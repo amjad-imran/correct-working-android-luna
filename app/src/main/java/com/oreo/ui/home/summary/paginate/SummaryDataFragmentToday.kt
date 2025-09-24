@@ -1119,6 +1119,19 @@ class SummaryDataFragmentToday :
             }
         }
 
+        mainViewModel.nudgeCycleTrackerData.observe(this){
+            it.getContent()?.let { nudge ->
+                viewModel.femaleHealthData.second?.let {
+                    val cycleTrackerData = it.copy(
+                        nudges = arrayListOf(nudge)
+                    )
+                    viewModel.updateCycleTrackerCardData(cycleTrackerData)?.let { card ->
+                        healthOverviewAdapter.updateData(card)
+                    }
+                }
+            }
+        }
+
         viewModel.timeTrackerActivitiesUpdated.observe(this) {
             it.getContent()?.let {
                 healthOverviewAdapter.updateData(viewModel.getTimelineCard())

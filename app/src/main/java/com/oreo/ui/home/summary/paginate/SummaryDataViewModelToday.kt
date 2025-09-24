@@ -2505,6 +2505,20 @@ class SummaryDataViewModelToday @Inject constructor(
         return data
     }
 
+    fun updateCycleTrackerCardData(
+        femaleData: FemaleHealthUserInfoModel
+    ): OHealthOverview? {
+        return if (femaleData.isOvulation || femaleData.isPeriod) {
+            OHealthOverview.CycleTrackerCardBig(convertToPeriodBigCardModel(femaleData))
+        } else {
+            OHealthOverview.CycleTrackerCardSmall(
+                convertToPeriodSmallCardModel(
+                    femaleData
+                )
+            )
+        }
+    }
+
     private fun getLunaAiCard(): OHealthOverview? {
         return if (enableAi) {
             val dailyHealthDigestState: SummaryStates = getSummaryStates(summaryAvailable)
@@ -4241,7 +4255,14 @@ class SummaryDataViewModelToday @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data.let {
-                            femaleHealthData = Pair(true, it)
+                            femaleHealthData = Pair(true, it?.copy (
+                                nudges = localDataStore.getNudgeCycleTrackerData()?.let { nudge ->
+                                    arrayListOf(Nudges(
+                                        nudge.title?:"", nudge.description?:""
+                                    ))
+                                }
+                            ))
+//                            femaleHealthData = Pair(true, it)
                             femaleHealthDataLoaded.postValue(Event(true))
                         }
                     }

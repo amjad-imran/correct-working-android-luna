@@ -182,6 +182,14 @@ class OreoActivityFragment :
         }
     }
 
+    private fun handleNudges(){
+        val data = mainViewModel.localDataStore.getNudgeActivityData()
+        val list = ArrayList<Nudges>()
+        data?.cue1?.let { list.add(Nudges("", it)) }
+        data?.cue2?.let { list.add(Nudges("", it)) }
+        setSleepBannerViewPager(list)
+    }
+
     private fun setSleepBannerViewPager(data: List<Nudges>?) {
         if (data.isNullOrEmpty()) {
             binding.lytAScoreData.lytAScoreBanner.root.gone()
@@ -265,7 +273,8 @@ class OreoActivityFragment :
         binding.lytAScoreData.lytSec3.tvTitle.text = getString(R.string.text_steps)
         binding.lytAScoreData.lytSec4.tvTitle.text = getString(R.string.text_distance)
         binding.lytAScoreData.lytScore.tvTitle.text = getString(R.string.text_activity_score)
-        setSleepBannerViewPager(it.nudges)
+        handleNudges()
+//        setSleepBannerViewPager(it.nudges)
         val scoreData = it.activityScore
         if (scoreData != null) {
             binding.lytAScoreData.lytScore.emptyText.gone()
@@ -974,6 +983,12 @@ class OreoActivityFragment :
                  }
              }
          }*/
+
+        mainViewModel.nudgeActivityData.observe(this){
+            it.getContent()?.let {
+                handleNudges()
+            }
+        }
 
         mainViewModel.activityHistoryResponse.observe(this) {
             if (it.isNullOrEmpty()) return@observe

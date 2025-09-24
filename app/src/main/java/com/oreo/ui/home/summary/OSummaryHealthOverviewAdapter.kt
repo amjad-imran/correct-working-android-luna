@@ -705,6 +705,16 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             if (index == -1) return
             items[index] = heathOverViewData
             notifyItemChanged(index)
+        } else if (heathOverViewData is OHealthOverview.CycleTrackerCardBig) {
+            val index = items.indexOfFirst { it is OHealthOverview.CycleTrackerCardBig }
+            if (index == -1) return
+            items[index] = heathOverViewData
+            notifyItemChanged(index)
+        } else if (heathOverViewData is OHealthOverview.CycleTrackerCardSmall) {
+            val index = items.indexOfFirst { it is OHealthOverview.CycleTrackerCardSmall }
+            if (index == -1) return
+            items[index] = heathOverViewData
+            notifyItemChanged(index)
         }
     }
 
@@ -3638,6 +3648,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.imv.setBackgroundResource(data.data.background)
 
             binding.tvDesc.text = data.data.nudge
+            binding.tvShimmer.setVisibilityByCondition(data.data.nudge.isEmpty())
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.FemaleHealthHome)
@@ -3656,6 +3667,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.tvCurrentDay.text = "Day ${data.data.days}"
             binding.tvDaysLeft.text = "of ${data.data.totalCycleDay}"
             binding.tvDesc.text = data.data.nudge
+            binding.tvShimmer.setVisibilityByCondition(data.data.nudge.isEmpty())
             binding.tvValue.text = if (data.data.temperatureVariation == null) {
                 "-"
             } else {

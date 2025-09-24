@@ -177,6 +177,14 @@ class OreoReadinessFragment :
         }
     }
 
+    private fun handleNudges(){
+        val data = mainViewModel.localDataStore.getNudgeReadinessData()
+        val list = ArrayList<Nudges>()
+        data?.cue1?.let { list.add(Nudges("", it)) }
+        data?.cue2?.let { list.add(Nudges("", it)) }
+        setReadinessBannerViewPager(list)
+    }
+
     private fun setReadinessBannerViewPager(data: List<Nudges>?) {
 
         if (data.isNullOrEmpty()) {
@@ -905,6 +913,12 @@ class OreoReadinessFragment :
              }
          }*/
 
+        mainViewModel.nudgeReadinessData.observe(this){
+            it.getContent()?.let {
+                handleNudges()
+            }
+        }
+
         mViewModel.planState.observe(this){
             it.getContent()?.let { triple ->
                 handleComfortDietFoodClick(triple)
@@ -1174,7 +1188,8 @@ class OreoReadinessFragment :
         binding.lytRScoreData.lytSec3.tvTitle.text = getString(R.string.text_skin_temperature)
         binding.lytRScoreData.lytSec4.tvTitle.text = getString(R.string.text_respiratory_rate)
 
-        setReadinessBannerViewPager(it.nudges)
+        handleNudges()
+//        setReadinessBannerViewPager(it.nudges)
 
         setHealthMonitor(it.healthTrend)
 
