@@ -9,6 +9,7 @@ import com.noisefit.luna.databinding.FragmentAddActivityTimelineBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 import com.oreo.ui.timelineScreen.addActivity.activities.ActivityListingFragment
+import com.oreo.ui.timelineScreen.addActivity.activities.AddAlcoholFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddCaffeineFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddLightExposureFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddMealActivityTimelineFragment
@@ -100,7 +101,9 @@ class AddActivityTimelineFragment :
                     }
 
                     AddActivityItemsEnum.SUPPLEMENTS -> {null}
-                    AddActivityItemsEnum.ALCOHOL -> {null}
+                    AddActivityItemsEnum.ALCOHOL -> {
+                        AddAlcoholFragment()
+                    }
                     AddActivityItemsEnum.RECOVERY -> {null}
                 }
                 fragment?.let {
