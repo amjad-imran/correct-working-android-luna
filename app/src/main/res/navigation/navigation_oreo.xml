@@ -1507,4 +1507,8 @@
             app:nullable="true" />
 
     </fragment>
+    <fragment
+        android:id="@+id/mealAiFragment"
+        android:name="com.oreo.ui.timelineScreen.meal.MealAiFragment"
+        android:label="MealAiFragment" />
 </navigation>
