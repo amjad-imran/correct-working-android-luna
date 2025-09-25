@@ -15,6 +15,7 @@ import com.oreo.ui.timelineScreen.addActivity.activities.AddLightExposureFragmen
 import com.oreo.ui.timelineScreen.addActivity.activities.AddMealActivityTimelineFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddPeriodLogFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddSleepFragment
+import com.oreo.ui.timelineScreen.addActivity.activities.AddSupplementsFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddWaterFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddWorkoutFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -100,7 +101,9 @@ class AddActivityTimelineFragment :
                         AddSleepFragment()
                     }
 
-                    AddActivityItemsEnum.SUPPLEMENTS -> {null}
+                    AddActivityItemsEnum.SUPPLEMENTS -> {
+                        AddSupplementsFragment()
+                    }
                     AddActivityItemsEnum.ALCOHOL -> {
                         AddAlcoholFragment()
                     }
