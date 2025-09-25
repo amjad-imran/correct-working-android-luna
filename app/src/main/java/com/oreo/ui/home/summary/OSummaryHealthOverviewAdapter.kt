@@ -2733,11 +2733,23 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             if (data.data.nudges.isNullOrEmpty()) {
                 binding.tvNudge.text = ""
                 binding.tvShimmer.visible()
+                binding.tvShimmer.fadeIn {  }
             } else {
-                binding.tvShimmer.gone()
                 val nudge = data.data.nudges.firstOrNull()
-                binding.tvDayStatus.text = nudge?.label ?: ""
-                binding.tvNudge.text = nudge?.message ?: ""
+                binding.tvShimmer.apply {
+                    visible()
+                    fadeOut {
+                        gone()
+                        binding.tvDayStatus.apply {
+                            text = nudge?.label ?: ""
+                            fadeIn {  }
+                        }
+                        binding.tvNudge.apply {
+                            text = nudge?.message ?: ""
+                            fadeIn {  }
+                        }
+                    }
+                }
             }
 
             if (data.data.totalScoreImpact == null || data.data.totalScoreImpact == 0) {
@@ -2867,17 +2879,34 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     topMargin = binding.tvTodayDesc.context.dpToPx(24)
                     bottomMargin = 0
                 }
-                binding.tvShimmer.visible()
+                binding.tvShimmer.apply {
+                    visible()
+                    fadeIn {  }
+                }
             } else {
-                binding.tvShimmer.gone()
-                binding.tvTitle.visible()
+                binding.tvTitle.gone()
                 (binding.tvTodayDesc.layoutParams as ConstraintLayout.LayoutParams).apply {
                     topMargin = binding.tvTodayDesc.context.dpToPx(8)
                     bottomMargin = binding.tvTodayDesc.context.dpToPx(26)
                 }
+
                 val nudge = data.data.nudges.firstOrNull()
-                binding.tvTodayDesc.text = nudge?.message ?: ""
-                binding.tvTitle.text = nudge?.label ?: ""
+
+                binding.tvShimmer.apply {
+                    visible()
+                    fadeOut {
+                        gone()
+                        binding.tvTitle.apply {
+                            visible()
+                            text = nudge?.label ?: ""
+                            fadeIn {  }
+                        }
+                        binding.tvTodayDesc.apply {
+                            text = nudge?.message ?: ""
+                            fadeIn {  }
+                        }
+                    }
+                }
             }
 
             if (scoreValue >= 0) {

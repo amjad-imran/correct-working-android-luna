@@ -891,8 +891,14 @@ class CycleTrackerFragment :
     ){
         val data = viewModel.localDataStore.getNudgeCycleTrackerData()
         val list = ArrayList<Nudges>()
-        data?.cue1?.let { list.add(Nudges("", it)) }
-        data?.cue2?.let { list.add(Nudges("", it)) }
+        data?.cue1?.let { list.add(Nudges(
+            it.title ?: "",
+            it.description ?: ""
+        )) }
+        data?.cue2?.let { list.add(Nudges(
+            it.title ?: "",
+            it.description ?: ""
+        )) }
         setNudgesViewPager(list, femaleHealthUserInfoModel)
     }
 

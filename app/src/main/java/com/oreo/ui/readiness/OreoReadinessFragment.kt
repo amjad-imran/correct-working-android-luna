@@ -180,8 +180,14 @@ class OreoReadinessFragment :
     private fun handleNudges(){
         val data = mainViewModel.localDataStore.getNudgeReadinessData()
         val list = ArrayList<Nudges>()
-        data?.cue1?.let { list.add(Nudges("", it)) }
-        data?.cue2?.let { list.add(Nudges("", it)) }
+        data?.cue1?.let { list.add(Nudges(
+            it.title ?: "",
+            it.description ?: ""
+        )) }
+        data?.cue2?.let { list.add(Nudges(
+            it.title ?: "",
+            it.description ?: ""
+        )) }
         setReadinessBannerViewPager(list)
     }
 

@@ -1652,7 +1652,7 @@ constructor(
                     currentTime - cycleTrackerApiTimestamp >= 30 * 60 * 1000
                 ) {
                     localDataStore.setNudgeCycleTrackerData(null)
-                    nudgesList.add("cycle_tracker")
+                    nudgesList.add("wellbeing")
                 }
             }
 
@@ -1696,7 +1696,7 @@ constructor(
                                         localDataStore.setNudgeActivityLastApiTimestamp(currentTime)
                                     }
 
-                                    "cycle_tracker" -> {
+                                    "wellbeing" -> {
                                         nudgeCycleTrackerData.postValue(Event(
                                             Nudges(it.title ?: "",
                                                 it.description ?: ""
