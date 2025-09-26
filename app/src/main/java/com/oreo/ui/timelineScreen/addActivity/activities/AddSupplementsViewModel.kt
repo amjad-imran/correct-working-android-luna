@@ -4,6 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.noisefit.data.model.timeline.SupplementOption
+import com.noisefit.data.remote.base.Resource
+import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit_commans.data.BinaryActionCallback
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddSupplementsViewModel @Inject constructor(
-
+    private val userRepository: UserRepository,
 ) : BaseViewModel(){
 
     var selectedDate: String ?= null
@@ -23,41 +28,64 @@ class AddSupplementsViewModel @Inject constructor(
 
     val onAddSuccess = MutableLiveData<Event<Boolean>>()
 
-    val supplementsList = MutableLiveData<ArrayList<String>>()
+    val supplementsList = MutableLiveData<ArrayList<SupplementOption>>()
 
     fun getSupplementsList(){
         viewModelScope.launch {
-            val supplements = listOf(
-                "Select Supplement", // This is the hint
-                "Calcium", "Magnesium", "Ashwagandha", "Creatine", "Melatonin",
-                "Vitamin B12", "Vitamin D3", "Probiotic", "Zinc", "Omega 3",
-                "Whey Protein", "Electrolytes"
-            )
 
-            supplementsList.postValue(ArrayList(supplements))
+            userRepository.getAddSupplementsListData().collect { resource ->
+
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getSupplementsList()
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.options?.let {
+                            supplementsList.postValue(ArrayList(it))
+                        }
+                    }
+                }
+
+            }
         }
     }
 
-    fun logSupplements() {
+    fun logSupplements(selectedOpt: SupplementOption) {
         viewModelScope.launch {
             val time = supplementTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"))
 
-            // TODO : Change json req obj and API
-            val alcoholObject = JsonObject().apply {
-                this.addProperty("event", "alcohol")
+            val supplementsObject = JsonObject().apply {
+                this.addProperty("event", "supplements")
                 this.addProperty("date", selectedDate)
                 this.addProperty("time", time)
+                this.addProperty("tag", selectedOpt.id)
             }
 
             val reqData = JsonObject().apply {
                 this.add("events", JsonArray().apply {
-                    this.add(alcoholObject)
+                    this.add(supplementsObject)
                 })
             }
-            onAddSuccess.postValue(Event(true))
-            return@launch
 
-            /*userRepository.submitLogMealTimelineData(reqData).collect{ resource ->
+            userRepository.submitLogSupplementsTimelineData(reqData).collect{ resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -86,7 +114,7 @@ class AddSupplementsViewModel @Inject constructor(
                         }
                     }
                 }
-            }*/
+            }
         }
     }
 

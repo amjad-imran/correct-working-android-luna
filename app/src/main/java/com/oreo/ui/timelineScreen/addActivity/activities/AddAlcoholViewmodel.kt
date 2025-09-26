@@ -10,7 +10,6 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
-import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -24,10 +23,49 @@ class AddAlcoholViewmodel @Inject constructor(
 ):
     BaseViewModel() {
 
+    var alcoholId: Int ?= null
+
     var selectedDate: String ?= null
     var alcoholTime: LocalTime = LocalTime.now()
 
     val onAddSuccess = MutableLiveData<Event<Boolean>>()
+
+    fun getAlcoholIdFromServer(){
+        viewModelScope.launch {
+            userRepository.getTimelineOptionIdData("alcohol").collect{ resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            it.options?.first()?.id?.let {
+                                alcoholId = it
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     fun logAlcohol() {
         viewModelScope.launch {
@@ -35,9 +73,9 @@ class AddAlcoholViewmodel @Inject constructor(
 
             // TODO : Change json req obj and API
             val alcoholObject = JsonObject().apply {
-                this.addProperty("event", "alcohol")
                 this.addProperty("date", selectedDate)
                 this.addProperty("time", time)
+                this.addProperty("tag", alcoholId)
             }
 
             val reqData = JsonObject().apply {
@@ -45,10 +83,8 @@ class AddAlcoholViewmodel @Inject constructor(
                     this.add(alcoholObject)
                 })
             }
-            onAddSuccess.postValue(Event(true))
-            return@launch
 
-            /*userRepository.submitLogMealTimelineData(reqData).collect{ resource ->
+            userRepository.submitLogAlcoholTimelineData(reqData).collect{ resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -77,7 +113,8 @@ class AddAlcoholViewmodel @Inject constructor(
                         }
                     }
                 }
-            }*/
+            }
+
         }
     }
 

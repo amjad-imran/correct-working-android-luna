@@ -11,6 +11,7 @@ import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.local.db.fromJson
 import com.noisefit.data.model.GoalModel
+import com.noisefit.data.model.timeline.SupplementsListResponse
 import com.noisefit.data.remote.CityData
 import com.noisefit.data.remote.StateData
 import com.noisefit.data.remote.UserLocationUpdatedResponse
@@ -636,6 +637,40 @@ class UserRepositoryImpl(
             remoteDataSource.submitLogLightExposureTimelineData(
                 "${BuildConfig.OREO_BASE_URL}/protean/v3/track-light",
                 req
+            )
+        }
+    }
+
+    override suspend fun submitLogSupplementsTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.submitLogLightExposureTimelineData(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/track-supplements",
+                req
+            )
+        }
+    }
+
+    override suspend fun submitLogAlcoholTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.submitLogLightExposureTimelineData(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/track-alcohol",
+                req
+            )
+        }
+    }
+
+    override suspend fun getAddSupplementsListData(): Flow<Resource<BaseApiResponse<SupplementsListResponse>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.getAddSupplementsListData(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/time-tracker/options/supplements"
+            )
+        }
+    }
+
+    override suspend fun getTimelineOptionIdData(option: String): Flow<Resource<BaseApiResponse<SupplementsListResponse>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.getAddSupplementsListData(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/time-tracker/options/$option"
             )
         }
     }

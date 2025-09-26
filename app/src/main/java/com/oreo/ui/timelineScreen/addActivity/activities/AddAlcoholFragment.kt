@@ -7,6 +7,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
+import com.moengage.core.internal.utils.showToast
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAddAlcoholBinding
 import com.noisefit.oreo.OreoMainViewModel
@@ -32,7 +33,7 @@ class AddAlcoholFragment : BaseFragment<FragmentAddAlcoholBinding>(FragmentAddAl
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModel.getAlcoholIdFromServer()
         viewModel.selectedDate = LocalDate.now()
             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         setUi()
@@ -72,6 +73,10 @@ class AddAlcoholFragment : BaseFragment<FragmentAddAlcoholBinding>(FragmentAddAl
         }
 
         binding.btnSave.setOnClickListener{
+            if(viewModel.alcoholId == null){
+                showToast(requireContext(), "Something went wrong!\nPlease try later.")
+                return@setOnClickListener
+            }
             viewModel.logAlcohol()
         }
     }

@@ -5,19 +5,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.widget.BaseAdapter
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
+import com.noisefit.data.model.timeline.SupplementOption
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAddSupplementsBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.common.bottomSheet.TIME_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.DateFormats
@@ -42,6 +47,43 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
         viewModel.selectedDate = LocalDate.now()
             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         setUi()
+    }
+
+    private fun setSpinnerUi(supplementsList: ArrayList<SupplementOption>) {
+        val spinner = binding.spinnerSupplements
+
+        // adapter, hint selection, offsets, etc.
+        val adapter = CustomSpinnerAdapter(requireContext(), supplementsList)
+        spinner.adapter = adapter
+
+        spinner.setSelection(0)
+
+        // 16dp gap below spinner
+        (spinner as? androidx.appcompat.widget.AppCompatSpinner)?.apply {
+            setDropDownWidth(ViewGroup.LayoutParams.MATCH_PARENT)
+            setDropDownVerticalOffset(16f.dpToPixel().toInt()) // or resources.getDimensionPixelSize(R.dimen.offset_16dp)
+            setPopupBackgroundResource(R.drawable.bg_dropdown_add_log_bs_circadian)
+        }
+
+        // Cap dropdown height to 70% of fragment height
+        view?.viewTreeObserver?.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                view?.viewTreeObserver?.removeOnGlobalLayoutListener(this)
+                val maxHeight = (view?.height?.times(0.7f))?.toInt()?: 400
+
+                try {
+                    val spinnerClass = androidx.appcompat.widget.AppCompatSpinner::class.java
+                    val popupField = spinnerClass.getDeclaredField("mPopup").apply { isAccessible = true }
+                    val popup = popupField.get(spinner)
+                    // Import androidx.appcompat.widget.ListPopupWindow
+                    if (popup is androidx.appcompat.widget.ListPopupWindow) {
+                        popup.height = maxHeight   // <- THIS sets the popup’s max height (scrolls automatically)
+                    }
+                } catch (t: Throwable) {
+                    // Reflection may break on some OEMs; swallow or log
+                }
+            }
+        })
     }
 
     private fun setUi() {
@@ -79,20 +121,17 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
         }
 
         binding.btnSave.setOnClickListener{
-            viewModel.logSupplements()
+            val spinner = binding.spinnerSupplements
+            val selected: SupplementOption? = spinner.selectedItem as? SupplementOption
+            selected?.let {
+                viewModel.logSupplements(it)
+            }
         }
     }
 
     override fun subscribeObservers() {
         viewModel.supplementsList.observe(this){ supplements->
-            val spinner = binding.spinnerSupplements
-
-            // Create an instance of the custom adapter
-            val adapter = CustomSpinnerAdapter(requireContext(), supplements)
-
-            // Set the adapter to the spinner
-            spinner.adapter = adapter
-
+            setSpinnerUi(supplements)
         }
 
         viewModel.onAddSuccess.observe(this){
@@ -120,66 +159,6 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
             } else {
                 uiController.displayProgressBar(false,"")
             }
-        }
-    }
-
-    class CustomSpinnerAdapter(
-        private val context: Context,
-        private val data: List<String>
-    ) : BaseAdapter()
-    {
-
-        // This will return the number of items in the spinner
-        override fun getCount(): Int {
-            return data.size
-        }
-
-        // This will return the item at a particular position
-        override fun getItem(position: Int): Any {
-            return data[position]
-        }
-
-        // This will return the item ID at a particular position (optional)
-        override fun getItemId(position: Int): Long {
-            return position.toLong()
-        }
-
-        // This is used to get the view for the spinner item
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val view: View = convertView ?: LayoutInflater.from(context)
-                .inflate(R.layout.spinner_item_addd_log_circadian, parent, false)
-
-            val textView: TextView = view.findViewById(R.id.tvTitle)
-            textView.text = data[position]
-
-            val divider: View = view.findViewById(R.id.divider)
-            divider.setVisibilityByCondition(position!=data.size-1)
-            // Set the color for the selected item
-            if (position == 0) {
-                textView.setTextColor(context.resources.getColor(android.R.color.darker_gray))  // Hint color (gray)
-            } else {
-                textView.setTextColor(context.resources.getColor(android.R.color.white))  // Regular item color
-            }
-
-            return view
-        }
-
-        // This is used to get the view for the dropdown items
-        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val view: View = convertView ?: LayoutInflater.from(context)
-                .inflate(R.layout.spinner_item_addd_log_circadian, parent, false)
-
-            val textView: TextView = view.findViewById(R.id.tvTitle)
-            textView.text = data[position]
-
-            // Set the color for the dropdown items
-            if (position == 0) {
-                textView.setTextColor(context.resources.getColor(android.R.color.darker_gray))  // Hint color (gray)
-            } else {
-                textView.setTextColor(context.resources.getColor(android.R.color.white))  // Regular item color
-            }
-
-            return view
         }
     }
 
@@ -248,6 +227,75 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
             )
         )
 
+    }
+
+    class CustomSpinnerAdapter(
+        private val context: Context,
+        private val data: List<SupplementOption>
+    ) : BaseAdapter() {
+
+        // Hint at index 0, followed by real items
+        private val items: List<SupplementOption> = listOf(
+            SupplementOption(id = -1, options = "Select Supplement", type = "", status = "", createdAt = "", updatedAt = "")
+        ) + data
+
+        override fun getCount(): Int = items.size
+        override fun getItem(position: Int): Any = items[position]
+        override fun getItemId(position: Int): Long = position.toLong()
+
+        override fun isEnabled(position: Int): Boolean = position != 0
+        override fun areAllItemsEnabled(): Boolean = false
+
+        // Closed view: shows hint at position 0 with arrow
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val view = convertView ?: LayoutInflater.from(context)
+                .inflate(android.R.layout.simple_spinner_item, parent, false)
+            val tv = view.findViewById<TextView>(android.R.id.text1)
+            val item = items[position]
+            val isHint = position == 0 || item.id == -1
+
+            tv.text = item.options
+            tv.setTextColor(if (isHint) "#99FFFFFF".toColorInt() else "#FFFFFF".toColorInt())
+
+            val arrow = AppCompatResources.getDrawable(context, R.drawable.ic_baseline_keyboard_arrow_down_24)
+            tv.setCompoundDrawablesWithIntrinsicBounds(null, null, arrow, null)
+            tv.compoundDrawablePadding = (8 * view.resources.displayMetrics.density).toInt()
+            return view
+        }
+
+        // Dropdown rows: hide hint by returning a zero-height view; avoid recycling that for real rows
+        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+            if (position == 0) {
+                // Always return/ensure a "hint spacer" view with height 0
+                val v = (convertView?.takeIf { it.tag == "HINT_SPACER" } ?: View(context)).apply {
+                    tag = "HINT_SPACER"
+                    layoutParams = (layoutParams ?: ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, 0
+                    )).also { it.height = 0 }
+                }
+                return v
+            }
+
+            // If convertView is the hint spacer, ignore it and inflate a real row
+            val safeConvert = convertView?.takeUnless { it.tag == "HINT_SPACER" }
+            val view = safeConvert ?: LayoutInflater.from(context)
+                .inflate(R.layout.spinner_item_addd_log_circadian, parent, false)
+
+            val tv = view.findViewById<TextView>(R.id.tvTitle)
+            val divider = view.findViewById<View>(R.id.divider)
+
+            val item = items[position]
+            tv.text = item.options ?: "-"
+            tv.setTextColor("#FFFFFF".toColorInt())
+
+            // divider visible except last visible item
+            divider.setVisibilityByCondition(position != items.lastIndex)
+
+            return view
+        }
+
+        /** Map spinner.selectedItemPosition -> data index (without hint). -1 if still on hint. */
+        fun toDataIndex(spinnerPosition: Int): Int = if (spinnerPosition <= 0) -1 else spinnerPosition - 1
     }
 
 }

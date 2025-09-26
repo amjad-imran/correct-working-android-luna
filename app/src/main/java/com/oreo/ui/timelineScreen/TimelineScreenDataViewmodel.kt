@@ -44,6 +44,7 @@ class TimelineScreenDataViewmodel @Inject constructor(
         val PERIOD_STARTED_KEY = "period"
         val SYMPTOM_KEY = "symptom"
         val ACTIVITY_KEY = "activity"
+        val SUPPLEMENTS_KEY = "supplements"
     }
 
     fun getCurrDayActivities(date: String) {
@@ -174,6 +175,10 @@ class TimelineScreenDataViewmodel @Inject constructor(
 
             ACTIVITY_KEY -> {
                 data.titleColor = "#FFFFFF".toColorInt()
+            }
+
+            SUPPLEMENTS_KEY -> {
+                data.desc = "Supplement"
             }
 
             else -> {}

@@ -3,6 +3,7 @@ package com.noisefit.data.repository.abstraction
 import android.net.Uri
 import com.google.gson.JsonObject
 import com.noisefit.data.model.GoalModel
+import com.noisefit.data.model.timeline.SupplementsListResponse
 import com.oreo.data.model.RingLocationData
 import com.noisefit.data.remote.CityData
 import com.noisefit.data.remote.StateData
@@ -92,5 +93,11 @@ interface UserRepository {
     suspend fun submitLogCaffeineTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
 
     suspend fun submitLogLightExposureTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
+
+    suspend fun submitLogSupplementsTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
+    suspend fun submitLogAlcoholTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
+
+    suspend fun getAddSupplementsListData(): Flow<Resource<BaseApiResponse<SupplementsListResponse>>>
+    suspend fun getTimelineOptionIdData(option: String): Flow<Resource<BaseApiResponse<SupplementsListResponse>>>
 
 }

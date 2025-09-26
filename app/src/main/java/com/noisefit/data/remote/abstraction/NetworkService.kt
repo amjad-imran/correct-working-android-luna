@@ -6,6 +6,7 @@ import com.noisefit.data.model.AiWorkoutResponse
 import com.noisefit.data.model.GoalModel
 import com.noisefit.data.model.referral.ReferralCodeResponse
 import com.noisefit.data.model.referral.ReferralInfoResponse
+import com.noisefit.data.model.timeline.SupplementsListResponse
 import com.oreo.data.model.RingLocationData
 import com.noisefit.data.remote.CityData
 import com.noisefit.data.remote.StateData
@@ -820,6 +821,12 @@ interface NetworkService {
         @Url url: String,
         @Body req: JsonObject
     ): BaseApiResponse<Any>
+
+
+    @GET
+    suspend fun getAddSupplementsListData(
+        @Url url: String
+    ): BaseApiResponse<SupplementsListResponse>
     //
 
     /**
