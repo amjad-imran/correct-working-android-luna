@@ -659,6 +659,15 @@ class UserRepositoryImpl(
         }
     }
 
+    override suspend fun submitLogRecoveryTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.submitLogLightExposureTimelineData(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/track-recovery",
+                req
+            )
+        }
+    }
+
     override suspend fun getAddSupplementsListData(): Flow<Resource<BaseApiResponse<SupplementsListResponse>>> {
         return safeApiCallFlow(dispatcher) {
             remoteDataSource.getAddSupplementsListData(

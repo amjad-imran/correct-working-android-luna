@@ -2202,5 +2202,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_supplements">Supplements</string>
     <string name="text_alcohol">Alcohol</string>
     <string name="text_recovery">Recovery</string>
+    <string name="text_add_option">Add Option</string>
 
 </resources>

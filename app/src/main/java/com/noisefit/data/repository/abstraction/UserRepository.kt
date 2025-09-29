@@ -96,6 +96,7 @@ interface UserRepository {
 
     suspend fun submitLogSupplementsTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
     suspend fun submitLogAlcoholTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
+    suspend fun submitLogRecoveryTimelineData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
 
     suspend fun getAddSupplementsListData(): Flow<Resource<BaseApiResponse<SupplementsListResponse>>>
     suspend fun getTimelineOptionIdData(option: String): Flow<Resource<BaseApiResponse<SupplementsListResponse>>>
