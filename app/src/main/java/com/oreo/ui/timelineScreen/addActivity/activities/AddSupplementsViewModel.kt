@@ -29,6 +29,8 @@ class AddSupplementsViewModel @Inject constructor(
     val onAddSuccess = MutableLiveData<Event<Boolean>>()
 
     val supplementsList = MutableLiveData<ArrayList<SupplementOption>>()
+    var selectedOption: SupplementOption ?= null
+    var isDropdownOpen = false
 
     fun getSupplementsList(){
         viewModelScope.launch {
@@ -68,7 +70,7 @@ class AddSupplementsViewModel @Inject constructor(
         }
     }
 
-    fun logSupplements(selectedOpt: SupplementOption) {
+    fun logSupplements() {
         viewModelScope.launch {
             val time = supplementTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"))
 
@@ -76,7 +78,7 @@ class AddSupplementsViewModel @Inject constructor(
                 this.addProperty("event", "supplements")
                 this.addProperty("date", selectedDate)
                 this.addProperty("time", time)
-                this.addProperty("tag", selectedOpt.id)
+                this.addProperty("tag", selectedOption?.id)
             }
 
             val reqData = JsonObject().apply {

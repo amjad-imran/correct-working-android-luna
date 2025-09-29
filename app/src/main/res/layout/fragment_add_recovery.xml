@@ -261,7 +261,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_add_recovery_dropdown"
         android:visibility="gone"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="@+id/lytSelected"
         app:layout_constraintStart_toStartOf="@+id/lytSelected"
         app:layout_constraintTop_toBottomOf="@+id/lytSelected" />

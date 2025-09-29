@@ -2,12 +2,15 @@ package com.oreo.ui.timelineScreen.addActivity.activities
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.core.view.doOnNextLayout
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.moengage.core.internal.utils.showToast
 import com.noisefit.data.model.timeline.SupplementOption
 import com.noisefit.luna.R
@@ -28,6 +31,7 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.getValue
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAddRecoveryBinding::inflate) {
@@ -84,6 +88,7 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
     override fun initListener() {
         binding.btnSave.setOnClickListener{
             if(viewModel.selectedOption==null){
+                // TODO: Update Msg Text
                 showToast(requireContext(), "Please select an option!")
                 return@setOnClickListener
             }
@@ -180,6 +185,9 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
     override fun subscribeObservers() {
         viewModel.recoveryListData.observe(this){
             optAdapter.updateDataSet(it)
+            binding.rvOptions.doOnNextLayout {
+                capRvHeightToPercent(binding.rvOptions, binding.root, 0.70f)
+            }
         }
 
         viewModel.onAddSuccess.observe(this){
@@ -210,6 +218,18 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
         }
     }
 
+    private fun capRvHeightToPercent(rv: RecyclerView, root: View, percent: Float) {
+        val rootH = root.height.takeIf { it > 0 } ?: root.measuredHeight
+        if (rootH <= 0) return // nothing to do yet
+
+        val maxH = (rootH * percent).roundToInt()
+        val params = rv.layoutParams
+        val rvMeasured = rv.measuredHeight
+
+        params.height = if (rvMeasured > maxH) maxH else ViewGroup.LayoutParams.WRAP_CONTENT
+        rv.layoutParams = params
+    }
+
     private fun onDateClicked() {
         parentFragment?.setFragmentResultListener(VALUE_REQUEST_KEY) { _, bundle ->
             val selectedValue = bundle.getString("selectedValue")
@@ -218,12 +238,6 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
                     LocalDate.parse(it1, DateTimeFormatter.ofPattern("dd MMM yyyy"))
                         .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString()
                 viewModel.date = parsedDate
-
-
-                val todayDate = LocalDate.now().toString()
-                if (parsedDate.equals(todayDate)) {
-//                    resetData()
-                }
                 setDate()
             }
         }
