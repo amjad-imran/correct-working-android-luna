@@ -12,13 +12,11 @@ import com.oreo.ui.timelineScreen.addActivity.activities.ActivityListingFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddAlcoholFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddCaffeineFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddLightExposureFragment
-import com.oreo.ui.timelineScreen.addActivity.activities.AddMealActivityTimelineFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddPeriodLogFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddSleepFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddSupplementsFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddWaterFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddWorkoutFragment
-import com.oreo.ui.timelineScreen.meal.MealAiFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -65,13 +63,15 @@ class AddActivityTimelineFragment :
     override fun subscribeObservers() {
         sharedViewModel.loadFragment.observe(this) {
             it.getContent()?.let {
+
                 val fragment = when (it) {
                     AddActivityItemsEnum.ACTIVITIES_LISTING -> {
                         ActivityListingFragment.newInstance()
                     }
 
                     AddActivityItemsEnum.MEAL -> {
-                        MealAiFragment()
+                        null
+                        //MealAiFragment()
                     /*AddMealActivityTimelineFragment()*/
                     }
 
@@ -115,6 +115,11 @@ class AddActivityTimelineFragment :
                     childFragmentManager.beginTransaction()
                         .replace(R.id.childFragmentContainer, it)
                         .commit()
+                }
+
+                if(it== AddActivityItemsEnum.MEAL){
+                    navigateUpSafe()
+                    navigate(R.id.mealAiFragment)
                 }
 
             }
