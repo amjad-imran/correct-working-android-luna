@@ -13,8 +13,11 @@ import com.noisefit.luna.databinding.FragmentAddAlcoholBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.common.bottomSheet.TIME_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
+import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,9 +37,14 @@ class AddAlcoholFragment : BaseFragment<FragmentAddAlcoholBinding>(FragmentAddAl
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getAlcoholIdFromServer()
-        viewModel.selectedDate = LocalDate.now()
-            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-        setUi()
+        viewModel.editData = arguments?.getParcelable("editData")
+        if(viewModel.editData == null) {
+            viewModel.selectedDate = LocalDate.now()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            setUi()
+        }else{
+            setEditLayout(viewModel.editData!!)
+        }
     }
 
     private fun setUi() {
@@ -108,6 +116,12 @@ class AddAlcoholFragment : BaseFragment<FragmentAddAlcoholBinding>(FragmentAddAl
                 uiController.displayProgressBar(false,"")
             }
         }
+
+        sharedViewModel.deleteBtnClickedEvent.observe(this){
+            it.getContent()?.let {
+                viewModel.deleteAlcoholItem()
+            }
+        }
     }
 
     private fun onTimeClicked() {
@@ -175,6 +189,37 @@ class AddAlcoholFragment : BaseFragment<FragmentAddAlcoholBinding>(FragmentAddAl
             )
         )
 
+    }
+
+    private fun setEditLayout(editData: ItemTimelineResponseModel) {
+        // Set Date
+        viewModel.selectedDate = editData.startDate ?: LocalDate.now().toString()
+        val parsedDate =
+            LocalDate.parse(viewModel.selectedDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                .format(DateTimeFormatter.ofPattern("dd MMM yyyy")).toString()
+        binding.lytDateTime.lytDate.tvTimeValue.text = parsedDate
+
+        // Set Time
+        viewModel.alcoholTime = LocalTime.parse(editData.startTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+        binding.lytDateTime.lytTime.tvTimeValue.text = DateFormats.formatTimeWithAmPm(
+            viewModel.alcoholTime.hour,
+            viewModel.alcoholTime.minute
+        )
+
+        // Set Other UI States
+        when(editData.canBeEditedOrDeleted){
+            0 -> {
+                binding.btnSave.gone()
+                binding.lytDateTime.lytDate.tvTimeValue.isClickable = false
+                binding.lytDateTime.lytTime.tvTimeValue.isClickable = false
+            }
+
+            else -> {
+                binding.btnSave.visible()
+                binding.lytDateTime.lytDate.tvTimeValue.isClickable = true
+                binding.lytDateTime.lytTime.tvTimeValue.isClickable = true
+            }
+        }
     }
 
 }

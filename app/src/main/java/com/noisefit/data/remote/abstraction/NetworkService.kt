@@ -822,6 +822,11 @@ interface NetworkService {
         @Body req: JsonObject
     ): BaseApiResponse<Any>
 
+    @DELETE
+    suspend fun deleteTimelineItemById(
+        @Url url: String
+    ): BaseApiResponse<Any>
+
 
     @GET
     suspend fun getAddSupplementsListData(

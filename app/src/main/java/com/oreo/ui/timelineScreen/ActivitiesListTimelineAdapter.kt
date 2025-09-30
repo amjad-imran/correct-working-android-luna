@@ -9,7 +9,10 @@ import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.SYMPTOM_KEY
 
-class ActivitiesListTimelineAdapter: RecyclerView.Adapter<ActivitiesListTimelineAdapter.TimelineViewHolder>() {
+class ActivitiesListTimelineAdapter(
+    val onItemClick: (ItemTimelineResponseModel) -> Unit
+)
+    : RecyclerView.Adapter<ActivitiesListTimelineAdapter.TimelineViewHolder>() {
 
     private val mList: ArrayList<ItemTimelineResponseModel> = ArrayList()
 
@@ -26,6 +29,10 @@ class ActivitiesListTimelineAdapter: RecyclerView.Adapter<ActivitiesListTimeline
                     text = data.displayTime
                     visible()
                 }
+            }
+
+            binding.root.setOnClickListener {
+                onItemClick(data)
             }
 
         }

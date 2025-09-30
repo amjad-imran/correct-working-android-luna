@@ -3,10 +3,6 @@ package com.noisefit_commans.data.model.timeline
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 
 data class Measurements(
     val hr: Boolean = true,
@@ -21,6 +17,9 @@ data class TimelineScreenResponse(
 
 @Parcelize
 data class ItemTimelineResponseModel(
+
+    val id: String?,
+
     @SerializedName("user_id")
     val userId: Int?,
 
@@ -50,8 +49,47 @@ data class ItemTimelineResponseModel(
 
     val title: String?,
 
+    val metadata: TimelineMetadata ?= null,
+
     // for app
     var titleColor: Int?=null,
     var desc: String?="-",
-    var displayTime: String?
+    var displayTime: String?,
+
+    /*
+        0 -> No edit, Only Visible
+        1 -> Edit and Delete
+        2 -> Edit
+        3 -> Delete
+    */
+    var canBeEditedOrDeleted:Int ?= 0,
+) : Parcelable
+
+@Parcelize
+data class TimelineMetadata(
+
+    @SerializedName("sleep_score")
+    val sleepScore: Int? = null,
+
+    @SerializedName("readiness_score")
+    val readinessScore: Int? = null,
+
+    @SerializedName("prev_sleep_score")
+    val prevSleepScore: Int? = null,
+
+    @SerializedName("sleep_score_impact")
+    val sleepScoreImpact: Int? = null,
+
+    @SerializedName("prev_readiness_score")
+    val prevReadinessScore: Int? = null,
+
+    @SerializedName("readiness_score_impact")
+    val readinessScoreImpact: Int? = null,
+
+    @SerializedName("luna_tracking_option_id")
+    val lunaTrackingOptionId: Int? = null,
+
+    @SerializedName("end_time")
+    val endTime: String? = null,
+
 ) : Parcelable

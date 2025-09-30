@@ -668,6 +668,14 @@ class UserRepositoryImpl(
         }
     }
 
+    override suspend fun deleteTimelineItemById(id: String): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.deleteTimelineItemById(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/time-tracker/$id"
+            )
+        }
+    }
+
     override suspend fun getAddSupplementsListData(): Flow<Resource<BaseApiResponse<SupplementsListResponse>>> {
         return safeApiCallFlow(dispatcher) {
             remoteDataSource.getAddSupplementsListData(

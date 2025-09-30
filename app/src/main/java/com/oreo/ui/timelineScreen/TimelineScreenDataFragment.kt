@@ -2,15 +2,18 @@ package com.oreo.ui.timelineScreen
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentTimelineScreenDataBinding
+import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -23,7 +26,9 @@ class TimelineScreenDataFragment :
     private val viewModel: TimelineScreenDataViewmodel by viewModels()
 
     private val activityListAdapter by lazy {
-        ActivitiesListTimelineAdapter()
+        ActivitiesListTimelineAdapter(){
+            handleOnItemClick(it)
+        }
     }
 
     companion object {
@@ -120,6 +125,109 @@ class TimelineScreenDataFragment :
         viewModel.date?.let {
             viewModel.getCurrDayActivities(it)
         }
+    }
+
+    private fun handleOnItemClick(data: ItemTimelineResponseModel) {
+
+        var canBeUpdated = false
+        // TODO : Meal, Nap/Sleep
+        when(data.event){
+            "caffeine" -> {
+                if(
+                    viewModel.getDate(0).equals(viewModel.date)
+                ){
+                    data.canBeEditedOrDeleted = 3
+                }
+            }
+
+            "caffeine" -> {
+                if(
+                    viewModel.getDate(0).equals(viewModel.date)
+                ){
+                    data.canBeEditedOrDeleted = 3
+                }
+            }
+
+            "light-exposure" -> {
+                if(
+                    viewModel.getDate(0).equals(viewModel.date)
+                ){
+                    data.canBeEditedOrDeleted = 3
+                }
+            }
+
+            "workout" -> {
+                if(
+                    viewModel.getDate(0).equals(viewModel.date)
+                ){
+                    data.canBeEditedOrDeleted = 2
+                }
+            }
+
+            "sleep" -> {
+                if(
+                    viewModel.getDate(0).equals(viewModel.date) ||
+                    viewModel.getDate(1).equals(viewModel.date)
+                ){
+                    canBeUpdated = true
+                }
+            }
+
+            "nap" -> {
+                if(
+                    viewModel.getDate(0).equals(viewModel.date) ||
+                    viewModel.getDate(1).equals(viewModel.date)
+                ){
+                    canBeUpdated = true
+                }
+            }
+
+            "symptom" -> {
+                if(
+                    viewModel.getDate(0).equals(viewModel.date)
+                ){
+                    canBeUpdated = true
+                }
+            }
+
+            "supplements" -> {
+                if(
+                    viewModel.getDate(0).equals(viewModel.date) ||
+                    viewModel.getDate(1).equals(viewModel.date)
+                ){
+                    data.canBeEditedOrDeleted = 3
+                }
+            }
+
+            "alcohol" -> {
+                if(
+                    viewModel.getDate(0).equals(viewModel.date) ||
+                    viewModel.getDate(1).equals(viewModel.date)
+                ){
+                    data.canBeEditedOrDeleted = 3
+                }
+            }
+
+
+            "recovery" -> {
+                if(
+                    viewModel.getDate(0).equals(viewModel.date) ||
+                    viewModel.getDate(1).equals(viewModel.date)
+                ){
+                    data.canBeEditedOrDeleted = 3
+                }
+            }
+        }
+
+        navigate(
+            R.id.addActivityTimelineFragment,
+            bundleOf(
+                "showTimeline" to false,
+                "key" to data.event,
+                "srcKey" to null,
+                "editData" to data
+            )
+        )
     }
 
 }

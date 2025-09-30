@@ -18,6 +18,7 @@ import com.noisefit.luna.databinding.FragmentAddRecoveryBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.common.bottomSheet.TIME_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
+import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.disable
 import com.noisefit_commans.ui.enable
@@ -48,20 +49,36 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.btnSave.disable()
+        viewModel.editData = arguments?.getParcelable("editData")
         viewModel.getRecoveryOptionsList()
         setAdapter()
-        setDefaultData()
+        setDefaultData(viewModel.editData)
+        viewModel.editData?.canBeEditedOrDeleted?.let {
+            setEditLayout(it)
+        }
     }
 
-    private fun setDefaultData() {
-        binding.btnSave.disable()
-        setDate()
+    private fun setDefaultData(editData: ItemTimelineResponseModel ?= null) {
+        setDate(editData)
         setDefaultStartAndEndTime()
     }
 
     private fun setDefaultStartAndEndTime() {
-        viewModel.endTime = LocalTime.now()
-        viewModel.startTime = viewModel.endTime?.minusMinutes(15)
+        if(viewModel.editData == null){
+            viewModel.endTime = LocalTime.now()
+            viewModel.startTime = viewModel.endTime?.minusMinutes(15)
+        }else{
+            val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+            try {
+                viewModel.endTime = LocalTime.parse(viewModel.editData?.endTime, formatter)
+                viewModel.startTime = LocalTime.parse(viewModel.editData?.startTime, formatter)
+            }catch (_: Exception){
+                viewModel.endTime = LocalTime.now()
+                viewModel.startTime = viewModel.endTime?.minusMinutes(15)
+            }
+        }
+
         viewModel.endTime?.let { binding.tvEndTime.text = getFormattedTimeString(it) }
         viewModel.startTime?.let { binding.tvStartTime.text = getFormattedTimeString(it) }
     }
@@ -185,8 +202,27 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
     override fun subscribeObservers() {
         viewModel.recoveryListData.observe(this){
             optAdapter.updateDataSet(it)
+            if(
+                viewModel.isListLoadedFirstTime &&
+                viewModel.editData?.metadata?.lunaTrackingOptionId != null
+            ){
+                it.first { it.id == (viewModel.editData?.metadata?.lunaTrackingOptionId ?: -1) }?.let { sOpt ->
+                    binding.tvSelected.text = sOpt.options
+                    viewModel.selectedOption = sOpt
+                    binding.btnSave.enable()
+                }
+                viewModel.isListLoadedFirstTime = false
+            }
             binding.rvOptions.doOnNextLayout {
                 capRvHeightToPercent(binding.rvOptions, binding.root, 0.70f)
+            }
+        }
+
+        sharedViewModel.deleteBtnClickedEvent.observe(this){
+            it.getContent()?.let {
+                if(it){
+                    viewModel.deleteRecoveryItem()
+                }
             }
         }
 
@@ -258,18 +294,40 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
 
     }
 
-    private fun setDate() {
+    private fun setDate(editData: ItemTimelineResponseModel?= null) {
         var date = "Enter"
+        val todayDate = LocalDate.now().toString()
+        val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
 
-        if (viewModel.date.isNullOrEmpty().not()) {
-            date = LocalDate.parse(viewModel.date)
-                .format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
-        } else {
-            date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMM yyyy")).toString()
-            viewModel.date = LocalDate.now().toString()
+        if(editData==null) {
+            if (viewModel.date.isNullOrEmpty()) {
+                viewModel.date = todayDate
+            }
+        }else{
+            viewModel.date = viewModel.editData?.date ?: todayDate
         }
+        date = LocalDate.parse(viewModel.date)
+            .format(formatter)
 
         binding.tvDate.text = date
+    }
+
+    private fun setEditLayout(key: Int) {
+        when(key){
+            0 -> {
+                binding.lytSelected.isClickable = false
+                binding.tvDate.isClickable = false
+                binding.lytStartTime.isClickable = false
+                binding.lytEndTime.isClickable = false
+            }
+
+            else -> {
+                binding.lytSelected.isClickable = true
+                binding.tvDate.isClickable = true
+                binding.lytStartTime.isClickable = true
+                binding.lytEndTime.isClickable = true
+            }
+        }
     }
 
 }
