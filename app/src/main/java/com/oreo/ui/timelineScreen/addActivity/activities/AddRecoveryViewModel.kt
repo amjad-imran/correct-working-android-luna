@@ -19,24 +19,24 @@ import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
-class AddSupplementsViewModel @Inject constructor(
+class AddRecoveryViewModel @Inject constructor(
     private val userRepository: UserRepository,
-) : BaseViewModel(){
+): BaseViewModel() {
 
-    var selectedDate: String ?= null
-    var supplementTime: LocalTime = LocalTime.now()
+    var date: String? = null
 
+    var startTime: LocalTime ?= null
+    var endTime: LocalTime ?= null
+
+    var isDropdownOpen = false
+    var selectedOption: SupplementOption ?= null
     val onAddSuccess = MutableLiveData<Event<Boolean>>()
 
-    val supplementsList = MutableLiveData<ArrayList<SupplementOption>>()
-    var selectedOption: SupplementOption ?= null
-    var isDropdownOpen = false
+    val recoveryListData = MutableLiveData<ArrayList<SupplementOption>>()
 
-    fun getSupplementsList(){
+    fun getRecoveryOptionsList(){
         viewModelScope.launch {
-
-            userRepository.getAddSupplementsListData().collect { resource ->
-
+            userRepository.getTimelineOptionIdData("recovery").collect{ resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -51,7 +51,7 @@ class AddSupplementsViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        getSupplementsList()
+                                        getRecoveryOptionsList()
                                     }
 
                                     override fun no() {}
@@ -60,34 +60,38 @@ class AddSupplementsViewModel @Inject constructor(
                     }
 
                     is Resource.Success -> {
-                        resource.data?.data?.options?.let {
-                            supplementsList.postValue(ArrayList(it))
+                        resource.data?.data?.let {
+                            it.options?.let {
+                                recoveryListData.postValue(it as ArrayList)
+                            }
                         }
                     }
                 }
-
             }
         }
     }
 
-    fun logSupplements() {
+    fun logRecovery() {
         viewModelScope.launch {
-            val time = supplementTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"))
+            val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+            val sTime = startTime?.format(formatter)
+            val eTime = endTime?.format(formatter)
 
-            val supplementsObject = JsonObject().apply {
-                this.addProperty("event", "supplements")
-                this.addProperty("date", selectedDate)
-                this.addProperty("time", time)
+            val alcoholObject = JsonObject().apply {
+                this.addProperty("event", "recovery")
+                this.addProperty("date", date)
+                this.addProperty("start_time", sTime)
+                this.addProperty("end_time", eTime)
                 this.addProperty("tag", selectedOption?.id)
             }
 
             val reqData = JsonObject().apply {
                 this.add("events", JsonArray().apply {
-                    this.add(supplementsObject)
+                    this.add(alcoholObject)
                 })
             }
 
-            userRepository.submitLogSupplementsTimelineData(reqData).collect{ resource ->
+            userRepository.submitLogRecoveryTimelineData(reqData).collect{ resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -102,7 +106,7 @@ class AddSupplementsViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-
+                                        logRecovery()
                                     }
 
                                     override fun no() {}
@@ -117,10 +121,11 @@ class AddSupplementsViewModel @Inject constructor(
                     }
                 }
             }
+
         }
     }
 
-    fun getSupplementsDates(): Array<String> {
+    fun getRecoveryDates(): Array<String> {
         val dates = mutableListOf<String>()
         val dateToday = LocalDate.now()
         val format = DateTimeFormatter.ofPattern("dd MMM yyyy")

@@ -2206,5 +2206,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_describe_your_meal_nin_free_form">Describe your meal\nin free form.</string>
     <string name="string_ai_prompt_ex">“eg. I had chicken tikka, some salad, tomato soup along with some pani puris for dinner...”</string>
     <string name="text_type_anything">Type anything...</string>
+    <string name="text_add_option">Add Option</string>
+    <string name="text_select_supplement">Select Supplement</string>
 
 </resources>

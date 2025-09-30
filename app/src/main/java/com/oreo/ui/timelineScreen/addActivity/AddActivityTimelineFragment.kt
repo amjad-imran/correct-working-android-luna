@@ -13,6 +13,7 @@ import com.oreo.ui.timelineScreen.addActivity.activities.AddAlcoholFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddCaffeineFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddLightExposureFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddPeriodLogFragment
+import com.oreo.ui.timelineScreen.addActivity.activities.AddRecoveryFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddSleepFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddSupplementsFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddWaterFragment
@@ -109,7 +110,9 @@ class AddActivityTimelineFragment :
                     AddActivityItemsEnum.ALCOHOL -> {
                         AddAlcoholFragment()
                     }
-                    AddActivityItemsEnum.RECOVERY -> {null}
+                    AddActivityItemsEnum.RECOVERY -> {
+                        AddRecoveryFragment()
+                    }
                 }
                 fragment?.let {
                     childFragmentManager.beginTransaction()

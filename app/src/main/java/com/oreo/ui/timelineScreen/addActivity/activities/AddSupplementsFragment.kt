@@ -11,10 +11,14 @@ import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
+import androidx.core.view.doOnNextLayout
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.moengage.core.internal.utils.showToast
 import com.noisefit.data.model.timeline.SupplementOption
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAddSupplementsBinding
@@ -22,9 +26,12 @@ import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.common.bottomSheet.TIME_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.dpToPixel
+import com.noisefit_commans.ui.disable
+import com.noisefit_commans.ui.enable
+import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,6 +40,7 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import kotlin.getValue
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(FragmentAddSupplementsBinding::inflate) {
@@ -41,52 +49,30 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
     private val sharedViewModel: AddActivityTimelineSharedViewModel by activityViewModels()
     private val mainViewModel: OreoMainViewModel by activityViewModels()
 
+    private val optAdapter by lazy {
+        RecoveryOptionsAdapter(){
+            handleOnOptionClicked(it)
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getSupplementsList()
         viewModel.selectedDate = LocalDate.now()
             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         setUi()
+        setAdapter()
     }
 
-    private fun setSpinnerUi(supplementsList: ArrayList<SupplementOption>) {
-        val spinner = binding.spinnerSupplements
-
-        // adapter, hint selection, offsets, etc.
-        val adapter = CustomSpinnerAdapter(requireContext(), supplementsList)
-        spinner.adapter = adapter
-
-        spinner.setSelection(0)
-
-        // 16dp gap below spinner
-        (spinner as? androidx.appcompat.widget.AppCompatSpinner)?.apply {
-            setDropDownWidth(ViewGroup.LayoutParams.MATCH_PARENT)
-            setDropDownVerticalOffset(16f.dpToPixel().toInt()) // or resources.getDimensionPixelSize(R.dimen.offset_16dp)
-            setPopupBackgroundResource(R.drawable.bg_dropdown_add_log_bs_circadian)
+    private fun setAdapter() {
+        binding.rvOptions.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = optAdapter
         }
-
-        // Cap dropdown height to 70% of fragment height
-        view?.viewTreeObserver?.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                view?.viewTreeObserver?.removeOnGlobalLayoutListener(this)
-                val maxHeight = (view?.height?.times(0.7f))?.toInt()?: 400
-
-                try {
-                    val spinnerClass = androidx.appcompat.widget.AppCompatSpinner::class.java
-                    val popupField = spinnerClass.getDeclaredField("mPopup").apply { isAccessible = true }
-                    val popup = popupField.get(spinner)
-                    // Import androidx.appcompat.widget.ListPopupWindow
-                    if (popup is androidx.appcompat.widget.ListPopupWindow) {
-                        popup.height = maxHeight   // <- THIS sets the popup’s max height (scrolls automatically)
-                    }
-                } catch (t: Throwable) {
-                    // Reflection may break on some OEMs; swallow or log
-                }
-            }
-        })
     }
 
     private fun setUi() {
+        binding.btnSave.disable()
         binding.lytDateTime.apply {
             lytDate.tvTime.text = getString(R.string.text_date)
             lytTime.tvTime.text = getString(R.string.text_time)
@@ -121,17 +107,25 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
         }
 
         binding.btnSave.setOnClickListener{
-            val spinner = binding.spinnerSupplements
-            val selected: SupplementOption? = spinner.selectedItem as? SupplementOption
-            selected?.let {
-                viewModel.logSupplements(it)
+            if(viewModel.selectedOption==null){
+                // TODO: Update Msg Text
+                showToast(requireContext(), "Please select an option!")
+                return@setOnClickListener
             }
+            viewModel.logSupplements()
+        }
+
+        binding.lytSelected.setOnClickListener {
+            handleDropDown()
         }
     }
 
     override fun subscribeObservers() {
         viewModel.supplementsList.observe(this){ supplements->
-            setSpinnerUi(supplements)
+            optAdapter.updateDataSet(supplements)
+            binding.rvOptions.doOnNextLayout {
+                capRvHeightToPercent(binding.rvOptions, binding.root, 0.70f)
+            }
         }
 
         viewModel.onAddSuccess.observe(this){
@@ -160,6 +154,37 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
                 uiController.displayProgressBar(false,"")
             }
         }
+    }
+
+    private fun capRvHeightToPercent(rv: RecyclerView, root: View, percent: Float) {
+        val rootH = root.height.takeIf { it > 0 } ?: root.measuredHeight
+        if (rootH <= 0) return // nothing to do yet
+
+        val maxH = (rootH * percent).roundToInt()
+        val params = rv.layoutParams
+        val rvMeasured = rv.measuredHeight
+
+        params.height = if (rvMeasured > maxH) maxH else ViewGroup.LayoutParams.WRAP_CONTENT
+        rv.layoutParams = params
+    }
+
+    private fun handleDropDown() {
+        if(viewModel.isDropdownOpen){
+            binding.rvOptions.gone()
+        }else{
+            binding.rvOptions.visible()
+        }
+        viewModel.isDropdownOpen = !viewModel.isDropdownOpen
+    }
+
+    private fun handleOnOptionClicked(option: SupplementOption) {
+        if(viewModel.selectedOption == null){
+            binding.btnSave.enable()
+            binding.tvSelected.setTextColor("#FFFFFF".toColorInt())
+        }
+        viewModel.selectedOption = option
+        binding.tvSelected.text = option.options
+        binding.rvOptions.gone()
     }
 
     private fun onTimeClicked() {

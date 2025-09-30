@@ -9,6 +9,7 @@
         android:id="@+id/tvTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/S14"
         android:layout_marginHorizontal="12dp"
         android:layout_marginVertical="13dp"
         android:background="@android:color/transparent"
