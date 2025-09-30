@@ -3,20 +3,31 @@ package com.oreo.ui.timelineScreen.meal
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.view.inputmethod.InputMethodManager
+import androidx.core.os.bundleOf
+import androidx.core.widget.TextViewCompat
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.AutoTransition
+import androidx.transition.TransitionManager
 import com.noisefit.data.model.timeline.MealAiFoods
+import com.noisefit.data.model.timeline.MealAiMacros
 import com.noisefit.data.model.timeline.MealAiResponse
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentMealAiBinding
+import com.noisefit.ui.common.bottomSheet.TIME_REQUEST_KEY
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
@@ -37,6 +48,36 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
         binding.lytContent.tvAddFood.setOnClickListener {
             showAddFoodSheet()
         }
+        binding.lytContent.tvTime.setOnClickListener {
+            setFragmentResultListener(TIME_REQUEST_KEY) { _, bundle ->
+                val hourOfDay = bundle.getInt("hour")
+                val minute = bundle.getInt("minute")
+
+                val time = LocalTime.of(hourOfDay, minute)
+                if (time > LocalTime.now()) {
+                    context.showShortToast("Time cannot be in future")
+                    return@setFragmentResultListener
+                }
+
+                viewModel.mealTime.postValue(time)
+
+            }
+
+
+            navigate(
+                R.id.timeBottomSheet,
+                bundleOf(
+                    "hour" to viewModel.mealTime.value!!.hour,
+                    "minute" to viewModel.mealTime.value!!.minute,
+                    "hourOther" to 0,
+                    "minuteOther" to 0,
+                    "isStart" to 1,
+                    "unitPosition" to 1,
+                    "title" to getString(R.string.text_time)
+                )
+            )
+
+        }
 
         binding.lytContent.btnSaveMeal.setOnClickListener {
             val foods = foodAdapter?.getItems()
@@ -49,6 +90,9 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
 
             viewModel.saveMeal(foods)
         }
+
+        binding.lytContent.lytMacrosHeader.setOnClickListener { toggleMacros() }
+        binding.lytContent.ivMacrosArrow.setOnClickListener { toggleMacros() }
 
 
         binding.tvRetryPrompt.setOnClickListener {
@@ -113,6 +157,15 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
                 showDataState(it)
             }
         }
+        viewModel.mealTime.observe(this){
+            binding.lytContent.tvTime.text = it.format(DateTimeFormatter.ofPattern("h:mma"))
+            setMealType(it)
+        }
+    }
+
+    private fun setMealType(time: LocalTime) {
+
+
     }
 
     private fun showDataState(data: MealAiResponse) {
@@ -131,7 +184,6 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
 
         foodAdapter?.setData(data.foods ?: ArrayList())
 
-        mealBinding.tvTime.text = data.time ?: ""
         mealBinding.tvDate.text = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMM"))
 
         /* when (data.mealType?.lowercase()){
@@ -142,6 +194,8 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
          }*/
 
         updateTotalCalories(foodAdapter?.getItems().orEmpty())
+
+        populateMacros(data.macros)
     }
 
     private fun showAnalysingState() {
@@ -226,4 +280,69 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
         val total = items.mapNotNull { it.calories }.sum()
         binding.lytContent.tvTotalCalories.text = "${total}Kcal"
     }
+
+    private fun populateMacros(macros: List<MealAiMacros>?) {
+        val mealBinding = binding.lytContent
+        val items = macros.orEmpty()
+        val container = mealBinding.llMacrosItems
+        container.removeAllViews()
+
+        if (items.isEmpty()) {
+            mealBinding.lytMacrosHeader.gone()
+            mealBinding.lytMacrosContent.gone()
+            mealBinding.viewMacrosDivider.gone()
+            return
+        } else {
+            mealBinding.lytMacrosHeader.visible()
+            mealBinding.viewMacrosDivider.visible()
+            mealBinding.lytMacrosContent.visible()
+            mealBinding.ivMacrosArrow.rotation = 180f
+        }
+
+        items.forEachIndexed { index, it ->
+            val row = LinearLayout(requireContext()).apply {
+                orientation = LinearLayout.HORIZONTAL
+                layoutParams = LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                ).apply {
+                    topMargin = if (index == 0) 8.dp else 12.dp
+                }
+            }
+
+            val tvName = TextView(requireContext()).apply {
+                TextViewCompat.setTextAppearance(this, com.noisefit_commans.R.style.S12)
+                setTextColor(android.graphics.Color.parseColor("#A3FFFFFF"))
+                text = it.name.orEmpty()
+                layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)
+            }
+
+            val tvValue = TextView(requireContext()).apply {
+                TextViewCompat.setTextAppearance(this, com.noisefit_commans.R.style.S12)
+                setTextColor(android.graphics.Color.parseColor("#FFFFFFFF"))
+                text = it.value.orEmpty()
+                layoutParams = LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+            }
+
+            row.addView(tvName)
+            row.addView(tvValue)
+            container.addView(row)
+        }
+    }
+
+    private fun toggleMacros() {
+        val mealBinding = binding.lytContent
+        val isVisible = mealBinding.lytMacrosContent.visibility == View.VISIBLE
+        val transition = AutoTransition().apply { duration = 200 }
+        TransitionManager.beginDelayedTransition(mealBinding.root as ViewGroup, transition)
+        mealBinding.lytMacrosContent.visibility = if (isVisible) View.GONE else View.VISIBLE
+        val target = if (isVisible) 0f else 180f
+        mealBinding.ivMacrosArrow.animate().rotation(target).setDuration(200).start()
+    }
+
+    private val Int.dp: Int
+        get() = (this * resources.displayMetrics.density).toInt()
 }

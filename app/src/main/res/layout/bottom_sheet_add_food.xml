@@ -1,38 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="20dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        style="@style/S18"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add food item"
-        android:textColor="@color/white" />
+        android:background="@android:color/transparent">
 
-    <EditText
-        android:id="@+id/etFoodName"
-        style="@style/S16"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/back_meal_type_selector"
-        android:hint="Food name"
-        android:paddingHorizontal="12dp"
-        android:paddingVertical="10dp"
-        android:textColor="@color/white"
-        android:textColorHint="#66FFFFFF" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnSaveFood"
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:text="Save"
-        android:textAllCaps="false" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/list"
+            style="@style/ModalStyleDialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_12dp"
+            android:layout_marginTop="@dimen/dimen_12dp"
+            android:layout_marginEnd="@dimen/dimen_12dp"
+            android:layout_marginBottom="@dimen/dimen_12dp"
+            tools:listitem="@layout/fragment_privacy_bottom_dialog_list_dialog_item">
 
-</LinearLayout>
+            <View
+                android:layout_width="40dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="8dp"
+                android:alpha="0.2"
+                android:background="@drawable/back_bottom_sheet_drag"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvTitle"
+                style="@style/H4"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/side_margin"
+                android:gravity="center"
+                android:text="@string/text_add_food_item"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/etFoodItem"
+                style="@style/S16"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:background="@drawable/back_meal_time_selector"
+                android:fontFamily="@font/gilroy_medium"
+                android:gravity="center"
+                android:layout_marginHorizontal="24dp"
+                android:maxLength="50"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:hint="@string/text_food_item"
+                android:layout_marginTop="24dp"
+                android:padding="0dp"
+                android:textColor="@color/white"
+                android:textColorHint="#66FFFFFF"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+
+            <Button
+                android:id="@+id/btnSave"
+                style="@style/BtnGreen"
+                android:layout_width="0dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="36dp"
+                android:text="@string/text_add"
+                app:backgroundTint="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etFoodItem"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+</layout>

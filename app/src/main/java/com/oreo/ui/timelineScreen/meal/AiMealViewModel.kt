@@ -13,6 +13,8 @@ import com.noisefit_commans.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 
@@ -22,6 +24,7 @@ class AiMealViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     val mealAiResponse = MutableLiveData<MealAiResponse?>()
+    var mealTime = MutableLiveData<LocalTime>(LocalTime.now())
     var lastEnteredPrompt: String? = null
     fun getNutritionFromText(text: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -61,6 +64,19 @@ class AiMealViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             mealAiResponse.postValue(it)
+
+
+                            val time = try {
+                                if (it.time.isNullOrEmpty()) {
+                                    LocalTime.now()
+                                } else {
+                                    LocalTime.parse(it.time, DateTimeFormatter.ofPattern("HH:mm"))
+                                }
+                            } catch (exp: Exception) {
+                                LocalTime.now()
+                            }
+
+                            mealTime.postValue(time)
                         }
                     }
                 }
