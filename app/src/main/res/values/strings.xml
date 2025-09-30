@@ -2208,5 +2208,14 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_type_anything">Type anything...</string>
     <string name="text_add_option">Add Option</string>
     <string name="text_select_supplement">Select Supplement</string>
+    <string name="text_identified_food">Identified food</string>
+    <string name="text_add_food_item">Add food item +</string>
+    <string name="text_more_details">More Details</string>
+    <string name="text_snack">Snack</string>
+    <string name="text_dinner">Dinner</string>
+    <string name="text_lunch">Lunch</string>
+    <string name="text_breakfast">Breakfast</string>
+    <string name="text_retry_prompt">Retry Prompt</string>
+    <string name="text_result_not_correct">Result not correct?</string>
 
 </resources>

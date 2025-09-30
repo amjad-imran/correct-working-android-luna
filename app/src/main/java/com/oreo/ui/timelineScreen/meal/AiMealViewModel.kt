@@ -1,7 +1,10 @@
 package com.oreo.ui.timelineScreen.meal
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
+import com.noisefit.data.model.timeline.MealAiFoods
+import com.noisefit.data.model.timeline.MealAiResponse
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit_commans.data.BinaryActionCallback
@@ -17,12 +20,14 @@ import javax.inject.Inject
 class AiMealViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : BaseViewModel() {
-    fun getNutritionFromText(text: String) {
 
+    val mealAiResponse = MutableLiveData<MealAiResponse?>()
+    var lastEnteredPrompt: String? = null
+    fun getNutritionFromText(text: String) {
         viewModelScope.launch(Dispatchers.IO) {
 
             val req = JsonObject().apply {
-                this.addProperty("prompt",text)
+                this.addProperty("prompt", text)
             }
 
             userRepository.getNutritionFromText(
@@ -55,12 +60,16 @@ class AiMealViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-
+                            mealAiResponse.postValue(it)
                         }
                     }
                 }
             }
         }
+
+    }
+
+    fun saveMeal(foods: List<MealAiFoods>) {
 
     }
 

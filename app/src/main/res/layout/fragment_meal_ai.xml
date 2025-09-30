@@ -5,7 +5,7 @@
     android:id="@+id/rootConstraint"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_background_new">
+    android:background="#1F1F1F">
 
     <ImageView
         android:id="@+id/ivBack"
@@ -36,8 +36,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
-        android:visibility="invisible"
         android:src="@drawable/ic_ai_meal"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivBack" />
 
@@ -48,15 +48,103 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="14dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="16dp"
         android:alpha="0"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ivEditMeal"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivMeal" />
+        app:layout_constraintTop_toBottomOf="@+id/ivMeal"
+        tools:alpha="1"
+        tools:text="I had chicken tikka, some salad, tomato soup along with some pani puris for dinner..."
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/ivEditMeal"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_marginEnd="16dp"
+        android:padding="4dp"
+        android:src="@drawable/ic_edit_meal_edit"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvTopText"
+        tools:visibility="visible" />
+
+
+    <com.app.shimmertextview.ShimmerTextView
+        android:id="@+id/tvAnalysing"
+        style="@style/S20"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="52dp"
+        android:gravity="center"
+        android:text="@string/text_analysing"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTopText"
+        app:text_shimmer_base_color="#70AF86"
+        app:text_shimmer_colored="true"
+        app:text_shimmer_duration="1500"
+        app:text_shimmer_highlight_color="#C2E6CE"
+        app:text_shimmer_repeat_mode="restart"
+        tools:visibility="visible" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/svMain"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTopText">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/lytContent"
+                layout="@layout/layout_meal_data"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                style="@style/S12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:gravity="center"
+                android:text="@string/text_result_not_correct"
+                android:textColor="#EBEBEB" />
+
+            <TextView
+                android:id="@+id/tvRetryPrompt"
+                style="@style/S12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#B397DC"
+                android:gravity="center_vertical"
+                android:drawablePadding="4dp"
+                android:paddingVertical="6dp"
+                android:layout_marginBottom="46dp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/text_retry_prompt"
+                app:drawableStartCompat="@drawable/ic_refresh_meal" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
     <TextView
         android:id="@+id/tvHeader"
@@ -96,12 +184,12 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="24dp"
-        app:cardBackgroundColor="@color/white_11"
+        app:cardBackgroundColor="#456C60"
         app:cardCornerRadius="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:strokeColor="@color/white_15"
+        app:strokeColor="#59B297"
         app:strokeWidth="1dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
