@@ -18,6 +18,7 @@ import com.google.gson.Gson
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.models.*
 import com.noisefit_commans.ui.tryCatch
+import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DistanceUtil
 import com.noisefit_commans.utils.LOGS
@@ -1015,6 +1016,8 @@ constructor(
                     }
 
                     val workoutType = parseWorkoutName(session.activity)
+
+
                     if (workoutType.isNullOrEmpty().not()) {
                         val workoutGoogleFit = WorkoutGoogleFit(
                             startTime = session.getStartTime(TimeUnit.SECONDS),
@@ -1026,6 +1029,8 @@ constructor(
                             exp.printStackTrace()
                             session.getEndTime(TimeUnit.SECONDS) - session.getStartTime(TimeUnit.SECONDS)
                         }
+                        AppLogs.sendAppLogs("google workout step1  - ${workoutType} -$duration ${session.appPackageName} ")
+
                         workoutGoogleFit.name = session.name
                         workoutGoogleFit.identifier = session.identifier
                         workoutGoogleFit.duration = duration

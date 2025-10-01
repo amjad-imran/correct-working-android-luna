@@ -11,6 +11,7 @@ import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.local.db.fromJson
 import com.noisefit.data.model.GoalModel
+import com.noisefit_commans.data.model.timeline.MealAiResponse
 import com.noisefit.data.model.timeline.SupplementsListResponse
 import com.noisefit.data.remote.CityData
 import com.noisefit.data.remote.StateData
@@ -670,6 +671,8 @@ class UserRepositoryImpl(
 
     override suspend fun deleteTimelineItemById(id: String): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
+            userHealthDataDataSource.clearDataByDates(listOf(DateFormats.getTodaysDateString(10)))
+            keyValueDataSource.removeDataByKey("", KeyValueDataType.CIRCADIAN_DATA)
             remoteDataSource.deleteTimelineItemById(
                 "${BuildConfig.OREO_BASE_URL}/protean/v3/time-tracker/$id"
             )
@@ -688,6 +691,26 @@ class UserRepositoryImpl(
         return safeApiCallFlow(dispatcher) {
             remoteDataSource.getAddSupplementsListData(
                 "${BuildConfig.OREO_BASE_URL}/protean/v3/time-tracker/options/$option"
+            )
+        }
+    }
+
+    override suspend fun getNutritionFromText(req: JsonObject): Flow<Resource<BaseApiResponse<MealAiResponse>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.getNutritionFromText(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/track-meal-new-generate",
+                req
+            )
+        }
+    }
+
+    override suspend fun saveAiMeal(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            userHealthDataDataSource.clearDataByDates(listOf(DateFormats.getTodaysDateString(10)))
+            keyValueDataSource.removeDataByKey("", KeyValueDataType.CIRCADIAN_DATA)
+            remoteDataSource.saveAiMeal(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/track-meal-new",
+                req
             )
         }
     }

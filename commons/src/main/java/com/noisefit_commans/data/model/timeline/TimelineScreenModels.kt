@@ -92,4 +92,8 @@ data class TimelineMetadata(
     @SerializedName("end_time")
     val endTime: String? = null,
 
+    val foods: List<MealAiFoods>?=null,
+    val macros: List<MealAiMacros>?=null,
+    val prompt: String?=null,
+
 ) : Parcelable

@@ -2,6 +2,7 @@ package com.oreo.ui.timelineScreen.addActivity
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.moengage.core.internal.utils.showToast
@@ -23,7 +24,6 @@ import com.oreo.ui.timelineScreen.addActivity.activities.AddSleepFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddSupplementsFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddWaterFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddWorkoutFragment
-import com.oreo.ui.timelineScreen.meal.MealAiFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -104,7 +104,8 @@ class AddActivityTimelineFragment :
                     }
 
                     AddActivityItemsEnum.MEAL -> {
-                        MealAiFragment()
+                        null
+                        //MealAiFragment()
                     /*AddMealActivityTimelineFragment()*/
                     }
 
@@ -196,6 +197,12 @@ class AddActivityTimelineFragment :
                 }else{
                     binding.ivDelete.invisible()
                 }
+
+                if(it.first== AddActivityItemsEnum.MEAL){
+                    navigateUpSafe()
+                    navigate(R.id.mealAiFragment, bundleOf("mealData" to null))
+                }
+
             }
         }
         sharedViewModel.navigateUp.observe(this) {
