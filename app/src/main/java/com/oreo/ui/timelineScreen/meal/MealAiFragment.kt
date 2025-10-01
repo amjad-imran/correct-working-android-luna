@@ -48,12 +48,15 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
         super.onViewCreated(view, savedInstanceState)
 
         val mealData = navArgs.mealData
-        if(mealData!=null){
+        if (mealData != null) {
 
-            val date  = mealData.date
-            if(date?.equals(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))) == true){
+            val date = mealData.date
+            if (date?.equals(
+                    LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                ) == true
+            ) {
                 viewModel.editMode = true
-            }else{
+            } else {
                 viewModel.viewMode = true
             }
 
@@ -74,14 +77,15 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
             binding.ivEditMeal.visibility = View.INVISIBLE
             binding.textResult.gone()
             binding.tvRetryPrompt.gone()
-            if(viewModel.editMode){
+            if (viewModel.editMode) {
                 binding.ivDelete.visible()
                 binding.lytContent.btnSaveMeal.visible()
             }
-            if(viewModel.viewMode){
+            if (viewModel.viewMode) {
                 binding.lytContent.btnSaveMeal.gone()
+                binding.tvTitle.text = getString(R.string.text_meal_intake)
             }
-        }else{
+        } else {
             binding.etInput.requestFocus()
         }
     }
@@ -97,7 +101,7 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
             showAddFoodSheet()
         }
         binding.lytContent.tvTime.setOnClickListener {
-            if(viewModel.viewMode) return@setOnClickListener
+            if (viewModel.viewMode) return@setOnClickListener
 
             setFragmentResultListener(TIME_REQUEST_KEY) { _, bundle ->
                 val hourOfDay = bundle.getInt("hour")
@@ -284,9 +288,9 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
             layoutManager = LinearLayoutManager(requireContext())
             foodAdapter = FoodAdapter(viewModel.viewMode) { items ->
                 updateTotalCalories(items)
-                if((foodAdapter?.itemCount?:0)>=10){
+                if ((foodAdapter?.itemCount ?: 0) >= 10) {
                     binding.lytContent.tvAddFood.gone()
-                }else{
+                } else {
                     binding.lytContent.tvAddFood.visible()
                 }
             }
@@ -295,9 +299,9 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
 
         foodAdapter?.setData(data.foods ?: ArrayList())
 
-        if((data.foods?.size?:0)>=10 || viewModel.viewMode){
+        if ((data.foods?.size ?: 0) >= 10 || viewModel.viewMode) {
             binding.lytContent.tvAddFood.gone()
-        }else{
+        } else {
             binding.lytContent.tvAddFood.visible()
         }
 
@@ -379,11 +383,11 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
     private fun showAddFoodSheet() {
         val sheet = AddFoodBottomSheet()
         sheet.callback = object : AddFoodBottomSheet.Callback {
-            override fun onFoodAdded(name: String) {
-                foodAdapter?.addItem(MealAiFoods(name, null))
-                if((foodAdapter?.itemCount?:0)>=10){
+            override fun onFoodAdded(name: String, calories: Int) {
+                foodAdapter?.addItem(MealAiFoods(name, calories))
+                if ((foodAdapter?.itemCount ?: 0) >= 10) {
                     binding.lytContent.tvAddFood.gone()
-                }else{
+                } else {
                     binding.lytContent.tvAddFood.visible()
                 }
             }
@@ -410,9 +414,9 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
         } else {
             mealBinding.lytMacrosHeader.visible()
             mealBinding.lytMacrosContent.visible()
-            if(viewModel.viewMode){
+            if (viewModel.viewMode) {
                 mealBinding.viewMacrosDivider.gone()
-            }else{
+            } else {
                 mealBinding.viewMacrosDivider.visible()
             }
             mealBinding.ivMacrosArrow.rotation = 180f

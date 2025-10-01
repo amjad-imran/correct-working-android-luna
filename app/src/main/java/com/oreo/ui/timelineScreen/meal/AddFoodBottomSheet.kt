@@ -12,7 +12,7 @@ class AddFoodBottomSheet :
     ) {
 
     interface Callback {
-        fun onFoodAdded(name: String)
+        fun onFoodAdded(name: String, calories: Int)
     }
 
     var callback: Callback? = null
@@ -23,8 +23,14 @@ class AddFoodBottomSheet :
 
         binding.btnSave.setOnClickListener {
             val name = binding.etFoodItem.text?.toString()?.trim().orEmpty()
+            val calories = binding.etCalories.text?.toString()?.trim().orEmpty()
             if (name.isNotEmpty()) {
-                callback?.onFoodAdded(name)
+                val calories = if (calories.isEmpty()) {
+                    0
+                } else {
+                    calories.toIntOrNull() ?: 0
+                }
+                callback?.onFoodAdded(name, calories)
                 dismiss()
             }
         }
