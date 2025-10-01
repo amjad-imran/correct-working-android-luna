@@ -75,6 +75,9 @@ class AddAlcoholViewmodel @Inject constructor(
 
             // TODO : Change json req obj and API
             val alcoholObject = JsonObject().apply {
+                editData?.id?.let {id ->
+                    this.addProperty("id", id)
+                }
                 this.addProperty("date", selectedDate)
                 this.addProperty("time", time)
                 this.addProperty("tag", alcoholId)
@@ -122,9 +125,6 @@ class AddAlcoholViewmodel @Inject constructor(
 
     fun deleteAlcoholItem() {
         viewModelScope.launch {
-            if(editData?.id == null){
-                return@launch
-            }
             userRepository.deleteTimelineItemById(editData?.id?:"").collect{ resource ->
                 when (resource) {
                     is Resource.GenericError -> {

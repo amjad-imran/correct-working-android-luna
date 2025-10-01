@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
+import com.moengage.core.internal.utils.showToast
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAddActivityTimelineBinding
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.setVisibilityByCondition
+import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.Event
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 import com.oreo.ui.timelineScreen.addActivity.activities.ActivityListingFragment
@@ -78,9 +80,12 @@ class AddActivityTimelineFragment :
 
         binding.ivDelete.setOnClickListener {
             if (args.editData?.id == null){
+                showToast(requireContext(),
+                    getString(R.string.text_something_went_wrong_please_try_again))
                 return@setOnClickListener
             }
             sharedViewModel.deleteBtnClickedEvent.postValue(Event(true))
+            sharedViewModel.deleteBtnClickedEvent.value = Event(null)
         }
     }
 
@@ -177,7 +182,14 @@ class AddActivityTimelineFragment :
                         .commit()
                 }
 
-                binding.ivDelete.setVisibilityByCondition(args.editData?.canBeEditedOrDeleted == 2 || args.editData?.canBeEditedOrDeleted == 3)
+                if(
+                    args.editData?.canBeEditedOrDeleted == 2 ||
+                    args.editData?.canBeEditedOrDeleted == 3
+                ){
+                    binding.ivDelete.visible()
+                }else{
+                    binding.ivDelete.invisible()
+                }
             }
         }
         sharedViewModel.navigateUp.observe(this) {

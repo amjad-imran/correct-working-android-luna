@@ -13,7 +13,6 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -166,8 +165,8 @@ class TimelineScreenDataFragment :
 
             "sleep" -> {
                 if(
-                    viewModel.getDate(0).equals(viewModel.date) ||
-                    viewModel.getDate(1).equals(viewModel.date)
+                    viewModel.getDate(0).equals(viewModel.date)/* ||
+                    viewModel.getDate(1).equals(viewModel.date)*/
                 ){
                     canBeUpdated = true
                 }
@@ -175,8 +174,8 @@ class TimelineScreenDataFragment :
 
             "nap" -> {
                 if(
-                    viewModel.getDate(0).equals(viewModel.date) ||
-                    viewModel.getDate(1).equals(viewModel.date)
+                    viewModel.getDate(0).equals(viewModel.date)/* ||
+                    viewModel.getDate(1).equals(viewModel.date)*/
                 ){
                     canBeUpdated = true
                 }
@@ -192,8 +191,8 @@ class TimelineScreenDataFragment :
 
             "supplements" -> {
                 if(
-                    viewModel.getDate(0).equals(viewModel.date) ||
-                    viewModel.getDate(1).equals(viewModel.date)
+                    viewModel.getDate(0).equals(viewModel.date)/* ||
+                    viewModel.getDate(1).equals(viewModel.date)*/
                 ){
                     data.canBeEditedOrDeleted = 3
                 }
@@ -201,8 +200,8 @@ class TimelineScreenDataFragment :
 
             "alcohol" -> {
                 if(
-                    viewModel.getDate(0).equals(viewModel.date) ||
-                    viewModel.getDate(1).equals(viewModel.date)
+                    viewModel.getDate(0).equals(viewModel.date)/* ||
+                    viewModel.getDate(1).equals(viewModel.date)*/
                 ){
                     data.canBeEditedOrDeleted = 3
                 }
@@ -211,8 +210,8 @@ class TimelineScreenDataFragment :
 
             "recovery" -> {
                 if(
-                    viewModel.getDate(0).equals(viewModel.date) ||
-                    viewModel.getDate(1).equals(viewModel.date)
+                    viewModel.getDate(0).equals(viewModel.date)/* ||
+                    viewModel.getDate(1).equals(viewModel.date)*/
                 ){
                     data.canBeEditedOrDeleted = 3
                 }

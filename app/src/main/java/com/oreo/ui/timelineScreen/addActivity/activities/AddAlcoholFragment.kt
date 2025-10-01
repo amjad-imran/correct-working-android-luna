@@ -15,6 +15,8 @@ import com.noisefit.ui.common.bottomSheet.TIME_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.disable
+import com.noisefit_commans.ui.enable
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
@@ -119,7 +121,14 @@ class AddAlcoholFragment : BaseFragment<FragmentAddAlcoholBinding>(FragmentAddAl
 
         sharedViewModel.deleteBtnClickedEvent.observe(this){
             it.getContent()?.let {
-                viewModel.deleteAlcoholItem()
+                if(it) {
+                    if(viewModel.editData?.id == null){
+                        showToast(requireContext(),
+                            getString(R.string.text_something_went_wrong_please_try_again))
+                        return@observe
+                    }
+                    viewModel.deleteAlcoholItem()
+                }
             }
         }
     }
@@ -141,7 +150,12 @@ class AddAlcoholFragment : BaseFragment<FragmentAddAlcoholBinding>(FragmentAddAl
             )
             viewModel.alcoholTime = time
             binding.lytDateTime.lytTime.tvTimeValue.text = curFormattedTime
-
+            if(viewModel.editData?.startTime != null){
+                val editDataTime = LocalTime.parse(viewModel.editData?.startTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+                if(editDataTime.hour != viewModel.alcoholTime.hour || editDataTime.minute != viewModel.alcoholTime.minute){
+                    binding.btnSave.enable()
+                }
+            }
         }
 
         val navController =
@@ -162,19 +176,23 @@ class AddAlcoholFragment : BaseFragment<FragmentAddAlcoholBinding>(FragmentAddAl
     }
 
     private fun onDateClicked() {
+        val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
         parentFragment?.setFragmentResultListener(VALUE_REQUEST_KEY) { _, bundle ->
             val selectedValue = bundle.getString("selectedValue")
             selectedValue?.let { it1 ->
 
                 val parsedDate =
-                    LocalDate.parse(it1, DateTimeFormatter.ofPattern("dd MMM yyyy"))
+                    LocalDate.parse(it1, formatter)
                         .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString()
                 viewModel.selectedDate = parsedDate
 
                 binding.lytDateTime.lytDate.tvTimeValue.text = it1
+
+                if(viewModel.editData?.startDate != null && !parsedDate.equals(viewModel.editData?.startDate)){
+                    binding.btnSave.enable()
+                }
             }
         }
-        val format = DateTimeFormatter.ofPattern("dd MMM yyyy")
 
         val navController =
             NavHostFragment.Companion.findNavController(this@AddAlcoholFragment)
@@ -183,7 +201,7 @@ class AddAlcoholFragment : BaseFragment<FragmentAddAlcoholBinding>(FragmentAddAl
             R.id.valueSelectorBottomSheet,
             bundleOf(
                 "selectedValue" to if (viewModel.selectedDate == null) null else LocalDate.parse(viewModel.selectedDate)
-                    .format(format),
+                    .format(formatter),
                 "selectionList" to viewModel.getAlcoholDates(),
                 "title" to  getString(R.string.text_date)
             )
@@ -192,6 +210,9 @@ class AddAlcoholFragment : BaseFragment<FragmentAddAlcoholBinding>(FragmentAddAl
     }
 
     private fun setEditLayout(editData: ItemTimelineResponseModel) {
+        binding.lytDateTime.lytDate.tvTime.text = getString(R.string.text_date)
+        binding.lytDateTime.lytTime.tvTime.text = getString(R.string.text_time)
+
         // Set Date
         viewModel.selectedDate = editData.startDate ?: LocalDate.now().toString()
         val parsedDate =
@@ -216,10 +237,15 @@ class AddAlcoholFragment : BaseFragment<FragmentAddAlcoholBinding>(FragmentAddAl
 
             else -> {
                 binding.btnSave.visible()
+                binding.btnSave.disable()
                 binding.lytDateTime.lytDate.tvTimeValue.isClickable = true
                 binding.lytDateTime.lytTime.tvTimeValue.isClickable = true
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
     }
 
 }
