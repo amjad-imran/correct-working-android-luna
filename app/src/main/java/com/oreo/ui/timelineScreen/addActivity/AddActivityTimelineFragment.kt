@@ -2,6 +2,7 @@ package com.oreo.ui.timelineScreen.addActivity
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
@@ -178,9 +179,11 @@ class AddActivityTimelineFragment :
                 }
 
                 binding.ivDelete.setVisibilityByCondition(args.editData?.canBeEditedOrDeleted == 2 || args.editData?.canBeEditedOrDeleted == 3)
-                if(it== AddActivityItemsEnum.MEAL){
+
+
+                if(it.first== AddActivityItemsEnum.MEAL){
                     navigateUpSafe()
-                    navigate(R.id.mealAiFragment)
+                    navigate(R.id.mealAiFragment, bundleOf("mealId" to null))
                 }
 
             }

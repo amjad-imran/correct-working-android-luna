@@ -13,6 +13,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
@@ -40,8 +41,14 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
     private var foodAdapter: FoodAdapter? = null
     private val mainViewModel: OreoMainViewModel by activityViewModels()
 
+    private val navArgs: MealAiFragmentArgs by navArgs()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        context.showShortToast("Meal Id ${navArgs.mealId}")
+
         binding.etInput.requestFocus()
 
     }
@@ -86,7 +93,7 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
         binding.lytContent.btnSaveMeal.setOnClickListener {
             val foods = foodAdapter?.getItems()
 
-            if(foods.isNullOrEmpty()) {
+            if (foods.isNullOrEmpty()) {
                 context.showShortToast(getString(R.string.text_add_food_item))
                 return@setOnClickListener
             }
@@ -108,7 +115,7 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
         }
 
         binding.ivEditMeal.setOnClickListener {
-            if(viewModel.mealAiResponse.value == null) return@setOnClickListener
+            if (viewModel.mealAiResponse.value == null) return@setOnClickListener
 
             viewModel.mealAiResponse.value = null
             binding.tvTopText.gone()
@@ -161,11 +168,11 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
                 showDataState(it)
             }
         }
-        viewModel.mealTime.observe(this){
+        viewModel.mealTime.observe(this) {
             binding.lytContent.tvTime.text = it.format(DateTimeFormatter.ofPattern("h:mma"))
             setMealType(it)
         }
-        viewModel.onAddSuccess.observe(this){
+        viewModel.onAddSuccess.observe(this) {
             it.getContent()?.let {
                 mainViewModel.sessionManager.reloadOnResume = true
 

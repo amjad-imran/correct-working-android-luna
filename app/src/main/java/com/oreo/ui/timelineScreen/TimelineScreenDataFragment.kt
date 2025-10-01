@@ -131,6 +131,13 @@ class TimelineScreenDataFragment :
 
         var canBeUpdated = false
         // TODO : Meal, Nap/Sleep
+
+        if(data.event.equals("meal")){
+            navigate(R.id.mealAiFragment, bundleOf("mealId" to data.id))
+            return
+        }
+
+
         when(data.event){
             "caffeine" -> {
                 if(
