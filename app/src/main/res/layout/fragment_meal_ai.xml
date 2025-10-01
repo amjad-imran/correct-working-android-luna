@@ -102,13 +102,13 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTopText">
+        app:layout_constraintTop_toBottomOf="@+id/tvTopText"
+        tools:visibility="visible">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -117,13 +117,20 @@
                 android:id="@+id/lytContent"
                 layout="@layout/layout_meal_data"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/textResult"
                 style="@style/S12"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
+                app:layout_constraintTop_toBottomOf="@id/lytContent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 android:gravity="center"
                 android:text="@string/text_result_not_correct"
                 android:textColor="#EBEBEB" />
@@ -133,16 +140,18 @@
                 style="@style/S12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#B397DC"
-                android:gravity="center_vertical"
-                android:drawablePadding="4dp"
-                android:paddingVertical="6dp"
-                android:layout_marginBottom="46dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="46dp"
+                android:drawablePadding="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textResult"
+                android:paddingVertical="6dp"
                 android:text="@string/text_retry_prompt"
+                android:textColor="#B397DC"
                 app:drawableStartCompat="@drawable/ic_refresh_meal" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 
@@ -227,4 +236,11 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
+
+    <include
+        android:id="@+id/progressBar"
+        layout="@layout/default_loader"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -694,4 +694,15 @@ class UserRepositoryImpl(
         }
     }
 
+    override suspend fun saveAiMeal(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            userHealthDataDataSource.clearDataByDates(listOf(DateFormats.getTodaysDateString(10)))
+            keyValueDataSource.removeDataByKey("", KeyValueDataType.CIRCADIAN_DATA)
+            remoteDataSource.saveAiMeal(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/track-meal-new",
+                req
+            )
+        }
+    }
+
 }

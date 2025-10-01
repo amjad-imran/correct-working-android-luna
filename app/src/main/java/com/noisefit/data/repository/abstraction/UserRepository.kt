@@ -102,5 +102,6 @@ interface UserRepository {
     suspend fun getAddSupplementsListData(): Flow<Resource<BaseApiResponse<SupplementsListResponse>>>
     suspend fun getTimelineOptionIdData(option: String): Flow<Resource<BaseApiResponse<SupplementsListResponse>>>
     suspend fun getNutritionFromText(req: JsonObject): Flow<Resource<BaseApiResponse<MealAiResponse>>>
+    suspend fun saveAiMeal(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
 
 }

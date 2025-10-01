@@ -834,7 +834,12 @@ interface NetworkService {
         @Url url: String,
         @Body req: JsonObject
     ): BaseApiResponse<MealAiResponse>
-    //
+
+    @POST
+    suspend fun saveAiMeal(
+        @Url url: String,
+        @Body req: JsonObject
+    ): BaseApiResponse<Any>
 
     /**
      * ---------------------------------------------------------------------------------

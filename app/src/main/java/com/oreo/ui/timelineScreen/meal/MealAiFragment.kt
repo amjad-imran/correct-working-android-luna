@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.os.bundleOf
 import androidx.core.widget.TextViewCompat
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +21,7 @@ import com.noisefit.data.model.timeline.MealAiMacros
 import com.noisefit.data.model.timeline.MealAiResponse
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentMealAiBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.common.bottomSheet.TIME_REQUEST_KEY
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
@@ -29,12 +31,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import kotlin.getValue
 
 @AndroidEntryPoint
 class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding::inflate) {
 
     private val viewModel: AiMealViewModel by viewModels()
     private var foodAdapter: FoodAdapter? = null
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -161,11 +165,67 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
             binding.lytContent.tvTime.text = it.format(DateTimeFormatter.ofPattern("h:mma"))
             setMealType(it)
         }
+        viewModel.onAddSuccess.observe(this){
+            it.getContent()?.let {
+                mainViewModel.sessionManager.reloadOnResume = true
+
+                navigateUpSafe()
+            }
+        }
+        viewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
+        viewModel.getApiErrors().observe(this) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
+
+        viewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
+
     }
 
     private fun setMealType(time: LocalTime) {
+        val selector = binding.lytContent.lytMealTypeSelector
 
+        val tvBreakfast = selector.tvBreakfast
+        val tvLunch = selector.tvLunch
+        val tvDinner = selector.tvDinner
+        val tvSnack = selector.tvSnack
 
+        fun reset() {
+            listOf(tvBreakfast, tvLunch, tvDinner, tvSnack).forEach {
+                it.setBackgroundResource(0)
+                it.setTextColor(android.graphics.Color.parseColor("#969696"))
+            }
+        }
+
+        val breakfastStart = LocalTime.of(7, 0)
+        val breakfastEnd = LocalTime.of(11, 0)
+        val lunchStart = LocalTime.of(12, 0)
+        val lunchEnd = LocalTime.of(15, 0)
+        val dinnerStart = LocalTime.of(18, 0)
+        val dinnerEnd = LocalTime.of(22, 0)
+
+        reset()
+
+        val target = when {
+            !time.isBefore(breakfastStart) && !time.isAfter(breakfastEnd) -> tvBreakfast
+            !time.isBefore(lunchStart) && !time.isAfter(lunchEnd) -> tvLunch
+            !time.isBefore(dinnerStart) && !time.isAfter(dinnerEnd) -> tvDinner
+            else -> tvSnack
+        }
+
+        target.setBackgroundResource(R.drawable.back_selected_meal_type)
+        target.setTextColor(android.graphics.Color.WHITE)
     }
 
     private fun showDataState(data: MealAiResponse) {
@@ -185,13 +245,6 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
         foodAdapter?.setData(data.foods ?: ArrayList())
 
         mealBinding.tvDate.text = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMM"))
-
-        /* when (data.mealType?.lowercase()){
-             "breakfast" -> mealBinding?.cgMealType?.check(mealBinding?.chipBreakfast?.id ?: -1)
-             "lunch" -> mealBinding?.cgMealType?.check(mealBinding?.chipLunch?.id ?: -1)
-             "dinner" -> mealBinding?.cgMealType?.check(mealBinding?.chipDinner?.id ?: -1)
-             "snack" -> mealBinding?.cgMealType?.check(mealBinding?.chipSnack?.id ?: -1)
-         }*/
 
         updateTotalCalories(foodAdapter?.getItems().orEmpty())
 
