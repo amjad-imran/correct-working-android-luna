@@ -62,7 +62,7 @@ data class ItemTimelineResponseModel(
         2 -> Edit
         3 -> Delete
     */
-    var canBeEditedOrDeleted:Int ?= 0,
+    var canBeEditedOrDeleted:Int = 0,
 ) : Parcelable
 
 @Parcelize
