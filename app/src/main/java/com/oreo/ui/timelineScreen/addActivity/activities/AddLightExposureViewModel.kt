@@ -60,6 +60,9 @@ class AddLightExposureViewModel @Inject constructor(
             val endTimeStr = endTime.format(formatter)
 
             val lightExpObject = JsonObject().apply {
+                editData?.id?.let {id ->
+                    this.addProperty("id", id)
+                }
                 this.addProperty("event", "light-exposure")
                 this.addProperty("start_time", startTimeStr)
                 this.addProperty("end_time", endTimeStr)

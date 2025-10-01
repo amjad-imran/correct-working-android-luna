@@ -8,6 +8,7 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,12 +26,29 @@ class AddCaffeineViewModel @Inject constructor(
     val caffeineValue = MutableLiveData<Int>(75)
     val onAddSuccess = MutableLiveData<Event<Boolean>>()
 
+    var editData : ItemTimelineResponseModel ?= null
+    var editDataCaffeineVal : Int ?= null
+
+    fun initData(){
+        if(editData!=null){
+            val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+            val sTime = LocalTime.parse(editData?.startTime, formatter)
+            caffeineTime.postValue(sTime)
+
+            caffeineValue.postValue(editData?.value?.toInt()?:75)
+            editDataCaffeineVal = editData?.value?.toInt()
+        }
+    }
+
     fun logCaffeineValue(localTime: LocalTime, quantity: Int) {
         viewModelScope.launch {
             val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
             val startTime = localTime.format(formatter)
 
             val caffeineObject = JsonObject().apply {
+                editData?.id?.let {id ->
+                    this.addProperty("id", id)
+                }
                 this.addProperty("event", "caffeine")
                 this.addProperty("value", quantity)
                 this.addProperty("start_time", startTime)
@@ -72,6 +90,42 @@ class AddCaffeineViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun deleteCaffeineItem() {
+        viewModelScope.launch {
+            userRepository.deleteTimelineItemById(editData?.id?:"").collect{ resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        deleteCaffeineItem()
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            onAddSuccess.postValue(Event(true))
+                        }
+                    }
+                }
+            }
+
         }
     }
 

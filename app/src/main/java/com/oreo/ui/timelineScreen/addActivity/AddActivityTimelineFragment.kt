@@ -124,7 +124,13 @@ class AddActivityTimelineFragment :
                     }
 
                     AddActivityItemsEnum.CAFFEINE -> {
-                        AddCaffeineFragment()
+                        AddCaffeineFragment().apply {
+                            it.second?.let { editData ->
+                                this.arguments = Bundle().apply {
+                                    putParcelable("editData", editData)
+                                }
+                            }
+                        }
                     }
 
                     AddActivityItemsEnum.WATER -> {

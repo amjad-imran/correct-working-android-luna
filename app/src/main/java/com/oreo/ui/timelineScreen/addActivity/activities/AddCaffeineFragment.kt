@@ -7,6 +7,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
+import com.moengage.core.internal.utils.showToast
 import com.noisefit.data.local.AppStaticData
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAddCaffeineBinding
@@ -16,6 +17,8 @@ import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.common.bottomSheet.TIME_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.disable
+import com.noisefit_commans.ui.enable
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
@@ -43,8 +46,33 @@ class AddCaffeineFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        viewModel.editData = arguments?.getParcelable("editData")
+        viewModel.initData()
         setSlider()
+        setEditUi()
+    }
+
+    private fun setEditUi() {
+        if(viewModel.editData != null){
+            viewModel.editData?.value?.toFloat()?.let {
+                binding.lytCard.lytSlider.setValue(it)
+            }
+            when(viewModel.editData!!.canBeEditedOrDeleted){
+                0 -> {
+                    // TODO: Block Slider touch
+                    binding.lytCard.lytSlider.disable()
+                    binding.lytCard.lytTimePicker.isClickable = false
+                    binding.btnSave.gone()
+                }
+
+                else -> {
+                    binding.lytCard.lytSlider.isClickable = true
+                    binding.lytCard.lytTimePicker.isClickable = true
+                    binding.btnSave.visible()
+                    binding.btnSave.disable()
+                }
+            }
+        }
     }
 
     private fun setSlider() {
@@ -56,9 +84,30 @@ class AddCaffeineFragment :
         customSlider.setOnValueChangeListener(object : CustomSlider.OnValueChangeListener {
             override fun onValueChanged(value: Int) {
                 viewModel.caffeineValue.value = value
+                if(viewModel.editDataCaffeineVal!=null && viewModel.editDataCaffeineVal!=value){
+                    binding.btnSave.enable()
+                }
             }
         })
     }
+
+    /*private fun setSlider() {
+        val customSlider = binding.lytCard.lytSlider
+
+        customSlider.setRange(min = 25f, max = 400f, step = 25f)
+        customSlider.setValue(viewModel.editDataCaffeineVal?.toFloat() ?: 75f)
+
+        if(viewModel.editData == null || viewModel.editData?.canBeEditedOrDeleted != 0){
+            customSlider.setOnValueChangeListener(object : CustomSlider.OnValueChangeListener {
+                override fun onValueChanged(value: Int) {
+                    viewModel.caffeineValue.value = value
+                    if (viewModel.editDataCaffeineVal != null && viewModel.editDataCaffeineVal != value) {
+                        binding.btnSave.enable()
+                    }
+                }
+            })
+        }
+    }*/
 
 
     override fun initListener() {
@@ -104,6 +153,17 @@ class AddCaffeineFragment :
 
                 viewModel.caffeineTime.postValue(time)
 
+                if(viewModel.editData!=null){
+                    val editDataTime = LocalTime.parse(
+                        viewModel.editData?.startTime, DateTimeFormatter.ofPattern("HH:mm:ss")
+                    )
+                    if(
+                        editDataTime.hour != time.hour ||
+                        editDataTime.minute != time.minute
+                    ){
+                        binding.btnSave.enable()
+                    }
+                }
             }
 
 
@@ -159,6 +219,19 @@ class AddCaffeineFragment :
                 mainViewModel.sessionManager.reloadOnResume = true
                 //mainViewModel.reloadTodaysData()
                 sharedViewModel.navigateUp()
+            }
+        }
+
+        sharedViewModel.deleteBtnClickedEvent.observe(this){
+            it.getContent()?.let {
+                if(it) {
+                    if(viewModel.editData?.id == null){
+                        showToast(requireContext(),
+                            getString(R.string.text_something_went_wrong_please_try_again))
+                        return@observe
+                    }
+                    viewModel.deleteCaffeineItem()
+                }
             }
         }
 

@@ -140,6 +140,7 @@ class TimelineScreenDataFragment :
 
         when(data.event){
             "caffeine" -> {
+                data.event = "caffeine_window"
                 if(
                     viewModel.getDate(0).equals(viewModel.date)
                 ){
