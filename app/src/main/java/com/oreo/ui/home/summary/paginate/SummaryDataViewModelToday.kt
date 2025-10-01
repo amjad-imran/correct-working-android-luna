@@ -1717,7 +1717,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
                 MEAL_INTAKE_KEY_KEY -> {
                     data.titleColor = "#FFE3B2".toColorInt()
-                    data.desc = "Meal ${mealCount--}"
+                    data.desc = "${data.metadata?.foods?.take(2)?.joinToString(", ") { it.name?:"" }}"
                 }
 
                 LIGHT_EXPOSURE_KEY -> {

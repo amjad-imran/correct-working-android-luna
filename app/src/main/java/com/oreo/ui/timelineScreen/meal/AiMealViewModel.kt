@@ -146,6 +146,10 @@ class AiMealViewModel @Inject constructor(
         val mealObject = JsonObject()
         val foodsArray = JsonArray()
 
+        mealAiResponse.value?.id?.let {
+            mealObject.addProperty("id", it)
+        }
+
         foods.forEach { food ->
             foodsArray.add(JsonObject().apply {
                 addProperty("name", food.name)

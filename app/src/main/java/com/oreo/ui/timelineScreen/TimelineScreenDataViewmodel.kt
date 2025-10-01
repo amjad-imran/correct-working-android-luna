@@ -79,14 +79,11 @@ class TimelineScreenDataViewmodel @Inject constructor(
                             } else {
                                 it.timeTracker?.let { dataList ->
                                     val data = mergeHydrationEvents(dataList)
-                                    var mealCount = data.count { item -> item.event.equals(MEAL_INTAKE_KEY_KEY) }
 
                                     data.map { obj ->
                                         obj.event?.let {
-                                            getActivityTitleColorAndDesc(obj, mealCount)
-                                            if (it.equals(MEAL_INTAKE_KEY_KEY)) {
-                                                mealCount--
-                                            }
+                                            getActivityTitleColorAndDesc(obj)
+
                                         }
                                     }
                                     activityListData.postValue(data)
@@ -99,7 +96,7 @@ class TimelineScreenDataViewmodel @Inject constructor(
         }
     }
 
-    private fun getActivityTitleColorAndDesc(data: ItemTimelineResponseModel, mealCount: Int) {
+    private fun getActivityTitleColorAndDesc(data: ItemTimelineResponseModel) {
         data.displayTime = convertTimeFormat(data.startTime)
         when (data.event) {
             SLEEP_KEY -> {
@@ -153,7 +150,7 @@ class TimelineScreenDataViewmodel @Inject constructor(
 
             MEAL_INTAKE_KEY_KEY -> {
                 data.titleColor = "#FFE3B2".toColorInt()
-                data.desc = "Meal $mealCount"
+                data.desc = "${data.metadata?.foods?.take(2)?.joinToString(", ") { it.name?:"" }}"
             }
 
             LIGHT_EXPOSURE_KEY -> {

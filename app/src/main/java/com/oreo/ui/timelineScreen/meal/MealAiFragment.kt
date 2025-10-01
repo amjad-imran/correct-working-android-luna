@@ -59,6 +59,7 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
 
             listOf(binding.tvHeader, binding.tvSub, binding.cardInput).forEach { v ->
                 v.alpha = 0f
+                v.gone()
             }
 
             viewModel.mealAiResponse.postValue(mealData)

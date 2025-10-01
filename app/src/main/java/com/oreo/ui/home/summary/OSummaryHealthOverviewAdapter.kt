@@ -111,6 +111,7 @@ import com.noisefit_commans.ui.playAnimation
 import com.oreo.data.model.OHealthOverview.VitalsType
 import com.oreo.ui.chatGpt.SummaryStates
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.MEAL_INTAKE_KEY_KEY
 import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.SYMPTOM_KEY
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -768,7 +769,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
                     binding.tvDesc.text = data.desc
 
-                    if (data.event.equals(SYMPTOM_KEY, true)) {
+                    if (data.event.equals(SYMPTOM_KEY, true) || data.event.equals(
+                            MEAL_INTAKE_KEY_KEY
+                        )
+                    ) {
                         binding.tvTime.invisible()
                     } else {
                         binding.tvTime.apply {
@@ -860,7 +864,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             binding.lytHrValue.apply {
                 tvValue.text = data.hrValue?.let { it } ?: "--"
-                tvUnit.text = data.hrValue?.let {"BPM"}?:""
+                tvUnit.text = data.hrValue?.let { "BPM" } ?: ""
                 tvUnit.setTextColor("#FF4E5C".toColorInt())
             }
             binding.tvHrAgo.text = data.hrLastTime ?: "-"
@@ -881,13 +885,13 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.lytSkinValue.apply {
                 tvValue.text =
                     data.skinTempValue?.let { it } ?: "--"
-                tvUnit.text = data.skinTempValue?.let { if(data.isMetric) "°C" else "°F" } ?: ""
+                tvUnit.text = data.skinTempValue?.let { if (data.isMetric) "°C" else "°F" } ?: ""
                 tvUnit.setTextColor("#6AAF93".toColorInt())
             }
             binding.tvSkinAgo.text = data.skinTempLastTime ?: "-"
 
             binding.itemHR.setOnClickListener {
-                if(expandedTile!=null) return@setOnClickListener
+                if (expandedTile != null) return@setOnClickListener
                 onItemClicked(
                     OHealthOverview.VitalsType.HR,
                     data,
@@ -896,7 +900,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
 
             binding.itemStress.setOnClickListener {
-                if(expandedTile!=null) return@setOnClickListener
+                if (expandedTile != null) return@setOnClickListener
                 onItemClicked(
                     OHealthOverview.VitalsType.STRESS,
                     data,
@@ -904,7 +908,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 )
             }
             binding.itemSpO2.setOnClickListener {
-                if(expandedTile!=null) return@setOnClickListener
+                if (expandedTile != null) return@setOnClickListener
                 onItemClicked(
                     OHealthOverview.VitalsType.SPO2,
                     data,
@@ -912,7 +916,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 )
             }
             binding.itemSkinTemp.setOnClickListener {
-                if(expandedTile!=null) return@setOnClickListener
+                if (expandedTile != null) return@setOnClickListener
                 onItemClicked(
                     OHealthOverview.VitalsType.SKIN_TEMP,
                     data,
@@ -1133,7 +1137,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 else -> {
 
                     lottieView.visible()
-                    lottieView.playAnimation(LottieDrawable.INFINITE,getBackAnim(data.expandedType))
+                    lottieView.playAnimation(
+                        LottieDrawable.INFINITE,
+                        getBackAnim(data.expandedType)
+                    )
 
                     lytSuccess.gone()
                     retryBtn.gone()
@@ -1161,24 +1168,25 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     null -> binding.ivHrIcon
                 }
                 ivAnchor.setImageResource(getIcon(data.expandedType))
-                if(data.isRetry.not()){
-                    animateImageView(ivAnchor, srcView,{
+                if (data.isRetry.not()) {
+                    animateImageView(ivAnchor, srcView, {
                         if (data.expandedType == OHealthOverview.VitalsType.HR) {
-                            val hrVal = data.hrValue?.toIntOrNull()?:60
+                            val hrVal = data.hrValue?.toIntOrNull() ?: 60
                             startHeartAnimation(ivAnchor, hrVal)
-                        }else {
+                        } else {
                             stopHeartAnimation(ivAnchor)
                         }
                     })
-                }else{ ivAnchor.visible()
+                } else {
+                    ivAnchor.visible()
                     if (data.expandedType == OHealthOverview.VitalsType.HR) {
-                        val hrVal = data.hrValue?.toIntOrNull()?:60
+                        val hrVal = data.hrValue?.toIntOrNull() ?: 60
                         startHeartAnimation(ivAnchor, hrVal)
-                    }else {
+                    } else {
                         stopHeartAnimation(ivAnchor)
                     }
                 }
-            }else if(data.measureState== TapMeasureState.ERROR){
+            } else if (data.measureState == TapMeasureState.ERROR) {
                 ivAnchor.visible()
                 stopHeartAnimation(ivAnchor)
             } else {
@@ -1253,7 +1261,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         }
 
         private fun getBackAnim(expandedType: VitalsType?): Int {
-            return when(expandedType){
+            return when (expandedType) {
                 VitalsType.HR -> R.raw.anim_measure_hr
                 VitalsType.STRESS -> R.raw.anim_measure_stress
                 VitalsType.SPO2 -> R.raw.anim_measure_spo2
@@ -1265,7 +1273,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         private fun animateImageView(
             ivAnchor: ImageView,
             ivHrIcon: ImageView,
-            onFinish:()-> Unit,
+            onFinish: () -> Unit,
         ) {
             ivAnchor.invisible()
             ivAnchor.post {
@@ -1298,7 +1306,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     .translationX(0f)
                     .translationY(0f)
                     .setDuration(500)
-                    .setListener(object : Animator.AnimatorListener{
+                    .setListener(object : Animator.AnimatorListener {
                         override fun onAnimationStart(animation: Animator) {
 
                         }
@@ -2733,7 +2741,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             if (data.data.nudges.isNullOrEmpty()) {
                 binding.tvNudge.text = ""
                 binding.tvShimmer.visible()
-                binding.tvShimmer.fadeIn {  }
+                binding.tvShimmer.fadeIn { }
             } else {
                 val nudge = data.data.nudges.firstOrNull()
                 binding.tvShimmer.apply {
@@ -2742,11 +2750,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         gone()
                         binding.tvDayStatus.apply {
                             text = nudge?.label ?: ""
-                            fadeIn {  }
+                            fadeIn { }
                         }
                         binding.tvNudge.apply {
                             text = nudge?.message ?: ""
-                            fadeIn {  }
+                            fadeIn { }
                         }
                     }
                 }
@@ -2881,7 +2889,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 }
                 binding.tvShimmer.apply {
                     visible()
-                    fadeIn {  }
+                    fadeIn { }
                 }
             } else {
                 binding.tvTitle.gone()
@@ -2899,11 +2907,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         binding.tvTitle.apply {
                             visible()
                             text = nudge?.label ?: ""
-                            fadeIn {  }
+                            fadeIn { }
                         }
                         binding.tvTodayDesc.apply {
                             text = nudge?.message ?: ""
-                            fadeIn {  }
+                            fadeIn { }
                         }
                     }
                 }
@@ -3698,14 +3706,14 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.tvCurrentDay.text = "Day ${data.data.days}"
             binding.tvDaysLeft.text = "of ${data.data.totalCycleDay}"
 //            binding.tvDesc.text = data.data.nudge
-            if(data.data.nudge.isEmpty()){
+            if (data.data.nudge.isEmpty()) {
                 binding.tvDesc.invisible()
                 binding.tvShimmer.visible()
                 binding.tvShimmer.apply {
                     visible()
-                    fadeIn {  }
+                    fadeIn { }
                 }
-            }else{
+            } else {
                 binding.tvDesc.invisible()
                 binding.tvShimmer.visible()
                 binding.tvShimmer.apply {
