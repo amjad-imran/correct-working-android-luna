@@ -7,6 +7,7 @@ import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
@@ -33,11 +34,13 @@ class AddActivityTimelineSharedViewModel @Inject constructor(
     var sourceKey: String ?= null
     var showTimeline = false
 
-    val loadFragment = MutableLiveData<Event<AddActivityItemsEnum>>()
+    val loadFragment = MutableLiveData<Event<Pair<AddActivityItemsEnum, ItemTimelineResponseModel?>>>()
     val navigateUp = MutableLiveData<Event<Boolean>>()
 
-    fun loadFragmentByType(type: AddActivityItemsEnum) {
-        loadFragment.postValue(Event(type))
+    val deleteBtnClickedEvent = MutableLiveData<Event<Boolean>>()
+
+    fun loadFragmentByType(type: AddActivityItemsEnum, editData: ItemTimelineResponseModel?=null) {
+        loadFragment.postValue(Event(Pair(type, editData)))
     }
 
     fun navigateUp() {

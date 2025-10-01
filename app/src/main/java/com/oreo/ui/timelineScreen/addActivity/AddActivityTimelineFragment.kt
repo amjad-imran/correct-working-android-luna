@@ -6,7 +6,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAddActivityTimelineBinding
+import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.setVisibilityByCondition
+import com.noisefit_commans.utils.Event
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 import com.oreo.ui.timelineScreen.addActivity.activities.ActivityListingFragment
 import com.oreo.ui.timelineScreen.addActivity.activities.AddAlcoholFragment
@@ -30,25 +33,37 @@ class AddActivityTimelineFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val key = arguments?.getString("key")
-        arguments?.getString("srcKey")?.let { sharedViewModel.sourceKey = it }
+        val key = args.key
+        args.srcKey?.let { sharedViewModel.sourceKey = it }
         sharedViewModel.showTimeline = try {
             args.showTimeline
         } catch (exp: Exception) {
             false
         }
+
+        val editData: ItemTimelineResponseModel? = args.editData
+
         when (key) {
             CircadianAlignmentViewModel.light_exposure_key ->
-                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.LIGHT_EXPOSURE)
+                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.LIGHT_EXPOSURE, editData)
 
             CircadianAlignmentViewModel.meal_window_key ->
-                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.MEAL)
+                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.MEAL, editData)
 
             CircadianAlignmentViewModel.caffeine_window_key ->
-                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.CAFFEINE)
+                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.CAFFEINE, editData)
 
             CircadianAlignmentViewModel.sleep_key ->
-                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.SLEEP)
+                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.SLEEP, editData)
+
+            "supplements" ->
+                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.SUPPLEMENTS, editData)
+
+            "recovery" ->
+                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.RECOVERY, editData)
+
+            "alcohol" ->
+                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.ALCOHOL, editData)
 
             else -> sharedViewModel.loadFragmentByType(AddActivityItemsEnum.ACTIVITIES_LISTING)
         }
@@ -59,15 +74,27 @@ class AddActivityTimelineFragment :
         binding.ivClose.setOnClickListener {
             navigateUpSafe()
         }
+
+        binding.ivDelete.setOnClickListener {
+            if (args.editData?.id == null){
+                return@setOnClickListener
+            }
+            sharedViewModel.deleteBtnClickedEvent.postValue(Event(true))
+        }
     }
 
     override fun subscribeObservers() {
         sharedViewModel.loadFragment.observe(this) {
             it.getContent()?.let {
-
-                val fragment = when (it) {
+                val fragment = when (it.first) {
                     AddActivityItemsEnum.ACTIVITIES_LISTING -> {
-                        ActivityListingFragment.newInstance()
+                        ActivityListingFragment.newInstance().apply {
+                            it.second?.let { editData ->
+                                this.arguments = Bundle().apply {
+                                    putParcelable("editData", editData)
+                                }
+                            }
+                        }
                     }
 
                     AddActivityItemsEnum.MEAL -> {
@@ -97,21 +124,51 @@ class AddActivityTimelineFragment :
                     }
 
                     AddActivityItemsEnum.NAP -> {
-                        AddSleepFragment()
+                        AddSleepFragment().apply {
+                            it.second?.let { editData ->
+                                this.arguments = Bundle().apply {
+                                    putParcelable("editData", editData)
+                                }
+                            }
+                        }
                     }
 
                     AddActivityItemsEnum.SLEEP -> {
-                        AddSleepFragment()
+                        AddSleepFragment().apply {
+                            it.second?.let { editData ->
+                                this.arguments = Bundle().apply {
+                                    putParcelable("editData", editData)
+                                }
+                            }
+                        }
                     }
 
                     AddActivityItemsEnum.SUPPLEMENTS -> {
-                        AddSupplementsFragment()
+                        AddSupplementsFragment().apply {
+                            it.second?.let { editData ->
+                                this.arguments = Bundle().apply {
+                                    putParcelable("editData", editData)
+                                }
+                            }
+                        }
                     }
                     AddActivityItemsEnum.ALCOHOL -> {
-                        AddAlcoholFragment()
+                        AddAlcoholFragment().apply {
+                            it.second?.let { editData ->
+                                this.arguments = Bundle().apply {
+                                    putParcelable("editData", editData)
+                                }
+                            }
+                        }
                     }
                     AddActivityItemsEnum.RECOVERY -> {
-                        AddRecoveryFragment()
+                        AddRecoveryFragment().apply {
+                            it.second?.let { editData ->
+                                this.arguments = Bundle().apply {
+                                    putParcelable("editData", editData)
+                                }
+                            }
+                        }
                     }
                 }
                 fragment?.let {
@@ -120,6 +177,7 @@ class AddActivityTimelineFragment :
                         .commit()
                 }
 
+                binding.ivDelete.setVisibilityByCondition(args.editData?.canBeEditedOrDeleted == 2 || args.editData?.canBeEditedOrDeleted == 3)
                 if(it== AddActivityItemsEnum.MEAL){
                     navigateUpSafe()
                     navigate(R.id.mealAiFragment)

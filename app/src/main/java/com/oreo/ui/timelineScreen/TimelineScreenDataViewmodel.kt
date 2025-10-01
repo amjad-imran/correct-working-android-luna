@@ -45,6 +45,7 @@ class TimelineScreenDataViewmodel @Inject constructor(
         val SYMPTOM_KEY = "symptom"
         val ACTIVITY_KEY = "activity"
         val SUPPLEMENTS_KEY = "supplements"
+        val RECOVERY_KEY = "recovery"
     }
 
     fun getCurrDayActivities(date: String) {
@@ -179,6 +180,10 @@ class TimelineScreenDataViewmodel @Inject constructor(
 
             SUPPLEMENTS_KEY -> {
                 data.desc = "Supplement"
+            }
+
+            RECOVERY_KEY -> {
+                data.desc = "Recovery"
             }
 
             else -> {}
@@ -343,4 +348,10 @@ class TimelineScreenDataViewmodel @Inject constructor(
 
         return sortedList
     }
+
+    fun getDate(prevDayNum: Long): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return LocalDate.now().minusDays(prevDayNum).format(formatter)
+    }
+
 }

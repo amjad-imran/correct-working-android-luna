@@ -33,6 +33,7 @@ import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -57,9 +58,8 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.editData = arguments?.getParcelable("editData")
         viewModel.getSupplementsList()
-        viewModel.selectedDate = LocalDate.now()
-            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         setUi()
         setAdapter()
     }
@@ -77,22 +77,33 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
             lytDate.tvTime.text = getString(R.string.text_date)
             lytTime.tvTime.text = getString(R.string.text_time)
 
-            // set Default Date
-            lytDate.tvTimeValue.text =
-                LocalDate.now()
-                    .format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
-                    .toString()
+            if(viewModel.editData == null) {
+                // set Default Date
+                viewModel.selectedDate = LocalDate.now()
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                lytDate.tvTimeValue.text =
+                    LocalDate.now()
+                        .format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
+                        .toString()
 
-            // set Default(Current) Time
-            val calendar = Calendar.getInstance()
-            val hour = calendar.get(Calendar.HOUR_OF_DAY)
-            val minute = calendar.get(Calendar.MINUTE)
-            val curFormattedTime = DateFormats.formatTimeWithAmPm(
-                hour,
-                minute
-            )
-            viewModel.supplementTime = LocalTime.of(hour, minute)
-            lytTime.tvTimeValue.text = curFormattedTime
+                // set Default(Current) Time
+                val calendar = Calendar.getInstance()
+                val hour = calendar.get(Calendar.HOUR_OF_DAY)
+                val minute = calendar.get(Calendar.MINUTE)
+                val curFormattedTime = DateFormats.formatTimeWithAmPm(
+                    hour,
+                    minute
+                )
+                viewModel.supplementTime = LocalTime.of(hour, minute)
+                lytTime.tvTimeValue.text = curFormattedTime
+            }else{
+                viewModel.selectedDate = viewModel.editData?.startDate
+                lytDate.tvTimeValue.text = viewModel.selectedDate
+                LOGS.d("scacjkac : ${viewModel.supplementTime}")
+                viewModel.supplementTime =
+                    LocalTime.parse(viewModel.editData?.startTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+            }
+
         }
     }
 
@@ -123,6 +134,17 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
     override fun subscribeObservers() {
         viewModel.supplementsList.observe(this){ supplements->
             optAdapter.updateDataSet(supplements)
+            if(
+                viewModel.isListLoadedFirstTime &&
+                viewModel.editData?.metadata?.lunaTrackingOptionId != null
+            ){
+                supplements.first { it.id == (viewModel.editData?.metadata?.lunaTrackingOptionId ?: -1) }?.let { sOpt ->
+                    binding.tvSelected.text = sOpt.options
+                    viewModel.selectedOption = sOpt
+                    binding.btnSave.enable()
+                }
+                viewModel.isListLoadedFirstTime = false
+            }
             binding.rvOptions.doOnNextLayout {
                 capRvHeightToPercent(binding.rvOptions, binding.root, 0.70f)
             }
@@ -252,75 +274,6 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
             )
         )
 
-    }
-
-    class CustomSpinnerAdapter(
-        private val context: Context,
-        private val data: List<SupplementOption>
-    ) : BaseAdapter() {
-
-        // Hint at index 0, followed by real items
-        private val items: List<SupplementOption> = listOf(
-            SupplementOption(id = -1, options = "Select Supplement", type = "", status = "", createdAt = "", updatedAt = "")
-        ) + data
-
-        override fun getCount(): Int = items.size
-        override fun getItem(position: Int): Any = items[position]
-        override fun getItemId(position: Int): Long = position.toLong()
-
-        override fun isEnabled(position: Int): Boolean = position != 0
-        override fun areAllItemsEnabled(): Boolean = false
-
-        // Closed view: shows hint at position 0 with arrow
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-            val view = convertView ?: LayoutInflater.from(context)
-                .inflate(android.R.layout.simple_spinner_item, parent, false)
-            val tv = view.findViewById<TextView>(android.R.id.text1)
-            val item = items[position]
-            val isHint = position == 0 || item.id == -1
-
-            tv.text = item.options
-            tv.setTextColor(if (isHint) "#99FFFFFF".toColorInt() else "#FFFFFF".toColorInt())
-
-            val arrow = AppCompatResources.getDrawable(context, R.drawable.ic_baseline_keyboard_arrow_down_24)
-            tv.setCompoundDrawablesWithIntrinsicBounds(null, null, arrow, null)
-            tv.compoundDrawablePadding = (8 * view.resources.displayMetrics.density).toInt()
-            return view
-        }
-
-        // Dropdown rows: hide hint by returning a zero-height view; avoid recycling that for real rows
-        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-            if (position == 0) {
-                // Always return/ensure a "hint spacer" view with height 0
-                val v = (convertView?.takeIf { it.tag == "HINT_SPACER" } ?: View(context)).apply {
-                    tag = "HINT_SPACER"
-                    layoutParams = (layoutParams ?: ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT, 0
-                    )).also { it.height = 0 }
-                }
-                return v
-            }
-
-            // If convertView is the hint spacer, ignore it and inflate a real row
-            val safeConvert = convertView?.takeUnless { it.tag == "HINT_SPACER" }
-            val view = safeConvert ?: LayoutInflater.from(context)
-                .inflate(R.layout.spinner_item_addd_log_circadian, parent, false)
-
-            val tv = view.findViewById<TextView>(R.id.tvTitle)
-            val divider = view.findViewById<View>(R.id.divider)
-
-            val item = items[position]
-            tv.text = item.options ?: "-"
-            tv.setTextColor("#FFFFFF".toColorInt())
-
-            // divider visible except last visible item
-            divider.setVisibilityByCondition(position != items.lastIndex)
-
-            return view
-        }
-
-        /** Map spinner.selectedItemPosition -> data index (without hint). -1 if still on hint. */
-        fun toDataIndex(spinnerPosition: Int): Int = if (spinnerPosition <= 0) -1 else spinnerPosition - 1
     }
 
 }
