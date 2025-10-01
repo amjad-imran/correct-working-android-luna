@@ -139,15 +139,8 @@ class TimelineScreenDataFragment :
                 }
             }
 
-            "caffeine" -> {
-                if(
-                    viewModel.getDate(0).equals(viewModel.date)
-                ){
-                    data.canBeEditedOrDeleted = 3
-                }
-            }
-
             "light-exposure" -> {
+                data.event = "light_exposure"
                 if(
                     viewModel.getDate(0).equals(viewModel.date)
                 ){

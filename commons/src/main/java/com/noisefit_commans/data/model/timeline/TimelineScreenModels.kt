@@ -24,7 +24,7 @@ data class ItemTimelineResponseModel(
     val userId: Int?,
 
     @SerializedName("event")
-    val event: String?,
+    var event: String?,
 
     @SerializedName("start_date")
     val startDate: String?,

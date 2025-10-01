@@ -99,6 +99,19 @@ class AddAlcoholFragment : BaseFragment<FragmentAddAlcoholBinding>(FragmentAddAl
             }
         }
 
+        sharedViewModel.deleteBtnClickedEvent.observe(this){
+            it.getContent()?.let {
+                if(it) {
+                    if(viewModel.editData?.id == null){
+                        showToast(requireContext(),
+                            getString(R.string.text_something_went_wrong_please_try_again))
+                        return@observe
+                    }
+                    viewModel.deleteAlcoholItem()
+                }
+            }
+        }
+
         //
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
@@ -116,19 +129,6 @@ class AddAlcoholFragment : BaseFragment<FragmentAddAlcoholBinding>(FragmentAddAl
                 uiController.displayProgressBar(true,"")
             } else {
                 uiController.displayProgressBar(false,"")
-            }
-        }
-
-        sharedViewModel.deleteBtnClickedEvent.observe(this){
-            it.getContent()?.let {
-                if(it) {
-                    if(viewModel.editData?.id == null){
-                        showToast(requireContext(),
-                            getString(R.string.text_something_went_wrong_please_try_again))
-                        return@observe
-                    }
-                    viewModel.deleteAlcoholItem()
-                }
             }
         }
     }

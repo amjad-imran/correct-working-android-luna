@@ -109,7 +109,13 @@ class AddActivityTimelineFragment :
                     }
 
                     AddActivityItemsEnum.LIGHT_EXPOSURE -> {
-                        AddLightExposureFragment()
+                        AddLightExposureFragment().apply {
+                            it.second?.let { editData ->
+                                this.arguments = Bundle().apply {
+                                    putParcelable("editData", editData)
+                                }
+                            }
+                        }
                     }
 
                     AddActivityItemsEnum.WORKOUT -> {
