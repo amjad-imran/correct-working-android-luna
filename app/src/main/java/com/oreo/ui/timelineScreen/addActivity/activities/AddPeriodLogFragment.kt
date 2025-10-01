@@ -8,6 +8,8 @@ import androidx.navigation.fragment.NavHostFragment
 import com.noisefit.luna.databinding.FragmentAddPeriodBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.disable
+import com.noisefit_commans.ui.enable
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
@@ -41,8 +43,10 @@ class AddPeriodLogFragment :
     private val flowAdapter: CycleLogAdapter by lazy {
         CycleLogAdapter(object : OnLogItemClick {
             override fun onItemClick(data: FHFlowIconsModel, position: Int) {
-                flowAdapter.updateItem(data, position)
-
+                if(logViewModel.editDataAddActivity?.canBeEditedOrDeleted != 0) {
+                    flowAdapter.updateItem(data, position)
+                    binding.btnSave.enable()
+                }
             }
         })
     }
@@ -56,7 +60,7 @@ class AddPeriodLogFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        logViewModel.editDataAddActivity = arguments?.getParcelable("editData")
         setUi()
         setRecycler()
     }
@@ -74,7 +78,17 @@ class AddPeriodLogFragment :
     }
 
     private fun setUi() {
+        if(logViewModel.editDataAddActivity != null){
+            when(logViewModel.editDataAddActivity?.canBeEditedOrDeleted){
+                0 -> {
+                    binding.btnSave.gone()
+                }
 
+                else -> {
+                    binding.btnSave.disable()
+                }
+            }
+        }
     }
 
 

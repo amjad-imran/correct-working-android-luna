@@ -10,6 +10,7 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
@@ -49,6 +50,8 @@ constructor(
     var periodStartDate: LocalDate? = null
     var periodEndDate: LocalDate? = null
 
+    var editDataAddActivity : ItemTimelineResponseModel ?= null
+
     fun getFemaleHealthIcons(date: String) {
 
         viewModelScope.launch {
@@ -83,8 +86,28 @@ constructor(
                     }
 
                     is Resource.Success -> {
-                        resource.data?.data?.let {
-                            getDataForDate(date, it)
+                        resource.data?.data?.let { data ->
+                            if(editDataAddActivity?.canBeEditedOrDeleted == 0) {
+                                editDataAddActivity?.metadata?.symptoms?.forEach { curItem ->
+                                    data.symptoms?.first { it.symptomShortName?.lowercase() == curItem }
+                                        ?.let {
+                                            it.isChecked = true
+                                        }
+                                }
+
+                                editDataAddActivity?.metadata?.flow?.forEach { curItem ->
+                                    data.flow?.first { it.symptomShortName?.lowercase() == curItem }
+                                        ?.let {
+                                            it.isChecked = true
+                                        }
+                                }
+
+                                _femaleHealthIcons.postValue(data)
+
+                            }
+                            else{
+                                getDataForDate(date, data)
+                            }
                         }
                     }
                 }

@@ -2220,5 +2220,11 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_result_not_correct">Result not correct?</string>
     <string name="text_macros_breakdown">Macros Breakdown</string>
     <string name="text_food_item">Food item</string>
+    <string name="text_add_light_exposure">Add Light Exposure</string>
+    <string name="text_add_caffeine">Add Caffeine</string>
+    <string name="text_add_water">Add Water</string>
+    <string name="text_add_recovery">Add Recovery</string>
+    <string name="text_add_alcohol">Add Alcohol</string>
+    <string name="text_add_supplement">Add Supplement</string>
 
 </resources>

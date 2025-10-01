@@ -187,7 +187,7 @@ class TimelineScreenDataFragment :
                 if(
                     viewModel.getDate(0).equals(viewModel.date)
                 ){
-                    canBeUpdated = true
+                    data.canBeEditedOrDeleted = 3
                 }
             }
 

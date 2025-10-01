@@ -96,4 +96,8 @@ data class TimelineMetadata(
     val macros: List<MealAiMacros>?=null,
     val prompt: String?=null,
 
+    // For Periods
+    val symptoms: List<String> ?= null,
+    val flow: List<String> ?= null,
+
 ) : Parcelable

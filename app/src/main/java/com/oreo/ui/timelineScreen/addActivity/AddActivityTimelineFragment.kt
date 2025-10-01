@@ -68,6 +68,9 @@ class AddActivityTimelineFragment :
             "alcohol" ->
                 sharedViewModel.loadFragmentByType(AddActivityItemsEnum.ALCOHOL, editData)
 
+            "symptom" ->
+                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.CYCLE_LOG, editData)
+
             else -> sharedViewModel.loadFragmentByType(AddActivityItemsEnum.ACTIVITIES_LISTING)
         }
     }
@@ -92,8 +95,10 @@ class AddActivityTimelineFragment :
     override fun subscribeObservers() {
         sharedViewModel.loadFragment.observe(this) {
             it.getContent()?.let {
+                var titleTxt = getString(R.string.text_add_activity)
                 val fragment = when (it.first) {
                     AddActivityItemsEnum.ACTIVITIES_LISTING -> {
+                        titleTxt = getString(R.string.text_add_activity)
                         ActivityListingFragment.newInstance().apply {
                             it.second?.let { editData ->
                                 this.arguments = Bundle().apply {
@@ -110,6 +115,7 @@ class AddActivityTimelineFragment :
                     }
 
                     AddActivityItemsEnum.LIGHT_EXPOSURE -> {
+                        titleTxt = getString(R.string.text_add_light_exposure)
                         AddLightExposureFragment().apply {
                             it.second?.let { editData ->
                                 this.arguments = Bundle().apply {
@@ -124,6 +130,7 @@ class AddActivityTimelineFragment :
                     }
 
                     AddActivityItemsEnum.CAFFEINE -> {
+                        titleTxt = getString(R.string.text_add_caffeine)
                         AddCaffeineFragment().apply {
                             it.second?.let { editData ->
                                 this.arguments = Bundle().apply {
@@ -134,14 +141,23 @@ class AddActivityTimelineFragment :
                     }
 
                     AddActivityItemsEnum.WATER -> {
+                        titleTxt = getString(R.string.text_add_water)
                         AddWaterFragment()
                     }
 
                     AddActivityItemsEnum.CYCLE_LOG -> {
-                        AddPeriodLogFragment()
+                        titleTxt = "Add Period Symptoms"
+                        AddPeriodLogFragment().apply {
+                            it.second?.let { editData ->
+                                this.arguments = Bundle().apply {
+                                    putParcelable("editData", editData)
+                                }
+                            }
+                        }
                     }
 
                     AddActivityItemsEnum.NAP -> {
+//                        titleTxt = getString(R.string.text_add_water)
                         AddSleepFragment().apply {
                             it.second?.let { editData ->
                                 this.arguments = Bundle().apply {
@@ -152,6 +168,7 @@ class AddActivityTimelineFragment :
                     }
 
                     AddActivityItemsEnum.SLEEP -> {
+                        titleTxt = getString(R.string.text_add_sleep)
                         AddSleepFragment().apply {
                             it.second?.let { editData ->
                                 this.arguments = Bundle().apply {
@@ -162,6 +179,7 @@ class AddActivityTimelineFragment :
                     }
 
                     AddActivityItemsEnum.SUPPLEMENTS -> {
+                        titleTxt = getString(R.string.text_add_supplement)
                         AddSupplementsFragment().apply {
                             it.second?.let { editData ->
                                 this.arguments = Bundle().apply {
@@ -171,6 +189,7 @@ class AddActivityTimelineFragment :
                         }
                     }
                     AddActivityItemsEnum.ALCOHOL -> {
+                        titleTxt = getString(R.string.text_add_alcohol)
                         AddAlcoholFragment().apply {
                             it.second?.let { editData ->
                                 this.arguments = Bundle().apply {
@@ -180,6 +199,7 @@ class AddActivityTimelineFragment :
                         }
                     }
                     AddActivityItemsEnum.RECOVERY -> {
+                        titleTxt = getString(R.string.text_add_recovery)
                         AddRecoveryFragment().apply {
                             it.second?.let { editData ->
                                 this.arguments = Bundle().apply {
@@ -189,6 +209,8 @@ class AddActivityTimelineFragment :
                         }
                     }
                 }
+
+                binding.textView191.text = titleTxt
                 fragment?.let {
                     childFragmentManager.beginTransaction()
                         .replace(R.id.childFragmentContainer, it)
