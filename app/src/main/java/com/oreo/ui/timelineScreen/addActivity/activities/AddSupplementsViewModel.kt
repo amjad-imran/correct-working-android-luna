@@ -79,6 +79,9 @@ class AddSupplementsViewModel @Inject constructor(
             val time = supplementTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"))
 
             val supplementsObject = JsonObject().apply {
+                editData?.id?.let {id ->
+                    this.addProperty("id", id)
+                }
                 this.addProperty("event", "supplements")
                 this.addProperty("date", selectedDate)
                 this.addProperty("time", time)
@@ -126,9 +129,6 @@ class AddSupplementsViewModel @Inject constructor(
 
     fun deleteSupplementItem() {
         viewModelScope.launch {
-            if(editData?.id == null){
-                return@launch
-            }
             userRepository.deleteTimelineItemById(editData?.id?:"").collect{ resource ->
                 when (resource) {
                     is Resource.GenericError -> {

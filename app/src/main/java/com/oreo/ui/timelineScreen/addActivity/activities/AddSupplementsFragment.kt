@@ -1,14 +1,8 @@
 package com.oreo.ui.timelineScreen.addActivity.activities
 
-import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
-import android.widget.BaseAdapter
-import android.widget.TextView
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
 import androidx.core.view.doOnNextLayout
@@ -29,11 +23,9 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.disable
 import com.noisefit_commans.ui.enable
 import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -98,10 +90,25 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
                 lytTime.tvTimeValue.text = curFormattedTime
             }else{
                 viewModel.selectedDate = viewModel.editData?.startDate
-                lytDate.tvTimeValue.text = viewModel.selectedDate
-                LOGS.d("scacjkac : ${viewModel.supplementTime}")
+                lytDate.tvTimeValue.text = LocalDate
+                            .parse(viewModel.selectedDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                            .format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
+
                 viewModel.supplementTime =
                     LocalTime.parse(viewModel.editData?.startTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+                lytTime.tvTimeValue.text = DateFormats.formatTimeWithAmPm(
+                    viewModel.supplementTime.hour,
+                    viewModel.supplementTime.minute
+                )
+
+                // Other Ui checks
+                val editCondition = viewModel.editData?.canBeEditedOrDeleted!=0
+                lytDate.tvTimeValue.isClickable = editCondition
+                lytTime.tvTimeValue.isClickable = editCondition
+                binding.lytSelected.isClickable = editCondition
+                if(!editCondition){
+                    binding.btnSave.gone()
+                }
             }
 
         }
@@ -141,7 +148,6 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
                 supplements.first { it.id == (viewModel.editData?.metadata?.lunaTrackingOptionId ?: -1) }?.let { sOpt ->
                     binding.tvSelected.text = sOpt.options
                     viewModel.selectedOption = sOpt
-                    binding.btnSave.enable()
                 }
                 viewModel.isListLoadedFirstTime = false
             }
@@ -154,6 +160,19 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
             it.getContent()?.let {
                 mainViewModel.sessionManager.reloadOnResume = true
                 sharedViewModel.navigateUp()
+            }
+        }
+
+        sharedViewModel.deleteBtnClickedEvent.observe(this){
+            it.getContent()?.let {
+                if(it) {
+                    if(viewModel.editData?.id == null){
+                        showToast(requireContext(),
+                            getString(R.string.text_something_went_wrong_please_try_again))
+                        return@observe
+                    }
+                    viewModel.deleteSupplementItem()
+                }
             }
         }
 
@@ -200,8 +219,8 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
     }
 
     private fun handleOnOptionClicked(option: SupplementOption) {
+        binding.btnSave.enable()
         if(viewModel.selectedOption == null){
-            binding.btnSave.enable()
             binding.tvSelected.setTextColor("#FFFFFF".toColorInt())
         }
         viewModel.selectedOption = option
@@ -227,6 +246,15 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
             viewModel.supplementTime = time
             binding.lytDateTime.lytTime.tvTimeValue.text = curFormattedTime
 
+            if(viewModel.editData?.startTime != null){
+                val editDataTime = LocalTime.parse(viewModel.editData?.startTime, DateTimeFormatter.ofPattern("HH:mm:ss"))
+                if(
+                    editDataTime.hour != viewModel.supplementTime.hour ||
+                    editDataTime.minute != viewModel.supplementTime.minute
+                ){
+                    binding.btnSave.enable()
+                }
+            }
         }
 
         val navController =
@@ -257,6 +285,12 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
                 viewModel.selectedDate = parsedDate
 
                 binding.lytDateTime.lytDate.tvTimeValue.text = it1
+                if(
+                    viewModel.editData?.startDate != null &&
+                    !parsedDate.equals(viewModel.editData?.startDate)
+                ){
+                    binding.btnSave.enable()
+                }
             }
         }
         val format = DateTimeFormatter.ofPattern("dd MMM yyyy")
