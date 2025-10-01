@@ -4,9 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import com.moengage.core.internal.serializers.toJsonElement
-import com.noisefit.data.model.timeline.MealAiFoods
-import com.noisefit.data.model.timeline.MealAiResponse
+import com.noisefit_commans.data.model.timeline.MealAiFoods
+import com.noisefit_commans.data.model.timeline.MealAiResponse
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit_commans.data.BinaryActionCallback
@@ -27,6 +26,8 @@ class AiMealViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : BaseViewModel() {
 
+    var editMode = false
+    var viewMode = false
     val mealAiResponse = MutableLiveData<MealAiResponse?>()
     var mealTime = MutableLiveData<LocalTime>(LocalTime.now())
     var lastEnteredPrompt: String? = null
@@ -96,7 +97,7 @@ class AiMealViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
 
 
-            val req = createRequestObject(foods, mealTime.value!!,mealAiResponse)
+            val req = createRequestObject(foods, mealTime.value!!, mealAiResponse)
 
             userRepository.saveAiMeal(
                 req
@@ -140,7 +141,7 @@ class AiMealViewModel @Inject constructor(
         foods: List<MealAiFoods>,
         value: LocalTime,
         mealAiResponse: MutableLiveData<MealAiResponse?>
-    ) : JsonObject{
+    ): JsonObject {
 
         val mealObject = JsonObject()
         val foodsArray = JsonArray()
@@ -164,11 +165,58 @@ class AiMealViewModel @Inject constructor(
         }
         mealObject.add("macros", macrosArray)
         mealObject.addProperty("prompt", lastEnteredPrompt)
-        mealObject.addProperty("date", LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+        mealObject.addProperty(
+            "date",
+            LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        )
 
         val request = JsonObject()
         request.add("meal", mealObject)
         return request
+    }
+
+    fun deleteMeal() {
+
+        viewModelScope.launch {
+
+            val id = mealAiResponse.value?.id
+            if (id == null) {
+                onAddSuccess.postValue(Event(true))
+                return@launch
+            }
+
+            userRepository.deleteTimelineItemById(id)
+                .collect { resource ->
+                    when (resource) {
+                        is Resource.GenericError -> {
+                            sendMessage(resource.message)
+                        }
+
+                        is Resource.Loading -> {
+                            setLoading(resource.loading)
+                        }
+
+                        is Resource.NetworkError -> {
+                            setApiErrors(resource.response.apply {
+                                (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                    object : BinaryActionCallback {
+                                        override fun yes() {
+                                            deleteMeal()
+                                        }
+
+                                        override fun no() {}
+                                    }
+                            })
+                        }
+
+                        is Resource.Success -> {
+                            resource.data?.data?.let {
+                                onAddSuccess.postValue(Event(true))
+                            }
+                        }
+                    }
+                }
+        }
     }
 
 

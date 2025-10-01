@@ -9,10 +9,13 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.noisefit.data.model.timeline.MealAiFoods
+import com.noisefit_commans.data.model.timeline.MealAiFoods
 import com.noisefit.luna.R
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.visible
 
 class FoodAdapter(
+    val isViewMode: Boolean,
     private val onChanged: (List<MealAiFoods>) -> Unit
 ) : RecyclerView.Adapter<FoodAdapter.FoodVH>() {
 
@@ -40,9 +43,21 @@ class FoodAdapter(
 
     override fun onBindViewHolder(holder: FoodVH, position: Int) {
         holder.bind(items[position])
+
+        if(isViewMode){
+            holder.ivRemove.gone()
+            holder.etCalories.isEnabled = false
+        }else{
+            holder.ivRemove.visible()
+            holder.etCalories.isEnabled = true
+        }
+
         holder.ivRemove.setOnClickListener {
             val pos = holder.bindingAdapterPosition
             if (pos != RecyclerView.NO_POSITION) {
+
+                if(items.size==1) return@setOnClickListener
+
                 items.removeAt(pos)
                 notifyItemRemoved(pos)
                 onChanged.invoke(items)
@@ -61,7 +76,7 @@ class FoodAdapter(
 
     class FoodVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvName: TextView = itemView.findViewById(R.id.tvFoodName)
-        private val etCalories: EditText = itemView.findViewById(R.id.etCalories)
+        val etCalories: EditText = itemView.findViewById(R.id.etCalories)
         val ivRemove: ImageView = itemView.findViewById(R.id.ivRemove)
 
         private var watcher: TextWatcher? = null

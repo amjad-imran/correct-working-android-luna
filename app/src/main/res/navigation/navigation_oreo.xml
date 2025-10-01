@@ -1518,8 +1518,8 @@
         android:name="com.oreo.ui.timelineScreen.meal.MealAiFragment"
         android:label="MealAiFragment" >
         <argument
-            android:name="mealId"
-            app:argType="string"
+            android:name="mealData"
+            app:argType="com.noisefit_commans.data.model.timeline.MealAiResponse"
             app:nullable="true" />
     </fragment>
 

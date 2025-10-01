@@ -17,9 +17,9 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
-import com.noisefit.data.model.timeline.MealAiFoods
-import com.noisefit.data.model.timeline.MealAiMacros
-import com.noisefit.data.model.timeline.MealAiResponse
+import com.noisefit_commans.data.model.timeline.MealAiFoods
+import com.noisefit_commans.data.model.timeline.MealAiMacros
+import com.noisefit_commans.data.model.timeline.MealAiResponse
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentMealAiBinding
 import com.noisefit.oreo.OreoMainViewModel
@@ -33,6 +33,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import kotlin.getValue
+import androidx.core.view.isVisible
 
 @AndroidEntryPoint
 class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding::inflate) {
@@ -46,20 +47,57 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val mealData = navArgs.mealData
+        if(mealData!=null){
 
-        context.showShortToast("Meal Id ${navArgs.mealId}")
+            val date  = mealData.date
+            if(date?.equals(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))) == true){
+                viewModel.editMode = true
+            }else{
+                viewModel.viewMode = true
+            }
 
-        binding.etInput.requestFocus()
+            listOf(binding.tvHeader, binding.tvSub, binding.cardInput).forEach { v ->
+                v.alpha = 0f
+            }
 
+            viewModel.mealAiResponse.postValue(mealData)
+            val time = LocalTime.parse(mealData.time)
+            viewModel.mealTime.postValue(time)
+
+            viewModel.lastEnteredPrompt = mealData.prompt
+            binding.ivMeal.visible()
+            binding.tvTopText.visible()
+            binding.tvTopText.alpha = 1f
+            binding.tvTopText.text = mealData.prompt
+            binding.ivEditMeal.visibility = View.INVISIBLE
+            binding.textResult.gone()
+            binding.tvRetryPrompt.gone()
+            if(viewModel.editMode){
+                binding.ivDelete.visible()
+                binding.lytContent.btnSaveMeal.visible()
+            }
+            if(viewModel.viewMode){
+                binding.lytContent.btnSaveMeal.gone()
+            }
+        }else{
+            binding.etInput.requestFocus()
+        }
     }
 
     override fun initListener() {
         binding.ivBack.setOnClickListener { navigateUpSafe() }
 
+        binding.ivDelete.setOnClickListener {
+            viewModel.deleteMeal()
+        }
+
         binding.lytContent.tvAddFood.setOnClickListener {
             showAddFoodSheet()
         }
         binding.lytContent.tvTime.setOnClickListener {
+            if(viewModel.viewMode) return@setOnClickListener
+
             setFragmentResultListener(TIME_REQUEST_KEY) { _, bundle ->
                 val hourOfDay = bundle.getInt("hour")
                 val minute = bundle.getInt("minute")
@@ -243,13 +281,24 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
 
         mealBinding.rvFoods.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            foodAdapter = FoodAdapter { items ->
+            foodAdapter = FoodAdapter(viewModel.viewMode) { items ->
                 updateTotalCalories(items)
+                if((foodAdapter?.itemCount?:0)>=10){
+                    binding.lytContent.tvAddFood.gone()
+                }else{
+                    binding.lytContent.tvAddFood.visible()
+                }
             }
             adapter = foodAdapter
         }
 
         foodAdapter?.setData(data.foods ?: ArrayList())
+
+        if((data.foods?.size?:0)>=10 || viewModel.viewMode){
+            binding.lytContent.tvAddFood.gone()
+        }else{
+            binding.lytContent.tvAddFood.visible()
+        }
 
         mealBinding.tvDate.text = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMM"))
 
@@ -331,6 +380,11 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
         sheet.callback = object : AddFoodBottomSheet.Callback {
             override fun onFoodAdded(name: String) {
                 foodAdapter?.addItem(MealAiFoods(name, null))
+                if((foodAdapter?.itemCount?:0)>=10){
+                    binding.lytContent.tvAddFood.gone()
+                }else{
+                    binding.lytContent.tvAddFood.visible()
+                }
             }
         }
         sheet.show(childFragmentManager, "AddFoodBottomSheet")
@@ -354,8 +408,12 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
             return
         } else {
             mealBinding.lytMacrosHeader.visible()
-            mealBinding.viewMacrosDivider.visible()
             mealBinding.lytMacrosContent.visible()
+            if(viewModel.viewMode){
+                mealBinding.viewMacrosDivider.gone()
+            }else{
+                mealBinding.viewMacrosDivider.visible()
+            }
             mealBinding.ivMacrosArrow.rotation = 180f
         }
 
@@ -395,7 +453,7 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
 
     private fun toggleMacros() {
         val mealBinding = binding.lytContent
-        val isVisible = mealBinding.lytMacrosContent.visibility == View.VISIBLE
+        val isVisible = mealBinding.lytMacrosContent.isVisible
         val transition = AutoTransition().apply { duration = 200 }
         TransitionManager.beginDelayedTransition(mealBinding.root as ViewGroup, transition)
         mealBinding.lytMacrosContent.visibility = if (isVisible) View.GONE else View.VISIBLE

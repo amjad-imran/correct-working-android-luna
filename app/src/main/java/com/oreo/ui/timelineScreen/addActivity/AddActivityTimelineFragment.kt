@@ -183,7 +183,7 @@ class AddActivityTimelineFragment :
 
                 if(it.first== AddActivityItemsEnum.MEAL){
                     navigateUpSafe()
-                    navigate(R.id.mealAiFragment, bundleOf("mealId" to null))
+                    navigate(R.id.mealAiFragment, bundleOf("mealData" to null))
                 }
 
             }

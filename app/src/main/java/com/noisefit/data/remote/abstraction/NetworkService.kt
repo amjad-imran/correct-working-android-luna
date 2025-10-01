@@ -6,7 +6,7 @@ import com.noisefit.data.model.AiWorkoutResponse
 import com.noisefit.data.model.GoalModel
 import com.noisefit.data.model.referral.ReferralCodeResponse
 import com.noisefit.data.model.referral.ReferralInfoResponse
-import com.noisefit.data.model.timeline.MealAiResponse
+import com.noisefit_commans.data.model.timeline.MealAiResponse
 import com.noisefit.data.model.timeline.SupplementsListResponse
 import com.oreo.data.model.RingLocationData
 import com.noisefit.data.remote.CityData

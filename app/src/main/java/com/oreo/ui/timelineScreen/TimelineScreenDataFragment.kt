@@ -133,7 +133,8 @@ class TimelineScreenDataFragment :
         // TODO : Meal, Nap/Sleep
 
         if(data.event.equals("meal")){
-            navigate(R.id.mealAiFragment, bundleOf("mealId" to data.id))
+
+            navigate(R.id.mealAiFragment, bundleOf("mealData" to viewModel.generateMealData(data)))
             return
         }
 
