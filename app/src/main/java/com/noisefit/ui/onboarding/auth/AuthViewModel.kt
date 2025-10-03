@@ -102,11 +102,13 @@ class AuthViewModel @Inject constructor(
                         if (errTimer != null) {
                             sessionManager.otpResendTimerSeconds = errTimer
 
-                            if (type == AuthMode.email) {
-                                email = value
-                                usePassword = false
+                            if(resource.errorBody.errors.otpExist == true){
+                                if (type == AuthMode.email) {
+                                    email = value
+                                    usePassword = false
+                                }
+                                emailOtpGenerated.postValue(Event(true))
                             }
-                            emailOtpGenerated.postValue(Event(true))
                             sendMessage(resource.errorBody.errors.message)
                         }else{
                             sendMessage(resource.message)

@@ -125,8 +125,12 @@ constructor(
                             sessionManager.otpResendTimerSeconds = errTimer
 
                             //todo handle 422 case
+                            if(resource.errorBody.errors.otpExist == true) {
+                                _successMessage.postValue(Event(resource.errorBody.errors.message))
+                            }else{
+                                sendMessage(resource.errorBody.errors.message)
+                            }
 
-                            _successMessage.postValue(Event(resource.errorBody.errors.message))
                         }else{
                             sendMessage(resource.message)
                         }

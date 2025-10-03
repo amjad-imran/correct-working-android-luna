@@ -18,4 +18,5 @@ data class ErrorMessage(
     val statusCode: Int? = null,
     @SerializedName("timer")
     val timer: Int? = null,
+    val otpExist: Boolean? = null,
 )
