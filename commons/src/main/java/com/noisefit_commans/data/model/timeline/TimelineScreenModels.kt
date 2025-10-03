@@ -89,6 +89,9 @@ data class TimelineMetadata(
     @SerializedName("luna_tracking_option_id")
     val lunaTrackingOptionId: Int? = null,
 
+    @SerializedName("luna_tracking_option_ids")
+    val lunaTrackingOptionIds: List<Int>? = null,
+
     @SerializedName("end_time")
     val endTime: String? = null,
 

@@ -9,11 +9,14 @@ import com.noisefit.data.googleFit.GoogleFitDataObservers
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
+import com.noisefit.data.model.timeline.SupplementOption
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.OreoNapNetworkEntity
+import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.models.SleepDataGoogleFit
 import com.noisefit_commans.models.SleepDataGoogleFit.SleepDataBreakup
 import com.noisefit_commans.ui.BaseViewModel
@@ -45,6 +48,7 @@ constructor(
     private val localDataStore: DataStoredInterface,
     private val googleFitDataObservers: GoogleFitDataObservers,
     private val oreoStepsDataImpl: OreoSyncRepository,
+    private val userRepository: UserRepository,
 ) :
     BaseViewModel() {
 
@@ -55,6 +59,10 @@ constructor(
     var startTimeSleep = OAddSleep()
     var endTimeSleep = OAddSleep()
 
+    var editDataAddActivity : ItemTimelineResponseModel ?= null
+    val sleepEnvOptListData = MutableLiveData<ArrayList<SupplementOption>>()
+
+    val selectedOptMap = HashMap<Int, Boolean>()
 
     private val _addSleepResponse =
         MutableLiveData<Event<Boolean>>()//todo return type will change once finalized
@@ -361,6 +369,108 @@ constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun getSleepEnvOptionsList(){
+        viewModelScope.launch(Dispatchers.IO) {
+            userRepository.getTimelineOptionIdData("sleep_env").collect{ resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getSleepEnvOptionsList()
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            it.options?.let {
+                                val alreadySelected = HashSet<Int>()
+                                editDataAddActivity?.metadata?.lunaTrackingOptionIds?.forEach {
+                                    alreadySelected.add(it)
+                                }
+                                it.forEach {
+                                    it.id?.let { key ->
+                                        val isSelected = alreadySelected.contains(key)
+                                        it.isChecked = isSelected
+                                        selectedOptMap.put(key, isSelected)
+                                    }
+                                }
+                                sleepEnvOptListData.postValue(it as ArrayList)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    fun submitSleepEnvOptions(){
+        viewModelScope.launch {
+
+            val sleepEnvObject = JsonObject().apply {
+                editDataAddActivity?.id?.let {id ->
+                    this.addProperty("track_id", id)
+                }
+                this.add("tags", JsonArray().apply {
+                    selectedOptMap.filter { it.value }.keys.forEach {
+                        this.add(it)
+                    }
+                })
+            }
+
+            val reqData = JsonObject().apply {
+                this.add("events", JsonArray().apply {
+                    this.add(sleepEnvObject)
+                })
+            }
+
+            userRepository.submitLogRecoveryTimelineData(reqData).collect{ resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        submitSleepEnvOptions()
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            _addSleepResponse.postValue(Event(true))
+                        }
+                    }
+                }
+            }
+
         }
     }
 

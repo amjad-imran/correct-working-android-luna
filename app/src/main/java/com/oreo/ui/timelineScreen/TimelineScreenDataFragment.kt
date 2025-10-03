@@ -170,7 +170,7 @@ class TimelineScreenDataFragment :
                     viewModel.getDate(0).equals(viewModel.date)/* ||
                     viewModel.getDate(1).equals(viewModel.date)*/
                 ){
-                    canBeUpdated = true
+                    data.canBeEditedOrDeleted = 1
                 }
             }
 
@@ -179,7 +179,7 @@ class TimelineScreenDataFragment :
                     viewModel.getDate(0).equals(viewModel.date)/* ||
                     viewModel.getDate(1).equals(viewModel.date)*/
                 ){
-                    canBeUpdated = true
+                    data.canBeEditedOrDeleted = 1
                 }
             }
 

@@ -34,12 +34,18 @@
             android:id="@+id/ivMore"
             android:layout_width="@dimen/dimen_16dp"
             android:layout_height="@dimen/dimen_16dp"
-            android:layout_marginEnd="@dimen/side_margin"
             android:src="@drawable/ic_arrow_right_dir"
             app:layout_constraintBottom_toBottomOf="@id/tvTime"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/dummyV1"
             app:layout_constraintTop_toTopOf="@id/tvTime" />
 
+        <View
+            android:id="@+id/dummyV1"
+            android:layout_width="16dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/ivMore"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/ivMore" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

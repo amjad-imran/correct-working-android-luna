@@ -38,156 +38,50 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <include
+        android:id="@+id/lytStartAndEndTime"
+        layout="@layout/layout_add_alcohol"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/bg_spinner_add_log_bottom_sheet_circadian"
-        android:padding="24dp">
+        android:layout_marginTop="16dp"
+        />
 
+    <LinearLayout
+        android:id="@+id/lytSleepEnvHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="24dp"
+        android:gravity="center_vertical">
 
         <TextView
-            android:id="@+id/textView188"
-            style="@style/S12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:text="@string/text_start_time"
+            style="@style/S12"
+            android:fontFamily="@font/gilroy_medium"
             android:textColor="#80FFFFFF"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:text="@string/text_sleep_environment" />
 
         <View
-            android:id="@+id/divider1st"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
             android:layout_marginStart="8dp"
-            android:background="#24D9D9D9"
-            app:layout_constraintBottom_toBottomOf="@+id/textView188"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView188"
-            app:layout_constraintTop_toTopOf="@+id/textView188" />
+            android:background="#14D9D9D9" />
+
+    </LinearLayout>
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupSleepEnv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:singleSelection="false"
+        app:selectionRequired="false"
+        app:chipSpacingHorizontal="12dp"
+        app:chipSpacingVertical="12dp">
 
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/lytStartTime"
-            android:layout_width="0dp"
-            android:layout_height="32dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/back_time_picker"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView188">
-
-            <TextView
-                android:id="@+id/tvStartTime"
-                style="@style/S14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="72dp"
-                android:layout_marginVertical="2dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="12 : 34 : PM" />
-
-            <ImageView
-                android:id="@+id/imageView105"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_picker_arrow_up"
-                app:layout_constraintBottom_toTopOf="@+id/imageView106"
-                app:layout_constraintEnd_toEndOf="@+id/imageView106"
-                app:layout_constraintStart_toStartOf="@+id/imageView106"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="packed" />
-
-            <ImageView
-                android:id="@+id/imageView106"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="8dp"
-                android:src="@drawable/ic_picker_arrow_down"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView105" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView
-            android:id="@+id/textView1882"
-            style="@style/S12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/text_end_time"
-            android:textColor="#80FFFFFF"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lytStartTime" />
-
-
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginStart="14dp"
-            android:background="#24D9D9D9"
-            app:layout_constraintBottom_toBottomOf="@+id/textView1882"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView1882"
-            app:layout_constraintTop_toTopOf="@+id/textView1882" />
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/lytEndTime"
-            android:layout_width="0dp"
-            android:layout_height="32dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/back_time_picker"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView1882">
-
-            <TextView
-                android:id="@+id/tvEndTime"
-                style="@style/S14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="72dp"
-                android:layout_marginVertical="2dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="12 : 34 : PM" />
-
-            <ImageView
-                android:id="@+id/imageView105s"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_picker_arrow_up"
-                app:layout_constraintBottom_toTopOf="@+id/imageView106s"
-                app:layout_constraintEnd_toEndOf="@+id/imageView106s"
-                app:layout_constraintStart_toStartOf="@+id/imageView106s"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="packed" />
-
-            <ImageView
-                android:id="@+id/imageView106s"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="8dp"
-                android:src="@drawable/ic_picker_arrow_down"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView105s" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.chip.ChipGroup>
 
 </LinearLayout>
 
