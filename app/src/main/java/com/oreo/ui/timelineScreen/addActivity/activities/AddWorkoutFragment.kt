@@ -6,10 +6,10 @@ import android.view.View
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
+import com.moengage.core.internal.utils.showToast
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.local.AppStaticData
 import com.noisefit.luna.R
@@ -19,27 +19,27 @@ import com.noisefit.ui.common.bottomSheet.TIME_REQUEST_KEY
 import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
 import com.noisefit_commans.constants.SportActivityName
 import com.noisefit_commans.data.model.OWorkoutListModal
+import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.disable
 import com.noisefit_commans.ui.enable
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
-import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.ui.timelineScreen.addActivity.AddActivityItemsEnum
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
-import com.oreo.ui.workout.add.ADD_WORKOUT_REQUEST_KEY
-import com.oreo.ui.workout.add.OAddWorkoutFragmentDirections
 import com.oreo.ui.workout.add.OAddWorkoutViewModel
 import com.oreo.ui.workout.add.SELECT_REQUEST_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
+import java.util.Locale
 
 @AndroidEntryPoint
 class AddWorkoutFragment :
@@ -58,6 +58,7 @@ class AddWorkoutFragment :
         //if (args.autoSport != null) {
         //   viewModel.convertAutoSport(args.autoSport)
         //} else {
+        viewModel.editData = arguments?.getParcelable("editData")
         viewModel.userDayData =
             mainViewModel.userHealthData[DateFormats.getTodaysDateString(10)]
         //}
@@ -655,11 +656,28 @@ class AddWorkoutFragment :
 
         viewModel.updateDefaultWorkout.observe(viewLifecycleOwner) {
             it.getContent()?.let {
-
-                setDefaultData(it)
+                if(viewModel.editData == null) {
+                    setDefaultData(it)
+                }else{
+                    setEditLayout(viewModel.editData!!, it)
+                }
             }
         }
 
+        sharedViewModel.deleteBtnClickedEvent.observe(this){
+            it.getContent()?.let {
+                if(it) {
+                    if(viewModel.editData?.id == null){
+                        showToast(requireContext(),
+                            getString(R.string.text_something_went_wrong_please_try_again))
+                        return@observe
+                    }
+                    viewModel.deleteWorkoutItem()
+                }
+            }
+        }
+
+        //
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)
@@ -719,6 +737,48 @@ class AddWorkoutFragment :
                 uiController.displayProgressBar(false,"")
             }
         }
+    }
+
+    private fun setEditLayout(data: ItemTimelineResponseModel, workout: OWorkoutListModal){
+        binding.btnSave.gone()
+
+        // Set Workout
+        binding.lytCard.ivWorkoutImage.loadImage(requireContext(), workout.iconUrl)
+        binding.lytCard.tvWorkout.text = workout.getTranslatedActivityName()
+
+        // Set Duration And Cals
+        binding.lytCard.lytCaloriesBurn.tvDurationValue.text = data.value ?: "--"
+        binding.lytCard.lytCaloriesBurn.tvDurationUnit.text = getString(R.string.text_min)
+
+        binding.lytCard.lytCaloriesBurn.tvCalBurnValue.text = data.metadata?.calories.toString()
+        binding.lytCard.lytCaloriesBurn.tvCalBurnUnit.text = getString(R.string.text_kcal)
+
+        // Set Date, Start And End Time
+        binding.lytCard.tvDate.text = LocalDate.parse(data.date)
+            .format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
+
+        val inFmt  = DateTimeFormatter.ofPattern("HH:mm:ss", Locale.getDefault())
+        val outFmt = DateTimeFormatter.ofPattern("h:mm a", Locale.getDefault())
+
+        binding.lytCard.tvStartTime.text = LocalTime.parse(data.startTime, inFmt)
+            .format(outFmt).uppercase()
+
+        binding.lytCard.tvEndTime.text = LocalTime.parse(data.endTime, inFmt)
+            .format(outFmt).uppercase()
+
+        // Set Intensity
+        binding.lytCard.lytItem.tvTimeValue.text = data.metadata?.intensity ?: "-"
+
+        // Disable btns
+        binding.lytCard.ivDropDown.isClickable = false
+
+        binding.lytCard.tvDate.isClickable = false
+        binding.lytCard.icArrow.isClickable = false
+
+        binding.lytCard.lytStartTime.isClickable = false
+        binding.lytCard.lytEndTime.isClickable = false
+
+        binding.lytCard.viewIntensity.isClickable = false
     }
 
 }

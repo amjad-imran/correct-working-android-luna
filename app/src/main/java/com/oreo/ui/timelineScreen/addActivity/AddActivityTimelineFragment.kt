@@ -71,6 +71,9 @@ class AddActivityTimelineFragment :
             "symptom" ->
                 sharedViewModel.loadFragmentByType(AddActivityItemsEnum.CYCLE_LOG, editData)
 
+            "workout" ->
+                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.WORKOUT, editData)
+
             else -> sharedViewModel.loadFragmentByType(AddActivityItemsEnum.ACTIVITIES_LISTING)
         }
     }
@@ -126,7 +129,13 @@ class AddActivityTimelineFragment :
                     }
 
                     AddActivityItemsEnum.WORKOUT -> {
-                        AddWorkoutFragment()
+                        AddWorkoutFragment().apply {
+                            it.second?.let { editData ->
+                                this.arguments = Bundle().apply {
+                                    putParcelable("editData", editData)
+                                }
+                            }
+                        }
                     }
 
                     AddActivityItemsEnum.CAFFEINE -> {

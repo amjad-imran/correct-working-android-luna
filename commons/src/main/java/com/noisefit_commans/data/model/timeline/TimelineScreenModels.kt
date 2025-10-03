@@ -103,4 +103,14 @@ data class TimelineMetadata(
     val symptoms: List<String> ?= null,
     val flow: List<String> ?= null,
 
+    // For Workout
+    val type: String? = null,
+    val steps: Int? = null,
+    val calories: Int? = null,
+    val intensity: String? = null,
+    @SerializedName("activity_type")
+    val activityType: String? = null,
+    @SerializedName("extra_calories")
+    val extraCalories: Int? = null
+
 ) : Parcelable

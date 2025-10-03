@@ -53,7 +53,10 @@ class AddPeriodLogFragment :
     private val symptomsAdapter: CycleSymptomsAdapter by lazy {
         CycleSymptomsAdapter(object : OnSymptomsItemClick {
             override fun onItemClick(data: FHSymptomsIconsModel, position: Int) {
-                symptomsAdapter.updateItem(data, position)
+                if(logViewModel.editDataAddActivity?.canBeEditedOrDeleted != 0) {
+                    symptomsAdapter.updateItem(data, position)
+                    binding.btnSave.enable()
+                }
             }
         })
     }
