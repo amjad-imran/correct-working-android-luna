@@ -85,6 +85,18 @@
             app:layout_constraintTop_toBottomOf="@+id/otpContainer"
             tools:visibility="visible" />
 
+        <TextView
+            android:id="@+id/tvTimer"
+            style="@style/H6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_24dp"
+            tools:text="12:00"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/otpContainer"
+            app:layout_constraintTop_toBottomOf="@+id/otpContainer"
+            tools:visibility="visible" />
+
 
         <Button
             android:id="@+id/btnResendOtp"

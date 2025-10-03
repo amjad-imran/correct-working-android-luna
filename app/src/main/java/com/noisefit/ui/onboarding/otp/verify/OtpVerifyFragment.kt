@@ -80,7 +80,7 @@ class OtpVerifyFragment :
         startSMSRetrieverClient()
 
         setBroadCastReceiver()
-        viewModel.startOtpResendTimer()
+        viewModel.startOtpResendTimer(viewModel.sessionManager.otpResendTimerSeconds)
 
     }
 
@@ -140,8 +140,6 @@ class OtpVerifyFragment :
 
 
         binding.btnResendOtp.setOnClickListener {
-            viewModel.startOtpResendTimer()
-
             binding.tvNotReceiveOtp.gone()
             binding.btnResendOtp.gone()
             viewModel.setEnteredOtp("")
@@ -166,6 +164,13 @@ class OtpVerifyFragment :
     }
 
     override fun subscribeObservers() {
+        viewModel.successMessage.observe(this) { message ->
+            message?.getContent()?.let { msg ->
+                if (!msg.isNullOrEmpty()) {
+                    viewModel.startOtpResendTimer(viewModel.sessionManager.otpResendTimerSeconds)
+                }
+            }
+        }
 
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
@@ -217,9 +222,16 @@ class OtpVerifyFragment :
 
         viewModel.timerRunning.observe(viewLifecycleOwner) {
             if (!it) {
+                binding.tvTimer.gone()
                 binding.tvNotReceiveOtp.visible()
                 binding.btnResendOtp.visible()
             }
+        }
+        viewModel.tickerTime.observe(viewLifecycleOwner) {
+            if (viewModel.timerRunning.value == false) return@observe
+
+            binding.tvTimer.text = "$it"
+            binding.tvTimer.visible()
         }
     }
 

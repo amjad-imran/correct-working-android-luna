@@ -6,5 +6,6 @@ data class SendOtpResponse(
     val is_pwd: Boolean? = false,
     val mask_email: String? = null,
     val image_url: String? = null,
-    val mobile: String? = null
+    val mobile: String? = null,
+    val timer: Int? = null,
 )

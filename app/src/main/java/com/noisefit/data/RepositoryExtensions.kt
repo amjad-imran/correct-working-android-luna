@@ -124,7 +124,7 @@ private fun genericError(message: ErrorResponse?, statusCode: Int?): Resource.Ge
     message?.let {
         LOGS.d(it)
     }
-    return Resource.GenericError(message?.errors?.message, statusCode)
+    return Resource.GenericError(message?.errors?.message, statusCode,errorBody = message)
 }
 
 private fun networkError(message: String?, statusCode: Int?): Resource.NetworkError {

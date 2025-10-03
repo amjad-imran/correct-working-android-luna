@@ -2,6 +2,7 @@ package com.noisefit.ui.onboarding.auth
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
@@ -43,7 +44,7 @@ class EmailOtpFragment :
         }
 
         if (viewModel.useOtp) {
-            viewModel.startOtpResendTimer()
+            viewModel.startOtpResendTimer(viewModel.sessionManager.otpResendTimerSeconds)
             binding.tvSubHeading.text = viewModel.enteredValue?.let { email ->
                 getString(R.string.text_email_otp, email)
             }
@@ -114,7 +115,6 @@ class EmailOtpFragment :
         binding.btnResendOtp.setOnClickListener {
 
             if (viewModel.useOtp) {
-                viewModel.startOtpResendTimer()
 
                 binding.tvNotReceiveOtp.gone()
                 binding.btnResendOtp.gone()
@@ -138,11 +138,24 @@ class EmailOtpFragment :
 
     override fun subscribeObservers() {
 
+        viewModel.emailOtpGenerated.observe(this){
+            it.getContent()?.let {
+                viewModel.startOtpResendTimer(viewModel.sessionManager.otpResendTimerSeconds)
+            }
+        }
+
         viewModel.timerRunning.observe(viewLifecycleOwner) {
             if (!it) {
+                binding.tvTimer.gone()
                 binding.tvNotReceiveOtp.visible()
                 binding.btnResendOtp.visible()
             }
+        }
+        viewModel.tickerTime.observe(viewLifecycleOwner) {
+            if (viewModel.timerRunning.value == false) return@observe
+
+            binding.tvTimer.text = "$it"
+            binding.tvTimer.visible()
         }
 
         viewModel.getMessages().observe(viewLifecycleOwner) {
