@@ -154,7 +154,7 @@ class EmailOtpFragment :
         viewModel.tickerTime.observe(viewLifecycleOwner) {
             if (viewModel.timerRunning.value == false) return@observe
 
-            binding.tvTimer.text = "$it"
+            binding.tvTimer.text = getString(R.string.text_retry_in_value, it)
             binding.tvTimer.visible()
         }
 

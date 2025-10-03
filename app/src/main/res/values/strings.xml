@@ -2226,5 +2226,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_add_recovery">Add Recovery</string>
     <string name="text_add_alcohol">Add Alcohol</string>
     <string name="text_add_supplement">Add Supplement</string>
+    <string name="text_retry_in_value">Retry in %1$s</string>
 
 </resources>
