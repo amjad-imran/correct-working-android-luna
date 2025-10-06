@@ -389,13 +389,13 @@ class CustomHomescreenViewModel @Inject constructor(
                     this.size + 1
                 )
             }
-            this["7_day_trends_card"] = CustomHomeScreenItem(
+            /*this["7_day_trends_card"] = CustomHomeScreenItem(
                 R.drawable.icon_7_day_trends_card,
                 "7_day_trends_card",
                 resourceProvider.getString(R.string.text_7_day_trends_cards),
                 true,
                 this.size + 1
-            )
+            )*/
             /*this["workout_history"] = CustomHomeScreenItem(
                 R.drawable.icon_flexibility_training,
                 "workout_history",
