@@ -730,6 +730,14 @@ class AddWorkoutFragment :
                 sharedViewModel.navigateUp()
             }
         }
+
+        viewModel.onDeleteSuccess.observe(this){
+            it.getContent()?.let {
+                mainViewModel.sessionManager.reloadOnResume = true
+                sharedViewModel.navigateUp()
+            }
+        }
+
         viewModel.getLoading().observe(this) {
             if (it) {
                 uiController.displayProgressBar(true,"")

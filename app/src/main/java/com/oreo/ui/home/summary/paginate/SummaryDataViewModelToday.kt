@@ -1323,9 +1323,9 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
 
                     "7_day_trends_card" -> {
-                        getSevenDaysTrendsDataCard(trendsData)?.let {
+                        /*getSevenDaysTrendsDataCard(trendsData)?.let {
                             userActivities.add(it)
-                        }
+                        }*/
                     }
 
                     /*"workout_history" -> {
