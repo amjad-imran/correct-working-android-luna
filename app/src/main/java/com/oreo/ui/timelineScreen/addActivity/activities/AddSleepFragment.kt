@@ -443,8 +443,8 @@ class AddSleepFragment :
 
     private fun setSleepEnvChipsData(items: ArrayList<SupplementOption>) {
         val canBeViewedOnly = viewModel.editDataAddActivity?.canBeEditedOrDeleted == 0
-        val checkedImg = if(canBeViewedOnly) R.drawable.ic_sleep_env_chip_box_checked
-                        else R.drawable.ic_sleep_env_chip_box_selected
+        val checkedImg = if(canBeViewedOnly) R.drawable.ic_sleep_env_chip_box_selected
+                        else R.drawable.ic_sleep_env_chip_box_checked
 
         val cg = binding.lytCard.chipGroupSleepEnv
         cg.removeAllViews()
