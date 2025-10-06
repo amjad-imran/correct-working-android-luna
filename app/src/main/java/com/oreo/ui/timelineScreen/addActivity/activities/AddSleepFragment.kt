@@ -56,21 +56,26 @@ class AddSleepFragment :
                 return@setOnClickListener
             }
 
-            if (viewModel.startTimeSleep.day.isEmpty()) {
-                uiController.onDisplayError(getString(R.string.text_please_select_start_time))
-                return@setOnClickListener
-            }
-            if (viewModel.endTimeSleep.day.isEmpty()) {
-                uiController.onDisplayError(getString(R.string.text_please_select_end_time))
-                return@setOnClickListener
-            }
-            /*if (viewModel.getSleepDuration() < (3 * 60 * 60)) {
+            if(viewModel.editDataAddActivity?.id != null){
+                viewModel.submitSleepEnvOptions()
+            }else {
+
+                if (viewModel.startTimeSleep.day.isEmpty()) {
+                    uiController.onDisplayError(getString(R.string.text_please_select_start_time))
+                    return@setOnClickListener
+                }
+                if (viewModel.endTimeSleep.day.isEmpty()) {
+                    uiController.onDisplayError(getString(R.string.text_please_select_end_time))
+                    return@setOnClickListener
+                }
+                /*if (viewModel.getSleepDuration() < (3 * 60 * 60)) {
                 uiController.onDisplayError("Sleep duration should be minimum of 3 hours")
                 return@setOnClickListener
             }*/
 
 
-            viewModel.callApiToAddSleep()
+                viewModel.callApiToAddSleep()
+            }
         }
 
         // Start Time

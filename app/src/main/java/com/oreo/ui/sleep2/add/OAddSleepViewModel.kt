@@ -440,7 +440,7 @@ constructor(
                 })
             }
 
-            userRepository.submitLogRecoveryTimelineData(reqData).collect{ resource ->
+            userRepository.submitLogSleepEnvOptData(reqData).collect{ resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)

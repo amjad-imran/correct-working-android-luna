@@ -87,6 +87,8 @@ class OAddWorkoutViewModel
 
     var editData : ItemTimelineResponseModel ?= null
 
+    val onDeleteSuccess = MutableLiveData<Event<Boolean>>()
+
     fun isAutoWorkout(): Boolean {
         return autoSport.value != null
     }
@@ -636,6 +638,7 @@ class OAddWorkoutViewModel
                     is Resource.Success -> {
                         resource.data?.data?.let {
 //                            onAddSuccess.postValue(Event(true))
+                            onDeleteSuccess.postValue(Event(true))
                         }
                     }
                 }
