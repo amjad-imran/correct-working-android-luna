@@ -1194,7 +1194,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 stopHeartAnimation(ivAnchor)
             }
 
-            tile.setOnClickListener {
+            /*tile.setOnClickListener {
 
                 return@setOnClickListener
 
@@ -1242,6 +1242,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     )
                 }
                 binding.itemSpO2.setOnClickListener {
+                    LOGS.d("dgdfgdfg listner 2")
                     if (data.measureState == TapMeasureState.ERROR) onItemClicked(
                         OHealthOverview.VitalsType.SPO2,
                         data,
@@ -1256,7 +1257,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     )
                 }
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnOneTapVitalsCollapsed)
-            }
+            }*/
             tile.isSoundEffectsEnabled = false
         }
 
