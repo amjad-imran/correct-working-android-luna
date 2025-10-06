@@ -2,7 +2,8 @@ package com.oreo.ui.timelineScreen.addActivity.activities
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.content.res.AppCompatResources
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
@@ -441,43 +442,32 @@ class AddSleepFragment :
     }
 
     private fun setSleepEnvChipsData(items: ArrayList<SupplementOption>) {
+        val canBeViewedOnly = viewModel.editDataAddActivity?.canBeEditedOrDeleted == 0
+        val checkedImg = if(canBeViewedOnly) R.drawable.ic_sleep_env_chip_box_checked
+                        else R.drawable.ic_sleep_env_chip_box_selected
+
         val cg = binding.lytCard.chipGroupSleepEnv
         cg.removeAllViews()
 
         items.forEachIndexed { index, data ->
-            val chip = Chip(requireContext(), null, com.google.android.material.R.attr.chipStyle).apply {
-                setText(data.options)
-                /*setChipBackgroundColorResource(R.color.chip_bg_color)
-                setChipStrokeColorResource(R.color.chip_stroke)*/
-                chipStrokeWidth = resources.getDimension(R.dimen.dimen_40dp)
-                isCheckable = true
-                isChecked = data.isChecked
-                closeIcon = AppCompatResources.getDrawable(context, R.drawable.ic_hm_check_default)
-                isCloseIconVisible = true
-                isCloseIconEnabled = false
-                closeIconTint = null
-                setTextAppearance(com.google.android.material.R.style.TextAppearance_Material3_BodyMedium)
-                setEnsureMinTouchTargetSize(false)
-                minHeight = resources.getDimensionPixelSize(R.dimen.dimen_40dp)
-                setPadding(0, 0, 0, 0)
-                setChipStartPadding(16f)
-                setTextEndPadding(12f)
-                setIconStartPadding(8f)
-                setIconEndPadding(8f)
+            val chip = layoutInflater.inflate(R.layout.layout_sleep_env_chip, cg, false)
+            val tv = chip.findViewById<TextView>(R.id.tvLabel)
+            val iv = chip.findViewById<ImageView>(R.id.ivBox)
 
-                //
-                tag = index
-                setOnCheckedChangeListener { btn, checked ->
-                    val i = btn.tag as Int
-                    items[i].isChecked = checked
-                    binding.btnSave.enable()
-                    viewModel.selectedOptMap[items[i].id as Int] = checked
-                }
+            tv.text = data.options
+            iv.setImageResource(if (data.isChecked) checkedImg else R.drawable.ic_sleep_env_chip_box_unchecked)
+
+            chip.setOnClickListener {
+                val newChecked = !data.isChecked
+                data.isChecked = newChecked
+                iv.setImageResource(if (newChecked) checkedImg else R.drawable.ic_sleep_env_chip_box_unchecked)
+                binding.btnSave.enable()
+                viewModel.selectedOptMap[data.id as Int] = newChecked
             }
             cg.addView(chip)
         }
 
-        if(viewModel.editDataAddActivity?.canBeEditedOrDeleted == 0){
+        if(canBeViewedOnly){
             for (i in 0 until cg.childCount){
                 (cg.getChildAt(i) as? Chip)?.apply {
                     isCheckable = false
