@@ -94,7 +94,11 @@ class AddLightExposureFragment :
                 viewModel.logLightExposure(
                     viewModel.lightTime.value!!,
                     viewModel.lightDuration.value!!
-                )
+                ){
+                    sharedViewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.insight_log_edited,
+                    )
+                }
             }
         }
 

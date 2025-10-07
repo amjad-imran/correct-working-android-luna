@@ -136,7 +136,11 @@ class AddCaffeineFragment :
                 viewModel.logCaffeineValue(
                     viewModel.caffeineTime.value!!,
                     viewModel.caffeineValue.value!!
-                )
+                ){
+                    sharedViewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.insight_log_edited,
+                    )
+                }
             }
         }
 

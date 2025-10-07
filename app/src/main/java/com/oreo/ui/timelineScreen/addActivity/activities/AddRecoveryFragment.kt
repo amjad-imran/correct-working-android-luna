@@ -104,14 +104,6 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
     }
 
     override fun initListener() {
-        binding.btnSave.setOnClickListener{
-            if(viewModel.selectedOption==null){
-                // TODO: Update Msg Text
-                showToast(requireContext(), "Please select an option!")
-                return@setOnClickListener
-            }
-            viewModel.logRecovery()
-        }
 
         binding.tvDate.setOnClickListener {
             onDateClicked()
@@ -134,7 +126,11 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
                 showToast(requireActivity(), "Please select an option")
                 return@setOnClickListener
             }
-            viewModel.logRecovery()
+            viewModel.logRecovery(){
+                sharedViewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.insight_log_edited,
+                )
+            }
         }
     }
 

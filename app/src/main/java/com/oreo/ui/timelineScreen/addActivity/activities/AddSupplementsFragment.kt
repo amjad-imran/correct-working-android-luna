@@ -131,7 +131,11 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
                 showToast(requireContext(), "Please select an option!")
                 return@setOnClickListener
             }
-            viewModel.logSupplements()
+            viewModel.logSupplements(){
+                sharedViewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.insight_log_edited,
+                )
+            }
         }
 
         binding.lytSelected.setOnClickListener {

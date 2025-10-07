@@ -88,7 +88,11 @@ class AddAlcoholFragment : BaseFragment<FragmentAddAlcoholBinding>(FragmentAddAl
                 showToast(requireContext(), "Something went wrong!\nPlease try later.")
                 return@setOnClickListener
             }
-            viewModel.logAlcohol()
+            viewModel.logAlcohol(){
+                sharedViewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.insight_log_edited,
+                )
+            }
         }
     }
 

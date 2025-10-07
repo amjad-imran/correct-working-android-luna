@@ -420,7 +420,7 @@ constructor(
         }
     }
 
-    fun submitSleepEnvOptions(){
+    fun submitSleepEnvOptions(editEventFun: () -> Unit){
         viewModelScope.launch {
 
             val sleepEnvObject = JsonObject().apply {
@@ -455,7 +455,7 @@ constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        submitSleepEnvOptions()
+                                        submitSleepEnvOptions(editEventFun)
                                     }
 
                                     override fun no() {}
@@ -466,6 +466,7 @@ constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             _addSleepResponse.postValue(Event(true))
+                            editEventFun()
                         }
                     }
                 }

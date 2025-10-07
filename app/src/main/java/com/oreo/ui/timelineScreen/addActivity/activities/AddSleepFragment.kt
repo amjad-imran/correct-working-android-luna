@@ -26,6 +26,7 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.OAddSleep
 import com.oreo.ui.sleep2.add.OAddSleepViewModel
 import com.oreo.ui.timelineScreen.addActivity.AddActivityItemsEnum
@@ -60,7 +61,11 @@ class AddSleepFragment :
             }
 
             if(viewModel.editDataAddActivity?.id != null){
-                viewModel.submitSleepEnvOptions()
+                viewModel.submitSleepEnvOptions(){
+                    sharedViewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.insight_log_edited,
+                    )
+                }
             }else {
 
                 if (viewModel.startTimeSleep.day.isEmpty()) {

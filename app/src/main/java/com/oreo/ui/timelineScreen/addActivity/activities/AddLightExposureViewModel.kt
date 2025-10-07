@@ -51,7 +51,7 @@ class AddLightExposureViewModel @Inject constructor(
         }
     }
 
-    fun logLightExposure(startTime: LocalTime, duration: Long) {
+    fun logLightExposure(startTime: LocalTime, duration: Long, editEventFun: () -> Unit) {
         viewModelScope.launch {
             val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
             val startTimeStr = startTime.format(formatter)
@@ -88,7 +88,7 @@ class AddLightExposureViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        logLightExposure(startTime, duration)
+                                        logLightExposure(startTime, duration, editEventFun)
                                     }
 
                                     override fun no() {}
@@ -99,6 +99,10 @@ class AddLightExposureViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             onAddSuccess.postValue(Event(true))
+
+                            editData?.id?.let {id ->
+                                editEventFun()
+                            }
                         }
                     }
                 }

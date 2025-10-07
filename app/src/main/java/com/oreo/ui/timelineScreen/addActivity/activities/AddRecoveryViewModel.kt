@@ -75,7 +75,7 @@ class AddRecoveryViewModel @Inject constructor(
         }
     }
 
-    fun logRecovery() {
+    fun logRecovery(editEventFun: () -> Unit) {
         viewModelScope.launch {
             val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
             val sTime = startTime?.format(formatter)
@@ -113,7 +113,7 @@ class AddRecoveryViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        logRecovery()
+                                        logRecovery(editEventFun)
                                     }
 
                                     override fun no() {}
@@ -124,6 +124,9 @@ class AddRecoveryViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             onAddSuccess.postValue(Event(true))
+                            editData?.id?.let {id ->
+                                editEventFun()
+                            }
                         }
                     }
                 }
