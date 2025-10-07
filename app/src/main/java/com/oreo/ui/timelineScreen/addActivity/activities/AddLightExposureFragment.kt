@@ -193,7 +193,11 @@ class AddLightExposureFragment :
                             getString(R.string.text_something_went_wrong_please_try_again))
                         return@observe
                     }
-                    viewModel.deleteLightExposureItem()
+                    viewModel.deleteLightExposureItem(){
+                        sharedViewModel.sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.insight_log_deleted,
+                        )
+                    }
                 }
             }
         }

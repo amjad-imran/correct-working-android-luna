@@ -106,7 +106,7 @@ class AddLightExposureViewModel @Inject constructor(
         }
     }
 
-    fun deleteLightExposureItem() {
+    fun deleteLightExposureItem(deleteEventFun: () -> Unit) {
         viewModelScope.launch {
             userRepository.deleteTimelineItemById(editData?.id?:"").collect{ resource ->
                 when (resource) {
@@ -123,7 +123,7 @@ class AddLightExposureViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        deleteLightExposureItem()
+                                        deleteLightExposureItem(deleteEventFun)
                                     }
 
                                     override fun no() {}
@@ -134,6 +134,7 @@ class AddLightExposureViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             onAddSuccess.postValue(Event(true))
+                            deleteEventFun()
                         }
                     }
                 }

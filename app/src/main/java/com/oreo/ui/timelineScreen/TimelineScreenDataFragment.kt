@@ -129,7 +129,6 @@ class TimelineScreenDataFragment :
     private fun handleOnItemClick(data: ItemTimelineResponseModel) {
 
         var canBeUpdated = false
-        // TODO : Meal, Nap/Sleep
 
         if(data.event.equals("meal")){
 

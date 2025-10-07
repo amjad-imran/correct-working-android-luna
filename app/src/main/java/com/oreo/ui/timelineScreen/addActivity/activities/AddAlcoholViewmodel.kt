@@ -123,7 +123,7 @@ class AddAlcoholViewmodel @Inject constructor(
         }
     }
 
-    fun deleteAlcoholItem() {
+    fun deleteAlcoholItem(deleteEventFun: () -> Unit) {
         viewModelScope.launch {
             userRepository.deleteTimelineItemById(editData?.id?:"").collect{ resource ->
                 when (resource) {
@@ -140,7 +140,7 @@ class AddAlcoholViewmodel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        deleteAlcoholItem()
+                                        deleteAlcoholItem(deleteEventFun)
                                     }
 
                                     override fun no() {}
@@ -151,6 +151,7 @@ class AddAlcoholViewmodel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             onAddSuccess.postValue(Event(true))
+                            deleteEventFun()
                         }
                     }
                 }

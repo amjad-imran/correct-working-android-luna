@@ -31,7 +31,9 @@ import com.oreo.ui.sleep2.add.OAddSleepViewModel
 import com.oreo.ui.timelineScreen.addActivity.AddActivityItemsEnum
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.Duration
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -349,7 +351,12 @@ class AddSleepFragment :
 
     private fun setEditLayout(data: ItemTimelineResponseModel) {
         // Set Sleep Duration
-        binding.lytCard.tvSleepDuration.text = formatSecondsToHrMin(data.value?.toLong())
+        binding.lytCard.tvSleepDuration.text = getSleepDuration(
+            data.startDate,
+            data.startTime,
+            data.endDate,
+            data.endTime,
+            )
 
         // Set Start Date & Time
         binding.lytCard.lytStartAndEndTime.lytDate.tvTime.text = getString(R.string.text_start_time)
@@ -386,13 +393,41 @@ class AddSleepFragment :
         }
     }
 
-    fun formatSecondsToHrMin(totalSeconds: Long?): String {
-        if(totalSeconds==null) return "--hr --min"
+    fun getSleepDuration(
+        startDate: String?,
+        startTime: String?,
+        endDate: String?,
+        endTime: String?
+    ): String {
         return try {
-            val h = TimeUnit.SECONDS.toHours(totalSeconds)
-            val m = TimeUnit.SECONDS.toMinutes(totalSeconds) - TimeUnit.HOURS.toMinutes(h)
-            "${h}hr ${m}min"
-        }catch (_: Exception){
+            // Define the format for time
+            val timeFormatter12Hour = DateTimeFormatter.ofPattern("h:mm a")
+
+            // Parse the start and end dates into LocalDate objects
+            val startDateObj = LocalDateTime.parse(
+                "$startDate $startTime",
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            )
+            val endDateObj = LocalDateTime.parse(
+                "$endDate $endTime",
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            )
+
+            // If the end time is before the start time, adjust the end time to the next day
+            val adjustedEndDateObj = if (endDateObj.isBefore(startDateObj)) {
+                endDateObj.plusDays(1)
+            } else {
+                endDateObj
+            }
+
+            // Calculate the duration between start and end times
+            val duration = Duration.between(startDateObj, adjustedEndDateObj)
+            val hours = duration.toHours()
+            val minutes = duration.toMinutes() % 60
+
+            "$hours hr $minutes m"
+        } catch (e: Exception) {
+            LOGS.e("TIMELINE_GET_SLEEP_DURATION_EXCEPTION : $e")
             "--hr --min"
         }
     }

@@ -132,7 +132,7 @@ class AddRecoveryViewModel @Inject constructor(
         }
     }
 
-    fun deleteRecoveryItem() {
+    fun deleteRecoveryItem(deleteEventFun: () -> Unit) {
         viewModelScope.launch {
             if(editData?.id == null){
                 return@launch
@@ -152,7 +152,7 @@ class AddRecoveryViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        logRecovery()
+                                        deleteRecoveryItem(deleteEventFun)
                                     }
 
                                     override fun no() {}
@@ -163,6 +163,7 @@ class AddRecoveryViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             onAddSuccess.postValue(Event(true))
+                            deleteEventFun()
                         }
                     }
                 }

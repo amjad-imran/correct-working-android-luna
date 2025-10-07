@@ -59,6 +59,9 @@ class AddActivityTimelineFragment :
             CircadianAlignmentViewModel.sleep_key ->
                 sharedViewModel.loadFragmentByType(AddActivityItemsEnum.SLEEP, editData)
 
+            "nap" ->
+                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.SLEEP, editData)
+
             "supplements" ->
                 sharedViewModel.loadFragmentByType(AddActivityItemsEnum.SUPPLEMENTS, editData)
 

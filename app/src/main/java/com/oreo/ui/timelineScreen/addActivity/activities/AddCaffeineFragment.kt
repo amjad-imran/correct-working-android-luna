@@ -230,7 +230,11 @@ class AddCaffeineFragment :
                             getString(R.string.text_something_went_wrong_please_try_again))
                         return@observe
                     }
-                    viewModel.deleteCaffeineItem()
+                    viewModel.deleteCaffeineItem(){
+                        sharedViewModel.sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.insight_log_deleted,
+                        )
+                    }
                 }
             }
         }

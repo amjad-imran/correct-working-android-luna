@@ -733,6 +733,9 @@ class AddWorkoutFragment :
 
         viewModel.onDeleteSuccess.observe(this){
             it.getContent()?.let {
+                sharedViewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.insight_log_deleted,
+                )
                 mainViewModel.sessionManager.reloadOnResume = true
                 sharedViewModel.navigateUp()
             }
