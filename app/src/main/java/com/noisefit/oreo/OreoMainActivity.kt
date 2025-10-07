@@ -279,6 +279,13 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             onLogPeriodClicked()
         }
 
+        binding.lytAddWorkoutSelector.tvAddActivity.setOnClickListener {
+            showTimeline()
+        }
+        binding.lytAddWorkoutSelector.ivAddActivity.setOnClickListener {
+            showTimeline()
+        }
+
         binding.lytAddWorkoutSelector.tvAddSleep.setOnClickListener {
             showAddSleep()
         }
@@ -359,6 +366,18 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         handleIntent(intent)
+    }
+
+    private fun showTimeline(){
+        showAddWorkoutCta()
+        binding.blurViewSelector.gone()
+        if (viewModel.isDeviceConnected().not()) {
+            showShortToast(getString(R.string.text_please_connect_your_ring))
+            return
+        }
+
+        navController?.navigate(R.id.addActivityTimelineFragment,bundleOf("showTimeline" to true, "key" to null))
+
     }
 
     private fun showAddSleep() {
@@ -460,6 +479,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     private fun animateFabUp() {
         binding.blurViewSelector.visible()
 
+
+
         animateItemsUp(binding.lytAddWorkoutSelector.ivRecordWorkout, 200f)
         animateItemsUp(binding.lytAddWorkoutSelector.tvRecordWorkout, 200f)
         binding.lytAddWorkoutSelector.ivAddWorkoutManual.visible()
@@ -474,9 +495,16 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             binding.lytAddWorkoutSelector.ivRecordSleep.visible()
             animateItemsUp(binding.lytAddWorkoutSelector.tvAddSleep, 350f)
             animateItemsUp(binding.lytAddWorkoutSelector.ivRecordSleep, 350f)
+
+            binding.lytAddWorkoutSelector.tvAddActivity.visible()
+            binding.lytAddWorkoutSelector.ivAddActivity.visible()
+            animateItemsUp(binding.lytAddWorkoutSelector.tvAddActivity, 400f)
+            animateItemsUp(binding.lytAddWorkoutSelector.ivAddActivity, 400f)
         } else {
             binding.lytAddWorkoutSelector.tvAddSleep.gone()
             binding.lytAddWorkoutSelector.ivRecordSleep.gone()
+            binding.lytAddWorkoutSelector.tvAddActivity.gone()
+            binding.lytAddWorkoutSelector.ivAddActivity.gone()
         }
 
         if (viewModel.shouldShowFemaleHealthCta() && lastDestination?.id == R.id.navigation_oreo_home) {
@@ -488,6 +516,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             binding.lytAddWorkoutSelector.ivLogPeriod.gone()
             binding.lytAddWorkoutSelector.tvLogPeriod.gone()
         }
+
+
 
 
         val rotate =
@@ -541,6 +571,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     private fun animateFabDown() {
         //binding.blurViewSelector.gone()
 
+        animateItemsDown(binding.lytAddWorkoutSelector.tvAddActivity)
+        animateItemsDown(binding.lytAddWorkoutSelector.ivAddActivity)
         animateItemsDown(binding.lytAddWorkoutSelector.ivRecordWorkout)
         animateItemsDown(binding.lytAddWorkoutSelector.ivAddWorkoutManual)
         animateItemsDown(binding.lytAddWorkoutSelector.tvAddWorkout)

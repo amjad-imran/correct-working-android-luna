@@ -669,7 +669,7 @@ class SummaryDataFragmentToday :
                             bundleOf("showTimeline" to true, "key" to type.key)
                         )
                     }else{
-                        showToast(requireContext(), getString(R.string.text_please_connect_your_ring_to_add_sleep))
+                        showToast(requireContext(), getString(R.string.text_please_connect_your_ring))
                     }
                 }
 
