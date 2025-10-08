@@ -90,6 +90,9 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
                 hashMapOf("source" to "readiness")
             )*/
 
+            LOGS.d("Setting_data selected date $selectedDate")
+
+
             mainViewModel.onCalendarDateSelected(selectedDate)
             mainViewModel.getUserHealthData(mainViewModel.mStartDate, mainViewModel.mEndDate)
         }
@@ -130,11 +133,14 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
     override fun subscribeObservers() {
         mainViewModel.dashboard.observe(viewLifecycleOwner) {
             LOGS.w("Setting_data size ${it.size}")
+            pagerAdapter = TimelinePagerAdapter(this)
+            binding.viewPagerTimeline.adapter = pagerAdapter
             pagerAdapter?.setDataSet(it)
 
             val pos = pagerAdapter?.getPositionForDate(mainViewModel.selectedDate) ?: (it.size - 1)
+            LOGS.w("Setting_data pos ${pos} ${mainViewModel.selectedDate}")
 
-            binding.viewPagerTimeline.setCurrentItem(pos, false)
+            binding.viewPagerTimeline.setCurrentItem(pos)
             binding.tabLayout.visible()
             //setTabDates(pos)
 
