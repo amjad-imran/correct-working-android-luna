@@ -929,7 +929,9 @@ class OreoReadinessFragment :
 
         mainViewModel.nudgeReadinessData.observe(this){
             it.getContent()?.let {
-                handleNudges()
+                if(mainViewModel.selectedDate.equals(LocalDate.now().toString())) {
+                    handleNudges()
+                }
             }
         }
 
@@ -1202,7 +1204,6 @@ class OreoReadinessFragment :
         binding.lytRScoreData.lytSec3.tvTitle.text = getString(R.string.text_skin_temperature)
         binding.lytRScoreData.lytSec4.tvTitle.text = getString(R.string.text_respiratory_rate)
 
-        handleNudges()
 //        setReadinessBannerViewPager(it.nudges)
 
         setHealthMonitor(it.healthTrend)
@@ -1421,6 +1422,7 @@ class OreoReadinessFragment :
              sleepEndTime
          )*/
         if (it.date.equals(LocalDate.now().toString())) {
+            handleNudges()
             mViewModel.loadAlertsData()
             if(mViewModel.getLdwReadinessData()){
                 displayWomansDayCard()
@@ -1429,6 +1431,7 @@ class OreoReadinessFragment :
                 binding.lytWomenDayAnnouncement.root.gone()
             }
         } else {
+            binding.lytRScoreData.lytAScoreBanner.root.gone()
             binding.lytIrregularityEvents.root.gone()
             binding.divider111.root.gone()
             binding.dividerWomenDayAnnouncement.root.gone()
