@@ -716,14 +716,15 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         val angles = listOf(160, 180, 200, 220, 250)
         val yBias = dpToPx(10)
+        data class Entry(val view: View, val tx: Int, val ty: Int)
+        val entries = ArrayList<Entry>(items.size)
+
         for ((index, item) in items.withIndex()) {
             val angle = Math.toRadians(angles[index].toDouble())
             val tx = (cx + radius * Math.cos(angle)).toInt()
             val ty = (cy + radius * Math.sin(angle)).toInt() + yBias
 
-
             val view = LayoutInflater.from(overlay.context).inflate(R.layout.layout_fab_item, null)
-
             view.findViewById<ImageView>(R.id.imageView).setImageResource(item.icon)
             view.findViewById<TextView>(R.id.tvTitle).apply {
                 text = item.title
@@ -735,35 +736,39 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 android.widget.FrameLayout.LayoutParams.WRAP_CONTENT
             )
             overlay.addView(view, lp)
+            entries.add(Entry(view, tx, ty))
+        }
 
-            view.post {
-                view.x = cx - view.width / 2f
-                view.y = cy - view.height / 2f
-                view.alpha = 0f
+        // Animate in top-to-bottom order (smallest target Y first)
+        overlay.post {
+            val sorted = entries.sortedBy { it.ty }
+            sorted.forEachIndexed { rank, e ->
+                e.view.x = cx - e.view.width / 2f
+                e.view.y = cy - e.view.height / 2f
+                e.view.alpha = 0f
 
-                val baseDelay = (index * 40L)
+                val baseDelay = rank * 40L
                 val moveDuration = 250L
 
                 val animX = ObjectAnimator.ofFloat(
-                    view,
+                    e.view,
                     View.X,
-                    view.x,
-                    tx.toFloat() - view.width / 2f
+                    e.view.x,
+                    e.tx.toFloat() - e.view.width / 2f
                 ).apply {
                     duration = moveDuration
                     startDelay = baseDelay
                 }
                 val animY = ObjectAnimator.ofFloat(
-                    view,
+                    e.view,
                     View.Y,
-                    view.y,
-                    ty.toFloat() - view.height / 2f
+                    e.view.y,
+                    e.ty.toFloat() - e.view.height / 2f
                 ).apply {
                     duration = moveDuration
                     startDelay = baseDelay
                 }
-
-                val alphaAnim = ObjectAnimator.ofFloat(view, View.ALPHA, 0f, 1f).apply {
+                val alphaAnim = ObjectAnimator.ofFloat(e.view, View.ALPHA, 0f, 1f).apply {
                     duration = moveDuration / 2
                     startDelay = baseDelay + moveDuration / 2
                 }
@@ -886,9 +891,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         val childCount = overlay.childCount
         if (childCount > 0) {
             var completed = 0
-            for (i in childCount - 1 downTo 0) {
-                val v = overlay.getChildAt(i)
-                val baseDelay = ((childCount - 1 - i) * 40L)
+            // Sort children by current Y descending -> bottom to top for close
+            val children = (0 until childCount).map { overlay.getChildAt(it) }
+                .sortedByDescending { it.y }
+            children.forEachIndexed { rank, v ->
+                val baseDelay = (rank * 40L)
                 val moveDuration = 200L
 
                 val animX = ObjectAnimator.ofFloat(
