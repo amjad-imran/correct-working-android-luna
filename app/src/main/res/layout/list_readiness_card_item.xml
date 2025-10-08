@@ -153,19 +153,141 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:text="Getting More Insights..."
         android:textSize="16sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/tvTodayDesc"
-        app:layout_constraintTop_toTopOf="@+id/tvTodayDesc"
-        app:layout_constraintStart_toStartOf="@+id/tvTodayDesc"
         app:layout_constraintEnd_toEndOf="@+id/tvTodayDesc"
+        app:layout_constraintStart_toStartOf="@+id/tvTodayDesc"
+        app:layout_constraintTop_toTopOf="@+id/tvTodayDesc"
         app:text_shimmer_base_color="#7095AF"
         app:text_shimmer_colored="true"
         app:text_shimmer_duration="3000"
         app:text_shimmer_highlight_color="#C2D9E6"
         app:text_shimmer_repeat_mode="restart"
-        android:text="Getting More Insights..."
-        tools:visibility="visible" />
+         />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lytPrevDaysFooter"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/lytNapLabel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" >
+
+        <include
+            android:id="@+id/include"
+            layout="@layout/layout_line_separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/include2"
+            layout="@layout/layout_line_separator"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginVertical="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include" />
+
+        <TextView
+            android:id="@+id/tvAvgHRVText"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_resting_hrv"
+            android:textColor="@color/white_64"
+            app:layout_constraintEnd_toStartOf="@+id/include2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/include2" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_8dp"
+            app:layout_constraintEnd_toEndOf="@+id/tvAvgHRVText"
+            app:layout_constraintStart_toStartOf="@+id/tvAvgHRVText"
+            app:layout_constraintTop_toBottomOf="@+id/tvAvgHRVText">
+
+            <TextView
+                android:id="@+id/tvHrvVal"
+                style="@style/H5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="--" />
+
+            <TextView
+                android:id="@+id/textHour"
+                style="@style/H6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginBottom="@dimen/dimen_2dp"
+                android:textSize="12sp"
+                android:text="@string/text_ms"
+                app:layout_constraintBottom_toBottomOf="@+id/tvHrvVal"
+                app:layout_constraintStart_toEndOf="@+id/tvHrvVal" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <TextView
+            android:id="@+id/tvLowestHr"
+            style="@style/Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_average_rhr"
+            android:textColor="@color/white_64"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/include2"
+            app:layout_constraintTop_toTopOf="@+id/include2" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_8dp"
+            app:layout_constraintEnd_toEndOf="@+id/tvLowestHr"
+            app:layout_constraintStart_toStartOf="@+id/tvLowestHr"
+            app:layout_constraintTop_toBottomOf="@+id/tvLowestHr">
+
+            <TextView
+                android:id="@+id/tvRhrValue"
+                style="@style/H5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="--" />
+
+            <TextView
+                android:id="@+id/tvHrUnit"
+                style="@style/H6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginBottom="@dimen/dimen_2dp"
+                android:text="@string/text_bpm_small"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvRhrValue"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tvRhrValue" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
