@@ -39,6 +39,7 @@
         android:id="@+id/textView197"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         style="@style/S12"
         android:textColor="#7BFFFFFF"
         android:layout_marginStart="12dp"
