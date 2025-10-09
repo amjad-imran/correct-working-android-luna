@@ -337,7 +337,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             if (binding.fabRevealOverlay.isVisible) {
                 hideFabRadialMenu()
             } else {
-                if (navController?.currentDestination?.id == R.id.navigation_oreo_workouts ||
+                /*if (navController?.currentDestination?.id == R.id.navigation_oreo_workouts ||
                     navController?.currentDestination?.id == R.id.oActivityListFragment
                 ) {
                     logAppEvent(
@@ -349,7 +349,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                         MoEngageLunaAppEvents.workout_add_button_clicked,
                         hashMapOf("source" to "homepage")
                     )
-                }
+                }*/
                 showFabRadialMenu()
             }
             return@setOnClickListener
@@ -760,7 +760,6 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             }
         }
 
-        // Animate in top-to-bottom order (smallest target Y first)
         overlay.post {
             val sorted = entries.sortedBy { it.ty }
             sorted.forEachIndexed { rank, e ->
@@ -828,7 +827,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         if(lastDestination?.id==R.id.sleepDashFragment){
             items.add(
                 FabModel(
-                    title = "Add sleep",
+                    title = getString(R.string.text_add_sleep),
                     icon = R.drawable.ic_fab_add_sleep,
                     color = "#F2CEFF".toColorInt(),
                     type = FabItems.ADD_SLEEP
@@ -839,7 +838,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         items.add(
             FabModel(
-                title = "Record workout",
+                title = getString(R.string.text_record_workout),
                 icon = R.drawable.ic_fab_record_workout,
                 color = "#99D9FF".toColorInt(),
                 type = FabItems.RECORD_WORKOUT
@@ -847,7 +846,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         )
         items.add(
             FabModel(
-                title = "Add workout",
+                title = getString(R.string.text_add_workout),
                 icon = R.drawable.ic_fab_add_workout,
                 color = "#99D9FF".toColorInt(),
                 type = FabItems.ADD_WORKOUT
@@ -858,7 +857,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         if (lastDestination?.id == R.id.navigation_oreo_home) {
             items.add(
                 FabModel(
-                    title = "Add sleep",
+                    title = getString(R.string.text_add_sleep),
                     icon = R.drawable.ic_fab_add_sleep,
                     color = "#F2CEFF".toColorInt(),
                     type = FabItems.ADD_SLEEP
@@ -869,7 +868,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         if (viewModel.shouldShowFemaleHealthCta() && lastDestination?.id == R.id.navigation_oreo_home) {
             items.add(
                 FabModel(
-                    title = "Track period",
+                    title = getString(R.string.text_track_period),
                     icon = R.drawable.ic_fab_period,
                     color = "#FFBFBF".toColorInt(),
                     type = FabItems.TRACK_PERIOD
@@ -880,7 +879,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         if (lastDestination?.id == R.id.navigation_oreo_home) {
             items.add(
                 FabModel(
-                    title = "Add other activity",
+                    title = getString(R.string.text_add_other_activity),
                     icon = R.drawable.ic_fab_add_other,
                     color = "#A8E0CD".toColorInt(),
                     type = FabItems.ADD_OTHER_ACTIVITY

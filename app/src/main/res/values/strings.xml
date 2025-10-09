@@ -2229,6 +2229,8 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_sleep_environment">Sleep Environment</string>
     <string name="text_please_connect_your_ring">Please connect your ring</string>
     <string name="text_average_rhr">Average RHR</string>
+    <string name="text_track_period">Track period</string>
+    <string name="text_add_other_activity">Add other activity</string>
 
 
 </resources>
