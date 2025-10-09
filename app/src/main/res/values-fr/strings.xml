@@ -2344,4 +2344,44 @@ onjour, Luna"</string>
     <string name="text_restarting">Redémarrage</string>
     <string name="text_your_wake_up_time_today_was_outside_your_usual_rhythm_so_the_circadian_rhythm_guide_is_temporarily_unavailable">Votre heure de réveil aujourd\'hui était en dehors de votre rythme habituel, donc le guide du rythme circadien est temporairement indisponible.</string>
 
+    <string name="text_supplements">Suppléments</string>
+    <string name="text_alcohol">Alcool</string>
+    <string name="text_recovery">Récupération</string>
+    <string name="text_add_meal_intake">Ajouter un repas</string>
+    <string name="text_describe_your_meal_nin_free_form">Décrivez votre repas\nen texte libre.</string>
+    <string name="string_ai_prompt_ex">« ex. J’ai mangé du poulet tikka, de la salade, une soupe à la tomate et quelques pani puris pour le dîner… »</string>
+    <string name="text_type_anything">Tapez n\'importe quoi...</string>
+    <string name="text_add_option">Ajouter une option</string>
+    <string name="text_select_supplement">Sélectionner un supplément</string>
+    <string name="text_identified_food">Aliment identifié</string>
+    <string name="text_add_food_item_plus">Ajouter un aliment +</string>
+    <string name="text_add_food_item">Ajouter un aliment</string>
+    <string name="text_more_details">Plus de détails</string>
+    <string name="text_snack">En-cas</string>
+    <string name="text_dinner">Dîner</string>
+    <string name="text_lunch">Déjeuner</string>
+    <string name="text_breakfast">Petit-déjeuner</string>
+    <string name="text_retry_prompt">Réessayer</string>
+    <string name="text_result_not_correct">Résultat incorrect ?</string>
+    <string name="text_macros_breakdown">Répartition des macros</string>
+    <string name="text_food_item">Aliment</string>
+    <string name="text_add_light_exposure">Ajouter exposition à la lumière</string>
+    <string name="text_add_caffeine">Ajouter caféine</string>
+    <string name="text_add_water">Ajouter eau</string>
+    <string name="text_add_recovery">Ajouter récupération</string>
+    <string name="text_add_alcohol">Ajouter alcool</string>
+    <string name="text_add_supplement">Ajouter supplément</string>
+    <string name="text_sleep_environment">Environnement de sommeil</string>
+    <string name="text_please_connect_your_ring">Veuillez connecter votre bague</string>
+    <string name="text_average_rhr">FCM moyenne</string>
+    <string name="text_track_period">Suivre la période</string>
+    <string name="text_add_other_activity">Ajouter une autre activité</string>
+    <string name="text_add_events">Ajouter événements</string>
+    <string name="text_your_readiness_needs_attention">Votre préparation nécessite de l’attention</string>
+    <string name="text_your_readiness_is_average">Votre préparation est moyenne.</string>
+    <string name="text_add_notes_to_refine_trends">Ajoutez des notes pour affiner les tendances.</string>
+    <string name="text_record_events_that_helped_your_recovery">Enregistrez les événements qui ont aidé votre récupération.</string>
+    <string name="text_your_readiness_is_good">Votre préparation est bonne !</string>
+    <string name="text_your_readiness_is_excellent">Votre préparation est excellente !</string>
+
 </resources>

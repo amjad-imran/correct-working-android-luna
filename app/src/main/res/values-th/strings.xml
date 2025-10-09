@@ -2231,4 +2231,44 @@
     <string name="text_restarting">กำลังรีสตาร์ท</string>
     <string name="text_your_wake_up_time_today_was_outside_your_usual_rhythm_so_the_circadian_rhythm_guide_is_temporarily_unavailable">เวลาตื่นของคุณวันนี้อยู่นอกจังหวะปกติของคุณ ดังนั้นคู่มือจังหวะวงจรชีวิตจึงไม่สามารถใช้งานได้ชั่วคราว</string>
 
+    <string name="text_supplements">อาหารเสริม</string>
+    <string name="text_alcohol">แอลกอฮอล์</string>
+    <string name="text_recovery">การฟื้นตัว</string>
+    <string name="text_add_meal_intake">เพิ่มมื้ออาหาร</string>
+    <string name="text_describe_your_meal_nin_free_form">อธิบายมื้ออาหารของคุณ\nในรูปแบบอิสระ</string>
+    <string name="string_ai_prompt_ex">“เช่น ฉันทานไก่ตikka สลัด ซุปมะเขือเทศ และปานีปุริสำหรับมื้อเย็น...”</string>
+    <string name="text_type_anything">พิมพ์อะไรก็ได้...</string>
+    <string name="text_add_option">เพิ่มตัวเลือก</string>
+    <string name="text_select_supplement">เลือกอาหารเสริม</string>
+    <string name="text_identified_food">อาหารที่ระบุแล้ว</string>
+    <string name="text_add_food_item_plus">เพิ่มอาหาร +</string>
+    <string name="text_add_food_item">เพิ่มอาหาร</string>
+    <string name="text_more_details">รายละเอียดเพิ่มเติม</string>
+    <string name="text_snack">ของว่าง</string>
+    <string name="text_dinner">มื้อเย็น</string>
+    <string name="text_lunch">มื้อกลางวัน</string>
+    <string name="text_breakfast">มื้อเช้า</string>
+    <string name="text_retry_prompt">ลองใหม่</string>
+    <string name="text_result_not_correct">ผลลัพธ์ไม่ถูกต้อง?</string>
+    <string name="text_macros_breakdown">สัดส่วนสารอาหารหลัก</string>
+    <string name="text_food_item">รายการอาหาร</string>
+    <string name="text_add_light_exposure">เพิ่มการรับแสง</string>
+    <string name="text_add_caffeine">เพิ่มคาเฟอีน</string>
+    <string name="text_add_water">เพิ่มน้ำ</string>
+    <string name="text_add_recovery">เพิ่มการฟื้นตัว</string>
+    <string name="text_add_alcohol">เพิ่มแอลกอฮอล์</string>
+    <string name="text_add_supplement">เพิ่มอาหารเสริม</string>
+    <string name="text_sleep_environment">สภาพแวดล้อมการนอน</string>
+    <string name="text_please_connect_your_ring">กรุณาเชื่อมต่อแหวนของคุณ</string>
+    <string name="text_average_rhr">ค่า RHR เฉลี่ย</string>
+    <string name="text_track_period">ติดตามรอบเวลา</string>
+    <string name="text_add_other_activity">เพิ่มกิจกรรมอื่น</string>
+    <string name="text_add_events">เพิ่มเหตุการณ์</string>
+    <string name="text_your_readiness_needs_attention">ความพร้อมของคุณต้องการความใส่ใจ</string>
+    <string name="text_your_readiness_is_average">ความพร้อมของคุณอยู่ในระดับปานกลาง</string>
+    <string name="text_add_notes_to_refine_trends">เพิ่มบันทึกเพื่อปรับปรุงแนวโน้ม</string>
+    <string name="text_record_events_that_helped_your_recovery">บันทึกเหตุการณ์ที่ช่วยให้คุณฟื้นตัว</string>
+    <string name="text_your_readiness_is_good">ความพร้อมของคุณดี!</string>
+    <string name="text_your_readiness_is_excellent">ความพร้อมของคุณยอดเยี่ยม!</string>
+
 </resources>
