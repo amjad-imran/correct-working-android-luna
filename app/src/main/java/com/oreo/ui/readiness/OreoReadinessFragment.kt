@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -52,7 +51,6 @@ import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import com.oreo.ui.sleep2.internal.SleepInternalDetailsFragment
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
-import com.oreo.util.EventUtil
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -60,7 +58,6 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import javax.inject.Inject
 import androidx.core.graphics.toColorInt
-import com.noisefit.oreo.OreoMainActivity
 import com.oreo.data.model.IrregularEventsChipModel
 import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.chatGpt.PlanType
@@ -856,10 +853,10 @@ class OreoReadinessFragment :
             )
         }
 
-        binding.lytIrregularityEvents.btnClose.setOnClickListener {
+        /*binding.lytIrregularityEvents.btnClose.setOnClickListener {
             (activity as OreoMainActivity).hideSoftKeyboard()
-            /*mainViewModel.localDataStore.setIrregularityCardsVisibilityReadiness(false)
-            binding.lytIrregularityEvents.root.gone()*/
+            *//*mainViewModel.localDataStore.setIrregularityCardsVisibilityReadiness(false)
+            binding.lytIrregularityEvents.root.gone()*//*
             mViewModel.updateAlert(true)
             mViewModel.loadAlertsData()
         }
@@ -894,7 +891,7 @@ class OreoReadinessFragment :
             (activity as OreoMainActivity).hideSoftKeyboard()
             mViewModel.isEventSubmitted = false
             mViewModel.loadAlertsData()
-        }
+        }*/
 
         binding.lytWomenDayAnnouncement.lytWorkoutAnnc.root.setOnClickListener {
             if (mViewModel.ringDataStore.getRingDevice() == null) {
@@ -942,7 +939,7 @@ class OreoReadinessFragment :
         }
 
         mViewModel.hrvAlertsData.observe(this) {
-            it.getContent()?.let {
+            /*it.getContent()?.let {
                 val hrvAlerts = mainViewModel.localDataStore.getHrvAlerts(false)
                 if (hrvAlerts != null) {
 
@@ -968,7 +965,7 @@ class OreoReadinessFragment :
                         binding.divider111.root.gone()
                     }
                 }
-            }
+            }*/
         }
 
         mainViewModel.readinessHistoryResponse.observe(this) {
@@ -1040,7 +1037,7 @@ class OreoReadinessFragment :
 
     }
 
-    fun setIrregularityEventsChips(category: List<IrregularEventsChipModel>?) {
+    /*fun setIrregularityEventsChips(category: List<IrregularEventsChipModel>?) {
         binding.lytIrregularityEvents.chipsPrograms.removeAllViews()
 
         if (category != null) {
@@ -1067,10 +1064,10 @@ class OreoReadinessFragment :
                 // Apply the color state list to the chip
                 mChip.chipBackgroundColor = colorStateList
 
-                /*val paddingDp = TypedValue.applyDimension(
+                *//*val paddingDp = TypedValue.applyDimension(
                     TypedValue.COMPLEX_UNIT_DIP, 10F, resources.displayMetrics
                 )
-                mChip.setPadding(paddingDp.toInt(), 0, paddingDp.toInt(), 0)*/
+                mChip.setPadding(paddingDp.toInt(), 0, paddingDp.toInt(), 0)*//*
                 mChip.setOnCheckedChangeListener { compoundButton, isChecked ->
                     mViewModel.updateChipSelection(item.key, isChecked)
                     if (mChip.tag.toString().equals("others")) {
@@ -1105,6 +1102,72 @@ class OreoReadinessFragment :
                 binding.lytIrregularityEvents.chipsPrograms.addView(mChip)
 
             }
+        }
+    }*/
+
+    fun setAddEventLayout(mainData: OreoReadinessModel, readinessVal: Int) {
+        if (mainData.date.equals(LocalDate.now().toString()).not()){
+            binding.divider111.root.gone()
+            binding.lytIrregularityEvents.root.gone()
+            return
+        }else{
+            binding.divider111.root.visible()
+            binding.lytIrregularityEvents.root.visible()
+        }
+        binding.lytIrregularityEvents.chipsPrograms.removeAllViews()
+
+        val addEventData = mViewModel.getAddEventsData(readinessVal)
+
+        val category = addEventData.chipList
+        for (item in category) {
+            val mChip: Chip =
+                layoutInflater.inflate(R.layout.item_chip_feedback, null, false) as Chip
+            mChip.text = item.displayName
+            mChip.tag = item.key
+
+            // Create a ColorStateList programmatically
+            val states = arrayOf(
+                intArrayOf(android.R.attr.state_checked),  // Checked state
+                intArrayOf(-android.R.attr.state_checked)   // Unchecked state
+            )
+
+            // Set your colors here (replace with your desired colors)
+            val colors = intArrayOf(
+                "#7C404E".toColorInt(),  // Checked color
+                "#0affffff".toColorInt()   // Unchecked color
+            )
+
+            val colorStateList = ColorStateList(states, colors)
+
+            mChip.chipBackgroundColor = colorStateList
+
+            mChip.setOnCheckedChangeListener { compoundButton, isChecked ->
+
+                mChip.isChecked = false
+                if (mChip.tag.toString().equals("others")) {
+                    navigate(
+                        R.id.addActivityTimelineFragment,
+                        bundleOf(
+                            "showTimeline" to false,
+                            "key" to "others",
+                            "srcKey" to "oreo_readiness",
+                            "editData" to null
+                        )
+                    )
+                }else{
+                    navigate(
+                        R.id.addActivityTimelineFragment,
+                        bundleOf(
+                            "showTimeline" to false,
+                            "key" to mChip.tag.toString(),
+                            "srcKey" to "oreo_readiness",
+                            "editData" to null
+                        )
+                    )
+                }
+            }
+            binding.lytIrregularityEvents.chipsPrograms.addView(mChip)
+
         }
     }
 
@@ -1217,12 +1280,14 @@ class OreoReadinessFragment :
                 if (readinessData.value == 0) {
                     if (it.totalSleep?.value != 0) {
                         setReadinessScore(readinessData)
+                        setAddEventLayout(it, readinessData.value)
                     } else {
                         binding.lytRScoreData.lytScore.tvValue.text = "-"
                         binding.lytRScoreData.lytScore.tvQuality.gone()
                     }
                 } else {
                     setReadinessScore(readinessData)
+                    setAddEventLayout(it, readinessData.value)
                 }
             } else {
                 binding.lytRScoreData.lytScore.tvValue.text = "-"

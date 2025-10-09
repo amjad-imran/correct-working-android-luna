@@ -1110,4 +1110,146 @@ constructor(
             IrregularEventsChipModel("others", resourcesProvider.getString(R.string.text_other)),
         )
     }
+
+    fun getAddEventsData(readinessVal: Int): AddEventsDataModel {
+        var title = "-"
+        var desc = "-"
+        var cardBg: Int ?= null
+        var cardState = AddEventState.RED
+        val chipsList = ArrayList<IrregularEventsChipModel>()
+        when(readinessVal){
+            in 0..59 -> {
+                title = resourcesProvider.getString(R.string.text_your_readiness_needs_attention)
+                desc = resourcesProvider.getString(R.string.text_tell_us_what_happened)
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "",
+                        displayName = "Late night meal",
+                    )
+                )
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "",
+                        displayName = "Disturbed sleep environment",
+                    )
+                )
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "",
+                        displayName = "Alcohol intake",
+                    )
+                )
+
+            }
+
+            in 60..69 -> {
+                cardState = AddEventState.YELLOW
+                title = resourcesProvider.getString(R.string.text_your_readiness_is_average)
+                desc = resourcesProvider.getString(R.string.text_add_notes_to_refine_trends)
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "recovery",
+                        displayName = "Warm bath",
+                    )
+                )
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "recovery",
+                        displayName = "Meditation",
+                    )
+                )
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "recovery",
+                        displayName = "Ice Bath",
+                    )
+                )
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "recovery",
+                        displayName = "Cold shower",
+                    )
+                )
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "supplements",
+                        displayName = "Supplement",
+                    )
+                )
+
+            }
+
+            else -> {
+                title = if(readinessVal in 80..84){
+                    resourcesProvider.getString(R.string.text_your_readiness_is_good)
+                }else{
+                    resourcesProvider.getString(R.string.text_your_readiness_is_excellent)
+                }
+
+                desc =
+                    resourcesProvider.getString(R.string.text_record_events_that_helped_your_recovery)
+                cardState = AddEventState.GREEN
+
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "recovery",
+                        displayName = "Cold Plunge",
+                    )
+                )
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "recovery",
+                        displayName = "Massage Therapy",
+                    )
+                )
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "recovery",
+                        displayName = "Warm bath",
+                    )
+                )
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "recovery",
+                        displayName = "Melatonin",
+                    )
+                )
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "sleep_env",
+                        displayName = "Improved Sleep Environment",
+                    )
+                )
+
+            }
+        }
+
+        chipsList.add(
+            IrregularEventsChipModel(
+                key = "others",
+                displayName = "Other",
+            )
+        )
+
+        return AddEventsDataModel(
+            title = title,
+            desc = desc,
+            cardBg = cardBg,
+            cardState = cardState,
+            chipList = chipsList
+        )
+    }
+
+    data class AddEventsDataModel(
+        val title: String,
+        val desc: String,
+        val cardBg: Int?,
+        val cardState: AddEventState,
+        val chipList: List<IrregularEventsChipModel>,
+    )
+
+    enum class AddEventState{
+        RED, YELLOW, GREEN
+    }
+
 }
