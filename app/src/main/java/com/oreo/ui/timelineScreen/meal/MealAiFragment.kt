@@ -60,7 +60,7 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
                 viewModel.viewMode = true
             }
 
-            listOf(binding.tvHeader, binding.tvSub, binding.cardInput).forEach { v ->
+            listOf(binding.tvHeader, binding.tvSub, binding.cardInput, binding.imageGreenBottomGlow).forEach { v ->
                 v.alpha = 0f
                 v.gone()
             }
@@ -72,6 +72,7 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
             viewModel.lastEnteredPrompt = mealData.prompt
             binding.ivMeal.visible()
             binding.tvTopText.visible()
+            binding.imageGradientTop.visible()
             binding.tvTopText.alpha = 1f
             binding.tvTopText.text = mealData.prompt
             binding.ivEditMeal.visibility = View.INVISIBLE
@@ -150,39 +151,18 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
 
 
         binding.tvRetryPrompt.setOnClickListener {
-            viewModel.mealAiResponse.value = null
+            onEditClicked()
+
+            /*viewModel.mealAiResponse.value = null
             showAnalysingState()
             viewModel.lastEnteredPrompt?.let {
                 viewModel.getNutritionFromText(it)
-            }
+            }*/
         }
 
         binding.ivEditMeal.setOnClickListener {
             if (viewModel.mealAiResponse.value == null) return@setOnClickListener
-
-            viewModel.mealAiResponse.value = null
-            binding.tvTopText.gone()
-            binding.ivEditMeal.gone()
-            binding.ivMeal.gone()
-
-            binding.tvHeader.visible()
-            binding.tvSub.visible()
-            binding.cardInput.visible()
-
-            listOf(binding.tvHeader, binding.tvSub, binding.cardInput).forEach { v ->
-                v.animate().alpha(1f).setDuration(250).start()
-            }
-
-            binding.etInput.setText(viewModel.lastEnteredPrompt)
-
-            binding.etInput.isEnabled = true
-            binding.etInput.requestFocus()
-            binding.etInput.setSelection(binding.etInput.text.length)
-            val imm =
-                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.showSoftInput(binding.etInput, InputMethodManager.SHOW_IMPLICIT)
-            binding.etInput.setSelection(binding.etInput.text.length)
-
+            onEditClicked()
         }
 
         binding.btnSend.setOnClickListener {
@@ -203,11 +183,45 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
         }
     }
 
+    fun onEditClicked(){
+        viewModel.mealAiResponse.value = null
+        binding.imageGradientTop.gone()
+        binding.tvTopText.gone()
+        binding.ivEditMeal.gone()
+        binding.ivMeal.gone()
+
+        binding.tvHeader.visible()
+        binding.tvSub.visible()
+        binding.cardInput.visible()
+        binding.imageGreenBottomGlow.visible()
+
+        listOf(binding.tvHeader, binding.tvSub, binding.cardInput, binding.imageGreenBottomGlow).forEach { v ->
+            v.animate().alpha(1f).setDuration(250).start()
+        }
+
+        binding.etInput.setText(viewModel.lastEnteredPrompt)
+
+        binding.etInput.isEnabled = true
+        binding.etInput.requestFocus()
+        binding.etInput.setSelection(binding.etInput.text.length)
+        val imm =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(binding.etInput, InputMethodManager.SHOW_IMPLICIT)
+        binding.etInput.setSelection(binding.etInput.text.length)
+
+    }
+
     override fun subscribeObservers() {
         viewModel.mealAiResponse.observe(this) {
             if (it == null) {
                 binding.svMain.gone()
             } else {
+                binding.tvAnalysing.gone()
+
+                if(it.foods.isNullOrEmpty()){
+                    onEditClicked()
+                    return@observe
+                }
                 showDataState(it)
             }
         }
@@ -279,7 +293,6 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
     }
 
     private fun showDataState(data: MealAiResponse) {
-        binding.tvAnalysing.gone()
         binding.svMain.visible()
 
         val mealBinding = binding.lytContent
@@ -353,7 +366,7 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
             floating.x = startX
             floating.y = startY
 
-            listOf(binding.tvHeader, binding.tvSub, binding.cardInput).forEach { v ->
+            listOf(binding.tvHeader, binding.tvSub, binding.cardInput, binding.imageGreenBottomGlow).forEach { v ->
                 v.animate().alpha(0f).setDuration(250).start()
             }
 
@@ -365,6 +378,7 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
                     root.removeView(floating)
                     binding.tvTopText.alpha = 1f
                     binding.tvTopText.visible()
+                    binding.imageGradientTop.visible()
                     binding.ivEditMeal.visible()
                     //binding.tvTopText.animate().alpha(1f).setDuration(150).start()
                     showAnalysingState()
