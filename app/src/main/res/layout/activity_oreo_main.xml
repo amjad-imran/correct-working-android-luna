@@ -195,7 +195,7 @@
                 android:id="@+id/ivAddWorkoutBack"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:background="@drawable/back_add_workout" />
+                android:background="@drawable/ic_fab_bg" />
 
             <ImageView
                 android:id="@+id/ivWorkout"
