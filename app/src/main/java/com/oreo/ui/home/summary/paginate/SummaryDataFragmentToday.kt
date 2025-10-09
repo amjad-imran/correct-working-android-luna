@@ -133,11 +133,11 @@ class SummaryDataFragmentToday :
 
 
     private val healthOverviewAdapter by lazy {
-        OSummaryHealthOverviewAdapter()
+        OSummaryHealthOverviewAdapter(true)
     }
 
     private val viewedCardsAdapter by lazy {
-        OSummaryHealthOverviewAdapter()
+        OSummaryHealthOverviewAdapter(true)
     }
 
     private val napsAdapter: NapsConfirmAdapter by lazy {

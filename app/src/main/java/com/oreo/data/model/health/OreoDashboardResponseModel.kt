@@ -33,6 +33,8 @@ data class ODashboardReadinessModel(
     val nudges: List<Nudges>? = null,
     val impact: Int? = null,
     val alertCount: Int = 0,
+    val avgHRV: Int ?= null,
+    val avgRestingHR: Int ?= null,
 )
 
 data class ODashboardActivityScoreModel(
