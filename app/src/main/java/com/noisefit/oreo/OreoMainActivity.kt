@@ -824,7 +824,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         val items = ArrayList<FabModel>()
 
-        if(lastDestination?.id==R.id.sleepDashFragment){
+       /* if(lastDestination?.id==R.id.sleepDashFragment){
             items.add(
                 FabModel(
                     title = getString(R.string.text_add_sleep),
@@ -834,7 +834,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 )
             )
             return items
-        }
+        }*/
 
         items.add(
             FabModel(
@@ -854,7 +854,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         )
 
 
-        if (lastDestination?.id == R.id.navigation_oreo_home) {
+        //if (lastDestination?.id == R.id.navigation_oreo_home) {
             items.add(
                 FabModel(
                     title = getString(R.string.text_add_sleep),
@@ -863,9 +863,9 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     type = FabItems.ADD_SLEEP
                 )
             )
-        }
+        //}
 
-        if (viewModel.shouldShowFemaleHealthCta() && lastDestination?.id == R.id.navigation_oreo_home) {
+        if (viewModel.shouldShowFemaleHealthCta()/* && lastDestination?.id == R.id.navigation_oreo_home*/) {
             items.add(
                 FabModel(
                     title = getString(R.string.text_track_period),
@@ -876,7 +876,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             )
         }
 
-        if (lastDestination?.id == R.id.navigation_oreo_home) {
+        //if (lastDestination?.id == R.id.navigation_oreo_home) {
             items.add(
                 FabModel(
                     title = getString(R.string.text_add_other_activity),
@@ -885,7 +885,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     type = FabItems.ADD_OTHER_ACTIVITY
                 )
             )
-        }
+        //}
 
         return items
     }
