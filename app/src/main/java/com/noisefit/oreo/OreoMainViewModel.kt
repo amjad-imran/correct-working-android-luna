@@ -1679,30 +1679,30 @@ constructor(
                                 currentTime = System.currentTimeMillis()
                                 when (type) {
                                     "readiness" -> {
+                                        localDataStore.setNudgeReadinessData(it)
+                                        localDataStore.setNudgeReadinessLastApiTimestamp(currentTime)
                                         nudgeReadinessData.postValue(Event(
                                             Nudges(it.title ?: "",
                                                 it.description ?: ""
                                         )))
-                                        localDataStore.setNudgeReadinessData(it)
-                                        localDataStore.setNudgeReadinessLastApiTimestamp(currentTime)
                                     }
 
                                     "activity" -> {
+                                        localDataStore.setNudgeActivityData(it)
+                                        localDataStore.setNudgeActivityLastApiTimestamp(currentTime)
                                         nudgeActivityData.postValue(Event(
                                             Nudges(it.title ?: "",
                                                 it.description ?: ""
                                             )))
-                                        localDataStore.setNudgeActivityData(it)
-                                        localDataStore.setNudgeActivityLastApiTimestamp(currentTime)
                                     }
 
                                     "wellbeing" -> {
+                                        localDataStore.setNudgeCycleTrackerData(it)
+                                        localDataStore.setNudgeCycleTrackerLastApiTimestamp(currentTime)
                                         nudgeCycleTrackerData.postValue(Event(
                                             Nudges(it.title ?: "",
                                                 it.description ?: ""
                                             )))
-                                        localDataStore.setNudgeCycleTrackerData(it)
-                                        localDataStore.setNudgeCycleTrackerLastApiTimestamp(currentTime)
                                     }
 
                                     else -> {}

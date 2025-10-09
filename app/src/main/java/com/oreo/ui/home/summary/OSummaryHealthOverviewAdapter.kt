@@ -3710,8 +3710,20 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.tvOvlDaysLeft.text = "of ${data.data.totalCycleDay}"
             binding.imv.setBackgroundResource(data.data.background)
 
-            binding.tvDesc.text = data.data.nudge
-            binding.tvShimmer.setVisibilityByCondition(data.data.nudge.isEmpty())
+            val nudge = data.data.nudge
+            if(nudge.isEmpty()){
+                binding.tvDesc.invisible()
+                binding.tvShimmer.apply {
+                    visible()
+                    fadeIn {}
+                }
+            }else{
+                binding.tvShimmer.gone()
+                binding.tvDesc.apply {
+                    text = nudge
+                    visible()
+                }
+            }
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.FemaleHealthHome)
