@@ -69,6 +69,7 @@ object NotificationUtil {
                     R.drawable.icon_transparent
                 )
             )
+            .setShowWhen(true)
             .setDefaults(DEFAULT_SOUND)
             .setContentText(content)
             .setContentIntent(contentIntent)
