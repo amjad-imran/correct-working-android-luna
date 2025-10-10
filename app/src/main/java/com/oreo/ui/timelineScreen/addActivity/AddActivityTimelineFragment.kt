@@ -44,6 +44,8 @@ class AddActivityTimelineFragment :
             false
         }
 
+        val lunaOption = args.lunaOption
+
         val editData: ItemTimelineResponseModel? = args.editData
 
         when (key) {
@@ -63,10 +65,10 @@ class AddActivityTimelineFragment :
                 sharedViewModel.loadFragmentByType(AddActivityItemsEnum.SLEEP, editData)
 
             "supplements" ->
-                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.SUPPLEMENTS, editData)
+                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.SUPPLEMENTS, editData, lunaOption)
 
             "recovery" ->
-                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.RECOVERY, editData)
+                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.RECOVERY, editData, lunaOption)
 
             "alcohol" ->
                 sharedViewModel.loadFragmentByType(AddActivityItemsEnum.ALCOHOL, editData)
@@ -198,6 +200,11 @@ class AddActivityTimelineFragment :
                                     putParcelable("editData", editData)
                                 }
                             }
+                            it.third?.let { lunaOpt ->
+                                this.arguments = Bundle().apply {
+                                    putString("lunaOption", lunaOpt)
+                                }
+                            }
                         }
                     }
                     AddActivityItemsEnum.ALCOHOL -> {
@@ -216,6 +223,11 @@ class AddActivityTimelineFragment :
                             it.second?.let { editData ->
                                 this.arguments = Bundle().apply {
                                     putParcelable("editData", editData)
+                                }
+                            }
+                            it.third?.let { lunaOpt ->
+                                this.arguments = Bundle().apply {
+                                    putString("lunaOption", lunaOpt)
                                 }
                             }
                         }

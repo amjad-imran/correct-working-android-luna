@@ -58,6 +58,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import javax.inject.Inject
 import androidx.core.graphics.toColorInt
+import com.moengage.core.internal.utils.showToast
 import com.oreo.data.model.IrregularEventsChipModel
 import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.chatGpt.PlanType
@@ -1116,7 +1117,9 @@ class OreoReadinessFragment :
         }
         binding.lytIrregularityEvents.chipsPrograms.removeAllViews()
 
-        val addEventData = mViewModel.getAddEventsData(readinessVal)
+        val addEventData = mViewModel.getAddEventsData(80)
+
+        addEventData.cardBg?.let { binding.lytIrregularityEvents.lytAddEventCard.setBackgroundResource(it) }
 
         val category = addEventData.chipList
         for (item in category) {
@@ -1154,14 +1157,19 @@ class OreoReadinessFragment :
                             "editData" to null
                         )
                     )
-                }else{
+                }
+                else if(mChip.tag.toString().equals("sleep")){
+                    showToast(requireContext(), "Coming Soon...!")
+                }
+                else{
                     navigate(
                         R.id.addActivityTimelineFragment,
                         bundleOf(
                             "showTimeline" to false,
                             "key" to mChip.tag.toString(),
                             "srcKey" to "oreo_readiness",
-                            "editData" to null
+                            "editData" to null,
+                            "lunaOption" to mChip.text
                         )
                     )
                 }

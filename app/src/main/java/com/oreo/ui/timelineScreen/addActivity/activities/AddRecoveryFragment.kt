@@ -52,6 +52,7 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
         super.onViewCreated(view, savedInstanceState)
         binding.btnSave.disable()
         viewModel.editData = arguments?.getParcelable("editData")
+        viewModel.lunaOption = arguments?.getString("lunaOption")
         viewModel.getRecoveryOptionsList()
         setAdapter()
         setDefaultData(viewModel.editData)
@@ -210,6 +211,15 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
                 }
                 viewModel.isListLoadedFirstTime = false
             }
+            else if(viewModel.lunaOption != null){
+                it.find { it.options.equals(viewModel.lunaOption, true) }?.let { sOpt ->
+                    binding.tvSelected.text = sOpt.options
+                    viewModel.selectedOption = sOpt
+                    binding.btnSave.enable()
+                }
+                viewModel.isListLoadedFirstTime = false
+            }
+
             binding.rvOptions.doOnNextLayout {
                 capRvHeightToPercent(binding.rvOptions, binding.root, 0.70f)
             }

@@ -35,6 +35,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.utils.Event
 import com.oreo.data.model.IrregularEventsChipModel
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
+import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.Date
@@ -1121,21 +1122,22 @@ constructor(
             in 0..59 -> {
                 title = resourcesProvider.getString(R.string.text_your_readiness_needs_attention)
                 desc = resourcesProvider.getString(R.string.text_tell_us_what_happened)
+                cardBg = R.drawable.bg_add_events_card_red
                 chipsList.add(
                     IrregularEventsChipModel(
-                        key = "",
+                        key = CircadianAlignmentViewModel.meal_window_key,
                         displayName = "Late night meal",
                     )
                 )
                 chipsList.add(
                     IrregularEventsChipModel(
-                        key = "",
+                        key = "sleep",
                         displayName = "Disturbed sleep environment",
                     )
                 )
                 chipsList.add(
                     IrregularEventsChipModel(
-                        key = "",
+                        key = "alcohol",
                         displayName = "Alcohol intake",
                     )
                 )
@@ -1146,6 +1148,7 @@ constructor(
                 cardState = AddEventState.YELLOW
                 title = resourcesProvider.getString(R.string.text_your_readiness_is_average)
                 desc = resourcesProvider.getString(R.string.text_add_notes_to_refine_trends)
+                cardBg = R.drawable.bg_add_events_card_yellow
                 chipsList.add(
                     IrregularEventsChipModel(
                         key = "recovery",
@@ -1189,7 +1192,7 @@ constructor(
                 desc =
                     resourcesProvider.getString(R.string.text_record_events_that_helped_your_recovery)
                 cardState = AddEventState.GREEN
-
+                cardBg = R.drawable.bg_add_events_card_green
                 chipsList.add(
                     IrregularEventsChipModel(
                         key = "recovery",
@@ -1210,13 +1213,13 @@ constructor(
                 )
                 chipsList.add(
                     IrregularEventsChipModel(
-                        key = "recovery",
+                        key = "supplements",
                         displayName = "Melatonin",
                     )
                 )
                 chipsList.add(
                     IrregularEventsChipModel(
-                        key = "sleep_env",
+                        key = "sleep",
                         displayName = "Improved Sleep Environment",
                     )
                 )

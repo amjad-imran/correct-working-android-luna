@@ -34,13 +34,13 @@ class AddActivityTimelineSharedViewModel @Inject constructor(
     var sourceKey: String ?= null
     var showTimeline = false
 
-    val loadFragment = MutableLiveData<Event<Pair<AddActivityItemsEnum, ItemTimelineResponseModel?>>>()
+    val loadFragment = MutableLiveData<Event<Triple<AddActivityItemsEnum, ItemTimelineResponseModel?, String?>>>()
     val navigateUp = MutableLiveData<Event<Boolean>>()
 
     val deleteBtnClickedEvent = MutableLiveData<Event<Boolean>>()
 
-    fun loadFragmentByType(type: AddActivityItemsEnum, editData: ItemTimelineResponseModel?=null) {
-        loadFragment.postValue(Event(Pair(type, editData)))
+    fun loadFragmentByType(type: AddActivityItemsEnum, editData: ItemTimelineResponseModel?=null, lunaOption: String ?= null) {
+        loadFragment.postValue(Event(Triple(type, editData, lunaOption)))
     }
 
     fun navigateUp() {
