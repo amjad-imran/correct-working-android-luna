@@ -134,6 +134,7 @@ class AddActivityTimelineFragment :
                     }
 
                     AddActivityItemsEnum.WORKOUT -> {
+                        titleTxt = getString(R.string.text_add_workout)
                         AddWorkoutFragment().apply {
                             it.second?.let { editData ->
                                 this.arguments = Bundle().apply {

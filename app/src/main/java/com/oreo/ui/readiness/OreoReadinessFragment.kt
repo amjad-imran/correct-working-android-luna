@@ -6,6 +6,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -1115,7 +1116,9 @@ class OreoReadinessFragment :
             binding.divider111.root.visible()
             binding.lytIrregularityEvents.root.visible()
         }
-        binding.lytIrregularityEvents.chipsPrograms.removeAllViews()
+
+        val chipGrp = binding.lytIrregularityEvents.chipsPrograms
+        chipGrp.removeAllViews()
 
         val addEventData = mViewModel.getAddEventsData(readinessVal)
 
@@ -1123,30 +1126,17 @@ class OreoReadinessFragment :
 
         val category = addEventData.chipList
         for (item in category) {
-            val mChip: Chip =
-                layoutInflater.inflate(R.layout.item_chip_feedback, null, false) as Chip
-            mChip.text = item.displayName
+            val mChip =
+                layoutInflater.inflate(R.layout.layout_add_event_readiness_chip, chipGrp, false)
+
+            mChip.background = mViewModel.getAddEventChipBg(item.key.equals("others"), addEventData.cardState)
+
+            val tvTxt = mChip.findViewById<TextView>(R.id.tvTitle)
+            tvTxt.text = item.displayName
             mChip.tag = item.key
 
-            // Create a ColorStateList programmatically
-            val states = arrayOf(
-                intArrayOf(android.R.attr.state_checked),  // Checked state
-                intArrayOf(-android.R.attr.state_checked)   // Unchecked state
-            )
+            mChip.setOnClickListener {
 
-            // Set your colors here (replace with your desired colors)
-            val colors = intArrayOf(
-                "#7C404E".toColorInt(),  // Checked color
-                "#0affffff".toColorInt()   // Unchecked color
-            )
-
-            val colorStateList = ColorStateList(states, colors)
-
-            mChip.chipBackgroundColor = colorStateList
-
-            mChip.setOnCheckedChangeListener { compoundButton, isChecked ->
-
-                mChip.isChecked = false
                 if (mChip.tag.toString().equals("others")) {
                     navigate(
                         R.id.addActivityTimelineFragment,
@@ -1169,12 +1159,12 @@ class OreoReadinessFragment :
                             "key" to mChip.tag.toString(),
                             "srcKey" to "oreo_readiness",
                             "editData" to null,
-                            "lunaOption" to mChip.text
+                            "lunaOption" to tvTxt.text
                         )
                     )
                 }
             }
-            binding.lytIrregularityEvents.chipsPrograms.addView(mChip)
+            chipGrp.addView(mChip)
 
         }
     }

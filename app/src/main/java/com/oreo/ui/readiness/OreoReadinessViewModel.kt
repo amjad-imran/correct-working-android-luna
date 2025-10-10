@@ -1,6 +1,9 @@
 package com.oreo.ui.readiness
 
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import androidx.compose.runtime.mutableStateListOf
+import androidx.core.graphics.toColorInt
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -1253,6 +1256,26 @@ constructor(
 
     enum class AddEventState{
         RED, YELLOW, GREEN
+    }
+
+    fun getAddEventChipBg(isOther: Boolean, state: AddEventState): Drawable{
+        val shapeDrawable = GradientDrawable()
+        shapeDrawable.shape = GradientDrawable.RECTANGLE
+        if(isOther){
+            val color = when(state) {
+                AddEventState.RED -> "#29CA6B7C".toColorInt()
+                AddEventState.YELLOW -> "#29CAAF6B".toColorInt()
+                AddEventState.GREEN -> "#296BCA8E".toColorInt()
+            }
+            shapeDrawable.setColor(color)
+        }else {
+            shapeDrawable.setColor("#0AFFFFFF".toColorInt())
+        }
+
+        shapeDrawable.setStroke(4, "#0AFFFFFF".toColorInt())
+        shapeDrawable.cornerRadius = 20f
+
+        return shapeDrawable
     }
 
 }
