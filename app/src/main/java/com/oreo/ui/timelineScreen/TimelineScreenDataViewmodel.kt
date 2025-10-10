@@ -177,15 +177,18 @@ class TimelineScreenDataViewmodel @Inject constructor(
 
             SUPPLEMENTS_KEY -> {
                 data.titleColor = "#C5A8ED".toColorInt()
+                data.desc = data.metadata?.lunaOption
             }
 
             RECOVERY_KEY -> {
+                data.title = data.metadata?.lunaOption
                 data.titleColor = "#C5A8ED".toColorInt()
+                data.desc = ""
             }
 
             ALCOHOL_KEY -> {
                 data.titleColor = "#C5A8ED".toColorInt()
-                data.desc = "${data.value} ${data.unit}"
+                data.desc = ""
             }
 
             else -> {}
