@@ -1117,7 +1117,7 @@ class OreoReadinessFragment :
         }
         binding.lytIrregularityEvents.chipsPrograms.removeAllViews()
 
-        val addEventData = mViewModel.getAddEventsData(80)
+        val addEventData = mViewModel.getAddEventsData(readinessVal)
 
         addEventData.cardBg?.let { binding.lytIrregularityEvents.lytAddEventCard.setBackgroundResource(it) }
 
