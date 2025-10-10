@@ -1186,7 +1186,7 @@ constructor(
             }
 
             else -> {
-                title = if(readinessVal in 80..84){
+                title = if(readinessVal in 70..84){
                     resourcesProvider.getString(R.string.text_your_readiness_is_good)
                 }else{
                     resourcesProvider.getString(R.string.text_your_readiness_is_excellent)
