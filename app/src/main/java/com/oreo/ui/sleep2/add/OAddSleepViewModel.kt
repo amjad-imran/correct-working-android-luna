@@ -465,7 +465,6 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            _addSleepResponse.postValue(Event(true))
                             editEventFun()
                         }
                     }
