@@ -1570,7 +1570,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                         || destination.id == R.id.sleepDashFragment) {
                         viewModel.handleAddWorkoutVisibility()
                     } else {
-                        viewModel.addWorkoutCtaVisibility.postValue(false)
+                        viewModel.addWorkoutCtaVisibility.value = false
                         viewModel.isActivityWorkAdd = false
                     }
 
@@ -1582,7 +1582,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     binding.navView.root.gone()
 
                     if (viewModel.isDevicePaired() != null) {
-                        viewModel.addWorkoutCtaVisibility.postValue(true)
+                        viewModel.addWorkoutCtaVisibility.value = true
                         viewModel.isActivityWorkAdd = true
                     }
                 }
@@ -1590,7 +1590,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 else -> {
                     binding.view27.gone()
                     binding.navView.root.gone()
-                    viewModel.addWorkoutCtaVisibility.postValue(false)
+                    viewModel.addWorkoutCtaVisibility.value = false
                     viewModel.isActivityWorkAdd = false
 
                 }
@@ -1797,6 +1797,13 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     override fun onBackPressed() {
         navController?.let {
+
+            if(binding.fabRevealOverlay.isVisible){
+                hideFabRadialMenu(false)
+                return
+            }
+
+
             when (it.currentDestination?.id) {
                 R.id.navigation_oreo_home, R.id.navigation_oreo_readiness,
                 R.id.navigation_oreo_workouts, R.id.sleepDashFragment, R.id.navigation_lunaZoneFragment -> {
