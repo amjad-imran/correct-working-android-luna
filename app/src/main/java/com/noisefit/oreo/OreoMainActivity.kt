@@ -868,7 +868,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         if (viewModel.shouldShowFemaleHealthCta()/* && lastDestination?.id == R.id.navigation_oreo_home*/) {
             items.add(
                 FabModel(
-                    title = getString(R.string.text_track_period),
+                    title = getString(R.string.text_log_period),
                     icon = R.drawable.ic_fab_period,
                     color = "#FFBFBF".toColorInt(),
                     type = FabItems.TRACK_PERIOD
