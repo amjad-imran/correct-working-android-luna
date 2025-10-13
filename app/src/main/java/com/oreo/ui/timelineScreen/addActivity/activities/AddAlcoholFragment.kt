@@ -41,6 +41,8 @@ class AddAlcoholFragment : BaseFragment<FragmentAddAlcoholBinding>(FragmentAddAl
         super.onViewCreated(view, savedInstanceState)
         viewModel.getAlcoholIdFromServer()
         viewModel.editData = arguments?.getParcelable("editData")
+
+        binding.lytDateTime.textView197.gone()
         if(viewModel.editData == null) {
             viewModel.selectedDate = LocalDate.now()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))

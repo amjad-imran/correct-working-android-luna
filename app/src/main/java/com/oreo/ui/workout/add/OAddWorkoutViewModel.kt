@@ -320,6 +320,12 @@ class OAddWorkoutViewModel
                 this.addProperty("end_time", addWorkout.endTimeIn24H)
                 this.addProperty("intensity", addWorkout.intensity)
             }
+
+            // Clear Nudges Data
+            if(LocalDate.now().toString().equals(addWorkout.date)) {
+                localDatSource.setNudgeActivityData(null)
+            }
+
             userActivityRepository.addWorkout(
                 requestObject
             ).collect { resource ->

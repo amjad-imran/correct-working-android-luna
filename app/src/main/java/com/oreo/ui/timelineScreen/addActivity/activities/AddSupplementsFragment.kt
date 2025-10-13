@@ -66,6 +66,8 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
     }
 
     private fun setUi() {
+        binding.lytDateTime.textView197.gone()
+
         binding.btnSave.disable()
         binding.lytDateTime.apply {
             lytDate.tvTime.text = getString(R.string.text_date)

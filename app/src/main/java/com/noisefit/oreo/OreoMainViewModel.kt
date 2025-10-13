@@ -767,6 +767,7 @@ constructor(
         if (!shouldRefresh) {
             val todayDate = getTodayDate()
             getUserHealthData(todayDate, todayDate)
+            getNudgeData()
         }
     }
 
