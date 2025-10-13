@@ -2195,4 +2195,44 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_restarting">Reiniciando</string>
     <string name="text_your_wake_up_time_today_was_outside_your_usual_rhythm_so_the_circadian_rhythm_guide_is_temporarily_unavailable">Tu hora de despertar hoy estuvo fuera de tu ritmo habitual, por lo que la Guía de Ritmo Circadiano está temporalmente no disponible.</string>
 
+    <string name="text_supplements">Suplementos</string>
+    <string name="text_alcohol">Alcohol</string>
+    <string name="text_recovery">Recuperación</string>
+    <string name="text_add_meal_intake">Añadir comida</string>
+    <string name="text_describe_your_meal_nin_free_form">Describe tu comida\nen forma libre.</string>
+    <string name="string_ai_prompt_ex">“p. ej. Comí pollo tikka, algo de ensalada, sopa de tomate y unos pani puris para la cena...”</string>
+    <string name="text_type_anything">Escribe lo que sea...</string>
+    <string name="text_add_option">Añadir opción</string>
+    <string name="text_select_supplement">Seleccionar suplemento</string>
+    <string name="text_identified_food">Alimento identificado</string>
+    <string name="text_add_food_item_plus">Añadir alimento +</string>
+    <string name="text_add_food_item">Añadir alimento</string>
+    <string name="text_more_details">Más detalles</string>
+    <string name="text_snack">Merienda</string>
+    <string name="text_dinner">Cena</string>
+    <string name="text_lunch">Almuerzo</string>
+    <string name="text_breakfast">Desayuno</string>
+    <string name="text_retry_prompt">Reintentar</string>
+    <string name="text_result_not_correct">¿Resultado incorrecto?</string>
+    <string name="text_macros_breakdown">Desglose de macros</string>
+    <string name="text_food_item">Alimento</string>
+    <string name="text_add_light_exposure">Añadir exposición a la luz</string>
+    <string name="text_add_caffeine">Añadir cafeína</string>
+    <string name="text_add_water">Añadir agua</string>
+    <string name="text_add_recovery">Añadir recuperación</string>
+    <string name="text_add_alcohol">Añadir alcohol</string>
+    <string name="text_add_supplement">Añadir suplemento</string>
+    <string name="text_sleep_environment">Entorno de sueño</string>
+    <string name="text_please_connect_your_ring">Conecta tu anillo</string>
+    <string name="text_average_rhr">FC en reposo promedio</string>
+    <string name="text_track_period">Registrar período</string>
+    <string name="text_add_other_activity">Añadir otra actividad</string>
+    <string name="text_add_events">Añadir eventos</string>
+    <string name="text_your_readiness_needs_attention">Tu preparación necesita atención</string>
+    <string name="text_your_readiness_is_average">Tu preparación es promedio.</string>
+    <string name="text_add_notes_to_refine_trends">Añade notas para refinar tendencias.</string>
+    <string name="text_record_events_that_helped_your_recovery">Registra los eventos que ayudaron a tu recuperación.</string>
+    <string name="text_your_readiness_is_good">¡Tu preparación es buena!</string>
+    <string name="text_your_readiness_is_excellent">¡Tu preparación es excelente!</string>
+
 </resources>

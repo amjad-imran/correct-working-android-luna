@@ -52,6 +52,7 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.editData = arguments?.getParcelable("editData")
+        viewModel.lunaOption = arguments?.getString("lunaOption")
         viewModel.getSupplementsList()
         setUi()
         setAdapter()
@@ -156,6 +157,15 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
                 }
                 viewModel.isListLoadedFirstTime = false
             }
+            else if(viewModel.lunaOption != null){
+                supplements.find { it.options.equals(viewModel.lunaOption, true) }?.let { sOpt ->
+                    binding.tvSelected.text = sOpt.options
+                    viewModel.selectedOption = sOpt
+                    binding.btnSave.enable()
+                }
+                viewModel.isListLoadedFirstTime = false
+            }
+
             binding.rvOptions.doOnNextLayout {
                 capRvHeightToPercent(binding.rvOptions, binding.root, 0.70f)
             }

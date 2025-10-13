@@ -36,6 +36,8 @@ class AddSupplementsViewModel @Inject constructor(
     var editData : ItemTimelineResponseModel ?= null
     var isListLoadedFirstTime = true
 
+    var lunaOption: String ?= null
+
     fun getSupplementsList(){
         viewModelScope.launch {
 

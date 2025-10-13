@@ -65,6 +65,9 @@ class AddSleepFragment :
                     sharedViewModel.sessionManager.logMoEngageAppEvent(
                         MoEngageLunaAppEvents.insight_log_edited,
                     )
+                    mainViewModel.sessionManager.reloadOnResume = true
+                    sharedViewModel.navigateUp()
+                    mainViewModel.sleepDashTodayReload.value = Event(true)
                 }
             }else {
 

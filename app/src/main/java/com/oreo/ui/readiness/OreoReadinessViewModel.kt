@@ -1,6 +1,9 @@
 package com.oreo.ui.readiness
 
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import androidx.compose.runtime.mutableStateListOf
+import androidx.core.graphics.toColorInt
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -35,6 +38,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.utils.Event
 import com.oreo.data.model.IrregularEventsChipModel
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
+import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.util.Date
@@ -1110,4 +1114,168 @@ constructor(
             IrregularEventsChipModel("others", resourcesProvider.getString(R.string.text_other)),
         )
     }
+
+    fun getAddEventsData(readinessVal: Int): AddEventsDataModel {
+        var title = "-"
+        var desc = "-"
+        var cardBg: Int ?= null
+        var cardState = AddEventState.RED
+        val chipsList = ArrayList<IrregularEventsChipModel>()
+        when(readinessVal){
+            in 0..59 -> {
+                title = resourcesProvider.getString(R.string.text_your_readiness_needs_attention)
+                desc = resourcesProvider.getString(R.string.text_tell_us_what_happened)
+                cardBg = R.drawable.bg_add_events_card_red
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = CircadianAlignmentViewModel.meal_window_key,
+                        displayName = "Late night meal",
+                    )
+                )
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "sleep",
+                        displayName = "Disturbed sleep environment",
+                    )
+                )
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "alcohol",
+                        displayName = "Alcohol intake",
+                    )
+                )
+
+            }
+
+            in 60..69 -> {
+                cardState = AddEventState.YELLOW
+                title = resourcesProvider.getString(R.string.text_your_readiness_is_average)
+                desc = resourcesProvider.getString(R.string.text_add_notes_to_refine_trends)
+                cardBg = R.drawable.bg_add_events_card_yellow
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "recovery",
+                        displayName = "Warm bath",
+                    )
+                )
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "recovery",
+                        displayName = "Meditation",
+                    )
+                )
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "recovery",
+                        displayName = "Ice Bath",
+                    )
+                )
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "recovery",
+                        displayName = "Cold shower",
+                    )
+                )
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "supplements",
+                        displayName = "Supplement",
+                    )
+                )
+
+            }
+
+            else -> {
+                title = if(readinessVal in 70..84){
+                    resourcesProvider.getString(R.string.text_your_readiness_is_good)
+                }else{
+                    resourcesProvider.getString(R.string.text_your_readiness_is_excellent)
+                }
+
+                desc =
+                    resourcesProvider.getString(R.string.text_record_events_that_helped_your_recovery)
+                cardState = AddEventState.GREEN
+                cardBg = R.drawable.bg_add_events_card_green
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "recovery",
+                        displayName = "Cold Plunge",
+                    )
+                )
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "recovery",
+                        displayName = "Massage Therapy",
+                    )
+                )
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "recovery",
+                        displayName = "Warm bath",
+                    )
+                )
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "supplements",
+                        displayName = "Melatonin",
+                    )
+                )
+                chipsList.add(
+                    IrregularEventsChipModel(
+                        key = "sleep",
+                        displayName = "Improved Sleep Environment",
+                    )
+                )
+
+            }
+        }
+
+        chipsList.add(
+            IrregularEventsChipModel(
+                key = "others",
+                displayName = "Other",
+            )
+        )
+
+        return AddEventsDataModel(
+            title = title,
+            desc = desc,
+            cardBg = cardBg,
+            cardState = cardState,
+            chipList = chipsList
+        )
+    }
+
+    data class AddEventsDataModel(
+        val title: String,
+        val desc: String,
+        val cardBg: Int?,
+        val cardState: AddEventState,
+        val chipList: List<IrregularEventsChipModel>,
+    )
+
+    enum class AddEventState{
+        RED, YELLOW, GREEN
+    }
+
+    fun getAddEventChipBg(isOther: Boolean, state: AddEventState): Drawable{
+        val shapeDrawable = GradientDrawable()
+        shapeDrawable.shape = GradientDrawable.RECTANGLE
+        if(isOther){
+            val color = when(state) {
+                AddEventState.RED -> "#29CA6B7C".toColorInt()
+                AddEventState.YELLOW -> "#29CAAF6B".toColorInt()
+                AddEventState.GREEN -> "#296BCA8E".toColorInt()
+            }
+            shapeDrawable.setColor(color)
+        }else {
+            shapeDrawable.setColor("#0AFFFFFF".toColorInt())
+        }
+
+        shapeDrawable.setStroke(4, "#0AFFFFFF".toColorInt())
+        shapeDrawable.cornerRadius = 20f
+
+        return shapeDrawable
+    }
+
 }

@@ -43,6 +43,7 @@ class TimelineScreenDataViewmodel @Inject constructor(
         val PERIOD_STARTED_KEY = "period"
         val SYMPTOM_KEY = "symptom"
         val ACTIVITY_KEY = "activity"
+        val ALCOHOL_KEY = "alcohol"
         val SUPPLEMENTS_KEY = "supplements"
         val RECOVERY_KEY = "recovery"
     }
@@ -175,11 +176,19 @@ class TimelineScreenDataViewmodel @Inject constructor(
             }
 
             SUPPLEMENTS_KEY -> {
-                data.desc = "Supplement"
+                data.titleColor = "#C5A8ED".toColorInt()
+                data.desc = data.metadata?.lunaOption
             }
 
             RECOVERY_KEY -> {
-                data.desc = "Recovery"
+                data.title = data.metadata?.lunaOption
+                data.titleColor = "#C5A8ED".toColorInt()
+                data.desc = ""
+            }
+
+            ALCOHOL_KEY -> {
+                data.titleColor = "#C5A8ED".toColorInt()
+                data.desc = ""
             }
 
             else -> {}

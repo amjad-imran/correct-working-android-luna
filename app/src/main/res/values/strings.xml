@@ -2199,6 +2199,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_firmware_version">Firmware Version</string>
     <string name="text_restarting">Restarting</string>
     <string name="text_your_wake_up_time_today_was_outside_your_usual_rhythm_so_the_circadian_rhythm_guide_is_temporarily_unavailable">Your wake-up time today was outside your usual rhythm, so the Circadian Rhythm Guide is temporarily unavailable.</string>
+
     <string name="text_supplements">Supplements</string>
     <string name="text_alcohol">Alcohol</string>
     <string name="text_recovery">Recovery</string>
@@ -2231,6 +2232,13 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_average_rhr">Average RHR</string>
     <string name="text_track_period">Track period</string>
     <string name="text_add_other_activity">Add other activity</string>
+    <string name="text_add_events">Add Events</string>
+    <string name="text_your_readiness_needs_attention">Your Readiness needs attention</string>
+    <string name="text_your_readiness_is_average">Your Readiness is average.</string>
+    <string name="text_add_notes_to_refine_trends">Add notes to refine trends.</string>
+    <string name="text_record_events_that_helped_your_recovery">Record events that helped your recovery.</string>
+    <string name="text_your_readiness_is_good">Your Readiness is good!</string>
+    <string name="text_your_readiness_is_excellent">Your Readiness is excellent!</string>
 
 
 </resources>

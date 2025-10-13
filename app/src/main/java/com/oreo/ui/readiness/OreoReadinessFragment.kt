@@ -5,8 +5,8 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.View
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -52,7 +52,6 @@ import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import com.oreo.ui.sleep2.internal.SleepInternalDetailsFragment
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
-import com.oreo.util.EventUtil
 import com.oreo.util.UtilClass
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -60,7 +59,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import javax.inject.Inject
 import androidx.core.graphics.toColorInt
-import com.noisefit.oreo.OreoMainActivity
+import com.moengage.core.internal.utils.showToast
 import com.oreo.data.model.IrregularEventsChipModel
 import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.chatGpt.PlanType
@@ -856,10 +855,10 @@ class OreoReadinessFragment :
             )
         }
 
-        binding.lytIrregularityEvents.btnClose.setOnClickListener {
+        /*binding.lytIrregularityEvents.btnClose.setOnClickListener {
             (activity as OreoMainActivity).hideSoftKeyboard()
-            /*mainViewModel.localDataStore.setIrregularityCardsVisibilityReadiness(false)
-            binding.lytIrregularityEvents.root.gone()*/
+            *//*mainViewModel.localDataStore.setIrregularityCardsVisibilityReadiness(false)
+            binding.lytIrregularityEvents.root.gone()*//*
             mViewModel.updateAlert(true)
             mViewModel.loadAlertsData()
         }
@@ -894,7 +893,7 @@ class OreoReadinessFragment :
             (activity as OreoMainActivity).hideSoftKeyboard()
             mViewModel.isEventSubmitted = false
             mViewModel.loadAlertsData()
-        }
+        }*/
 
         binding.lytWomenDayAnnouncement.lytWorkoutAnnc.root.setOnClickListener {
             if (mViewModel.ringDataStore.getRingDevice() == null) {
@@ -942,7 +941,7 @@ class OreoReadinessFragment :
         }
 
         mViewModel.hrvAlertsData.observe(this) {
-            it.getContent()?.let {
+            /*it.getContent()?.let {
                 val hrvAlerts = mainViewModel.localDataStore.getHrvAlerts(false)
                 if (hrvAlerts != null) {
 
@@ -968,7 +967,7 @@ class OreoReadinessFragment :
                         binding.divider111.root.gone()
                     }
                 }
-            }
+            }*/
         }
 
         mainViewModel.readinessHistoryResponse.observe(this) {
@@ -1040,7 +1039,7 @@ class OreoReadinessFragment :
 
     }
 
-    fun setIrregularityEventsChips(category: List<IrregularEventsChipModel>?) {
+    /*fun setIrregularityEventsChips(category: List<IrregularEventsChipModel>?) {
         binding.lytIrregularityEvents.chipsPrograms.removeAllViews()
 
         if (category != null) {
@@ -1067,10 +1066,10 @@ class OreoReadinessFragment :
                 // Apply the color state list to the chip
                 mChip.chipBackgroundColor = colorStateList
 
-                /*val paddingDp = TypedValue.applyDimension(
+                *//*val paddingDp = TypedValue.applyDimension(
                     TypedValue.COMPLEX_UNIT_DIP, 10F, resources.displayMetrics
                 )
-                mChip.setPadding(paddingDp.toInt(), 0, paddingDp.toInt(), 0)*/
+                mChip.setPadding(paddingDp.toInt(), 0, paddingDp.toInt(), 0)*//*
                 mChip.setOnCheckedChangeListener { compoundButton, isChecked ->
                     mViewModel.updateChipSelection(item.key, isChecked)
                     if (mChip.tag.toString().equals("others")) {
@@ -1105,6 +1104,83 @@ class OreoReadinessFragment :
                 binding.lytIrregularityEvents.chipsPrograms.addView(mChip)
 
             }
+        }
+    }*/
+
+    fun setAddEventLayout(mainData: OreoReadinessModel, readinessVal: Int) {
+        if (mainData.date.equals(LocalDate.now().toString()).not()){
+            binding.divider111.root.gone()
+            binding.lytIrregularityEvents.root.gone()
+            return
+        }else{
+            binding.divider111.root.visible()
+            binding.lytIrregularityEvents.root.visible()
+        }
+
+        val chipGrp = binding.lytIrregularityEvents.chipsPrograms
+        chipGrp.removeAllViews()
+
+        val addEventData = mViewModel.getAddEventsData(readinessVal)
+
+        addEventData.cardBg?.let { binding.lytIrregularityEvents.lytAddEventCard.setBackgroundResource(it) }
+
+        val category = addEventData.chipList
+        for (item in category) {
+            val mChip =
+                layoutInflater.inflate(R.layout.layout_add_event_readiness_chip, chipGrp, false)
+
+            mChip.background = mViewModel.getAddEventChipBg(item.key.equals("others"), addEventData.cardState)
+
+            val tvTxt = mChip.findViewById<TextView>(R.id.tvTitle)
+            tvTxt.text = item.displayName
+            mChip.tag = item.key
+
+            mChip.setOnClickListener {
+
+                if (mChip.tag.toString().equals("others")) {
+                    navigate(
+                        R.id.addActivityTimelineFragment,
+                        bundleOf(
+                            "showTimeline" to false,
+                            "key" to "others",
+                            "srcKey" to "oreo_readiness",
+                            "editData" to null
+                        )
+                    )
+                }
+                else if(mChip.tag.toString().equals("sleep")){
+                    val mostRecentSleep = mainViewModel.localDataStore.getTimelineActivitiesData()?.
+                    find { it.event.equals("sleep") }
+                    if(mostRecentSleep==null){
+                        showToast(requireContext(), getString(R.string.text_something_went_wrong))
+                    }else{
+                        mostRecentSleep.canBeEditedOrDeleted = 1
+                        navigate(
+                            R.id.addActivityTimelineFragment,
+                            bundleOf(
+                                "showTimeline" to false,
+                                "key" to mostRecentSleep.event,
+                                "srcKey" to null,
+                                "editData" to mostRecentSleep
+                            )
+                        )
+                    }
+                }
+                else{
+                    navigate(
+                        R.id.addActivityTimelineFragment,
+                        bundleOf(
+                            "showTimeline" to false,
+                            "key" to mChip.tag.toString(),
+                            "srcKey" to "oreo_readiness",
+                            "editData" to null,
+                            "lunaOption" to tvTxt.text
+                        )
+                    )
+                }
+            }
+            chipGrp.addView(mChip)
+
         }
     }
 
@@ -1217,12 +1293,14 @@ class OreoReadinessFragment :
                 if (readinessData.value == 0) {
                     if (it.totalSleep?.value != 0) {
                         setReadinessScore(readinessData)
+                        setAddEventLayout(it, readinessData.value)
                     } else {
                         binding.lytRScoreData.lytScore.tvValue.text = "-"
                         binding.lytRScoreData.lytScore.tvQuality.gone()
                     }
                 } else {
                     setReadinessScore(readinessData)
+                    setAddEventLayout(it, readinessData.value)
                 }
             } else {
                 binding.lytRScoreData.lytScore.tvValue.text = "-"

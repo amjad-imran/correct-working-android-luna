@@ -38,6 +38,8 @@ class AddRecoveryViewModel @Inject constructor(
 
     var editData : ItemTimelineResponseModel ?= null
 
+    var lunaOption: String ?= null
+
     fun getRecoveryOptionsList(){
         viewModelScope.launch {
             userRepository.getTimelineOptionIdData("recovery").collect{ resource ->
