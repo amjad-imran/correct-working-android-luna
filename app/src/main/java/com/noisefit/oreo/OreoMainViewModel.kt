@@ -1011,14 +1011,14 @@ constructor(
     fun handleAddWorkoutVisibility() {
         /*viewModelScope.launch(Dispatchers.IO) {*/
         if (sessionManager.connectedDeviceRing.value == null) {
-            addWorkoutCtaVisibility.postValue(false)
+            addWorkoutCtaVisibility.value = false
             return
         }
         if (selectedDate == DateFormats.getCurrentDateOreoFormat()) {
-            addWorkoutCtaVisibility.postValue(true)
+            addWorkoutCtaVisibility.value = true
             isActivityWorkAdd = true
         } else {
-            addWorkoutCtaVisibility.postValue(false)
+            addWorkoutCtaVisibility.value = false
             isActivityWorkAdd = false
         }
         /*}*/
