@@ -25,6 +25,7 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
+import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.custom.CustomSlider
 import com.oreo.ui.timelineScreen.addActivity.AddActivityItemsEnum
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
@@ -68,8 +69,11 @@ class AddCaffeineFragment :
                 else -> {
                     binding.lytCard.lytSlider.isClickable = true
                     binding.lytCard.lytTimePicker.isClickable = true
-                    binding.btnSave.visible()
-                    binding.btnSave.disable()
+                    binding.btnSave.apply {
+                        text = getString(R.string.text_learn_more_with_luna_ai)
+                        enable()
+                        visible()
+                    }
                 }
             }
         }
@@ -85,7 +89,7 @@ class AddCaffeineFragment :
             override fun onValueChanged(value: Int) {
                 viewModel.caffeineValue.value = value
                 if(viewModel.editDataCaffeineVal!=null && viewModel.editDataCaffeineVal!=value){
-                    binding.btnSave.enable()
+                    binding.btnSave.text = getString(R.string.text_save)
                 }
             }
         })
@@ -133,13 +137,29 @@ class AddCaffeineFragment :
                         }
                     )
                 }
-                viewModel.logCaffeineValue(
-                    viewModel.caffeineTime.value!!,
-                    viewModel.caffeineValue.value!!
-                ){
-                    sharedViewModel.sessionManager.logMoEngageAppEvent(
-                        MoEngageLunaAppEvents.insight_log_edited,
-                    )
+
+                if(getString(R.string.text_save).equals(binding.btnSave.text)) {
+                    viewModel.logCaffeineValue(
+                        viewModel.caffeineTime.value!!,
+                        viewModel.caffeineValue.value!!
+                    ){
+                        sharedViewModel.sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.insight_log_edited,
+                        )
+                    }
+                }else{
+                    if (sharedViewModel.ringDataStore.getRingDevice() == null) {
+                        context.showShortToast(getString(R.string.text_luna_ai_message))
+                    }else {
+                        if (sharedViewModel.localDataStore.isAiChatSplashShown()) {
+                            navigate(
+                                R.id.aiTopQuestionsFragment,
+                                bundleOf("aiTopic" to AITopics.GENERAL)
+                            )
+                        } else {
+                            navigate(R.id.aiChatOnboardFragment)
+                        }
+                    }
                 }
             }
         }
@@ -165,7 +185,7 @@ class AddCaffeineFragment :
                         editDataTime.hour != time.hour ||
                         editDataTime.minute != time.minute
                     ){
-                        binding.btnSave.enable()
+                        binding.btnSave.text = getString(R.string.text_save)
                     }
                 }
             }

@@ -27,6 +27,7 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
+import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -112,6 +113,12 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
                 binding.lytSelected.isClickable = editCondition
                 if(!editCondition){
                     binding.btnSave.gone()
+                }else{
+                    binding.btnSave.apply {
+                        text = getString(R.string.text_learn_more_with_luna_ai)
+                        enable()
+                        visible()
+                    }
                 }
             }
 
@@ -134,11 +141,28 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
                 showToast(requireContext(), "Please select an option!")
                 return@setOnClickListener
             }
-            viewModel.logSupplements(){
-                sharedViewModel.sessionManager.logMoEngageAppEvent(
-                    MoEngageLunaAppEvents.insight_log_edited,
-                )
+
+            if(getString(R.string.text_save).equals(binding.btnSave.text)) {
+                viewModel.logSupplements(){
+                    sharedViewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.insight_log_edited,
+                    )
+                }
+            }else{
+                if (sharedViewModel.ringDataStore.getRingDevice() == null) {
+                    context.showShortToast(getString(R.string.text_luna_ai_message))
+                }else {
+                    if (sharedViewModel.localDataStore.isAiChatSplashShown()) {
+                        navigate(
+                            R.id.aiTopQuestionsFragment,
+                            bundleOf("aiTopic" to AITopics.GENERAL)
+                        )
+                    } else {
+                        navigate(R.id.aiChatOnboardFragment)
+                    }
+                }
             }
+
         }
 
         binding.lytSelected.setOnClickListener {
@@ -240,6 +264,7 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
     }
 
     private fun handleOnOptionClicked(option: SupplementOption) {
+        binding.btnSave.text = getString(R.string.text_save)
         binding.btnSave.enable()
         if(viewModel.selectedOption == null){
             binding.tvSelected.setTextColor("#FFFFFF".toColorInt())
@@ -273,6 +298,7 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
                     editDataTime.hour != viewModel.supplementTime.hour ||
                     editDataTime.minute != viewModel.supplementTime.minute
                 ){
+                    binding.btnSave.text = getString(R.string.text_save)
                     binding.btnSave.enable()
                 }
             }
@@ -310,6 +336,7 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
                     viewModel.editData?.startDate != null &&
                     !parsedDate.equals(viewModel.editData?.startDate)
                 ){
+                    binding.btnSave.text = getString(R.string.text_save)
                     binding.btnSave.enable()
                 }
             }
