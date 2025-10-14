@@ -130,7 +130,7 @@
             app:text_shimmer_duration="3000"
             app:text_shimmer_highlight_color="#C2D9E6"
             app:text_shimmer_repeat_mode="restart"
-            android:text="Getting More Insights..."
+            android:text="@string/text_getting_more_insights"
             tools:visibility="visible" />
 
         <include
