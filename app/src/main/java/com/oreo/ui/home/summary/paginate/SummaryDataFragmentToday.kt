@@ -81,6 +81,7 @@ import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.SummaryStates
+import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 import com.oreo.ui.custom.CirclePagerIndicatorDecoration
 import com.oreo.ui.custom.SnapHelperOneByOne
 import com.oreo.ui.device.FIND_RING_LOCATION_PERM_REQUEST
@@ -2008,7 +2009,14 @@ class SummaryDataFragmentToday :
         if (data.addSleep) {
             binding.contentMain.lytSleepAlert.btnDone.visible()
             binding.contentMain.lytSleepAlert.btnDone.setOnClickListener {
-                navigate(R.id.fragmentAddSleep)
+                navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to CircadianAlignmentViewModel.sleep_key,
+                        "srcKey" to "dash_fab"
+                    )
+                )
             }
         } else {
             binding.contentMain.lytSleepAlert.btnDone.gone()

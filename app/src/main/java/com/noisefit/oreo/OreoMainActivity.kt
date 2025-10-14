@@ -74,6 +74,7 @@ import kotlinx.coroutines.withContext
 import androidx.core.view.isVisible
 import com.oreo.data.model.FabItems
 import com.oreo.data.model.FabModel
+import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 
 @AndroidEntryPoint
 class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
@@ -436,7 +437,14 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     return@launch
                 }
                 withContext(Dispatchers.Main) {
-                    navController?.navigate(R.id.fragmentAddSleep)
+                    navController?.navigate(
+                        R.id.addActivityTimelineFragment,
+                        bundleOf(
+                            "showTimeline" to false,
+                            "key" to CircadianAlignmentViewModel.sleep_key,
+                            "srcKey" to "dash_fab"
+                        )
+                    )
                 }
             }
         }

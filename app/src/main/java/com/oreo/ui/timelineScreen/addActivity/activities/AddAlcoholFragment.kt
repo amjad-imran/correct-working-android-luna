@@ -273,6 +273,8 @@ class AddAlcoholFragment : BaseFragment<FragmentAddAlcoholBinding>(FragmentAddAl
                 binding.lytDateTime.lytTime.tvTimeValue.isClickable = true
             }
         }
+
+        binding.lytDateTime.lytDate.tvTimeValue.isClickable = false
     }
 
     override fun onDestroyView() {

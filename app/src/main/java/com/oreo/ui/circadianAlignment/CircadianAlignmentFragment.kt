@@ -657,7 +657,7 @@ class CircadianAlignmentFragment :
 
     override fun initListener() {
 
-        binding.lytCircularView.lytUnlockedState.lytNoSleepData.setOnClickListener {
+        binding.lytCircularView.lytUnlockedState.llLytLog.setOnClickListener {
             if(viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess){
                 showToast(requireContext(), getString(R.string.text_please_connect_your_ring_to_add_sleep))
                 return@setOnClickListener

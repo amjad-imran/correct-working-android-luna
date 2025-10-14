@@ -120,6 +120,7 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
                         visible()
                     }
                 }
+                binding.lytDateTime.lytDate.tvTimeValue.isClickable = false
             }
 
         }
