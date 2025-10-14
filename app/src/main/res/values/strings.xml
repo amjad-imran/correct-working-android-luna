@@ -2203,7 +2203,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_supplements">Supplements</string>
     <string name="text_alcohol">Alcohol</string>
     <string name="text_recovery">Recovery</string>
-    <string name="text_add_meal_intake">Add meal Intake</string>
+    <string name="text_add_meal_intake">Add Meal Intake</string>
     <string name="text_describe_your_meal_nin_free_form">Describe your meal\nin free form.</string>
     <string name="string_ai_prompt_ex">“eg. I had chicken tikka, some salad, tomato soup along with some pani puris for dinner...”</string>
     <string name="text_type_anything">Type anything...</string>
@@ -2240,6 +2240,10 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_your_readiness_is_good">Your Readiness is good!</string>
     <string name="text_your_readiness_is_excellent">Your Readiness is excellent!</string>
     <string name="text_learn_more_with_luna_ai">Learn more with Luna AI</string>
+    <string name="text_add_caffeine_intake">Add Caffeine Intake</string>
+    <string name="text_add_sleep2">Add Sleep</string>
+    <string name="text_add_alcohol_intake">Add Alcohol Intake</string>
+    <string name="text_add_supplements">Add Supplements</string>
 
 
 </resources>

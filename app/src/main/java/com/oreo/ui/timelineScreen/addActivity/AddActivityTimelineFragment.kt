@@ -145,7 +145,7 @@ class AddActivityTimelineFragment :
                     }
 
                     AddActivityItemsEnum.CAFFEINE -> {
-                        titleTxt = getString(R.string.text_add_caffeine)
+                        titleTxt = getString(R.string.text_add_caffeine_intake)
                         AddCaffeineFragment().apply {
                             it.second?.let { editData ->
                                 this.arguments = Bundle().apply {
@@ -183,7 +183,7 @@ class AddActivityTimelineFragment :
                     }
 
                     AddActivityItemsEnum.SLEEP -> {
-                        titleTxt = getString(R.string.text_add_sleep)
+                        titleTxt = getString(R.string.text_add_sleep2)
                         AddSleepFragment().apply {
                             it.second?.let { editData ->
                                 this.arguments = Bundle().apply {
@@ -194,7 +194,7 @@ class AddActivityTimelineFragment :
                     }
 
                     AddActivityItemsEnum.SUPPLEMENTS -> {
-                        titleTxt = getString(R.string.text_add_supplement)
+                        titleTxt = getString(R.string.text_add_supplements)
                         AddSupplementsFragment().apply {
                             it.second?.let { editData ->
                                 this.arguments = Bundle().apply {
@@ -209,7 +209,7 @@ class AddActivityTimelineFragment :
                         }
                     }
                     AddActivityItemsEnum.ALCOHOL -> {
-                        titleTxt = getString(R.string.text_add_alcohol)
+                        titleTxt = getString(R.string.text_add_alcohol_intake)
                         AddAlcoholFragment().apply {
                             it.second?.let { editData ->
                                 this.arguments = Bundle().apply {
