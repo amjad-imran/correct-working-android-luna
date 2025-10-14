@@ -2383,5 +2383,12 @@ onjour, Luna"</string>
     <string name="text_record_events_that_helped_your_recovery">Enregistrez les événements qui ont aidé votre récupération.</string>
     <string name="text_your_readiness_is_good">Votre préparation est bonne !</string>
     <string name="text_your_readiness_is_excellent">Votre préparation est excellente !</string>
+    <string name="text_learn_more_with_luna_ai">En savoir plus avec Luna AI</string>
+    <string name="text_add_caffeine_intake">Ajouter l’apport en caféine</string>
+    <string name="text_add_sleep2">Ajouter un sommeil</string>
+    <string name="text_add_alcohol_intake">Ajouter la consommation d’alcool</string>
+    <string name="text_add_supplements">Ajouter des compléments</string>
+    <string name="text_no_food_items_found_please_try_again">Aucun aliment trouvé. Veuillez réessayer.</string>
+    <string name="text_supplement">Complément</string>
 
 </resources>

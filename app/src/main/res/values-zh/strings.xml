@@ -2258,5 +2258,12 @@
     <string name="text_record_events_that_helped_your_recovery">记录帮助你恢复的事件。</string>
     <string name="text_your_readiness_is_good">你的准备情况很好！</string>
     <string name="text_your_readiness_is_excellent">你的准备情况非常好！</string>
+    <string name="text_learn_more_with_luna_ai">使用 Luna AI 了解更多</string>
+    <string name="text_add_caffeine_intake">添加咖啡因摄入</string>
+    <string name="text_add_sleep2">添加睡眠</string>
+    <string name="text_add_alcohol_intake">添加酒精摄入</string>
+    <string name="text_add_supplements">添加膳食补充剂</string>
+    <string name="text_no_food_items_found_please_try_again">未找到食物项。请重试。</string>
+    <string name="text_supplement">补充剂</string>
 
 </resources>

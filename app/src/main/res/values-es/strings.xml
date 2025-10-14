@@ -2234,5 +2234,12 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_record_events_that_helped_your_recovery">Registra los eventos que ayudaron a tu recuperación.</string>
     <string name="text_your_readiness_is_good">¡Tu preparación es buena!</string>
     <string name="text_your_readiness_is_excellent">¡Tu preparación es excelente!</string>
+    <string name="text_learn_more_with_luna_ai">Más información con Luna AI</string>
+    <string name="text_add_caffeine_intake">Añadir ingesta de cafeína</string>
+    <string name="text_add_sleep2">Añadir sueño</string>
+    <string name="text_add_alcohol_intake">Añadir consumo de alcohol</string>
+    <string name="text_add_supplements">Añadir suplementos</string>
+    <string name="text_no_food_items_found_please_try_again">No se encontraron alimentos. Inténtalo de nuevo.</string>
+    <string name="text_supplement">Suplemento</string>
 
 </resources>

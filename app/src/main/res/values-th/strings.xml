@@ -2270,5 +2270,12 @@
     <string name="text_record_events_that_helped_your_recovery">บันทึกเหตุการณ์ที่ช่วยให้คุณฟื้นตัว</string>
     <string name="text_your_readiness_is_good">ความพร้อมของคุณดี!</string>
     <string name="text_your_readiness_is_excellent">ความพร้อมของคุณยอดเยี่ยม!</string>
+    <string name="text_learn_more_with_luna_ai">เรียนรู้เพิ่มเติมกับ Luna AI</string>
+    <string name="text_add_caffeine_intake">เพิ่มการบริโภคคาเฟอีน</string>
+    <string name="text_add_sleep2">เพิ่มการนอนหลับ</string>
+    <string name="text_add_alcohol_intake">เพิ่มการบริโภคแอลกอฮอล์</string>
+    <string name="text_add_supplements">เพิ่มอาหารเสริม</string>
+    <string name="text_no_food_items_found_please_try_again">ไม่พบรายการอาหาร โปรดลองอีกครั้ง</string>
+    <string name="text_supplement">อาหารเสริม</string>
 
 </resources>

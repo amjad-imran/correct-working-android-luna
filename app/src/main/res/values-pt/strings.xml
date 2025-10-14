@@ -2288,5 +2288,12 @@
     <string name="text_record_events_that_helped_your_recovery">Registre eventos que ajudaram na sua recuperação.</string>
     <string name="text_your_readiness_is_good">Sua prontidão é boa!</string>
     <string name="text_your_readiness_is_excellent">Sua prontidão é excelente!</string>
+    <string name="text_learn_more_with_luna_ai">Saiba mais com a Luna AI</string>
+    <string name="text_add_caffeine_intake">Adicionar ingestão de cafeína</string>
+    <string name="text_add_sleep2">Adicionar sono</string>
+    <string name="text_add_alcohol_intake">Adicionar consumo de álcool</string>
+    <string name="text_add_supplements">Adicionar suplementos</string>
+    <string name="text_no_food_items_found_please_try_again">Nenhum alimento encontrado. Tente novamente.</string>
+    <string name="text_supplement">Suplemento</string>
 
 </resources>

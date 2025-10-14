@@ -2264,5 +2264,12 @@
     <string name="text_record_events_that_helped_your_recovery">Noteer gebeurtenissen die je herstel hebben geholpen.</string>
     <string name="text_your_readiness_is_good">Je paraatheid is goed!</string>
     <string name="text_your_readiness_is_excellent">Je paraatheid is uitstekend!</string>
+    <string name="text_learn_more_with_luna_ai">Meer informatie met Luna AI</string>
+    <string name="text_add_caffeine_intake">Cafeïne-inname toevoegen</string>
+    <string name="text_add_sleep2">Slaap toevoegen</string>
+    <string name="text_add_alcohol_intake">Alcoholinname toevoegen</string>
+    <string name="text_add_supplements">Supplementen toevoegen</string>
+    <string name="text_no_food_items_found_please_try_again">Geen voedingsmiddelen gevonden. Probeer het opnieuw.</string>
+    <string name="text_supplement">Supplement</string>
 
 </resources>

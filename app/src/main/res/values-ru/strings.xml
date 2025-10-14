@@ -2286,5 +2286,11 @@
     <string name="text_record_events_that_helped_your_recovery">Запишите события, которые помогли вашему восстановлению.</string>
     <string name="text_your_readiness_is_good">Ваш уровень готовности хороший!</string>
     <string name="text_your_readiness_is_excellent">Ваш уровень готовности отличный!</string>
-
+    <string name="text_learn_more_with_luna_ai">Узнайте больше с Luna AI</string>
+    <string name="text_add_caffeine_intake">Добавить потребление кофеина</string>
+    <string name="text_add_sleep2">Добавить сон</string>
+    <string name="text_add_alcohol_intake">Добавить потребление алкоголя</string>
+    <string name="text_add_supplements">Добавить добавки</string>
+    <string name="text_no_food_items_found_please_try_again">Продукты не найдены. Повторите попытку.</string>
+    <string name="text_supplement">Добавка</string>
 </resources>
