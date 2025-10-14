@@ -78,7 +78,7 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
             binding.tvTopText.text = mealData.prompt
             binding.ivEditMeal.visibility = View.INVISIBLE
             binding.textResult.gone()
-            binding.tvRetryPrompt.gone()
+            binding.llLytRetryPrompt.gone()
             if (viewModel.editMode) {
                 binding.ivDelete.visible()
                 binding.lytContent.btnSaveMeal.visible()
@@ -151,7 +151,7 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
         binding.lytContent.ivMacrosArrow.setOnClickListener { toggleMacros() }
 
 
-        binding.tvRetryPrompt.setOnClickListener {
+        binding.llLytRetryPrompt.setOnClickListener {
             onEditClicked()
 
             /*viewModel.mealAiResponse.value = null
@@ -460,7 +460,7 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
             val tvValue = TextView(requireContext()).apply {
                 TextViewCompat.setTextAppearance(this, com.noisefit_commans.R.style.S12)
                 setTextColor(android.graphics.Color.parseColor("#FFFFFFFF"))
-                text = it.value.orEmpty()
+                text = it.value.orEmpty() + " "
                 layoutParams = LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT

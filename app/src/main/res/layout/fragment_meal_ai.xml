@@ -103,9 +103,11 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
         android:layout_marginTop="52dp"
+        android:layout_marginBottom="52dp"
         android:gravity="center"
         android:text="@string/text_analysing"
         android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTopText"
@@ -157,21 +159,34 @@
                 android:text="@string/text_result_not_correct"
                 android:textColor="#EBEBEB" />
 
-            <TextView
-                android:id="@+id/tvRetryPrompt"
-                style="@style/S12"
+            <LinearLayout
+                android:id="@+id/llLytRetryPrompt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="46dp"
-                android:drawablePadding="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/textResult"
-                android:paddingVertical="6dp"
-                android:text="@string/text_retry_prompt"
-                android:textColor="#B397DC"
-                app:drawableStartCompat="@drawable/ic_refresh_meal" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/textResult">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_refresh_meal" />
+
+                <TextView
+                    android:id="@+id/tvRetryPrompt"
+                    style="@style/S12"
+                    android:layout_marginStart="4dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="6dp"
+                    android:text="@string/text_retry_prompt"
+                    android:textColor="#B397DC" />
+
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
