@@ -7,6 +7,7 @@ import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
@@ -29,6 +30,7 @@ class AddActivityTimelineSharedViewModel @Inject constructor(
     private val userHealthDataDataSource: OreoUserHealthDataDataSource,
     val localDataStore: DataStoredInterface,
     val sessionManager: SessionManager,
+    val ringDataStore: RingDataStore,
 ) : BaseViewModel() {
 
     var sourceKey: String ?= null
