@@ -1,11 +1,13 @@
 package com.oreo.ui.recordworkout
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentSelectWorkoutBinding
@@ -44,7 +46,7 @@ class SelectWorkoutFragment :
 
         setRecycler()
 
-        viewModel.getWorkoutList()
+        viewModel.getWorkoutList(isConnectedToInternet())
     }
 
     fun navigateToStartWorkout(oWorkoutListModal: OWorkoutListModal) {
@@ -178,6 +180,15 @@ class SelectWorkoutFragment :
 
         }
 
+    }
+
+    fun isConnectedToInternet(): Boolean {
+        val context = requireContext()
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork ?: return false
+        val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+
+        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
     }
 
 }

@@ -1,6 +1,5 @@
 package com.oreo.ui.recordworkout
 
-import android.media.metrics.Event
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -50,10 +49,10 @@ constructor(
         return sessionManager.isRingCharging.value == true
     }
 
-    fun getWorkoutList() {
+    fun getWorkoutList(connectedToInternet: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             val workoutList = keyValueDataSource.getData("" , KeyValueDataType.RECORD_WORKOUT)
-            if(workoutList?.value != null){
+            if(!connectedToInternet && workoutList?.value != null){
                 val type = object : TypeToken<List<OWorkoutListModal>>() {}.type
                 _oWorkoutListModalResponse.postValue(
                     Gson().fromJson(workoutList.value, type)
@@ -77,7 +76,7 @@ constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        getWorkoutList()
+                                        getWorkoutList(connectedToInternet)
                                     }
 
                                     override fun no() {
