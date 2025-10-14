@@ -90,7 +90,7 @@ class AddSleepFragment :
         }
 
         // Start Time
-        binding.lytCard.lytStartAndEndTime.lytDate.tvTimeValue.setOnClickListener {
+        binding.lytCard.lytStartAndEndTime.lytDate.lytLlInput.setOnClickListener {
 
             parentFragment?.setFragmentResultListener(SLEEP_TIME_REQUEST_KEY) { _, bundle ->
                 val addSleep = bundle.getParcelable<OAddSleep>("sleepTime")
@@ -176,7 +176,7 @@ class AddSleepFragment :
         }
 
         // End Time
-        binding.lytCard.lytStartAndEndTime.lytTime.tvTimeValue.setOnClickListener {
+        binding.lytCard.lytStartAndEndTime.lytTime.lytLlInput.setOnClickListener {
             if (binding.lytCard.lytStartAndEndTime.lytDate.tvTimeValue.text == getString(R.string.text_enter)) {
                 context.showShortToast(getString(R.string.text_select_start_time_first))
                 return@setOnClickListener
@@ -387,8 +387,8 @@ class AddSleepFragment :
         binding.lytCard.lytStartAndEndTime.lytDate.ivMore.gone()
         binding.lytCard.lytStartAndEndTime.lytTime.ivMore.gone()
 
-        binding.lytCard.lytStartAndEndTime.lytDate.tvTimeValue.isClickable = false
-        binding.lytCard.lytStartAndEndTime.lytTime.tvTimeValue.isClickable = false
+        binding.lytCard.lytStartAndEndTime.lytDate.lytLlInput.isClickable = false
+        binding.lytCard.lytStartAndEndTime.lytTime.lytLlInput.isClickable = false
 
         when(data.canBeEditedOrDeleted){
             0 -> {
