@@ -34,6 +34,7 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import kotlin.getValue
 import androidx.core.view.isVisible
+import com.moengage.core.internal.utils.showToast
 
 @AndroidEntryPoint
 class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding::inflate) {
@@ -219,6 +220,8 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
                 binding.tvAnalysing.gone()
 
                 if(it.foods.isNullOrEmpty()){
+                    showToast(requireContext(),
+                        getString(R.string.text_no_food_items_found_please_try_again))
                     onEditClicked()
                     return@observe
                 }
