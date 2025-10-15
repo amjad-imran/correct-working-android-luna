@@ -2245,5 +2245,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_add_supplements">Add Supplements</string>
     <string name="text_no_food_items_found_please_try_again">No food items found. Please try again.</string>
     <string name="text_supplement">Supplement</string>
+    <string name="text_retry_in_value">Retry in %1$d</string>
 
 </resources>

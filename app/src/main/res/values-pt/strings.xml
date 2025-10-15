@@ -2295,5 +2295,6 @@
     <string name="text_add_supplements">Adicionar suplementos</string>
     <string name="text_no_food_items_found_please_try_again">Nenhum alimento encontrado. Tente novamente.</string>
     <string name="text_supplement">Suplemento</string>
+    <string name="text_retry_in_value">Tentar novamente em %1$d</string>
 
 </resources>

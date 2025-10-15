@@ -2272,5 +2272,6 @@
     <string name="text_add_supplements">Aggiungi integratori</string>
     <string name="text_no_food_items_found_please_try_again">Nessun alimento trovato. Riprova.</string>
     <string name="text_supplement">Integratore</string>
+    <string name="text_retry_in_value">Riprova tra %1$d</string>
 
 </resources>
