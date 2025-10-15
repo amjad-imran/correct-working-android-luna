@@ -52,6 +52,8 @@ class OMyDeviceViewModel @Inject constructor(
     var appLogFile: File? = null
     var firmwareLogFile: File? = null
 
+    var downloadMyDataSelectedItem: String ?= null
+
     val lunarBlackImagesUrl = Pair(
         "https://luna-cdn.gonoise.com/production/ring/set_2/Luna+Gen+2.538+(1)+1.png",
         "https://luna-cdn.gonoise.com/production/ring/set_1/Luna+Gen+2.565+1.png"
@@ -140,6 +142,20 @@ class OMyDeviceViewModel @Inject constructor(
 
             emit(Pair(appLogs, watchLogs))
         }
+    }
+
+    fun getDownloadMyDataList(): ArrayList<String> {
+        val listData = ArrayList<String>().apply {
+            this.add(resProvider.getString(R.string.text_today))
+
+            this.add(resProvider.getString(R.string.text_last_val_days, 3))
+
+            this.add(resProvider.getString(R.string.text_last_val_days, 7))
+        }
+
+        downloadMyDataSelectedItem = listData.get(1)
+
+        return listData
     }
 
 

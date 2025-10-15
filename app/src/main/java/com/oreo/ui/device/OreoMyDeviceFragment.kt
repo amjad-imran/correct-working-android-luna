@@ -31,6 +31,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoMyDeviceBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.SplashActivity
+import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
 import com.noisefit.ui.myDevice.REST_REQUEST_KEY
 import com.noisefit.ui.myDevice.UNPAIR_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
@@ -217,6 +218,35 @@ class OreoMyDeviceFragment :
             navigate(R.id.unpairBottomDialogFragment)
 
         }
+
+        binding.rowDownloadMyData.setOnClickListener {
+            val downloadMyDataList = mViewModel.getDownloadMyDataList()
+            parentFragment?.setFragmentResultListener(VALUE_REQUEST_KEY) { _, bundle ->
+                val selectedValue = bundle.getString("selectedValue")
+                selectedValue?.let { it1 ->
+                    mViewModel.downloadMyDataSelectedItem = it1
+                    val dayVal = when(it1){
+                        getString(R.string.text_today) -> 1
+                        getString(R.string.text_last_val_days, 3) -> 3
+                        getString(R.string.text_last_val_days, 7) -> 7
+                        else -> -1
+                    }
+                    if(dayVal!=-1){
+
+                    }
+                }
+
+            }
+            navigate(
+                R.id.valueSelectorBottomSheet,
+                bundleOf(
+                    "selectedValue" to mViewModel.downloadMyDataSelectedItem,
+                    "selectionList" to downloadMyDataList,
+                    "title" to getString(R.string.text_duration)
+                )
+            )
+        }
+
     }
 
     override fun subscribeObservers() {
