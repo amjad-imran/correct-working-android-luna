@@ -98,7 +98,9 @@ class SummaryDataViewModel @Inject constructor(
                                 statusCode = healthData.readiness?.readinessScore?.status,
                                 totalScoreImpact = healthData.readiness?.totalScoreImpact ?: 0,
                                 noOfNaps = healthData.sleep?.naps?.size ?: 0,
-                                noOfSleeps = healthData.sleep?.sleeps?.size ?: 0
+                                noOfSleeps = healthData.sleep?.sleeps?.size ?: 0,
+                                avgHRV = healthData.readiness?.hrv?.value,
+                                avgRestingHR = healthData.readiness?.restingHr?.value,
                             )
                         )
                     )

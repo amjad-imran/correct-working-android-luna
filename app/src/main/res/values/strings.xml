@@ -2202,7 +2202,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_supplements">Supplements</string>
     <string name="text_alcohol">Alcohol</string>
     <string name="text_recovery">Recovery</string>
-    <string name="text_add_meal_intake">Add meal Intake</string>
+    <string name="text_add_meal_intake">Add Meal Intake</string>
     <string name="text_describe_your_meal_nin_free_form">Describe your meal\nin free form.</string>
     <string name="string_ai_prompt_ex">“eg. I had chicken tikka, some salad, tomato soup along with some pani puris for dinner...”</string>
     <string name="text_type_anything">Type anything...</string>
@@ -2226,6 +2226,5 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_add_recovery">Add Recovery</string>
     <string name="text_add_alcohol">Add Alcohol</string>
     <string name="text_add_supplement">Add Supplement</string>
-    <string name="text_retry_in_value">Retry in %1$s</string>
 
 </resources>

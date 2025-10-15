@@ -13,11 +13,18 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.ViewAnimationUtils
+import android.animation.Animator
+import android.view.LayoutInflater
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -64,6 +71,10 @@ import eightbitlab.com.blurview.RenderScriptBlur
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.core.view.isVisible
+import com.oreo.data.model.FabItems
+import com.oreo.data.model.FabModel
+import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 
 @AndroidEntryPoint
 class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
@@ -245,6 +256,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     override fun initListener() {
 
+        // FAB radial overlay dismiss
+        binding.fabRevealOverlay.setOnClickListener {
+            hideFabRadialMenu()
+        }
+
         binding.blurViewSelector.setOnClickListener {
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.activity_event_cancelled,
@@ -277,6 +293,13 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         }
         binding.lytAddWorkoutSelector.ivLogPeriod.setOnClickListener {
             onLogPeriodClicked()
+        }
+
+        binding.lytAddWorkoutSelector.tvAddActivity.setOnClickListener {
+            showTimeline()
+        }
+        binding.lytAddWorkoutSelector.ivAddActivity.setOnClickListener {
+            showTimeline()
         }
 
         binding.lytAddWorkoutSelector.tvAddSleep.setOnClickListener {
@@ -312,6 +335,26 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         }
 
         binding.btnAddWorkout.setOnClickListener {
+            if (binding.fabRevealOverlay.isVisible) {
+                hideFabRadialMenu()
+            } else {
+                /*if (navController?.currentDestination?.id == R.id.navigation_oreo_workouts ||
+                    navController?.currentDestination?.id == R.id.oActivityListFragment
+                ) {
+                    logAppEvent(
+                        MoEngageLunaAppEvents.workout_add_button_clicked,
+                        hashMapOf("source" to "activity")
+                    )
+                } else {
+                    logAppEvent(
+                        MoEngageLunaAppEvents.workout_add_button_clicked,
+                        hashMapOf("source" to "homepage")
+                    )
+                }*/
+                showFabRadialMenu()
+            }
+            return@setOnClickListener
+
             setBlurAddCta()
             if (viewModel.isActivityWorkAdd)
                 viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_activity_add_workout_click)
@@ -361,6 +404,21 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         handleIntent(intent)
     }
 
+    private fun showTimeline() {
+        showAddWorkoutCta()
+        binding.blurViewSelector.gone()
+        if (viewModel.isDeviceConnected().not()) {
+            showShortToast(getString(R.string.text_please_connect_your_ring))
+            return
+        }
+
+        navController?.navigate(
+            R.id.addActivityTimelineFragment,
+            bundleOf("showTimeline" to true, "key" to null)
+        )
+
+    }
+
     private fun showAddSleep() {
         showAddWorkoutCta()
         binding.blurViewSelector.gone()
@@ -379,7 +437,14 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     return@launch
                 }
                 withContext(Dispatchers.Main) {
-                    navController?.navigate(R.id.fragmentAddSleep)
+                    navController?.navigate(
+                        R.id.addActivityTimelineFragment,
+                        bundleOf(
+                            "showTimeline" to false,
+                            "key" to CircadianAlignmentViewModel.sleep_key,
+                            "srcKey" to "dash_fab"
+                        )
+                    )
                 }
             }
         }
@@ -460,6 +525,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     private fun animateFabUp() {
         binding.blurViewSelector.visible()
 
+
+
         animateItemsUp(binding.lytAddWorkoutSelector.ivRecordWorkout, 200f)
         animateItemsUp(binding.lytAddWorkoutSelector.tvRecordWorkout, 200f)
         binding.lytAddWorkoutSelector.ivAddWorkoutManual.visible()
@@ -474,9 +541,16 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             binding.lytAddWorkoutSelector.ivRecordSleep.visible()
             animateItemsUp(binding.lytAddWorkoutSelector.tvAddSleep, 350f)
             animateItemsUp(binding.lytAddWorkoutSelector.ivRecordSleep, 350f)
+
+            binding.lytAddWorkoutSelector.tvAddActivity.visible()
+            binding.lytAddWorkoutSelector.ivAddActivity.visible()
+            animateItemsUp(binding.lytAddWorkoutSelector.tvAddActivity, 400f)
+            animateItemsUp(binding.lytAddWorkoutSelector.ivAddActivity, 400f)
         } else {
             binding.lytAddWorkoutSelector.tvAddSleep.gone()
             binding.lytAddWorkoutSelector.ivRecordSleep.gone()
+            binding.lytAddWorkoutSelector.tvAddActivity.gone()
+            binding.lytAddWorkoutSelector.ivAddActivity.gone()
         }
 
         if (viewModel.shouldShowFemaleHealthCta() && lastDestination?.id == R.id.navigation_oreo_home) {
@@ -541,6 +615,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     private fun animateFabDown() {
         //binding.blurViewSelector.gone()
 
+        animateItemsDown(binding.lytAddWorkoutSelector.tvAddActivity)
+        animateItemsDown(binding.lytAddWorkoutSelector.ivAddActivity)
         animateItemsDown(binding.lytAddWorkoutSelector.ivRecordWorkout)
         animateItemsDown(binding.lytAddWorkoutSelector.ivAddWorkoutManual)
         animateItemsDown(binding.lytAddWorkoutSelector.tvAddWorkout)
@@ -646,6 +722,316 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         animatorSet.interpolator = AccelerateDecelerateInterpolator()
         animatorSet.playTogether(translateDown, alpha)
         animatorSet.start()
+    }
+
+    private fun dpToPx(dp: Int): Int = (dp * resources.displayMetrics.density).toInt()
+
+    private fun populateFabRadialItems(cx: Int, cy: Int) {
+        val overlay = binding.fabRevealOverlay
+        overlay.removeAllViews()
+        val radius = dpToPx(120)
+        val items = getFabItems()
+
+        items.reverse()
+
+
+        val angles = listOf(160, 180, 200, 220, 250)
+        val angles2 = listOf(180, 200)
+        val yBias = dpToPx(10)
+        data class Entry(val view: View, val tx: Int, val ty: Int)
+        val entries = ArrayList<Entry>(items.size)
+
+        val is2Items = items.size<=2
+
+        for ((index, item) in items.withIndex()) {
+            val angle = Math.toRadians(if(is2Items) angles2[index].toDouble() else angles[index].toDouble())
+            val tx = (cx + radius * Math.cos(angle)).toInt()
+            val ty = (cy + radius * Math.sin(angle)).toInt() + yBias
+
+            val view = LayoutInflater.from(overlay.context).inflate(R.layout.layout_fab_item, null)
+            view.findViewById<ImageView>(R.id.imageView).setImageResource(item.icon)
+            view.findViewById<TextView>(R.id.tvTitle).apply {
+                text = item.title
+                setTextColor(item.color)
+            }
+
+            val lp = android.widget.FrameLayout.LayoutParams(
+                android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+                android.widget.FrameLayout.LayoutParams.WRAP_CONTENT
+            )
+            overlay.addView(view, lp)
+            entries.add(Entry(view, tx, ty))
+
+            view.setOnClickListener {
+                hideFabRadialMenu(false)
+                onFabMenuItemCLicked(item)
+            }
+        }
+
+        overlay.post {
+            val sorted = entries.sortedBy { it.ty }
+            sorted.forEachIndexed { rank, e ->
+                e.view.x = cx - e.view.width / 2f
+                e.view.y = cy - e.view.height / 2f
+                e.view.alpha = 0f
+
+                val baseDelay = rank * 40L
+                val moveDuration = 250L
+
+                val animX = ObjectAnimator.ofFloat(
+                    e.view,
+                    View.X,
+                    e.view.x,
+                    e.tx.toFloat() - e.view.width / 2f
+                ).apply {
+                    duration = moveDuration
+                    startDelay = baseDelay
+                }
+                val animY = ObjectAnimator.ofFloat(
+                    e.view,
+                    View.Y,
+                    e.view.y,
+                    e.ty.toFloat() - e.view.height / 2f
+                ).apply {
+                    duration = moveDuration
+                    startDelay = baseDelay
+                }
+                val alphaAnim = ObjectAnimator.ofFloat(e.view, View.ALPHA, 0f, 1f).apply {
+                    duration = moveDuration / 2
+                    startDelay = baseDelay + moveDuration / 2
+                }
+
+                animX.start(); animY.start(); alphaAnim.start()
+            }
+        }
+    }
+
+    private fun onFabMenuItemCLicked(item: FabModel) {
+
+        when(item.type){
+            FabItems.RECORD_WORKOUT -> {
+                showRecordWorkout()
+            }
+            FabItems.ADD_WORKOUT -> {
+                showAddWorkout()
+            }
+            FabItems.ADD_SLEEP -> {
+                showAddSleep()
+            }
+            FabItems.TRACK_PERIOD ->{
+                onLogPeriodClicked()
+            }
+            FabItems.ADD_OTHER_ACTIVITY ->{
+                showTimeline()
+            }
+        }
+    }
+
+    private fun getFabItems(): ArrayList<FabModel> {
+        val lastDestination = navController?.currentDestination
+
+        val items = ArrayList<FabModel>()
+
+       /* if(lastDestination?.id==R.id.sleepDashFragment){
+            items.add(
+                FabModel(
+                    title = getString(R.string.text_add_sleep),
+                    icon = R.drawable.ic_fab_add_sleep,
+                    color = "#F2CEFF".toColorInt(),
+                    type = FabItems.ADD_SLEEP
+                )
+            )
+            return items
+        }*/
+
+        items.add(
+            FabModel(
+                title = getString(R.string.text_record_workout),
+                icon = R.drawable.ic_fab_record_workout,
+                color = "#99D9FF".toColorInt(),
+                type = FabItems.RECORD_WORKOUT
+            )
+        )
+        items.add(
+            FabModel(
+                title = getString(R.string.text_add_workout),
+                icon = R.drawable.ic_fab_add_workout,
+                color = "#99D9FF".toColorInt(),
+                type = FabItems.ADD_WORKOUT
+            )
+        )
+
+
+        //if (lastDestination?.id == R.id.navigation_oreo_home) {
+            items.add(
+                FabModel(
+                    title = getString(R.string.text_add_sleep),
+                    icon = R.drawable.ic_fab_add_sleep,
+                    color = "#F2CEFF".toColorInt(),
+                    type = FabItems.ADD_SLEEP
+                )
+            )
+        //}
+
+        if (viewModel.shouldShowFemaleHealthCta()/* && lastDestination?.id == R.id.navigation_oreo_home*/) {
+            items.add(
+                FabModel(
+                    title = getString(R.string.text_log_period),
+                    icon = R.drawable.ic_fab_period,
+                    color = "#FFBFBF".toColorInt(),
+                    type = FabItems.TRACK_PERIOD
+                )
+            )
+        }
+
+        //if (lastDestination?.id == R.id.navigation_oreo_home) {
+            items.add(
+                FabModel(
+                    title = getString(R.string.text_add_other_activity),
+                    icon = R.drawable.ic_fab_add_other,
+                    color = "#A8E0CD".toColorInt(),
+                    type = FabItems.ADD_OTHER_ACTIVITY
+                )
+            )
+        //}
+
+        return items
+    }
+
+    private fun showFabRadialMenu() {
+        if (binding.fabRevealOverlay.isVisible) return
+
+        val overlay = binding.fabRevealOverlay
+        overlay.visibility = View.VISIBLE
+
+        try {
+            ObjectAnimator.ofFloat(
+                binding.ivWorkout,
+                View.ROTATION,
+                binding.ivWorkout.rotation,
+                -45f
+            ).apply {
+                duration = 150
+                start()
+            }
+        } catch (_: Exception) {
+        }
+
+        overlay.post {
+            val fabLoc = IntArray(2)
+            val overlayLoc = IntArray(2)
+            binding.btnAddWorkout.getLocationOnScreen(fabLoc)
+            overlay.getLocationOnScreen(overlayLoc)
+            val cx = fabLoc[0] - overlayLoc[0] + binding.btnAddWorkout.width / 2
+            val cy = fabLoc[1] - overlayLoc[1] + binding.btnAddWorkout.height / 2
+
+            val finalRadius =
+                kotlin.math.hypot(overlay.width.toDouble(), overlay.height.toDouble()).toFloat()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                val anim = ViewAnimationUtils.createCircularReveal(overlay, cx, cy, 0f, finalRadius)
+                anim.duration = 300
+                overlay.visibility = View.VISIBLE
+                anim.start()
+            } else {
+                overlay.alpha = 0f
+                overlay.animate().alpha(1f).setDuration(200).start()
+            }
+
+            populateFabRadialItems(cx, cy)
+        }
+    }
+
+    private fun hideFabRadialMenu(animate: Boolean = true) {
+        if (binding.fabRevealOverlay.visibility != View.VISIBLE) return
+        val overlay = binding.fabRevealOverlay
+        try {
+            ObjectAnimator.ofFloat(
+                binding.ivWorkout, View.ROTATION,
+                binding.ivWorkout.rotation, 0f
+            )
+                .apply {
+                    duration = 150
+                    start()
+                }
+        } catch (_: Exception) {
+        }
+
+        val fabLoc = IntArray(2)
+        val overlayLoc = IntArray(2)
+        binding.btnAddWorkout.getLocationOnScreen(fabLoc)
+        overlay.getLocationOnScreen(overlayLoc)
+        val cx = fabLoc[0] - overlayLoc[0] + binding.btnAddWorkout.width / 2
+        val cy = fabLoc[1] - overlayLoc[1] + binding.btnAddWorkout.height / 2
+
+        val childCount = overlay.childCount
+        if (childCount > 0) {
+            var completed = 0
+            val children = (0 until childCount).map { overlay.getChildAt(it) }
+                .sortedByDescending { it.y }
+            children.forEachIndexed { rank, v ->
+                val baseDelay = if(animate) (rank * 40L) else 0
+                val moveDuration = if(animate) 200L else 0
+
+                val animX = ObjectAnimator.ofFloat(
+                    v,
+                    View.X,
+                    v.x,
+                    cx - v.width / 2f
+                ).apply {
+                    duration = moveDuration
+                    startDelay = baseDelay
+                }
+                val animY = ObjectAnimator.ofFloat(
+                    v,
+                    View.Y,
+                    v.y,
+                    cy - v.height / 2f
+                ).apply {
+                    duration = moveDuration
+                    startDelay = baseDelay
+                }
+                val alphaAnim = ObjectAnimator.ofFloat(v, View.ALPHA, 1f, 0f).apply {
+                    duration = moveDuration / 2
+                    startDelay = baseDelay
+                    addListener(object : android.animation.AnimatorListenerAdapter() {
+                        override fun onAnimationEnd(animation: android.animation.Animator) {
+                            completed++
+                            if (completed == childCount) {
+                                concealOverlayAfterItems(cx, cy,animate)
+                            }
+                        }
+                    })
+                }
+
+                animX.start(); animY.start(); alphaAnim.start()
+            }
+        } else {
+            concealOverlayAfterItems(cx, cy,animate)
+        }
+    }
+
+    private fun concealOverlayAfterItems(cx: Int, cy: Int,animate: Boolean = true) {
+        val overlay = binding.fabRevealOverlay
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && overlay.isShown) {
+            val initialRadius =
+                kotlin.math.hypot(overlay.width.toDouble(), overlay.height.toDouble()).toFloat()
+            val anim = ViewAnimationUtils.createCircularReveal(overlay, cx, cy, initialRadius, 0f)
+            anim.duration = if(animate) 220 else 0
+            anim.addListener(object : android.animation.AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    super.onAnimationEnd(animation)
+                    overlay.visibility = View.GONE
+                    overlay.removeAllViews()
+                }
+            })
+            anim.start()
+        } else {
+            overlay.animate().alpha(0f).setDuration(if (animate) 150 else 0).withEndAction {
+                overlay.visibility = View.GONE
+                overlay.alpha = 1f
+                overlay.removeAllViews()
+            }.start()
+        }
     }
 
     private fun showAddWorkoutCta() {
@@ -1188,10 +1574,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     binding.view27.visible()
                     binding.navView.root.visible()
 
-                    if (destination.id == R.id.navigation_oreo_home || destination.id == R.id.navigation_oreo_workouts) {
+                    if (destination.id == R.id.navigation_oreo_home || destination.id == R.id.navigation_oreo_workouts
+                        || destination.id == R.id.sleepDashFragment) {
                         viewModel.handleAddWorkoutVisibility()
                     } else {
-                        viewModel.addWorkoutCtaVisibility.postValue(false)
+                        viewModel.addWorkoutCtaVisibility.value = false
                         viewModel.isActivityWorkAdd = false
                     }
 
@@ -1203,7 +1590,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     binding.navView.root.gone()
 
                     if (viewModel.isDevicePaired() != null) {
-                        viewModel.addWorkoutCtaVisibility.postValue(true)
+                        viewModel.addWorkoutCtaVisibility.value = true
                         viewModel.isActivityWorkAdd = true
                     }
                 }
@@ -1211,7 +1598,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 else -> {
                     binding.view27.gone()
                     binding.navView.root.gone()
-                    viewModel.addWorkoutCtaVisibility.postValue(false)
+                    viewModel.addWorkoutCtaVisibility.value = false
                     viewModel.isActivityWorkAdd = false
 
                 }
@@ -1418,6 +1805,13 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     override fun onBackPressed() {
         navController?.let {
+
+            if(binding.fabRevealOverlay.isVisible){
+                hideFabRadialMenu(false)
+                return
+            }
+
+
             when (it.currentDestination?.id) {
                 R.id.navigation_oreo_home, R.id.navigation_oreo_readiness,
                 R.id.navigation_oreo_workouts, R.id.sleepDashFragment, R.id.navigation_lunaZoneFragment -> {

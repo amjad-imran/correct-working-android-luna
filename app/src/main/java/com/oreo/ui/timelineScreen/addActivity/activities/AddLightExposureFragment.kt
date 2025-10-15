@@ -21,6 +21,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
+import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 import com.oreo.ui.timelineScreen.addActivity.AddActivityItemsEnum
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
@@ -58,7 +59,8 @@ class AddLightExposureFragment :
                     binding.lytCard.lytTimePicker.isClickable = true
                     binding.lytCard.lytDuration.isClickable = true
                     binding.btnSave.apply {
-                        disable()
+                        text = getString(R.string.text_learn_more_with_luna_ai)
+                        enable()
                         visible()
                     }
                 }
@@ -91,10 +93,30 @@ class AddLightExposureFragment :
                     )
                 }
                 //
-                viewModel.logLightExposure(
-                    viewModel.lightTime.value!!,
-                    viewModel.lightDuration.value!!
-                )
+
+                if(getString(R.string.text_save).equals(binding.btnSave.text)) {
+                    viewModel.logLightExposure(
+                        viewModel.lightTime.value!!,
+                        viewModel.lightDuration.value!!
+                    ){
+                        sharedViewModel.sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.insight_log_edited,
+                        )
+                    }
+                }else{
+                    if (sharedViewModel.ringDataStore.getRingDevice() == null) {
+                        context.showShortToast(getString(R.string.text_luna_ai_message))
+                    }else {
+                        if (sharedViewModel.localDataStore.isAiChatSplashShown()) {
+                            navigate(
+                                R.id.aiTopQuestionsFragment,
+                                bundleOf("aiTopic" to AITopics.GENERAL)
+                            )
+                        } else {
+                            navigate(R.id.aiChatOnboardFragment)
+                        }
+                    }
+                }
             }
         }
 
@@ -119,7 +141,7 @@ class AddLightExposureFragment :
                         editDataTime.hour != viewModel.lightTime.value?.hour ||
                         editDataTime.minute != viewModel.lightTime.value?.minute
                     ){
-                        binding.btnSave.enable()
+                        binding.btnSave.text = getString(R.string.text_save)
                     }
                 }
 
@@ -153,7 +175,7 @@ class AddLightExposureFragment :
                         viewModel.editDataDuration != null &&
                         viewModel.editDataDuration!=viewModel.lightDuration.value
                     ){
-                        binding.btnSave.enable()
+                        binding.btnSave.text = getString(R.string.text_save)
                     }
                 }
 
@@ -193,7 +215,11 @@ class AddLightExposureFragment :
                             getString(R.string.text_something_went_wrong_please_try_again))
                         return@observe
                     }
-                    viewModel.deleteLightExposureItem()
+                    viewModel.deleteLightExposureItem(){
+                        sharedViewModel.sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.insight_log_deleted,
+                        )
+                    }
                 }
             }
         }

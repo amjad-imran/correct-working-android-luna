@@ -76,6 +76,11 @@ class LanguageViewModel @Inject constructor(
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY_V2)
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_SYMPTOMS_ICON)
 
+            // Clear Nudge Data
+            localDataStore.setNudgeReadinessData(null)
+            localDataStore.setNudgeActivityData(null)
+            localDataStore.setNudgeCycleTrackerData(null)
+
             //Clear OTA Data
             ringDataStore.cleaNewOtaVersion()
 

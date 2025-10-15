@@ -7,6 +7,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -28,7 +29,8 @@ class CalenderDayLogViewModel
 @Inject
 constructor(
     val femaleHealthRepository: FemaleHealthRepository,
-    val sessionManager: SessionManager
+    val sessionManager: SessionManager,
+    private val userRepository: UserRepository,
 ) : BaseViewModel() {
 
 //    var hmOfIcons = HashMap<LocalDate, Pair<ArrayList<FHSymptomsIconsModel>?, ArrayList<FHFlowIconsModel>?>>()
@@ -214,6 +216,43 @@ constructor(
                     is Resource.Success -> {
                         resource.data?.data.let {
                             _serverSuccess.postValue(Event(true))
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+
+    fun deletePeriodSymptomsItem(deleteEventFun: () -> Unit) {
+        viewModelScope.launch {
+            userRepository.deleteTimelineItemById(editDataAddActivity?.id?:"").collect{ resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        deletePeriodSymptomsItem(deleteEventFun)
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            _serverSuccess.postValue(Event(true))
+                            deleteEventFun()
                         }
                     }
                 }

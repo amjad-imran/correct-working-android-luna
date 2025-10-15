@@ -23,6 +23,9 @@ data class ItemTimelineResponseModel(
     @SerializedName("user_id")
     val userId: Int?,
 
+    @SerializedName("event_id")
+    val eventId: String?=null,
+
     @SerializedName("event")
     var event: String?,
 
@@ -47,7 +50,7 @@ data class ItemTimelineResponseModel(
     @SerializedName("date")
     val date: String?,
 
-    val title: String?,
+    var title: String?,
 
     val metadata: TimelineMetadata ?= null,
 
@@ -86,8 +89,17 @@ data class TimelineMetadata(
     @SerializedName("readiness_score_impact")
     val readinessScoreImpact: Int? = null,
 
+    @SerializedName("luna_option")
+    val lunaOption: String? = null,
+
     @SerializedName("luna_tracking_option_id")
     val lunaTrackingOptionId: Int? = null,
+
+    @SerializedName("luna_options")
+    val lunaOptions: List<String>? = null,
+
+    @SerializedName("luna_tracking_option_ids")
+    val lunaTrackingOptionIds: List<Int>? = null,
 
     @SerializedName("end_time")
     val endTime: String? = null,
@@ -99,5 +111,15 @@ data class TimelineMetadata(
     // For Periods
     val symptoms: List<String> ?= null,
     val flow: List<String> ?= null,
+
+    // For Workout
+    val type: String? = null,
+    val steps: Int? = null,
+    val calories: Int? = null,
+    val intensity: String? = null,
+    @SerializedName("activity_type")
+    val activityType: String? = null,
+    @SerializedName("extra_calories")
+    val extraCalories: Int? = null
 
 ) : Parcelable

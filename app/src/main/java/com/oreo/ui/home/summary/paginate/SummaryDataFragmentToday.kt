@@ -81,6 +81,7 @@ import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.SummaryStates
+import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 import com.oreo.ui.custom.CirclePagerIndicatorDecoration
 import com.oreo.ui.custom.SnapHelperOneByOne
 import com.oreo.ui.device.FIND_RING_LOCATION_PERM_REQUEST
@@ -133,11 +134,11 @@ class SummaryDataFragmentToday :
 
 
     private val healthOverviewAdapter by lazy {
-        OSummaryHealthOverviewAdapter()
+        OSummaryHealthOverviewAdapter(true)
     }
 
     private val viewedCardsAdapter by lazy {
-        OSummaryHealthOverviewAdapter()
+        OSummaryHealthOverviewAdapter(true)
     }
 
     private val napsAdapter: NapsConfirmAdapter by lazy {
@@ -669,7 +670,7 @@ class SummaryDataFragmentToday :
                             bundleOf("showTimeline" to true, "key" to type.key)
                         )
                     }else{
-                        showToast(requireContext(), getString(R.string.text_please_connect_your_ring_to_add_sleep))
+                        showToast(requireContext(), getString(R.string.text_please_connect_your_ring))
                     }
                 }
 
@@ -2008,7 +2009,14 @@ class SummaryDataFragmentToday :
         if (data.addSleep) {
             binding.contentMain.lytSleepAlert.btnDone.visible()
             binding.contentMain.lytSleepAlert.btnDone.setOnClickListener {
-                navigate(R.id.fragmentAddSleep)
+                navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to CircadianAlignmentViewModel.sleep_key,
+                        "srcKey" to "dash_fab"
+                    )
+                )
             }
         } else {
             binding.contentMain.lytSleepAlert.btnDone.gone()

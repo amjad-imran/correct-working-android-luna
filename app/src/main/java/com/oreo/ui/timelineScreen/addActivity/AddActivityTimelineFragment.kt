@@ -44,6 +44,8 @@ class AddActivityTimelineFragment :
             false
         }
 
+        val lunaOption = args.lunaOption
+
         val editData: ItemTimelineResponseModel? = args.editData
 
         when (key) {
@@ -59,17 +61,23 @@ class AddActivityTimelineFragment :
             CircadianAlignmentViewModel.sleep_key ->
                 sharedViewModel.loadFragmentByType(AddActivityItemsEnum.SLEEP, editData)
 
+            "nap" ->
+                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.SLEEP, editData)
+
             "supplements" ->
-                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.SUPPLEMENTS, editData)
+                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.SUPPLEMENTS, editData, lunaOption)
 
             "recovery" ->
-                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.RECOVERY, editData)
+                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.RECOVERY, editData, lunaOption)
 
             "alcohol" ->
                 sharedViewModel.loadFragmentByType(AddActivityItemsEnum.ALCOHOL, editData)
 
             "symptom" ->
                 sharedViewModel.loadFragmentByType(AddActivityItemsEnum.CYCLE_LOG, editData)
+
+            "workout" ->
+                sharedViewModel.loadFragmentByType(AddActivityItemsEnum.WORKOUT, editData)
 
             else -> sharedViewModel.loadFragmentByType(AddActivityItemsEnum.ACTIVITIES_LISTING)
         }
@@ -126,11 +134,18 @@ class AddActivityTimelineFragment :
                     }
 
                     AddActivityItemsEnum.WORKOUT -> {
-                        AddWorkoutFragment()
+                        titleTxt = getString(R.string.text_add_workout)
+                        AddWorkoutFragment().apply {
+                            it.second?.let { editData ->
+                                this.arguments = Bundle().apply {
+                                    putParcelable("editData", editData)
+                                }
+                            }
+                        }
                     }
 
                     AddActivityItemsEnum.CAFFEINE -> {
-                        titleTxt = getString(R.string.text_add_caffeine)
+                        titleTxt = getString(R.string.text_add_caffeine_intake)
                         AddCaffeineFragment().apply {
                             it.second?.let { editData ->
                                 this.arguments = Bundle().apply {
@@ -168,7 +183,7 @@ class AddActivityTimelineFragment :
                     }
 
                     AddActivityItemsEnum.SLEEP -> {
-                        titleTxt = getString(R.string.text_add_sleep)
+                        titleTxt = getString(R.string.text_add_sleep2)
                         AddSleepFragment().apply {
                             it.second?.let { editData ->
                                 this.arguments = Bundle().apply {
@@ -179,17 +194,22 @@ class AddActivityTimelineFragment :
                     }
 
                     AddActivityItemsEnum.SUPPLEMENTS -> {
-                        titleTxt = getString(R.string.text_add_supplement)
+                        titleTxt = getString(R.string.text_add_supplements)
                         AddSupplementsFragment().apply {
                             it.second?.let { editData ->
                                 this.arguments = Bundle().apply {
                                     putParcelable("editData", editData)
                                 }
                             }
+                            it.third?.let { lunaOpt ->
+                                this.arguments = Bundle().apply {
+                                    putString("lunaOption", lunaOpt)
+                                }
+                            }
                         }
                     }
                     AddActivityItemsEnum.ALCOHOL -> {
-                        titleTxt = getString(R.string.text_add_alcohol)
+                        titleTxt = getString(R.string.text_add_alcohol_intake)
                         AddAlcoholFragment().apply {
                             it.second?.let { editData ->
                                 this.arguments = Bundle().apply {
@@ -204,6 +224,11 @@ class AddActivityTimelineFragment :
                             it.second?.let { editData ->
                                 this.arguments = Bundle().apply {
                                     putParcelable("editData", editData)
+                                }
+                            }
+                            it.third?.let { lunaOpt ->
+                                this.arguments = Bundle().apply {
+                                    putString("lunaOption", lunaOpt)
                                 }
                             }
                         }

@@ -188,7 +188,7 @@ sealed class OSummaryHealthOverviewClickEnum {
 
 }
 
-class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHolder>() {
+class OSummaryHealthOverviewAdapter(val isToday: Boolean) : RecyclerView.Adapter<HomeRecyclerViewHolder>() {
 
     var devicePaired = false
     var lastPosition = -1
@@ -500,7 +500,7 @@ class OSummaryHealthOverviewAdapter() : RecyclerView.Adapter<HomeRecyclerViewHol
             )
 
             is HomeRecyclerViewHolder.ReadinessViewHolder -> holder.bind(
-                items[position] as OHealthOverview.Readiness, position, lastPosition, devicePaired
+                items[position] as OHealthOverview.Readiness, position, lastPosition, devicePaired, isToday
             )
 
             is HomeRecyclerViewHolder.SleepViewHolder -> holder.bind(
@@ -1194,7 +1194,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 stopHeartAnimation(ivAnchor)
             }
 
-            tile.setOnClickListener {
+            /*tile.setOnClickListener {
 
                 return@setOnClickListener
 
@@ -1242,6 +1242,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     )
                 }
                 binding.itemSpO2.setOnClickListener {
+                    LOGS.d("dgdfgdfg listner 2")
                     if (data.measureState == TapMeasureState.ERROR) onItemClicked(
                         OHealthOverview.VitalsType.SPO2,
                         data,
@@ -1256,7 +1257,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     )
                 }
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnOneTapVitalsCollapsed)
-            }
+            }*/
             tile.isSoundEffectsEnabled = false
         }
 
@@ -2856,7 +2857,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
     class ReadinessViewHolder(private val binding: ListReadinessCardItemBinding) :
         HomeRecyclerViewHolder(binding) {
         fun bind(
-            data: OHealthOverview.Readiness, position: Int, lastPosition: Int, devicePaired: Boolean
+            data: OHealthOverview.Readiness,
+            position: Int,
+            lastPosition: Int,
+            devicePaired: Boolean,
+            isToday: Boolean
         ) {
 
             //binding.imv.loadImage(binding.imv.context, R.drawable.ic_readiness_card_bg1)
@@ -2880,41 +2885,60 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 //                binding.tvTodayDesc.visible()
             }
 
-            if (data.data.nudges.isNullOrEmpty()) {
-                binding.tvTitle.gone()
-                binding.tvTodayDesc.text = ""
-                (binding.tvTodayDesc.layoutParams as ConstraintLayout.LayoutParams).apply {
-                    topMargin = binding.tvTodayDesc.context.dpToPx(24)
-                    bottomMargin = 0
-                }
-                binding.tvShimmer.apply {
-                    visible()
-                    fadeIn { }
-                }
-            } else {
-                binding.tvTitle.gone()
-                (binding.tvTodayDesc.layoutParams as ConstraintLayout.LayoutParams).apply {
-                    topMargin = binding.tvTodayDesc.context.dpToPx(8)
-                    bottomMargin = binding.tvTodayDesc.context.dpToPx(26)
-                }
+            if(isToday) {
+                binding.lytPrevDaysFooter.gone()
+                if (data.data.nudges.isNullOrEmpty()) {
+                    binding.tvTitle.gone()
+                    binding.tvTodayDesc.text = ""
+                    (binding.tvTodayDesc.layoutParams as ConstraintLayout.LayoutParams).apply {
+                        topMargin = binding.tvTodayDesc.context.dpToPx(24)
+                        bottomMargin = 0
+                    }
+                    binding.tvShimmer.apply {
+                        visible()
+                        fadeIn { }
+                    }
+                } else {
+                    val nudge = data.data.nudges.firstOrNull()
 
-                val nudge = data.data.nudges.firstOrNull()
+                    /*binding.tvTitle.gone()
+                    (binding.tvTodayDesc.layoutParams as ConstraintLayout.LayoutParams).apply {
+                        topMargin = binding.tvTodayDesc.context.dpToPx(8)
+                        bottomMargin = binding.tvTodayDesc.context.dpToPx(26)
+                    }
 
-                binding.tvShimmer.apply {
-                    visible()
-                    fadeOut {
-                        gone()
-                        binding.tvTitle.apply {
-                            visible()
-                            text = nudge?.label ?: ""
-                            fadeIn { }
+                    binding.tvShimmer.apply {
+                        visible()
+                        fadeOut {
+                            gone()
+                            binding.tvTitle.apply {
+                                visible()
+                                text = nudge?.label ?: ""
+                                fadeIn { }
+                            }
+                            binding.tvTodayDesc.apply {
+                                text = nudge?.message ?: ""
+                                fadeIn { }
+                            }
                         }
-                        binding.tvTodayDesc.apply {
-                            text = nudge?.message ?: ""
-                            fadeIn { }
-                        }
+                    }*/
+
+                    binding.tvShimmer.gone()
+                    binding.tvTitle.apply {
+                        visible()
+                        text = nudge?.label ?: ""
+                    }
+                    binding.tvTodayDesc.apply {
+                        text = nudge?.message ?: ""
                     }
                 }
+            }else{
+                binding.tvTitle.gone()
+                binding.tvTodayDesc.gone()
+                binding.tvShimmer.gone()
+                binding.tvHrvVal.text = data.data.avgHRV?.toString() ?: "--"
+                binding.tvRhrValue.text = data.data.avgRestingHR?.toString() ?: "--"
+                binding.lytPrevDaysFooter.visible()
             }
 
             if (scoreValue >= 0) {
@@ -3686,8 +3710,20 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             binding.tvOvlDaysLeft.text = "of ${data.data.totalCycleDay}"
             binding.imv.setBackgroundResource(data.data.background)
 
-            binding.tvDesc.text = data.data.nudge
-            binding.tvShimmer.setVisibilityByCondition(data.data.nudge.isEmpty())
+            val nudge = data.data.nudge
+            if(nudge.isEmpty()){
+                binding.tvDesc.invisible()
+                binding.tvShimmer.apply {
+                    visible()
+                    fadeIn {}
+                }
+            }else{
+                binding.tvShimmer.gone()
+                binding.tvDesc.apply {
+                    text = nudge
+                    visible()
+                }
+            }
 
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.FemaleHealthHome)

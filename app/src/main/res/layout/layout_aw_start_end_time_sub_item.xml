@@ -18,28 +18,36 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/text_start_time" />
 
-        <TextView
-            android:id="@+id/tvTimeValue"
-            style="@style/H6"
+        <LinearLayout
+            android:id="@+id/lytLlInput"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="6dp"
-            android:textColor="@color/white_48"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/ivMore"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Enter" />
-
-        <ImageView
-            android:id="@+id/ivMore"
-            android:layout_width="@dimen/dimen_16dp"
-            android:layout_height="@dimen/dimen_16dp"
-            android:layout_marginEnd="@dimen/side_margin"
-            android:src="@drawable/ic_arrow_right_dir"
-            app:layout_constraintBottom_toBottomOf="@id/tvTime"
+            android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tvTime" />
+            app:layout_constraintBottom_toBottomOf="@id/tvTime"
+            app:layout_constraintTop_toTopOf="@id/tvTime">
 
+            <TextView
+                android:id="@+id/tvTimeValue"
+                style="@style/H6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:textColor="@color/white_48"
+                tools:text="Enter" />
+
+            <ImageView
+                android:id="@+id/ivMore"
+                android:layout_width="@dimen/dimen_16dp"
+                android:layout_height="@dimen/dimen_16dp"
+                android:src="@drawable/ic_arrow_right_dir" />
+
+            <View
+                android:id="@+id/dummyV1"
+                android:layout_width="16dp"
+                android:layout_height="0dp" />
+
+        </LinearLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

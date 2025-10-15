@@ -40,7 +40,7 @@ class AddCaffeineViewModel @Inject constructor(
         }
     }
 
-    fun logCaffeineValue(localTime: LocalTime, quantity: Int) {
+    fun logCaffeineValue(localTime: LocalTime, quantity: Int, editEventFun: () -> Unit) {
         viewModelScope.launch {
             val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
             val startTime = localTime.format(formatter)
@@ -75,7 +75,7 @@ class AddCaffeineViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        logCaffeineValue(localTime, quantity)
+                                        logCaffeineValue(localTime, quantity, editEventFun)
                                     }
 
                                     override fun no() {}
@@ -86,6 +86,9 @@ class AddCaffeineViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             onAddSuccess.postValue(Event(true))
+                            editData?.id?.let {id ->
+                                editEventFun()
+                            }
                         }
                     }
                 }
@@ -93,7 +96,7 @@ class AddCaffeineViewModel @Inject constructor(
         }
     }
 
-    fun deleteCaffeineItem() {
+    fun deleteCaffeineItem(deleteEventFun: () -> Unit) {
         viewModelScope.launch {
             userRepository.deleteTimelineItemById(editData?.id?:"").collect{ resource ->
                 when (resource) {
@@ -110,7 +113,7 @@ class AddCaffeineViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        deleteCaffeineItem()
+                                        deleteCaffeineItem(deleteEventFun)
                                     }
 
                                     override fun no() {}
@@ -121,6 +124,7 @@ class AddCaffeineViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             onAddSuccess.postValue(Event(true))
+                            deleteEventFun()
                         }
                     }
                 }

@@ -61,18 +61,32 @@
         tools:itemCount="2"
         tools:listitem="@layout/item_meal_food" />
 
-    <TextView
-        android:id="@+id/tvAddFood"
-        style="@style/S12"
+    <LinearLayout
+        android:id="@+id/llLytAddFoodItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:layout_marginStart="16dp"
-        android:fontFamily="@font/gilroy_medium"
-        android:paddingVertical="16dp"
-        android:text="@string/text_add_food_item_plus"
-        android:textColor="#6BAA95"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvFoods" />
+        app:layout_constraintTop_toBottomOf="@+id/rvFoods">
+
+        <TextView
+            android:id="@+id/tvAddFood"
+            style="@style/S12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/gilroy_medium"
+            android:paddingVertical="16dp"
+            android:text="@string/text_add_food_item"
+            android:textColor="#6BAA95" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_add_food_item_timeline_meal" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tvMoreDetails"
@@ -85,7 +99,7 @@
         android:text="@string/text_more_details"
         android:textColor="#80FFFFFF"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvAddFood" />
+        app:layout_constraintTop_toBottomOf="@+id/llLytAddFoodItem" />
 
     <View
         android:layout_width="0dp"

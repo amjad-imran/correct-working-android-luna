@@ -8,6 +8,7 @@ import com.google.gson.JsonObject
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.local.db.CacheResult
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.common.maxWithoutInvalidMovementValues
@@ -16,6 +17,7 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.OWorkoutListModal
 import com.noisefit_commans.data.model.OreoAutoSportData
+import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.models.SportsModeResponse
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.ui.tryCatch
@@ -50,7 +52,8 @@ class OAddWorkoutViewModel
     private val syncRepository: OreoSyncRepository,
     val resourcesProvider: ResourcesProvider,
     private val userHealthDataDataSource: OreoUserHealthDataDataSource,
-    val sessionManager: SessionManager
+    val sessionManager: SessionManager,
+    private val userRepository: UserRepository,
 ) : BaseViewModel() {
 
     var userDayData: ServerUserHealthData? = null
@@ -81,6 +84,10 @@ class OAddWorkoutViewModel
     var isEndTimeSelected = false
 
     var workoutListResponse: ArrayList<OWorkoutListModal> ?= null
+
+    var editData : ItemTimelineResponseModel ?= null
+
+    val onDeleteSuccess = MutableLiveData<Event<Boolean>>()
 
     fun isAutoWorkout(): Boolean {
         return autoSport.value != null
@@ -313,6 +320,12 @@ class OAddWorkoutViewModel
                 this.addProperty("end_time", addWorkout.endTimeIn24H)
                 this.addProperty("intensity", addWorkout.intensity)
             }
+
+            // Clear Nudges Data
+            if(LocalDate.now().toString().equals(addWorkout.date)) {
+                localDatSource.setNudgeActivityData(null)
+            }
+
             userActivityRepository.addWorkout(
                 requestObject
             ).collect { resource ->
@@ -544,8 +557,15 @@ class OAddWorkoutViewModel
                 list.find { it.activityType.equals("walking", true) }
             if (autoSport.value == null) {
 
-                walkingWorkout?.let { walk ->
-                    updateDefaultWorkout.postValue(Event(walk))
+                if(editData?.id != null){
+                    list.find { it.activityType.equals(editData?.metadata?.activityType, true) }?.let {
+                        updateDefaultWorkout.postValue(Event(it))
+                    }
+                }else {
+
+                    walkingWorkout?.let { walk ->
+                        updateDefaultWorkout.postValue(Event(walk))
+                    }
                 }
             } else {
                 workoutListModal = walkingWorkout
@@ -596,14 +616,51 @@ class OAddWorkoutViewModel
         }
     }
 
+    fun deleteWorkoutItem() {
+        viewModelScope.launch {
+            userRepository.deleteTimelineItemById(editData?.id?:"").collect{ resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        deleteWorkoutItem()
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+//                            onAddSuccess.postValue(Event(true))
+                            onDeleteSuccess.postValue(Event(true))
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+
     fun getWorkoutDates(): Array<String> {
         val dates = mutableListOf<String>()
         val dateToday = LocalDate.now()
         val format = DateTimeFormatter.ofPattern("dd MMM yyyy")
         dates.add(dateToday.format(format).toString())
-        dates.add(dateToday.minusDays(1).format(format).toString())
+        /*dates.add(dateToday.minusDays(1).format(format).toString())
         dates.add(dateToday.minusDays(2).format(format).toString())
-        dates.add(dateToday.minusDays(3).format(format).toString())
+        dates.add(dateToday.minusDays(3).format(format).toString())*/
         return dates.reversed().toTypedArray()
 
     }

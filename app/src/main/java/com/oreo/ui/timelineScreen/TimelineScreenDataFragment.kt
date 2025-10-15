@@ -14,6 +14,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
+import com.oreo.data.model.OActivityListModal
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 
@@ -127,13 +128,37 @@ class TimelineScreenDataFragment :
     }
 
     private fun handleOnItemClick(data: ItemTimelineResponseModel) {
-
-        var canBeUpdated = false
-        // TODO : Meal, Nap/Sleep
+        if(data.event.equals("hydration")){
+            return
+        }
 
         if(data.event.equals("meal")){
 
             navigate(R.id.mealAiFragment, bundleOf("mealData" to viewModel.generateMealData(data)))
+            return
+        }
+
+        if(data.event.equals("workout")){
+            val workoutData = OActivityListModal(
+                type = data.metadata?.type,
+                id = data.eventId,
+                date = data.date,
+                activityType = data.metadata?.activityType
+            )
+
+            if (workoutData.getDisplayVersionType() == 2) {
+                navigate(R.id.oWorkoutDetailsFragmentV2, Bundle().apply {
+                    putString("workoutId", workoutData.id ?: "")
+                    putInt("position", -1)
+                })
+            } else {
+                navigate(R.id.oWorkoutDetailsFragment, Bundle().apply {
+                    putString("workoutId", workoutData.id ?: "")
+                    putString("workoutName", workoutData.getTranslatedActivityName())
+                    putInt("position", -1)
+                })
+            }
+
             return
         }
 
@@ -157,20 +182,20 @@ class TimelineScreenDataFragment :
                 }
             }
 
-            "workout" -> {
+            /*"workout" -> {
                 if(
                     viewModel.getDate(0).equals(viewModel.date)
                 ){
                     data.canBeEditedOrDeleted = 2
                 }
-            }
+            }*/
 
             "sleep" -> {
                 if(
                     viewModel.getDate(0).equals(viewModel.date)/* ||
                     viewModel.getDate(1).equals(viewModel.date)*/
                 ){
-                    canBeUpdated = true
+                    data.canBeEditedOrDeleted = 1
                 }
             }
 
@@ -179,7 +204,7 @@ class TimelineScreenDataFragment :
                     viewModel.getDate(0).equals(viewModel.date)/* ||
                     viewModel.getDate(1).equals(viewModel.date)*/
                 ){
-                    canBeUpdated = true
+                    data.canBeEditedOrDeleted = 1
                 }
             }
 

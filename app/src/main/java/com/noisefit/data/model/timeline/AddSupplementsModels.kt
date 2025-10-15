@@ -12,5 +12,8 @@ data class SupplementOption(
     val type: String? = null,
     val status: String? = null,
     @SerializedName("created_at") val createdAt: String? = null,
-    @SerializedName("updated_at") val updatedAt: String? = null
+    @SerializedName("updated_at") val updatedAt: String? = null,
+
+    // for app
+    var isChecked: Boolean = false,
 )

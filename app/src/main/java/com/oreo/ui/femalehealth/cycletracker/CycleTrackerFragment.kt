@@ -889,6 +889,11 @@ class CycleTrackerFragment :
     private fun handleNudges(
         femaleHealthUserInfoModel: FemaleHealthUserInfoModel
     ){
+        if(viewModel.selectedDate.value != LocalDate.now()){
+            binding.dividerCues.root.gone()
+            binding.lytCues.root.gone()
+            return
+        }
         val data = viewModel.localDataStore.getNudgeCycleTrackerData()
         val list = ArrayList<Nudges>()
         data?.cue1?.let { list.add(Nudges(

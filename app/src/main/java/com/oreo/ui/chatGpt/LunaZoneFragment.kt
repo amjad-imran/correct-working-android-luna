@@ -176,6 +176,9 @@ class LunaZoneFragment : BaseFragment<FragmentLunaZoneBinding>(FragmentLunaZoneB
         binding.lytChatWidget.ivHistory.setOnClickListener {
             navigate(R.id.chatHistoryFragment)
         }
+        binding.ivHistory.setOnClickListener {
+            navigate(R.id.chatHistoryFragment)
+        }
         binding.lytChatWidget.ivMic.setOnClickListener {
             val (frag, bundle) = AudioAiFragment.getStartData(
                 PlanType.NONE

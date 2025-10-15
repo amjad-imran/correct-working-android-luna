@@ -36,6 +36,8 @@ class AddSupplementsViewModel @Inject constructor(
     var editData : ItemTimelineResponseModel ?= null
     var isListLoadedFirstTime = true
 
+    var lunaOption: String ?= null
+
     fun getSupplementsList(){
         viewModelScope.launch {
 
@@ -74,7 +76,7 @@ class AddSupplementsViewModel @Inject constructor(
         }
     }
 
-    fun logSupplements() {
+    fun logSupplements(editEventFun: () -> Unit) {
         viewModelScope.launch {
             val time = supplementTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"))
 
@@ -109,7 +111,7 @@ class AddSupplementsViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-
+                                        logSupplements(editEventFun)
                                     }
 
                                     override fun no() {}
@@ -120,6 +122,9 @@ class AddSupplementsViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             onAddSuccess.postValue(Event(true))
+                            editData?.id?.let {id ->
+                                editEventFun()
+                            }
                         }
                     }
                 }
@@ -127,7 +132,7 @@ class AddSupplementsViewModel @Inject constructor(
         }
     }
 
-    fun deleteSupplementItem() {
+    fun deleteSupplementItem(deleteEventFun: () -> Unit) {
         viewModelScope.launch {
             userRepository.deleteTimelineItemById(editData?.id?:"").collect{ resource ->
                 when (resource) {
@@ -144,7 +149,7 @@ class AddSupplementsViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        deleteSupplementItem()
+                                        deleteSupplementItem(deleteEventFun)
                                     }
 
                                     override fun no() {}
@@ -155,6 +160,7 @@ class AddSupplementsViewModel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             onAddSuccess.postValue(Event(true))
+                            deleteEventFun()
                         }
                     }
                 }

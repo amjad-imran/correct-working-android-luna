@@ -26,6 +26,8 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
+import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -51,6 +53,7 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.editData = arguments?.getParcelable("editData")
+        viewModel.lunaOption = arguments?.getString("lunaOption")
         viewModel.getSupplementsList()
         setUi()
         setAdapter()
@@ -64,6 +67,8 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
     }
 
     private fun setUi() {
+        binding.lytDateTime.textView197.gone()
+
         binding.btnSave.disable()
         binding.lytDateTime.apply {
             lytDate.tvTime.text = getString(R.string.text_date)
@@ -108,7 +113,14 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
                 binding.lytSelected.isClickable = editCondition
                 if(!editCondition){
                     binding.btnSave.gone()
+                }else{
+                    binding.btnSave.apply {
+                        text = getString(R.string.text_learn_more_with_luna_ai)
+                        enable()
+                        visible()
+                    }
                 }
+                binding.lytDateTime.lytDate.tvTimeValue.isClickable = false
             }
 
         }
@@ -130,7 +142,28 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
                 showToast(requireContext(), "Please select an option!")
                 return@setOnClickListener
             }
-            viewModel.logSupplements()
+
+            if(getString(R.string.text_save).equals(binding.btnSave.text)) {
+                viewModel.logSupplements(){
+                    sharedViewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.insight_log_edited,
+                    )
+                }
+            }else{
+                if (sharedViewModel.ringDataStore.getRingDevice() == null) {
+                    context.showShortToast(getString(R.string.text_luna_ai_message))
+                }else {
+                    if (sharedViewModel.localDataStore.isAiChatSplashShown()) {
+                        navigate(
+                            R.id.aiTopQuestionsFragment,
+                            bundleOf("aiTopic" to AITopics.GENERAL)
+                        )
+                    } else {
+                        navigate(R.id.aiChatOnboardFragment)
+                    }
+                }
+            }
+
         }
 
         binding.lytSelected.setOnClickListener {
@@ -151,6 +184,15 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
                 }
                 viewModel.isListLoadedFirstTime = false
             }
+            else if(viewModel.lunaOption != null){
+                supplements.find { it.options.equals(viewModel.lunaOption, true) }?.let { sOpt ->
+                    binding.tvSelected.text = sOpt.options
+                    viewModel.selectedOption = sOpt
+                    binding.btnSave.enable()
+                }
+                viewModel.isListLoadedFirstTime = false
+            }
+
             binding.rvOptions.doOnNextLayout {
                 capRvHeightToPercent(binding.rvOptions, binding.root, 0.70f)
             }
@@ -171,7 +213,11 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
                             getString(R.string.text_something_went_wrong_please_try_again))
                         return@observe
                     }
-                    viewModel.deleteSupplementItem()
+                    viewModel.deleteSupplementItem(){
+                        sharedViewModel.sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.insight_log_deleted,
+                        )
+                    }
                 }
             }
         }
@@ -219,6 +265,7 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
     }
 
     private fun handleOnOptionClicked(option: SupplementOption) {
+        binding.btnSave.text = getString(R.string.text_save)
         binding.btnSave.enable()
         if(viewModel.selectedOption == null){
             binding.tvSelected.setTextColor("#FFFFFF".toColorInt())
@@ -252,6 +299,7 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
                     editDataTime.hour != viewModel.supplementTime.hour ||
                     editDataTime.minute != viewModel.supplementTime.minute
                 ){
+                    binding.btnSave.text = getString(R.string.text_save)
                     binding.btnSave.enable()
                 }
             }
@@ -289,6 +337,7 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
                     viewModel.editData?.startDate != null &&
                     !parsedDate.equals(viewModel.editData?.startDate)
                 ){
+                    binding.btnSave.text = getString(R.string.text_save)
                     binding.btnSave.enable()
                 }
             }

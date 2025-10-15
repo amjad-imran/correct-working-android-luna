@@ -767,6 +767,7 @@ constructor(
         if (!shouldRefresh) {
             val todayDate = getTodayDate()
             getUserHealthData(todayDate, todayDate)
+            getNudgeData()
         }
     }
 
@@ -1011,14 +1012,14 @@ constructor(
     fun handleAddWorkoutVisibility() {
         /*viewModelScope.launch(Dispatchers.IO) {*/
         if (sessionManager.connectedDeviceRing.value == null) {
-            addWorkoutCtaVisibility.postValue(false)
+            addWorkoutCtaVisibility.value = false
             return
         }
         if (selectedDate == DateFormats.getCurrentDateOreoFormat()) {
-            addWorkoutCtaVisibility.postValue(true)
+            addWorkoutCtaVisibility.value = true
             isActivityWorkAdd = true
         } else {
-            addWorkoutCtaVisibility.postValue(false)
+            addWorkoutCtaVisibility.value = false
             isActivityWorkAdd = false
         }
         /*}*/
@@ -1679,30 +1680,30 @@ constructor(
                                 currentTime = System.currentTimeMillis()
                                 when (type) {
                                     "readiness" -> {
+                                        localDataStore.setNudgeReadinessData(it)
+                                        localDataStore.setNudgeReadinessLastApiTimestamp(currentTime)
                                         nudgeReadinessData.postValue(Event(
                                             Nudges(it.title ?: "",
                                                 it.description ?: ""
                                         )))
-                                        localDataStore.setNudgeReadinessData(it)
-                                        localDataStore.setNudgeReadinessLastApiTimestamp(currentTime)
                                     }
 
                                     "activity" -> {
+                                        localDataStore.setNudgeActivityData(it)
+                                        localDataStore.setNudgeActivityLastApiTimestamp(currentTime)
                                         nudgeActivityData.postValue(Event(
                                             Nudges(it.title ?: "",
                                                 it.description ?: ""
                                             )))
-                                        localDataStore.setNudgeActivityData(it)
-                                        localDataStore.setNudgeActivityLastApiTimestamp(currentTime)
                                     }
 
                                     "wellbeing" -> {
+                                        localDataStore.setNudgeCycleTrackerData(it)
+                                        localDataStore.setNudgeCycleTrackerLastApiTimestamp(currentTime)
                                         nudgeCycleTrackerData.postValue(Event(
                                             Nudges(it.title ?: "",
                                                 it.description ?: ""
                                             )))
-                                        localDataStore.setNudgeCycleTrackerData(it)
-                                        localDataStore.setNudgeCycleTrackerLastApiTimestamp(currentTime)
                                     }
 
                                     else -> {}

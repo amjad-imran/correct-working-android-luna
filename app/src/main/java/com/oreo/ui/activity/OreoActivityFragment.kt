@@ -51,6 +51,7 @@ import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
 import javax.inject.Inject
 
 
@@ -279,7 +280,11 @@ class OreoActivityFragment :
         binding.lytAScoreData.lytSec3.tvTitle.text = getString(R.string.text_steps)
         binding.lytAScoreData.lytSec4.tvTitle.text = getString(R.string.text_distance)
         binding.lytAScoreData.lytScore.tvTitle.text = getString(R.string.text_activity_score)
-        handleNudges()
+        if (it.date.equals(LocalDate.now().toString())) {
+            handleNudges()
+        }else{
+            binding.lytAScoreData.lytAScoreBanner.root.gone()
+        }
 //        setSleepBannerViewPager(it.nudges)
         val scoreData = it.activityScore
         if (scoreData != null) {
@@ -992,7 +997,9 @@ class OreoActivityFragment :
 
         mainViewModel.nudgeActivityData.observe(this){
             it.getContent()?.let {
-                handleNudges()
+                if(mainViewModel.selectedDate.equals(LocalDate.now().toString())) {
+                    handleNudges()
+                }
             }
         }
 

@@ -5,6 +5,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#cc030f1d">
+    <TextView
+        android:id="@+id/tvAddActivity"
+        style="@style/H5"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:text="@string/text_add_activity"
+        app:layout_constraintBottom_toBottomOf="@+id/ivAddActivity"
+        app:layout_constraintEnd_toStartOf="@+id/ivAddActivity"
+        app:layout_constraintTop_toTopOf="@+id/ivAddActivity" />
+
+    <ImageView
+        android:id="@+id/ivAddActivity"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/ic_add_workout_manual"
+        android:layout_marginBottom="-12dp"
+        app:layout_constraintBottom_toTopOf="@+id/ivLogPeriod"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/tvLogPeriod"
