@@ -2390,6 +2390,6 @@ onjour, Luna"</string>
     <string name="text_add_supplements">Ajouter des compléments</string>
     <string name="text_no_food_items_found_please_try_again">Aucun aliment trouvé. Veuillez réessayer.</string>
     <string name="text_supplement">Complément</string>
-    <string name="text_retry_in_value">Nouvelle tentative dans %1$d</string>
+    <string name="text_retry_in_value">Nouvelle tentative dans %1$s</string>
 
 </resources>

@@ -2277,6 +2277,6 @@
     <string name="text_add_supplements">เพิ่มอาหารเสริม</string>
     <string name="text_no_food_items_found_please_try_again">ไม่พบรายการอาหาร โปรดลองอีกครั้ง</string>
     <string name="text_supplement">อาหารเสริม</string>
-    <string name="text_retry_in_value">ลองอีกครั้งใน %1$d</string>
+    <string name="text_retry_in_value">ลองอีกครั้งใน %1$s</string>
 
 </resources>

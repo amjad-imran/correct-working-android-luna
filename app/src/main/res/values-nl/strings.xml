@@ -2271,6 +2271,6 @@
     <string name="text_add_supplements">Supplementen toevoegen</string>
     <string name="text_no_food_items_found_please_try_again">Geen voedingsmiddelen gevonden. Probeer het opnieuw.</string>
     <string name="text_supplement">Supplement</string>
-    <string name="text_retry_in_value">Opnieuw proberen over %1$d</string>
+    <string name="text_retry_in_value">Opnieuw proberen over %1$s</string>
 
 </resources>

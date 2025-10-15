@@ -2271,6 +2271,6 @@
     <string name="text_add_supplements">Nahrungsergänzungsmittel hinzufügen</string>
     <string name="text_no_food_items_found_please_try_again">Keine Lebensmittel gefunden. Bitte versuche es erneut.</string>
     <string name="text_supplement">Nahrungsergänzung</string>
-    <string name="text_retry_in_value">Erneut versuchen in %1$d</string>
+    <string name="text_retry_in_value">Erneut versuchen in %1$s</string>
 
 </resources>

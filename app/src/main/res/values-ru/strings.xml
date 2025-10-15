@@ -2293,6 +2293,6 @@
     <string name="text_add_supplements">Добавить добавки</string>
     <string name="text_no_food_items_found_please_try_again">Продукты не найдены. Повторите попытку.</string>
     <string name="text_supplement">Добавка</string>
-    <string name="text_retry_in_value">Повтор через %1$d</string>
+    <string name="text_retry_in_value">Повтор через %1$s</string>
 
 </resources>
