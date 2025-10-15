@@ -1127,6 +1127,9 @@ class SummaryDataFragmentToday :
                     val cycleTrackerData = it.copy(
                         nudges = arrayListOf(nudge)
                     )
+                    viewModel.femaleHealthData = viewModel.femaleHealthData.copy(
+                        second = cycleTrackerData
+                    )
                     viewModel.updateCycleTrackerCardData(cycleTrackerData)?.let { card ->
                         healthOverviewAdapter.updateData(card)
                     }
