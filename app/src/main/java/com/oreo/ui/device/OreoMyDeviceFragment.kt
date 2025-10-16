@@ -220,20 +220,17 @@ class OreoMyDeviceFragment :
         }
 
         binding.rowDownloadMyData.setOnClickListener {
-            val downloadMyDataList = mViewModel.getDownloadMyDataList()
-            parentFragment?.setFragmentResultListener(VALUE_REQUEST_KEY) { _, bundle ->
+            if(mViewModel.downloadMyDataList==null) mViewModel.setDownloadMyDataList()
+            setFragmentResultListener(VALUE_REQUEST_KEY) { _, bundle ->
                 val selectedValue = bundle.getString("selectedValue")
                 selectedValue?.let { it1 ->
                     mViewModel.downloadMyDataSelectedItem = it1
                     val dayVal = when(it1){
                         getString(R.string.text_today) -> 1
                         getString(R.string.text_last_val_days, 3) -> 3
-                        getString(R.string.text_last_val_days, 7) -> 7
-                        else -> -1
+                        else -> 7
                     }
-                    if(dayVal!=-1){
-
-                    }
+                    mViewModel.getDownloadMyDataPDF(dayVal)
                 }
 
             }
@@ -241,8 +238,9 @@ class OreoMyDeviceFragment :
                 R.id.valueSelectorBottomSheet,
                 bundleOf(
                     "selectedValue" to mViewModel.downloadMyDataSelectedItem,
-                    "selectionList" to downloadMyDataList,
-                    "title" to getString(R.string.text_duration)
+                    "selectionList" to mViewModel.downloadMyDataList?.toTypedArray(),
+                    "title" to getString(R.string.text_download_my_data),
+                    "isTopLineVisible" to true
                 )
             )
         }

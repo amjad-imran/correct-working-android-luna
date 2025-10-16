@@ -53,6 +53,7 @@ class OMyDeviceViewModel @Inject constructor(
     var firmwareLogFile: File? = null
 
     var downloadMyDataSelectedItem: String ?= null
+    var downloadMyDataList: ArrayList<String> ?= null
 
     val lunarBlackImagesUrl = Pair(
         "https://luna-cdn.gonoise.com/production/ring/set_2/Luna+Gen+2.538+(1)+1.png",
@@ -144,8 +145,8 @@ class OMyDeviceViewModel @Inject constructor(
         }
     }
 
-    fun getDownloadMyDataList(): ArrayList<String> {
-        val listData = ArrayList<String>().apply {
+    fun setDownloadMyDataList(){
+        downloadMyDataList = ArrayList<String>().apply {
             this.add(resProvider.getString(R.string.text_today))
 
             this.add(resProvider.getString(R.string.text_last_val_days, 3))
@@ -153,9 +154,42 @@ class OMyDeviceViewModel @Inject constructor(
             this.add(resProvider.getString(R.string.text_last_val_days, 7))
         }
 
-        downloadMyDataSelectedItem = listData.get(1)
+        downloadMyDataSelectedItem = downloadMyDataList?.get(1)
+    }
 
-        return listData
+    fun getDownloadMyDataPDF(days: Int){
+        viewModelScope.launch {
+            userRepository.getDownloadMyDataPDF(days).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getDownloadMyDataPDF(days)
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+
+                        }
+                    }
+                }
+            }
+        }
     }
 
 

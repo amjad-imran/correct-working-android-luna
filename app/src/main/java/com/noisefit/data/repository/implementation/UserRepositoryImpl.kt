@@ -52,6 +52,7 @@ import com.noisefit_commans.data.model.timeline.TimelineScreenResponse
 import com.noisefit_commans.ui.checkTimeDifferenceMoreNMinutes
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
+import com.oreo.data.model.downloadMyData.DownloadMyDataResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -720,6 +721,15 @@ class UserRepositoryImpl(
             remoteDataSource.saveAiMeal(
                 "${BuildConfig.OREO_BASE_URL}/protean/v3/track-meal-new",
                 req
+            )
+        }
+    }
+
+    override suspend fun getDownloadMyDataPDF(days: Int): Flow<Resource<BaseApiResponse<DownloadMyDataResponse>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.getDownloadMyDataPDF(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/kindbody",
+                days
             )
         }
     }

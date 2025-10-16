@@ -100,6 +100,10 @@
         <argument
             android:name="title"
             app:argType="string" />
+        <argument
+            android:name="isTopLineVisible"
+            android:defaultValue="false"
+            app:argType="boolean" />
     </dialog>
     <dialog
         android:id="@+id/nameUpdateBottomSheet"

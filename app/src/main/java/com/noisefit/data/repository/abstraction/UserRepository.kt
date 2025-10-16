@@ -22,6 +22,7 @@ import com.oreo.data.model.CaffeinePostApiModel
 import com.oreo.data.model.circadian.CircadianQuizResponseModel
 import com.oreo.data.model.circadian.CircadianResponseModel
 import com.noisefit_commans.data.model.timeline.TimelineScreenResponse
+import com.oreo.data.model.downloadMyData.DownloadMyDataResponse
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
@@ -105,5 +106,7 @@ interface UserRepository {
     suspend fun submitLogSleepEnvOptData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
     suspend fun getNutritionFromText(req: JsonObject): Flow<Resource<BaseApiResponse<MealAiResponse>>>
     suspend fun saveAiMeal(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
+
+    suspend fun getDownloadMyDataPDF(days: Int): Flow<Resource<BaseApiResponse<DownloadMyDataResponse>>>
 
 }

@@ -7,6 +7,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.noisefit.luna.databinding.FragmentTempUnitBottomSheetBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.ScreenUtils
 import com.noisefit_commans.utils.WheelAdapter
@@ -43,19 +44,22 @@ class ValueSelectorBottomSheet : BaseBottomSheetWithTransparent<FragmentTempUnit
             val args = ValueSelectorBottomSheetArgs.fromBundle(it)
             mSelectionList = args.selectionList
             mTitle = args.title
-            initUi(args.selectedValue, args.selectionList)
+            initUi(args.selectedValue, args.selectionList, args.isTopLineVisible)
         }
 
     }
 
 
-    private fun initUi(selectedValue: String?, selectionList: Array<String>) {
+    private fun initUi(selectedValue: String?, selectionList: Array<String>, isTopLineVisible: Boolean) {
         if (selectionList.isEmpty()) {
             LOGS.e("Selection List empty")
             navigateUpSafe()
         }
 
         binding.tvTitle.text = mTitle
+        if(isTopLineVisible){
+            binding.view1.visible()
+        }
 
         val listData = ArrayList<WheelItem<String>>()
         selectionList.forEach {
