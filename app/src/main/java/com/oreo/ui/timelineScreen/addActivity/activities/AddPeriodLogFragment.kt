@@ -5,6 +5,8 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
+import com.moengage.core.internal.utils.showToast
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAddPeriodBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseFragment
@@ -53,7 +55,10 @@ class AddPeriodLogFragment :
     private val symptomsAdapter: CycleSymptomsAdapter by lazy {
         CycleSymptomsAdapter(object : OnSymptomsItemClick {
             override fun onItemClick(data: FHSymptomsIconsModel, position: Int) {
-                symptomsAdapter.updateItem(data, position)
+                if(logViewModel.editDataAddActivity?.canBeEditedOrDeleted != 0) {
+                    symptomsAdapter.updateItem(data, position)
+                    binding.btnSave.enable()
+                }
             }
         })
     }
@@ -143,6 +148,23 @@ class AddPeriodLogFragment :
             it?.getContent()?.let {
                 mainViewModel.sessionManager.reloadOnResume = true
                 sharedViewModel.navigateUp()
+            }
+        }
+
+        sharedViewModel.deleteBtnClickedEvent.observe(this){
+            it.getContent()?.let {
+                if(it) {
+                    if(logViewModel.editDataAddActivity?.id == null){
+                        showToast(requireContext(),
+                            getString(R.string.text_something_went_wrong_please_try_again))
+                        return@observe
+                    }
+                    logViewModel.deletePeriodSymptomsItem(){
+                        sharedViewModel.sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.insight_log_deleted,
+                        )
+                    }
+                }
             }
         }
 

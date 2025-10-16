@@ -272,5 +272,7 @@ object MoEngageLunaAppEvents {
     // Timeline
     const val calendar_day_selected = "calendar_day_selected"
     const val page_scrolled = "page_scrolled"
+    const val insight_log_deleted = "insight_log_deleted"
+    const val insight_log_edited = "insight_log_edited"
 
 }

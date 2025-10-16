@@ -19,6 +19,7 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/btnUpdateNow"
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="6dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 

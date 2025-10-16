@@ -669,6 +669,15 @@ class UserRepositoryImpl(
         }
     }
 
+    override suspend fun submitLogSleepEnvOptData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.submitLogLightExposureTimelineData(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/track-sleep-env",
+                req
+            )
+        }
+    }
+
     override suspend fun deleteTimelineItemById(id: String): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
             userHealthDataDataSource.clearDataByDates(listOf(DateFormats.getTodaysDateString(10)))

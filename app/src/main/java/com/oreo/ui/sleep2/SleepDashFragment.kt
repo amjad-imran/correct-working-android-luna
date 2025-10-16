@@ -154,7 +154,7 @@ class SleepDashFragment :
     }
 
     private fun showAddSleepCta() {
-        viewModel.addSleepCtaVisibility.postValue(true)
+        //viewModel.addSleepCtaVisibility.postValue(true)
         //binding.btnAddWorkout.visible()
     }
 
@@ -318,11 +318,11 @@ class SleepDashFragment :
     override fun subscribeObservers() {
 
         viewModel.addSleepCtaVisibility.observe(this) {
-            if (it) {
+          /*  if (it) {
                 binding.btnAddWorkout.visible()
             } else {
                 binding.btnAddWorkout.gone()
-            }
+            }*/
         }
         viewModel.calendarStartDate.observe(this) {
             it.getContent()?.let {

@@ -7,6 +7,7 @@ import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
@@ -29,18 +30,19 @@ class AddActivityTimelineSharedViewModel @Inject constructor(
     private val userHealthDataDataSource: OreoUserHealthDataDataSource,
     val localDataStore: DataStoredInterface,
     val sessionManager: SessionManager,
+    val ringDataStore: RingDataStore,
 ) : BaseViewModel() {
 
     var sourceKey: String ?= null
     var showTimeline = false
 
-    val loadFragment = MutableLiveData<Event<Pair<AddActivityItemsEnum, ItemTimelineResponseModel?>>>()
+    val loadFragment = MutableLiveData<Event<Triple<AddActivityItemsEnum, ItemTimelineResponseModel?, String?>>>()
     val navigateUp = MutableLiveData<Event<Boolean>>()
 
     val deleteBtnClickedEvent = MutableLiveData<Event<Boolean>>()
 
-    fun loadFragmentByType(type: AddActivityItemsEnum, editData: ItemTimelineResponseModel?=null) {
-        loadFragment.postValue(Event(Pair(type, editData)))
+    fun loadFragmentByType(type: AddActivityItemsEnum, editData: ItemTimelineResponseModel?=null, lunaOption: String ?= null) {
+        loadFragment.postValue(Event(Triple(type, editData, lunaOption)))
     }
 
     fun navigateUp() {
@@ -120,7 +122,7 @@ class AddActivityTimelineSharedViewModel @Inject constructor(
         )
         list.add(
             AddActivityListTimelineModel(
-                name = resourcesProvider.getString(R.string.text_alcohol),
+                name = resourcesProvider.getString(R.string.text_add_alcohol_intake),
                 type = AddActivityItemsEnum.ALCOHOL,
                 titleColor = "#BE7A64".toColorInt()
             )

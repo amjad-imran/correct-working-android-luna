@@ -225,6 +225,10 @@ class OtpVerifyFragment :
                 binding.tvTimer.gone()
                 binding.tvNotReceiveOtp.visible()
                 binding.btnResendOtp.visible()
+            }else{
+                binding.tvNotReceiveOtp.gone()
+                binding.btnResendOtp.gone()
+                binding.tvTimer.visible()
             }
         }
         viewModel.tickerTime.observe(viewLifecycleOwner) {

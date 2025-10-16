@@ -69,7 +69,7 @@ class SummaryDataFragment :
 
 
     private val healthOverviewAdapter by lazy {
-        OSummaryHealthOverviewAdapter()
+        OSummaryHealthOverviewAdapter(false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

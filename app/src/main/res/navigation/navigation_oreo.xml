@@ -1483,7 +1483,11 @@
             app:argType="com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel"
             app:nullable="true"
             android:defaultValue="@null" />
-
+        <argument
+            android:name="lunaOption"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/circadianHowItWorksDetailFragment"

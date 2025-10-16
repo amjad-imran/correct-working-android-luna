@@ -6,10 +6,12 @@ import android.view.View
 import android.widget.DatePicker
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.Lifecycle
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.SleepTimeBottomSheetBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.WheelAdapter
 import com.noisefit_commans.utils.WheelItem
 import com.oreo.data.model.OAddSleep
@@ -43,6 +45,9 @@ class SleepTimeBottomSheet : BaseBottomSheetWithTransparent<SleepTimeBottomSheet
             val args = SleepTimeBottomSheetArgs.fromBundle(it)
             addSleep = args.addSleep.copy()
             isStartDateToday = args.isStartDateToday
+
+            LOGS.d("sdjfhksj $isStartDateToday $addSleep")
+
             dayData()
             initUi()
         }
@@ -141,7 +146,11 @@ class SleepTimeBottomSheet : BaseBottomSheetWithTransparent<SleepTimeBottomSheet
         dayList.add(WheelItem("Today"))
 
         if (addSleep.day.isEmpty()) {
-            addSleep.day = dayList[0].data
+            addSleep.day = if(isStartDateToday){
+                dayList[0].data
+            }else{
+                dayList[1].data
+            }
         }
     }
 
@@ -149,6 +158,10 @@ class SleepTimeBottomSheet : BaseBottomSheetWithTransparent<SleepTimeBottomSheet
         binding.lytTimePicker.wheelPicker.visibleItemCount = 2
         wheelAdapter.data = dayList
         wheelAdapter.setOnItemSelectedListener { item ->
+            if (!viewLifecycleOwner.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+                return@setOnItemSelectedListener
+            }
+
             addSleep.day = item.split(" ")[0]
 
             val calendar = Calendar.getInstance()
@@ -191,6 +204,16 @@ class SleepTimeBottomSheet : BaseBottomSheetWithTransparent<SleepTimeBottomSheet
 
     override fun subscribeObservers() {
 
+    }
+
+    override fun onDestroyView() {
+        // timePicker listener -> no-op to avoid holding the Fragment
+        binding.lytTimePicker.timePicker.setOnTimeChangedListener { _, _, _ -> }
+
+        // wheel listener -> no-op (in case WheelPicker posts runnables internally)
+        wheelAdapter.setOnItemSelectedListener { _ -> }
+
+        super.onDestroyView()
     }
 
 }

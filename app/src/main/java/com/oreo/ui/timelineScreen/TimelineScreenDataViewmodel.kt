@@ -3,9 +3,11 @@ package com.oreo.ui.timelineScreen
 import androidx.core.graphics.toColorInt
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit_commans.data.model.timeline.MealAiResponse
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -26,6 +28,7 @@ import javax.inject.Inject
 class TimelineScreenDataViewmodel @Inject constructor(
     private val userRepository: UserRepository,
     val sessionManager: SessionManager,
+    val resourceProvider: ResourcesProvider,
 ) : BaseViewModel() {
 
     var date: String? = null
@@ -43,6 +46,7 @@ class TimelineScreenDataViewmodel @Inject constructor(
         val PERIOD_STARTED_KEY = "period"
         val SYMPTOM_KEY = "symptom"
         val ACTIVITY_KEY = "activity"
+        val ALCOHOL_KEY = "alcohol"
         val SUPPLEMENTS_KEY = "supplements"
         val RECOVERY_KEY = "recovery"
     }
@@ -150,7 +154,7 @@ class TimelineScreenDataViewmodel @Inject constructor(
 
             MEAL_INTAKE_KEY_KEY -> {
                 data.titleColor = "#FFE3B2".toColorInt()
-                data.desc = "${data.metadata?.foods?.take(2)?.joinToString(", ") { it.name?:"" }}"
+                data.desc = "${data.metadata?.foods?.take(3)?.joinToString(", ") { it.name?:"" }}"
             }
 
             LIGHT_EXPOSURE_KEY -> {
@@ -175,11 +179,20 @@ class TimelineScreenDataViewmodel @Inject constructor(
             }
 
             SUPPLEMENTS_KEY -> {
-                data.desc = "Supplement"
+                data.title = resourceProvider.getString(R.string.text_supplement)
+                data.titleColor = "#C5A8ED".toColorInt()
+                data.desc = data.metadata?.lunaOption
             }
 
             RECOVERY_KEY -> {
-                data.desc = "Recovery"
+                data.title = data.metadata?.lunaOption
+                data.titleColor = "#C5A8ED".toColorInt()
+                data.desc = ""
+            }
+
+            ALCOHOL_KEY -> {
+                data.titleColor = "#C5A8ED".toColorInt()
+                data.desc = ""
             }
 
             else -> {}

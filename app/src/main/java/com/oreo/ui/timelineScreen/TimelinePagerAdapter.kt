@@ -2,6 +2,7 @@ package com.oreo.ui.timelineScreen
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.noisefit_commans.utils.LOGS
 
 class TimelinePagerAdapter (fragmentActivity: Fragment) : FragmentStateAdapter(fragmentActivity) {
     private var dates = ArrayList<String>()
@@ -35,6 +36,8 @@ class TimelinePagerAdapter (fragmentActivity: Fragment) : FragmentStateAdapter(f
 
     fun getPositionForDate(selectedDate: String?): Int {
         if (selectedDate == null) return dates.size - 1
+
+        LOGS.d("Setting_data selected date $selectedDate  - ${dates}")
 
         val index = dates.indexOfFirst {
             it == selectedDate

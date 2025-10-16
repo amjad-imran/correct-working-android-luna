@@ -106,12 +106,15 @@ import com.oreo.ui.chatGpt.SummaryStates
 import com.oreo.ui.custom.HighlightState
 import com.oreo.ui.customHomeScreen.CustomHomeScreenItem
 import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.ACTIVITY_KEY
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.ALCOHOL_KEY
 import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.CAFFEINE_INTAKE_KEY
 import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.LIGHT_EXPOSURE_KEY
 import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.MEAL_INTAKE_KEY_KEY
 import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.NAP_KEY
 import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.PERIOD_STARTED_KEY
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.RECOVERY_KEY
 import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.SLEEP_KEY
+import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.SUPPLEMENTS_KEY
 import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.SYMPTOM_KEY
 import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.WATER_CONSUMPTION_KEY
 import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.WORKOUT_KEY
@@ -1323,9 +1326,9 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
 
                     "7_day_trends_card" -> {
-                        getSevenDaysTrendsDataCard(trendsData)?.let {
+                        /*getSevenDaysTrendsDataCard(trendsData)?.let {
                             userActivities.add(it)
-                        }
+                        }*/
                     }
 
                     /*"workout_history" -> {
@@ -1717,7 +1720,7 @@ class SummaryDataViewModelToday @Inject constructor(
 
                 MEAL_INTAKE_KEY_KEY -> {
                     data.titleColor = "#FFE3B2".toColorInt()
-                    data.desc = "${data.metadata?.foods?.take(2)?.joinToString(", ") { it.name?:"" }}"
+                    data.desc = "${data.metadata?.foods?.take(3)?.joinToString(", ") { it.name?:"" }}"
                 }
 
                 LIGHT_EXPOSURE_KEY -> {
@@ -1740,6 +1743,23 @@ class SummaryDataViewModelToday @Inject constructor(
 
                 ACTIVITY_KEY -> {
                     data.titleColor = "#FFFFFF".toColorInt()
+                }
+
+                SUPPLEMENTS_KEY -> {
+                    data.title = resourceProvider.getString(R.string.text_supplement)
+                    data.titleColor = "#C5A8ED".toColorInt()
+                    data.desc = data.metadata?.lunaOption
+                }
+
+                RECOVERY_KEY -> {
+                    data.title = data.metadata?.lunaOption
+                    data.titleColor = "#C5A8ED".toColorInt()
+                    data.desc = ""
+                }
+
+                ALCOHOL_KEY -> {
+                    data.titleColor = "#C5A8ED".toColorInt()
+                    data.desc = ""
                 }
 
                 else -> {}

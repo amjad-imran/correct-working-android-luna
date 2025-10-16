@@ -108,6 +108,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.util.Calendar
 import java.util.Locale
 import java.util.TimeZone
@@ -1430,8 +1431,14 @@ constructor() : LifecycleService() {
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             val dates = HashSet<String>()
+
+                            var isWorkoutToday = false
+
                             workouts.forEach { workout ->
                                 workout.date?.let { date ->
+                                    if(!isWorkoutToday && LocalDate.now().toString().equals(date)){
+                                        isWorkoutToday = true
+                                    }
                                     dates.add(date)
                                 }
                             }
@@ -1456,6 +1463,11 @@ constructor() : LifecycleService() {
                             locationDataSource.deleteAll()
                             ringDataStore.removeRecordDeleteList()
                             delay(200)
+
+                            if(isWorkoutToday) {
+                                localDataStore.setNudgeActivityData(null)
+                            }
+
                             sessionManager.reloadTodayData.postValue(
                                 Event(true)
                             )

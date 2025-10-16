@@ -2,33 +2,43 @@ package com.oreo.ui.timelineScreen.addActivity.activities
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContextCompat
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
+import com.google.android.material.chip.Chip
+import com.noisefit.data.model.timeline.SupplementOption
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAddSleepBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.common.bottomSheet.SLEEP_TIME_REQUEST_KEY
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.disable
 import com.noisefit_commans.ui.enable
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
-import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.OAddSleep
-import com.oreo.ui.sleep2.add.OAddSleepFragmentDirections
 import com.oreo.ui.sleep2.add.OAddSleepViewModel
 import com.oreo.ui.timelineScreen.addActivity.AddActivityItemsEnum
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
+import java.util.concurrent.TimeUnit
 import kotlin.getValue
 
 @AndroidEntryPoint
@@ -50,25 +60,37 @@ class AddSleepFragment :
                 return@setOnClickListener
             }
 
-            if (viewModel.startTimeSleep.day.isEmpty()) {
-                uiController.onDisplayError(getString(R.string.text_please_select_start_time))
-                return@setOnClickListener
-            }
-            if (viewModel.endTimeSleep.day.isEmpty()) {
-                uiController.onDisplayError(getString(R.string.text_please_select_end_time))
-                return@setOnClickListener
-            }
-            /*if (viewModel.getSleepDuration() < (3 * 60 * 60)) {
+            if(viewModel.editDataAddActivity?.id != null){
+                viewModel.submitSleepEnvOptions(){
+                    sharedViewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.insight_log_edited,
+                    )
+                    mainViewModel.sessionManager.reloadOnResume = true
+                    sharedViewModel.navigateUp()
+                    mainViewModel.sleepDashTodayReload.value = Event(true)
+                }
+            }else {
+
+                if (viewModel.startTimeSleep.day.isEmpty()) {
+                    uiController.onDisplayError(getString(R.string.text_please_select_start_time))
+                    return@setOnClickListener
+                }
+                if (viewModel.endTimeSleep.day.isEmpty()) {
+                    uiController.onDisplayError(getString(R.string.text_please_select_end_time))
+                    return@setOnClickListener
+                }
+                /*if (viewModel.getSleepDuration() < (3 * 60 * 60)) {
                 uiController.onDisplayError("Sleep duration should be minimum of 3 hours")
                 return@setOnClickListener
             }*/
 
 
-            viewModel.callApiToAddSleep()
+                viewModel.callApiToAddSleep()
+            }
         }
 
-
-        binding.lytCard.lytStartTime.setOnClickListener {
+        // Start Time
+        binding.lytCard.lytStartAndEndTime.lytDate.lytLlInput.setOnClickListener {
 
             parentFragment?.setFragmentResultListener(SLEEP_TIME_REQUEST_KEY) { _, bundle ->
                 val addSleep = bundle.getParcelable<OAddSleep>("sleepTime")
@@ -152,8 +174,10 @@ class AddSleepFragment :
                 "addSleep" to viewModel.startTimeSleep.copy(),
                 "isStartDateToday" to false))
         }
-        binding.lytCard.lytEndTime.setOnClickListener {
-            if (binding.lytCard.tvStartTime.text == getString(R.string.text_enter)) {
+
+        // End Time
+        binding.lytCard.lytStartAndEndTime.lytTime.lytLlInput.setOnClickListener {
+            if (binding.lytCard.lytStartAndEndTime.lytDate.tvTimeValue.text == getString(R.string.text_enter)) {
                 context.showShortToast(getString(R.string.text_select_start_time_first))
                 return@setOnClickListener
             }
@@ -266,8 +290,8 @@ class AddSleepFragment :
             viewModel.endTimeSleep.minute.toInt()
         )
         viewModel.isEndTimeSelected = true
-        binding.lytCard.tvEndTime.setTextColor(resources.getColor(R.color.white))
-        binding.lytCard.tvEndTime.text = "${viewModel.endTimeSleep.day}, $endTime"
+        binding.lytCard.lytStartAndEndTime.lytTime.tvTimeValue.setTextColor(resources.getColor(R.color.white))
+        binding.lytCard.lytStartAndEndTime.lytTime.tvTimeValue.text = "${viewModel.endTimeSleep.day}, $endTime"
         if (viewModel.isStartTimeSelected && viewModel.isEndTimeSelected) {
             binding.btnSave.enable()
         }
@@ -278,8 +302,8 @@ class AddSleepFragment :
             viewModel.startTimeSleep.hour.toInt(),
             viewModel.startTimeSleep.minute.toInt()
         )
-        binding.lytCard.tvStartTime.setTextColor(resources.getColor(R.color.white))
-        binding.lytCard.tvStartTime.text =
+        binding.lytCard.lytStartAndEndTime.lytDate.tvTimeValue.setTextColor(resources.getColor(R.color.white))
+        binding.lytCard.lytStartAndEndTime.lytDate.tvTimeValue.text =
             "${viewModel.startTimeSleep.day}, $startTime"
         viewModel.isStartTimeSelected = true
     }
@@ -294,6 +318,12 @@ class AddSleepFragment :
                 }
             }
         }
+
+        viewModel.sleepEnvOptListData.observe(this){
+            setSleepEnvChipsData(it)
+        }
+
+        //
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)
@@ -317,18 +347,135 @@ class AddSleepFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.editDataAddActivity = arguments?.getParcelable("editData")
 
-        initUI()
+        if(viewModel.editDataAddActivity==null) {
+            initUI()
+        }else{
+            viewModel.getSleepEnvOptionsList()
+            setEditLayout(viewModel.editDataAddActivity!!)
+        }
+    }
+
+    private fun setEditLayout(data: ItemTimelineResponseModel) {
+        // Set Sleep Duration
+        binding.lytCard.tvSleepDuration.text = getSleepDuration(
+            data.startDate,
+            data.startTime,
+            data.endDate,
+            data.endTime,
+            )
+
+        // Set Start Date & Time
+        binding.lytCard.lytStartAndEndTime.lytDate.tvTime.text = getString(R.string.text_start_time)
+        binding.lytCard.lytStartAndEndTime.lytTime.tvTime.text = getString(R.string.text_end_time)
+
+        binding.lytCard.lytStartAndEndTime.lytDate.tvTimeValue.apply {
+            text = getDisplayFormatTime(
+                data.startDate, data.startTime
+            )
+        }
+
+        // Set End Time
+        binding.lytCard.lytStartAndEndTime.lytTime.tvTimeValue.apply {
+            text = getDisplayFormatTime(
+                data.endDate, data.endTime
+            )
+        }
+
+        // Other things
+        binding.lytCard.lytStartAndEndTime.lytDate.ivMore.gone()
+        binding.lytCard.lytStartAndEndTime.lytTime.ivMore.gone()
+
+        binding.lytCard.lytStartAndEndTime.lytDate.lytLlInput.isClickable = false
+        binding.lytCard.lytStartAndEndTime.lytTime.lytLlInput.isClickable = false
+
+        when(data.canBeEditedOrDeleted){
+            0 -> {
+                binding.btnSave.gone()
+            }
+
+            else -> {
+                binding.btnSave.disable()
+            }
+        }
+    }
+
+    fun getSleepDuration(
+        startDate: String?,
+        startTime: String?,
+        endDate: String?,
+        endTime: String?
+    ): String {
+        return try {
+            // Define the format for time
+            val timeFormatter12Hour = DateTimeFormatter.ofPattern("h:mm a")
+
+            // Parse the start and end dates into LocalDate objects
+            val startDateObj = LocalDateTime.parse(
+                "$startDate $startTime",
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            )
+            val endDateObj = LocalDateTime.parse(
+                "$endDate $endTime",
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            )
+
+            // If the end time is before the start time, adjust the end time to the next day
+            val adjustedEndDateObj = if (endDateObj.isBefore(startDateObj)) {
+                endDateObj.plusDays(1)
+            } else {
+                endDateObj
+            }
+
+            // Calculate the duration between start and end times
+            val duration = Duration.between(startDateObj, adjustedEndDateObj)
+            val hours = duration.toHours()
+            val minutes = duration.toMinutes() % 60
+
+            "$hours hr $minutes m"
+        } catch (e: Exception) {
+            LOGS.e("TIMELINE_GET_SLEEP_DURATION_EXCEPTION : $e")
+            "--hr --min"
+        }
+    }
+
+    fun getDisplayFormatTime(date: String?, time: String?): String{
+        return try {
+            val day = if (LocalDate.now().toString().equals(date)) "Today"
+            else "Yesterday"
+
+            val inFmt  = DateTimeFormatter.ofPattern("HH:mm:ss", Locale.getDefault())
+            val outFmt = DateTimeFormatter.ofPattern("h:mm a", Locale.getDefault())
+            val time = LocalTime.parse(time, inFmt)
+                    .format(outFmt).uppercase()
+
+            "$day, $time"
+        }catch (_: Exception){
+            "--"
+        }
     }
 
     private fun initUI() {
+
+        binding.lytCard.lytSleepEnvHeader.gone()
+        binding.lytCard.chipGroupSleepEnv.gone()
 
         binding.btnSave.disable()
 
         binding.lytCard.tvSleepDuration.text = "--hr --min"
 
-        binding.lytCard.tvStartTime.text = getString(R.string.text_enter)
-        binding.lytCard.tvEndTime.text = getString(R.string.text_enter)
+        binding.lytCard.lytStartAndEndTime.lytDate.tvTime.text = getString(R.string.text_start_time)
+        binding.lytCard.lytStartAndEndTime.lytTime.tvTime.text = getString(R.string.text_end_time)
+
+        binding.lytCard.lytStartAndEndTime.lytDate.tvTimeValue.apply {
+            text = getString(R.string.text_enter)
+            setTextColor("#FFFFFF".toColorInt())
+        }
+        binding.lytCard.lytStartAndEndTime.lytTime.tvTimeValue.apply {
+            text = getString(R.string.text_enter)
+            setTextColor("#FFFFFF".toColorInt())
+        }
 
 //        if (args.launchMode == OAddSleepLaunchState.ADD) {
 //            binding.tvDeleteSleep.gone()
@@ -336,4 +483,43 @@ class AddSleepFragment :
 //            binding.tvDeleteSleep.visible()
 //        }
     }
+
+    private fun setSleepEnvChipsData(items: ArrayList<SupplementOption>) {
+        val canBeViewedOnly = viewModel.editDataAddActivity?.canBeEditedOrDeleted == 0
+        val checkedImg = if(canBeViewedOnly) R.drawable.ic_sleep_env_chip_box_selected
+                        else R.drawable.ic_sleep_env_chip_box_checked
+
+        val cg = binding.lytCard.chipGroupSleepEnv
+        cg.removeAllViews()
+
+        items.forEachIndexed { index, data ->
+            val chip = layoutInflater.inflate(R.layout.layout_sleep_env_chip, cg, false)
+            val tv = chip.findViewById<TextView>(R.id.tvLabel)
+            val iv = chip.findViewById<ImageView>(R.id.ivBox)
+
+            tv.text = data.options
+            iv.setImageResource(if (data.isChecked) checkedImg else R.drawable.ic_sleep_env_chip_box_unchecked)
+
+            chip.setOnClickListener {
+                val newChecked = !data.isChecked
+                data.isChecked = newChecked
+                iv.setImageResource(if (newChecked) checkedImg else R.drawable.ic_sleep_env_chip_box_unchecked)
+                binding.btnSave.enable()
+                viewModel.selectedOptMap[data.id as Int] = newChecked
+            }
+            cg.addView(chip)
+        }
+
+        if(canBeViewedOnly){
+            for (i in 0 until cg.childCount){
+                (cg.getChildAt(i) as? Chip)?.apply {
+                    isCheckable = false
+                    isClickable = false
+                    isFocusable = false
+                }
+            }
+        }
+
+    }
+
 }

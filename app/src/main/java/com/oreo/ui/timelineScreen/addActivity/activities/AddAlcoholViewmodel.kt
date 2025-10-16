@@ -69,7 +69,7 @@ class AddAlcoholViewmodel @Inject constructor(
         }
     }
 
-    fun logAlcohol() {
+    fun logAlcohol(editEventFun: () -> Unit) {
         viewModelScope.launch {
             val time = alcoholTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"))
 
@@ -104,7 +104,7 @@ class AddAlcoholViewmodel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-
+                                        logAlcohol(editEventFun)
                                     }
 
                                     override fun no() {}
@@ -115,6 +115,9 @@ class AddAlcoholViewmodel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             onAddSuccess.postValue(Event(true))
+                            editData?.id?.let {id ->
+                                editEventFun()
+                            }
                         }
                     }
                 }
@@ -123,7 +126,7 @@ class AddAlcoholViewmodel @Inject constructor(
         }
     }
 
-    fun deleteAlcoholItem() {
+    fun deleteAlcoholItem(deleteEventFun: () -> Unit) {
         viewModelScope.launch {
             userRepository.deleteTimelineItemById(editData?.id?:"").collect{ resource ->
                 when (resource) {
@@ -140,7 +143,7 @@ class AddAlcoholViewmodel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        deleteAlcoholItem()
+                                        deleteAlcoholItem(deleteEventFun)
                                     }
 
                                     override fun no() {}
@@ -151,6 +154,7 @@ class AddAlcoholViewmodel @Inject constructor(
                     is Resource.Success -> {
                         resource.data?.data?.let {
                             onAddSuccess.postValue(Event(true))
+                            deleteEventFun()
                         }
                     }
                 }
