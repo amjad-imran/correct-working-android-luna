@@ -1658,7 +1658,6 @@ constructor(
                 nudgesList.add("activity")
             }
 
-            localDataStore.setNudgeCycleTrackerData(null)
             val user = localDataStore.getUser()
             if (user?.userInfo?.gender.equals("female", true)) {
                 val cycleTrackerApiTimestamp = localDataStore.getNudgeCycleTrackerLastApiTimestamp()
