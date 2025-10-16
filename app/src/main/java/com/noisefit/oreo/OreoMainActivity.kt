@@ -729,24 +729,37 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     private fun populateFabRadialItems(cx: Int, cy: Int) {
         val overlay = binding.fabRevealOverlay
         overlay.removeAllViews()
-        val radius = dpToPx(120)
+        val radius = dpToPx(80)
         val items = getFabItems()
 
         items.reverse()
 
 
-        val angles = listOf(160, 180, 200, 220, 250)
-        val angles2 = listOf(180, 200)
+        val angles = listOf(
+            Pair(140, dpToPx(56)),
+            Pair(180, dpToPx(60)),
+            Pair(210, dpToPx(70)),
+            Pair(240, dpToPx(80)),
+            Pair(260, dpToPx(105))
+        )
+        val angles2 = listOf(
+            Pair(180, dpToPx(60)),
+            Pair(210, dpToPx(70)),
+        )
         val yBias = dpToPx(10)
+
         data class Entry(val view: View, val tx: Int, val ty: Int)
+
         val entries = ArrayList<Entry>(items.size)
 
-        val is2Items = items.size<=2
+        val is2Items = items.size <= 2
 
         for ((index, item) in items.withIndex()) {
-            val angle = Math.toRadians(if(is2Items) angles2[index].toDouble() else angles[index].toDouble())
-            val tx = (cx + radius * Math.cos(angle)).toInt()
-            val ty = (cy + radius * Math.sin(angle)).toInt() + yBias
+            val selectedAngle = if (is2Items) angles2 else angles
+            val angle =
+                Math.toRadians(selectedAngle[index].first.toDouble())
+            val tx = (cx + selectedAngle[index].second * Math.cos(angle)).toInt()
+            val ty = (cy + selectedAngle[index].second * Math.sin(angle)).toInt() + yBias
 
             val view = LayoutInflater.from(overlay.context).inflate(R.layout.layout_fab_item, null)
             view.findViewById<ImageView>(R.id.imageView).setImageResource(item.icon)
@@ -771,7 +784,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         overlay.post {
             val sorted = entries.sortedBy { it.ty }
             sorted.forEachIndexed { rank, e ->
-                e.view.x = cx - e.view.width / 2f
+                e.view.x = cx - e.view.width.toFloat() / 2f
                 e.view.y = cy - e.view.height / 2f
                 e.view.alpha = 0f
 
@@ -782,7 +795,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     e.view,
                     View.X,
                     e.view.x,
-                    e.tx.toFloat() - e.view.width / 2f
+                    e.tx.toFloat() - e.view.width/* / 2f*/
                 ).apply {
                     duration = moveDuration
                     startDelay = baseDelay
@@ -808,20 +821,24 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     private fun onFabMenuItemCLicked(item: FabModel) {
 
-        when(item.type){
+        when (item.type) {
             FabItems.RECORD_WORKOUT -> {
                 showRecordWorkout()
             }
+
             FabItems.ADD_WORKOUT -> {
                 showAddWorkout()
             }
+
             FabItems.ADD_SLEEP -> {
                 showAddSleep()
             }
-            FabItems.TRACK_PERIOD ->{
+
+            FabItems.TRACK_PERIOD -> {
                 onLogPeriodClicked()
             }
-            FabItems.ADD_OTHER_ACTIVITY ->{
+
+            FabItems.ADD_OTHER_ACTIVITY -> {
                 showTimeline()
             }
         }
@@ -832,17 +849,17 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         val items = ArrayList<FabModel>()
 
-       /* if(lastDestination?.id==R.id.sleepDashFragment){
-            items.add(
-                FabModel(
-                    title = getString(R.string.text_add_sleep),
-                    icon = R.drawable.ic_fab_add_sleep,
-                    color = "#F2CEFF".toColorInt(),
-                    type = FabItems.ADD_SLEEP
-                )
-            )
-            return items
-        }*/
+        /* if(lastDestination?.id==R.id.sleepDashFragment){
+             items.add(
+                 FabModel(
+                     title = getString(R.string.text_add_sleep),
+                     icon = R.drawable.ic_fab_add_sleep,
+                     color = "#F2CEFF".toColorInt(),
+                     type = FabItems.ADD_SLEEP
+                 )
+             )
+             return items
+         }*/
 
         items.add(
             FabModel(
@@ -863,14 +880,14 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
 
         //if (lastDestination?.id == R.id.navigation_oreo_home) {
-            items.add(
-                FabModel(
-                    title = getString(R.string.text_add_sleep),
-                    icon = R.drawable.ic_fab_add_sleep,
-                    color = "#F2CEFF".toColorInt(),
-                    type = FabItems.ADD_SLEEP
-                )
+        items.add(
+            FabModel(
+                title = getString(R.string.text_add_sleep),
+                icon = R.drawable.ic_fab_add_sleep,
+                color = "#F2CEFF".toColorInt(),
+                type = FabItems.ADD_SLEEP
             )
+        )
         //}
 
         if (viewModel.shouldShowFemaleHealthCta()/* && lastDestination?.id == R.id.navigation_oreo_home*/) {
@@ -885,14 +902,14 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         }
 
         //if (lastDestination?.id == R.id.navigation_oreo_home) {
-            items.add(
-                FabModel(
-                    title = getString(R.string.text_add_other_activity),
-                    icon = R.drawable.ic_fab_add_other,
-                    color = "#A8E0CD".toColorInt(),
-                    type = FabItems.ADD_OTHER_ACTIVITY
-                )
+        items.add(
+            FabModel(
+                title = getString(R.string.text_add_other_activity),
+                icon = R.drawable.ic_fab_add_other,
+                color = "#A8E0CD".toColorInt(),
+                type = FabItems.ADD_OTHER_ACTIVITY
             )
+        )
         //}
 
         return items
@@ -969,8 +986,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             val children = (0 until childCount).map { overlay.getChildAt(it) }
                 .sortedByDescending { it.y }
             children.forEachIndexed { rank, v ->
-                val baseDelay = if(animate) (rank * 40L) else 0
-                val moveDuration = if(animate) 200L else 0
+                val baseDelay = if (animate) (rank * 40L) else 0
+                val moveDuration = if (animate) 200L else 0
 
                 val animX = ObjectAnimator.ofFloat(
                     v,
@@ -997,7 +1014,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                         override fun onAnimationEnd(animation: android.animation.Animator) {
                             completed++
                             if (completed == childCount) {
-                                concealOverlayAfterItems(cx, cy,animate)
+                                concealOverlayAfterItems(cx, cy, animate)
                             }
                         }
                     })
@@ -1006,17 +1023,17 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 animX.start(); animY.start(); alphaAnim.start()
             }
         } else {
-            concealOverlayAfterItems(cx, cy,animate)
+            concealOverlayAfterItems(cx, cy, animate)
         }
     }
 
-    private fun concealOverlayAfterItems(cx: Int, cy: Int,animate: Boolean = true) {
+    private fun concealOverlayAfterItems(cx: Int, cy: Int, animate: Boolean = true) {
         val overlay = binding.fabRevealOverlay
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && overlay.isShown) {
             val initialRadius =
                 kotlin.math.hypot(overlay.width.toDouble(), overlay.height.toDouble()).toFloat()
             val anim = ViewAnimationUtils.createCircularReveal(overlay, cx, cy, initialRadius, 0f)
-            anim.duration = if(animate) 220 else 0
+            anim.duration = if (animate) 220 else 0
             anim.addListener(object : android.animation.AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
                     super.onAnimationEnd(animation)
@@ -1576,7 +1593,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     binding.navView.root.visible()
 
                     if (destination.id == R.id.navigation_oreo_home || destination.id == R.id.navigation_oreo_workouts
-                        || destination.id == R.id.sleepDashFragment) {
+                        || destination.id == R.id.sleepDashFragment
+                    ) {
                         viewModel.handleAddWorkoutVisibility()
                     } else {
                         viewModel.addWorkoutCtaVisibility.value = false
@@ -1807,7 +1825,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     override fun onBackPressed() {
         navController?.let {
 
-            if(binding.fabRevealOverlay.isVisible){
+            if (binding.fabRevealOverlay.isVisible) {
                 hideFabRadialMenu(false)
                 return
             }
