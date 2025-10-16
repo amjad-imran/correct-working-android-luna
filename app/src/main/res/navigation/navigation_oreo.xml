@@ -1531,4 +1531,14 @@
             app:nullable="true" />
     </fragment>
 
+    <dialog
+        android:id="@+id/processAndDownloadMyDataBottomSheet"
+        android:name="com.oreo.ui.profile.downloadMyData.ProcessAndDownloadMyDataBottomSheet"
+        android:label="fragment_process_and_download_my_data_bottom_sheet"
+        tools:layout="@layout/fragment_process_and_download_my_data_bottom_sheet" >
+        <argument
+            android:name="stateBS"
+            app:argType="boolean" />
+    </dialog>
+
 </navigation>

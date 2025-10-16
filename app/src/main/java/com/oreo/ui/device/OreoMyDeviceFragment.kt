@@ -18,7 +18,10 @@ import androidx.core.view.doOnLayout
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
@@ -43,7 +46,6 @@ import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.doOnNextLayoutOnce
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.setVisibilityByCondition
@@ -58,6 +60,9 @@ import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
 import com.noisefit_zhsdk.log.ZhBleLogUtils
+import com.oreo.ui.device.OMyDeviceViewModel.DownloadMyDataBS
+import com.oreo.ui.device.OMyDeviceViewModel.DownloadMyDataBS.*
+import com.oreo.ui.profile.downloadMyData.DOWNLOAD_MY_DATA_KEY
 import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -222,17 +227,16 @@ class OreoMyDeviceFragment :
         binding.rowDownloadMyData.setOnClickListener {
             if(mViewModel.downloadMyDataList==null) mViewModel.setDownloadMyDataList()
             setFragmentResultListener(VALUE_REQUEST_KEY) { _, bundle ->
-                val selectedValue = bundle.getString("selectedValue")
-                selectedValue?.let { it1 ->
-                    mViewModel.downloadMyDataSelectedItem = it1
-                    val dayVal = when(it1){
-                        getString(R.string.text_today) -> 1
-                        getString(R.string.text_last_val_days, 3) -> 3
-                        else -> 7
-                    }
-                    mViewModel.getDownloadMyDataPDF(dayVal)
+                val selectedValue = bundle.getString("selectedValue") ?: return@setFragmentResultListener
+                mViewModel.downloadMyDataSelectedItem = selectedValue
+
+                val dayVal = when (selectedValue) {
+                    getString(R.string.text_today) -> 1
+                    getString(R.string.text_last_val_days, 3) -> 3
+                    else -> 7
                 }
 
+                mViewModel.getDownloadMyDataPDF(dayVal)
             }
             navigate(
                 R.id.valueSelectorBottomSheet,
@@ -245,6 +249,36 @@ class OreoMyDeviceFragment :
             )
         }
 
+    }
+
+    private fun showProcessSheet() {
+        // Navigate to your processing sheet. Use singleTop/inclusive to avoid stacking.
+        findNavController().navigate(
+            R.id.processAndDownloadMyDataBottomSheet,
+            bundleOf("stateBS" to "PROCESSING"),
+            navOptions {
+                launchSingleTop = true
+            }
+        )
+    }
+
+    private fun showSuccessSheet() {
+        findNavController().navigate(
+            R.id.processAndDownloadMyDataBottomSheet,
+            bundleOf("stateBS" to "SUCCESS"),
+            navOptions {
+                launchSingleTop = true
+            }
+        )
+    }
+
+    private fun dismissProcessSheetIfVisible() {
+        // If your sheet is a destination, pop it if it’s on top
+        val nav = findNavController()
+        val currentId = nav.currentDestination?.id
+        if (currentId == R.id.processAndDownloadMyDataBottomSheet) {
+            nav.popBackStack()
+        }
     }
 
     override fun subscribeObservers() {
@@ -365,6 +399,32 @@ class OreoMyDeviceFragment :
                 }
 
                 else -> {}
+            }
+
+            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+                mViewModel.bsState.collect { state ->
+                    when (state) {
+                        PROCESSING -> {
+                            showProcessSheet()
+                        }
+
+                        SUCCESS -> {
+                            // Option A: if you have a single sheet that changes UI, just show SUCCESS there
+                            showSuccessSheet()
+                            // Fire share immediately if you want:
+                            mViewModel.fileUri.value?.let { uri ->
+                                ShareUtil.shareFile(requireContext(), uri)
+                            } ?: requireContext().showShortToast(getString(R.string.text_try_again))
+                        }
+
+                        ERROR -> {
+                            dismissProcessSheetIfVisible()
+                            requireContext().showShortToast(getString(R.string.text_something_went_wrong))
+                        }
+
+                        else -> Unit
+                    }
+                }
             }
 
         }

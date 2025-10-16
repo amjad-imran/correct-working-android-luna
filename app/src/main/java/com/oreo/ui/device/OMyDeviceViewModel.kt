@@ -1,9 +1,10 @@
 package com.oreo.ui.device
 
+import android.content.Context
+import android.net.Uri
+import androidx.core.content.FileProvider
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.JsonObject
-import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
 import com.noisefit.data.remote.base.Resource
@@ -13,22 +14,25 @@ import com.noisefit.session.SessionManager
 import com.noisefit.watch.ConnectionHandler
 import com.noisefit.watch.WatchesSDK
 import com.noisefit_commans.NoisefitApplication
-import com.noisefit_commans.data.BinaryActionCallback
-import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
-import com.noisefit_commans.models.CaseInfoData
-import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.FileLogsUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
 import java.io.File
+import java.io.FileOutputStream
 import javax.inject.Inject
 
 @HiltViewModel
@@ -41,7 +45,8 @@ class OMyDeviceViewModel @Inject constructor(
     val watchDataStore: WatchDataStore,
     val resProvider: ResourcesProvider,
     val deviceRepository: DeviceRepository,
-    val watchesSDK: WatchesSDK
+    val watchesSDK: WatchesSDK,
+    @ApplicationContext private val appCtx: Context
 ) : BaseViewModel() {
     private var _deviceConnected: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     var deviceConnected = _deviceConnected
@@ -54,6 +59,8 @@ class OMyDeviceViewModel @Inject constructor(
 
     var downloadMyDataSelectedItem: String ?= null
     var downloadMyDataList: ArrayList<String> ?= null
+
+    var downloadMyDataFileUri: Uri ?= null
 
     val lunarBlackImagesUrl = Pair(
         "https://luna-cdn.gonoise.com/production/ring/set_2/Luna+Gen+2.538+(1)+1.png",
@@ -157,40 +164,76 @@ class OMyDeviceViewModel @Inject constructor(
         downloadMyDataSelectedItem = downloadMyDataList?.get(1)
     }
 
-    fun getDownloadMyDataPDF(days: Int){
+    private val _bsState = MutableStateFlow(DownloadMyDataBS.IDLE)
+    val bsState: StateFlow<DownloadMyDataBS> = _bsState
+
+    private val _fileUri = MutableStateFlow<Uri?>(null)
+    val fileUri: StateFlow<Uri?> = _fileUri
+
+    fun getDownloadMyDataPDF(days: Int) {
         viewModelScope.launch {
             userRepository.getDownloadMyDataPDF(days).collect { resource ->
                 when (resource) {
-                    is Resource.GenericError -> {
-                        sendMessage(resource.message)
-                    }
-
                     is Resource.Loading -> {
-                        setLoading(resource.loading)
+                        _bsState.value = DownloadMyDataBS.PROCESSING
                     }
-
-                    is Resource.NetworkError -> {
-                        setApiErrors(resource.response.apply {
-                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                                object : BinaryActionCallback {
-                                    override fun yes() {
-                                        getDownloadMyDataPDF(days)
-                                    }
-
-                                    override fun no() {}
-                                }
-                        })
-                    }
-
                     is Resource.Success -> {
-                        resource.data?.data?.let {
-
+                        val url = resource.data?.data?.url
+                        if (url.isNullOrBlank()) {
+                            _bsState.value = DownloadMyDataBS.ERROR
+                        } else {
+                            downloadIntoCacheAndGetUri(url)
                         }
+                    }
+                    is Resource.GenericError,
+                    is Resource.NetworkError -> {
+                        _bsState.value = DownloadMyDataBS.ERROR
                     }
                 }
             }
         }
     }
 
+    private fun downloadIntoCacheAndGetUri(pdfUrl: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val req = okhttp3.Request.Builder().url(pdfUrl).build()
+                OkHttpClient().newCall(req).execute().use { res ->
+                    if (!res.isSuccessful) error("Download failed: ${res.code}")
+
+                    val filename = "generated_${System.currentTimeMillis()}.pdf"
+                    val outFile = File(appCtx.cacheDir, filename)
+
+                    res.body?.byteStream()?.use { input ->
+                        FileOutputStream(outFile).use { output ->
+                            input.copyTo(output)
+                        }
+                    } ?: error("Empty body")
+
+                    val uri = FileProvider.getUriForFile(
+                        appCtx,
+                        "${appCtx.packageName}.fileprovider",
+                        outFile
+                    )
+
+                    withContext(Dispatchers.Main) {
+                        _fileUri.value = uri
+                        _bsState.value = DownloadMyDataBS.SUCCESS
+                    }
+                }
+            } catch (t: Throwable) {
+                withContext(Dispatchers.Main) {
+                    _bsState.value = DownloadMyDataBS.ERROR
+                }
+            }
+        }
+    }
+
+    fun resetDownloadState() {
+        _bsState.value = DownloadMyDataBS.IDLE
+        _fileUri.value = null
+    }
+
+    enum class DownloadMyDataBS { IDLE, PROCESSING, SUCCESS, ERROR }
 
 }
