@@ -369,7 +369,15 @@ class RingDataStoreImpl
     }
 
     override fun setManualMeasurementValueStress(data: ManualMeasurement) {
-        mPrefs.edit()?.putString(MANUAL_MEASUREMENT_KEY_STRESS, gson.toJson(data))?.commit()
+        val new = data.copy()
+        if(data.value==0 && data.isError){
+            val lastValue = getManualMeasurementValueStress()
+            if(lastValue!=null){
+                new.value = lastValue.value
+                new.timeStamp = lastValue.timeStamp
+            }
+        }
+        mPrefs.edit()?.putString(MANUAL_MEASUREMENT_KEY_STRESS, gson.toJson(new))?.commit()
     }
 
     override fun getManualMeasurementValueStress(): ManualMeasurement? {
@@ -391,7 +399,16 @@ class RingDataStoreImpl
     }
 
     override fun setManualMeasurementValueBloodOxygen(data: ManualMeasurement) {
-        mPrefs.edit()?.putString(MANUAL_MEASUREMENT_KEY_BLOOD_OXYGEN, gson.toJson(data))?.commit()
+        val new = data.copy()
+        if(data.value==0 && data.isError){
+            val lastValue = getManualMeasurementValueBloodOxygen()
+            if(lastValue!=null){
+                new.value = lastValue.value
+                new.timeStamp = lastValue.timeStamp
+            }
+        }
+
+        mPrefs.edit()?.putString(MANUAL_MEASUREMENT_KEY_BLOOD_OXYGEN, gson.toJson(new))?.commit()
     }
 
     override fun getManualMeasurementValueBloodOxygen(): ManualMeasurement? {
