@@ -1636,9 +1636,21 @@ constructor(
             val nudgesList = ArrayList<String>()
             var currentTime = System.currentTimeMillis()
 
-            if (localDataStore.getNudgeReadinessData()==null || readinessApiTimestamp == 0L || currentTime - readinessApiTimestamp >= 30 * 60 * 1000) {
-                localDataStore.setNudgeReadinessData(null)
-                nudgesList.add("readiness")
+            val healthDataToday = userHealthData[java.time.LocalDate.now().toString()]
+            if(healthDataToday != null) {
+                var totalSleep: Int? = null
+                healthDataToday.sleep?.sleeps?.forEach {
+                    if (totalSleep == null) {
+                        totalSleep = 0
+                    }
+                    totalSleep = totalSleep + (it.totalDuration ?: 0)
+                }
+                if (healthDataToday.sleep?.sleep_score != null || (totalSleep ?: 0) > 0){
+                    if (localDataStore.getNudgeReadinessData() == null || readinessApiTimestamp == 0L || currentTime - readinessApiTimestamp >= 30 * 60 * 1000) {
+                        localDataStore.setNudgeReadinessData(null)
+                        nudgesList.add("readiness")
+                    }
+                }
             }
 
             if (localDataStore.getNudgeActivityData()==null || activityApiTimestamp == 0L || currentTime - activityApiTimestamp >= 30 * 60 * 1000) {
@@ -1646,7 +1658,6 @@ constructor(
                 nudgesList.add("activity")
             }
 
-            localDataStore.setNudgeCycleTrackerData(null)
             val user = localDataStore.getUser()
             if (user?.userInfo?.gender.equals("female", true)) {
                 val cycleTrackerApiTimestamp = localDataStore.getNudgeCycleTrackerLastApiTimestamp()
