@@ -1052,7 +1052,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     private fun showAddWorkoutCta() {
-        viewModel.addWorkoutCtaVisibility.postValue(true)
+        viewModel.addWorkoutCtaVisibility.value = true
         //binding.btnAddWorkout.visible()
     }
 
