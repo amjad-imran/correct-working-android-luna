@@ -138,8 +138,8 @@ class AddLightExposureFragment :
                         viewModel.editData?.startTime, DateTimeFormatter.ofPattern("HH:mm:ss")
                     )
                     if(
-                        editDataTime.hour != viewModel.lightTime.value?.hour ||
-                        editDataTime.minute != viewModel.lightTime.value?.minute
+                        editDataTime.hour != time?.hour ||
+                        editDataTime.minute != time.minute
                     ){
                         binding.btnSave.text = getString(R.string.text_save)
                     }
@@ -173,7 +173,7 @@ class AddLightExposureFragment :
 
                     if(
                         viewModel.editDataDuration != null &&
-                        viewModel.editDataDuration!=viewModel.lightDuration.value
+                        viewModel.editDataDuration!= minString?.toLongOrNull()
                     ){
                         binding.btnSave.text = getString(R.string.text_save)
                     }
