@@ -740,7 +740,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             Pair(180, dpToPx(60)),
             Pair(210, dpToPx(70)),
             Pair(240, dpToPx(80)),
-            Pair(300, dpToPx(90))
+            Pair(260, dpToPx(105))
         )
         val angles2 = listOf(
             Pair(180, dpToPx(60)),
