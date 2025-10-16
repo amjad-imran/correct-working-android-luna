@@ -1481,6 +1481,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                             )
 
                             syncCompletedState()
+                            viewModel.getNudgeData()
                         }
 
                         viewModel.updateAppTrackingEvent(AppTrackEvent.SYNC)
