@@ -29,6 +29,7 @@ import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.OAddSleep
+import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.sleep2.add.OAddSleepViewModel
 import com.oreo.ui.timelineScreen.addActivity.AddActivityItemsEnum
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
@@ -61,32 +62,48 @@ class AddSleepFragment :
                 return@setOnClickListener
             }
 
-            if(viewModel.editDataAddActivity?.id != null){
-                viewModel.submitSleepEnvOptions(){
-                    sharedViewModel.sessionManager.logMoEngageAppEvent(
-                        MoEngageLunaAppEvents.insight_log_edited,
-                    )
-                    mainViewModel.sessionManager.reloadOnResume = true
-                    sharedViewModel.navigateUp()
-                    mainViewModel.sleepDashTodayReload.value = Event(true)
-                }
-            }else {
+            if(getString(R.string.text_save).equals(binding.btnSave.text)) {
 
-                if (viewModel.startTimeSleep.day.isEmpty()) {
-                    uiController.onDisplayError(getString(R.string.text_please_select_start_time))
-                    return@setOnClickListener
-                }
-                if (viewModel.endTimeSleep.day.isEmpty()) {
-                    uiController.onDisplayError(getString(R.string.text_please_select_end_time))
-                    return@setOnClickListener
-                }
-                /*if (viewModel.getSleepDuration() < (3 * 60 * 60)) {
+                if (viewModel.editDataAddActivity?.id != null) {
+                    viewModel.submitSleepEnvOptions() {
+                        sharedViewModel.sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.insight_log_edited,
+                        )
+                        mainViewModel.sessionManager.reloadOnResume = true
+                        sharedViewModel.navigateUp()
+                        mainViewModel.sleepDashTodayReload.value = Event(true)
+                    }
+                } else {
+
+                    if (viewModel.startTimeSleep.day.isEmpty()) {
+                        uiController.onDisplayError(getString(R.string.text_please_select_start_time))
+                        return@setOnClickListener
+                    }
+                    if (viewModel.endTimeSleep.day.isEmpty()) {
+                        uiController.onDisplayError(getString(R.string.text_please_select_end_time))
+                        return@setOnClickListener
+                    }
+                    /*if (viewModel.getSleepDuration() < (3 * 60 * 60)) {
                 uiController.onDisplayError("Sleep duration should be minimum of 3 hours")
                 return@setOnClickListener
             }*/
 
 
-                viewModel.callApiToAddSleep()
+                    viewModel.callApiToAddSleep()
+                }
+
+            }
+            else{
+
+                if (sharedViewModel.localDataStore.isAiChatSplashShown()) {
+                    navigate(
+                        R.id.aiTopQuestionsFragment,
+                        bundleOf("aiTopic" to AITopics.SLEEP)
+                    )
+                } else {
+                    navigate(R.id.aiChatOnboardFragment)
+                }
+
             }
         }
 
