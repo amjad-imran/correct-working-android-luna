@@ -1122,6 +1122,9 @@ class OreoReadinessFragment :
 
         val addEventData = mViewModel.getAddEventsData(readinessVal)
 
+        binding.lytIrregularityEvents.tvCardTitle.text = addEventData.title
+        binding.lytIrregularityEvents.tvCardDesc.text = addEventData.desc
+
         addEventData.cardBg?.let { binding.lytIrregularityEvents.lytAddEventCard.setBackgroundResource(it) }
 
         val category = addEventData.chipList
