@@ -49,7 +49,11 @@ class AddPeriodLogFragment :
             override fun onItemClick(data: FHFlowIconsModel, position: Int) {
                 if(logViewModel.editDataAddActivity?.canBeEditedOrDeleted != 0) {
                     flowAdapter.updateItem(data, position)
-                    binding.btnSave.enable()
+                    if(symptomsAdapter.getData().isNotEmpty() || data.isChecked) {
+                        binding.btnSave.enable()
+                    }else{
+                        binding.btnSave.disable()
+                    }
                     binding.btnSave.text = getString(R.string.text_save)
                 }
             }
@@ -60,7 +64,11 @@ class AddPeriodLogFragment :
             override fun onItemClick(data: FHSymptomsIconsModel, position: Int) {
                 if(logViewModel.editDataAddActivity?.canBeEditedOrDeleted != 0) {
                     symptomsAdapter.updateItem(data, position)
-                    binding.btnSave.enable()
+                    if(symptomsAdapter.getData().isNotEmpty() || flowAdapter.getSelectedValue() != null) {
+                        binding.btnSave.enable()
+                    }else{
+                        binding.btnSave.disable()
+                    }
                     binding.btnSave.text = getString(R.string.text_save)
                 }
             }
