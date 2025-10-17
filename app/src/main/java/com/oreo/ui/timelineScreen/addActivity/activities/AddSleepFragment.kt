@@ -522,25 +522,20 @@ class AddSleepFragment :
             tv.text = data.options
             iv.setImageResource(if (data.isChecked) checkedImg else R.drawable.ic_sleep_env_chip_box_unchecked)
 
-            chip.setOnClickListener {
-                val newChecked = !data.isChecked
-                data.isChecked = newChecked
-                iv.setImageResource(if (newChecked) checkedImg else R.drawable.ic_sleep_env_chip_box_unchecked)
-                binding.btnSave.text = getString(R.string.text_save)
-                binding.btnSave.enable()
-                viewModel.selectedOptMap[data.id as Int] = newChecked
-            }
-            cg.addView(chip)
-        }
-
-        if(canBeViewedOnly){
-            for (i in 0 until cg.childCount){
-                (cg.getChildAt(i) as? Chip)?.apply {
-                    isCheckable = false
-                    isClickable = false
-                    isFocusable = false
+            if(canBeViewedOnly){
+                chip.isClickable = false
+                chip.isFocusable = false
+            }else {
+                chip.setOnClickListener {
+                    val newChecked = !data.isChecked
+                    data.isChecked = newChecked
+                    iv.setImageResource(if (newChecked) checkedImg else R.drawable.ic_sleep_env_chip_box_unchecked)
+                    binding.btnSave.text = getString(R.string.text_save)
+                    binding.btnSave.enable()
+                    viewModel.selectedOptMap[data.id as Int] = newChecked
                 }
             }
+            cg.addView(chip)
         }
 
     }
