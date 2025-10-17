@@ -102,6 +102,7 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
         viewModel.selectedOption = option
         binding.tvSelected.text = option.options
         binding.rvOptions.gone()
+        binding.imageView100.setImageResource(R.drawable.ic_arrow_down_2)
         binding.btnSave.text = getString(R.string.text_save)
         if(!binding.btnSave.isEnabled) binding.btnSave.enable()
     }
@@ -212,8 +213,10 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
     private fun handleDropDown() {
         if(viewModel.isDropdownOpen){
             binding.rvOptions.gone()
+            binding.imageView100.setImageResource(R.drawable.ic_arrow_down_2)
         }else{
             binding.rvOptions.visible()
+            binding.imageView100.setImageResource(R.drawable.ic_arrow_up_2)
         }
         viewModel.isDropdownOpen = !viewModel.isDropdownOpen
     }
