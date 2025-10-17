@@ -23,6 +23,7 @@ import com.noisefit_commans.ui.disable
 import com.noisefit_commans.ui.enable
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
@@ -396,7 +397,11 @@ class AddSleepFragment :
             }
 
             else -> {
-                binding.btnSave.disable()
+                binding.btnSave.apply {
+                    text = getString(R.string.text_learn_more_with_luna_ai)
+                    enable()
+                    visible()
+                }
             }
         }
     }
@@ -504,6 +509,7 @@ class AddSleepFragment :
                 val newChecked = !data.isChecked
                 data.isChecked = newChecked
                 iv.setImageResource(if (newChecked) checkedImg else R.drawable.ic_sleep_env_chip_box_unchecked)
+                binding.btnSave.text = getString(R.string.text_save)
                 binding.btnSave.enable()
                 viewModel.selectedOptMap[data.id as Int] = newChecked
             }
