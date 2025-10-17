@@ -1122,6 +1122,9 @@ class OreoReadinessFragment :
 
         val addEventData = mViewModel.getAddEventsData(readinessVal)
 
+        binding.lytIrregularityEvents.tvCardTitle.text = addEventData.title
+        binding.lytIrregularityEvents.tvCardDesc.text = addEventData.desc
+
         addEventData.cardBg?.let { binding.lytIrregularityEvents.lytAddEventCard.setBackgroundResource(it) }
 
         val category = addEventData.chipList
@@ -1149,10 +1152,29 @@ class OreoReadinessFragment :
                     )
                 }
                 else if(mChip.tag.toString().equals("sleep")){
-                    val mostRecentSleep = mainViewModel.localDataStore.getTimelineActivitiesData()?.
+                    val timelineData = mainViewModel.localDataStore.getTimelineActivitiesData()
+                    val mostRecentSleep = timelineData?.
                     find { it.event.equals("sleep") }
                     if(mostRecentSleep==null){
-                        showToast(requireContext(), getString(R.string.text_something_went_wrong))
+                        val mostRecentNap = timelineData?.
+                        find { it.event.equals("nap") }
+                        if(mostRecentNap==null) {
+                            showToast(
+                                requireContext(),
+                                getString(R.string.text_something_went_wrong)
+                            )
+                        }else{
+                            mostRecentNap.canBeEditedOrDeleted = 1
+                            navigate(
+                                R.id.addActivityTimelineFragment,
+                                bundleOf(
+                                    "showTimeline" to false,
+                                    "key" to mostRecentNap.event,
+                                    "srcKey" to null,
+                                    "editData" to mostRecentNap
+                                )
+                            )
+                        }
                     }else{
                         mostRecentSleep.canBeEditedOrDeleted = 1
                         navigate(

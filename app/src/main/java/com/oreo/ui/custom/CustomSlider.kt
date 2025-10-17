@@ -23,6 +23,8 @@ class CustomSlider @JvmOverloads constructor(
         fun onValueChanged(value: Int)
     }
 
+    private var isSlideEnabled = true
+
     private var minValue = 0f
     private var maxValue = 100f
     private var stepSize = 1f
@@ -174,6 +176,7 @@ class CustomSlider @JvmOverloads constructor(
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        if(isSlideEnabled.not()) return false
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 if (isPointInTrack(event.x, event.y)) {
@@ -212,6 +215,10 @@ class CustomSlider @JvmOverloads constructor(
 
         val newValue = minValue + (progress * (maxValue - minValue))
         setValue(newValue)
+    }
+
+    fun sliderEnable(state:Boolean) {
+        isSlideEnabled = state
     }
 
     /*override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

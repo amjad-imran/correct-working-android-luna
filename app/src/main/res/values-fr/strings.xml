@@ -2391,5 +2391,6 @@ onjour, Luna"</string>
     <string name="text_no_food_items_found_please_try_again">Aucun aliment trouvé. Veuillez réessayer.</string>
     <string name="text_supplement">Complément</string>
     <string name="text_retry_in_value">Nouvelle tentative dans %1$s</string>
+    <string name="text_workout_recorded_but_it_will_be_processed_when_the_internet_is_available">Entraînement enregistré, il sera traité lorsque l\'internet sera disponible.</string>
 
 </resources>

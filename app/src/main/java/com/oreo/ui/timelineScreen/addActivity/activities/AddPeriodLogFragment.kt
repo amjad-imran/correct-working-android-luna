@@ -2,6 +2,7 @@ package com.oreo.ui.timelineScreen.addActivity.activities
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.NavHostFragment
@@ -18,6 +19,7 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.FHFlowIconsModel
 import com.oreo.data.model.FHSymptomsIconsModel
+import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.femalehealth.cycletracker.CycleSymptomsAdapter
 import com.oreo.ui.femalehealth.cycletracker.OnSymptomsItemClick
 import com.oreo.ui.femalehealth.cycletracker.log.CycleLogAdapter
@@ -47,7 +49,12 @@ class AddPeriodLogFragment :
             override fun onItemClick(data: FHFlowIconsModel, position: Int) {
                 if(logViewModel.editDataAddActivity?.canBeEditedOrDeleted != 0) {
                     flowAdapter.updateItem(data, position)
-                    binding.btnSave.enable()
+                    if(symptomsAdapter.getData().isNotEmpty() || data.isChecked) {
+                        binding.btnSave.enable()
+                    }else{
+                        binding.btnSave.disable()
+                    }
+                    binding.btnSave.text = getString(R.string.text_save)
                 }
             }
         })
@@ -57,7 +64,12 @@ class AddPeriodLogFragment :
             override fun onItemClick(data: FHSymptomsIconsModel, position: Int) {
                 if(logViewModel.editDataAddActivity?.canBeEditedOrDeleted != 0) {
                     symptomsAdapter.updateItem(data, position)
-                    binding.btnSave.enable()
+                    if(symptomsAdapter.getData().isNotEmpty() || flowAdapter.getSelectedValue() != null) {
+                        binding.btnSave.enable()
+                    }else{
+                        binding.btnSave.disable()
+                    }
+                    binding.btnSave.text = getString(R.string.text_save)
                 }
             }
         })
@@ -90,9 +102,15 @@ class AddPeriodLogFragment :
                 }
 
                 else -> {
-                    binding.btnSave.disable()
+                    binding.btnSave.apply {
+                        text = getString(R.string.text_learn_more_with_luna_ai)
+                        enable()
+                        visible()
+                    }
                 }
             }
+        }else{
+            binding.btnSave.disable()
         }
     }
 
@@ -106,22 +124,37 @@ class AddPeriodLogFragment :
         }
 
         binding.btnSave.setOnClickListener {
-            val flowType = flowAdapter.getSelectedValue()
-            val symptoms = symptomsAdapter.getData()
-            val date = logViewModel.selectedDate.value.toString()
-            logViewModel.saveSymptom(date, symptoms, flowType)
-            //
-            //
-            sharedViewModel.sourceKey?.let { sourceKey ->
-                sharedViewModel.sessionManager.logMoEngageAppEvent(
-                    MoEngageLunaAppEvents.insight_logged,
-                    HashMap<String, Any>().apply {
-                        this["source"] = sourceKey
-                        this["log_category"] = "period_symptom"
-                        this["period_flow_type"] = "$flowType"
-                        this["period_symptoms"] = "$symptoms"
+            if(getString(R.string.text_save).equals(binding.btnSave.text)) {
+                val flowType = flowAdapter.getSelectedValue()
+                val symptoms = symptomsAdapter.getData()
+                val date = logViewModel.selectedDate.value.toString()
+                logViewModel.saveSymptom(date, symptoms, flowType)
+                //
+                //
+                sharedViewModel.sourceKey?.let { sourceKey ->
+                    sharedViewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.insight_logged,
+                        HashMap<String, Any>().apply {
+                            this["source"] = sourceKey
+                            this["log_category"] = "period_symptom"
+                            this["period_flow_type"] = "$flowType"
+                            this["period_symptoms"] = "$symptoms"
+                        }
+                    )
+                }
+            }else{
+                if (sharedViewModel.ringDataStore.getRingDevice() == null) {
+                    context.showShortToast(getString(R.string.text_luna_ai_message))
+                }else {
+                    if (sharedViewModel.localDataStore.isAiChatSplashShown()) {
+                        navigate(
+                            R.id.aiTopQuestionsFragment,
+                            bundleOf("aiTopic" to AITopics.MENSTRUAL_HEALTH)
+                        )
+                    } else {
+                        navigate(R.id.aiChatOnboardFragment)
                     }
-                )
+                }
             }
         }
 

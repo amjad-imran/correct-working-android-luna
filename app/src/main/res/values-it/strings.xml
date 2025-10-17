@@ -2273,5 +2273,6 @@
     <string name="text_no_food_items_found_please_try_again">Nessun alimento trovato. Riprova.</string>
     <string name="text_supplement">Integratore</string>
     <string name="text_retry_in_value">Riprova tra %1$s</string>
+    <string name="text_workout_recorded_but_it_will_be_processed_when_the_internet_is_available">Allenamento registrato, ma verrà elaborato quando internet sarà disponibile.</string>
 
 </resources>

@@ -2295,4 +2295,6 @@
     <string name="text_supplement">Добавка</string>
     <string name="text_retry_in_value">Повтор через %1$s</string>
 
+    <string name="text_workout_recorded_but_it_will_be_processed_when_the_internet_is_available">Тренировка записана, но будет обработана, когда будет доступен интернет.</string>
+
 </resources>
