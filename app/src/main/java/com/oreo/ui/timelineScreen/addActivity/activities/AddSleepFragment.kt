@@ -464,8 +464,11 @@ class AddSleepFragment :
 
     fun getDisplayFormatTime(date: String?, time: String?): String{
         return try {
-            val day = if (LocalDate.now().toString().equals(date)) "Today"
-            else "Yesterday"
+            val day = if (getDate(0).equals(date)) "Today"
+            else if (getDate(1).equals(date)) "Yesterday"
+            else LocalDate
+                .parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                .format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
 
             val inFmt  = DateTimeFormatter.ofPattern("HH:mm:ss", Locale.getDefault())
             val outFmt = DateTimeFormatter.ofPattern("h:mm a", Locale.getDefault())
@@ -476,6 +479,11 @@ class AddSleepFragment :
         }catch (_: Exception){
             "--"
         }
+    }
+
+    fun getDate(prevDayNum: Long): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return LocalDate.now().minusDays(prevDayNum).format(formatter)
     }
 
     private fun initUI() {
