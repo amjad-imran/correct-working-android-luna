@@ -70,7 +70,7 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
     private fun setDefaultStartAndEndTime() {
         if(viewModel.editData == null){
             viewModel.endTime = LocalTime.now()
-            viewModel.startTime = viewModel.endTime?.minusMinutes(15)
+            viewModel.startTime = viewModel.endTime?.minusMinutes(60)
         }else{
             val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
             try {
@@ -78,7 +78,7 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
                 viewModel.startTime = LocalTime.parse(viewModel.editData?.startTime, formatter)
             }catch (_: Exception){
                 viewModel.endTime = LocalTime.now()
-                viewModel.startTime = viewModel.endTime?.minusMinutes(15)
+                viewModel.startTime = viewModel.endTime?.minusMinutes(60)
             }
         }
 
