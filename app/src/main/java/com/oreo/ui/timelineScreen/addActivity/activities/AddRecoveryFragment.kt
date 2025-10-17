@@ -231,10 +231,12 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
                 it.first { it.id == (viewModel.editData?.metadata?.lunaTrackingOptionId ?: -1) }?.let { sOpt ->
                     binding.tvSelected.text = sOpt.options
                     viewModel.selectedOption = sOpt
-                    binding.btnSave.apply {
-                        text = getString(R.string.text_learn_more_with_luna_ai)
-                        enable()
-                        visible()
+                    if(viewModel.editData?.canBeEditedOrDeleted != 0) {
+                        binding.btnSave.apply {
+                            text = getString(R.string.text_learn_more_with_luna_ai)
+                            enable()
+                            visible()
+                        }
                     }
                 }
                 viewModel.isListLoadedFirstTime = false
@@ -244,7 +246,7 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
                     binding.tvSelected.text = sOpt.options
                     viewModel.selectedOption = sOpt
                     binding.btnSave.apply {
-                        text = getString(R.string.text_learn_more_with_luna_ai)
+                        text = getString(R.string.text_save)
                         enable()
                         visible()
                     }
@@ -362,6 +364,8 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
                 binding.tvDate.isClickable = false
                 binding.lytStartTime.isClickable = false
                 binding.lytEndTime.isClickable = false
+
+                binding.btnSave.gone()
             }
 
             else -> {

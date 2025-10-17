@@ -4213,6 +4213,7 @@ class SummaryDataViewModelToday @Inject constructor(
                             it.firstOrNull()?.let { napData ->
                                 if (napData.date != null) {
                                     userHealthDataDataSource.clearDataByDates(listOf(napData.date!!))
+                                    localDataStore.setNudgeReadinessData(null)
                                     delay(100)
                                 }
                                 onNapAddSuccess.postValue(Event(napData))
