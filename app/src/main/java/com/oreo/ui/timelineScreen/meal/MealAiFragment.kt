@@ -106,7 +106,7 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
             viewModel.deleteMeal()
         }
 
-        binding.lytContent.tvAddFood.setOnClickListener {
+        binding.lytContent.llLytAddFoodItem.setOnClickListener {
             showAddFoodSheet()
         }
         binding.lytContent.tvTime.setOnClickListener {
@@ -319,9 +319,9 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
             foodAdapter = FoodAdapter(viewModel.viewMode) { items ->
                 updateTotalCalories(items)
                 if ((foodAdapter?.itemCount ?: 0) >= 10) {
-                    binding.lytContent.tvAddFood.gone()
+                    binding.lytContent.llLytAddFoodItem.gone()
                 } else {
-                    binding.lytContent.tvAddFood.visible()
+                    binding.lytContent.llLytAddFoodItem.visible()
                 }
             }
             adapter = foodAdapter
@@ -330,9 +330,9 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
         foodAdapter?.setData(data.foods ?: ArrayList())
 
         if ((data.foods?.size ?: 0) >= 10 || viewModel.viewMode) {
-            binding.lytContent.tvAddFood.gone()
+            binding.lytContent.llLytAddFoodItem.gone()
         } else {
-            binding.lytContent.tvAddFood.visible()
+            binding.lytContent.llLytAddFoodItem.visible()
         }
 
         val date = if(data.date!=null){
@@ -437,9 +437,9 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
             override fun onFoodAdded(name: String, calories: Int) {
                 foodAdapter?.addItem(MealAiFoods(name, calories))
                 if ((foodAdapter?.itemCount ?: 0) >= 10) {
-                    binding.lytContent.tvAddFood.gone()
+                    binding.lytContent.llLytAddFoodItem.gone()
                 } else {
-                    binding.lytContent.tvAddFood.visible()
+                    binding.lytContent.llLytAddFoodItem.visible()
                 }
             }
         }
