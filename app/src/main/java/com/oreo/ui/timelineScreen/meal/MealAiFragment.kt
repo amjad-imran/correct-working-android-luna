@@ -36,6 +36,7 @@ import kotlin.getValue
 import androidx.core.view.isVisible
 import com.moengage.core.internal.utils.showToast
 import com.noisefit_commans.utils.DateFormats.getDayOfMonthSuffix
+import com.noisefit_commans.utils.LOGS
 
 @AndroidEntryPoint
 class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding::inflate) {
@@ -334,7 +335,17 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
             binding.lytContent.tvAddFood.visible()
         }
 
-        val date = LocalDate.now()
+        val date = if(data.date!=null){
+            try {
+                LocalDate.parse(data.date,
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            }catch (exp: Exception){
+                exp.printStackTrace()
+                LocalDate.now()
+            }
+        }else{
+            LocalDate.now()
+        }
         val day = date.format(DateTimeFormatter.ofPattern("dd"))
 
         val prefix = getDayOfMonthSuffix(day.toInt())
