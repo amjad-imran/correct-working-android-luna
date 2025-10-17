@@ -564,7 +564,8 @@ class RecordWorkoutFragmentV2 :
                             return@observe
                         }
                         if(workoutId.equals("no_internet")){
-                            showToast(requireContext(), "Workout Recorded but it will be processed when the internet is available")
+                            showToast(requireContext(),
+                                getString(R.string.text_workout_recorded_but_it_will_be_processed_when_the_internet_is_available))
                             navigateUpSafe()
                             return@observe
                         }

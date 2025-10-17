@@ -2272,5 +2272,6 @@
     <string name="text_no_food_items_found_please_try_again">Keine Lebensmittel gefunden. Bitte versuche es erneut.</string>
     <string name="text_supplement">Nahrungsergänzung</string>
     <string name="text_retry_in_value">Erneut versuchen in %1$s</string>
+    <string name="text_workout_recorded_but_it_will_be_processed_when_the_internet_is_available">Training aufgezeichnet, wird jedoch verarbeitet, sobald das Internet verfügbar ist.</string>
 
 </resources>

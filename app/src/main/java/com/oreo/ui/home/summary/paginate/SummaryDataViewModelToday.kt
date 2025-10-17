@@ -3715,6 +3715,8 @@ class SummaryDataViewModelToday @Inject constructor(
                             this.measuring = false
                         })
                     }
+                    ringDataStore.setManualMeasurementValueStress(manualMeasurement.copy(isError = false))
+
                 } else {
                     if (manualMeasurement.isMeasuring) {
                         stateStressCard.value?.measureState = TapMeasureState.MEASURING
@@ -3727,10 +3729,12 @@ class SummaryDataViewModelToday @Inject constructor(
                         stateOneTapVitalsCard.value?.let {
                             stateOneTapVitalsCard.postValue(it.apply {
                                 this.measureState = TapMeasureState.LAST_MEASURED
+                                val lastStressValue = this.stressValue
                                 this.stressValue =
-                                    if (manualMeasurement.value != 0) manualMeasurement.value.toString() else null
-                                this.stressLastTime =
-                                    resourceProvider.getString(R.string.text_just_now)
+                                    if (manualMeasurement.value != 0) manualMeasurement.value.toString() else lastStressValue
+                                val lastTime = this.stressLastTime
+                                this.stressLastTime = if(manualMeasurement.value!=0) resourceProvider.getString(R.string.text_just_now) else lastTime
+
                                 this.measuring = false
                             })
                         }
@@ -3787,6 +3791,7 @@ class SummaryDataViewModelToday @Inject constructor(
                             this.measuring = false
                         })
                     }
+                    ringDataStore.setManualMeasurementValueBloodOxygen(manualMeasurement.copy(isError = false))
                 } else {
                     if (manualMeasurement.isMeasuring) {
 
@@ -3795,10 +3800,14 @@ class SummaryDataViewModelToday @Inject constructor(
                         stateOneTapVitalsCard.value?.let {
                             stateOneTapVitalsCard.postValue(it.apply {
                                 this.measureState = TapMeasureState.LAST_MEASURED
+                                val lastStressValue = this.stressValue
                                 this.spo2Value =
-                                    if (manualMeasurement.value != 0) manualMeasurement.value.toString() else null
-                                this.spo2LastTime =
-                                    resourceProvider.getString(R.string.text_just_now)
+                                    if (manualMeasurement.value != 0) manualMeasurement.value.toString() else lastStressValue
+
+                                val lastTime = this.stressLastTime
+
+                                this.spo2LastTime = if (manualMeasurement.value != 0) resourceProvider.getString(R.string.text_just_now) else lastTime
+
                                 this.measuring = false
                             })
                         }
@@ -4204,6 +4213,7 @@ class SummaryDataViewModelToday @Inject constructor(
                             it.firstOrNull()?.let { napData ->
                                 if (napData.date != null) {
                                     userHealthDataDataSource.clearDataByDates(listOf(napData.date!!))
+                                    localDataStore.setNudgeReadinessData(null)
                                     delay(100)
                                 }
                                 onNapAddSuccess.postValue(Event(napData))

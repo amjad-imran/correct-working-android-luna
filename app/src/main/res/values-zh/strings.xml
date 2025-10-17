@@ -2266,5 +2266,6 @@
     <string name="text_no_food_items_found_please_try_again">未找到食物项。请重试。</string>
     <string name="text_supplement">补充剂</string>
     <string name="text_retry_in_value">在 %1$s 后重试</string>
+    <string name="text_workout_recorded_but_it_will_be_processed_when_the_internet_is_available">锻炼已记录，但将在有网络时进行处理。</string>
 
 </resources>

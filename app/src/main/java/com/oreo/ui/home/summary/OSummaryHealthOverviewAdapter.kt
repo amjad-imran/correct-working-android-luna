@@ -2930,6 +2930,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     }
                     binding.tvTodayDesc.apply {
                         text = nudge?.message ?: ""
+                        //visible()
                     }
                 }
             }else{

@@ -70,7 +70,7 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
     private fun setDefaultStartAndEndTime() {
         if(viewModel.editData == null){
             viewModel.endTime = LocalTime.now()
-            viewModel.startTime = viewModel.endTime?.minusMinutes(15)
+            viewModel.startTime = viewModel.endTime?.minusMinutes(60)
         }else{
             val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
             try {
@@ -78,7 +78,7 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
                 viewModel.startTime = LocalTime.parse(viewModel.editData?.startTime, formatter)
             }catch (_: Exception){
                 viewModel.endTime = LocalTime.now()
-                viewModel.startTime = viewModel.endTime?.minusMinutes(15)
+                viewModel.startTime = viewModel.endTime?.minusMinutes(60)
             }
         }
 
@@ -102,6 +102,7 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
         viewModel.selectedOption = option
         binding.tvSelected.text = option.options
         binding.rvOptions.gone()
+        binding.imageView100.setImageResource(R.drawable.ic_arrow_down_2)
         binding.btnSave.text = getString(R.string.text_save)
         if(!binding.btnSave.isEnabled) binding.btnSave.enable()
     }
@@ -212,8 +213,10 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
     private fun handleDropDown() {
         if(viewModel.isDropdownOpen){
             binding.rvOptions.gone()
+            binding.imageView100.setImageResource(R.drawable.ic_arrow_down_2)
         }else{
             binding.rvOptions.visible()
+            binding.imageView100.setImageResource(R.drawable.ic_arrow_up_2)
         }
         viewModel.isDropdownOpen = !viewModel.isDropdownOpen
     }
@@ -228,10 +231,12 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
                 it.first { it.id == (viewModel.editData?.metadata?.lunaTrackingOptionId ?: -1) }?.let { sOpt ->
                     binding.tvSelected.text = sOpt.options
                     viewModel.selectedOption = sOpt
-                    binding.btnSave.apply {
-                        text = getString(R.string.text_learn_more_with_luna_ai)
-                        enable()
-                        visible()
+                    if(viewModel.editData?.canBeEditedOrDeleted != 0) {
+                        binding.btnSave.apply {
+                            text = getString(R.string.text_learn_more_with_luna_ai)
+                            enable()
+                            visible()
+                        }
                     }
                 }
                 viewModel.isListLoadedFirstTime = false
@@ -241,7 +246,7 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
                     binding.tvSelected.text = sOpt.options
                     viewModel.selectedOption = sOpt
                     binding.btnSave.apply {
-                        text = getString(R.string.text_learn_more_with_luna_ai)
+                        text = getString(R.string.text_save)
                         enable()
                         visible()
                     }
@@ -359,6 +364,8 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
                 binding.tvDate.isClickable = false
                 binding.lytStartTime.isClickable = false
                 binding.lytEndTime.isClickable = false
+
+                binding.btnSave.gone()
             }
 
             else -> {

@@ -169,6 +169,11 @@ class SummaryDataFragmentToday :
 
         viewModel.getPeriodData()
 
+        Handler(Looper.getMainLooper()).postDelayed({
+            navigate(R.id.timelineScreenFragment)
+        },3000)
+
+
 
     }
 
