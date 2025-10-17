@@ -2295,5 +2295,6 @@
     <string name="text_add_supplements">Adicionar suplementos</string>
     <string name="text_no_food_items_found_please_try_again">Nenhum alimento encontrado. Tente novamente.</string>
     <string name="text_supplement">Suplemento</string>
+    <string name="text_workout_recorded_but_it_will_be_processed_when_the_internet_is_available">Treino registrado, mas será processado quando a internet estiver disponível.</string>
 
 </resources>
