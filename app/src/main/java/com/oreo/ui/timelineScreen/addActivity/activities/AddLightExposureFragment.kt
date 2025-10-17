@@ -26,6 +26,7 @@ import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 import com.oreo.ui.timelineScreen.addActivity.AddActivityItemsEnum
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -48,6 +49,14 @@ class AddLightExposureFragment :
 
     private fun setUi() {
         if(viewModel.editData!=null){
+            binding.lytCard.textView192.text =
+                if(LocalDate.now().toString().equals(viewModel.editData?.startDate)){
+                    getString(R.string.text_today)
+                }else{
+                    LocalDate
+                        .parse(viewModel.editData?.startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                        .format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
+                }
             when(viewModel.editData!!.canBeEditedOrDeleted){
                 0 -> {
                     binding.lytCard.lytTimePicker.isClickable = false
