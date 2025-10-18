@@ -13,7 +13,7 @@
             android:id="@+id/list"
             style="@style/ModalStyleDialog"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dimen_12dp"
             android:layout_marginTop="@dimen/dimen_12dp"
             android:layout_marginEnd="@dimen/dimen_12dp"
@@ -41,15 +41,16 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@+id/view40">
 
                 <TextView
-                    android:id="@+id/textView201"
+                    android:id="@+id/tvProcessingTxt"
+                    style="@style/S18"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TextView"
+                    android:text="@string/text_processing_your_data"
+                    android:textColor="#EEEEEE"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -59,13 +60,62 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView201"
+                    app:layout_constraintTop_toBottomOf="@+id/tvProcessingTxt"
                     app:lottie_autoPlay="true"
                     app:lottie_loop="true"
                     app:lottie_rawRes="@raw/anim_loading_download_my_data" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/lytSuccess"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view40">
+
+                <ImageView
+                    android:id="@+id/imageView108"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_check_download_my_data" />
+
+                <TextView
+                    android:id="@+id/textView201"
+                    style="@style/S18"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="32dp"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/text_data_downloaded_successfully"
+                    android:textAlignment="center"
+                    android:textColor="#EEEEEE"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView108" />
+
+                <Button
+                    android:id="@+id/btnOkay"
+                    style="@style/PrimaryButtonStyle"
+                    android:layout_width="0dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginBottom="24dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:text="@string/text_okay"
+                    app:backgroundTint="@null"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView201" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>

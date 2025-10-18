@@ -2248,6 +2248,8 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_supplement">Supplement</string>
     <string name="text_download_my_data">Download my data</string>
     <string name="text_last_val_days">Last %1$d days</string>
+    <string name="text_processing_your_data">Processing your data</string>
+    <string name="text_data_downloaded_successfully">Data Downloaded Successfully</string>
 
 
 </resources>

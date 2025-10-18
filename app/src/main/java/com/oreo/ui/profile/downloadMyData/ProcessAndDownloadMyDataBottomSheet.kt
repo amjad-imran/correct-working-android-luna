@@ -13,21 +13,29 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentProcessAndDownloadMyDataBottomSheetBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
+import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.visible
 import com.oreo.ui.device.OMyDeviceViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-const val PROCESS_DOWNLOAD_MY_DATA_KEY = "PROCESS_DOWNLOAD_MY_DATA_KEY"
-const val DOWNLOAD_MY_DATA_KEY = "DOWNLOAD_MY_DATA_KEY"
-
+@AndroidEntryPoint
 class ProcessAndDownloadMyDataBottomSheet :
     BaseBottomSheetWithTransparent<FragmentProcessAndDownloadMyDataBottomSheetBinding>(
         FragmentProcessAndDownloadMyDataBottomSheetBinding::inflate
     ) {
 
-    private val vm: OMyDeviceViewModel by viewModels(ownerProducer = { requireParentFragment() })
+    private val vm: OMyDeviceViewModel by viewModels(
+        ownerProducer = { requireParentFragment() },
+        factoryProducer = { defaultViewModelProviderFactory }
+    )
 
     override fun initListener() {
-
+        binding.btnOkay.setOnClickListener {
+            vm.handleOkayBtnBsClicked()
+            dismiss()
+        }
     }
 
     override fun subscribeObservers() {
@@ -36,8 +44,7 @@ class ProcessAndDownloadMyDataBottomSheet :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 vm.bsState.collect { state ->
                     when (state) {
@@ -52,11 +59,13 @@ class ProcessAndDownloadMyDataBottomSheet :
     }
 
     fun showProcessingUi(){
-
+        binding.lytProcessing.visible()
+        binding.lytSuccess.invisible()
     }
 
     fun showSuccessUi(){
-
+        binding.lytSuccess.visible()
+        binding.lytProcessing.invisible()
     }
 
     fun showErrorUi(){

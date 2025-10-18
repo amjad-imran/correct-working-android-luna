@@ -1538,7 +1538,7 @@
         tools:layout="@layout/fragment_process_and_download_my_data_bottom_sheet" >
         <argument
             android:name="stateBS"
-            app:argType="boolean" />
+            app:argType="string" />
     </dialog>
 
 </navigation>

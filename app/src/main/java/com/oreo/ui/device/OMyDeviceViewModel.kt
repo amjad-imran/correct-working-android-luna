@@ -24,6 +24,7 @@ import com.noisefit_commans.utils.FileLogsUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,6 +32,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
@@ -46,6 +48,7 @@ class OMyDeviceViewModel @Inject constructor(
     val resProvider: ResourcesProvider,
     val deviceRepository: DeviceRepository,
     val watchesSDK: WatchesSDK,
+    private val okHttpClient: OkHttpClient,
     @ApplicationContext private val appCtx: Context
 ) : BaseViewModel() {
     private var _deviceConnected: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
@@ -197,8 +200,12 @@ class OMyDeviceViewModel @Inject constructor(
     private fun downloadIntoCacheAndGetUri(pdfUrl: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val req = okhttp3.Request.Builder().url(pdfUrl).build()
-                OkHttpClient().newCall(req).execute().use { res ->
+                val req = Request.Builder()
+                    .url(pdfUrl)
+                    .header("User-Agent", "okhttp/4 Android")
+                    .build()
+
+                okHttpClient.newCall(req).execute().use { res ->
                     if (!res.isSuccessful) error("Download failed: ${res.code}")
 
                     val filename = "generated_${System.currentTimeMillis()}.pdf"
@@ -212,12 +219,13 @@ class OMyDeviceViewModel @Inject constructor(
 
                     val uri = FileProvider.getUriForFile(
                         appCtx,
-                        "${appCtx.packageName}.fileprovider",
+                        "com.noisefit.luna.fileprovider",
                         outFile
                     )
 
                     withContext(Dispatchers.Main) {
                         _fileUri.value = uri
+                        delay(3000L)
                         _bsState.value = DownloadMyDataBS.SUCCESS
                     }
                 }
@@ -234,6 +242,11 @@ class OMyDeviceViewModel @Inject constructor(
         _fileUri.value = null
     }
 
-    enum class DownloadMyDataBS { IDLE, PROCESSING, SUCCESS, ERROR }
+    fun handleOkayBtnBsClicked(){
+        _bsState.value = DownloadMyDataBS.OPEN_PDF
+        resetDownloadState()
+    }
+
+    enum class DownloadMyDataBS { IDLE, PROCESSING, SUCCESS, OPEN_PDF, ERROR }
 
 }

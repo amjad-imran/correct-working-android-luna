@@ -60,9 +60,8 @@ import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
 import com.noisefit_zhsdk.log.ZhBleLogUtils
-import com.oreo.ui.device.OMyDeviceViewModel.DownloadMyDataBS
 import com.oreo.ui.device.OMyDeviceViewModel.DownloadMyDataBS.*
-import com.oreo.ui.profile.downloadMyData.DOWNLOAD_MY_DATA_KEY
+import com.oreo.ui.profile.downloadMyData.ProcessAndDownloadMyDataBottomSheet
 import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -252,24 +251,8 @@ class OreoMyDeviceFragment :
     }
 
     private fun showProcessSheet() {
-        // Navigate to your processing sheet. Use singleTop/inclusive to avoid stacking.
-        findNavController().navigate(
-            R.id.processAndDownloadMyDataBottomSheet,
-            bundleOf("stateBS" to "PROCESSING"),
-            navOptions {
-                launchSingleTop = true
-            }
-        )
-    }
-
-    private fun showSuccessSheet() {
-        findNavController().navigate(
-            R.id.processAndDownloadMyDataBottomSheet,
-            bundleOf("stateBS" to "SUCCESS"),
-            navOptions {
-                launchSingleTop = true
-            }
-        )
+        ProcessAndDownloadMyDataBottomSheet()
+            .show(childFragmentManager, "DownloadBS")
     }
 
     private fun dismissProcessSheetIfVisible() {
@@ -410,8 +393,10 @@ class OreoMyDeviceFragment :
 
                         SUCCESS -> {
                             // Option A: if you have a single sheet that changes UI, just show SUCCESS there
-                            showSuccessSheet()
-                            // Fire share immediately if you want:
+//                            showSuccessSheet()
+                        }
+
+                        OPEN_PDF -> {
                             mViewModel.fileUri.value?.let { uri ->
                                 ShareUtil.shareFile(requireContext(), uri)
                             } ?: requireContext().showShortToast(getString(R.string.text_try_again))
