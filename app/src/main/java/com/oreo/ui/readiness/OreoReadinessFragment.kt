@@ -1191,8 +1191,9 @@ class OreoReadinessFragment :
                 else{
                     val curKey = mChip.tag.toString()
                     val lunaOpt = if(curKey.equals("recovery") || curKey.equals("supplements")){
-                        category.find { tvTxt.text.toString().equals(it.displayName) }?.actualName
-                            ?: ""
+                        tvTxt.text.toString()
+                        /*category.find { tvTxt.text.toString().equals(it.displayName) }?.actualName
+                            ?: ""*/
                     }else{
                         null
                     }
