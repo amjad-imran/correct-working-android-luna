@@ -1129,19 +1129,19 @@ constructor(
                 chipsList.add(
                     IrregularEventsChipModel(
                         key = CircadianAlignmentViewModel.meal_window_key,
-                        displayName = "Late night meal",
+                        displayName = resourcesProvider.getString(R.string.text_late_night_meal)
                     )
                 )
                 chipsList.add(
                     IrregularEventsChipModel(
                         key = "sleep",
-                        displayName = "Disturbed sleep environment",
+                        displayName = resourcesProvider.getString(R.string.text_disturbed_sleep_environment)
                     )
                 )
                 chipsList.add(
                     IrregularEventsChipModel(
                         key = "alcohol",
-                        displayName = "Alcohol intake",
+                        displayName = resourcesProvider.getString(R.string.text_alcohol_intake),
                     )
                 )
 
@@ -1155,31 +1155,36 @@ constructor(
                 chipsList.add(
                     IrregularEventsChipModel(
                         key = "recovery",
-                        displayName = "Warm bath",
+                        displayName = resourcesProvider.getString(R.string.text_warm_bath),
+                        actualName = "Warm bath",
                     )
                 )
                 chipsList.add(
                     IrregularEventsChipModel(
                         key = "recovery",
-                        displayName = "Meditation",
+                        displayName = resourcesProvider.getString(R.string.text_meditation),
+                        actualName = "Meditation",
                     )
                 )
                 chipsList.add(
                     IrregularEventsChipModel(
                         key = "recovery",
-                        displayName = "Ice Bath",
+                        displayName = resourcesProvider.getString(R.string.text_ice_bath),
+                        actualName = "Ice Bath",
                     )
                 )
                 chipsList.add(
                     IrregularEventsChipModel(
                         key = "recovery",
-                        displayName = "Cold shower",
+                        displayName = resourcesProvider.getString(R.string.text_cold_shower),
+                        actualName = "Cold shower",
                     )
                 )
                 chipsList.add(
                     IrregularEventsChipModel(
                         key = "supplements",
-                        displayName = "Supplement",
+                        displayName = resourcesProvider.getString(R.string.text_supplement),
+                        actualName = "Supplement",
                     )
                 )
 
@@ -1199,31 +1204,35 @@ constructor(
                 chipsList.add(
                     IrregularEventsChipModel(
                         key = "recovery",
-                        displayName = "Cold Plunge",
+                        displayName = resourcesProvider.getString(R.string.text_cold_plunge),
+                        actualName = "Cold Plunge",
                     )
                 )
                 chipsList.add(
                     IrregularEventsChipModel(
                         key = "recovery",
-                        displayName = "Massage Therapy",
+                        displayName = resourcesProvider.getString(R.string.text_massage_therapy),
+                        actualName = "Massage Therapy",
                     )
                 )
                 chipsList.add(
                     IrregularEventsChipModel(
                         key = "recovery",
-                        displayName = "Warm bath",
+                        displayName = resourcesProvider.getString(R.string.text_warm_bath),
+                        actualName = "Warm bath",
                     )
                 )
                 chipsList.add(
                     IrregularEventsChipModel(
                         key = "supplements",
-                        displayName = "Melatonin",
+                        displayName = resourcesProvider.getString(R.string.text_melatonin),
+                        actualName = "Melatonin",
                     )
                 )
                 chipsList.add(
                     IrregularEventsChipModel(
                         key = "sleep",
-                        displayName = "Improved Sleep Environment",
+                        displayName = resourcesProvider.getString(R.string.text_improved_sleep_environment),
                     )
                 )
 
@@ -1233,7 +1242,7 @@ constructor(
         chipsList.add(
             IrregularEventsChipModel(
                 key = "others",
-                displayName = "Other",
+                displayName = resourcesProvider.getString(R.string.text_other),
             )
         )
 

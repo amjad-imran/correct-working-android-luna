@@ -2243,5 +2243,14 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_supplement">Suplemento</string>
     <string name="text_retry_in_value">Reintentar en %1$s</string>
     <string name="text_workout_recorded_but_it_will_be_processed_when_the_internet_is_available">Entrenamiento registrado, pero se procesará cuando haya internet disponible.</string>
+    <string name="text_alcohol_intake">Consumo de alcohol</string>
+    <string name="text_warm_bath">Baño caliente</string>
+    <string name="text_meditation">Meditación</string>
+    <string name="text_ice_bath">Baño de hielo</string>
+    <string name="text_cold_shower">Ducha fría</string>
+    <string name="text_cold_plunge">Inmersión en agua fría</string>
+    <string name="text_massage_therapy">Terapia de masaje</string>
+    <string name="text_melatonin">Melatonina</string>
+    <string name="text_improved_sleep_environment">Entorno de sueño mejorado</string>
 
 </resources>

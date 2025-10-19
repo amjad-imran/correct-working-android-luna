@@ -1189,6 +1189,14 @@ class OreoReadinessFragment :
                     }
                 }
                 else{
+                    val curKey = mChip.tag.toString()
+                    val lunaOpt = if(curKey.equals("recovery") || curKey.equals("supplements")){
+                        tvTxt.text.toString()
+                        /*category.find { tvTxt.text.toString().equals(it.displayName) }?.actualName
+                            ?: ""*/
+                    }else{
+                        null
+                    }
                     navigate(
                         R.id.addActivityTimelineFragment,
                         bundleOf(
@@ -1196,7 +1204,7 @@ class OreoReadinessFragment :
                             "key" to mChip.tag.toString(),
                             "srcKey" to "oreo_readiness",
                             "editData" to null,
-                            "lunaOption" to tvTxt.text
+                            "lunaOption" to lunaOpt
                         )
                     )
                 }

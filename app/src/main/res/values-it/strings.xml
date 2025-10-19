@@ -2274,5 +2274,14 @@
     <string name="text_supplement">Integratore</string>
     <string name="text_retry_in_value">Riprova tra %1$s</string>
     <string name="text_workout_recorded_but_it_will_be_processed_when_the_internet_is_available">Allenamento registrato, ma verrà elaborato quando internet sarà disponibile.</string>
+    <string name="text_alcohol_intake">Assunzione di alcol</string>
+    <string name="text_warm_bath">Bagno caldo</string>
+    <string name="text_meditation">Meditazione</string>
+    <string name="text_ice_bath">Bagno di ghiaccio</string>
+    <string name="text_cold_shower">Doccia fredda</string>
+    <string name="text_cold_plunge">Immersione in acqua fredda</string>
+    <string name="text_massage_therapy">Terapia di massaggio</string>
+    <string name="text_melatonin">Melatonina</string>
+    <string name="text_improved_sleep_environment">Ambiente di sonno migliorato</string>
 
 </resources>

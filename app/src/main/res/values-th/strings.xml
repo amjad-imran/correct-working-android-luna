@@ -2279,5 +2279,14 @@
     <string name="text_supplement">อาหารเสริม</string>
     <string name="text_retry_in_value">ลองอีกครั้งใน %1$s</string>
     <string name="text_workout_recorded_but_it_will_be_processed_when_the_internet_is_available">บันทึกการออกกำลังกายแล้ว แต่จะถูกประมวลผลเมื่อมีอินเทอร์เน็ต</string>
+    <string name="text_alcohol_intake">การดื่มแอลกอฮอล์</string>
+    <string name="text_warm_bath">อาบน้ำอุ่น</string>
+    <string name="text_meditation">การทำสมาธิ</string>
+    <string name="text_ice_bath">อ่างน้ำแข็ง</string>
+    <string name="text_cold_shower">อาบน้ำเย็น</string>
+    <string name="text_cold_plunge">แช่น้ำเย็น</string>
+    <string name="text_massage_therapy">การบำบัดด้วยการนวด</string>
+    <string name="text_melatonin">เมลาโทนิน</string>
+    <string name="text_improved_sleep_environment">สภาพแวดล้อมการนอนที่ดีขึ้น</string>
 
 </resources>
