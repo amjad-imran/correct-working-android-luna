@@ -38,6 +38,13 @@ class WorkoutPlansFragment :
     private val viewModel: WorkoutPlanViewModel by viewModels()
     private val mAdapter: AiWorkoutAdapter by lazy {
         AiWorkoutAdapter(onWorkoutSelected = {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.lunaai_wid_sel_click,
+                HashMap<String, Any>().apply {
+                    this["Section"] = "workout"
+                    this["name"] = viewModel.dayTitle.value ?: ""
+                }
+            )
             navigate(
                 R.id.aiWorkoutDetailFragment,
                 bundleOf(

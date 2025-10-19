@@ -8,6 +8,7 @@ import com.noisefit.data.model.AiMeal
 import com.noisefit.data.model.AiMealResponse
 import com.noisefit.data.model.AiMeals
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -25,6 +26,7 @@ class MealPlanViewModel @Inject constructor(
     val oreoDeviceRepository: OreoDeviceRepository,
     val localDataStore: DataStoredInterface,
     val ringDataStore: RingDataStore,
+    val sessionManager: SessionManager,
 ) : BaseViewModel() {
 
     val workoutData: String? = null

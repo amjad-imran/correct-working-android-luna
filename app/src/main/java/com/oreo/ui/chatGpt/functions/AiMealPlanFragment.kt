@@ -22,6 +22,7 @@ import com.oreo.ui.chatGpt.PlanType
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import androidx.navigation.fragment.navArgs
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 
 @AndroidEntryPoint
 class AiMealPlanFragment :
@@ -47,6 +48,13 @@ class AiMealPlanFragment :
                 "mealName" to mealName,
                 "dietState" to dietState
             ))
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.lunaai_wid_sel_click,
+                HashMap<String, Any>().apply {
+                    this["Section"] = "nutrition"
+                    this["name"] = mealName
+                }
+            )
         })
     }
 
@@ -149,6 +157,13 @@ class AiMealPlanFragment :
                     AITopics.GENERAL,
                     PlanType.DIET
                 )
+            )
+
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.lunaai_edit_click,
+                HashMap<String, Any>().apply {
+                    this["Section"] = "nutrition"
+                }
             )
         }
 
@@ -300,6 +315,12 @@ class AiMealPlanFragment :
         layouts.forEach {
             if (it.tag.toString().toInt() == selectedTag) {
                 it.setBackgroundResource(R.drawable.bg_week_selected)
+                viewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.ai_day_selected,
+                    HashMap<String, Any>().apply {
+                        this["Section"] = "nutrition"
+                    }
+                )
             } else {
                 it.setBackgroundResource(0)
             }

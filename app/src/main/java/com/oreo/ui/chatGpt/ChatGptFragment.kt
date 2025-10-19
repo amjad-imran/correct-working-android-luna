@@ -212,10 +212,32 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         }
 
         binding.lytSaveData.btnSave.setOnClickListener {
+            if(viewModel.planType == PlanType.WORKOUT || viewModel.planType == PlanType.DIET) {
+                val section = if(viewModel.planType == PlanType.WORKOUT) "workout"
+                                else "nutrition"
+                viewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.lunaai_wid_selection,
+                    HashMap<String, Any>().apply {
+                        this["section"] = section
+                        this["command"] = "save"
+                    }
+                )
+            }
             viewModel.savePlanData()
         }
 
         binding.lytSaveData.btnCancel.setOnClickListener {
+            if(viewModel.planType == PlanType.WORKOUT || viewModel.planType == PlanType.DIET) {
+                val section = if(viewModel.planType == PlanType.WORKOUT) "workout"
+                                else "nutrition"
+                viewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.lunaai_wid_selection,
+                    HashMap<String, Any>().apply {
+                        this["section"] = section
+                        this["command"] = "not now"
+                    }
+                )
+            }
             binding.lytSaveData.root.gone()
             binding.ivGeneratingGradient.gone()
             binding.videoView.stopPlayback()

@@ -118,6 +118,7 @@ object MoEngageLunaAppEvents {
     const val customize_homescreen_warning = "customize_homescreen_warning"
     const val ai_day_selected = "ai_day_selected"
     const val lunaai_edit_clicked = "lunaai_edit_clicked"
+    const val lunaai_edit_click = "lunaai_edit_click"
     const val day_change_click = "day_change_click"
     const val activity_event_cancelled = "activity_event_cancelled"
     //
@@ -274,5 +275,9 @@ object MoEngageLunaAppEvents {
     const val page_scrolled = "page_scrolled"
     const val insight_log_deleted = "insight_log_deleted"
     const val insight_log_edited = "insight_log_edited"
+
+    // Luna Ai Workout / Nutrition
+    const val lunaai_wid_sel_click = "lunaai_wid_sel_click"
+    const val lunaai_wid_selection = "lunaai_wid_selection"
 
 }
