@@ -2391,5 +2391,14 @@ onjour, Luna"</string>
     <string name="text_no_food_items_found_please_try_again">Aucun aliment trouvé. Veuillez réessayer.</string>
     <string name="text_supplement">Complément</string>
     <string name="text_workout_recorded_but_it_will_be_processed_when_the_internet_is_available">Entraînement enregistré, il sera traité lorsque l\'internet sera disponible.</string>
+    <string name="text_alcohol_intake">Consommation d\'alcool</string>
+    <string name="text_warm_bath">Bain chaud</string>
+    <string name="text_meditation">Méditation</string>
+    <string name="text_ice_bath">Bain de glace</string>
+    <string name="text_cold_shower">Douche froide</string>
+    <string name="text_cold_plunge">Immersion froide</string>
+    <string name="text_massage_therapy">Thérapie de massage</string>
+    <string name="text_melatonin">Mélatonine</string>
+    <string name="text_improved_sleep_environment">Environnement de sommeil amélioré</string>
 
 </resources>

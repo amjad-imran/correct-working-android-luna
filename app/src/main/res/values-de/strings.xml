@@ -2272,5 +2272,14 @@
     <string name="text_no_food_items_found_please_try_again">Keine Lebensmittel gefunden. Bitte versuche es erneut.</string>
     <string name="text_supplement">Nahrungsergänzung</string>
     <string name="text_workout_recorded_but_it_will_be_processed_when_the_internet_is_available">Training aufgezeichnet, wird jedoch verarbeitet, sobald das Internet verfügbar ist.</string>
+    <string name="text_alcohol_intake">Alkoholkonsum</string>
+    <string name="text_warm_bath">Warmes Bad</string>
+    <string name="text_meditation">Meditation</string>
+    <string name="text_ice_bath">Eisbad</string>
+    <string name="text_cold_shower">Kalte Dusche</string>
+    <string name="text_cold_plunge">Kalter Tauchgang</string>
+    <string name="text_massage_therapy">Massagetherapie</string>
+    <string name="text_melatonin">Melatonin</string>
+    <string name="text_improved_sleep_environment">Verbesserte Schlafumgebung</string>
 
 </resources>

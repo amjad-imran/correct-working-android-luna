@@ -2266,5 +2266,14 @@
     <string name="text_no_food_items_found_please_try_again">未找到食物项。请重试。</string>
     <string name="text_supplement">补充剂</string>
     <string name="text_workout_recorded_but_it_will_be_processed_when_the_internet_is_available">锻炼已记录，但将在有网络时进行处理。</string>
+    <string name="text_alcohol_intake">酒精摄入</string>
+    <string name="text_warm_bath">热水浴</string>
+    <string name="text_meditation">冥想</string>
+    <string name="text_ice_bath">冰浴</string>
+    <string name="text_cold_shower">冷水澡</string>
+    <string name="text_cold_plunge">冷水浸泡</string>
+    <string name="text_massage_therapy">按摩疗法</string>
+    <string name="text_melatonin">褪黑素</string>
+    <string name="text_improved_sleep_environment">改善的睡眠环境</string>
 
 </resources>

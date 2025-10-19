@@ -2272,5 +2272,14 @@
     <string name="text_no_food_items_found_please_try_again">Geen voedingsmiddelen gevonden. Probeer het opnieuw.</string>
     <string name="text_supplement">Supplement</string>
     <string name="text_workout_recorded_but_it_will_be_processed_when_the_internet_is_available">Training opgenomen, maar het wordt verwerkt zodra er internet beschikbaar is.</string>
+    <string name="text_alcohol_intake">Alcoholinname</string>
+    <string name="text_warm_bath">Warm bad</string>
+    <string name="text_meditation">Meditatie</string>
+    <string name="text_ice_bath">IJsbad</string>
+    <string name="text_cold_shower">Koude douche</string>
+    <string name="text_cold_plunge">Koude dompel</string>
+    <string name="text_massage_therapy">Massagetherapie</string>
+    <string name="text_melatonin">Melatonine</string>
+    <string name="text_improved_sleep_environment">Verbeterde slaapomgeving</string>
 
 </resources>
