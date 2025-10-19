@@ -2271,5 +2271,9 @@
     <string name="text_add_supplements">Nahrungsergänzungsmittel hinzufügen</string>
     <string name="text_no_food_items_found_please_try_again">Keine Lebensmittel gefunden. Bitte versuche es erneut.</string>
     <string name="text_supplement">Nahrungsergänzung</string>
+    <string name="text_download_my_data">Meine Daten herunterladen</string>
+    <string name="text_last_val_days">Letzte %1$d Tage</string>
+    <string name="text_processing_your_data">Ihre Daten werden verarbeitet</string>
+    <string name="text_data_downloaded_successfully">Daten erfolgreich heruntergeladen</string>
 
 </resources>

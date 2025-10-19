@@ -2277,5 +2277,9 @@
     <string name="text_add_supplements">เพิ่มอาหารเสริม</string>
     <string name="text_no_food_items_found_please_try_again">ไม่พบรายการอาหาร โปรดลองอีกครั้ง</string>
     <string name="text_supplement">อาหารเสริม</string>
+    <string name="text_download_my_data">ดาวน์โหลดข้อมูลของฉัน</string>
+    <string name="text_last_val_days">ย้อนหลัง %1$d วัน</string>
+    <string name="text_processing_your_data">กำลังประมวลผลข้อมูลของคุณ</string>
+    <string name="text_data_downloaded_successfully">ดาวน์โหลดข้อมูลเรียบร้อยแล้ว</string>
 
 </resources>

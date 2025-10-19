@@ -2293,4 +2293,9 @@
     <string name="text_add_supplements">Добавить добавки</string>
     <string name="text_no_food_items_found_please_try_again">Продукты не найдены. Повторите попытку.</string>
     <string name="text_supplement">Добавка</string>
+    <string name="text_download_my_data">Скачать мои данные</string>
+    <string name="text_last_val_days">Последние %1$d дней</string>
+    <string name="text_processing_your_data">Обработка ваших данных</string>
+    <string name="text_data_downloaded_successfully">Данные успешно загружены</string>
+
 </resources>

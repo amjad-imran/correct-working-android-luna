@@ -2295,5 +2295,9 @@
     <string name="text_add_supplements">Adicionar suplementos</string>
     <string name="text_no_food_items_found_please_try_again">Nenhum alimento encontrado. Tente novamente.</string>
     <string name="text_supplement">Suplemento</string>
+    <string name="text_download_my_data">Baixar meus dados</string>
+    <string name="text_last_val_days">Últimos %1$d dias</string>
+    <string name="text_processing_your_data">Processando seus dados</string>
+    <string name="text_data_downloaded_successfully">Dados baixados com sucesso</string>
 
 </resources>

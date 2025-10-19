@@ -2390,5 +2390,9 @@ onjour, Luna"</string>
     <string name="text_add_supplements">Ajouter des compléments</string>
     <string name="text_no_food_items_found_please_try_again">Aucun aliment trouvé. Veuillez réessayer.</string>
     <string name="text_supplement">Complément</string>
+    <string name="text_download_my_data">Télécharger mes données</string>
+    <string name="text_last_val_days">Derniers %1$d jours</string>
+    <string name="text_processing_your_data">Traitement de vos données</string>
+    <string name="text_data_downloaded_successfully">Données téléchargées avec succès</string>
 
 </resources>

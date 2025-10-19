@@ -2265,5 +2265,9 @@
     <string name="text_add_supplements">添加膳食补充剂</string>
     <string name="text_no_food_items_found_please_try_again">未找到食物项。请重试。</string>
     <string name="text_supplement">补充剂</string>
+    <string name="text_download_my_data">下载我的数据</string>
+    <string name="text_last_val_days">最近 %1$d 天</string>
+    <string name="text_processing_your_data">正在处理您的数据</string>
+    <string name="text_data_downloaded_successfully">数据下载成功</string>
 
 </resources>

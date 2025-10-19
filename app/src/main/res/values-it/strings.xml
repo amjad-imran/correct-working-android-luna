@@ -2272,5 +2272,9 @@
     <string name="text_add_supplements">Aggiungi integratori</string>
     <string name="text_no_food_items_found_please_try_again">Nessun alimento trovato. Riprova.</string>
     <string name="text_supplement">Integratore</string>
+    <string name="text_download_my_data">Scarica i miei dati</string>
+    <string name="text_last_val_days">Ultimi %1$d giorni</string>
+    <string name="text_processing_your_data">Elaborazione dei tuoi dati</string>
+    <string name="text_data_downloaded_successfully">Dati scaricati con successo</string>
 
 </resources>

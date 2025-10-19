@@ -2271,5 +2271,9 @@
     <string name="text_add_supplements">Supplementen toevoegen</string>
     <string name="text_no_food_items_found_please_try_again">Geen voedingsmiddelen gevonden. Probeer het opnieuw.</string>
     <string name="text_supplement">Supplement</string>
+    <string name="text_download_my_data">Mijn gegevens downloaden</string>
+    <string name="text_last_val_days">Laatste %1$d dagen</string>
+    <string name="text_processing_your_data">Je gegevens worden verwerkt</string>
+    <string name="text_data_downloaded_successfully">Gegevens succesvol gedownload</string>
 
 </resources>

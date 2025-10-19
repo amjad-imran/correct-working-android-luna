@@ -2241,5 +2241,9 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_add_supplements">Añadir suplementos</string>
     <string name="text_no_food_items_found_please_try_again">No se encontraron alimentos. Inténtalo de nuevo.</string>
     <string name="text_supplement">Suplemento</string>
+    <string name="text_download_my_data">Descargar mis datos</string>
+    <string name="text_last_val_days">Últimos %1$d días</string>
+    <string name="text_processing_your_data">Procesando tus datos</string>
+    <string name="text_data_downloaded_successfully">Datos descargados con éxito</string>
 
 </resources>
