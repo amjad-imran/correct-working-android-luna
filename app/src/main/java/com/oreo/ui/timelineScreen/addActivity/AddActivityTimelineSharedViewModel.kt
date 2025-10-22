@@ -122,7 +122,7 @@ class AddActivityTimelineSharedViewModel @Inject constructor(
         )
         list.add(
             AddActivityListTimelineModel(
-                name = resourcesProvider.getString(R.string.text_add_alcohol_intake),
+                name = resourcesProvider.getString(R.string.text_alcohol_intake),
                 type = AddActivityItemsEnum.ALCOHOL,
                 titleColor = "#BE7A64".toColorInt()
             )
