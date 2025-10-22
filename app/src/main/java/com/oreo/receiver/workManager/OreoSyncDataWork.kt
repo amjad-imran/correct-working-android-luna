@@ -219,6 +219,10 @@ constructor(
 
                             is Resource.Success -> {
 
+                                if(userActivities.first.sleepData != null){
+                                    localDataStore.setNudgeReadinessData(null)
+                                }
+
 //                                sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Completed_Uploading_Data.name, eventProperty)
 //                                sessionManager.logAppEvent(FunnelEvents.SyncEvents.Sync_Completed.name, eventProperty)
 //                                localDataStore.setLastStepsSyncWithServer(DateFormats.getTimeStamp())
