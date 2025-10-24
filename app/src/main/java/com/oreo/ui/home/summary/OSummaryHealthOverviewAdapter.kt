@@ -2930,6 +2930,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     }
                     binding.tvTodayDesc.apply {
                         text = nudge?.message ?: ""
+                        //visible()
                     }
                 }
             }else{
@@ -3745,23 +3746,12 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             if (data.data.nudge.isEmpty()) {
                 binding.tvDesc.invisible()
                 binding.tvShimmer.visible()
-                binding.tvShimmer.apply {
-                    visible()
-                    fadeIn { }
-                }
+                binding.tvShimmer.fadeIn {}
             } else {
-                binding.tvDesc.invisible()
-                binding.tvShimmer.visible()
-                binding.tvShimmer.apply {
+                binding.tvShimmer.gone()
+                binding.tvDesc.apply {
                     visible()
-                    fadeOut {
-                        binding.tvShimmer.gone()
-                        binding.tvDesc.apply {
-                            visible()
-                            text = data.data.nudge
-                            fadeIn { }
-                        }
-                    }
+                    text = data.data.nudge
                 }
             }
 

@@ -23,11 +23,13 @@ import com.noisefit_commans.ui.disable
 import com.noisefit_commans.ui.enable
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.OAddSleep
+import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.sleep2.add.OAddSleepViewModel
 import com.oreo.ui.timelineScreen.addActivity.AddActivityItemsEnum
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
@@ -60,32 +62,48 @@ class AddSleepFragment :
                 return@setOnClickListener
             }
 
-            if(viewModel.editDataAddActivity?.id != null){
-                viewModel.submitSleepEnvOptions(){
-                    sharedViewModel.sessionManager.logMoEngageAppEvent(
-                        MoEngageLunaAppEvents.insight_log_edited,
-                    )
-                    mainViewModel.sessionManager.reloadOnResume = true
-                    sharedViewModel.navigateUp()
-                    mainViewModel.sleepDashTodayReload.value = Event(true)
-                }
-            }else {
+            if(getString(R.string.text_save).equals(binding.btnSave.text)) {
 
-                if (viewModel.startTimeSleep.day.isEmpty()) {
-                    uiController.onDisplayError(getString(R.string.text_please_select_start_time))
-                    return@setOnClickListener
-                }
-                if (viewModel.endTimeSleep.day.isEmpty()) {
-                    uiController.onDisplayError(getString(R.string.text_please_select_end_time))
-                    return@setOnClickListener
-                }
-                /*if (viewModel.getSleepDuration() < (3 * 60 * 60)) {
+                if (viewModel.editDataAddActivity?.id != null) {
+                    viewModel.submitSleepEnvOptions() {
+                        sharedViewModel.sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.insight_log_edited,
+                        )
+                        mainViewModel.sessionManager.reloadOnResume = true
+                        sharedViewModel.navigateUp()
+                        mainViewModel.sleepDashTodayReload.value = Event(true)
+                    }
+                } else {
+
+                    if (viewModel.startTimeSleep.day.isEmpty()) {
+                        uiController.onDisplayError(getString(R.string.text_please_select_start_time))
+                        return@setOnClickListener
+                    }
+                    if (viewModel.endTimeSleep.day.isEmpty()) {
+                        uiController.onDisplayError(getString(R.string.text_please_select_end_time))
+                        return@setOnClickListener
+                    }
+                    /*if (viewModel.getSleepDuration() < (3 * 60 * 60)) {
                 uiController.onDisplayError("Sleep duration should be minimum of 3 hours")
                 return@setOnClickListener
             }*/
 
 
-                viewModel.callApiToAddSleep()
+                    viewModel.callApiToAddSleep()
+                }
+
+            }
+            else{
+
+                if (sharedViewModel.localDataStore.isAiChatSplashShown()) {
+                    navigate(
+                        R.id.aiTopQuestionsFragment,
+                        bundleOf("aiTopic" to AITopics.SLEEP)
+                    )
+                } else {
+                    navigate(R.id.aiChatOnboardFragment)
+                }
+
             }
         }
 
@@ -396,7 +414,11 @@ class AddSleepFragment :
             }
 
             else -> {
-                binding.btnSave.disable()
+                binding.btnSave.apply {
+                    text = getString(R.string.text_learn_more_with_luna_ai)
+                    enable()
+                    visible()
+                }
             }
         }
     }
@@ -442,8 +464,11 @@ class AddSleepFragment :
 
     fun getDisplayFormatTime(date: String?, time: String?): String{
         return try {
-            val day = if (LocalDate.now().toString().equals(date)) "Today"
-            else "Yesterday"
+            val day = if (getDate(0).equals(date)) "Today"
+            else if (getDate(1).equals(date)) "Yesterday"
+            else LocalDate
+                .parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                .format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
 
             val inFmt  = DateTimeFormatter.ofPattern("HH:mm:ss", Locale.getDefault())
             val outFmt = DateTimeFormatter.ofPattern("h:mm a", Locale.getDefault())
@@ -454,6 +479,11 @@ class AddSleepFragment :
         }catch (_: Exception){
             "--"
         }
+    }
+
+    fun getDate(prevDayNum: Long): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        return LocalDate.now().minusDays(prevDayNum).format(formatter)
     }
 
     private fun initUI() {
@@ -500,24 +530,20 @@ class AddSleepFragment :
             tv.text = data.options
             iv.setImageResource(if (data.isChecked) checkedImg else R.drawable.ic_sleep_env_chip_box_unchecked)
 
-            chip.setOnClickListener {
-                val newChecked = !data.isChecked
-                data.isChecked = newChecked
-                iv.setImageResource(if (newChecked) checkedImg else R.drawable.ic_sleep_env_chip_box_unchecked)
-                binding.btnSave.enable()
-                viewModel.selectedOptMap[data.id as Int] = newChecked
-            }
-            cg.addView(chip)
-        }
-
-        if(canBeViewedOnly){
-            for (i in 0 until cg.childCount){
-                (cg.getChildAt(i) as? Chip)?.apply {
-                    isCheckable = false
-                    isClickable = false
-                    isFocusable = false
+            if(canBeViewedOnly){
+                chip.isClickable = false
+                chip.isFocusable = false
+            }else {
+                chip.setOnClickListener {
+                    val newChecked = !data.isChecked
+                    data.isChecked = newChecked
+                    iv.setImageResource(if (newChecked) checkedImg else R.drawable.ic_sleep_env_chip_box_unchecked)
+                    binding.btnSave.text = getString(R.string.text_save)
+                    binding.btnSave.enable()
+                    viewModel.selectedOptMap[data.id as Int] = newChecked
                 }
             }
+            cg.addView(chip)
         }
 
     }

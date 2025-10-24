@@ -13,5 +13,10 @@ data class BaseApiResponse<T>(
 
 data class ErrorMessage(
     @SerializedName("message")
-    val message: String? = null
+    val message: String? = null,
+    @SerializedName("statusCode")
+    val statusCode: Int? = null,
+    @SerializedName("timer")
+    val timer: Int? = null,
+    val otpExist: Boolean? = null,
 )

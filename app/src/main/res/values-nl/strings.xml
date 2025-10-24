@@ -2275,5 +2275,16 @@
     <string name="text_last_val_days">Laatste %1$d dagen</string>
     <string name="text_processing_your_data">Je gegevens worden verwerkt</string>
     <string name="text_data_downloaded_successfully">Gegevens succesvol gedownload</string>
+    <string name="text_retry_in_value">Opnieuw proberen over %1$s</string>
+    <string name="text_workout_recorded_but_it_will_be_processed_when_the_internet_is_available">Training opgenomen, maar het wordt verwerkt zodra er internet beschikbaar is.</string>
+    <string name="text_alcohol_intake">Alcoholinname</string>
+    <string name="text_warm_bath">Warm bad</string>
+    <string name="text_meditation">Meditatie</string>
+    <string name="text_ice_bath">IJsbad</string>
+    <string name="text_cold_shower">Koude douche</string>
+    <string name="text_cold_plunge">Koude dompel</string>
+    <string name="text_massage_therapy">Massagetherapie</string>
+    <string name="text_melatonin">Melatonine</string>
+    <string name="text_improved_sleep_environment">Verbeterde slaapomgeving</string>
 
 </resources>

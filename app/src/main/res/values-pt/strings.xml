@@ -2299,5 +2299,16 @@
     <string name="text_last_val_days">Últimos %1$d dias</string>
     <string name="text_processing_your_data">Processando seus dados</string>
     <string name="text_data_downloaded_successfully">Dados baixados com sucesso</string>
+    <string name="text_retry_in_value">Tentar novamente em %1$s</string>
+    <string name="text_workout_recorded_but_it_will_be_processed_when_the_internet_is_available">Treino registrado, mas será processado quando a internet estiver disponível.</string>
+    <string name="text_alcohol_intake">Ingestão de álcool</string>
+    <string name="text_warm_bath">Banho quente</string>
+    <string name="text_meditation">Meditação</string>
+    <string name="text_ice_bath">Banho de gelo</string>
+    <string name="text_cold_shower">Chuveiro frio</string>
+    <string name="text_cold_plunge">Mergulho em água fria</string>
+    <string name="text_massage_therapy">Terapia de massagem</string>
+    <string name="text_melatonin">Melatonina</string>
+    <string name="text_improved_sleep_environment">Ambiente de sono aprimorado</string>
 
 </resources>

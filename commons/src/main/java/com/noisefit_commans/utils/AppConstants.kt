@@ -4,6 +4,8 @@ object AppConstants {
 
 
     const val OTP_RESEND_TIMER = 60000L
+    const val OTP_RESEND_SECONDS = (OTP_RESEND_TIMER /1000).toInt()
+
 
     const val URL_CONTACT_SUPPORT = "https://www.gonoise.com/pages/register-your-complaint"
     const val URL_PRIVACY_POLICY = "https://www.gonoise.com/pages/luna-ring-privacy-policy"

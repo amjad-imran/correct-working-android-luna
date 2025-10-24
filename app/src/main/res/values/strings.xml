@@ -2251,5 +2251,16 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_processing_your_data">Processing your data</string>
     <string name="text_data_downloaded_successfully">Data Downloaded Successfully</string>
 
+    <string name="text_retry_in_value">Retry in %1$s</string>
+    <string name="text_workout_recorded_but_it_will_be_processed_when_the_internet_is_available">Workout Recorded but it will be processed when the internet is available.</string>
+    <string name="text_alcohol_intake">Alcohol Intake</string>
+    <string name="text_warm_bath">Warm bath</string>
+    <string name="text_meditation">Meditation</string>
+    <string name="text_ice_bath">Ice Bath</string>
+    <string name="text_cold_shower">Cold shower</string>
+    <string name="text_cold_plunge">Cold Plunge</string>
+    <string name="text_massage_therapy">Massage Therapy</string>
+    <string name="text_melatonin">Melatonin</string>
+    <string name="text_improved_sleep_environment">Improved Sleep Environment</string>
 
 </resources>

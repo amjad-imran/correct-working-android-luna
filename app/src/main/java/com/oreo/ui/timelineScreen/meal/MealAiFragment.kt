@@ -35,6 +35,8 @@ import java.time.format.DateTimeFormatter
 import kotlin.getValue
 import androidx.core.view.isVisible
 import com.moengage.core.internal.utils.showToast
+import com.noisefit_commans.utils.DateFormats.getDayOfMonthSuffix
+import com.noisefit_commans.utils.LOGS
 
 @AndroidEntryPoint
 class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding::inflate) {
@@ -61,7 +63,12 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
                 viewModel.viewMode = true
             }
 
-            listOf(binding.tvHeader, binding.tvSub, binding.cardInput, binding.imageGreenBottomGlow).forEach { v ->
+            listOf(
+                binding.tvHeader,
+                binding.tvSub,
+                binding.cardInput,
+                binding.imageGreenBottomGlow
+            ).forEach { v ->
                 v.alpha = 0f
                 v.gone()
             }
@@ -99,7 +106,7 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
             viewModel.deleteMeal()
         }
 
-        binding.lytContent.tvAddFood.setOnClickListener {
+        binding.lytContent.llLytAddFoodItem.setOnClickListener {
             showAddFoodSheet()
         }
         binding.lytContent.tvTime.setOnClickListener {
@@ -184,7 +191,7 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
         }
     }
 
-    fun onEditClicked(){
+    fun onEditClicked() {
         viewModel.mealAiResponse.value = null
         binding.imageGradientTop.gone()
         binding.tvTopText.gone()
@@ -196,7 +203,12 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
         binding.cardInput.visible()
         binding.imageGreenBottomGlow.visible()
 
-        listOf(binding.tvHeader, binding.tvSub, binding.cardInput, binding.imageGreenBottomGlow).forEach { v ->
+        listOf(
+            binding.tvHeader,
+            binding.tvSub,
+            binding.cardInput,
+            binding.imageGreenBottomGlow
+        ).forEach { v ->
             v.animate().alpha(1f).setDuration(250).start()
         }
 
@@ -219,9 +231,11 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
             } else {
                 binding.tvAnalysing.gone()
 
-                if(it.foods.isNullOrEmpty()){
-                    showToast(requireContext(),
-                        getString(R.string.text_no_food_items_found_please_try_again))
+                if (it.foods.isNullOrEmpty()) {
+                    showToast(
+                        requireContext(),
+                        getString(R.string.text_no_food_items_found_please_try_again)
+                    )
                     onEditClicked()
                     return@observe
                 }
@@ -305,9 +319,9 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
             foodAdapter = FoodAdapter(viewModel.viewMode) { items ->
                 updateTotalCalories(items)
                 if ((foodAdapter?.itemCount ?: 0) >= 10) {
-                    binding.lytContent.tvAddFood.gone()
+                    binding.lytContent.llLytAddFoodItem.gone()
                 } else {
-                    binding.lytContent.tvAddFood.visible()
+                    binding.lytContent.llLytAddFoodItem.visible()
                 }
             }
             adapter = foodAdapter
@@ -316,12 +330,27 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
         foodAdapter?.setData(data.foods ?: ArrayList())
 
         if ((data.foods?.size ?: 0) >= 10 || viewModel.viewMode) {
-            binding.lytContent.tvAddFood.gone()
+            binding.lytContent.llLytAddFoodItem.gone()
         } else {
-            binding.lytContent.tvAddFood.visible()
+            binding.lytContent.llLytAddFoodItem.visible()
         }
 
-        mealBinding.tvDate.text = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMM"))
+        val date = if(data.date!=null){
+            try {
+                LocalDate.parse(data.date,
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+            }catch (exp: Exception){
+                exp.printStackTrace()
+                LocalDate.now()
+            }
+        }else{
+            LocalDate.now()
+        }
+        val day = date.format(DateTimeFormatter.ofPattern("dd"))
+
+        val prefix = getDayOfMonthSuffix(day.toInt())
+        val month = date.format(DateTimeFormatter.ofPattern("MMM"))
+        mealBinding.tvDate.text = "$day${prefix} $month"
 
         updateTotalCalories(foodAdapter?.getItems().orEmpty())
 
@@ -369,7 +398,12 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
             floating.x = startX
             floating.y = startY
 
-            listOf(binding.tvHeader, binding.tvSub, binding.cardInput, binding.imageGreenBottomGlow).forEach { v ->
+            listOf(
+                binding.tvHeader,
+                binding.tvSub,
+                binding.cardInput,
+                binding.imageGreenBottomGlow
+            ).forEach { v ->
                 v.animate().alpha(0f).setDuration(250).start()
             }
 
@@ -403,9 +437,9 @@ class MealAiFragment : BaseFragment<FragmentMealAiBinding>(FragmentMealAiBinding
             override fun onFoodAdded(name: String, calories: Int) {
                 foodAdapter?.addItem(MealAiFoods(name, calories))
                 if ((foodAdapter?.itemCount ?: 0) >= 10) {
-                    binding.lytContent.tvAddFood.gone()
+                    binding.lytContent.llLytAddFoodItem.gone()
                 } else {
-                    binding.lytContent.tvAddFood.visible()
+                    binding.lytContent.llLytAddFoodItem.visible()
                 }
             }
         }

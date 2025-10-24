@@ -2269,5 +2269,16 @@
     <string name="text_last_val_days">最近 %1$d 天</string>
     <string name="text_processing_your_data">正在处理您的数据</string>
     <string name="text_data_downloaded_successfully">数据下载成功</string>
+    <string name="text_retry_in_value">在 %1$s 后重试</string>
+    <string name="text_workout_recorded_but_it_will_be_processed_when_the_internet_is_available">锻炼已记录，但将在有网络时进行处理。</string>
+    <string name="text_alcohol_intake">酒精摄入</string>
+    <string name="text_warm_bath">热水浴</string>
+    <string name="text_meditation">冥想</string>
+    <string name="text_ice_bath">冰浴</string>
+    <string name="text_cold_shower">冷水澡</string>
+    <string name="text_cold_plunge">冷水浸泡</string>
+    <string name="text_massage_therapy">按摩疗法</string>
+    <string name="text_melatonin">褪黑素</string>
+    <string name="text_improved_sleep_environment">改善的睡眠环境</string>
 
 </resources>

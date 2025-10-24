@@ -169,6 +169,11 @@ class SummaryDataFragmentToday :
 
         viewModel.getPeriodData()
 
+        /*Handler(Looper.getMainLooper()).postDelayed({
+            navigate(R.id.timelineScreenFragment)
+        },3000)*/
+
+
 
     }
 
@@ -1126,6 +1131,9 @@ class SummaryDataFragmentToday :
                 viewModel.femaleHealthData.second?.let {
                     val cycleTrackerData = it.copy(
                         nudges = arrayListOf(nudge)
+                    )
+                    viewModel.femaleHealthData = viewModel.femaleHealthData.copy(
+                        second = cycleTrackerData
                     )
                     viewModel.updateCycleTrackerCardData(cycleTrackerData)?.let { card ->
                         healthOverviewAdapter.updateData(card)

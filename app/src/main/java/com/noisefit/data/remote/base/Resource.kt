@@ -8,7 +8,9 @@ import com.noisefit_commans.data.ErrorResponse
  */
 sealed class Resource<out T> {
     class Success<out T>(val data: T?) : Resource<T>()
-    class GenericError(val message: String?, val errorCode: Int?) : Resource<Nothing>()
+    class GenericError(val message: String?, val errorCode: Int?,
+                       val errorBody: com.noisefit_commans.data.response.ErrorResponse? = null
+        ) : Resource<Nothing>()
     class NetworkError(val response: ErrorResponse, val code:Int?=0) : Resource<Nothing>()
 
 //    class WrongClientTimeError(val response: ErrorResponse, val code:Int?=0) : Resource<Nothing>()

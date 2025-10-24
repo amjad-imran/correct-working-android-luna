@@ -258,8 +258,10 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
     private fun handleDropDown() {
         if(viewModel.isDropdownOpen){
             binding.rvOptions.gone()
+            binding.imageView100.setImageResource(R.drawable.ic_arrow_down_2)
         }else{
             binding.rvOptions.visible()
+            binding.imageView100.setImageResource(R.drawable.ic_arrow_up_2)
         }
         viewModel.isDropdownOpen = !viewModel.isDropdownOpen
     }
@@ -273,6 +275,7 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
         viewModel.selectedOption = option
         binding.tvSelected.text = option.options
         binding.rvOptions.gone()
+        binding.imageView100.setImageResource(R.drawable.ic_arrow_down_2)
     }
 
     private fun onTimeClicked() {

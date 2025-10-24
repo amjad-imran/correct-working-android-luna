@@ -40,6 +40,7 @@ import com.noisefit_commans.models.Units
 import com.noisefit_commans.models.UserLocation
 import com.noisefit_commans.models.WorkoutRealTimeData
 import com.noisefit_commans.ui.tryCatch
+import com.noisefit_commans.utils.AppConstants
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
@@ -71,6 +72,13 @@ class SessionManager
         val TAG = "SessionManager"
 
     }
+
+    /**
+     *set it on every api send otp api call
+     *     and use for timer
+     */
+    var otpResendTimerSeconds = AppConstants.OTP_RESEND_SECONDS
+
     val nfcSleepErr = MutableLiveData<Event<Boolean>>()
     val updateRingLocation = MutableLiveData<Event<Boolean>>()
     val forceUpdateApp = MutableLiveData<Event<Boolean>>()

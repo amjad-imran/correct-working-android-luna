@@ -98,7 +98,21 @@ class AuthViewModel @Inject constructor(
             authRepo.sendOtp(requestObject).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
-                        sendMessage(resource.message)
+                        val errTimer = resource.errorBody?.errors?.timer
+                        if (errTimer != null) {
+                            sessionManager.otpResendTimerSeconds = errTimer
+
+                            if(resource.errorBody.errors.otpExist == true){
+                                if (type == AuthMode.email) {
+                                    email = value
+                                    usePassword = false
+                                }
+                                emailOtpGenerated.postValue(Event(true))
+                            }
+                            sendMessage(resource.errorBody.errors.message)
+                        }else{
+                            sendMessage(resource.message)
+                        }
                     }
 
                     is Resource.Loading -> {
@@ -122,6 +136,8 @@ class AuthViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
+                            sessionManager.otpResendTimerSeconds = it.timer?:AppConstants.OTP_RESEND_SECONDS
+
                             if (type == AuthMode.email) {
                                 email = value
                                 usePassword = it.is_pwd ?: false
@@ -373,11 +389,37 @@ class AuthViewModel @Inject constructor(
 
     var timer: CountDownTimer? = null
     val timerRunning = MutableLiveData<Boolean>()
-    fun startOtpResendTimer() {
+    val tickerTime = MutableLiveData<String>()
+
+    fun startOtpResendTimer(startSeconds: Int? = null) {
+        val totalMillis = if (startSeconds != null) startSeconds.toLong() * 1000L else AppConstants.OTP_RESEND_TIMER
         timer?.cancel()
         timerRunning.postValue(true)
-        timer = object : CountDownTimer(AppConstants.OTP_RESEND_TIMER, 1000) {
+        timer = object : CountDownTimer(totalMillis + 999L, 1000L) {
             override fun onTick(millisUntilFinished: Long) {
+
+                val totalSecs = ((millisUntilFinished + 999L) / 1000L).toInt()
+
+                if (totalSecs <= 0) return
+
+
+                val seconds = totalSecs % 60
+                val minutes = (totalSecs / 60) % 60
+                val hours = (totalSecs / 3600) % 24
+                val tempSec: String = if (seconds < 10)
+                    "0$seconds"
+                else
+                    "$seconds"
+                val tempMin: String = if (minutes < 10)
+                    "0$minutes"
+                else
+                    "$minutes"
+                val tempHour: String = if (hours < 10)
+                    "0$hours"
+                else
+                    "$hours"
+                tickerTime.postValue(if (hours > 0) "$tempHour:$tempMin:$tempSec" else "$tempMin:$tempSec")
+
             }
 
             override fun onFinish() {

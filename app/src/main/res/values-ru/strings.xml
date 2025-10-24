@@ -2298,4 +2298,17 @@
     <string name="text_processing_your_data">Обработка ваших данных</string>
     <string name="text_data_downloaded_successfully">Данные успешно загружены</string>
 
+    <string name="text_retry_in_value">Повтор через %1$s</string>
+
+    <string name="text_workout_recorded_but_it_will_be_processed_when_the_internet_is_available">Тренировка записана, но будет обработана, когда будет доступен интернет.</string>
+    <string name="text_alcohol_intake">Потребление алкоголя</string>
+    <string name="text_warm_bath">Тёплая ванна</string>
+    <string name="text_meditation">Медитация</string>
+    <string name="text_ice_bath">Ледяная ванна</string>
+    <string name="text_cold_shower">Холодный душ</string>
+    <string name="text_cold_plunge">Погружение в холодную воду</string>
+    <string name="text_massage_therapy">Массажная терапия</string>
+    <string name="text_melatonin">Мелатонин</string>
+    <string name="text_improved_sleep_environment">Улучшенная среда для сна</string>
+
 </resources>

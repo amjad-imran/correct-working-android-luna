@@ -31,6 +31,7 @@ import com.oreo.ui.timelineScreen.addActivity.AddActivityItemsEnum
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
 import com.oreo.ui.workout.add.OAddWorkoutFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
@@ -58,17 +59,25 @@ class AddCaffeineFragment :
             viewModel.editData?.value?.toFloat()?.let {
                 binding.lytCard.lytSlider.setValue(it)
             }
+
+            binding.lytCard.textView192.text =
+                if(LocalDate.now().toString().equals(viewModel.editData?.startDate)){
+                    getString(R.string.text_today)
+                }else{
+                    LocalDate
+                        .parse(viewModel.editData?.startDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                        .format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
+                }
+
             when(viewModel.editData!!.canBeEditedOrDeleted){
                 0 -> {
                     // TODO: Block Slider touch
-                    binding.lytCard.lytSlider.disable()
-                    binding.lytCard.lytTimePicker.isClickable = false
+                    binding.lytCard.lytSlider.sliderEnable(false)
                     binding.btnSave.gone()
                 }
 
                 else -> {
-                    binding.lytCard.lytSlider.isClickable = true
-                    binding.lytCard.lytTimePicker.isClickable = true
+                    binding.lytCard.lytSlider.sliderEnable(true)
                     binding.btnSave.apply {
                         text = getString(R.string.text_learn_more_with_luna_ai)
                         enable()

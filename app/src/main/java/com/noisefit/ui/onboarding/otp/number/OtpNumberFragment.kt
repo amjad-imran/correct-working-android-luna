@@ -133,6 +133,7 @@ class OtpNumberFragment :
 
     private fun sendOtp() {
         if (viewModel.contactNumber.value?.isValidMobileNumber() == true) {
+            viewModel.isMobileExist = false
             viewModel.sendOtp()
         }
 

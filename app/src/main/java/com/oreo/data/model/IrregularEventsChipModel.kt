@@ -14,7 +14,8 @@ data class IrregularEventsChipsListModel(
 @Parcelize
 data class IrregularEventsChipModel(
     val key:String,
-    val displayName:String
+    val displayName:String,
+    val actualName:String?=null,
 ) : Parcelable
 
 @Parcelize

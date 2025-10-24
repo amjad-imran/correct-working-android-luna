@@ -170,6 +170,10 @@ constructor(
             supervisorScope {
                 val userActivities = syncRepository.getUnSyncUserActivities()
 
+                if(userActivities.first.sleepData != null){
+                    localDataStore.setNudgeReadinessData(null)
+                }
+
                 /*syncRepository.getTodaySleepData().collect { resource ->
                     when (resource) {
                         is CacheResult.Success -> {
