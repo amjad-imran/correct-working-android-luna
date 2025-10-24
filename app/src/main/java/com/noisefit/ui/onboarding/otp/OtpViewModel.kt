@@ -319,9 +319,13 @@ constructor(
         val totalMillis = if (startSeconds != null) startSeconds.toLong() * 1000L else AppConstants.OTP_RESEND_TIMER
         timer?.cancel()
         timerRunning.postValue(true)
-        timer = object : CountDownTimer(totalMillis, 1000) {
+        timer = object : CountDownTimer(totalMillis + 999L, 1000L) {
             override fun onTick(millisUntilFinished: Long) {
-                val totalSecs = millisUntilFinished / 1000
+
+                val totalSecs = ((millisUntilFinished + 999L) / 1000L).toInt()
+
+                if (totalSecs <= 0) return
+
                 val seconds = totalSecs % 60
                 val minutes = (totalSecs / 60) % 60
                 val hours = (totalSecs / 3600) % 24
