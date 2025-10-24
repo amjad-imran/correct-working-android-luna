@@ -414,6 +414,7 @@ constructor(
                                 //sleepDashTodayReload.value = Event(true)
 
                                 circadianGraphData = it.circadianGraph
+                                getNudgeData()
                             }
 
                             val todayData = userHealthData[getTodayDate()]
@@ -767,7 +768,7 @@ constructor(
         if (!shouldRefresh) {
             val todayDate = getTodayDate()
             getUserHealthData(todayDate, todayDate)
-            getNudgeData()
+//            getNudgeData()
         }
     }
 
