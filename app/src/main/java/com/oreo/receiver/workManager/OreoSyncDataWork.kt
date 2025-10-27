@@ -64,6 +64,7 @@ import java.util.Calendar
 import java.util.TimeZone
 import java.util.Timer
 import java.util.TimerTask
+import java.util.concurrent.TimeUnit
 import kotlin.concurrent.schedule
 import kotlin.coroutines.CoroutineContext
 
@@ -903,14 +904,21 @@ constructor(
                     //
                     val currentTimezone = TimeZone.getDefault().id
                     val storedTimezone = localDataStore.getLastKnownTimezone()
+
+                    val currentOffset = TimeUnit.MILLISECONDS.toMinutes(
+                        Calendar.getInstance().get(Calendar.ZONE_OFFSET).toLong()
+                    ).toString()
+
                     when{
                         storedTimezone == null -> {
                             localDataStore.setLastKnownTimezone(currentTimezone)
+                            localDataStore.setLastKnownOffset(currentOffset)
                             localDataStore.isTimezoneChangedAlertCardDismissed(true)
                         }
 
                         storedTimezone != currentTimezone -> {
                             localDataStore.setLastKnownTimezone(currentTimezone)
+                            localDataStore.setLastKnownOffset(currentOffset)
                             localDataStore.isTimezoneChangedAlertCardDismissed(false)
                         }
 

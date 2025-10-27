@@ -273,11 +273,13 @@ class NetworkConnectionInterceptor(
 
             val timeZone = localDataStore.getLastKnownTimezone() ?: TimeZone.getDefault().id
             addHeader("timezone", timeZone)
+
+            val offset = localDataStore.getLastKnownOffset() ?: TimeUnit.MILLISECONDS.toMinutes(
+                Calendar.getInstance().get(Calendar.ZONE_OFFSET).toLong()
+            ).toString()
             addHeader(
                 "offset",
-                TimeUnit.MILLISECONDS.toMinutes(
-                    Calendar.getInstance().get(Calendar.ZONE_OFFSET).toLong()
-                ).toString()
+                offset
             )
             addHeader("device-no", WatchInfoGlobals.firmwareDeviceIdRing.toString())
         }.build()

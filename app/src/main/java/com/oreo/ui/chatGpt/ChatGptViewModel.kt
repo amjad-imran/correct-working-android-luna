@@ -349,9 +349,10 @@ class ChatGptViewModel
         builder.addHeader("wearable-type", "ring")
         val timeZone = localDataStore.getLastKnownTimezone() ?: TimeZone.getDefault().id
         builder.addHeader("timezone", timeZone)
-        builder.addHeader("offset", TimeUnit.MILLISECONDS.toMinutes(
+        val offset = localDataStore.getLastKnownOffset() ?: TimeUnit.MILLISECONDS.toMinutes(
             Calendar.getInstance().get(Calendar.ZONE_OFFSET).toLong()
-        ).toString())
+        ).toString()
+        builder.addHeader("offset", offset)
 
     }
 

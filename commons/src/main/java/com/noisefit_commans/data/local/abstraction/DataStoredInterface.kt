@@ -583,6 +583,9 @@ interface DataStoredInterface {
     fun setLastKnownTimezone(timeZone: String)
     fun isTimezoneChangedAlertCardDismissed(isChanged: Boolean?=null): Boolean
 
+    fun getLastKnownOffset(): String?
+    fun setLastKnownOffset(offset: String)
+
     fun saveUserCopyTodayData(data: OreoStepsData?)
     fun getUserCopyTodayData():OreoStepsData?
     fun getExceptionCancelTime(): Long

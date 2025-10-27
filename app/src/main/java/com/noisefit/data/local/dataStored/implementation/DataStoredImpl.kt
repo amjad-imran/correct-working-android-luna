@@ -270,6 +270,7 @@ private const val MEASUREMENTS_DATA = "MEASUREMENTS_DATA"
 private const val TIMELINE_ACTIVITIES_DATA = "TIMELINE_ACTIVITIES_DATA"
 
 private const val LAST_KNOWN_TIMEZONE = "LAST_KNOWN_TIMEZONE"
+private const val LAST_KNOWN_OFFSET = "LAST_KNOWN_OFFSET"
 private const val TIMEZONE_CHANGED_CARD_DISMISSED = "TIMEZONE_CHANGED_CARD_DISMISSED"
 private const val SLEEP_EXCEPTION_CANCEL_TIME = "SLEEP_EXCEPTION_CANCEL_TIME"
 
@@ -888,6 +889,7 @@ class DataStoredImpl
         mPrefs.edit()?.remove(TIMELINE_ACTIVITIES_DATA)?.apply()
 
         mPrefs.edit()?.remove(LAST_KNOWN_TIMEZONE)?.apply()
+        mPrefs.edit()?.remove(LAST_KNOWN_OFFSET)?.apply()
         mPrefs.edit()?.remove(TIMEZONE_CHANGED_CARD_DISMISSED)?.apply()
 
         mPrefs.edit()?.remove(PORTABLE_CHARGER_ONBOARDING)?.apply()
@@ -2397,6 +2399,14 @@ class DataStoredImpl
             mPrefs.edit()?.putBoolean(TIMEZONE_CHANGED_CARD_DISMISSED, isChanged)?.commit()
         }
         return output
+    }
+
+    override fun getLastKnownOffset(): String? {
+        return mPrefs.getString(LAST_KNOWN_OFFSET, null)
+    }
+
+    override fun setLastKnownOffset(offset: String) {
+        mPrefs.edit()?.putString(LAST_KNOWN_OFFSET, offset)?.commit()
     }
 
     override fun saveUserCopyTodayData(data: OreoStepsData?) {
