@@ -61,9 +61,9 @@ data class ItemTimelineResponseModel(
 
     /*
         0 -> No edit, Only Visible
-        1 -> Edit and Delete
-        2 -> Edit
-        3 -> Delete
+        1 -> Edit
+        2 -> Delete
+        3 -> Edit and Delete
     */
     var canBeEditedOrDeleted:Int = 0,
 ) : Parcelable
