@@ -167,7 +167,7 @@ class AddAlcoholFragment : BaseFragment<FragmentAddAlcoholBinding>(FragmentAddAl
             val minute = bundle.getInt("minute")
 
             val time = LocalTime.of(hourOfDay, minute)
-            if (time > LocalTime.now()) {
+            if (LocalDate.now().toString().equals(viewModel.selectedDate) && time > LocalTime.now()) {
                 context.showShortToast("Time cannot be in future") //TODO message change
                 return@setFragmentResultListener
             }
