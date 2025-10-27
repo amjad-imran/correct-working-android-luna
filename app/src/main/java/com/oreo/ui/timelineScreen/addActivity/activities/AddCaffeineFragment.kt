@@ -73,11 +73,13 @@ class AddCaffeineFragment :
                 0 -> {
                     // TODO: Block Slider touch
                     binding.lytCard.lytSlider.sliderEnable(false)
+                    binding.lytCard.lytTimePicker.isClickable = false
                     binding.btnSave.gone()
                 }
 
                 else -> {
                     binding.lytCard.lytSlider.sliderEnable(true)
+                    binding.lytCard.lytTimePicker.isClickable = true
                     binding.btnSave.apply {
                         text = getString(R.string.text_learn_more_with_luna_ai)
                         enable()
