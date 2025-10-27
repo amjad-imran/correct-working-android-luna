@@ -212,6 +212,17 @@ class AddAlcoholFragment : BaseFragment<FragmentAddAlcoholBinding>(FragmentAddAl
                 val parsedDate =
                     LocalDate.parse(it1, formatter)
                         .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString()
+
+                val curTime = LocalTime.now()
+
+                if(LocalDate.now().toString().equals(parsedDate) && viewModel.alcoholTime > curTime){
+                    viewModel.alcoholTime = curTime
+                    binding.lytDateTime.lytTime.tvTimeValue.text = DateFormats.formatTimeWithAmPm(
+                        curTime.hour,
+                        curTime.minute
+                    )
+                }
+
                 viewModel.selectedDate = parsedDate
 
                 binding.lytDateTime.lytDate.tvTimeValue.text = it1

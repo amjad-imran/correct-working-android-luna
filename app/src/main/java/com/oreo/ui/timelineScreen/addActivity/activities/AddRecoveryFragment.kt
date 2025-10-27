@@ -160,8 +160,12 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
             val hourOfDay = bundle.getInt("hour")
             val minute = bundle.getInt("minute")
 
-            val time = LocalTime.of(hourOfDay, minute)
-            if (time > LocalTime.now()) {
+            val time = if(isStartTimeClicked) {
+                LocalTime.of(hourOfDay, minute, 59, 9999)
+            }else{
+                LocalTime.of(hourOfDay, minute, 0, 0)
+            }
+            if (LocalDate.now().toString().equals(viewModel.date) && time > LocalTime.now()) {
                 val errorMsg = if(isStartTimeClicked){
                     getString(R.string.text_start_time_less_then_current_time)
                 }else{
@@ -318,6 +322,16 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
                 val parsedDate =
                     LocalDate.parse(it1, DateTimeFormatter.ofPattern("dd MMM yyyy"))
                         .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString()
+
+                val curTime = LocalTime.now()
+
+                if(LocalDate.now().toString().equals(parsedDate) && viewModel.endTime?.let { it>curTime } == true){
+                    viewModel.endTime = curTime
+                    viewModel.startTime = viewModel.endTime?.minusMinutes(60)
+
+                    viewModel.endTime?.let { binding.tvEndTime.text = getFormattedTimeString(it) }
+                    viewModel.startTime?.let { binding.tvStartTime.text = getFormattedTimeString(it) }
+                }
                 viewModel.date = parsedDate
                 setDate()
             }

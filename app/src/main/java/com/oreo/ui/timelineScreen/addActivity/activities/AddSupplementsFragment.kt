@@ -284,7 +284,7 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
             val minute = bundle.getInt("minute")
 
             val time = LocalTime.of(hourOfDay, minute)
-            if (time > LocalTime.now()) {
+            if (LocalDate.now().toString().equals(viewModel.selectedDate) && time > LocalTime.now()) {
                 context.showShortToast("Time cannot be in future") //TODO message change
                 return@setFragmentResultListener
             }
@@ -333,6 +333,16 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
                 val parsedDate =
                     LocalDate.parse(it1, DateTimeFormatter.ofPattern("dd MMM yyyy"))
                         .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")).toString()
+
+                val curTime = LocalTime.now()
+
+                if(LocalDate.now().toString().equals(parsedDate) && viewModel.supplementTime > curTime){
+                    viewModel.supplementTime = curTime
+                    binding.lytDateTime.lytTime.tvTimeValue.text = DateFormats.formatTimeWithAmPm(
+                            curTime.hour,
+                            curTime.minute
+                    )
+                }
                 viewModel.selectedDate = parsedDate
 
                 binding.lytDateTime.lytDate.tvTimeValue.text = it1
