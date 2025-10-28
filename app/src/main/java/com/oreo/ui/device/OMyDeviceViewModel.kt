@@ -21,6 +21,7 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.FileLogsUtils
+import com.oreo.ui.profile.downloadMyData.ProcessAndDownloadMyDataBottomSheet
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -69,6 +70,8 @@ class OMyDeviceViewModel @Inject constructor(
         "https://luna-cdn.gonoise.com/production/ring/set_2/Luna+Gen+2.538+(1)+1.png",
         "https://luna-cdn.gonoise.com/production/ring/set_1/Luna+Gen+2.565+1.png"
     )
+
+    var processSheet: ProcessAndDownloadMyDataBottomSheet? = null
 
     init {
         _deviceConnected.value = (ringDataStore.getRingDevice() != null)
@@ -208,7 +211,7 @@ class OMyDeviceViewModel @Inject constructor(
                 okHttpClient.newCall(req).execute().use { res ->
                     if (!res.isSuccessful) error("Download failed: ${res.code}")
 
-                    val filename = "generated_${System.currentTimeMillis()}.pdf"
+                    val filename = "Luna_Report_${System.currentTimeMillis()}.pdf"
                     val outFile = File(appCtx.cacheDir, filename)
 
                     res.body?.byteStream()?.use { input ->

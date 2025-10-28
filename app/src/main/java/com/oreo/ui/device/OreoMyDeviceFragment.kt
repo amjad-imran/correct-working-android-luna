@@ -251,17 +251,13 @@ class OreoMyDeviceFragment :
     }
 
     private fun showProcessSheet() {
-        ProcessAndDownloadMyDataBottomSheet()
-            .show(childFragmentManager, "DownloadBS")
+        mViewModel.processSheet = ProcessAndDownloadMyDataBottomSheet()
+        mViewModel.processSheet?.show(childFragmentManager, "DownloadBS")
     }
 
     private fun dismissProcessSheetIfVisible() {
-        // If your sheet is a destination, pop it if it’s on top
-        val nav = findNavController()
-        val currentId = nav.currentDestination?.id
-        if (currentId == R.id.processAndDownloadMyDataBottomSheet) {
-            nav.popBackStack()
-        }
+        mViewModel.processSheet?.dismiss()
+        mViewModel.processSheet = null
     }
 
     override fun subscribeObservers() {
