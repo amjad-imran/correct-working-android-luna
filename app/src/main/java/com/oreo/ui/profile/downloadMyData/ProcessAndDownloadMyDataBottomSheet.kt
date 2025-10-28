@@ -12,10 +12,10 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentProcessAndDownloadMyDataBottomSheetBinding
+import com.noisefit.ui.profile.ProfileViewModel
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
-import com.oreo.ui.device.OMyDeviceViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,7 +26,7 @@ class ProcessAndDownloadMyDataBottomSheet :
         FragmentProcessAndDownloadMyDataBottomSheetBinding::inflate
     ) {
 
-    private val vm: OMyDeviceViewModel by viewModels(
+    private val vm: ProfileViewModel by viewModels(
         ownerProducer = { requireParentFragment() },
         factoryProducer = { defaultViewModelProviderFactory }
     )
@@ -48,9 +48,9 @@ class ProcessAndDownloadMyDataBottomSheet :
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 vm.bsState.collect { state ->
                     when (state) {
-                        OMyDeviceViewModel.DownloadMyDataBS.PROCESSING -> showProcessingUi()
-                        OMyDeviceViewModel.DownloadMyDataBS.SUCCESS -> showSuccessUi()
-                        OMyDeviceViewModel.DownloadMyDataBS.ERROR -> showErrorUi()
+                        ProfileViewModel.DownloadMyDataBS.PROCESSING -> showProcessingUi()
+                        ProfileViewModel.DownloadMyDataBS.SUCCESS -> showSuccessUi()
+                        ProfileViewModel.DownloadMyDataBS.ERROR -> showErrorUi()
                         else -> Unit
                     }
                 }
