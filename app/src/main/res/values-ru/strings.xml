@@ -2310,5 +2310,7 @@
     <string name="text_massage_therapy">Массажная терапия</string>
     <string name="text_melatonin">Мелатонин</string>
     <string name="text_improved_sleep_environment">Улучшенная среда для сна</string>
+    <string name="text_alcohol_logged">Алкоголь зафиксирован</string>
+    <string name="text_reorder_hide_or_show_the_features_you_care_about_the_most_personalize_your_homescreen_to_keep_what_s_relevant_you_ll_always_be_able_to_add_it_back_later">Упорядочьте, скрывайте или показывайте функции, которые важны именно вам. Настройте главный экран, чтобы оставалось только нужное. Позже вы всегда сможете добавить их обратно.</string>
 
 </resources>

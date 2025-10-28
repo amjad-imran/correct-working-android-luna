@@ -2292,5 +2292,7 @@
     <string name="text_massage_therapy">การบำบัดด้วยการนวด</string>
     <string name="text_melatonin">เมลาโทนิน</string>
     <string name="text_improved_sleep_environment">สภาพแวดล้อมการนอนที่ดีขึ้น</string>
+    <string name="text_alcohol_logged">บันทึกแอลกอฮอล์แล้ว</string>
+    <string name="text_reorder_hide_or_show_the_features_you_care_about_the_most_personalize_your_homescreen_to_keep_what_s_relevant_you_ll_always_be_able_to_add_it_back_later">จัดลำดับใหม่ ซ่อน หรือแสดงฟีเจอร์ที่คุณให้ความสำคัญมากที่สุด ปรับแต่งหน้าจอหลักเพื่อคงไว้เฉพาะสิ่งที่เกี่ยวข้อง คุณสามารถเพิ่มกลับมาได้ทุกเมื่อในภายหลัง</string>
 
 </resources>

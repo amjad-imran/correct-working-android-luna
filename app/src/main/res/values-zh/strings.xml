@@ -2280,5 +2280,7 @@
     <string name="text_massage_therapy">按摩疗法</string>
     <string name="text_melatonin">褪黑素</string>
     <string name="text_improved_sleep_environment">改善的睡眠环境</string>
+    <string name="text_alcohol_logged">已记录饮酒</string>
+    <string name="text_reorder_hide_or_show_the_features_you_care_about_the_most_personalize_your_homescreen_to_keep_what_s_relevant_you_ll_always_be_able_to_add_it_back_later">重新排序、隐藏或显示你最关心的功能。个性化你的主屏幕，保留对你有用的内容。你随时都可以在之后再添加回来。</string>
 
 </resources>

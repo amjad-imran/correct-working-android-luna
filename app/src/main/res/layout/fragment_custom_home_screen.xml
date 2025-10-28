@@ -96,7 +96,7 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
                     android:lineSpacingExtra="4sp"
-                    android:text="@string/text_custom_homescreen_message_2"
+                    android:text="@string/text_reorder_hide_or_show_the_features_you_care_about_the_most_personalize_your_homescreen_to_keep_what_s_relevant_you_ll_always_be_able_to_add_it_back_later"
                     android:textColor="#80ffffff"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
