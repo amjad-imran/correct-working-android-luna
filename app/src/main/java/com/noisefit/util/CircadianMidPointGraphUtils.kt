@@ -173,6 +173,23 @@ object CircadianMidPointGraphUtils {
             }
         }
 
+        // Both before phase range (but within graph bounds)
+        if (avgBeforeIndex < phaseRange.first() && avgNowIndex < phaseRange.first()) {
+            return if (avgNowIndex > avgBeforeIndex) {
+                Triple(
+                    CircadianMidPointState.PhaseAdvance,
+                    CircadianMidPointStatus.Correcting,
+                    context.getString(R.string.text_you_re_improving_staying_active_later_and_delaying_sleep_cues_is_helping)
+                )
+            } else {
+                Triple(
+                    CircadianMidPointState.PhaseAdvance,
+                    CircadianMidPointStatus.Worsening,
+                    context.getString(R.string.text_your_rhythm_is_significantly_early_try_extending_your_evening_routine_and_getting_light_later_to_shift_gently)
+                )
+            }
+        }
+
         // Moved from after to inside phase
         if (nowInPhase && avgBeforeIndex > phaseRange.last()) {
             return Triple(
