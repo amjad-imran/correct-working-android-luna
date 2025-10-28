@@ -736,15 +736,15 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
 
         val angles = listOf(
-            Pair(140, dpToPx(56)),
-            Pair(180, dpToPx(60)),
-            Pair(210, dpToPx(70)),
-            Pair(240, dpToPx(80)),
-            Pair(260, dpToPx(105))
+            Pair(90, dpToPx(56)),
+            Pair(165, dpToPx(56)),
+            Pair(200, dpToPx(70)),
+            Pair(235, dpToPx(80)),
+            Pair(270, dpToPx(105))
         )
         val angles2 = listOf(
-            Pair(180, dpToPx(60)),
-            Pair(210, dpToPx(70)),
+            Pair(165, dpToPx(56)),
+            Pair(200, dpToPx(70)),
         )
         val yBias = dpToPx(10)
 
