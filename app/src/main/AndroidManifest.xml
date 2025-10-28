@@ -470,7 +470,7 @@
             android:theme="@style/MyCustomThemeChat"
             tools:replace="android:theme" />
 
-        <receiver
+        <!--<receiver
             android:name="com.oreo.widget.water.WaterIntakeWidgetReceiver"
             android:exported="true"
             android:label="@string/water_widget_label">
@@ -480,7 +480,7 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/water_intake_widget_info" />
-        </receiver>
+        </receiver>-->
 
     </application>
 
