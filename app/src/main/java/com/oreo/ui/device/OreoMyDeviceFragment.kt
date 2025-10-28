@@ -18,10 +18,7 @@ import androidx.core.view.doOnLayout
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.navOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
@@ -34,7 +31,6 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOreoMyDeviceBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit.ui.SplashActivity
-import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
 import com.noisefit.ui.myDevice.REST_REQUEST_KEY
 import com.noisefit.ui.myDevice.UNPAIR_REQUEST_KEY
 import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
@@ -60,8 +56,6 @@ import com.noisefit_commans.utils.MoEngageAppEventParams
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
 import com.noisefit_zhsdk.log.ZhBleLogUtils
-import com.oreo.ui.device.OMyDeviceViewModel.DownloadMyDataBS.*
-import com.oreo.ui.profile.downloadMyData.ProcessAndDownloadMyDataBottomSheet
 import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -222,42 +216,6 @@ class OreoMyDeviceFragment :
             navigate(R.id.unpairBottomDialogFragment)
 
         }
-
-        binding.rowDownloadMyData.setOnClickListener {
-            if(mViewModel.downloadMyDataList==null) mViewModel.setDownloadMyDataList()
-            setFragmentResultListener(VALUE_REQUEST_KEY) { _, bundle ->
-                val selectedValue = bundle.getString("selectedValue") ?: return@setFragmentResultListener
-                mViewModel.downloadMyDataSelectedItem = selectedValue
-
-                val dayVal = when (selectedValue) {
-                    getString(R.string.text_today) -> 1
-                    getString(R.string.text_last_val_days, 3) -> 3
-                    else -> 7
-                }
-
-                mViewModel.getDownloadMyDataPDF(dayVal)
-            }
-            navigate(
-                R.id.valueSelectorBottomSheet,
-                bundleOf(
-                    "selectedValue" to mViewModel.downloadMyDataSelectedItem,
-                    "selectionList" to mViewModel.downloadMyDataList?.toTypedArray(),
-                    "title" to getString(R.string.text_download_my_data),
-                    "isTopLineVisible" to true
-                )
-            )
-        }
-
-    }
-
-    private fun showProcessSheet() {
-        mViewModel.processSheet = ProcessAndDownloadMyDataBottomSheet()
-        mViewModel.processSheet?.show(childFragmentManager, "DownloadBS")
-    }
-
-    private fun dismissProcessSheetIfVisible() {
-        mViewModel.processSheet?.dismiss()
-        mViewModel.processSheet = null
     }
 
     override fun subscribeObservers() {
@@ -378,34 +336,6 @@ class OreoMyDeviceFragment :
                 }
 
                 else -> {}
-            }
-
-            viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-                mViewModel.bsState.collect { state ->
-                    when (state) {
-                        PROCESSING -> {
-                            showProcessSheet()
-                        }
-
-                        SUCCESS -> {
-                            // Option A: if you have a single sheet that changes UI, just show SUCCESS there
-//                            showSuccessSheet()
-                        }
-
-                        OPEN_PDF -> {
-                            mViewModel.fileUri.value?.let { uri ->
-                                ShareUtil.shareFile(requireContext(), uri)
-                            } ?: requireContext().showShortToast(getString(R.string.text_try_again))
-                        }
-
-                        ERROR -> {
-                            dismissProcessSheetIfVisible()
-                            requireContext().showShortToast(getString(R.string.text_something_went_wrong))
-                        }
-
-                        else -> Unit
-                    }
-                }
             }
 
         }
