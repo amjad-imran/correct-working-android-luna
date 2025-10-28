@@ -2262,5 +2262,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_massage_therapy">Massage Therapy</string>
     <string name="text_melatonin">Melatonin</string>
     <string name="text_improved_sleep_environment">Improved Sleep Environment</string>
+    <string name="text_alcohol_logged">Alcohol Logged</string>
 
 </resources>

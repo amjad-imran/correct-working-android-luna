@@ -82,6 +82,10 @@ class TimelineScreenDataViewmodel @Inject constructor(
                                 activityListData.postValue(ArrayList())
                             } else {
                                 it.timeTracker?.let { dataList ->
+                                    dataList.filter { it.event.equals("meal") }.map {
+                                        it.startTime+=":00"
+                                        LOGS.d("scjkkasasascs : ${it.startTime}")
+                                    }
                                     val data = mergeHydrationEvents(dataList)
 
                                     data.map { obj ->
@@ -187,12 +191,12 @@ class TimelineScreenDataViewmodel @Inject constructor(
             RECOVERY_KEY -> {
                 data.title = data.metadata?.lunaOption
                 data.titleColor = "#C5A8ED".toColorInt()
-                data.desc = ""
+                data.desc = getSleepDuration(data.startDate, data.startTime, data.endDate, data.endTime)
             }
 
             ALCOHOL_KEY -> {
                 data.titleColor = "#C5A8ED".toColorInt()
-                data.desc = ""
+                data.desc = resourceProvider.getString(R.string.text_alcohol_logged)
             }
 
             else -> {}

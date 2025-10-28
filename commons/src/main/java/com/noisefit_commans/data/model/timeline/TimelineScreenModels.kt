@@ -33,7 +33,7 @@ data class ItemTimelineResponseModel(
     val startDate: String?,
 
     @SerializedName("start_time")
-    val startTime: String?,
+    var startTime: String?,
 
     @SerializedName("end_date")
     val endDate: String?,
