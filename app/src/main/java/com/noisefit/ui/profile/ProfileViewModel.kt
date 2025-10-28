@@ -1,6 +1,8 @@
 package com.noisefit.ui.profile
 
+import android.net.Uri
 import android.text.TextUtils
+import androidx.core.content.FileProvider
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -27,8 +29,18 @@ import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.oreo.data.model.femaleh.FemaleCycleTrackInfoModel
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
+import com.oreo.ui.profile.downloadMyData.ProcessAndDownloadMyDataBottomSheet
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.File
+import java.io.FileOutputStream
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,6 +56,7 @@ constructor(
     private val referralRepository: ReferralRepository,
     private val resourcesProvider: ResourcesProvider,
     private val femaleHealthRepository: FemaleHealthRepository,
+    private val okHttpClient: OkHttpClient,
 ) : BaseViewModel() {
 
     private var _user = MutableLiveData<User>()
@@ -60,6 +73,17 @@ constructor(
     val cannyFeedbackUrl = MutableLiveData<Event<String>>()
 
     val dataReportToDevUpdated = MutableLiveData<Event<Boolean>>()
+
+    var downloadMyDataList: ArrayList<String> ?= null
+    var downloadMyDataSelectedItem: String ?= null
+
+    private val _bsState = MutableStateFlow(DownloadMyDataBS.IDLE)
+    val bsState: StateFlow<DownloadMyDataBS> = _bsState
+
+    private val _fileUri = MutableStateFlow<Uri?>(null)
+    val fileUri: StateFlow<Uri?> = _fileUri
+
+    var processSheet: ProcessAndDownloadMyDataBottomSheet? = null
 
     fun getUser(): LiveData<User> = _user
     fun getFormattedGender(): LiveData<String> = _userGender
@@ -433,6 +457,93 @@ constructor(
         }
     }
 
+    fun setDownloadMyDataList(){
+        downloadMyDataList = ArrayList<String>().apply {
+            this.add(resourcesProvider.getString(R.string.text_today))
+
+            this.add(resourcesProvider.getString(R.string.text_last_val_days, 3))
+
+            this.add(resourcesProvider.getString(R.string.text_last_val_days, 7))
+        }
+
+        downloadMyDataSelectedItem = downloadMyDataList?.get(1)
+    }
+
+    fun getDownloadMyDataPDF(days: Int) {
+        viewModelScope.launch {
+            userRepository.getDownloadMyDataPDF(days).collect { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
+                        _bsState.value = DownloadMyDataBS.PROCESSING
+                    }
+                    is Resource.Success -> {
+                        val url = resource.data?.data?.url
+                        if (url.isNullOrBlank()) {
+                            _bsState.value = DownloadMyDataBS.ERROR
+                        } else {
+                            downloadIntoCacheAndGetUri(url)
+                        }
+                    }
+                    is Resource.GenericError,
+                    is Resource.NetworkError -> {
+                        _bsState.value = DownloadMyDataBS.ERROR
+                    }
+                }
+            }
+        }
+    }
+
+    private fun downloadIntoCacheAndGetUri(pdfUrl: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val req = Request.Builder()
+                    .url(pdfUrl)
+                    .header("User-Agent", "okhttp/4 Android")
+                    .build()
+
+                okHttpClient.newCall(req).execute().use { res ->
+                    if (!res.isSuccessful) error("Download failed: ${res.code}")
+
+                    val filename = "Luna_Report_${System.currentTimeMillis()}.pdf"
+                    val outFile = File(resourcesProvider.context.cacheDir, filename)
+
+                    res.body?.byteStream()?.use { input ->
+                        FileOutputStream(outFile).use { output ->
+                            input.copyTo(output)
+                        }
+                    } ?: error("Empty body")
+
+                    val uri = FileProvider.getUriForFile(
+                        resourcesProvider.context,
+                        "com.noisefit.luna.fileprovider",
+                        outFile
+                    )
+
+                    withContext(Dispatchers.Main) {
+                        _fileUri.value = uri
+                        delay(3000L)
+                        _bsState.value = DownloadMyDataBS.SUCCESS
+                    }
+                }
+            } catch (t: Throwable) {
+                withContext(Dispatchers.Main) {
+                    _bsState.value = DownloadMyDataBS.ERROR
+                }
+            }
+        }
+    }
+
+    fun resetDownloadState() {
+        _bsState.value = DownloadMyDataBS.IDLE
+        _fileUri.value = null
+    }
+
+    fun handleOkayBtnBsClicked(){
+        _bsState.value = DownloadMyDataBS.OPEN_PDF
+        resetDownloadState()
+    }
+
+    enum class DownloadMyDataBS { IDLE, PROCESSING, SUCCESS, OPEN_PDF, ERROR }
 
 }
 

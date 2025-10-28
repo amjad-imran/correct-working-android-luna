@@ -6,11 +6,13 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.freshchat.consumer.sdk.Freshchat
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentMyProfileOreoBinding
 import com.noisefit.oreo.OreoMainViewModel
+import com.noisefit.ui.common.bottomSheet.VALUE_REQUEST_KEY
 import com.noisefit.ui.onboarding.OnBoardActivity
 import com.noisefit.ui.profile.LOGOUT_KEY
 import com.noisefit.ui.profile.ProfileViewModel
@@ -28,6 +30,8 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
 import com.oreo.ui.chatGpt.PlanType
+import com.noisefit.ui.profile.ProfileViewModel.DownloadMyDataBS.*
+import com.oreo.ui.profile.downloadMyData.ProcessAndDownloadMyDataBottomSheet
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -309,6 +313,31 @@ class OMyProfileFragment :
             }
             navigate(R.id.reportToDevelopersBottomSheet)
         }
+
+        binding.rowDownloadMyData.setOnClickListener {
+            if(viewModel.downloadMyDataList==null) viewModel.setDownloadMyDataList()
+            setFragmentResultListener(VALUE_REQUEST_KEY) { _, bundle ->
+                val selectedValue = bundle.getString("selectedValue") ?: return@setFragmentResultListener
+                viewModel.downloadMyDataSelectedItem = selectedValue
+
+                val dayVal = when (selectedValue) {
+                    getString(R.string.text_today) -> 1
+                    getString(R.string.text_last_val_days, 3) -> 3
+                    else -> 7
+                }
+
+                viewModel.getDownloadMyDataPDF(dayVal)
+            }
+            navigate(
+                R.id.valueSelectorBottomSheet,
+                bundleOf(
+                    "selectedValue" to viewModel.downloadMyDataSelectedItem,
+                    "selectionList" to viewModel.downloadMyDataList?.toTypedArray(),
+                    "title" to getString(R.string.text_download_my_data),
+                    "isTopLineVisible" to true
+                )
+            )
+        }
         //
 
     }
@@ -320,8 +349,45 @@ class OMyProfileFragment :
         navigate(R.id.profileFragmentOreo)
     }
 
+    private fun showProcessSheet() {
+        viewModel.processSheet = ProcessAndDownloadMyDataBottomSheet()
+        viewModel.processSheet?.show(childFragmentManager, "DownloadBS")
+    }
+
+    private fun dismissProcessSheetIfVisible() {
+        viewModel.processSheet?.dismiss()
+        viewModel.processSheet = null
+    }
 
     override fun subscribeObservers() {
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.bsState.collect { state ->
+                when (state) {
+                    PROCESSING -> {
+                        showProcessSheet()
+                    }
+
+                    SUCCESS -> {
+                        // Option A: if you have a single sheet that changes UI, just show SUCCESS there
+//                            showSuccessSheet()
+                    }
+
+                    OPEN_PDF -> {
+                        viewModel.fileUri.value?.let { uri ->
+                            ShareUtil.shareFile(requireContext(), uri)
+                        } ?: requireContext().showShortToast(getString(R.string.text_try_again))
+                    }
+
+                    ERROR -> {
+                        dismissProcessSheetIfVisible()
+                        requireContext().showShortToast(getString(R.string.text_something_went_wrong))
+                    }
+
+                    else -> Unit
+                }
+            }
+        }
 
         viewModel.dataReportToDevUpdated.observe(this) {
             it.getContent()?.let {

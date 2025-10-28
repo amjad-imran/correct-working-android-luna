@@ -145,15 +145,6 @@
                         android:visibility="visible"
                         app:image="@drawable/ic_round_share_location"
                         app:text="@string/text_find_my_ring" />
-
-                    <com.noisefit_commans.ui.custom.SettingsRow
-                        android:id="@+id/rowDownloadMyData"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:visibility="visible"
-                        app:image="@drawable/ic_download_my_data"
-                        app:text="@string/text_download_my_data" />
-
                     <com.noisefit_commans.ui.custom.SettingsRow
                         android:id="@+id/rowAboutDevice"
                         android:layout_width="match_parent"

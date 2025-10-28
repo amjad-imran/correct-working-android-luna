@@ -219,6 +219,17 @@
                     app:text="@string/text_luna_ai_voice_calibration" />
 
                 <com.noisefit_commans.ui.custom.SettingsRow
+                    android:id="@+id/rowDownloadMyData"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:visibility="visible"
+                    app:image="@drawable/ic_download_my_data"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:text="@string/text_download_my_data" />
+
+                <com.noisefit_commans.ui.custom.SettingsRow
                     android:id="@+id/rowCannyFeedback"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
