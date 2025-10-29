@@ -97,9 +97,17 @@ class ChatGptViewModel
 
     @Volatile
     private var pendingAttachment: AttachmentData? = null
+    val attachmentPreview = MutableLiveData<AttachmentData?>(null)
 
     fun setPendingAttachment(uri: Uri, mimeType: String, fileName: String, sizeBytes: Long) {
-        pendingAttachment = AttachmentData(uri, mimeType, fileName, sizeBytes)
+        val data = AttachmentData(uri, mimeType, fileName, sizeBytes)
+        pendingAttachment = data
+        attachmentPreview.postValue(data)
+    }
+
+    fun clearPendingAttachment() {
+        pendingAttachment = null
+        attachmentPreview.postValue(null)
     }
 
     init {
@@ -338,6 +346,7 @@ class ChatGptViewModel
                 fetchInProgress.postValue(false)
                 videoState.postValue(false)
                 pendingAttachment = null
+                attachmentPreview.postValue(null)
                 checkForPlans(responseBuilder.toString())
             } catch (t: Throwable) {
                 if (fetchInProgress.value == true) {
@@ -359,7 +368,6 @@ class ChatGptViewModel
                     }
                 }
             } finally {
-                //pendingAttachment = null
                 currentCall = null
             }
         }
