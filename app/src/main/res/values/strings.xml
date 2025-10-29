@@ -2267,5 +2267,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_ask_anything">Ask anything</string>
     <string name="text_photos">Photos</string>
     <string name="text_files">Files</string>
+    <string name="text_file_too_large_max_20_mb">File too large (max 20 MB)</string>
+    <string name="text_unsupported_file_type">Unsupported file type</string>
 
 </resources>

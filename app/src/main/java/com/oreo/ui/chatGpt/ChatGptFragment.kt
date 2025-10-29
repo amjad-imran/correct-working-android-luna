@@ -2,6 +2,7 @@ package com.oreo.ui.chatGpt
 
 import android.media.audiofx.Visualizer
 import android.net.Uri
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -9,6 +10,12 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.setFragmentResultListener
@@ -27,6 +34,7 @@ import com.noisefit_commans.ui.revealFromBottom
 import com.noisefit_commans.ui.scrollToBottom
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChatGptOverview
 import dagger.hilt.android.AndroidEntryPoint
@@ -76,6 +84,12 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         ChatGptAdapter()
     }
 
+    private var cameraUri: Uri? = null
+    private lateinit var takePictureLauncher: ActivityResultLauncher<Uri>
+    private lateinit var pickImageLauncher: ActivityResultLauncher<String>
+    private lateinit var pickDocumentLauncher: ActivityResultLauncher<Array<String>>
+    private lateinit var requestCameraPermission: ActivityResultLauncher<String>
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.threadId = args.threadId
@@ -107,6 +121,8 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
 
         setVideo()
+
+        registerAttachmentPickers()
     }
 
     private fun setMealSuggestions(suggestions: ArrayList<String>) {
@@ -188,8 +204,17 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
         binding.lytChatBox.ivAddAttachment.setOnClickListener {
             setFragmentResultListener(ATTACHMENT_KEY) { _, bundle ->
-                val type = bundle.getString("type")
-                context.showShortToast(type)
+                when (bundle.getString("type")) {
+                    "camera" -> launchCameraPicker()
+                    "photo" -> pickImageLauncher.launch("image/*")
+                    "file" -> pickDocumentLauncher.launch(
+                        arrayOf(
+                            "application/pdf",
+                            "application/msword",
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                        )
+                    )
+                }
             }
             navigate(R.id.bottomSheetAttachmentPicker)
         }
@@ -360,6 +385,101 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_ai_message_submit)
         }
 
+    }
+
+    private fun registerAttachmentPickers() {
+        requestCameraPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (granted) {
+                launchCameraPicker()
+            } else {
+                context.showShortToast(getString(R.string.text_camera_permission_qr))
+            }
+        }
+        takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+            val uri = cameraUri
+            if (success && uri != null) {
+                handlePickedUri(uri, "image/jpeg")
+            } else {
+                context.showShortToast(getString(R.string.text_something_went_wrong_single))
+            }
+        }
+
+        pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            uri?.let { handlePickedUri(it, getMimeType(it) ?: "image/*") }
+        }
+
+        pickDocumentLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            uri?.let {
+                handlePickedUri(it, getMimeType(it) ?: "application/octet-stream")
+            }
+        }
+    }
+
+    private fun launchCameraPicker() {
+        // Some OEMs require CAMERA permission even for ACTION_IMAGE_CAPTURE
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestCameraPermission.launch(Manifest.permission.CAMERA)
+            return
+        }
+        val fileName = "IMG_${System.currentTimeMillis()}.jpg"
+        val cacheDir = requireContext().externalCacheDir ?: requireContext().cacheDir
+        val imageFile = java.io.File(cacheDir, fileName)
+        imageFile.parentFile?.mkdirs()
+
+        val uri = FileProvider.getUriForFile(
+            requireContext(),
+            "com.noisefit.luna.fileprovider",
+            imageFile
+        )
+        cameraUri = uri
+        takePictureLauncher.launch(uri)
+    }
+
+    private fun handlePickedUri(uri: Uri, fallbackMime: String) {
+        val mime = getMimeType(uri) ?: fallbackMime
+        val name = getDisplayName(uri) ?: "file"
+        val size = getFileSize(uri)
+        val maxBytes = 20L * 1024 * 1024 // 20 MB
+
+        if (size < 0L) {
+            context.showShortToast(getString(R.string.text_something_went_wrong_single))
+            return
+        }
+        if (size > maxBytes) {
+            context.showShortToast(getString(R.string.text_file_too_large_max_20_mb))
+            return
+        }
+
+        val isImage = mime.startsWith("image/")
+        val isSupportedDoc = mime == "application/pdf" ||
+                mime == "application/msword" ||
+                mime == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+
+        if (!(isImage || isSupportedDoc)) {
+            context.showShortToast(getString(R.string.text_unsupported_file_type))
+            return
+        }
+
+        viewModel.setPendingAttachment(uri, mime, name, size)
+
+        LOGS.d("sdkfjskdjfhdj $uri $mime $name $size")
+    }
+
+    private fun getMimeType(uri: Uri): String? =
+        requireContext().contentResolver.getType(uri)
+
+    private fun getDisplayName(uri: Uri): String? {
+        return requireContext().contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+            val nameIndex = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
+            if (nameIndex != -1 && cursor.moveToFirst()) cursor.getString(nameIndex) else null
+        }
+    }
+
+    private fun getFileSize(uri: Uri): Long {
+        return requireContext().contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+            val sizeIndex = cursor.getColumnIndex(android.provider.OpenableColumns.SIZE)
+            if (sizeIndex != -1 && cursor.moveToFirst()) cursor.getLong(sizeIndex) else -1L
+        } ?: -1L
     }
 
     private var keyboardListener: ViewTreeObserver.OnGlobalLayoutListener? = null

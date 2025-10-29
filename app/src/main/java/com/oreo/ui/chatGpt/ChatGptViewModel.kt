@@ -1,8 +1,10 @@
 package com.oreo.ui.chatGpt
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.grapesnberries.curllogger.CurlLoggerInterceptor
 import com.here.oksse.OkSse
 import com.here.oksse.ServerSentEvent
 import com.noisefit.data.base.ResourcesProvider
@@ -18,6 +20,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.Token
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChatGptOverview
@@ -30,8 +33,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import okhttp3.Call
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
+import okhttp3.logging.HttpLoggingInterceptor
 import java.util.Calendar
 import java.util.TimeZone
 import java.util.UUID
@@ -82,6 +92,15 @@ class ChatGptViewModel
 
     var lastApi: Pair<Int, String>? = null
     private var initMessage: String
+
+
+
+    @Volatile
+    private var pendingAttachment: AttachmentData? = null
+
+    fun setPendingAttachment(uri: Uri, mimeType: String, fileName: String, sizeBytes: Long) {
+        pendingAttachment = AttachmentData(uri, mimeType, fileName, sizeBytes)
+    }
 
     init {
         val user = localDataStore.getUser()
@@ -224,9 +243,20 @@ class ChatGptViewModel
         }
     }
 
-
-    var serverSentEvent: ServerSentEvent? = null
-    val okSse = OkSse()
+    private val sseClient: OkHttpClient by lazy {
+        OkHttpClient.Builder()
+            .readTimeout(0, java.util.concurrent.TimeUnit.MILLISECONDS)
+            .apply {
+                if (BuildConfig.DEBUG) {
+                    tryCatch {
+                        //this.addInterceptor(HttpLoggingInterceptor())
+                        //this.addInterceptor(CurlLoggerInterceptor("CURL"))
+                    }
+                }
+            }
+            .build()
+    }
+    @Volatile private var currentCall: Call? = null
 
     fun askQuestionStream(prompt: String) {
         fetchInProgress.value = true
@@ -237,108 +267,101 @@ class ChatGptViewModel
         val uuid = UUID.randomUUID()
 
         viewModelScope.launch(Dispatchers.IO) {
-
             val userToken = localDataStore.getUserToken()
 
-            val request: Request =
-                Request.Builder()
-                    .apply {
-                        when (planType) {
-                            PlanType.WORKOUT -> url("${BuildConfig.BASE_URL_NEW}/luna/ai/v1/workout/stream?message=$prompt")
-                            PlanType.DIET -> url("${BuildConfig.BASE_URL_NEW}/luna/ai/v1/diet/stream?message=$prompt")
-                            PlanType.NONE, null -> url("${BuildConfig.BASE_URL_NEW}/luna/ai/v1/stream?message=$prompt&thread_id=$threadId")
-                        }
-                        userToken?.let {
-                            addHeaders(this,it)
-                        }
-                    }.build()
+            val baseUrl = when (planType) {
+                PlanType.WORKOUT -> "${BuildConfig.BASE_URL_NEW}/luna/ai/v1/workout/stream"
+                PlanType.DIET -> "${BuildConfig.BASE_URL_NEW}/luna/ai/v1/diet/stream"
+                PlanType.NONE, null -> "${BuildConfig.BASE_URL_NEW}/luna/ai/v1/stream"
+            }
+            val urlWithParams = when (planType) {
+                PlanType.WORKOUT -> "$baseUrl?message=$prompt"
+                PlanType.DIET -> "$baseUrl?message=$prompt"
+                PlanType.NONE, null -> "$baseUrl?message=$prompt&thread_id=$threadId"
+            }
 
-            serverSentEvent = okSse.newServerSentEvent(request, object : ServerSentEvent.Listener {
-                override fun onOpen(sse: ServerSentEvent?, response: Response?) {
-                    // When the channel is opened
-                    LOGS.d("streammmmmm onOpen() $response")
-                }
-
-                override fun onMessage(
-                    sse: ServerSentEvent?,
-                    id: String?,
-                    event: String?,
-                    message: String?
-                ) {
-                    // When a message is received
-                    //LOGS.d("streammmmmm onMessage() $message")
-                    var msg = message
-
-                    if (msg != null) {
-                        msg = cleanServerResponse(msg)
-                        responseBuilder.append(msg)
+            val ctx = resourceProvider.context
+            val att = pendingAttachment
+            val attachmentBody: RequestBody? = att?.let { a ->
+                try {
+                    ctx.contentResolver.openInputStream(a.uri)?.use { input ->
+                        val bytes = input.readBytes()
+                        RequestBody.create(a.mimeType.toMediaTypeOrNull(), bytes)
                     }
+                } catch (e: Exception) { null }
+            }
 
-                    addReceivedMessage(
-                        responseBuilder.toString(),uuid
-                    )
+            val requestBody: RequestBody = if (attachmentBody != null && att != null) {
+                MultipartBody.Builder()
+                    .setType(MultipartBody.FORM)
+                    .addFormDataPart("file", att.fileName, attachmentBody)
+                    .build()
+            } else {
+                ByteArray(0).toRequestBody(null, 0, 0)
+            }
+
+            val requestBuilder = Request.Builder()
+                .url(urlWithParams)
+                .post(requestBody)
+                .addHeader("Accept", "text/event-stream")
+                .addHeader("Cache-Control", "no-cache")
+
+            userToken?.let { addHeaders(requestBuilder, it) }
+
+            val request = requestBuilder.build()
+
+            try {
+                val call = sseClient.newCall(request)
+                currentCall = call
+                val response = call.execute()
+                if (!response.isSuccessful) throw java.io.IOException("Unexpected code ${response.code}")
+
+                response.body?.source()?.let { source ->
+                    val eventBuffer = StringBuilder()
+                    while (fetchInProgress.value == true) {
+                        val line = try { source.readUtf8Line() } catch (e: Exception) { null }
+                        if (line == null) break
+                        if (line.startsWith("data:")) {
+                            eventBuffer.append(line.removePrefix("data:").trimStart())
+                            LOGS.d("SSE response $line")
+                        } else if (line.isBlank()) {
+                            if (eventBuffer.isNotEmpty()) {
+                                val cleaned = cleanServerResponse(eventBuffer.toString())
+                                responseBuilder.append(cleaned)
+                                addReceivedMessage(responseBuilder.toString(), uuid)
+                                eventBuffer.setLength(0)
+                            }
+                        }
+                    }
                 }
 
-                override fun onComment(sse: ServerSentEvent?, comment: String?) {
-                    // When a comment is received
-                    LOGS.d("streammmmmm onComment() $comment")
-
-                }
-
-                override fun onRetryTime(sse: ServerSentEvent?, milliseconds: Long): Boolean {
-                    LOGS.d("streammmmmm onRetryTime() $sse")
-
-                    return false; // True to use the new retry time received by SSE
-                }
-
-                override fun onRetryError(
-                    sse: ServerSentEvent?,
-                    throwable: Throwable?,
-                    response: Response?
-                ): Boolean {
-                    if (fetchInProgress.value == false) return false
-
+                fetchInProgress.postValue(false)
+                videoState.postValue(false)
+                pendingAttachment = null
+                checkForPlans(responseBuilder.toString())
+            } catch (t: Throwable) {
+                if (fetchInProgress.value == true) {
                     fetchInProgress.postValue(false)
                     videoState.postValue(false)
-
-                    if (responseBuilder.toString().isEmpty()) {
+                    if (responseBuilder.isEmpty()) {
                         addErrorState(
                             String.format(
                                 resourceProvider.getString(R.string.text_ai_error_message),
                                 userName ?: ""
                             )
                         )
-
-                        stopResponseGeneration()
-
                         GlobalScope.launch(Dispatchers.IO) {
                             syncRepository.logErrorServer(
                                 ErrorServerCases.LUNA_AI_ERROR.name,
-                                "Error log : ${throwable?.message}"
+                                "Error log : ${t.message}"
                             ).collect()
                         }
                     }
-                    return false; // True to retry, false otherwise
                 }
-
-                override fun onClosed(sse: ServerSentEvent?) {
-                    LOGS.d("streammmmmm onClosed()")
-                    fetchInProgress.postValue(false)
-                    videoState.postValue(false)
-
-                    //TODO write plan & its type recognition logic  - with anil
-                    checkForPlans(responseBuilder.toString())
-                    sse?.close()
-                }
-
-                override fun onPreRetry(sse: ServerSentEvent?, originalRequest: Request): Request {
-                    LOGS.d("streammmmmm onPreRetry()")
-                    return originalRequest
-                }
-
-            })
-
-
+            } finally {
+                //pendingAttachment = null
+                currentCall = null
+            }
         }
 
 
@@ -530,7 +553,8 @@ class ChatGptViewModel
             removeThinkingState()
             fetchInProgress.postValue(false)
             videoState.postValue(false)
-            serverSentEvent?.close()
+            //serverSentEvent?.close()
+            currentCall?.cancel()
 
             oreoDeviceRepository.stopResponseGeneration(threadId, planType ?: PlanType.NONE)
                 .collect { resource ->
@@ -564,6 +588,7 @@ class ChatGptViewModel
                                 removeThinkingState()
                                 fetchInProgress.postValue(false)
                                 serverSentEvent?.close()
+                                currentCall?.cancel()
                             }
                         }
                     }*/
@@ -653,6 +678,12 @@ class ChatGptViewModel
     fun removeSnackBar() {
         removeSnackBar.postValue(Event(true))
     }
+    data class AttachmentData(
+        val uri: Uri,
+        val mimeType: String,
+        val fileName: String,
+        val sizeBytes: Long
+    )
 }
 
 enum class AiPlanType {
