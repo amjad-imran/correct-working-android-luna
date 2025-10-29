@@ -2264,5 +2264,10 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_improved_sleep_environment">Improved Sleep Environment</string>
     <string name="text_alcohol_logged">Alcohol Logged</string>
     <string name="text_reorder_hide_or_show_the_features_you_care_about_the_most_personalize_your_homescreen_to_keep_what_s_relevant_you_ll_always_be_able_to_add_it_back_later">Reorder, hide, or show the features you care about the most. Personalize your Homescreen to keep what’s relevant. You’ll always be able to add it back later.</string>
+    <string name="text_ask_anything">Ask anything</string>
+    <string name="text_photos">Photos</string>
+    <string name="text_files">Files</string>
+    <string name="text_file_too_large_max_20_mb">File too large (max 20 MB)</string>
+    <string name="text_unsupported_file_type">Unsupported file type</string>
 
 </resources>

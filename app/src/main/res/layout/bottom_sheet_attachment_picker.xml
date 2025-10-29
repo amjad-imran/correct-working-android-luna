@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/list"
+            style="@style/ModalStyleDialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_12dp"
+            tools:context=".ui.onboarding.PrivacyBottomDialogFragment"
+            tools:listitem="@layout/fragment_privacy_bottom_dialog_list_dialog_item">
+
+            <View
+                android:id="@+id/view42"
+                android:layout_width="80dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="4dp"
+                android:alpha="0.5"
+                android:background="@drawable/back_bottom_sheet_drag"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivCamera"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="34dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="20dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/image_back_attachment"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ivPhotos"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view42" />
+
+            <ImageView
+                android:id="@+id/imageView110"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_photo_camera"
+                app:layout_constraintBottom_toTopOf="@+id/textView202"
+                app:layout_constraintEnd_toEndOf="@+id/ivCamera"
+                app:layout_constraintStart_toStartOf="@+id/ivCamera"
+                app:layout_constraintTop_toBottomOf="@+id/ivCamera" />
+
+            <TextView
+                android:id="@+id/textView202"
+                style="@style/S14"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:singleLine="true"
+                android:text="@string/text_camera"
+                android:layout_marginTop="4dp"
+                app:layout_constraintBottom_toTopOf="@+id/ivCamera"
+                app:layout_constraintEnd_toEndOf="@+id/ivCamera"
+                app:layout_constraintStart_toStartOf="@+id/ivCamera"
+                app:layout_constraintTop_toBottomOf="@+id/imageView110" />
+
+            <ImageView
+                android:id="@+id/ivPhotos"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/image_back_attachment"
+                app:layout_constraintBottom_toBottomOf="@+id/ivCamera"
+                app:layout_constraintEnd_toStartOf="@+id/ivFiles"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/ivCamera"
+                app:layout_constraintTop_toTopOf="@+id/ivCamera" />
+
+            <ImageView
+                android:id="@+id/imageView111"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_a_photos"
+                app:layout_constraintBottom_toTopOf="@+id/textView203"
+                app:layout_constraintEnd_toEndOf="@+id/ivPhotos"
+                app:layout_constraintStart_toStartOf="@+id/ivPhotos"
+                app:layout_constraintTop_toTopOf="@+id/ivPhotos"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/textView203"
+                style="@style/S14"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:singleLine="true"
+                android:layout_marginTop="4dp"
+                android:text="@string/text_photos"
+                app:layout_constraintBottom_toBottomOf="@+id/ivPhotos"
+                app:layout_constraintEnd_toEndOf="@+id/ivPhotos"
+                app:layout_constraintStart_toStartOf="@+id/ivPhotos"
+                app:layout_constraintTop_toBottomOf="@+id/imageView111" />
+
+            <ImageView
+                android:id="@+id/ivFiles"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="34dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/image_back_attachment"
+                app:layout_constraintBottom_toBottomOf="@+id/ivCamera"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/ivPhotos"
+                app:layout_constraintTop_toTopOf="@+id/ivCamera" />
+
+            <ImageView
+                android:id="@+id/imageView112"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_a_file"
+                app:layout_constraintBottom_toTopOf="@+id/textView204"
+                app:layout_constraintEnd_toEndOf="@+id/ivFiles"
+                app:layout_constraintStart_toStartOf="@+id/ivFiles"
+                app:layout_constraintTop_toTopOf="@+id/ivFiles"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/textView204"
+                style="@style/S14"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:singleLine="true"
+                android:layout_marginTop="4dp"
+                android:text="@string/text_files"
+                app:layout_constraintBottom_toBottomOf="@+id/ivFiles"
+                app:layout_constraintEnd_toEndOf="@+id/ivFiles"
+                app:layout_constraintStart_toStartOf="@+id/ivFiles"
+                app:layout_constraintTop_toBottomOf="@+id/imageView112" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+</layout>

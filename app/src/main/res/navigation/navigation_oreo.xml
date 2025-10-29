@@ -1383,7 +1383,7 @@
         android:id="@+id/caffeineWindowScreenFragment"
         android:name="com.oreo.ui.caffeineWindowScreen.CaffeineWindowScreenFragment"
         android:label="fragment_caffeine_window_screen"
-        tools:layout="@layout/fragment_caffeine_window_screen" >
+        tools:layout="@layout/fragment_caffeine_window_screen">
         <argument
             android:name="caffeineGraphData"
             app:argType="com.oreo.data.model.CaffeineWindowData"
@@ -1408,7 +1408,7 @@
         android:id="@+id/quizCircadianFragment"
         android:name="com.oreo.ui.circadianAlignment.quiz.QuizCircadianFragment"
         android:label="fragment_quiz_circadian"
-        tools:layout="@layout/fragment_quiz_circadian" >
+        tools:layout="@layout/fragment_quiz_circadian">
         <action
             android:id="@+id/action_quizCircadianFragment_to_circadianAlignmentFragment"
             app:destination="@id/circadianAlignmentFragment"
@@ -1418,7 +1418,7 @@
     <dialog
         android:id="@+id/logCircadianBottomSheetFragment"
         android:name="com.oreo.ui.circadianAlignment.LogCircadianBottomSheetFragment"
-        android:label="LogCircadianBottomSheetFragment" >
+        android:label="LogCircadianBottomSheetFragment">
         <argument
             android:name="key"
             app:argType="string" />
@@ -1431,7 +1431,7 @@
         android:id="@+id/circadianSplashScreenFragment"
         android:name="com.oreo.ui.circadianAlignment.onboarding.CircadianSplashScreenFragment"
         android:label="fragment_circadian_splash_screen"
-        tools:layout="@layout/fragment_circadian_splash_screen" >
+        tools:layout="@layout/fragment_circadian_splash_screen">
         <action
             android:id="@+id/action_circadianSplashScreenFragment_to_quizCircadianFragment"
             app:destination="@id/quizCircadianFragment"
@@ -1447,7 +1447,7 @@
         android:id="@+id/timelineScreenFragment"
         android:name="com.oreo.ui.timelineScreen.TimelineScreenFragment"
         android:label="fragment_timeline_screen"
-        tools:layout="@layout/fragment_timeline_screen" >
+        tools:layout="@layout/fragment_timeline_screen">
         <argument
             android:name="srcKey"
             app:argType="string"
@@ -1467,37 +1467,37 @@
         android:id="@+id/addActivityTimelineFragment"
         android:name="com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineFragment"
         android:label="fragment_add_activity_timeline"
-        tools:layout="@layout/fragment_add_activity_timeline" >
+        tools:layout="@layout/fragment_add_activity_timeline">
         <argument
             android:name="key"
+            android:defaultValue="@null"
             app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
         <argument
             android:name="srcKey"
+            android:defaultValue="@null"
             app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
         <argument
             android:name="showTimeline"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            android:defaultValue="false"
+            app:argType="boolean" />
         <argument
             android:name="editData"
+            android:defaultValue="@null"
             app:argType="com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
         <argument
             android:name="lunaOption"
+            android:defaultValue="@null"
             app:argType="string"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/circadianHowItWorksDetailFragment"
         android:name="com.oreo.ui.circadianAlignment.CircadianHowItWorksDetailFragment"
         android:label="fragment_circadian_how_it_works_detail"
-        tools:layout="@layout/fragment_circadian_how_it_works_detail" >
+        tools:layout="@layout/fragment_circadian_how_it_works_detail">
 
         <argument
             android:name="position"
@@ -1508,7 +1508,7 @@
         android:id="@+id/surgeCaseOnboardingFragment"
         android:name="com.oreo.ui.device.surgeCase.SurgeCaseOnboardingFragment"
         android:label="fragment_surge_case_onboarding"
-        tools:layout="@layout/fragment_surge_case_onboarding" >
+        tools:layout="@layout/fragment_surge_case_onboarding">
 
         <action
             android:id="@+id/action_surgeCaseOnboardingFragment_to_oreo_my_device"
@@ -1524,7 +1524,7 @@
     <fragment
         android:id="@+id/mealAiFragment"
         android:name="com.oreo.ui.timelineScreen.meal.MealAiFragment"
-        android:label="MealAiFragment" >
+        android:label="MealAiFragment">
         <argument
             android:name="mealData"
             app:argType="com.noisefit_commans.data.model.timeline.MealAiResponse"
@@ -1535,10 +1535,14 @@
         android:id="@+id/processAndDownloadMyDataBottomSheet"
         android:name="com.oreo.ui.profile.downloadMyData.ProcessAndDownloadMyDataBottomSheet"
         android:label="fragment_process_and_download_my_data_bottom_sheet"
-        tools:layout="@layout/fragment_process_and_download_my_data_bottom_sheet" >
+        tools:layout="@layout/fragment_process_and_download_my_data_bottom_sheet">
         <argument
             android:name="stateBS"
             app:argType="string" />
     </dialog>
+    <dialog
+        android:id="@+id/bottomSheetAttachmentPicker"
+        android:name="com.oreo.ui.chatGpt.BottomSheetAttachmentPicker"
+        android:label="BottomSheetAttachmentPicker" />
 
 </navigation>

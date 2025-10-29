@@ -63,6 +63,7 @@ class TimelineScreenDataFragment :
         viewModel.activityListData.observe(this) {
             if (it.isEmpty()) {
                 binding.recyclerView.gone()
+                binding.lytNoActivity.root.visible()
                 binding.lytNoActivity.apply {
                     textView195.text = if (viewModel.date.equals(LocalDate.now().toString(), true))
                         getString(R.string.text_it_looks_like_you_have_not_logged_any_activities_yet)
