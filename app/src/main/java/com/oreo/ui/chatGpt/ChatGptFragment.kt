@@ -11,6 +11,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +20,7 @@ import com.noisefit.data.model.AiMeals
 import com.noisefit.data.model.AiWorkout
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentChatGptBinding
+import com.noisefit.ui.common.bottomSheet.DATE_REQUEST_KEY
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.revealFromBottom
@@ -172,11 +174,32 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
     override fun initListener() {
 
-        binding.lytChatBox.ivSend.setOnClickListener {
+        binding.lytChatBox.chatEtx.setOnEditorActionListener { v, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                val message = v.text.toString().trim()
+                if (message.isNotEmpty()) {
+                        sendMessage(message)
+                }
+                true
+            } else {
+                false
+            }
+        }
+
+        binding.lytChatBox.ivAddAttachment.setOnClickListener {
+            setFragmentResultListener(ATTACHMENT_KEY) { _, bundle ->
+                val type = bundle.getString("type")
+                context.showShortToast(type)
+            }
+            navigate(R.id.bottomSheetAttachmentPicker)
+        }
+
+
+        /*binding.lytChatBox.ivSend.setOnClickListener {
             if (binding.lytChatBox.chatEtx.text.isNullOrEmpty().not()) {
                 sendMessage(binding.lytChatBox.chatEtx.text.toString())
             }
-        }
+        }*/
 
         binding.lytChatBox.btnAudioChat.setOnClickListener {
             navigate(ChatGptFragmentDirections.actionChatGptFragmentToAudioAiFragment(null).apply {
@@ -270,7 +293,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         })
 
         binding.lytChatBox.chatEtx.addTextChangedListener(afterTextChanged = {
-            if (it.isNullOrEmpty()) {
+            /*if (it.isNullOrEmpty()) {
                 binding.lytChatBox.space.visible()
                 binding.lytChatBox.btnAudioChat.visible()
 
@@ -280,7 +303,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                 binding.lytChatBox.btnAudioChat.gone()
 
                 binding.lytChatBox.ivSend.visible()
-            }
+            }*/
         })
     }
 

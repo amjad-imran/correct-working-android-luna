@@ -5,6 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+
+    <ImageView
+        android:id="@+id/ivAddAttachment"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:src="@drawable/image_add_attachments_ai"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
         android:id="@+id/imageView47"
         android:layout_width="0dp"
@@ -21,51 +31,31 @@
         style="@style/S16"
         android:layout_width="0dp"
         android:layout_height="54dp"
+        android:layout_marginStart="6dp"
         android:background="@color/transparent"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:hint="@string/text_message"
+        android:hint="@string/text_ask_anything"
+        android:maxLines="1"
+        android:imeOptions="actionSend"
+        android:singleLine="true"
         android:paddingStart="16dp"
         android:paddingEnd="54dp"
-        android:maxLines="2"
         android:textColor="@color/white"
         android:textColorHint="#66ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/space"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ivAddAttachment"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/ivSend"
+        android:id="@+id/btnAudioChat"
         android:layout_width="54dp"
         android:layout_height="54dp"
-        android:padding="16dp"
-        android:src="@drawable/ic_ai_send_message_2"
-        android:visibility="gone"
+        android:padding="12dp"
+        android:src="@drawable/image_ai_mic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/chatEtx"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
-
-    <Space
-        android:id="@+id/space"
-        android:layout_width="10dp"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/btnAudioChat"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/btnAudioChat"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:background="#FFFFFF"
-        android:src="@drawable/ic_ai_mic_black"
-        app:contentPadding="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
-
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
