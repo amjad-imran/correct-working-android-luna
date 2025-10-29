@@ -83,6 +83,30 @@ object ApplicationUtils {
             AppLinks.FEMALE_HEALTH
         } else if (string.equals("/applinks/caffeine", true)) {
             AppLinks.CAFFEINE_WINDOW
+        } else if (string.equals("/applinks/add-caffeine-intake", true)) {
+            AppLinks.ADD_CAFFEINE_INTAKE
+        } else if (string.equals("/applinks/add-light", true)) {
+            AppLinks.ADD_LIGHT_EXPOSURE
+        } else if (string.equals("/applinks/add-workout", true)) {
+            AppLinks.ADD_WORKOUT
+        } else if (string.equals("/applinks/log-period", true)) {
+            AppLinks.LOG_PERIOD_SYMPTOMS
+        } else if (string.equals("/applinks/add-sleep", true)) {
+            AppLinks.ADD_SLEEP
+        } else if (string.equals("/applinks/sleep-page", true)) {
+          AppLinks.SLEEP_DASH
+        } else if (string.equals("/applinks/readiness-page", true)) {
+          AppLinks.READINESS_DASH
+        } else if (string.equals("/applinks/activity-page", true)) {
+            AppLinks.ACTIVITY_DASH
+        } else if (string.equals("/applinks/circadian-home", true)) {
+            AppLinks.CIRCADIAN_PAGE
+        } else if (string.equals("/applinks/stress-home", true)) {
+            AppLinks.STRESS_DETAIL
+        } else if (string.equals("/applinks/hr-home", true)) {
+            AppLinks.HR_DETAIL
+        } else if (string.equals("/applinks/timeline-list", true)) {
+            AppLinks.TIMELINE_LIST
         } else {
             null
         }

@@ -1798,6 +1798,104 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 //navController?.navigate(R.id.caffeineWindowScreenFragment)
             }
 
+            AppLinks.ADD_CAFFEINE_INTAKE -> {
+                navController?.navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to CircadianAlignmentViewModel.caffeine_window_key,
+                        "srcKey" to "appLink",
+                    )
+                )
+            }
+            AppLinks.ADD_LIGHT_EXPOSURE -> {
+                navController?.navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to CircadianAlignmentViewModel.light_exposure_key,
+                        "srcKey" to "appLink",
+                    )
+                )
+            }
+
+            AppLinks.ADD_WORKOUT -> {
+                navController?.navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to "workout",
+                        "srcKey" to "appLink",
+                    )
+                )
+            }
+
+            AppLinks.LOG_PERIOD_SYMPTOMS -> {
+                navController?.navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to "symptom",
+                        "srcKey" to "appLink",
+                    )
+                )
+            }
+
+            AppLinks.ADD_SLEEP -> {
+                navController?.navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to CircadianAlignmentViewModel.sleep_key,
+                        "srcKey" to "appLink",
+                    )
+                )
+            }
+
+            AppLinks.SLEEP_DASH -> {
+                viewModel.navigateTo(BottomNavOption.SLEEP)
+            }
+
+            AppLinks.READINESS_DASH -> {
+                viewModel.navigateTo(BottomNavOption.READINESS)
+            }
+
+            AppLinks.ACTIVITY_DASH -> {
+                viewModel.navigateTo(BottomNavOption.ACTIVITY)
+            }
+
+            AppLinks.CIRCADIAN_PAGE -> {
+                val isOnBoard = viewModel.localDataStore.getCircadianGraphData()?.onboarding ?: false
+                if(isOnBoard){
+                    navController?.navigate(R.id.circadianAlignmentFragment)
+                }else {
+                    navController?.navigate(R.id.circadianSplashScreenFragment)
+                }
+            }
+
+            AppLinks.STRESS_DETAIL -> {
+                if (viewModel.localDataStore.getStressWalkthroughShownStatus()) {
+                    navController?.navigate(R.id.fragmentOStressDetails)
+                } else {
+                    navController?.navigate(R.id.stressSplashFragment)
+                }
+            }
+
+            AppLinks.HR_DETAIL -> {
+                navController?.navigate(R.id.fragmentHeartRateDetails)
+            }
+
+            AppLinks.TIMELINE_LIST -> {
+                navController?.navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to "",
+                        "srcKey" to "appLink",
+                    )
+                )
+            }
+
         }
     }
 

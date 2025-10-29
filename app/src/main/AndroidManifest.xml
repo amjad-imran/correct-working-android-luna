@@ -236,6 +236,150 @@
                 <data android:pathPattern="/applinks/caffeine" />
             </intent-filter>
 
+            <!--Add Caffeine Intake (Timeline) - Add Activity Frag-->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="link.lunazone.com" />
+                <data android:pathPattern="/applinks/add-caffeine-intake" />
+            </intent-filter>
+
+            <!--Add Light Exposure (Timeline) - Add Activity Frag-->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="link.lunazone.com" />
+                <data android:pathPattern="/applinks/add-light" />
+            </intent-filter>
+
+            <!--Add Workout (Timeline) - Add Activity Frag-->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="link.lunazone.com" />
+                <data android:pathPattern="/applinks/add-workout" />
+            </intent-filter>
+
+            <!--Log period symptoms (Timeline) - Add Activity Frag-->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="link.lunazone.com" />
+                <data android:pathPattern="/applinks/log-period" />
+            </intent-filter>
+
+            <!--Add Sleep (Timeline) - Add Activity Frag-->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="link.lunazone.com" />
+                <data android:pathPattern="/applinks/add-sleep" />
+            </intent-filter>
+
+            <!-- Sleep Detail (Dashboard) - SleepDash Frag-->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="link.lunazone.com" />
+                <data android:pathPattern="/applinks/sleep-page" />
+            </intent-filter>
+
+            <!-- Readiness Detail (Dashboard) - ReadinessDash Frag-->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="link.lunazone.com" />
+                <data android:pathPattern="/applinks/readiness-page" />
+            </intent-filter>
+
+            <!-- Activity Detail (Dashboard) - ActivityDash Frag-->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="link.lunazone.com" />
+                <data android:pathPattern="/applinks/activity-page" />
+            </intent-filter>
+
+            <!-- Circadian Detail Tab - CircadianAlignment Frag-->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="link.lunazone.com" />
+                <data android:pathPattern="/applinks/circadian-home" />
+            </intent-filter>
+
+            <!-- Stress Detail (Dashboard) - Stress Frag-->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="link.lunazone.com" />
+                <data android:pathPattern="/applinks/stress-home" />
+            </intent-filter>
+
+            <!-- HeartRate Detail (Dashboard) - HeartRate Frag-->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="link.lunazone.com" />
+                <data android:pathPattern="/applinks/hr-home" />
+            </intent-filter>
+
+            <!--Add Activity (Timeline) - Add Activity(AllListing) Frag-->
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="link.lunazone.com" />
+                <data android:pathPattern="/applinks/timeline-list" />
+            </intent-filter>
+
         </activity>
 
         <service
