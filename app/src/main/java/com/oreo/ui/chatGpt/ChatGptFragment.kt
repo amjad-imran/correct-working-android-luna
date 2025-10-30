@@ -423,7 +423,6 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
     }
 
     private fun launchCameraPicker() {
-        // Some OEMs require CAMERA permission even for ACTION_IMAGE_CAPTURE
         if (ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.CAMERA
@@ -450,7 +449,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         val mime = getMimeType(uri) ?: fallbackMime
         val name = getDisplayName(uri) ?: "file"
         val size = getFileSize(uri)
-        val maxBytes = 20L * 1024 * 1024 // 20 MB
+        val maxBytes = 5 * 1024 * 1024 // 5 MB
 
         if (size < 0L) {
             context.showShortToast(getString(R.string.text_something_went_wrong_single))
