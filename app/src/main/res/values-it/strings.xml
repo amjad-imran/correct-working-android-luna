@@ -2289,5 +2289,13 @@
     <string name="text_improved_sleep_environment">Ambiente di sonno migliorato</string>
     <string name="text_alcohol_logged">Alcol registrato</string>
     <string name="text_reorder_hide_or_show_the_features_you_care_about_the_most_personalize_your_homescreen_to_keep_what_s_relevant_you_ll_always_be_able_to_add_it_back_later">Riordina, nascondi o mostra le funzionalità che ti interessano di più. Personalizza la schermata Home per mantenere ciò che è rilevante. Potrai sempre aggiungerle di nuovo in seguito.</string>
+    <string name="text_ask_anything">Chiedi qualsiasi cosa</string>
+    <string name="text_photos">Foto</string>
+    <string name="text_files">File</string>
+    <string name="text_file_too_large_max_5_mb">Carica un file inferiore a 5 MB</string>
+    <string name="text_unsupported_file_type">Tipo di file non supportato</string>
+    <string name="text_pdf">PDF</string>
+    <string name="text_camera_permission">Autorizzazione della fotocamera richiesta</string>
+    <string name="text_camera_perssision_message">L\'app Luna Ring richiede l\'autorizzazione della fotocamera per scattare una foto.</string>
 
 </resources>
