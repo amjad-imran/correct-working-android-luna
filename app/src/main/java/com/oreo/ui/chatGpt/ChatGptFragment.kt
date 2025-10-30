@@ -108,7 +108,9 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             } else {
                 viewModel.loadMessagesByThreadId(viewModel.threadId!!)
             }
+            binding.lytChatBox.ivAddAttachment.visible()
         } else {
+            binding.lytChatBox.ivAddAttachment.gone()
             viewModel.generateInitMessage()
         }
 
@@ -223,7 +225,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         binding.lytChatBox.btnSend.setOnClickListener {
             val text = binding.lytChatBox.chatEtx.text.toString()
             if (text.isEmpty().not() || viewModel.pendingAttachment != null) {
-                val message = text.ifEmpty { "Analyse image" }
+                val message = text.ifEmpty { "Analyse file" }
                 sendMessage(message)
             }
         }
@@ -320,14 +322,18 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         })
 
         binding.lytChatBox.chatEtx.addTextChangedListener(afterTextChanged = {
-            if (it.isNullOrEmpty() && viewModel.pendingAttachment == null) {
-                binding.lytChatBox.btnSend.gone()
-                binding.lytChatBox.btnAudioChat.visible()
-            } else {
-                binding.lytChatBox.btnSend.visible()
-                binding.lytChatBox.btnAudioChat.gone()
-            }
+            setSendCtaStates(it.toString())
         })
+    }
+
+    fun setSendCtaStates(text: String) {
+        if (text.isEmpty() && viewModel.pendingAttachment == null) {
+            binding.lytChatBox.btnSend.gone()
+            binding.lytChatBox.btnAudioChat.visible()
+        } else {
+            binding.lytChatBox.btnSend.visible()
+            binding.lytChatBox.btnAudioChat.gone()
+        }
     }
 
     fun checkScrollState(recyclerView: RecyclerView) {
@@ -390,9 +396,9 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
                 if (granted) {
                     launchCameraPicker()
-                } else {
+                }/* else {
                     context.showShortToast(getString(R.string.text_camera_permission_qr))
-                }
+                }*/
             }
         takePictureLauncher =
             registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
@@ -525,11 +531,14 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
     override fun subscribeObservers() {
         viewModel.attachmentPreview.observe(this) { data ->
+            val enteredText = binding.lytChatBox.chatEtx.text.toString()
+            setSendCtaStates(enteredText)
             if (data == null) {
                 binding.lytChatBox.lytAttachment.gone()
                 binding.lytChatBox.imageView47.setImageResource(R.drawable.back_chat_message_send)
                 return@observe
             }
+
             binding.lytChatBox.lytAttachment.visible()
             binding.lytChatBox.imageView47.setImageResource(R.drawable.back_chat_message_send_expanded)
             val isImage = data.mimeType.startsWith("image/")
