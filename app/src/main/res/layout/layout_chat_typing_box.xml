@@ -10,6 +10,8 @@
         android:id="@+id/ivAddAttachment"
         android:layout_width="52dp"
         android:layout_height="52dp"
+        android:visibility="gone"
+        tools:visibility="visible"
         android:src="@drawable/image_add_attachments_ai"
         app:layout_constraintBottom_toBottomOf="@id/chatEtx"
         app:layout_constraintStart_toStartOf="parent" />
@@ -126,6 +128,16 @@
         android:layout_height="54dp"
         android:padding="12dp"
         android:src="@drawable/image_ai_mic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/chatEtx"/>
+
+    <ImageView
+        android:id="@+id/btnSend"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:padding="18dp"
+        android:visibility="gone"
+        android:src="@drawable/ic_ai_send_message_2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/chatEtx"/>
 

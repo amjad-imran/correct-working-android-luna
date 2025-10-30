@@ -7,20 +7,85 @@
     android:layout_marginTop="16dp">
 
     <LinearLayout
+        android:id="@+id/lytRightContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:gravity="end"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/logo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardImage"
+            android:layout_width="138dp"
+            android:layout_height="92dp"
+            android:layout_marginBottom="6dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:cardCornerRadius="16dp">
+
+            <ImageView
+                android:id="@+id/ivImage"
+                android:layout_width="138dp"
+                android:layout_height="92dp"
+                android:scaleType="centerCrop" />
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/lytDoc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:background="@drawable/back_modal_attachment"
+            android:gravity="center_vertical"
+            android:minWidth="180dp"
+            android:minHeight="64dp"
+            android:paddingEnd="10dp"
+            android:orientation="horizontal"
+            android:paddingStart="10dp"
+            android:visibility="gone"
+            tools:visibility="gone">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/image_ai_pdf" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvDocName"
+                    style="@style/S14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="#CCFFFFFF"
+                    tools:text="Document.pdf jhjkjhkjhkj dsjh s dfjkhs fskdjf h kjs hdf hjsdkf sd fkjshfd " />
+
+                <TextView
+                    android:id="@+id/tvDocType"
+                    style="@style/S12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="#99FFFFFF"
+                    tools:text="PDF" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:cardCornerRadius="14dp">
+
             <TextView
                 android:id="@+id/tvMessage"
                 style="@style/S16"
@@ -29,7 +94,7 @@
                 android:background="@drawable/back_chat_user_message_ai"
                 android:lineSpacingExtra="6sp"
                 android:padding="12dp"
-                tools:text="sdfkjhkh kjsd hfkj hsdfkj shdkfj hsdkf" />
+                tools:text="Build me a diet plan from this pdf" />
         </androidx.cardview.widget.CardView>
 
     </LinearLayout>
@@ -45,4 +110,3 @@
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
-

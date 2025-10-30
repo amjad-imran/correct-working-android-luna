@@ -9,12 +9,17 @@ sealed class ChatGptOverview(var id: UUID = UUID.randomUUID()) {
 
     class SentMessage(
         val message: String,
-        val userImage: String?
+        val userImage: String?,
+        val attachmentSource: String? = null,
+        val attachmentMimeType: String? = null,
+        val attachmentName: String? = null
     ) : ChatGptOverview()
 
     class ReceivedMessage(
         val message: String
     ) : ChatGptOverview()
+
+    
 
     class ThinkingMessage(
     ) : ChatGptOverview()

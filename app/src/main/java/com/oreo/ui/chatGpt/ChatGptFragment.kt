@@ -108,7 +108,9 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             } else {
                 viewModel.loadMessagesByThreadId(viewModel.threadId!!)
             }
+            binding.lytChatBox.ivAddAttachment.visible()
         } else {
+            binding.lytChatBox.ivAddAttachment.gone()
             viewModel.generateInitMessage()
         }
 
@@ -194,7 +196,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             if (actionId == EditorInfo.IME_ACTION_SEND) {
                 val message = v.text.toString().trim()
                 if (message.isNotEmpty()) {
-                        sendMessage(message)
+                    sendMessage(message)
                 }
                 true
             } else {
@@ -220,11 +222,13 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         }
 
 
-        /*binding.lytChatBox.ivSend.setOnClickListener {
-            if (binding.lytChatBox.chatEtx.text.isNullOrEmpty().not()) {
-                sendMessage(binding.lytChatBox.chatEtx.text.toString())
+        binding.lytChatBox.btnSend.setOnClickListener {
+            val text = binding.lytChatBox.chatEtx.text.toString()
+            if (text.isEmpty().not() || viewModel.pendingAttachment != null) {
+                val message = text.ifEmpty { "Analyse file" }
+                sendMessage(message)
             }
-        }*/
+        }
 
         binding.lytChatBox.btnAudioChat.setOnClickListener {
             navigate(ChatGptFragmentDirections.actionChatGptFragmentToAudioAiFragment(null).apply {
@@ -260,9 +264,9 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         }
 
         binding.lytSaveData.btnSave.setOnClickListener {
-            if(viewModel.planType == PlanType.WORKOUT || viewModel.planType == PlanType.DIET) {
-                val section = if(viewModel.planType == PlanType.WORKOUT) "workout"
-                                else "nutrition"
+            if (viewModel.planType == PlanType.WORKOUT || viewModel.planType == PlanType.DIET) {
+                val section = if (viewModel.planType == PlanType.WORKOUT) "workout"
+                else "nutrition"
                 viewModel.sessionManager.logMoEngageAppEvent(
                     MoEngageLunaAppEvents.lunaai_wid_selection,
                     HashMap<String, Any>().apply {
@@ -275,9 +279,9 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         }
 
         binding.lytSaveData.btnCancel.setOnClickListener {
-            if(viewModel.planType == PlanType.WORKOUT || viewModel.planType == PlanType.DIET) {
-                val section = if(viewModel.planType == PlanType.WORKOUT) "workout"
-                                else "nutrition"
+            if (viewModel.planType == PlanType.WORKOUT || viewModel.planType == PlanType.DIET) {
+                val section = if (viewModel.planType == PlanType.WORKOUT) "workout"
+                else "nutrition"
                 viewModel.sessionManager.logMoEngageAppEvent(
                     MoEngageLunaAppEvents.lunaai_wid_selection,
                     HashMap<String, Any>().apply {
@@ -318,18 +322,18 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         })
 
         binding.lytChatBox.chatEtx.addTextChangedListener(afterTextChanged = {
-            /*if (it.isNullOrEmpty()) {
-                binding.lytChatBox.space.visible()
-                binding.lytChatBox.btnAudioChat.visible()
-
-                binding.lytChatBox.ivSend.gone()
-            } else {
-                binding.lytChatBox.space.gone()
-                binding.lytChatBox.btnAudioChat.gone()
-
-                binding.lytChatBox.ivSend.visible()
-            }*/
+            setSendCtaStates(it.toString())
         })
+    }
+
+    fun setSendCtaStates(text: String) {
+        if (text.isEmpty() && viewModel.pendingAttachment == null) {
+            binding.lytChatBox.btnSend.gone()
+            binding.lytChatBox.btnAudioChat.visible()
+        } else {
+            binding.lytChatBox.btnSend.visible()
+            binding.lytChatBox.btnAudioChat.gone()
+        }
     }
 
     fun checkScrollState(recyclerView: RecyclerView) {
@@ -368,11 +372,11 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
     }
 
     fun sendMessage(message: String) {
-        if(binding.lytSuggestions.root.isVisible){
+        if (binding.lytSuggestions.root.isVisible) {
             binding.lytSuggestions.root.gone()
         }
         if (message.isNotEmpty()) {
-            viewModel.addSentMessage(message)
+            viewModel.addSentMessageWithPendingAttachment(message)
             viewModel.addThinkingMessage()
 
 
@@ -388,36 +392,42 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
     }
 
     private fun registerAttachmentPickers() {
-        requestCameraPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-            if (granted) {
-                launchCameraPicker()
-            } else {
-                context.showShortToast(getString(R.string.text_camera_permission_qr))
+        requestCameraPermission =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+                if (granted) {
+                    launchCameraPicker()
+                }/* else {
+                    context.showShortToast(getString(R.string.text_camera_permission_qr))
+                }*/
             }
-        }
-        takePictureLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-            val uri = cameraUri
-            if (success && uri != null) {
-                handlePickedUri(uri, "image/jpeg")
-            } else {
-                context.showShortToast(getString(R.string.text_something_went_wrong_single))
+        takePictureLauncher =
+            registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+                val uri = cameraUri
+                if (success && uri != null) {
+                    handlePickedUri(uri, "image/jpeg")
+                } else {
+                    //context.showShortToast(getString(R.string.text_something_went_wrong_single))
+                }
             }
-        }
 
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
             uri?.let { handlePickedUri(it, getMimeType(it) ?: "image/*") }
         }
 
-        pickDocumentLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-            uri?.let {
-                handlePickedUri(it, getMimeType(it) ?: "application/octet-stream")
+        pickDocumentLauncher =
+            registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+                uri?.let {
+                    handlePickedUri(it, getMimeType(it) ?: "application/octet-stream")
+                }
             }
-        }
     }
 
     private fun launchCameraPicker() {
-        // Some OEMs require CAMERA permission even for ACTION_IMAGE_CAPTURE
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             requestCameraPermission.launch(Manifest.permission.CAMERA)
             return
         }
@@ -439,7 +449,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         val mime = getMimeType(uri) ?: fallbackMime
         val name = getDisplayName(uri) ?: "file"
         val size = getFileSize(uri)
-        val maxBytes = 20L * 1024 * 1024 // 20 MB
+        val maxBytes = 5 * 1024 * 1024 // 5 MB
 
         if (size < 0L) {
             context.showShortToast(getString(R.string.text_something_went_wrong_single))
@@ -520,11 +530,14 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
     override fun subscribeObservers() {
         viewModel.attachmentPreview.observe(this) { data ->
+            val enteredText = binding.lytChatBox.chatEtx.text.toString()
+            setSendCtaStates(enteredText)
             if (data == null) {
                 binding.lytChatBox.lytAttachment.gone()
                 binding.lytChatBox.imageView47.setImageResource(R.drawable.back_chat_message_send)
                 return@observe
             }
+
             binding.lytChatBox.lytAttachment.visible()
             binding.lytChatBox.imageView47.setImageResource(R.drawable.back_chat_message_send_expanded)
             val isImage = data.mimeType.startsWith("image/")
@@ -535,11 +548,13 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                     com.bumptech.glide.Glide.with(binding.root.context)
                         .load(data.uri)
                         .into(binding.lytChatBox.ivAttachmentImage)
-                } catch (_: Exception) {}
+                } catch (_: Exception) {
+                }
             } else {
                 binding.lytChatBox.ivAttachmentImage.gone()
                 binding.lytChatBox.lytAttachmentDoc.visible()
-                binding.lytChatBox.tvDocType.text = if (data.mimeType == "application/pdf") "PDF" else "DOC"
+                binding.lytChatBox.tvDocType.text =
+                    if (data.mimeType == "application/pdf") "PDF" else "DOC"
                 binding.lytChatBox.tvDocName.text = data.fileName
             }
         }
