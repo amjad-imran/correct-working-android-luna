@@ -1,6 +1,10 @@
 package com.oreo.ui.chatGpt
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
+import androidx.core.content.FileProvider
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -42,6 +46,8 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
+import java.io.File
+import java.io.FileOutputStream
 import java.util.Calendar
 import java.util.TimeZone
 import java.util.UUID
@@ -59,6 +65,10 @@ class ChatGptViewModel
     private val syncRepository: OreoSyncRepository,
     val resourceProvider: ResourcesProvider,
 ) : BaseViewModel() {
+
+
+    val IMAGE_MAX_BYTES = 5 * 1024 * 1024 // 5 MB
+    val DEFAULT_IMAGE_QUALITY = 80 // JPEG quality (0-100)
 
     private var userImage: String? = null
     private var userName: String? = null
@@ -92,7 +102,6 @@ class ChatGptViewModel
 
     var lastApi: Pair<Int, String>? = null
     private var initMessage: String
-
 
 
     @Volatile
@@ -278,7 +287,9 @@ class ChatGptViewModel
             }
             .build()
     }
-    @Volatile private var currentCall: Call? = null
+
+    @Volatile
+    private var currentCall: Call? = null
 
     fun askQuestionStream(prompt: String) {
         fetchInProgress.value = true
@@ -310,7 +321,9 @@ class ChatGptViewModel
                         val bytes = input.readBytes()
                         RequestBody.create(a.mimeType.toMediaTypeOrNull(), bytes)
                     }
-                } catch (e: Exception) { null }
+                } catch (e: Exception) {
+                    null
+                }
             }
 
             val requestBody: RequestBody = if (attachmentBody != null && att != null) {
@@ -341,7 +354,11 @@ class ChatGptViewModel
                 response.body?.source()?.let { source ->
                     val eventBuffer = StringBuilder()
                     while (fetchInProgress.value == true) {
-                        val line = try { source.readUtf8Line() } catch (e: Exception) { null }
+                        val line = try {
+                            source.readUtf8Line()
+                        } catch (e: Exception) {
+                            null
+                        }
                         if (line == null) break
                         if (line.startsWith("data:")) {
                             eventBuffer.append(line.removePrefix("data:").trimStart())
@@ -708,6 +725,70 @@ class ChatGptViewModel
     fun removeSnackBar() {
         removeSnackBar.postValue(Event(true))
     }
+
+
+    fun compressImage(
+        context: Context,
+        sourceUri: Uri,
+        quality: Int = DEFAULT_IMAGE_QUALITY
+    ): Uri? {
+        return try {
+            val resolver = context.contentResolver
+
+            val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+            resolver.openInputStream(sourceUri)
+                ?.use { BitmapFactory.decodeStream(it, null, bounds) }
+
+            val maxDimension = 1920
+            var inSample = 1
+            val w = bounds.outWidth
+            val h = bounds.outHeight
+            if (w > 0 && h > 0) {
+                while ((w / inSample) > maxDimension || (h / inSample) > maxDimension) {
+                    inSample *= 2
+                }
+            }
+
+            val opts = BitmapFactory.Options().apply { inSampleSize = inSample.coerceAtLeast(1) }
+            val bitmap = resolver.openInputStream(sourceUri)
+                ?.use { BitmapFactory.decodeStream(it, null, opts) }
+                ?: return null
+
+            val outFile =
+                File(context.cacheDir, "compressed_${System.currentTimeMillis()}.jpg")
+            FileOutputStream(outFile).use { fos ->
+                bitmap.compress(Bitmap.CompressFormat.JPEG, quality.coerceIn(0, 100), fos)
+            }
+            bitmap.recycle()
+
+            FileProvider.getUriForFile(
+                context,
+                "com.noisefit.luna.fileprovider",
+                outFile
+            )
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    fun getMimeType(context: Context, uri: Uri): String? =
+        context.contentResolver.getType(uri)
+
+    fun getDisplayName(context: Context, uri: Uri): String? {
+        return context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+            val nameIndex = cursor.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
+            if (nameIndex != -1 && cursor.moveToFirst()) cursor.getString(nameIndex) else null
+        }
+    }
+
+    fun getFileSize(context: Context, uri: Uri): Long {
+        return context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+            val sizeIndex = cursor.getColumnIndex(android.provider.OpenableColumns.SIZE)
+            if (sizeIndex != -1 && cursor.moveToFirst()) cursor.getLong(sizeIndex) else -1L
+        } ?: -1L
+    }
+
+
     data class AttachmentData(
         val uri: Uri,
         val mimeType: String,
