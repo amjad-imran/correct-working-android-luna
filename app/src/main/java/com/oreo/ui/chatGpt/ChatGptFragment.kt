@@ -12,8 +12,10 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import androidx.appcompat.app.AlertDialog
 import java.io.File
 import java.io.FileOutputStream
+import android.provider.Settings
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import android.Manifest
@@ -32,6 +34,10 @@ import com.noisefit.data.model.AiWorkout
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentChatGptBinding
 import com.noisefit.ui.common.bottomSheet.DATE_REQUEST_KEY
+import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.data.BinaryActionCallback
+import com.noisefit_commans.data.ErrorResponse
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.revealFromBottom
@@ -401,9 +407,14 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
                 if (granted) {
                     launchCameraPicker()
-                }/* else {
-                    context.showShortToast(getString(R.string.text_camera_permission_qr))
-                }*/
+                } else {
+                    val showRationale = shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)
+                    if (showRationale) {
+                        context.showShortToast(getString(R.string.text_camera_permission))
+                    } else {
+                        showCameraPermissionSettingsDialog()
+                    }
+                }
             }
         takePictureLauncher =
             registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
@@ -425,6 +436,43 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                     handlePickedUri(it, viewModel.getMimeType(requireContext(),it) ?: "application/octet-stream")
                 }
             }
+    }
+
+    private fun showCameraPermissionSettingsDialog() {
+        try {
+            uiController.onApiErrorReceived(
+                ErrorResponse(
+                    UIComponentType.AreYouSureDialog(
+                        getString(R.string.text_permission_required),
+                        getString(R.string.text_camera_perssision_message),
+                        false,
+                        getString(R.string.text_go_to_settings),
+                        object : BinaryActionCallback {
+                            override fun yes() {
+                                openAppSettings()
+                            }
+
+                            override fun no() {
+
+                            }
+                        }
+                    )
+                )
+            )
+        } catch (_: Exception) {
+            context.showShortToast(getString(R.string.text_camera_permission))
+        }
+    }
+
+    private fun openAppSettings() {
+        try {
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = Uri.fromParts("package", requireContext().packageName, null)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            startActivity(intent)
+        } catch (_: Exception) {
+        }
     }
 
     private fun launchCameraPicker() {
@@ -463,14 +511,14 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             return
         }
 
-        LOGS.d(
+        /*LOGS.d(
             "Image compressed original file size  ${
                 viewModel.getFileSize(
                     requireContext(),
                     uri
                 )
             }"
-        )
+        )*/
         if (isImage) {
             val compressedUri = viewModel.compressImage(
                 requireContext(),
@@ -488,7 +536,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             }
             LOGS.d("Image compressed compressed image size  ${compressedSize}")
             if (compressedSize > viewModel.IMAGE_MAX_BYTES) {
-                context.showShortToast(getString(R.string.text_file_too_large_max_20_mb))
+                context.showShortToast(getString(R.string.text_file_too_large_max_5_mb))
                 return
             }
             viewModel.setPendingAttachment(compressedUri, "image/jpeg", name, compressedSize)
@@ -500,7 +548,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                 return
             }
             if (size > viewModel.IMAGE_MAX_BYTES) {
-                context.showShortToast(getString(R.string.text_file_too_large_max_20_mb))
+                context.showShortToast(getString(R.string.text_file_too_large_max_5_mb))
                 return
             }
             viewModel.setPendingAttachment(uri, mime, name, size)
