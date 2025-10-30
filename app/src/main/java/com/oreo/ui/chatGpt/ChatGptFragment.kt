@@ -372,7 +372,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             binding.lytSuggestions.root.gone()
         }
         if (message.isNotEmpty()) {
-            viewModel.addSentMessage(message)
+            viewModel.addSentMessageWithPendingAttachment(message)
             viewModel.addThinkingMessage()
 
 
@@ -400,7 +400,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             if (success && uri != null) {
                 handlePickedUri(uri, "image/jpeg")
             } else {
-                context.showShortToast(getString(R.string.text_something_went_wrong_single))
+                //context.showShortToast(getString(R.string.text_something_went_wrong_single))
             }
         }
 

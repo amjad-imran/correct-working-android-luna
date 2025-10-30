@@ -137,9 +137,23 @@ class ChatGptViewModel
         val messages = _chatGptOverview.value ?: ArrayList()
         messages.add(ChatGptOverview.SentMessage(message, userImage))
         _chatGptOverview.value = (messages)
-        //_chatGptOverview.postValue(messages)
-        //generateThreadTitle(message)
+    }
 
+    fun addSentMessageWithPendingAttachment(message: String) {
+        val messages = _chatGptOverview.value ?: ArrayList()
+        val att = pendingAttachment
+        messages.add(
+            ChatGptOverview.SentMessage(
+                message = message,
+                userImage = userImage,
+                attachmentSource = att?.uri?.toString(),
+                attachmentMimeType = att?.mimeType,
+                attachmentName = att?.fileName
+            )
+        )
+        _chatGptOverview.value = messages
+        // clear attachment preview state once committed
+        attachmentPreview.postValue(null)
     }
 
     fun addThinkingMessage() {
@@ -545,7 +559,15 @@ class ChatGptViewModel
                 if (it.sender.equals("assistant", true)) {
                     tempMessage.add(ChatGptOverview.ReceivedMessage(it.message ?: ""))
                 } else if (it.sender.equals("user", true)) {
-                    tempMessage.add(ChatGptOverview.SentMessage(it.message ?: "", userImage))
+                    tempMessage.add(
+                        ChatGptOverview.SentMessage(
+                            message = it.message ?: "",
+                            userImage = userImage,
+                            attachmentSource = it.attachmentUrl,
+                            attachmentMimeType = it.mimeType,
+                            attachmentName = it.documentName
+                        )
+                    )
                 }
             }
 

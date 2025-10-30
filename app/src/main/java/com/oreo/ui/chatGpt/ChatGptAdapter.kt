@@ -33,6 +33,8 @@ import android.text.style.AbsoluteSizeSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.TypefaceSpan
 import android.graphics.Color
+import com.bumptech.glide.Glide
+// Removed standalone attachment bindings; sent message now renders attachment inline
 
 
 class ChatGptAdapter :
@@ -188,7 +190,8 @@ class ChatGptAdapter :
     override fun getItemCount() = asyncListDiffer.currentList.size
 
     override fun getItemViewType(position: Int): Int {
-        return when (asyncListDiffer.currentList[position]) {
+        val item = asyncListDiffer.currentList[position]
+        return when (item) {
             is ChatGptOverview.SentMessage -> R.layout.item_chat_message_sent_list
             is ChatGptOverview.ReceivedMessage -> R.layout.item_chat_message_recived_list
             is ChatGptOverview.RetryMessage -> R.layout.item_chat_message_retry
@@ -212,12 +215,27 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
             data: ChatGptOverview.SentMessage,
             position: Int
         ) {
-            /*binding.logo.loadImageWithCache(
-                binding.logo.context,
-                data.userImage,
-                R.drawable.ic_default_profile_image
-            )*/
             binding.tvMessage.text = data.message
+
+            val src = data.attachmentSource
+            val type = data.attachmentMimeType
+            if (!src.isNullOrEmpty() && !type.isNullOrEmpty()) {
+                if (type.startsWith("image/")) {
+                    binding.cardImage.visible()
+                    binding.lytDoc.gone()
+                    Glide.with(binding.cardImage.context)
+                        .load(src)
+                        .into(binding.ivImage)
+                } else {
+                    binding.cardImage.gone()
+                    binding.lytDoc.visible()
+                    binding.tvDocName.text = data.attachmentName ?: "Document"
+                    binding.tvDocType.text = if (type == "application/pdf") "PDF" else "DOC"
+                }
+            } else {
+                binding.cardImage.gone()
+                binding.lytDoc.gone()
+            }
         }
     }
 
@@ -311,6 +329,8 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
         }
 
     }
+
+    
 
 
 }
