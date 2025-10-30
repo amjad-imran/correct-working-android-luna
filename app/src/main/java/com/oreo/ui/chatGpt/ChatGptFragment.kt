@@ -10,6 +10,10 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import java.io.File
+import java.io.FileOutputStream
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import android.Manifest
@@ -89,6 +93,8 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
     private lateinit var pickImageLauncher: ActivityResultLauncher<String>
     private lateinit var pickDocumentLauncher: ActivityResultLauncher<Array<String>>
     private lateinit var requestCameraPermission: ActivityResultLauncher<String>
+    private val IMAGE_MAX_BYTES = 5 * 1024 * 1024 // 5 MB
+    private val DEFAULT_IMAGE_QUALITY = 80 // JPEG quality (0-100)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -448,18 +454,6 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
     private fun handlePickedUri(uri: Uri, fallbackMime: String) {
         val mime = getMimeType(uri) ?: fallbackMime
         val name = getDisplayName(uri) ?: "file"
-        val size = getFileSize(uri)
-        val maxBytes = 5 * 1024 * 1024 // 5 MB
-
-        if (size < 0L) {
-            context.showShortToast(getString(R.string.text_something_went_wrong_single))
-            return
-        }
-        if (size > maxBytes) {
-            context.showShortToast(getString(R.string.text_file_too_large_max_20_mb))
-            return
-        }
-
         val isImage = mime.startsWith("image/")
         val isSupportedDoc = mime == "application/pdf" ||
                 mime == "application/msword" ||
@@ -470,9 +464,80 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             return
         }
 
-        viewModel.setPendingAttachment(uri, mime, name, size)
+        LOGS.d("Image compressed original file size  ${getFileSize(uri)}")
+        if (isImage) {
+            val compressedUri = compressImage(uri, quality = DEFAULT_IMAGE_QUALITY)
+            if (compressedUri == null) {
+                context.showShortToast(getString(R.string.text_something_went_wrong_single))
+                return
+            }
+            val compressedSize = getFileSize(compressedUri)
+            if (compressedSize < 0L) {
+                context.showShortToast(getString(R.string.text_something_went_wrong_single))
+                return
+            }
+            LOGS.d("Image compressed compressed image size  ${compressedSize}")
+            if (compressedSize > IMAGE_MAX_BYTES) {
+                context.showShortToast(getString(R.string.text_file_too_large_max_20_mb))
+                return
+            }
+            viewModel.setPendingAttachment(compressedUri, "image/jpeg", name, compressedSize)
+            LOGS.d("Image compressed -> $compressedUri image/jpeg $name $compressedSize")
+        } else {
+            val size = getFileSize(uri)
+            if (size < 0L) {
+                context.showShortToast(getString(R.string.text_something_went_wrong_single))
+                return
+            }
+            if (size > IMAGE_MAX_BYTES) {
+                context.showShortToast(getString(R.string.text_file_too_large_max_20_mb))
+                return
+            }
+            viewModel.setPendingAttachment(uri, mime, name, size)
+            LOGS.d("Doc picked -> $uri $mime $name $size")
+        }
+    }
 
-        LOGS.d("sdkfjskdjfhdj $uri $mime $name $size")
+    // Compress an image URI to a JPEG in cache, with configurable quality (0-100).
+    // Returns a content URI (FileProvider) of the compressed file or null on failure.
+    private fun compressImage(sourceUri: Uri, quality: Int = DEFAULT_IMAGE_QUALITY): Uri? {
+        return try {
+            val resolver = requireContext().contentResolver
+
+            // Decode bounds first
+            val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+            resolver.openInputStream(sourceUri)?.use { BitmapFactory.decodeStream(it, null, bounds) }
+
+            // Downsample very large images to keep memory reasonable
+            val maxDimension = 1920
+            var inSample = 1
+            val w = bounds.outWidth
+            val h = bounds.outHeight
+            if (w > 0 && h > 0) {
+                while ((w / inSample) > maxDimension || (h / inSample) > maxDimension) {
+                    inSample *= 2
+                }
+            }
+
+            val opts = BitmapFactory.Options().apply { inSampleSize = inSample.coerceAtLeast(1) }
+            val bitmap = resolver.openInputStream(sourceUri)?.use { BitmapFactory.decodeStream(it, null, opts) }
+                ?: return null
+
+            val outFile = File(requireContext().cacheDir, "compressed_${System.currentTimeMillis()}.jpg")
+            FileOutputStream(outFile).use { fos ->
+                bitmap.compress(Bitmap.CompressFormat.JPEG, quality.coerceIn(0, 100), fos)
+            }
+            bitmap.recycle()
+
+            // Return a content:// URI via FileProvider so downstream code can open it
+            FileProvider.getUriForFile(
+                requireContext(),
+                "com.noisefit.luna.fileprovider",
+                outFile
+            )
+        } catch (_: Exception) {
+            null
+        }
     }
 
     private fun getMimeType(uri: Uri): String? =
