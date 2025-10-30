@@ -96,7 +96,7 @@ class ChatGptViewModel
 
 
     @Volatile
-    private var pendingAttachment: AttachmentData? = null
+    var pendingAttachment: AttachmentData? = null
     val attachmentPreview = MutableLiveData<AttachmentData?>(null)
 
     fun setPendingAttachment(uri: Uri, mimeType: String, fileName: String, sizeBytes: Long) {

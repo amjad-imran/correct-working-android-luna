@@ -129,4 +129,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/chatEtx"/>
 
+    <ImageView
+        android:id="@+id/btnSend"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:padding="18dp"
+        android:visibility="gone"
+        android:src="@drawable/ic_ai_send_message_2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/chatEtx"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
