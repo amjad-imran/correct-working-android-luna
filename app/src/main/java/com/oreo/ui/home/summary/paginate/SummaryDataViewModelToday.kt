@@ -3169,6 +3169,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
                     add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
                     add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["timeline"]!!.copy(priority = priorityList.size))
                     add(itemsMap["activity"]!!.copy(priority = priorityList.size))
                     add(itemsMap["heart_rate"]!!.copy(priority = priorityList.size))
                     add(itemsMap["one_tap_vitals"]!!.copy(priority = priorityList.size))
@@ -3177,11 +3178,11 @@ class SummaryDataViewModelToday @Inject constructor(
                     add(itemsMap["cycle_tracker"]!!.copy(priority = priorityList.size))
                     add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))
                     add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["timeline"]!!.copy(priority = priorityList.size))
                 }
 
                 1 -> {
                     add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
+                    add(itemsMap["timeline"]!!.copy(priority = priorityList.size))
                     add(itemsMap["activity"]!!.copy(priority = priorityList.size))
                     add(itemsMap["heart_rate"]!!.copy(priority = priorityList.size))
                     add(itemsMap["one_tap_vitals"]!!.copy(priority = priorityList.size))
@@ -3193,10 +3194,10 @@ class SummaryDataViewModelToday @Inject constructor(
                     add(itemsMap["cycle_tracker"]!!.copy(priority = priorityList.size))
                     add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))
                     add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["timeline"]!!.copy(priority = priorityList.size))
                 }
 
                 else -> {
+                    add(itemsMap["timeline"]!!.copy(priority = priorityList.size))
                     add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
                     add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
                     add(itemsMap["activity"]!!.copy(priority = priorityList.size))
@@ -3209,7 +3210,6 @@ class SummaryDataViewModelToday @Inject constructor(
                     add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
                     add(itemsMap["cycle_tracker"]!!.copy(priority = priorityList.size))
                     add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["timeline"]!!.copy(priority = priorityList.size))
                 }
             }
 
