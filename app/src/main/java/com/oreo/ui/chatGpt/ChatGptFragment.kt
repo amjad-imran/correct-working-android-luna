@@ -519,6 +519,34 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
     }
 
     override fun subscribeObservers() {
+        viewModel.attachmentPreview.observe(this) { data ->
+            if (data == null) {
+                binding.lytChatBox.lytAttachment.gone()
+                binding.lytChatBox.imageView47.setImageResource(R.drawable.back_chat_message_send)
+                return@observe
+            }
+            binding.lytChatBox.lytAttachment.visible()
+            binding.lytChatBox.imageView47.setImageResource(R.drawable.back_chat_message_send_expanded)
+            val isImage = data.mimeType.startsWith("image/")
+            if (isImage) {
+                binding.lytChatBox.ivAttachmentImage.visible()
+                binding.lytChatBox.lytAttachmentDoc.gone()
+                try {
+                    com.bumptech.glide.Glide.with(binding.root.context)
+                        .load(data.uri)
+                        .into(binding.lytChatBox.ivAttachmentImage)
+                } catch (_: Exception) {}
+            } else {
+                binding.lytChatBox.ivAttachmentImage.gone()
+                binding.lytChatBox.lytAttachmentDoc.visible()
+                binding.lytChatBox.tvDocType.text = if (data.mimeType == "application/pdf") "PDF" else "DOC"
+                binding.lytChatBox.tvDocName.text = data.fileName
+            }
+        }
+
+        binding.lytChatBox.ivRemoveAttachment.setOnClickListener {
+            viewModel.clearPendingAttachment()
+        }
         viewModel.videoState.observe(this) {
             if (it) {
                 binding.ivGeneratingGradient.visible()
