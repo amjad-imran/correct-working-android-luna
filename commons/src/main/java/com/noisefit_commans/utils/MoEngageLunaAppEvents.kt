@@ -280,4 +280,11 @@ object MoEngageLunaAppEvents {
     const val lunaai_wid_sel_click = "lunaai_wid_sel_click"
     const val lunaai_wid_selection = "lunaai_wid_selection"
 
+    // One Tap Vitals
+
+    const val one_tap_hr = "one_tap_hr"
+    const val one_tap_stress = "one_tap_stress"
+    const val one_tap_spo2 = "one_tap_spo2"
+    const val one_tap_temp = "one_tap_temp"
+
 }

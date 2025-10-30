@@ -86,7 +86,7 @@ class TimelineScreenDataFragment :
             }
         }
 
-        viewModel.getApiErrors().observe(viewLifecycleOwner) {
+        viewModel.getApiErrors().observe(this) {
             it?.getContent()?.let { response ->
                 uiController.onApiErrorReceived(response)
             }

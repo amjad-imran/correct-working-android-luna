@@ -741,18 +741,22 @@ class SummaryDataFragmentToday :
 
                 when (type) {
                     OHealthOverview.VitalsType.HR -> {
+                        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.one_tap_hr)
                         viewModel.performOneTapVitalsOp(ManualMeasureType.HEART_RATE, true)
                     }
 
                     OHealthOverview.VitalsType.STRESS -> {
+                        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.one_tap_stress)
                         viewModel.performOneTapVitalsOp(ManualMeasureType.STRESS, true)
                     }
 
                     OHealthOverview.VitalsType.SPO2 -> {
+                        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.one_tap_spo2)
                         viewModel.performOneTapVitalsOp(ManualMeasureType.BLOOD_OXYGEN, true)
                     }
 
                     OHealthOverview.VitalsType.SKIN_TEMP -> {
+                        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.one_tap_temp)
                         viewModel.performOneTapVitalsOp(ManualMeasureType.BODY_TEMPERATURE, true)
                     }
 
