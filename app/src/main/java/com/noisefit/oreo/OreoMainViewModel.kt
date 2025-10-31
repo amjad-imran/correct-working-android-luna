@@ -375,7 +375,6 @@ constructor(
                             ldwReadiness = it.comfort_readiness ?: false
                             ldwCycleTracker = it.comfort_cycle ?: false
                             boosterWomen = it.booster_women ?: false
-                            timeTrackerActivities = it.timeTrackerActivities
                             //
 
                             temperatureBaseLine = it.tempBaseLine ?: DEFAULT_TEMPERATURE_BASELINE
@@ -409,6 +408,7 @@ constructor(
 
                             if (reloadDays.contains(DateFormats.getTodaysDateString(10))) {
                                 impactData = it.impact
+                                timeTrackerActivities = it.timeTrackerActivities
                                 dashTodayReload.postValue(Event(true))
                                 lunaZoneReload.postValue(Event(true))
                                 //sleepDashTodayReload.value = Event(true)
