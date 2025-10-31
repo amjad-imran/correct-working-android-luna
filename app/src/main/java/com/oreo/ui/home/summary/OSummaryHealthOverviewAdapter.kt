@@ -769,10 +769,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
                     binding.tvDesc.text = data.desc
 
-                    if (data.event.equals(SYMPTOM_KEY, true) || data.event.equals(
-                            MEAL_INTAKE_KEY_KEY
-                        )
-                    ) {
+                    if (data.event.equals(SYMPTOM_KEY, true)) {
                         binding.tvTime.invisible()
                     } else {
                         binding.tvTime.apply {
