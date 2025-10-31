@@ -219,8 +219,8 @@ class TimelineScreenDataFragment :
 
             "supplements" -> {
                 if(
-                    viewModel.getDate(0).equals(viewModel.date)/* ||
-                    viewModel.getDate(1).equals(viewModel.date)*/
+                    viewModel.getDate(0).equals(viewModel.date) ||
+                    viewModel.getDate(1).equals(viewModel.date)
                 ){
                     data.canBeEditedOrDeleted = 3
                 }
