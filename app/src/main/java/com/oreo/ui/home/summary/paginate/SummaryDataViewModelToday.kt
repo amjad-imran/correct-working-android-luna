@@ -1754,12 +1754,14 @@ class SummaryDataViewModelToday @Inject constructor(
                 RECOVERY_KEY -> {
                     data.title = data.metadata?.lunaOption
                     data.titleColor = "#C5A8ED".toColorInt()
-                    data.desc = ""
+                    data.desc = getSleepDuration(data.startDate, data.startTime, data.endDate, data.endTime)
+
                 }
 
                 ALCOHOL_KEY -> {
                     data.titleColor = "#C5A8ED".toColorInt()
                     data.desc = ""
+                    data.desc = resourceProvider.getString(R.string.text_alcohol_logged)
                 }
 
                 else -> {}
