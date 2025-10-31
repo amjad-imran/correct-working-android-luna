@@ -76,6 +76,7 @@ import com.oreo.data.model.CaffeinePostApiModel
 import com.oreo.data.model.circadian.CircadianQuizResponseModel
 import com.oreo.data.model.circadian.CircadianResponseModel
 import com.noisefit_commans.data.model.timeline.TimelineScreenResponse
+import com.oreo.data.model.dataSharingVendorModels.DataSharingVendorListResponseItem
 import com.oreo.data.model.downloadMyData.DownloadMyDataResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -852,6 +853,17 @@ interface NetworkService {
         @Url url: String,
         @Query("days") days: Int,
     ): BaseApiResponse<DownloadMyDataResponse>
+
+    @GET
+    suspend fun getDataSharingVendorList(
+        @Url url: String,
+    ): BaseApiResponse<List<DataSharingVendorListResponseItem>>
+
+    @POST
+    suspend fun submitDataSharingVendorToggleState(
+        @Url url: String,
+        @Body req: JsonObject
+    ): BaseApiResponse<Any>
 
     /**
      * ---------------------------------------------------------------------------------
