@@ -2288,5 +2288,13 @@
     <string name="text_improved_sleep_environment">Verbesserte Schlafumgebung</string>
     <string name="text_alcohol_logged">Alkohol protokolliert</string>
     <string name="text_reorder_hide_or_show_the_features_you_care_about_the_most_personalize_your_homescreen_to_keep_what_s_relevant_you_ll_always_be_able_to_add_it_back_later">Ordne die Funktionen neu, blende sie aus oder zeige sie an – ganz nach deinen Prioritäten. Personalisiere deinen Startbildschirm, damit Relevantes bleibt. Du kannst sie später jederzeit wieder hinzufügen.</string>
+    <string name="text_ask_anything">Frag mich irgendetwas</string>
+    <string name="text_photos">Fotos</string>
+    <string name="text_files">Dateien</string>
+    <string name="text_file_too_large_max_5_mb">Bitte lade eine Datei unter 5 MB hoch</string>
+    <string name="text_unsupported_file_type">Nicht unterstützter Dateityp</string>
+    <string name="text_pdf">PDF</string>
+    <string name="text_camera_permission">Kameraberechtigung erforderlich</string>
+    <string name="text_camera_perssision_message">Die Luna Ring App benötigt die Kameraberechtigung, um ein Bild aufzunehmen.</string>
 
 </resources>

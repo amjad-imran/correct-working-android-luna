@@ -2407,5 +2407,13 @@ onjour, Luna"</string>
     <string name="text_improved_sleep_environment">Environnement de sommeil amélioré</string>
     <string name="text_alcohol_logged">Alcool enregistré</string>
     <string name="text_reorder_hide_or_show_the_features_you_care_about_the_most_personalize_your_homescreen_to_keep_what_s_relevant_you_ll_always_be_able_to_add_it_back_later">Réorganisez, masquez ou affichez les fonctionnalités qui comptent le plus pour vous. Personnalisez votre écran d’accueil pour conserver l’essentiel. Vous pourrez toujours les réajouter plus tard.</string>
+    <string name="text_ask_anything">Demandez n\'importe quoi</string>
+    <string name="text_photos">Photos</string>
+    <string name="text_files">Fichiers</string>
+    <string name="text_file_too_large_max_5_mb">Veuillez télécharger un fichier de moins de 5 Mo</string>
+    <string name="text_unsupported_file_type">Type de fichier non pris en charge</string>
+    <string name="text_pdf">PDF</string>
+    <string name="text_camera_permission">Autorisation de caméra requise</string>
+    <string name="text_camera_perssision_message">L\'application Luna Ring nécessite l\'autorisation de la caméra pour capturer une image.</string>
 
 </resources>

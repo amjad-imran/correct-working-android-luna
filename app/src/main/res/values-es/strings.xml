@@ -2258,5 +2258,13 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_improved_sleep_environment">Entorno de sueño mejorado</string>
     <string name="text_alcohol_logged">Alcohol registrado</string>
     <string name="text_reorder_hide_or_show_the_features_you_care_about_the_most_personalize_your_homescreen_to_keep_what_s_relevant_you_ll_always_be_able_to_add_it_back_later">Reordena, oculta o muestra las funciones que más te importan. Personaliza tu pantalla de inicio para mantener lo relevante. Siempre podrás volver a añadirlas más tarde.</string>
+    <string name="text_ask_anything">Pregunta lo que quieras</string>
+    <string name="text_photos">Fotos</string>
+    <string name="text_files">Archivos</string>
+    <string name="text_file_too_large_max_5_mb">Por favor, sube un archivo de menos de 5 MB</string>
+    <string name="text_unsupported_file_type">Tipo de archivo no compatible</string>
+    <string name="text_pdf">PDF</string>
+    <string name="text_camera_permission">Permiso de cámara requerido</string>
+    <string name="text_camera_perssision_message">La aplicación Luna Ring requiere permiso de cámara para capturar una imagen.</string>
 
 </resources>
