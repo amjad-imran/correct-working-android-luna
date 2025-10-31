@@ -228,8 +228,8 @@ class TimelineScreenDataFragment :
 
             "alcohol" -> {
                 if(
-                    viewModel.getDate(0).equals(viewModel.date)/* ||
-                    viewModel.getDate(1).equals(viewModel.date)*/
+                    viewModel.getDate(0).equals(viewModel.date) ||
+                    viewModel.getDate(1).equals(viewModel.date)
                 ){
                     data.canBeEditedOrDeleted = 3
                 }
@@ -238,8 +238,8 @@ class TimelineScreenDataFragment :
 
             "recovery" -> {
                 if(
-                    viewModel.getDate(0).equals(viewModel.date)/* ||
-                    viewModel.getDate(1).equals(viewModel.date)*/
+                    viewModel.getDate(0).equals(viewModel.date) ||
+                    viewModel.getDate(1).equals(viewModel.date)
                 ){
                     data.canBeEditedOrDeleted = 3
                 }
