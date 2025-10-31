@@ -2297,5 +2297,6 @@
     <string name="text_pdf">PDF</string>
     <string name="text_camera_permission">Autorizzazione della fotocamera richiesta</string>
     <string name="text_camera_perssision_message">L\'app Luna Ring richiede l\'autorizzazione della fotocamera per scattare una foto.</string>
-
+    <string name="text_only_the_sleep_data_shown_above_will_be_shared_you_can_stop_sharing_anytime_by_turning_off_the_toggle">Verranno condivisi solo i dati del sonno mostrati sopra. Puoi interrompere la condivisione in qualsiasi momento disattivando l\'interruttore.</string>
+    <string name="text_workout_no_internet">Allenamento salvato. Lo elaboreremo quando sarai online.</string>
 </resources>

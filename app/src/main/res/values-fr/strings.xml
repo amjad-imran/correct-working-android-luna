@@ -2415,5 +2415,6 @@ onjour, Luna"</string>
     <string name="text_pdf">PDF</string>
     <string name="text_camera_permission">Autorisation de caméra requise</string>
     <string name="text_camera_perssision_message">L\'application Luna Ring nécessite l\'autorisation de la caméra pour capturer une image.</string>
-
+    <string name="text_only_the_sleep_data_shown_above_will_be_shared_you_can_stop_sharing_anytime_by_turning_off_the_toggle">Seules les données de sommeil affichées ci-dessus seront partagées. Vous pouvez arrêter le partage à tout moment en désactivant le commutateur.</string>
+    <string name="text_workout_no_internet">Entraînement enregistré. Nous le traiterons lorsque vous serez en ligne.</string>
 </resources>

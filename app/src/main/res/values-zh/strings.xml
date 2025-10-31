@@ -2290,5 +2290,6 @@
     <string name="text_pdf">PDF</string>
     <string name="text_camera_permission">需要相机权限</string>
     <string name="text_camera_perssision_message">Luna Ring 应用需要相机权限以拍摄图片。</string>
-
+    <string name="text_only_the_sleep_data_shown_above_will_be_shared_you_can_stop_sharing_anytime_by_turning_off_the_toggle">仅会共享上方显示的睡眠数据。你可以随时通过关闭开关来停止共享。</string>
+    <string name="text_workout_no_internet">已保存锻炼。你在线时我们会处理。</string>
 </resources>
