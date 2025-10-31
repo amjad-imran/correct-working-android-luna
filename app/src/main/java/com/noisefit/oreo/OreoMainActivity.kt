@@ -743,8 +743,10 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             Pair(270, dpToPx(105))
         )
         val angles2 = listOf(
+            Pair(90, dpToPx(56)),
             Pair(165, dpToPx(56)),
-            Pair(200, dpToPx(70)),
+            Pair(205, dpToPx(60)),
+            Pair(270, dpToPx(65)),
         )
         val yBias = dpToPx(10)
 
@@ -752,10 +754,10 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         val entries = ArrayList<Entry>(items.size)
 
-        val is2Items = items.size <= 2
+        val is4Items = items.size == 4
 
         for ((index, item) in items.withIndex()) {
-            val selectedAngle = if (is2Items) angles2 else angles
+            val selectedAngle = if (is4Items) angles2 else angles
             val angle =
                 Math.toRadians(selectedAngle[index].first.toDouble())
             val tx = (cx + selectedAngle[index].second * Math.cos(angle)).toInt()
