@@ -576,13 +576,20 @@ class ChatGptViewModel
                 if (it.sender.equals("assistant", true)) {
                     tempMessage.add(ChatGptOverview.ReceivedMessage(it.message ?: ""))
                 } else if (it.sender.equals("user", true)) {
+                    val metaUrl = it.metadata?.takeIf { url -> url.isNotBlank() } ?: it.attachmentUrl
+                    val (attSrc, attMime, attName) = if (!metaUrl.isNullOrBlank()) {
+                        val parsed = parseAttachmentFromUrl(metaUrl)
+                        Triple(parsed.first, parsed.second, parsed.third)
+                    } else {
+                        Triple(it.attachmentUrl, it.mimeType, it.documentName)
+                    }
                     tempMessage.add(
                         ChatGptOverview.SentMessage(
                             message = it.message ?: "",
                             userImage = userImage,
-                            attachmentSource = it.attachmentUrl,
-                            attachmentMimeType = it.mimeType,
-                            attachmentName = it.documentName
+                            attachmentSource = attSrc,
+                            attachmentMimeType = attMime,
+                            attachmentName = attName
                         )
                     )
                 }
@@ -591,6 +598,32 @@ class ChatGptViewModel
             setLoading(false)
             _chatGptOverview.postValue(tempMessage)
             _scrollToBottom.postValue(Event(true))
+        }
+    }
+
+    private fun parseAttachmentFromUrl(url: String): Triple<String?, String?, String?> {
+        val clean = url.substringBefore('#').substringBefore('?')
+        val rawName = clean.substringAfterLast('/')
+        val decodedName = decodeUrlFileName(rawName)
+        val name = decodedName.ifBlank { null }
+        val ext = (name ?: rawName).substringAfterLast('.', missingDelimiterValue = "").lowercase()
+        val mime = when (ext) {
+            "jpg", "jpeg" -> "image/jpeg"
+            "png" -> "image/png"
+            "webp" -> "image/webp"
+            "pdf" -> "application/pdf"
+            "doc" -> "application/msword"
+            "docx" -> "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            else -> if (ext.isNotBlank()) "application/octet-stream" else null
+        }
+        return Triple(url, mime, name)
+    }
+
+    private fun decodeUrlFileName(encoded: String): String {
+        return try {
+            java.net.URLDecoder.decode(encoded, Charsets.UTF_8.name())
+        } catch (_: Exception) {
+            encoded
         }
     }
 
