@@ -1040,6 +1040,12 @@ constructor(
                     )
                 }
             }
+
+            override fun onRingWearingStatus(p0: Int) {
+
+                LOGS.d("onRingWearingStatus $p0")
+
+            }
         })
 
         /**
