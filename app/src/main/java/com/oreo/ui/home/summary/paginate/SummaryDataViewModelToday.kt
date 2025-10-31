@@ -1760,7 +1760,6 @@ class SummaryDataViewModelToday @Inject constructor(
 
                 ALCOHOL_KEY -> {
                     data.titleColor = "#C5A8ED".toColorInt()
-                    data.desc = ""
                     data.desc = resourceProvider.getString(R.string.text_alcohol_logged)
                 }
 
@@ -1880,8 +1879,15 @@ class SummaryDataViewModelToday @Inject constructor(
 
             timeObj.format(newFormatter).uppercase(Locale.getDefault())
         } catch (e: Exception) {
-            LOGS.e("TIMELINE_convertTimeFormat_EXCEPTION : $e")
-            "-"
+            try {
+                val originalFormatter = DateTimeFormatter.ofPattern("HH:mm")
+                val timeObj = LocalTime.parse(time, originalFormatter)
+                val newFormatter = DateTimeFormatter.ofPattern("h:mm a")
+                timeObj.format(newFormatter).uppercase(Locale.getDefault())
+            }catch (e: Exception){
+                LOGS.e("TIMELINE_convertTimeFormat_EXCEPTION : $e")
+                "-"
+            }
         }
     }
 
