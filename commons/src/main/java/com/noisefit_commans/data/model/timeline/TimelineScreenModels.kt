@@ -111,6 +111,7 @@ data class TimelineMetadata(
     // For Periods
     val symptoms: List<String> ?= null,
     val flow: List<String> ?= null,
+    val flow_type: String ?= null,
 
     // For Workout
     val type: String? = null,

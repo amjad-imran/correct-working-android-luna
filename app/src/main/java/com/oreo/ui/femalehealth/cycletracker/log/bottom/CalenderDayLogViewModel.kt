@@ -58,6 +58,10 @@ constructor(
 
         viewModelScope.launch {
             if (_femaleHealthIcons.value != null) {
+                if(editDataAddActivity != null) {
+                    mapEditDataAddActivity(_femaleHealthIcons.value!!)
+                    return@launch
+                }
                 getDataForDate(date, _femaleHealthIcons.value)
                 return@launch
             }
@@ -89,23 +93,8 @@ constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let { data ->
-                            if(editDataAddActivity?.canBeEditedOrDeleted == 0) {
-                                editDataAddActivity?.metadata?.symptoms?.forEach { curItem ->
-                                    data.symptoms?.first { it.symptomShortName?.lowercase() == curItem }
-                                        ?.let {
-                                            it.isChecked = true
-                                        }
-                                }
-
-                                editDataAddActivity?.metadata?.flow?.forEach { curItem ->
-                                    data.flow?.first { it.symptomShortName?.lowercase() == curItem }
-                                        ?.let {
-                                            it.isChecked = true
-                                        }
-                                }
-
-                                _femaleHealthIcons.postValue(data)
-
+                            if(editDataAddActivity != null) {
+                                mapEditDataAddActivity(data)
                             }
                             else{
                                 getDataForDate(date, data)
@@ -116,6 +105,24 @@ constructor(
             }
 
         }
+    }
+
+    fun mapEditDataAddActivity(data: FemaleHealthIconsModel){
+        editDataAddActivity?.metadata?.symptoms?.forEach { curItem ->
+            data.symptoms?.first { it.symptomShortName?.lowercase() == curItem }
+                ?.let {
+                    it.isChecked = true
+                }
+        }
+
+        editDataAddActivity?.metadata?.flow_type?.let { curItem ->
+            data.flow?.first { it.symptomShortName?.lowercase() == curItem }
+                ?.let {
+                    it.isChecked = true
+                }
+        }
+
+        _femaleHealthIcons.postValue(data)
     }
 
     fun getDataForDate(date: String, femaleHealthIconsModel: FemaleHealthIconsModel?) {
