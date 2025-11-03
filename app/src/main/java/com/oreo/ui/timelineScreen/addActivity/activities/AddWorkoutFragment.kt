@@ -26,6 +26,7 @@ import com.noisefit_commans.ui.enable
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
@@ -743,9 +744,9 @@ class AddWorkoutFragment :
 
         viewModel.getLoading().observe(this) {
             if (it) {
-                uiController.displayProgressBar(true,"")
+                binding.progressBar.root.visible()
             } else {
-                uiController.displayProgressBar(false,"")
+                binding.progressBar.root.gone()
             }
         }
     }

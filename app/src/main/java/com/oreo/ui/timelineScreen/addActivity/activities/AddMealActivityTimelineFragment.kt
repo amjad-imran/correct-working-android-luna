@@ -140,9 +140,9 @@ class AddMealActivityTimelineFragment :
 
         viewModel.getLoading().observe(this) {
             if (it) {
-                uiController.displayProgressBar(true,"")
+                binding.progressBar.root.visible()
             } else {
-                uiController.displayProgressBar(false,"")
+                binding.progressBar.root.gone()
             }
         }
     }
