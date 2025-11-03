@@ -155,7 +155,11 @@ class AiMealPlanFragment :
                     getString(R.string.text_build_me_a_weekly_diet_plan),
                     "",
                     AITopics.GENERAL,
-                    PlanType.DIET
+                    PlanType.DIET,
+                    null,
+                    null,
+                    null,
+                    -1
                 )
             )
 

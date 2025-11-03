@@ -72,7 +72,11 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             aiTopic: AITopics,
             meal: AiMeals? = null,
             workout: AiWorkout? = null,
-            planType: PlanType? = null
+            planType: PlanType? = null,
+            attachmentUri: String? = null,
+            attachmentMime: String? = null,
+            attachmentName: String? = null,
+            attachmentSize: Long? = null
         ): Pair<Int, Bundle?> {
             return Pair(R.id.chatGptFragment, Bundle().apply {
                 putString("threadId", threadId ?: "")
@@ -83,6 +87,11 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                 putSerializable("planType", planType ?: PlanType.NONE)
                 putParcelable("meal", meal)
                 putParcelable("workout", workout)
+
+                attachmentUri.let { putString("attachmentUri", it) }
+                attachmentMime.let { putString("attachmentMime", it) }
+                attachmentName.let { putString("attachmentName", it) }
+                attachmentSize.let { putLong("attachmentSize", it?:-1) }
             })
         }
     }
@@ -109,6 +118,16 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         viewModel.meal = args.meal
         viewModel.workout = args.workout
         viewModel.planType = args.planType
+
+        try {
+            val attUri = arguments?.getString("attachmentUri")
+            val attMime = arguments?.getString("attachmentMime")
+            val attName = arguments?.getString("attachmentName")
+            val attSize = arguments?.getLong("attachmentSize", -1L) ?: -1L
+            if (!attUri.isNullOrEmpty() && !attMime.isNullOrEmpty() && !attName.isNullOrEmpty() && attSize > 0) {
+                viewModel.setPendingAttachment(Uri.parse(attUri), attMime, attName, attSize)
+            }
+        } catch (_: Exception) { }
 
         viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_ai_page_visit)
         setAdapter()

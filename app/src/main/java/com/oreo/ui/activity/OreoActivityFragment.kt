@@ -50,6 +50,7 @@ import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
+import com.oreo.util.setSafeOnClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 import javax.inject.Inject
@@ -870,7 +871,7 @@ class OreoActivityFragment :
         binding.lytToolbar.ivAddFriend.setImageResource(R.drawable.ic_calenders)
         binding.lytToolbar.backBtn.invisible()
 
-        binding.lytToolbar.view1.setOnClickListener {
+        binding.lytToolbar.view1.setSafeOnClickListener(200) {
             showCalendar()
 
         }

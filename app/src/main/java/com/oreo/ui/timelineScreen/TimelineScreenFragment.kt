@@ -18,6 +18,7 @@ import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChartModel
 import com.oreo.ui.calendar.SELECTED_DATE
 import com.oreo.ui.custom.ScrollListener
+import com.oreo.util.setSafeOnClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
 
@@ -69,7 +70,7 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
             navigateUpSafe()
         }
 
-        binding.lytToolbar.view1.setOnClickListener {
+        binding.lytToolbar.view1.setSafeOnClickListener(200) {
             mainViewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.calendar_day_selected,
                 HashMap<String, Any>().apply {

@@ -68,6 +68,7 @@ import com.oreo.ui.sleep2.internal.OSPTrendsSharedViewModel
 import com.oreo.ui.sleep2.internal.SleepInternalDetailsFragment
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import com.oreo.util.EventUtil
+import com.oreo.util.setSafeOnClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderEffectBlur
 import eightbitlab.com.blurview.RenderScriptBlur
@@ -245,7 +246,7 @@ class SleepDashFragment :
             viewModel.onWeekScrolled(weekDays.days.get(0).date)
         }
 
-        binding.toolbar.viewBackCalendar.setOnClickListener {
+        binding.toolbar.viewBackCalendar.setSafeOnClickListener(200) {
 
             setFragmentResultListener(SELECTED_DATE) { requestKey, bundle ->
                 val selectedDate =

@@ -1,7 +1,14 @@
 package com.oreo.ui.chatGpt.topquestions
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -48,6 +55,10 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.viewModels
+import androidx.fragment.app.setFragmentResultListener
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.fragment.navArgs
 import com.noisefit.luna.R
@@ -56,7 +67,10 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.showShortToast
 import com.oreo.data.model.ai.TopQuestions
 import com.oreo.ui.chatGpt.PlanType
+import com.oreo.ui.chatGpt.ChatGptFragment
+import com.oreo.ui.chatGpt.ChatGptViewModel
 import com.oreo.ui.chatGpt.audio.AudioAiFragment
+import com.oreo.ui.chatGpt.ATTACHMENT_KEY
 import com.oreo.ui.compose.element.button.CircularBackButton
 import com.oreo.ui.compose.element.button.CircularHistoryButton
 import com.oreo.ui.compose.element.button.Loading
@@ -69,8 +83,15 @@ class AiTopQuestionsFragment :
     BaseFragment<FragmentAiTopQuestionsBinding>(FragmentAiTopQuestionsBinding::inflate) {
 
     val viewModel: AiTopQuestionsViewModel by viewModels()
+    private val chatHelperViewModel: ChatGptViewModel by viewModels()
 
     private val navArgs: AiTopQuestionsFragmentArgs by navArgs()
+
+    private var cameraUri: Uri? = null
+    private lateinit var takePictureLauncher: ActivityResultLauncher<Uri>
+    private lateinit var pickImageLauncher: ActivityResultLauncher<String>
+    private lateinit var pickDocumentLauncher: ActivityResultLauncher<Array<String>>
+    private lateinit var requestCameraPermission: ActivityResultLauncher<String>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -106,11 +127,87 @@ class AiTopQuestionsFragment :
                                 ques,
                                 "",
                                 navArgs.aiTopic,
-                                PlanType.NONE
+                                PlanType.NONE,
+                                null,
+                                null,
+                                null,
+                                -1
                             )
                         )
                     })
             }
+        }
+
+        binding.lytChatBox.ivAddAttachment.isVisible = true
+        registerAttachmentPickers()
+
+        binding.lytChatBox.ivAddAttachment.setOnClickListener {
+            setFragmentResultListener(ATTACHMENT_KEY) { _, bundle ->
+                when (bundle.getString("type")) {
+                    "camera" -> launchCameraPicker()
+                    "photo" -> pickImageLauncher.launch("image/*")
+                    "file" -> pickDocumentLauncher.launch(
+                        arrayOf(
+                            "application/pdf",
+                            "application/msword",
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                        )
+                    )
+                }
+            }
+            navigate(R.id.bottomSheetAttachmentPicker)
+        }
+
+        binding.lytChatBox.btnSend.setOnClickListener {
+            val text = binding.lytChatBox.chatEtx.text.toString()
+            val att = chatHelperViewModel.pendingAttachment
+
+
+            if (text.isEmpty().not() || att != null) {
+                val message = text.ifEmpty { "Analyse this file" }
+                val (frag, bundle) = ChatGptFragment.getStartData(
+                    threadId = "",
+                    defaultMessage = "",
+                    userMessage = message,
+                    title = "",
+                    aiTopic = navArgs.aiTopic,
+                    meal = null,
+                    workout = null,
+                    planType = PlanType.NONE,
+                    attachmentUri = if(att?.uri!=null){att.uri.toString()} else null,
+                    attachmentMime = att?.mimeType,
+                    attachmentName = att?.fileName,
+                    attachmentSize = att?.sizeBytes?:-1
+                )
+                navigate(frag, bundle)
+                chatHelperViewModel.clearPendingAttachment()
+                binding.lytChatBox.chatEtx.setText("")
+
+            }
+
+        }
+
+        binding.lytChatBox.chatEtx.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                binding.lytChatBox.btnSend.performClick()
+                true
+            } else false
+        }
+
+        binding.lytChatBox.chatEtx.addTextChangedListener(afterTextChanged = {
+            setSendCtaStates(it.toString())
+        })
+
+        binding.lytChatBox.btnAudioChat.setOnClickListener {
+            navigate(
+                AiTopQuestionsFragmentDirections.actionAiTopQuestionsFragmentToAudioAiFragment(
+                    null
+                )
+            )
+        }
+
+        binding.lytChatBox.ivRemoveAttachment.setOnClickListener {
+            chatHelperViewModel.clearPendingAttachment()
         }
     }
 
@@ -119,7 +216,182 @@ class AiTopQuestionsFragment :
     }
 
     override fun subscribeObservers() {
+        chatHelperViewModel.attachmentPreview.observe(this) { data ->
+            val enteredText = binding.lytChatBox.chatEtx.text.toString()
+            setSendCtaStates(enteredText)
+            if (data == null) {
+                binding.lytChatBox.lytAttachment.visibility = View.GONE
+                binding.lytChatBox.imageView47.setImageResource(R.drawable.back_chat_message_send)
+                return@observe
+            }
 
+            binding.lytChatBox.lytAttachment.visibility = View.VISIBLE
+            binding.lytChatBox.imageView47.setImageResource(R.drawable.back_chat_message_send_expanded)
+            val isImage = data.mimeType.startsWith("image/")
+            if (isImage) {
+                binding.lytChatBox.ivAttachmentImage.visibility = View.VISIBLE
+                binding.lytChatBox.lytAttachmentDoc.visibility = View.GONE
+                try {
+                    com.bumptech.glide.Glide.with(binding.root.context)
+                        .load(data.uri)
+                        .into(binding.lytChatBox.ivAttachmentImage)
+                } catch (_: Exception) { }
+            } else {
+                binding.lytChatBox.ivAttachmentImage.visibility = View.GONE
+                binding.lytChatBox.lytAttachmentDoc.visibility = View.VISIBLE
+                binding.lytChatBox.tvDocType.text =
+                    if (data.mimeType == "application/pdf") "PDF" else "DOC"
+                binding.lytChatBox.tvDocName.text = data.fileName
+            }
+        }
+    }
+
+    private fun setSendCtaStates(text: String) {
+        if (text.isEmpty() && chatHelperViewModel.pendingAttachment == null) {
+            binding.lytChatBox.btnSend.visibility = View.GONE
+            binding.lytChatBox.btnAudioChat.visibility = View.VISIBLE
+        } else {
+            binding.lytChatBox.btnSend.visibility = View.VISIBLE
+            binding.lytChatBox.btnAudioChat.visibility = View.GONE
+        }
+    }
+
+    private fun registerAttachmentPickers() {
+        requestCameraPermission =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+                if (granted) {
+                    launchCameraPicker()
+                } else {
+                    val showRationale = shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)
+                    if (showRationale) {
+                        context.showShortToast(getString(R.string.text_camera_permission))
+                    } else {
+                        showCameraPermissionSettingsDialog()
+                    }
+                }
+            }
+        takePictureLauncher =
+            registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+                val uri = cameraUri
+                if (success && uri != null) {
+                    handlePickedUri(uri, "image/jpeg")
+                }
+            }
+
+        pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            uri?.let { handlePickedUri(it, chatHelperViewModel.getMimeType(requireContext(), it) ?: "image/*") }
+        }
+
+        pickDocumentLauncher =
+            registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+                uri?.let {
+                    handlePickedUri(it, chatHelperViewModel.getMimeType(requireContext(), it) ?: "application/octet-stream")
+                }
+            }
+    }
+
+    private fun showCameraPermissionSettingsDialog() {
+        try {
+            uiController.onApiErrorReceived(
+                com.noisefit_commans.data.ErrorResponse(
+                    com.noisefit_commans.data.UIComponentType.AreYouSureDialog(
+                        getString(R.string.text_permission_required),
+                        getString(R.string.text_camera_perssision_message),
+                        false,
+                        getString(R.string.text_go_to_settings),
+                        object : com.noisefit_commans.data.BinaryActionCallback {
+                            override fun yes() {
+                                openAppSettings()
+                            }
+
+                            override fun no() {}
+                        }
+                    )
+                )
+            )
+        } catch (_: Exception) {
+            context.showShortToast(getString(R.string.text_camera_permission))
+        }
+    }
+
+    private fun openAppSettings() {
+        try {
+            val intent = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = Uri.fromParts("package", requireContext().packageName, null)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            startActivity(intent)
+        } catch (_: Exception) { }
+    }
+
+    private fun launchCameraPicker() {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestCameraPermission.launch(Manifest.permission.CAMERA)
+            return
+        }
+        val fileName = "IMG_${System.currentTimeMillis()}.jpg"
+        val cacheDir = requireContext().externalCacheDir ?: requireContext().cacheDir
+        val imageFile = java.io.File(cacheDir, fileName)
+        imageFile.parentFile?.mkdirs()
+
+        val uri = androidx.core.content.FileProvider.getUriForFile(
+            requireContext(),
+            "com.noisefit.luna.fileprovider",
+            imageFile
+        )
+        cameraUri = uri
+        takePictureLauncher.launch(uri)
+    }
+
+    private fun handlePickedUri(uri: Uri, fallbackMime: String) {
+        val mime = chatHelperViewModel.getMimeType(requireContext(), uri) ?: fallbackMime
+        val name = chatHelperViewModel.getDisplayName(requireContext(), uri) ?: "file"
+        val isImage = mime.startsWith("image/")
+        val isSupportedDoc = mime == "application/pdf" ||
+                mime == "application/msword" ||
+                mime == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+
+        if (!(isImage || isSupportedDoc)) {
+            context.showShortToast(getString(R.string.text_unsupported_file_type))
+            return
+        }
+
+        if (isImage) {
+            val compressedUri = chatHelperViewModel.compressImage(
+                requireContext(),
+                uri,
+                quality = chatHelperViewModel.DEFAULT_IMAGE_QUALITY
+            )
+            if (compressedUri == null) {
+                context.showShortToast(getString(R.string.text_something_went_wrong_single))
+                return
+            }
+            val compressedSize = chatHelperViewModel.getFileSize(requireContext(), compressedUri)
+            if (compressedSize < 0L) {
+                context.showShortToast(getString(R.string.text_something_went_wrong_single))
+                return
+            }
+            if (compressedSize > chatHelperViewModel.IMAGE_MAX_BYTES) {
+                context.showShortToast(getString(R.string.text_file_too_large_max_5_mb))
+                return
+            }
+            chatHelperViewModel.setPendingAttachment(compressedUri, "image/jpeg", name, compressedSize)
+        } else {
+            val size = chatHelperViewModel.getFileSize(requireContext(), uri)
+            if (size < 0L) {
+                context.showShortToast(getString(R.string.text_something_went_wrong_single))
+                return
+            }
+            if (size > chatHelperViewModel.IMAGE_MAX_BYTES) {
+                context.showShortToast(getString(R.string.text_file_too_large_max_5_mb))
+                return
+            }
+            chatHelperViewModel.setPendingAttachment(uri, mime, name, size)
+        }
     }
 
 }
@@ -168,7 +440,7 @@ fun AiTopQuestionMain(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .padding(bottom = 88.dp),
+                .padding(bottom = 0.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             AiHistoryToolbar(
@@ -186,21 +458,6 @@ fun AiTopQuestionMain(
                 onQuestionSelected(selectedQues)
             }
         }
-
-        AskQuestion(
-            Modifier
-                .padding(bottom = 32.dp)
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .height(52.dp)
-                .padding(horizontal = 16.dp),
-            onSendClicked = {
-                onQuestionSelected(it)
-            },
-            onAiAudioClicked = {
-                onAiAudioClicked()
-            }
-        )
 
         if (loading) {
             Loading()

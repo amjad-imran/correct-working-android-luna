@@ -111,7 +111,7 @@ class ChatGptViewModel
     fun setPendingAttachment(uri: Uri, mimeType: String, fileName: String, sizeBytes: Long) {
         val data = AttachmentData(uri, mimeType, fileName, sizeBytes)
         pendingAttachment = data
-        attachmentPreview.postValue(data)
+        attachmentPreview.value = (data)
     }
 
     fun clearPendingAttachment() {
@@ -451,7 +451,8 @@ class ChatGptViewModel
 
     private fun sendUserInitMessage(userMessage: String) {
         viewModelScope.launch(Dispatchers.Main) {
-            addSentMessage(userMessage)
+            //addSentMessage(userMessage)
+            addSentMessageWithPendingAttachment(userMessage)
             addThinkingMessage()
             askQuestionStream(userMessage)
             //generateThreadTitle(userMessage)
