@@ -4,7 +4,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 
-fun View.setSafeOnClickListener(delayMillis: Long = 600, onClick: () -> Unit) {
+fun View.setSafeOnClickListener(delayMillis: Long = 400, onClick: () -> Unit) {
     var isClicked = false
     setOnClickListener {
         if (!isClicked) {

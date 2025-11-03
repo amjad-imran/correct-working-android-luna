@@ -70,7 +70,7 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
             navigateUpSafe()
         }
 
-        binding.lytToolbar.view1.setSafeOnClickListener(200) {
+        binding.lytToolbar.view1.setSafeOnClickListener() {
             mainViewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.calendar_day_selected,
                 HashMap<String, Any>().apply {
