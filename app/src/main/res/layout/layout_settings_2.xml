@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/textView109"
@@ -16,37 +16,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/back_modal_new"
-        app:layout_constraintBottom_toBottomOf="@+id/tvGoogleFit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvGoogleFit" />
-
-    <TextView
-        android:id="@+id/tvGoogleFit"
-        style="@style/S14"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvDataSharingVendors"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="12dp"
-        android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:text="@string/text_google_fit"
+        android:layout_height="wrap_content"
+        android:background="@drawable/back_modal_new"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView109" />
-
-    <ImageView
-        android:id="@+id/imageView25"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_arrow_settings"
-        app:layout_constraintBottom_toBottomOf="@+id/tvGoogleFit"
-        app:layout_constraintEnd_toEndOf="@+id/tvGoogleFit"
-        app:layout_constraintTop_toTopOf="@+id/tvGoogleFit" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

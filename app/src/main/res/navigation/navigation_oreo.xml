@@ -1544,5 +1544,16 @@
         android:id="@+id/bottomSheetAttachmentPicker"
         android:name="com.oreo.ui.chatGpt.BottomSheetAttachmentPicker"
         android:label="BottomSheetAttachmentPicker" />
+    <fragment
+        android:id="@+id/dataSharingVendorDetailFragment"
+        android:name="com.noisefit.ui.settings.dataSharingVendors.DataSharingVendorDetailFragment"
+        android:label="fragment_data_sharing_vendor_detail"
+        tools:layout="@layout/fragment_data_sharing_vendor_detail" >
+
+        <argument
+            android:name="data"
+            app:argType="com.oreo.data.model.dataSharingVendorModels.DataSharingVendorListResponseItem" />
+
+    </fragment>
 
 </navigation>

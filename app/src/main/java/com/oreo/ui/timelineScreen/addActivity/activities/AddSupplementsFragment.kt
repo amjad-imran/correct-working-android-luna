@@ -94,7 +94,7 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
                 viewModel.supplementTime = LocalTime.of(hour, minute)
                 lytTime.tvTimeValue.text = curFormattedTime
             }else{
-                viewModel.selectedDate = viewModel.editData?.startDate
+                viewModel.selectedDate = viewModel.editData?.date
                 lytDate.tvTimeValue.text = LocalDate
                             .parse(viewModel.selectedDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
                             .format(DateTimeFormatter.ofPattern("dd MMM yyyy"))
@@ -120,7 +120,7 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
                         visible()
                     }
                 }
-                binding.lytDateTime.lytDate.tvTimeValue.isClickable = false
+//                binding.lytDateTime.lytDate.tvTimeValue.isClickable = false
             }
 
         }
@@ -236,9 +236,9 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
 
         viewModel.getLoading().observe(this) {
             if (it) {
-                uiController.displayProgressBar(true,"")
+                binding.progressBar.root.visible()
             } else {
-                uiController.displayProgressBar(false,"")
+                binding.progressBar.root.gone()
             }
         }
     }
@@ -347,8 +347,8 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
 
                 binding.lytDateTime.lytDate.tvTimeValue.text = it1
                 if(
-                    viewModel.editData?.startDate != null &&
-                    !parsedDate.equals(viewModel.editData?.startDate)
+                    viewModel.editData?.date != null &&
+                    !parsedDate.equals(viewModel.editData?.date)
                 ){
                     binding.btnSave.text = getString(R.string.text_save)
                     binding.btnSave.enable()

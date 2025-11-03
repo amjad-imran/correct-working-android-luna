@@ -362,6 +362,7 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
             if (viewModel.date.isNullOrEmpty()) {
                 viewModel.date = todayDate
             }
+            binding.btnSave.text = getString(R.string.text_save)
         }else{
             viewModel.date = viewModel.editData?.date ?: todayDate
         }
@@ -384,7 +385,7 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
 
             else -> {
                 binding.lytSelected.isClickable = true
-                binding.tvDate.isClickable = false
+                binding.tvDate.isClickable = true
                 binding.lytStartTime.isClickable = true
                 binding.lytEndTime.isClickable = true
             }

@@ -2302,5 +2302,6 @@
     <string name="text_pdf">PDF</string>
     <string name="text_camera_permission">ต้องการสิทธิ์การเข้าถึงกล้อง</string>
     <string name="text_camera_perssision_message">แอป Luna Ring ต้องการสิทธิ์การเข้าถึงกล้องเพื่อถ่ายภาพ</string>
-
+    <string name="text_only_the_sleep_data_shown_above_will_be_shared_you_can_stop_sharing_anytime_by_turning_off_the_toggle">จะแชร์เฉพาะข้อมูลการนอนที่แสดงไว้ข้างบนเท่านั้น คุณสามารถหยุดการแชร์ได้ทุกเมื่อโดยปิดสวิตช์</string>
+    <string name="text_workout_no_internet">บันทึกการออกกำลังกายแล้ว เราจะประมวลผลเมื่อคุณออนไลน์</string>
 </resources>

@@ -154,9 +154,9 @@ class AddAlcoholFragment : BaseFragment<FragmentAddAlcoholBinding>(FragmentAddAl
 
         viewModel.getLoading().observe(this) {
             if (it) {
-                uiController.displayProgressBar(true,"")
+                binding.progressBar.root.visible()
             } else {
-                uiController.displayProgressBar(false,"")
+                binding.progressBar.root.gone()
             }
         }
     }
@@ -227,7 +227,7 @@ class AddAlcoholFragment : BaseFragment<FragmentAddAlcoholBinding>(FragmentAddAl
 
                 binding.lytDateTime.lytDate.tvTimeValue.text = it1
 
-                if(viewModel.editData?.startDate != null && !parsedDate.equals(viewModel.editData?.startDate)){
+                if(viewModel.editData?.date != null && !parsedDate.equals(viewModel.editData?.date)){
                     binding.btnSave.text = getString(R.string.text_save)
                 }
             }
@@ -253,7 +253,7 @@ class AddAlcoholFragment : BaseFragment<FragmentAddAlcoholBinding>(FragmentAddAl
         binding.lytDateTime.lytTime.tvTime.text = getString(R.string.text_time)
 
         // Set Date
-        viewModel.selectedDate = editData.startDate ?: LocalDate.now().toString()
+        viewModel.selectedDate = editData.date ?: LocalDate.now().toString()
         val parsedDate =
             LocalDate.parse(viewModel.selectedDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
                 .format(DateTimeFormatter.ofPattern("dd MMM yyyy")).toString()
@@ -285,7 +285,7 @@ class AddAlcoholFragment : BaseFragment<FragmentAddAlcoholBinding>(FragmentAddAl
             }
         }
 
-        binding.lytDateTime.lytDate.tvTimeValue.isClickable = false
+//        binding.lytDateTime.lytDate.tvTimeValue.isClickable = false
     }
 
     override fun onDestroyView() {

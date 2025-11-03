@@ -47,6 +47,8 @@ import com.noisefit_commans.utils.ScreenUtils
 import com.noisefit_commans.utils.StringUtils.capitalizeWords
 import com.oreo.data.db.abstaction.GoogleFitDataSource
 import com.oreo.data.model.GoogleFitDataType
+import com.oreo.data.model.dataSharingVendorModels.DataSharingListEnum
+import com.oreo.data.model.dataSharingVendorModels.DataSharingVendorListResponseItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -106,6 +108,8 @@ class ProfileEditViewModel
     var stepsGoal: Int? = null//in ml
 
     var tempLocation: UserLocation? = null
+
+    val vendorsList = MutableLiveData<ArrayList<DataSharingVendorListResponseItem>>()
 
 
     init {
@@ -710,5 +714,50 @@ class ProfileEditViewModel
         return unit.value != Units.IMPERIAL
     }
 
+    fun getDataSharingVendorList(){
+        viewModelScope.launch {
+            userRepository.getDataSharingVendorList().collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getDataSharingVendorList()
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            val list = ArrayList<DataSharingVendorListResponseItem>()
+                            list.add(
+                                DataSharingVendorListResponseItem(
+                                    vendorName = resourcesProvider.getString(R.string.text_google_fit),
+                                    type = DataSharingListEnum.GOOGLE_FIT
+                                )
+                            )
+                            it.map {
+                                it.type = DataSharingListEnum.DYNAMIC_ITEM
+                            }
+                            list.addAll(it)
+                            vendorsList.postValue(list)
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 }
