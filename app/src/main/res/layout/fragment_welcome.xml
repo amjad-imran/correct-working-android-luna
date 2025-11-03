@@ -35,15 +35,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/hello_from_" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/side_margin"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="36dp"
-            android:layout_marginStart="@dimen/side_margin"
-            app:layout_constraintTop_toBottomOf="@+id/tvFromFitness"
-            android:src="@drawable/ic_new_onboarding"/>
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_new_onboarding"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvFromFitness" />
 
 <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
 <!--            android:layout_width="match_parent"-->
