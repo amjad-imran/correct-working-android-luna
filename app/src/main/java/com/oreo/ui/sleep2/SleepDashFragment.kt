@@ -246,7 +246,7 @@ class SleepDashFragment :
             viewModel.onWeekScrolled(weekDays.days.get(0).date)
         }
 
-        binding.toolbar.viewBackCalendar.setSafeOnClickListener(200) {
+        binding.toolbar.viewBackCalendar.setSafeOnClickListener() {
 
             setFragmentResultListener(SELECTED_DATE) { requestKey, bundle ->
                 val selectedDate =

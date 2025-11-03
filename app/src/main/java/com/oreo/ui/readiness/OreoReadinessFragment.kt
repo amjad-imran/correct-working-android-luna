@@ -749,7 +749,7 @@ class OreoReadinessFragment :
         binding.lytToolbar.ivAddFriend.setImageResource(R.drawable.ic_calenders)
         binding.lytToolbar.backBtn.invisible()
 
-        binding.lytToolbar.view1.setSafeOnClickListener(200) {
+        binding.lytToolbar.view1.setSafeOnClickListener() {
             mViewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.luna_readiness_date_range_click)
             showCalendar()
         }
