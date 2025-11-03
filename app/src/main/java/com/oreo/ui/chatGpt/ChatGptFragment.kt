@@ -285,9 +285,9 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             binding.rvChats.scrollToBottom()
         }
 
-        /*binding.ivHistory.setOnClickListener {
+        binding.ivHistory.setOnClickListener {
             navigate(ChatGptFragmentDirections.actionChatGptFragmentToChatHistoryFragment())
-        }*/
+        }
 
         binding.lytGeneratingData.ivStopGenerating.setOnClickListener {
             viewModel.stopResponseGeneration()
