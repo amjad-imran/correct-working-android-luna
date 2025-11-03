@@ -370,8 +370,6 @@ constructor(
                             //
 //                            lunaManagedData = it.customScreen
 //                            Log.d("yashhhhhhhhhhhhhh" , "$lunaManagedData")
-                            caffeineGraphData = it.caffeine ?: null
-                            summaryAvailable = it.summaryAvailable ?: false
                             ldwReadiness = it.comfort_readiness ?: false
                             ldwCycleTracker = it.comfort_cycle ?: false
                             boosterWomen = it.booster_women ?: false
@@ -412,6 +410,9 @@ constructor(
                                 dashTodayReload.postValue(Event(true))
                                 lunaZoneReload.postValue(Event(true))
                                 //sleepDashTodayReload.value = Event(true)
+
+                                caffeineGraphData = it.caffeine ?: null
+                                summaryAvailable = it.summaryAvailable ?: false
 
                                 circadianGraphData = it.circadianGraph
                                 getNudgeData()
