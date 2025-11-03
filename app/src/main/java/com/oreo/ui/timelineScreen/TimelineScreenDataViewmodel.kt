@@ -191,7 +191,7 @@ class TimelineScreenDataViewmodel @Inject constructor(
             RECOVERY_KEY -> {
                 data.title = data.metadata?.lunaOption
                 data.titleColor = "#C5A8ED".toColorInt()
-                data.desc = getSleepDuration(data.startDate, data.startTime, data.endDate, data.endTime)
+                data.desc = getRecoveryDuration(data.startTime, data.endTime)
             }
 
             ALCOHOL_KEY -> {
@@ -274,6 +274,30 @@ class TimelineScreenDataViewmodel @Inject constructor(
             */
         } catch (e: Exception) {
             LOGS.e("TIMELINE_GET_SLEEP_DURATION_EXCEPTION : $e")
+            "-"
+        }
+    }
+
+    fun getRecoveryDuration(
+        startTime: String?,
+        endTime: String?
+    ): String{
+        return try {
+            // Define formatter for time with seconds
+            val timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+
+            // Parse start and end times
+            val start = LocalTime.parse(startTime, timeFormatter).withSecond(0).withNano(0)
+            val end = LocalTime.parse(endTime, timeFormatter).withSecond(0).withNano(0)
+
+            // Calculate duration
+            val duration = Duration.between(start, end)
+            val hours = duration.toHours()
+            val minutes = duration.toMinutes() % 60
+
+            "$hours hr $minutes m"
+        } catch (e: Exception) {
+            LOGS.e("GET_RECOVERY_DURATION_EXCEPTION : $e")
             "-"
         }
     }
