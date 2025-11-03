@@ -938,6 +938,22 @@
         <argument
             android:name="planType"
             app:argType="com.oreo.ui.chatGpt.PlanType" />
+        <!-- Optional attachment arguments passed from AiTopQuestionsFragment -->
+        <argument
+            android:name="attachmentUri"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="attachmentMime"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="attachmentName"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="attachmentSize"
+            app:argType="long" />
         <action
             android:id="@+id/action_chatGptFragment_to_workoutPlansFragment"
             app:destination="@id/workoutPlansFragment"

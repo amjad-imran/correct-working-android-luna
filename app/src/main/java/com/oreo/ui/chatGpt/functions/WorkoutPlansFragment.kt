@@ -116,7 +116,11 @@ class WorkoutPlansFragment :
                     getString(R.string.text_build_me_a_workout_plan),
                     "",
                     AITopics.GENERAL,
-                    PlanType.WORKOUT
+                    PlanType.WORKOUT,
+                    null,
+                    null,
+                    null,
+                    -1
                 )
             )
         }
