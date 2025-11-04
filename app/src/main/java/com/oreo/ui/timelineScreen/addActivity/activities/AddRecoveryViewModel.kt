@@ -80,8 +80,8 @@ class AddRecoveryViewModel @Inject constructor(
     fun logRecovery(editEventFun: () -> Unit) {
         viewModelScope.launch {
             val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
-            val sTime = startTime?.format(formatter)
-            val eTime = endTime?.format(formatter)
+            val sTime = startTime?.withSecond(0)?.format(formatter)
+            val eTime = endTime?.withSecond(0)?.format(formatter)
 
             val alcoholObject = JsonObject().apply {
                 editData?.id?.let {id ->
