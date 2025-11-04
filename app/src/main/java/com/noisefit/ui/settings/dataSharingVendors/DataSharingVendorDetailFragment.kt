@@ -1,10 +1,12 @@
 package com.noisefit.ui.settings.dataSharingVendors
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.FragmentDataSharingVendorDetailBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
@@ -49,12 +51,30 @@ class DataSharingVendorDetailFragment : BaseFragment<FragmentDataSharingVendorDe
         binding.rvItems.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = itemsAdapter
+            addItemDecoration(
+                SpacingItemDecoration(20)
+            )
         }
         itemsAdapter.isToggleOn = isChecked
         if(isChecked!=true){
             isFirstTimeLoaded = false
         }
         itemsAdapter.updateItems(features)
+    }
+
+    class SpacingItemDecoration(private val space: Int) : RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(
+            outRect: Rect,
+            view: View,
+            parent: RecyclerView,
+            state: RecyclerView.State
+        ) {
+            outRect.bottom = space
+
+            if (parent.getChildAdapterPosition(view) == parent.adapter?.itemCount?.minus(1)) {
+                outRect.bottom = 0
+            }
+        }
     }
 
     override fun initListener() {
