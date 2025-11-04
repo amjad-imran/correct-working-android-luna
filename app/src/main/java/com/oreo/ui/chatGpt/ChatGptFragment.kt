@@ -255,7 +255,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         binding.lytChatBox.btnSend.setOnClickListener {
             val text = binding.lytChatBox.chatEtx.text.toString()
             if (text.isEmpty().not() || viewModel.pendingAttachment != null) {
-                val message = text.ifEmpty { "Analyse this file" }
+                val message = text.ifEmpty { getString(R.string.text_analyse_this_file) }
                 sendMessage(message)
             }
         }
