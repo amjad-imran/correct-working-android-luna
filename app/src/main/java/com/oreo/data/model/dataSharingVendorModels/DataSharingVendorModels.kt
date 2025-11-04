@@ -12,7 +12,8 @@ data class DataSharingVendorListResponseItem(
     val vendorName: String ?= null,
 
     // for app
-    var type: DataSharingListEnum ?= null
+    var type: DataSharingListEnum ?= null,
+    val vendorIconDrawable: Int ?= null,
 ) : Parcelable
 
 @Parcelize

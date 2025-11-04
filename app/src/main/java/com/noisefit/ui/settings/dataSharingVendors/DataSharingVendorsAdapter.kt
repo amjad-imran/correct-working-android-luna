@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.ItemDataSharingSettingsBinding
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.setVisibilityByCondition
+import com.oreo.data.model.dataSharingVendorModels.DataSharingListEnum
 import com.oreo.data.model.dataSharingVendorModels.DataSharingVendorListResponseItem
 
 class DataSharingVendorsAdapter(
@@ -48,7 +49,15 @@ class DataSharingVendorsAdapter(
             }
 
             binding.line241.setVisibilityByCondition(displayBottomLine)
-            binding.icon.loadImage(binding.root.context, item.vendorIcon)
+            when(item.type){
+                DataSharingListEnum.GOOGLE_FIT -> {
+                    item.vendorIconDrawable?.let { binding.icon.setImageResource(it) }
+                }
+
+                else -> {
+                    binding.icon.loadImage(binding.root.context, item.vendorIcon)
+                }
+            }
         }
 
     }

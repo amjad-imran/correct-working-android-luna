@@ -745,7 +745,8 @@ class ProfileEditViewModel
                             list.add(
                                 DataSharingVendorListResponseItem(
                                     vendorName = resourcesProvider.getString(R.string.text_google_fit),
-                                    type = DataSharingListEnum.GOOGLE_FIT
+                                    type = DataSharingListEnum.GOOGLE_FIT,
+                                    vendorIconDrawable = R.drawable.ic_google_fit
                                 )
                             )
                             it.map {
