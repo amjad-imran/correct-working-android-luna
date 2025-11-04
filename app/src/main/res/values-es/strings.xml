@@ -2268,4 +2268,5 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_camera_perssision_message">La aplicación Luna Ring requiere permiso de cámara para capturar una imagen.</string>
     <string name="text_only_the_sleep_data_shown_above_will_be_shared_you_can_stop_sharing_anytime_by_turning_off_the_toggle">Solo se compartirán los datos de sueño mostrados arriba. Puedes dejar de compartir en cualquier momento desactivando el interruptor.</string>
     <string name="text_workout_no_internet">Entrenamiento guardado. Lo procesaremos cuando estés en línea.</string>
+    <string name="text_analyse_this_file">Analizar este archivo</string>
 </resources>

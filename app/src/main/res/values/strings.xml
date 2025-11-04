@@ -2274,6 +2274,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_camera_perssision_message">Luna Ring app requires Camera permission to capture image.</string>
     <string name="text_only_the_sleep_data_shown_above_will_be_shared_you_can_stop_sharing_anytime_by_turning_off_the_toggle">Only the sleep data shown above will be shared. You can stop sharing anytime by turning off the toggle.</string>
     <string name="text_workout_no_internet">Workout saved. We’ll process it when you’re online.</string>
+    <string name="text_analyse_this_file">Analyse this file</string>
 
 
 </resources>

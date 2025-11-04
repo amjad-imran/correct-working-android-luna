@@ -2298,4 +2298,5 @@
     <string name="text_camera_perssision_message">De Luna Ring-app heeft cameratoestemming nodig om een afbeelding te maken.</string>
     <string name="text_only_the_sleep_data_shown_above_will_be_shared_you_can_stop_sharing_anytime_by_turning_off_the_toggle">Alleen de hierboven weergegeven slaapgegevens worden gedeeld. Je kunt het delen op elk moment stoppen door de schakelaar uit te zetten.</string>
     <string name="text_workout_no_internet">Training opgeslagen. We verwerken het zodra je online bent.</string>
+    <string name="text_analyse_this_file">Dit bestand analyseren</string>
 </resources>
