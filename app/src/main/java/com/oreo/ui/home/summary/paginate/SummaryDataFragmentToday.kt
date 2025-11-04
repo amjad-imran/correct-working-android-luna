@@ -320,6 +320,12 @@ class SummaryDataFragmentToday :
                 }
 
                 OSummaryHealthOverviewClickEnum.OnCircadianAlignmentCardClicked -> {
+                    viewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.insight_clicked,
+                        HashMap<String, Any>().apply {
+                            this["section"] = "circadian"
+                        }
+                    )
                     navigate(R.id.circadianAlignmentFragment)
                 }
 
