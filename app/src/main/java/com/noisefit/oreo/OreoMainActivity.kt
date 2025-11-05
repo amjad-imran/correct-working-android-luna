@@ -1762,14 +1762,16 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     return
                 }
 
-                val (frag, bundle) = ChatGptFragment.getStartData(
+                navController?.navigate(R.id.aiTopQuestionsFragment)
+
+                /*val (frag, bundle) = ChatGptFragment.getStartData(
                     null,
                     null,
                     null,
                     null,
                     AITopics.GENERAL
                 )
-                navController?.navigate(frag, bundle)
+                navController?.navigate(frag, bundle)*/
 
                 //viewModel.navigateTo(BottomNavOption.LUNA_AI)
             }
