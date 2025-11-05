@@ -75,6 +75,8 @@ object ApplicationUtils {
             AppLinks.SLEEP_PLANNER
         } else if (string.equals("/applinks/luna-ai", true)) {
             AppLinks.LUNA_AI
+        } else if (string.equals("/applinks/luna-settings", true)) {
+            AppLinks.LUNA_SETTINGS
         } else if (string.equals("/applinks/feature-request", true)) {
             AppLinks.FEATURE_REQUEST
         } else if (string.equals("/applinks/dashboard", true)) {

@@ -1741,9 +1741,27 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             AppLinks.DASHBOARD -> {
                 viewModel.navigateTo(BottomNavOption.HOME)
             }
+            AppLinks.LUNA_SETTINGS -> {
+                navController?.navigate(R.id.settingsFragment)
+            }
 
             AppLinks.LUNA_AI -> {
-                viewModel.navigateTo(BottomNavOption.LUNA_AI)
+
+                if (viewModel.ringDataStore.getRingDevice() == null) {
+                    showShortToast(getString(R.string.text_luna_ai_message))
+                    return
+                }
+
+                val (frag, bundle) = ChatGptFragment.getStartData(
+                    null,
+                    null,
+                    null,
+                    null,
+                    AITopics.GENERAL
+                )
+                navController?.navigate(frag, bundle)
+
+                //viewModel.navigateTo(BottomNavOption.LUNA_AI)
             }
 
             AppLinks.FEATURE_REQUEST -> {
