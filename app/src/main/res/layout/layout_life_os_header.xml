@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        style="@style/S28"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/imageView116"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="title here" />
+
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageView116"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="-8dp"
+        android:layout_marginEnd="-8dp"
+        android:background="#0AFFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/textView205"
+        app:layout_constraintEnd_toEndOf="@+id/textView205"
+        app:layout_constraintStart_toStartOf="@+id/imageView117"
+        app:layout_constraintTop_toTopOf="@+id/textView205"
+        app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize16dp" />
+
+    <ImageView
+        android:id="@+id/imageView117"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="2dp"
+        android:src="@drawable/ic_ai_personalise"
+        app:layout_constraintBottom_toBottomOf="@+id/textView205"
+        app:layout_constraintEnd_toStartOf="@+id/textView205"
+        app:layout_constraintTop_toTopOf="@+id/textView205" />
+
+    <TextView
+        android:id="@+id/textView205"
+        style="@style/S16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:text="@string/text_personalise"
+        android:textColor="#B3FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/tvTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <include
+        android:id="@+id/lytChatBox"
+        layout="@layout/layout_ai_chat_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvQuestions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lytChatBox" />
+
+    <include
+        layout="@layout/layout_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/rvQuestions" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="12dp"
+    android:paddingVertical="8dp"
+    android:background="@drawable/back_modal_v2_16">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lytAttachment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/chatEtx"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/ivAttachmentImage"
+            android:layout_width="138dp"
+            android:layout_height="92dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp"
+            tools:src="@drawable/image_ai_m_plan"
+            tools:visibility="gone" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/lytAttachmentDoc"
+            android:layout_width="100dp"
+            android:layout_height="92dp"
+            android:background="@drawable/back_modal_opaque"
+            android:orientation="vertical"
+            android:padding="10dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/tvDocType"
+                style="@style/S14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_pdf"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvDocName"
+                style="@style/S14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="#CCFFFFFF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="Report Converted..." />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/ivRemoveAttachment"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:padding="2dp"
+            android:src="@drawable/ic_cross_attachment"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <EditText
+        android:id="@+id/chatEtx"
+        style="@style/S16"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:background="@color/transparent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:hint="@string/text_talk_to_your_data"
+        android:imeOptions="actionSend"
+        android:maxLines="8"
+        android:paddingStart="16dp"
+        android:paddingEnd="54dp"
+        android:textColor="@color/white"
+        android:textColorHint="#A9A9AA"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ivAddAttachment"
+        app:layout_constraintTop_toBottomOf="@id/lytAttachment" />
+
+    <ImageView
+        android:id="@+id/ivAddAttachment"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:padding="4dp"
+        android:src="@drawable/ic_ai_add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chatEtx" />
+
+
+    <ImageView
+        android:id="@+id/btnAction"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:padding="4dp"
+        android:src="@drawable/image_ai_mic"
+        app:layout_constraintTop_toBottomOf="@id/chatEtx"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
