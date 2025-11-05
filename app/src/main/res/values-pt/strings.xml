@@ -2322,5 +2322,6 @@
     <string name="text_camera_perssision_message">O aplicativo Luna Ring requer permissão da câmera para capturar uma imagem.</string>
     <string name="text_only_the_sleep_data_shown_above_will_be_shared_you_can_stop_sharing_anytime_by_turning_off_the_toggle">Apenas os dados de sono mostrados acima serão compartilhados. Você pode parar de compartilhar a qualquer momento desativando o interruptor.</string>
     <string name="text_workout_no_internet">Treino salvo. Processaremos quando você estiver online.</string>
-    <string name="text_analyse_this_file">Analisar este arquivo</string>
+    <string name="text_analyse_this">Analise isto</string>
+
 </resources>

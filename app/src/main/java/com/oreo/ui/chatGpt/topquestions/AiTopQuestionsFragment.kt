@@ -164,7 +164,7 @@ class AiTopQuestionsFragment :
 
 
             if (text.isEmpty().not() || att != null) {
-                val message = text.ifEmpty { getString(R.string.text_analyse_this_file) }
+                val message = text.ifEmpty { getString(R.string.text_analyse_this) }
                 val (frag, bundle) = ChatGptFragment.getStartData(
                     threadId = "",
                     defaultMessage = "",
