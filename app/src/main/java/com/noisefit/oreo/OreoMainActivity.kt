@@ -1875,14 +1875,23 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             }
 
             AppLinks.LOG_PERIOD_SYMPTOMS -> {
-                navController?.navigate(
-                    R.id.addActivityTimelineFragment,
-                    bundleOf(
-                        "showTimeline" to false,
-                        "key" to "symptom",
-                        "srcKey" to "appLink",
-                    )
-                )
+                val user = viewModel.localDataStore.getUser()
+                if (user?.userInfo?.gender.equals("female", true).not()) {
+                    showShortToast(getString(R.string.text_feature_not_enabled_for_this_user))
+                } else {
+                    viewModel.getCycleHistoryData() {
+                        navController?.navigate(
+                            R.id.addActivityTimelineFragment,
+                            bundleOf(
+                                "showTimeline" to false,
+                                "key" to "symptom",
+                                "srcKey" to "appLink",
+                            )
+                        )
+                    }
+                }
+
+
             }
 
             AppLinks.ADD_SLEEP -> {
