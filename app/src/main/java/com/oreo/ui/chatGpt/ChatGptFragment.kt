@@ -19,7 +19,9 @@ import android.provider.Settings
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
+import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
@@ -356,6 +358,12 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         })
     }
 
+    private fun hideKeyboard() {
+        val imm =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view?.windowToken, 0)
+    }
+
     fun setSendCtaStates(text: String) {
         if (text.isEmpty() && viewModel.pendingAttachment == null) {
             binding.lytChatBox.btnSend.gone()
@@ -402,6 +410,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
     }
 
     fun sendMessage(message: String) {
+        hideKeyboard()
         if (binding.lytSuggestions.root.isVisible) {
             binding.lytSuggestions.root.gone()
         }

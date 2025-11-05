@@ -1762,7 +1762,8 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     return
                 }
 
-                navController?.navigate(R.id.aiTopQuestionsFragment)
+                navController?.navigate(R.id.aiTopQuestionsFragment,
+                    bundleOf("aiTopic" to AITopics.GENERAL))
 
                 /*val (frag, bundle) = ChatGptFragment.getStartData(
                     null,
