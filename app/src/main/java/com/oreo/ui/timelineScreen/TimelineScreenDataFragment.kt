@@ -60,7 +60,7 @@ class TimelineScreenDataFragment :
     }
 
     override fun subscribeObservers() {
-        viewModel.activityListData.observe(this) {
+        viewModel.activityListData.observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
                 binding.recyclerView.gone()
                 binding.lytNoActivity.root.visible()
@@ -80,19 +80,19 @@ class TimelineScreenDataFragment :
         }
 
         //
-        viewModel.getMessages().observe(this) {
+        viewModel.getMessages().observe(viewLifecycleOwner) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)
             }
         }
 
-        viewModel.getApiErrors().observe(this) {
+        viewModel.getApiErrors().observe(viewLifecycleOwner) {
             it?.getContent()?.let { response ->
                 uiController.onApiErrorReceived(response)
             }
         }
 
-        viewModel.getLoading().observe(this) {
+        viewModel.getLoading().observe(viewLifecycleOwner) {
             if (it) {
                 binding.progressBar.root.visible()
             } else {
