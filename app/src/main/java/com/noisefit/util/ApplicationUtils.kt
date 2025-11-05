@@ -87,9 +87,17 @@ object ApplicationUtils {
             AppLinks.ADD_CAFFEINE_INTAKE
         } else if (string.equals("/applinks/add-light", true)) {
             AppLinks.ADD_LIGHT_EXPOSURE
+        } else if (string.equals("/applinks/add-meal-intake", true)) {
+            AppLinks.ADD_MEAL
+        }else if (string.equals("/applinks/add-recovery", true)) {
+            AppLinks.ADD_RECOVERY
+        }else if (string.equals("/applinks/add-supplements", true)) {
+            AppLinks.ADD_SUPPLEMENTS
+        }else if (string.equals("/applinks/add-alcohol", true)) {
+            AppLinks.ADD_ALCOHOL
         } else if (string.equals("/applinks/add-workout", true)) {
             AppLinks.ADD_WORKOUT
-        } else if (string.equals("/applinks/log-period", true)) {
+        } else if (string.equals("/applinks/log-period-symptoms", true)) {
             AppLinks.LOG_PERIOD_SYMPTOMS
         } else if (string.equals("/applinks/add-sleep", true)) {
             AppLinks.ADD_SLEEP

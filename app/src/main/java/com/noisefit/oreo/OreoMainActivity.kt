@@ -1821,6 +1821,48 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 )
             }
 
+            AppLinks.ADD_MEAL -> {
+                navController?.navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to CircadianAlignmentViewModel.meal_window_key,
+                        "srcKey" to "appLink",
+                    )
+                )
+            }
+            AppLinks.ADD_RECOVERY -> {
+                navController?.navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to "recovery",
+                        "srcKey" to "appLink",
+                    )
+                )
+            }
+            AppLinks.ADD_SUPPLEMENTS -> {
+                navController?.navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to "supplements",
+                        "srcKey" to "appLink",
+                    )
+                )
+            }
+            AppLinks.ADD_ALCOHOL -> {
+                navController?.navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to "alcohol",
+                        "srcKey" to "appLink",
+                    )
+                )
+            }
+
+
             AppLinks.ADD_WORKOUT -> {
                 navController?.navigate(
                     R.id.addActivityTimelineFragment,

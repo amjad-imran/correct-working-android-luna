@@ -261,6 +261,48 @@
                 <data android:pathPattern="/applinks/add-light" />
             </intent-filter>
 
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="link.lunazone.com" />
+                <data android:pathPattern="/applinks/add-meal-intake" />
+            </intent-filter>
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="link.lunazone.com" />
+                <data android:pathPattern="/applinks/add-recovery" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="link.lunazone.com" />
+                <data android:pathPattern="/applinks/add-supplements" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="https" />
+                <data android:host="link.lunazone.com" />
+                <data android:pathPattern="/applinks/add-alcohol" />
+            </intent-filter>
+
             <!--Add Workout (Timeline) - Add Activity Frag-->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
@@ -282,7 +324,7 @@
 
                 <data android:scheme="https" />
                 <data android:host="link.lunazone.com" />
-                <data android:pathPattern="/applinks/log-period" />
+                <data android:pathPattern="/applinks/log-period-symptoms" />
             </intent-filter>
 
             <!--Add Sleep (Timeline) - Add Activity Frag-->
