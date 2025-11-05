@@ -401,7 +401,16 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        handleIntent(intent)
+
+        intent?.let {
+            Handler(Looper.getMainLooper()).postDelayed({
+
+                handleIntent(it)
+            }, 500)
+
+
+        }
+        //handleIntent(intent)
     }
 
     private fun showTimeline() {
@@ -1706,6 +1715,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     private fun handleAppLinkNavigation(appLink: AppLinks) {
         val savedWorkout = viewModel.ringDataStore.getOngoingRecordWorkout()
         if (savedWorkout != null) return
+
 
         when (appLink) {
             AppLinks.REFERRAL -> {
