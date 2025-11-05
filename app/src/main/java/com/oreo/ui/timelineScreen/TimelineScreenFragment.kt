@@ -134,14 +134,19 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
     override fun subscribeObservers() {
         mainViewModel.dashboard.observe(viewLifecycleOwner) {
             LOGS.w("Setting_data size ${it.size}")
-            pagerAdapter = TimelinePagerAdapter(this)
-            binding.viewPagerTimeline.adapter = pagerAdapter
+            if (pagerAdapter == null) {
+                pagerAdapter = TimelinePagerAdapter(this)
+                binding.viewPagerTimeline.adapter = pagerAdapter
+            }
             pagerAdapter?.setDataSet(it)
 
             val pos = pagerAdapter?.getPositionForDate(mainViewModel.selectedDate) ?: (it.size - 1)
             LOGS.w("Setting_data pos ${pos} ${mainViewModel.selectedDate}")
 
-            binding.viewPagerTimeline.setCurrentItem(pos)
+            // Jump without smooth scroll to avoid visible page hopping
+            if (binding.viewPagerTimeline.currentItem != pos) {
+                binding.viewPagerTimeline.setCurrentItem(pos, false)
+            }
             binding.tabLayout.visible()
             //setTabDates(pos)
 
