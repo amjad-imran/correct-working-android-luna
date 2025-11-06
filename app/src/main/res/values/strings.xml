@@ -2277,6 +2277,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_analyse_this_file">Analyse this file</string>
     <string name="text_personalise">Personalise</string>
     <string name="text_talk_to_your_data">Talk to your data</string>
+    <string name="text_life_os">Life OS</string>
 
 
 </resources>

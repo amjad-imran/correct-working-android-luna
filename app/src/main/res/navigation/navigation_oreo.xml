@@ -1269,10 +1269,14 @@
             app:popUpTo="@id/workoutPlansFragment"
             app:popUpToInclusive="true" />
     </fragment>
-    <fragment
+    <!--<fragment
         android:id="@+id/navigation_lunaZoneFragment"
         android:name="com.oreo.ui.chatGpt.LunaZoneFragment"
-        android:label="fragment_luna_zone" />
+        android:label="fragment_luna_zone" />-->
+
+    <fragment
+        android:id="@+id/navigation_lifeOsFragment"
+        android:name="com.oreo.ui.lifeos.LifeOsDashFragment"/>
     <fragment
         android:id="@+id/aiSummaryFragment"
         android:name="com.oreo.ui.chatGpt.summary.AiSummaryFragment"

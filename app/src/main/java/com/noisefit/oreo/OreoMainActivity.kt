@@ -124,11 +124,6 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         viewModel.localDataStore.saveAppTrackEvent(AppTrackEvent.APP_START, false)
         viewModel.updateAppTrackingEvent(AppTrackEvent.APP_START)
 
-        if (viewModel.isBottomNavGifPlaying.not()) {
-            binding.navView.ivLunaAi.loadImage(this, R.drawable.anim_luna_ai_nav)
-            viewModel.isBottomNavGifPlaying = true
-        }
-
         navController = findNavController(R.id.o_nav_host_fragment)
         setNavViewListeners()
         setBlur()
@@ -146,58 +141,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         }
 
-        /*
-                Handler(Looper.getMainLooper()).postDelayed({
-                    navController?.navigate(R.id.bottomSheetForceUpdate)
-                }, 3000)*/
-
         viewModel.rescheduleAlarms()
-        setLunaIcon()
-
-    }
-
-    private fun setLunaIcon() {
-
-
-        /*  binding.navView.ivLunaAi.post {
-              val viewWidth = 36f * resources.displayMetrics.density
-              val viewHeight = 36f * resources.displayMetrics.density
-
-              // Get the animation's intrinsic width and height
-              val animationWidth = binding.navView.ivLunaAi.composition?.bounds?.width()?.toFloat() ?: 0f
-              val animationHeight = binding.navView.ivLunaAi.composition?.bounds?.height()?.toFloat() ?: 0f
-
-              // Calculate the scale factors
-              val scaleX = if (animationWidth > 0) viewWidth / animationWidth else 1f
-              val scaleY = if (animationHeight > 0) viewHeight / animationHeight else 1f
-
-              // Apply the scale
-              binding.navView.ivLunaAi.scaleX = scaleX
-              binding.navView.ivLunaAi.scaleY = scaleY
-
-          }*/
-
-        /*binding.navView.ivLunaAi.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                // Remove the listener to avoid multiple calls
-                binding.navView.ivLunaAi.viewTreeObserver.removeOnGlobalLayoutListener(this)
-
-                val viewWidth = 36f * resources.displayMetrics.density
-                val viewHeight = 36f * resources.displayMetrics.density
-
-                // Get the animation's intrinsic width and height
-                val animationWidth = binding.navView.ivLunaAi.composition?.bounds?.width()?.toFloat() ?: 0f
-                val animationHeight = binding.navView.ivLunaAi.composition?.bounds?.height()?.toFloat() ?: 0f
-
-                // Calculate the scale factors
-                val scaleX = if (animationWidth > 0) viewWidth / animationWidth else 1f
-                val scaleY = if (animationHeight > 0) viewHeight / animationHeight else 1f
-
-                // Apply the scale
-                binding.navView.ivLunaAi.scaleX = scaleX
-                binding.navView.ivLunaAi.scaleY = scaleY
-            }
-        })*/
     }
 
     private fun setBlurAddCta(radius: Float = 5f) {
@@ -1224,7 +1168,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
         viewModel.lunaZoneReload.observe(this) {
             it.getContent()?.let {
-                if (navController?.currentDestination?.id == R.id.navigation_lunaZoneFragment) {
+                if (navController?.currentDestination?.id == R.id.navigation_lifeOsFragment) {
                     viewModel.lunaZoneReloadConfirm.postValue(Event(true))
                 }
             }
@@ -1590,7 +1534,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             when (destination.id) {
                 R.id.navigation_oreo_home, R.id.navigation_oreo_readiness,
                 R.id.navigation_oreo_workouts, R.id.sleepDashFragment,
-                R.id.navigation_lunaZoneFragment -> {
+                R.id.navigation_lifeOsFragment -> {
                     binding.view27.visible()
                     binding.navView.root.visible()
 
@@ -1933,7 +1877,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
             when (it.currentDestination?.id) {
                 R.id.navigation_oreo_home, R.id.navigation_oreo_readiness,
-                R.id.navigation_oreo_workouts, R.id.sleepDashFragment, R.id.navigation_lunaZoneFragment -> {
+                R.id.navigation_oreo_workouts, R.id.sleepDashFragment, R.id.navigation_lifeOsFragment -> {
 
                     if (it.currentDestination?.id == R.id.navigation_oreo_home) {
                         finish()
@@ -1959,12 +1903,9 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep_default)
                 binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
-                //binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_default)
+                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_default)
 
-                if (viewModel.isBottomNavGifPlaying.not()) {
-                    binding.navView.ivLunaAi.loadImage(this, R.drawable.anim_luna_ai_nav)
-                    viewModel.isBottomNavGifPlaying = true
-                }
+
 
                 binding.navView.apply {
                     ivGlowHome.visible()
@@ -1989,12 +1930,9 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep)
                 binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
-                //binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_default)
+                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_default)
 
-                if (viewModel.isBottomNavGifPlaying.not()) {
-                    binding.navView.ivLunaAi.loadImage(this, R.drawable.anim_luna_ai_nav)
-                    viewModel.isBottomNavGifPlaying = true
-                }
+
                 binding.navView.apply {
                     ivGlowHome.gone()
                     ivGlowSleep.visible()
@@ -2017,12 +1955,9 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep_default)
                 binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness)
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
-                //binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_default)
+                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_default)
 
-                if (viewModel.isBottomNavGifPlaying.not()) {
-                    binding.navView.ivLunaAi.loadImage(this, R.drawable.anim_luna_ai_nav)
-                    viewModel.isBottomNavGifPlaying = true
-                }
+
                 binding.navView.apply {
                     ivGlowHome.gone()
                     ivGlowSleep.gone()
@@ -2044,11 +1979,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep_default)
                 binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity)
-                if (viewModel.isBottomNavGifPlaying.not()) {
-                    binding.navView.ivLunaAi.loadImage(this, R.drawable.anim_luna_ai_nav)
-                    viewModel.isBottomNavGifPlaying = true
-                }
-                //binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_default)
+                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_default)
 
                 binding.navView.apply {
                     ivGlowHome.gone()
@@ -2070,24 +2001,20 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep_default)
                 binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
-
-                viewModel.isBottomNavGifPlaying = false
-                binding.navView.ivLunaAi.loadImage(this, R.drawable.ic_dash_luna_zone_selected)
-
-                //binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_selected)
+                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_selected)
 
                 binding.navView.apply {
                     ivGlowHome.gone()
                     ivGlowSleep.gone()
                     ivGlowReadiness.gone()
                     ivGlowActivity.gone()
-                    ivGlowLunaAi.gone()
+                    ivGlowLunaAi.visible()
                 }
                 val lastDestination = navController?.currentDestination
-                if (lastDestination?.id != R.id.navigation_lunaZoneFragment) {
+                if (lastDestination?.id != R.id.navigation_lifeOsFragment) {
                     viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.home_footer_lunaai)
-                    navController?.popBackStack(R.id.navigation_lunaZoneFragment, true)
-                    navController?.navigate(R.id.navigation_lunaZoneFragment)
+                    navController?.popBackStack(R.id.navigation_lifeOsFragment, true)
+                    navController?.navigate(R.id.navigation_lifeOsFragment)
                 }
             }
         }

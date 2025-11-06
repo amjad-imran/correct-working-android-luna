@@ -7,8 +7,12 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class LifeOsDashFragment :
     BaseFragment<FragmentLifeOsDashBinding>(FragmentLifeOsDashBinding::inflate) {
-    override fun initListener() {
 
+
+    override fun initListener() {
+        binding.lytHeader.lytChatBox.root.setOnClickListener {
+
+        }
     }
 
     override fun subscribeObservers() {
