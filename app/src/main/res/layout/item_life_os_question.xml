@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root"
+    android:layout_width="124dp"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="8dp"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="#11141C"
+    app:cardCornerRadius="16dp">
+
+    <TextView
+        android:id="@+id/tvText"
+        style="@style/S12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:text="Sample question" />
+
+</com.google.android.material.card.MaterialCardView>
+
