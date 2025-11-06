@@ -1276,7 +1276,16 @@
 
     <fragment
         android:id="@+id/navigation_lifeOsFragment"
-        android:name="com.oreo.ui.lifeos.LifeOsDashFragment"/>
+        android:name="com.oreo.ui.lifeos.LifeOsDashFragment">
+        <action
+            android:id="@+id/action_navigation_lifeOsFragment_to_lifeOsChatFragment"
+            app:destination="@id/lifeOsChatFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/lifeOsChatFragment"
+        android:name="com.oreo.ui.lifeos.LifeOsChatFragment"
+        android:label="fragment_life_os_chat"
+        tools:layout="@layout/fragment_life_os_chat" />
     <fragment
         android:id="@+id/aiSummaryFragment"
         android:name="com.oreo.ui.chatGpt.summary.AiSummaryFragment"

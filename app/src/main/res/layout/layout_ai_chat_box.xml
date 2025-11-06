@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:paddingHorizontal="12dp"
     android:paddingVertical="8dp"
-    android:background="@drawable/back_modal_v2_16">
+    android:background="@drawable/back_modal_v2_16"
+    android:transitionName="@string/transition_chat_box">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
