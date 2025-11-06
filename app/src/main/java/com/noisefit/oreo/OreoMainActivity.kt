@@ -249,6 +249,9 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             }
 
             lytLunaAi.setOnClickListener {
+                viewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.homepage_luna
+                )
                 selectMenuItem(BottomNavOption.LUNA_AI)
             }
         }

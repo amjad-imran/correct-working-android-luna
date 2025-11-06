@@ -64,6 +64,8 @@ constructor(
 
     val selectedOptMap = HashMap<Int, Boolean>()
 
+    var srcKey: String ?= null
+
     private val _addSleepResponse =
         MutableLiveData<Event<Boolean>>()//todo return type will change once finalized
     val addSleepResponse = _addSleepResponse

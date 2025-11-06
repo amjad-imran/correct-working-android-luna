@@ -133,9 +133,20 @@ class AddRecoveryFragment : BaseFragment<FragmentAddRecoveryBinding>(FragmentAdd
 
             if(getString(R.string.text_save).equals(binding.btnSave.text)) {
                 viewModel.logRecovery(){
-                    sharedViewModel.sessionManager.logMoEngageAppEvent(
-                        MoEngageLunaAppEvents.insight_log_edited,
-                    )
+                    if(viewModel.editData?.id != null) {
+                        sharedViewModel.sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.insight_log_edited,
+                        )
+                    }else{
+                        sharedViewModel.sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.insight_logged,
+                            HashMap<String, Any>().apply {
+                                this["source"] = "timeline"
+                                this["log_category"] = "recovery"
+                                this["supplement"] = viewModel.selectedOption?.options ?: ""
+                            }
+                        )
+                    }
                 }
             }else{
                 if (sharedViewModel.ringDataStore.getRingDevice() == null) {
