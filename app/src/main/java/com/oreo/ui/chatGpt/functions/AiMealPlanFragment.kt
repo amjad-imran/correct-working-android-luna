@@ -176,15 +176,24 @@ class AiMealPlanFragment :
             val isRegularState =
                 viewModel.dietState.value == DietState.REGULAR || viewModel.dietState.value == DietState.NORMAL
             if (isRegularState){
+                viewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.switch_diet_comfort
+                )
                 viewModel.dietState.value = DietState.COMFORT
             }
             else{
+                viewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.switch_diet_regular
+                )
                 viewModel.dietState.value = DietState.REGULAR
             }
             viewModel.setSelectedPosition(curDay)
         }
 
         binding.lytCreateComfortFood.btnCreate.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.comfort_food_create
+            )
             if (viewModel.ringDataStore.getRingDevice() == null) {
                 context.showShortToast(getString(R.string.text_luna_ai_message))
                 return@setOnClickListener
@@ -193,6 +202,9 @@ class AiMealPlanFragment :
         }
 
         binding.lytCreateComfortFood.btnDismiss.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.comfort_food_dismiss
+            )
             viewModel.localDataStore.setIsLowDietPlanSetUp(false)
             binding.lytCreateComfortFood.root.gone()
         }

@@ -315,6 +315,9 @@ class OMyProfileFragment :
         }
 
         binding.rowDownloadMyData.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.pdf_click
+            )
             if(viewModel.downloadMyDataList==null) viewModel.setDownloadMyDataList()
             setFragmentResultListener(VALUE_REQUEST_KEY) { _, bundle ->
                 val selectedValue = bundle.getString("selectedValue") ?: return@setFragmentResultListener

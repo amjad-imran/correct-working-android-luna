@@ -94,9 +94,19 @@ class AddAlcoholFragment : BaseFragment<FragmentAddAlcoholBinding>(FragmentAddAl
 
             if(getString(R.string.text_save).equals(binding.btnSave.text)) {
                 viewModel.logAlcohol() {
-                    sharedViewModel.sessionManager.logMoEngageAppEvent(
-                        MoEngageLunaAppEvents.insight_log_edited,
-                    )
+                    if(viewModel.editData?.id != null) {
+                        sharedViewModel.sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.insight_log_edited,
+                        )
+                    }else{
+                        sharedViewModel.sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.insight_logged,
+                            HashMap<String, Any>().apply {
+                                this["source"] = "timeline"
+                                this["log_category"] = "alcohol"
+                            }
+                        )
+                    }
                 }
             }else{
                 if (sharedViewModel.ringDataStore.getRingDevice() == null) {

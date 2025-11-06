@@ -675,6 +675,9 @@ class SummaryDataFragmentToday :
                 }
 
                 is OSummaryHealthOverviewClickEnum.OnLogActivityClicked -> {
+                    viewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.insight_log
+                    )
                     if(viewModel.sessionManager.connectStateRing.value is ConnectState.ConnectSuccess){
                         navigate(
                             R.id.addActivityTimelineFragment,
