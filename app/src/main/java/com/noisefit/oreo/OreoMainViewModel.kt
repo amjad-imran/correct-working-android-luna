@@ -122,7 +122,6 @@ constructor(
     var showSyncLoader: Boolean = true
     val FAB_ANIM_TIME = 500L
 
-    var isBottomNavGifPlaying = false
 
     var registerDate: Int = -1
     var temperatureBaseLine: Float? = null
