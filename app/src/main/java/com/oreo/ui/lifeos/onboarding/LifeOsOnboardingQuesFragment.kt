@@ -2,7 +2,6 @@ package com.oreo.ui.lifeos.onboarding
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLifeOsOnboardingQuesBinding

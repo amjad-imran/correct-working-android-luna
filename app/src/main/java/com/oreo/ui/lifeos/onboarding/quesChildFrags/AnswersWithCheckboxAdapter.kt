@@ -12,7 +12,11 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ItemLifeosOnboardCheckboxTextBinding
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.lifeos.onboarding.AnswerX
+import com.oreo.ui.lifeos.onboarding.LifeOsOnboardingQuesViewModel.States
 
 class AnswersWithCheckboxAdapter(
     private val isOther: (AnswerX) -> Boolean = { it.addOntext=="1" },
@@ -36,21 +40,22 @@ class AnswersWithCheckboxAdapter(
                 if(item.isSelected){
                     ivCheckBox.setImageResource(R.drawable.ic_hm_check_mark)
                 }else{
-                    ivCheckBox.setImageResource(R.drawable.ic_hm_check_default)
+                    ivCheckBox.setImageResource(R.drawable.ic_lifeos_onboard_chechbox_empty)
                 }
 
                 // ✅ show/hide include
-                lytInputField.root.isVisible = isOther(item) && item.isSelected
+//                lytInputField.root.isVisible = item.state==States.OTHER && item.isSelected
 
                 // Clicks anywhere on the row
-                lytCheckBox.setOnClickListener { onRowClick(bindingAdapterPosition) }
-                ivCheckBox.setOnClickListener { onRowClick(bindingAdapterPosition) }
-                tvText.setOnClickListener { onRowClick(bindingAdapterPosition) }
+
+                LOGS.d("akldncacstate : ${item.text}-${item.state}, addOntext-${item.addOntext}")
+
+                lytCheckBox.setOnClickListener { onRowClick(position, item.state) }
 
                 // --- EditText lookup (robust to either exposing edit directly or via TextInputLayout) ---
                 val et: EditText? = when {
-                    lytInputField.root.findViewById<EditText?>(R.id.descInputLayout) != null ->
-                        lytInputField.root.findViewById(R.id.descInputLayout)
+                    item.state == States.OTHER ->
+                        binding.lytInputField.descInputLayout
                     else -> null
                 }
 
@@ -79,6 +84,7 @@ class AnswersWithCheckboxAdapter(
                     currentWatcher = watcher
                 }
 
+                /*
                 // ✅ keyboard handling: only for this holder
                 if (isOther(item) && item.isSelected && et != null) {
                     if (!et.hasFocus()) et.requestFocus()
@@ -89,50 +95,67 @@ class AnswersWithCheckboxAdapter(
                         et.clearFocus()
                         hideKeyboard(et)
                     }
-                }
+                }*/
             }
         }
 
-        private fun onRowClick(position: Int) {
-            if (position == RecyclerView.NO_POSITION) return
+        private fun onRowClick(position: Int, state: States?) {
+            if (position !in 0..(items.size-1)) return
             val clicked = items[position]
 
-            when {
-                isNone(clicked) -> {
+            when(state){
+                States.OTHER -> {
                     val nowSelected = !clicked.isSelected
-                    items.forEachIndexed { index, a ->
-                        a.isSelected = false
-                        // keep "Other" text as-is, just hidden when not selected
-                        notifyItemChanged(index, "payload_icon")
+                    val et = binding.lytInputField.descInputLayout
+                    if(nowSelected){
+                        binding.lytInputField.root.visible()
+                        if (!et.hasFocus()) et.requestFocus()
+                        showKeyboard(et)
+                    }else{
+                        et.clearFocus()
+                        hideKeyboard(et)
+                        binding.lytInputField.root.gone()
                     }
-                    clicked.isSelected = nowSelected
-                    notifyItemChanged(position, "payload_full")
-                }
 
-                isOther(clicked) -> {
-                    val nowSelected = !clicked.isSelected
                     clicked.isSelected = nowSelected
                     // turn off None if it was on
                     val noneIndex = items.indexOfFirst { isNone(it) }
                     if (noneIndex >= 0 && items[noneIndex].isSelected) {
                         items[noneIndex].isSelected = false
-                        notifyItemChanged(noneIndex, "payload_icon")
+                        notifyItemChanged(noneIndex)
                     }
-                    notifyItemChanged(position, "payload_full")
+                    notifyItemChanged(position)
                 }
 
-                else -> {
+                States.NONE -> {
                     val nowSelected = !clicked.isSelected
-                    clicked.isSelected = nowSelected
-                    if (nowSelected) {
-                        val noneIndex = items.indexOfFirst { isNone(it) }
-                        if (noneIndex >= 0 && items[noneIndex].isSelected) {
-                            items[noneIndex].isSelected = false
-                            notifyItemChanged(noneIndex, "payload_icon")
+                    if(nowSelected){
+                        items.forEachIndexed { index, a ->
+                            if(position!=index && a.isSelected) {
+                                a.isSelected = false
+                                notifyItemChanged(index)
+                            }
                         }
                     }
-                    notifyItemChanged(position, "payload_icon")
+                    clicked.isSelected = nowSelected
+                    notifyItemChanged(position)
                 }
+
+                /*States.NORMAL,*/
+                else -> {
+                    val nowSelected = !clicked.isSelected
+                    if(nowSelected){
+                        items.filter {
+                            it.state == States.NONE && it.isSelected
+                        }.forEachIndexed { index, x ->
+                            x.isSelected = false
+                            notifyItemChanged(index)
+                        }
+                    }
+                    clicked.isSelected = nowSelected
+                    notifyItemChanged(position)
+                }
+
             }
 
             onSelectionChanged?.invoke(items)
@@ -163,21 +186,11 @@ class AnswersWithCheckboxAdapter(
         return items.size
     }
 
-    private fun showKeyboard(view: View) {
-        val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        view.post { imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT) }
-    }
-
-    private fun hideKeyboard(view: View) {
-        val imm = view.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(view.windowToken, 0)
-    }
-
     fun getSelected(): List<AnswerX> {
         return items.filter { it.isSelected }
     }
 
-    fun replaceAll(newItems: List<AnswerX>) {
+    fun updateDataSet(newItems: List<AnswerX>) {
         items.clear()
         items.addAll(newItems)
         notifyDataSetChanged()

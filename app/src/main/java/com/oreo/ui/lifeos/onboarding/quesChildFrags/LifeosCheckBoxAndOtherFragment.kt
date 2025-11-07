@@ -7,6 +7,7 @@ import com.oreo.ui.lifeos.onboarding.LifeOsOnboardingQuesViewModel
 import kotlin.getValue
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.databinding.FragmentLifeosCheckBoxAndOtherBinding
 
 class LifeosCheckBoxAndOtherFragment : BaseFragment<FragmentLifeosCheckBoxAndOtherBinding>(FragmentLifeosCheckBoxAndOtherBinding::inflate) {
@@ -28,17 +29,18 @@ class LifeosCheckBoxAndOtherFragment : BaseFragment<FragmentLifeosCheckBoxAndOth
     private fun setUi(ques: Question) {
         binding.tvQues.text = ques.text
 
-        val adapterCode = AnswersWithCheckboxAdapter(
-            isOther = {
-                it.isSelected
-            },
-            isNone = {
-                it.isSelected
-            },
+        val ansAdapter = AnswersWithCheckboxAdapter(
             onSelectionChanged = {
 
             }
         )
+
+        binding.rvAnswers.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = ansAdapter
+        }
+
+        ansAdapter.updateDataSet(ques.answer)
     }
 
     override fun initListener() {

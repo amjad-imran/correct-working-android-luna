@@ -24,8 +24,6 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
         viewModelScope.launch {
             val jsonRes = """
                 {
-                  "success": true,
-                  "data": {
                     "questions": [
                       {
                         "id": 1,
@@ -99,18 +97,34 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
                         "other_text": "other data"
                       }
                     ]
-                  },
-                  "message": "Onboarding questions fetched successfully",
-                  "time": "1762408592630"
-                }
+                  }
             """.trimIndent()
             curQuesIndex = 0
             onBoardResponseData = Gson().fromJson(jsonRes, OnBoardQuesGetResponse::class.java)
 
-            onBoardResponseData?.questions?.first()?.let {
-                curQues.postValue(it)
+            onBoardResponseData?.let { processData(it) }
+        }
+    }
+
+    fun processData(mainData: OnBoardQuesGetResponse){
+        mainData.questions.forEach {
+            it.answer.forEach { ans ->
+                ans.state = if(ans.addOntext.equals("1")){
+                    States.OTHER
+                }else if(ans.text.equals("none", ignoreCase = true)){
+                    States.NONE
+                }else{
+                    States.NORMAL
+                }
             }
         }
+        mainData.questions.first().let {
+            curQues.postValue(it)
+        }
+    }
+
+    enum class States {
+        OTHER, NONE, NORMAL
     }
 
 
