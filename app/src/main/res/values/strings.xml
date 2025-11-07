@@ -2281,6 +2281,7 @@ These insights help you understand how your heart rate changes during different 
 
     <!-- Shared element transition names -->
     <string name="transition_chat_box">transition_chat_box</string>
+    <string name="text_insights">Insights</string>
 
 
 </resources>

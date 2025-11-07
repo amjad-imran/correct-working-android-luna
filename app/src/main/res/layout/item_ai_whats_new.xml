@@ -10,6 +10,7 @@
         style="@style/S14"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:lineSpacingExtra="3sp"
         android:layout_marginTop="16dp"
         android:textColor="#B3FFFFFF"
         tools:text="New in Timeline: Streamlined logging for Supplements, Alcohol, and Recovery (meditation, cold plunge, and more)." />

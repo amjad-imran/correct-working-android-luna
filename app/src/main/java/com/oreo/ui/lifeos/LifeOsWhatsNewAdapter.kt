@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.ItemAiWhatsNewBinding
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 
 class LifeOsWhatsNewAdapter : RecyclerView.Adapter<LifeOsWhatsNewAdapter.ViewHolder>() {
@@ -17,7 +18,7 @@ class LifeOsWhatsNewAdapter : RecyclerView.Adapter<LifeOsWhatsNewAdapter.ViewHol
             binding.tvTitle.text = text
 
             if (bindingAdapterPosition == items.size - 1) {
-                binding.lytDivider.root.gone()
+                binding.lytDivider.root.invisible()
             } else {
                 binding.lytDivider.root.visible()
             }
