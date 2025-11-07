@@ -348,7 +348,16 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        handleIntent(intent)
+
+        intent?.let {
+            Handler(Looper.getMainLooper()).postDelayed({
+
+                handleIntent(it)
+            }, 500)
+
+
+        }
+        //handleIntent(intent)
     }
 
     private fun showTimeline() {
@@ -1654,6 +1663,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         val savedWorkout = viewModel.ringDataStore.getOngoingRecordWorkout()
         if (savedWorkout != null) return
 
+
         when (appLink) {
             AppLinks.REFERRAL -> {
                 viewModel.getReferralInfo { data ->
@@ -1688,9 +1698,30 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             AppLinks.DASHBOARD -> {
                 viewModel.navigateTo(BottomNavOption.HOME)
             }
+            AppLinks.LUNA_SETTINGS -> {
+                navController?.navigate(R.id.settingsFragment)
+            }
 
             AppLinks.LUNA_AI -> {
-                viewModel.navigateTo(BottomNavOption.LUNA_AI)
+
+                if (viewModel.ringDataStore.getRingDevice() == null) {
+                    showShortToast(getString(R.string.text_luna_ai_message))
+                    return
+                }
+
+                navController?.navigate(R.id.aiTopQuestionsFragment,
+                    bundleOf("aiTopic" to AITopics.GENERAL))
+
+                /*val (frag, bundle) = ChatGptFragment.getStartData(
+                    null,
+                    null,
+                    null,
+                    null,
+                    AITopics.GENERAL
+                )
+                navController?.navigate(frag, bundle)*/
+
+                //viewModel.navigateTo(BottomNavOption.LUNA_AI)
             }
 
             AppLinks.FEATURE_REQUEST -> {
@@ -1768,6 +1799,48 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 )
             }
 
+            AppLinks.ADD_MEAL -> {
+                navController?.navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to CircadianAlignmentViewModel.meal_window_key,
+                        "srcKey" to "appLink",
+                    )
+                )
+            }
+            AppLinks.ADD_RECOVERY -> {
+                navController?.navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to "recovery",
+                        "srcKey" to "appLink",
+                    )
+                )
+            }
+            AppLinks.ADD_SUPPLEMENTS -> {
+                navController?.navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to "supplements",
+                        "srcKey" to "appLink",
+                    )
+                )
+            }
+            AppLinks.ADD_ALCOHOL -> {
+                navController?.navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to "alcohol",
+                        "srcKey" to "appLink",
+                    )
+                )
+            }
+
+
             AppLinks.ADD_WORKOUT -> {
                 navController?.navigate(
                     R.id.addActivityTimelineFragment,
@@ -1780,14 +1853,23 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             }
 
             AppLinks.LOG_PERIOD_SYMPTOMS -> {
-                navController?.navigate(
-                    R.id.addActivityTimelineFragment,
-                    bundleOf(
-                        "showTimeline" to false,
-                        "key" to "symptom",
-                        "srcKey" to "appLink",
-                    )
-                )
+                val user = viewModel.localDataStore.getUser()
+                if (user?.userInfo?.gender.equals("female", true).not()) {
+                    showShortToast(getString(R.string.text_feature_not_enabled_for_this_user))
+                } else {
+                    viewModel.getCycleHistoryData() {
+                        navController?.navigate(
+                            R.id.addActivityTimelineFragment,
+                            bundleOf(
+                                "showTimeline" to false,
+                                "key" to "symptom",
+                                "srcKey" to "appLink",
+                            )
+                        )
+                    }
+                }
+
+
             }
 
             AppLinks.ADD_SLEEP -> {

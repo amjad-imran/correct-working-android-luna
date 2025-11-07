@@ -35,13 +35,13 @@ class AudioAiCalibrationFragment :
     }
 
     private fun setVideo() {
-        val fileName = ("android.resource://" + requireContext().packageName) + "/raw/video_chat_ai"
+       /* val fileName = ("android.resource://" + requireContext().packageName) + "/raw/video_chat_ai"
         val uri = Uri.parse(fileName)
         val videoView = binding.videoView
         videoView.setVideoURI(uri)
         videoView.stopPlayback()
         videoView.setOnPreparedListener { it.isLooping = true }
-        videoView.start()
+        videoView.start()*/
     }
 
     override fun initListener() {

@@ -2322,5 +2322,6 @@
     <string name="text_camera_perssision_message">Приложению Luna Ring требуется разрешение камеры для съёмки изображения.</string>
     <string name="text_only_the_sleep_data_shown_above_will_be_shared_you_can_stop_sharing_anytime_by_turning_off_the_toggle">Будут передаваться только показанные выше данные о сне. Вы можете в любой момент остановить передачу, выключив переключатель.</string>
     <string name="text_workout_no_internet">Тренировка сохранена. Мы обработаем её, когда вы будете в сети.</string>
-    <string name="text_analyse_this_file">Анализировать этот файл</string>
+    <string name="text_analyse_this">Проанализируйте это</string>
+
 </resources>

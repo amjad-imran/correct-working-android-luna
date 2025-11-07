@@ -1,6 +1,8 @@
 package com.oreo.ui.chatGpt
 
 import android.media.audiofx.Visualizer
+import android.os.Build
+import android.graphics.ImageDecoder
 import android.net.Uri
 import android.content.Intent
 import android.os.Bundle
@@ -19,7 +21,9 @@ import android.provider.Settings
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
+import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
@@ -255,7 +259,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         binding.lytChatBox.btnSend.setOnClickListener {
             val text = binding.lytChatBox.chatEtx.text.toString()
             if (text.isEmpty().not() || viewModel.pendingAttachment != null) {
-                val message = text.ifEmpty { getString(R.string.text_analyse_this_file) }
+                val message = text.ifEmpty { getString(R.string.text_analyse_this) }
                 sendMessage(message)
             }
         }
@@ -356,6 +360,12 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         })
     }
 
+    private fun hideKeyboard() {
+        val imm =
+            requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view?.windowToken, 0)
+    }
+
     fun setSendCtaStates(text: String) {
         if (text.isEmpty() && viewModel.pendingAttachment == null) {
             binding.lytChatBox.btnSend.gone()
@@ -402,6 +412,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
     }
 
     fun sendMessage(message: String) {
+        hideKeyboard()
         if (binding.lytSuggestions.root.isVisible) {
             binding.lytSuggestions.root.gone()
         }
@@ -446,7 +457,38 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             }
 
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-            uri?.let { handlePickedUri(it, viewModel.getMimeType(requireContext(),it) ?: "image/*") }
+            uri?.let {
+                val mime = viewModel.getMimeType(requireContext(), it) ?: "image/*"
+                val isHeic = mime.equals("image/heic", true) || mime.equals("image/heif", true)
+                if (isHeic) {
+                    val converted = convertHeicToJpeg(it, viewModel.DEFAULT_IMAGE_QUALITY)
+                    if (converted == null) {
+                        context.showShortToast(getString(R.string.text_something_went_wrong_single))
+                        return@let
+                    }
+
+                    val size = viewModel.getFileSize(requireContext(), converted)
+                    if (size < 0L) {
+                        context.showShortToast(getString(R.string.text_something_went_wrong_single))
+                        return@let
+                    }
+                    if (size > viewModel.IMAGE_MAX_BYTES) {
+                        context.showShortToast(getString(R.string.text_file_too_large_max_5_mb))
+                        return@let
+                    }
+
+                    val originalName = viewModel.getDisplayName(requireContext(), it) ?: "image"
+                    val jpgName = if (originalName.contains('.')) {
+                        originalName.substringBeforeLast('.') + ".jpg"
+                    } else {
+                        "$originalName.jpg"
+                    }
+
+                    viewModel.setPendingAttachment(converted, "image/jpeg", jpgName, size)
+                } else {
+                    handlePickedUri(it, mime)
+                }
+            }
         }
 
         pickDocumentLauncher =
@@ -521,9 +563,9 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         val mime = viewModel.getMimeType(requireContext(), uri) ?: fallbackMime
         val name = viewModel.getDisplayName(requireContext(), uri) ?: "file"
         val isImage = mime.startsWith("image/")
-        val isSupportedDoc = mime == "application/pdf" ||
+        val isSupportedDoc = mime == "application/pdf" /*||
                 mime == "application/msword" ||
-                mime == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                mime == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"*/
 
         if (!(isImage || isSupportedDoc)) {
             context.showShortToast(getString(R.string.text_unsupported_file_type))
@@ -572,6 +614,34 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             }
             viewModel.setPendingAttachment(uri, mime, name, size)
             LOGS.d("Doc picked -> $uri $mime $name $size")
+        }
+    }
+
+    private fun convertHeicToJpeg(sourceUri: Uri, quality: Int): Uri? {
+        return try {
+            val resolver = requireContext().contentResolver
+            val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                val source = ImageDecoder.createSource(resolver, sourceUri)
+                ImageDecoder.decodeBitmap(source)
+            } else {
+                resolver.openInputStream(sourceUri)?.use { BitmapFactory.decodeStream(it) }
+            }
+
+            if (bitmap == null) return null
+
+            val outFile = File(requireContext().cacheDir, "heic_${System.currentTimeMillis()}.jpg")
+            FileOutputStream(outFile).use { fos ->
+                bitmap.compress(Bitmap.CompressFormat.JPEG, quality.coerceIn(0, 100), fos)
+            }
+            bitmap.recycle()
+
+            FileProvider.getUriForFile(
+                requireContext(),
+                "com.noisefit.luna.fileprovider",
+                outFile
+            )
+        } catch (_: Exception) {
+            null
         }
     }
 

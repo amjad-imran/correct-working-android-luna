@@ -3,15 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_life_os"
     tools:context="com.oreo.ui.lifeos.LifeOsDashFragment">
 
     <include
         android:id="@+id/lytToolbar"
         layout="@layout/toolbar_life_os"
         android:layout_width="match_parent"
-        android:layout_height="56dp" />
+        android:layout_height="wrap_content" />
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/svMain"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -27,29 +28,33 @@
 
             <include
                 android:id="@+id/lytHeader"
-                android:layout_marginTop="40dp"
+                layout="@layout/layout_life_os_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                layout="@layout/layout_life_os_header"/>
+                android:layout_marginTop="40dp" />
 
 
             <include
                 android:id="@+id/lytDashInsights"
+                layout="@layout/layout_dash_insights"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                layout="@layout/layout_dash_insights"/>
+                android:layout_marginTop="20dp" />
 
             <include
                 android:id="@+id/lytDashWhatsNew"
+                layout="@layout/layout_ai_dash_whats_new"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                layout="@layout/layout_ai_dash_whats_new"/>
+                android:layout_marginTop="20dp" />
 
-
-
+            <View
+                android:id="@+id/dummyView"
+                android:layout_width="match_parent"
+                android:layout_height="64dp" />
 
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
