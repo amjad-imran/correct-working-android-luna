@@ -355,9 +355,9 @@ class AiTopQuestionsFragment :
         val mime = chatHelperViewModel.getMimeType(requireContext(), uri) ?: fallbackMime
         val name = chatHelperViewModel.getDisplayName(requireContext(), uri) ?: "file"
         val isImage = mime.startsWith("image/")
-        val isSupportedDoc = mime == "application/pdf" ||
+        val isSupportedDoc = mime == "application/pdf"/* ||
                 mime == "application/msword" ||
-                mime == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                mime == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"*/
 
         if (!(isImage || isSupportedDoc)) {
             context.showShortToast(getString(R.string.text_unsupported_file_type))
