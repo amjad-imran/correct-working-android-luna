@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -20,7 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AiSummaryViewModel @Inject constructor(
-    private val deviceRepository: OreoDeviceRepository
+    private val deviceRepository: OreoDeviceRepository,
+    val sessionManager: SessionManager,
 ) : BaseViewModel() {
 
 

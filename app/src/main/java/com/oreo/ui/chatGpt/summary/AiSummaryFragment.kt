@@ -31,6 +31,7 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.CommonConstants.FILE_PROVIDER
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.AiDailySummaryModel
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
@@ -276,6 +277,9 @@ class AiSummaryFragment :
 
         binding.ivShare.setOnClickListener {
             viewModel.getCurrentStoryData()?.let {
+                viewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.homepage_dhd_share
+                )
                 navigate(R.id.shareSummaryFragment, bundleOf("data" to it))
             }
 

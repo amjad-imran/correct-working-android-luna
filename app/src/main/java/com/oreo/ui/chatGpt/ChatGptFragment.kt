@@ -828,6 +828,11 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
 
         viewModel.chatGptOverview.observe(this) {
             it?.let {
+                if(it.filter { it is ChatGptOverview.ReceivedMessage }.size == 2){
+                    viewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.homepage_luna_sent_double
+                    )
+                }
                 //mAdapter.items = it
                 mAdapter.setDataSet(it)
                 nullableBinding?.rvChats?.post {

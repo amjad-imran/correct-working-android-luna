@@ -65,6 +65,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAiTopQuestionsBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ai.TopQuestions
 import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.chatGpt.ChatGptFragment
@@ -164,6 +165,9 @@ class AiTopQuestionsFragment :
 
 
             if (text.isEmpty().not() || att != null) {
+                chatHelperViewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.homepage_luna_sent
+                )
                 val message = text.ifEmpty { getString(R.string.text_analyse_this) }
                 val (frag, bundle) = ChatGptFragment.getStartData(
                     threadId = "",

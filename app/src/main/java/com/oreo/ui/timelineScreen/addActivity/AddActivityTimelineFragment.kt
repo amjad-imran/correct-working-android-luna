@@ -185,11 +185,15 @@ class AddActivityTimelineFragment :
                     AddActivityItemsEnum.SLEEP -> {
                         titleTxt = getString(R.string.text_add_sleep2)
                         AddSleepFragment().apply {
-                            it.second?.let { editData ->
-                                this.arguments = Bundle().apply {
-                                    putParcelable("editData", editData)
-                                }
+                            val bundle = Bundle()
+                            if("timeline".equals(args.srcKey)){
+                                bundle.putString("srcKey", args.srcKey)
                             }
+                            it.second?.let { editData ->
+                                bundle.putParcelable("editData", editData)
+                            }
+
+                            this.arguments = bundle
                         }
                     }
 
