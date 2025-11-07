@@ -276,9 +276,22 @@ object MoEngageLunaAppEvents {
     const val insight_log_deleted = "insight_log_deleted"
     const val insight_log_edited = "insight_log_edited"
 
-    // Luna Ai Workout / Nutrition
+    // Luna Ai / Workout / Nutrition
     const val lunaai_wid_sel_click = "lunaai_wid_sel_click"
     const val lunaai_wid_selection = "lunaai_wid_selection"
+    const val gentle_movement_create = "gentle_movement_create"
+    const val gentle_movement_dismiss = "gentle_movement_dismiss"
+    const val switch_workout_regular = "switch_workout_regular"
+    const val swicth_workout_relaxed = "swicth_workout_relaxed"
+    const val comfort_food_create = "comfort_food_create"
+    const val comfort_food_dismiss = "comfort_food_dismiss"
+    const val switch_diet_regular = "switch_diet_regular"
+    const val switch_diet_comfort = "switch_diet_comfort"
+    const val homepage_luna = "homepage_luna"
+    const val homepage_dhd = "homepage_dhd"
+    const val homepage_luna_sent = "homepage_luna_sent"
+    const val homepage_luna_sent_double = "homepage_luna_sent_double"
+    const val homepage_dhd_share = "homepage_dhd_share"
 
     // One Tap Vitals
 
@@ -286,5 +299,9 @@ object MoEngageLunaAppEvents {
     const val one_tap_stress = "one_tap_stress"
     const val one_tap_spo2 = "one_tap_spo2"
     const val one_tap_temp = "one_tap_temp"
+
+    // Download My Data
+    const val pdf_click = "pdf_click"
+    const val pdf_download = "pdf_download"
 
 }

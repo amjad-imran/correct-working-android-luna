@@ -145,9 +145,20 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
 
             if(getString(R.string.text_save).equals(binding.btnSave.text)) {
                 viewModel.logSupplements(){
-                    sharedViewModel.sessionManager.logMoEngageAppEvent(
-                        MoEngageLunaAppEvents.insight_log_edited,
-                    )
+                    if(viewModel.editData?.id != null) {
+                        sharedViewModel.sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.insight_log_edited,
+                        )
+                    }else{
+                        sharedViewModel.sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.insight_logged,
+                            HashMap<String, Any>().apply {
+                                this["source"] = "timeline"
+                                this["log_category"] = "supplements"
+                                this["supplement"] = viewModel.selectedOption?.options ?: ""
+                            }
+                        )
+                    }
                 }
             }else{
                 if (sharedViewModel.ringDataStore.getRingDevice() == null) {

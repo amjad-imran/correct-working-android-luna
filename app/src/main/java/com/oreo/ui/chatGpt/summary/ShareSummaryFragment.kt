@@ -22,6 +22,7 @@ import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.utils.CommonConstants.FILE_PROVIDER
 import com.noisefit_commans.utils.ImageUtil
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.AiDailySummaryModel
 import com.oreo.data.model.DataMetrics
 import dagger.hilt.android.AndroidEntryPoint
@@ -108,6 +109,9 @@ class ShareSummaryFragment :
 
         binding.tvShare.setOnClickListener {
             context?.let {
+                sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.homepage_dhd_share
+                )
                 val bitmap = ImageUtil.getBitmapFromView(binding.lytTemplate.root)
                 bitmap ?: return@setOnClickListener
 

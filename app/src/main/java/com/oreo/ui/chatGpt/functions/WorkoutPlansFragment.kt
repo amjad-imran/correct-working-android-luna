@@ -130,6 +130,9 @@ class WorkoutPlansFragment :
         }
 
         binding.lytCreateRelaxedWorkout.btnCreate.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.gentle_movement_create
+            )
             if (viewModel.ringDataStore.getRingDevice() == null) {
                 context.showShortToast(getString(R.string.text_luna_ai_message))
                 return@setOnClickListener
@@ -138,19 +141,28 @@ class WorkoutPlansFragment :
         }
 
         binding.lytCreateRelaxedWorkout.btnDismiss.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.gentle_movement_dismiss
+            )
             viewModel.localDataStore.setIsWorkoutPlanSetUp(false)
             binding.lytCreateRelaxedWorkout.root.gone()
         }
 
         binding.btnSwitch.setOnClickListener {
-            LOGS.d("noisnv : ${viewModel.workoutState.value}")
+
             val curDay = LocalDate.now().dayOfWeek.value
             val isRegularState =
                 viewModel.workoutState.value == DietState.REGULAR || viewModel.workoutState.value == DietState.NORMAL
             if (isRegularState){
+                viewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.swicth_workout_relaxed
+                )
                 viewModel.workoutState.value = DietState.COMFORT
             }
             else{
+                viewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.switch_workout_regular
+                )
                 viewModel.workoutState.value = DietState.REGULAR
             }
             viewModel.setSelectedPosition(curDay)

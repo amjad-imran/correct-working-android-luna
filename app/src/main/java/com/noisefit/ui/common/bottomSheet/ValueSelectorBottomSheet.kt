@@ -7,9 +7,11 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentTempUnitBottomSheetBinding
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.ScreenUtils
 import com.noisefit_commans.utils.WheelAdapter
 import com.noisefit_commans.utils.WheelItem
@@ -32,6 +34,9 @@ class ValueSelectorBottomSheet : BaseBottomSheetWithTransparent<FragmentTempUnit
 
     @Inject
     lateinit var screenUtils: ScreenUtils
+
+    @Inject
+    lateinit var sessionManager: SessionManager
 
 
     private val wheelAdapter: WheelAdapter<String> by lazy {
@@ -141,6 +146,12 @@ class ValueSelectorBottomSheet : BaseBottomSheetWithTransparent<FragmentTempUnit
                 true
             } else {
                 !mInitialSelectedValue.equals(mSelectedValue, true)
+            }
+
+            if(getString(R.string.text_download_my_data).equals(mTitle)){
+                sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.pdf_download
+                )
             }
 
             setFragmentResult(

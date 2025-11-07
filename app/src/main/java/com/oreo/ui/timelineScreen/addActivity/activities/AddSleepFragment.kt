@@ -74,6 +74,14 @@ class AddSleepFragment :
                     }
                 } else {
 
+                    sharedViewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.insight_logged,
+                        HashMap<String, Any>().apply {
+                            this["source"] = "timeline"
+                            this["log_category"] = "sleep"
+                        }
+                    )
+
                     if (viewModel.startTimeSleep.day.isEmpty()) {
                         uiController.onDisplayError(getString(R.string.text_please_select_start_time))
                         return@setOnClickListener
@@ -366,6 +374,7 @@ class AddSleepFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.editDataAddActivity = arguments?.getParcelable("editData")
+        viewModel.srcKey = arguments?.getString("srcKey")
 
         if(viewModel.editDataAddActivity==null) {
             initUI()
