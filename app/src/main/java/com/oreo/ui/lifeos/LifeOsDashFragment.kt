@@ -100,6 +100,10 @@ class LifeOsDashFragment :
         binding.lytToolbar.ivHistory.setOnClickListener {
             navigate(R.id.chatHistoryFragment)
         }
+
+        binding.lytDashInsights.ivMore.setOnClickListener {
+            navigate(R.id.lifeOsInsightFrag)
+        }
     }
 
     override fun subscribeObservers() {

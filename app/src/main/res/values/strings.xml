@@ -2283,6 +2283,8 @@ These insights help you understand how your heart rate changes during different 
     <string name="transition_chat_box">transition_chat_box</string>
     <string name="text_insights">Insights</string>
     <string name="text_analyse_this">Analyse this</string>
+    <string name="text_talk_with_life_os">Talk with Life OS</string>
+    <string name="text_insight_more">That’s all we had for now. Anything specific you’re looking for?</string>
 
 
 </resources>

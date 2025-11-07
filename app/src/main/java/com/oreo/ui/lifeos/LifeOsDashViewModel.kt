@@ -15,10 +15,10 @@ class LifeOsDashViewModel @Inject constructor() : ViewModel() {
     private val _whatsNew = MutableLiveData<List<String>>()
     val whatsNew: LiveData<List<String>> get() = _whatsNew
 
+
     init {
         loadSuggestedQuestions()
         loadWhatsNew()
-
     }
 
     fun loadSuggestedQuestions() {

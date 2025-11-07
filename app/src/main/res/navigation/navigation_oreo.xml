@@ -1287,6 +1287,21 @@
         android:label="fragment_life_os_chat"
         tools:layout="@layout/fragment_life_os_chat" />
     <fragment
+        android:id="@+id/lifeOsInsightFrag"
+        android:name="com.oreo.ui.lifeos.LifeOsInsightFrag"
+        android:label="fragment_life_os_insight"
+        tools:layout="@layout/fragment_life_os_insight">
+    </fragment>
+    <fragment
+        android:id="@+id/lifeOsInsightDetailsFragment"
+        android:name="com.oreo.ui.lifeos.LifeOsInsightDetailsFragment"
+        android:label="fragment_life_os_insight_details"
+        tools:layout="@layout/fragment_life_os_insight_details">
+        <argument
+            android:name="insightId"
+            app:argType="string" />
+    </fragment>
+    <fragment
         android:id="@+id/aiSummaryFragment"
         android:name="com.oreo.ui.chatGpt.summary.AiSummaryFragment"
         android:label="fragment_ai_summary" />

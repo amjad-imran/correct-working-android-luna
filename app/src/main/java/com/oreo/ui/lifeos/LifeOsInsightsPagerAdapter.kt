@@ -12,7 +12,6 @@ class LifeOsInsightsPagerAdapter(
 
     override fun createFragment(position: Int): Fragment {
         val text = items[position]
-        return LifeOsInsightCardFragment.newInstance(text)
+        return LifeOsInsightCardFragment.newInstance(text, list = ArrayList(items))
     }
 }
-
