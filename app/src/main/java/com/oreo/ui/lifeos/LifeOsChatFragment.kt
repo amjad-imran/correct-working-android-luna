@@ -81,7 +81,6 @@ class LifeOsChatFragment :
         registerAttachmentPickers()
         viewModel.generateThreadId()
 
-        // Setup chat list
         binding.rvChats.apply {
             itemAnimator = null
             layoutManager = LinearLayoutManager(context)
@@ -184,10 +183,12 @@ class LifeOsChatFragment :
                         "Create a workout plan for me"
                     )
                 )
+                binding.ivLogo.visible()
                 binding.ivLogoTop.gone()
             } else {
                 binding.ivLogoTop.visible()
                 binding.lytSuggestions.root.gone()
+                binding.ivLogo.gone()
             }
         }
 
