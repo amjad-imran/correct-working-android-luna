@@ -127,6 +127,14 @@ class LifeOsChatFragment :
         }
 
         binding.lytChatBox.ivAddAttachment.setOnClickListener {
+            try {
+                ViewCompat.getWindowInsetsController(requireView())
+                    ?.hide(WindowInsetsCompat.Type.ime())
+            } catch (_: Exception) {}
+            binding.lytChatBox.chatEtx.clearFocus()
+            hideKeyboard()
+            resetImePadding()
+            kickstartImeTranslation()
             setFragmentResultListener(ATTACHMENT_KEY) { _, bundle ->
                 when (bundle.getString("type")) {
                     "camera" -> launchCameraPicker()
@@ -301,6 +309,18 @@ class LifeOsChatFragment :
                     )
                     return insets
                 }
+
+                override fun onEnd(animation: WindowInsetsAnimationCompat) {
+                    val currentInsets = ViewCompat.getRootWindowInsets(root) ?: return
+                    val sysBars = currentInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+                    val imeBottom = currentInsets.getInsets(WindowInsetsCompat.Type.ime()).bottom
+                    root.setPadding(
+                        root.paddingLeft,
+                        root.paddingTop,
+                        root.paddingRight,
+                        sysBars.bottom + imeBottom
+                    )
+                }
             }
         )
     }
@@ -308,6 +328,13 @@ class LifeOsChatFragment :
     private fun kickstartImeTranslation() {
         val root = view ?: return
         root.post { root.requestLayout() }
+    }
+
+    private fun resetImePadding() {
+        val root = view ?: return
+        val insets = ViewCompat.getRootWindowInsets(root) ?: return
+        val sysBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+        root.setPadding(root.paddingLeft, root.paddingTop, root.paddingRight, sysBars.bottom)
     }
 
 
