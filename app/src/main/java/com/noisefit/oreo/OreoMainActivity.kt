@@ -75,6 +75,7 @@ import androidx.core.view.isVisible
 import com.oreo.data.model.FabItems
 import com.oreo.data.model.FabModel
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
+import com.oreo.ui.lifeos.LifeOsChatFragment
 
 @AndroidEntryPoint
 class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
@@ -1211,12 +1212,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     return@observe
                 }
 
-                val (frag, bundle) = ChatGptFragment.getStartData(
-                    threadId,
-                    null,
-                    null,
-                    null,
-                    AITopics.GENERAL
+                val (frag, bundle) = LifeOsChatFragment.getStartData(
+                    threadId = threadId,
+                    userMessage = null,
+                    title = null,
+                    aiTopic = AITopics.GENERAL
                 )
                 navController?.navigate(frag, bundle)
             }

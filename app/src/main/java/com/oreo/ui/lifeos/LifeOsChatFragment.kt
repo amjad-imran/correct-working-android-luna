@@ -1,52 +1,99 @@
 package com.oreo.ui.lifeos
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.view.WindowManager
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsAnimationCompat
-import com.google.android.material.transition.MaterialContainerTransform
-import androidx.transition.Transition
-import androidx.transition.TransitionListenerAdapter
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.setFragmentResultListener
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.core.view.isVisible
+import androidx.navigation.fragment.navArgs
+import com.noisefit.data.model.AiMeals
+import com.noisefit.data.model.AiWorkout
+import com.oreo.ui.chatGpt.ChatGptAdapter
+import com.oreo.data.model.ChatGptOverview
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLifeOsChatBinding
+import com.noisefit_commans.data.ErrorResponse
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.showShortToast
+import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
+import com.oreo.ui.chatGpt.AITopics
+import com.oreo.ui.chatGpt.ATTACHMENT_KEY
+import com.oreo.ui.chatGpt.ChatGptViewModel
+import com.oreo.ui.chatGpt.PlanType
+import com.oreo.ui.chatGpt.SuggestionAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
+import java.io.FileOutputStream
 
 @AndroidEntryPoint
 class LifeOsChatFragment :
     BaseFragment<FragmentLifeOsChatBinding>(FragmentLifeOsChatBinding::inflate) {
 
     private var previousSoftInputMode: Int? = null
+    private val viewModel: ChatGptViewModel by viewModels()
+    private val mAdapter: ChatGptAdapter by lazy { ChatGptAdapter() }
+    private val args: LifeOsChatFragmentArgs by navArgs()
+
+    private lateinit var takePictureLauncher: ActivityResultLauncher<Uri>
+    private lateinit var pickImageLauncher: ActivityResultLauncher<String>
+    private lateinit var pickDocumentLauncher: ActivityResultLauncher<Array<String>>
+    private lateinit var requestCameraPermission: ActivityResultLauncher<String>
+
+
+    companion object {
+        fun getStartData(
+            threadId: String?,
+            userMessage: String?,
+            title: String?,
+            aiTopic: AITopics,
+            meal: AiMeals? = null,
+            workout: AiWorkout? = null,
+            planType: PlanType? = null,
+        ): Pair<Int, Bundle?> {
+            return Pair(R.id.lifeOsChatFragment, Bundle().apply {
+                putString("threadId", threadId ?: "")
+                putString("userMessage", userMessage ?: "")
+                putString("title", title ?: "")
+                putSerializable("aiTopic", aiTopic)
+                putSerializable("planType", planType ?: PlanType.NONE)
+                putParcelable("meal", meal)
+                putParcelable("workout", workout)
+            })
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Ensure no relayout when IME shows; set early
         val window = requireActivity().window
         if (previousSoftInputMode == null) previousSoftInputMode = window.attributes.softInputMode
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
-        sharedElementEnterTransition = MaterialContainerTransform().apply {
-            drawingViewId = R.id.o_nav_host_fragment
-            duration = 300
-            scrimColor = Color.TRANSPARENT
-        }
-        sharedElementReturnTransition = MaterialContainerTransform().apply {
-            drawingViewId = R.id.o_nav_host_fragment
-            duration = 250
-            scrimColor = Color.TRANSPARENT
-        }
-    }
-
-    override fun initListener() {
-
-    }
-
-    override fun subscribeObservers() {
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,11 +101,33 @@ class LifeOsChatFragment :
 
         val editText = binding.lytChatBox.chatEtx
         editText.requestFocus()
+        editText.setHint(getString(R.string.text_ask_anything))
+
+        viewModel.threadId = args.threadId
+        viewModel.userMessage = args.userMessage
+        viewModel.meal = args.meal
+        viewModel.workout = args.workout
+        viewModel.planType = args.planType
+
+        setActionButtonState()
 
         setupImeAnimation()
 
+        registerAttachmentPickers()
+        viewModel.generateThreadId()
+
+        binding.rvChats.apply {
+            itemAnimator = null
+            layoutManager = LinearLayoutManager(context)
+            adapter = mAdapter
+        }
+        mAdapter.itemClickListener = { item, _ ->
+            if (item is ChatGptOverview.RetryMessage) {
+                viewModel.retryApi()
+            }
+        }
+
         val showIme: () -> Unit = {
-            // Prefer WindowInsetsController on newer APIs
             ViewCompat.getWindowInsetsController(view)?.show(WindowInsetsCompat.Type.ime())
                 ?: run {
                     requireContext().getSystemService<InputMethodManager>()?.showSoftInput(
@@ -68,83 +137,477 @@ class LifeOsChatFragment :
                 }
         }
 
-        val transition = (sharedElementEnterTransition as? Transition)
-        if (transition != null) {
-            transition.addListener(object : TransitionListenerAdapter() {
-                override fun onTransitionStart(transition: Transition) {
-                    // IME parallel open with a tiny delay to avoid first-frame jump
-                    view.postDelayed({
-                        showIme()
-                        kickstartImeTranslation()
-                    }, 60)
+        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+        view.post {
+            showIme()
+            kickstartImeTranslation()
+        }
+    }
+
+
+    override fun initListener() {
+        binding.ivBack.setOnClickListener {
+            navigateUpSafe()
+        }
+        binding.btnRetry.setOnClickListener {
+            viewModel.retryApi()
+        }
+        binding.ivNewChat.setOnClickListener {
+            //navigate(LifeOsChatFragmentDirections.actionLifeOsChatFragmentSelf())
+        }
+
+        binding.lytChatBox.chatEtx.setOnEditorActionListener { v, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                val message = v.text?.toString()?.trim().orEmpty()
+                if (message.isNotEmpty()) sendMessage(message)
+                true
+            } else false
+        }
+
+        binding.lytChatBox.ivAddAttachment.setOnClickListener {
+            try {
+                ViewCompat.getWindowInsetsController(requireView())
+                    ?.hide(WindowInsetsCompat.Type.ime())
+            } catch (_: Exception) {
+            }
+            binding.lytChatBox.chatEtx.clearFocus()
+            hideKeyboard()
+            resetImePadding()
+            kickstartImeTranslation()
+            setFragmentResultListener(ATTACHMENT_KEY) { _, bundle ->
+                when (bundle.getString("type")) {
+                    "camera" -> launchCameraPicker()
+                    "photo" -> pickImageLauncher.launch("image/*")
+                    "file" -> pickDocumentLauncher.launch(
+                        arrayOf(
+                            "application/pdf",
+                            "application/msword",
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                        )
+                    )
                 }
-                override fun onTransitionEnd(transition: Transition) {
-                    // Keep ADJUST_NOTHING; translation is handled by insets animation
+            }
+            navigate(R.id.bottomSheetAttachmentPicker)
+        }
+
+        binding.lytChatBox.chatEtx.addTextChangedListener(afterTextChanged = {
+            setActionButtonState()
+        })
+
+        binding.lytChatBox.btnAction.setOnClickListener {
+            if (viewModel.fetchInProgress.value == true) {
+                viewModel.stopResponseGeneration()
+                return@setOnClickListener
+            }
+            val text = binding.lytChatBox.chatEtx.text?.toString().orEmpty().trim()
+            if (text.isEmpty() && viewModel.pendingAttachment == null) {
+                navigate(R.id.chatGptAudioFragment)
+            } else {
+                val message = text.ifEmpty { getString(R.string.text_analyse_this) }
+                sendMessage(message)
+            }
+        }
+
+        binding.lytChatBox.ivRemoveAttachment.setOnClickListener {
+            viewModel.clearPendingAttachment()
+        }
+    }
+
+    override fun subscribeObservers() {
+        viewModel.showRetry.observe(this) {
+            if(it){
+                binding.btnRetry.visible()
+            }else{
+                binding.btnRetry.gone()
+            }
+        }
+        viewModel.fetchInProgress.observe(this) {
+            setActionButtonState()
+        }
+
+        viewModel.showSuggestedQuestions.observe(this) { show ->
+            if (show) {
+                setSuggestedQuestions(
+                    arrayListOf(
+                        "Teach me about my sleep score",
+                        "Create a diet plan for me",
+                        "Teach me about my sleep score jkdshf kjd gfkjsd fhk",
+                        "Create a diet plan for me",
+                        "Create a workout plan for me"
+                    )
+                )
+                binding.ivLogo.visible()
+                binding.ivLogoTop.gone()
+            } else {
+                binding.ivLogoTop.visible()
+                binding.lytSuggestions.root.gone()
+                binding.ivLogo.gone()
+            }
+        }
+
+
+        viewModel.attachmentPreview.observe(this) { data ->
+            //val enteredText = binding.lytChatBox.chatEtx.text?.toString().orEmpty()
+            setActionButtonState()
+            if (data == null) {
+                binding.lytChatBox.lytAttachment.gone()
+                return@observe
+            }
+
+            binding.lytChatBox.lytAttachment.visible()
+            val isImage = data.mimeType.startsWith("image/")
+            if (isImage) {
+                binding.lytChatBox.ivAttachmentImage.visible()
+                binding.lytChatBox.lytAttachmentDoc.gone()
+                try {
+                    com.bumptech.glide.Glide.with(binding.root.context)
+                        .load(data.uri)
+                        .into(binding.lytChatBox.ivAttachmentImage)
+                } catch (_: Exception) {
                 }
-            })
-        } else {
-            // No transition, show immediately
-            requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
-            view.post {
-                showIme()
-                kickstartImeTranslation()
+            } else {
+                binding.lytChatBox.ivAttachmentImage.gone()
+                binding.lytChatBox.lytAttachmentDoc.visible()
+                binding.lytChatBox.tvDocType.text =
+                    if (data.mimeType == "application/pdf") "PDF" else "DOC"
+                binding.lytChatBox.tvDocName.text = data.fileName
+            }
+            // layout will remeasure due to visibility change; no manual padding needed
+        }
+
+        viewModel.scrollToBottom.observe(this) {
+            it.getContent()?.let {
+                binding.rvChats.smoothScrollToPosition(
+                    (binding.rvChats.adapter?.itemCount ?: 1) - 1
+                )
+            }
+        }
+
+        viewModel.chatGptOverview.observe(this) { list ->
+            list?.let {
+                mAdapter.setDataSet(it)
+                binding.rvChats.post {
+                    binding.rvChats.smoothScrollToPosition(mAdapter.itemCount - 1)
+                }
             }
         }
     }
 
-    
+
+    private fun hideKeyboard() {
+        val imm = requireContext().getSystemService<InputMethodManager>()
+        imm?.hideSoftInputFromWindow(view?.windowToken, 0)
+    }
+
+    private fun setActionButtonState() {
+        val text = binding.lytChatBox.chatEtx.text?.toString().orEmpty()
+        val hasAttachment = viewModel.pendingAttachment != null
+
+        val isGenerating = viewModel.fetchInProgress.value ?: false
+
+        if (isGenerating) {
+            binding.lytChatBox.btnAction.setImageResource(R.drawable.ic_ai_stop)
+            binding.lytChatBox.btnAction.alpha = 1f
+            return
+        }
+
+        val showSend = text.isNotEmpty() || hasAttachment
+
+        val res = R.drawable.image_ai_message_send_3
+
+        //val res = if (showSend) R.drawable.ic_ai_send_message_2 else R.drawable.image_ai_mic
+
+        if (showSend) {
+            binding.lytChatBox.btnAction.alpha = 1f
+        } else {
+            binding.lytChatBox.btnAction.alpha = 0.5f
+        }
+
+        binding.lytChatBox.btnAction.setImageResource(res)
+    }
 
     private fun setupImeAnimation() {
-        val inputContainer = binding.lytChatBox.root // translate only chat box, not full screen
         val root = requireView()
 
-        // Apply base system bar padding; we drive IME with translation
         ViewCompat.setOnApplyWindowInsetsListener(root) { v, insets ->
             val sysBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(v.paddingLeft, v.paddingTop, v.paddingRight, sysBars.bottom)
-
-            // Also apply final position for static states (IME shown/hidden)
             val imeBottom = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
-            inputContainer.translationY = -imeBottom.toFloat()
+            v.setPadding(v.paddingLeft, v.paddingTop, v.paddingRight, sysBars.bottom + imeBottom)
             insets
         }
 
         ViewCompat.setWindowInsetsAnimationCallback(
             root,
-            object : WindowInsetsAnimationCompat.Callback(WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_STOP) {
+            object :
+                WindowInsetsAnimationCompat.Callback(WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_STOP) {
                 override fun onProgress(
                     insets: WindowInsetsCompat,
                     runningAnimations: MutableList<WindowInsetsAnimationCompat>
                 ): WindowInsetsCompat {
+                    val sysBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
                     val imeBottom = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
-                    inputContainer.translationY = -imeBottom.toFloat()
+                    root.setPadding(
+                        root.paddingLeft,
+                        root.paddingTop,
+                        root.paddingRight,
+                        sysBars.bottom + imeBottom
+                    )
                     return insets
+                }
+
+                override fun onEnd(animation: WindowInsetsAnimationCompat) {
+                    val currentInsets = ViewCompat.getRootWindowInsets(root) ?: return
+                    val sysBars = currentInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+                    val imeBottom = currentInsets.getInsets(WindowInsetsCompat.Type.ime()).bottom
+                    root.setPadding(
+                        root.paddingLeft,
+                        root.paddingTop,
+                        root.paddingRight,
+                        sysBars.bottom + imeBottom
+                    )
                 }
             }
         )
     }
 
-    // Fast-path to set translation as soon as IME insets become available
     private fun kickstartImeTranslation() {
         val root = view ?: return
-        var attempts = 0
-        val runnable = object : Runnable {
-            override fun run() {
-                val insets = ViewCompat.getRootWindowInsets(root)
-                val ime = insets?.getInsets(WindowInsetsCompat.Type.ime())?.bottom ?: 0
-                if (ime > 0) {
-                    binding.lytChatBox.root.translationY = -ime.toFloat()
-                } else if (attempts++ < 12) { // ~200ms max @16ms
-                    root.postDelayed(this, 16)
+        root.post { root.requestLayout() }
+    }
+
+    private fun resetImePadding() {
+        val root = view ?: return
+        val insets = ViewCompat.getRootWindowInsets(root) ?: return
+        val sysBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+        root.setPadding(root.paddingLeft, root.paddingTop, root.paddingRight, sysBars.bottom)
+    }
+
+
+    private fun registerAttachmentPickers() {
+        requestCameraPermission =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+                if (granted) {
+                    launchCameraPicker()
+                } else {
+                    val showRationale =
+                        shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)
+                    if (showRationale) {
+                        context.showShortToast(getString(R.string.text_camera_permission))
+                    } else {
+                        showCameraPermissionSettingsDialog()
+                    }
+                }
+            }
+
+        takePictureLauncher =
+            registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+                val uri = viewModel.cameraUri
+                if (success && uri != null) {
+                    handlePickedUri(uri, "image/jpeg")
+                }
+            }
+
+        pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            uri?.let {
+                val mime = viewModel.getMimeType(requireContext(), it) ?: "image/*"
+                val isHeic = mime.equals("image/heic", true) || mime.equals("image/heif", true)
+                if (isHeic) {
+                    val converted = convertHeicToJpeg(it, viewModel.DEFAULT_IMAGE_QUALITY)
+                    if (converted == null) {
+                        context.showShortToast(getString(R.string.text_something_went_wrong_single))
+                        return@let
+                    }
+
+                    val size = viewModel.getFileSize(requireContext(), converted)
+                    if (size < 0L) {
+                        context.showShortToast(getString(R.string.text_something_went_wrong_single))
+                        return@let
+                    }
+                    if (size > viewModel.IMAGE_MAX_BYTES) {
+                        context.showShortToast(getString(R.string.text_file_too_large_max_5_mb))
+                        return@let
+                    }
+
+                    val originalName = viewModel.getDisplayName(requireContext(), it) ?: "image"
+                    val jpgName = if (originalName.contains('.')) {
+                        originalName.substringBeforeLast('.') + ".jpg"
+                    } else {
+                        "$originalName.jpg"
+                    }
+
+                    viewModel.setPendingAttachment(converted, "image/jpeg", jpgName, size)
+                } else {
+                    handlePickedUri(it, mime)
                 }
             }
         }
-        root.post(runnable)
+
+        pickDocumentLauncher =
+            registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+                uri?.let {
+                    handlePickedUri(
+                        it,
+                        viewModel.getMimeType(requireContext(), it) ?: "application/octet-stream"
+                    )
+                }
+            }
+    }
+
+    private fun showCameraPermissionSettingsDialog() {
+        try {
+            uiController.onApiErrorReceived(
+                ErrorResponse(
+                    UIComponentType.AreYouSureDialog(
+                        getString(R.string.text_permission_required),
+                        getString(R.string.text_camera_perssision_message),
+                        false,
+                        getString(R.string.text_go_to_settings),
+                        object : com.noisefit_commans.data.BinaryActionCallback {
+                            override fun yes() {
+                                openAppSettings()
+                            }
+
+                            override fun no() {}
+                        }
+                    )
+                )
+            )
+        } catch (_: Exception) {
+            context.showShortToast(getString(R.string.text_camera_permission))
+        }
+    }
+
+    private fun openAppSettings() {
+        try {
+            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                data = Uri.fromParts("package", requireContext().packageName, null)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            startActivity(intent)
+        } catch (_: Exception) {
+        }
+    }
+
+    private fun launchCameraPicker() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestCameraPermission.launch(Manifest.permission.CAMERA)
+            return
+        }
+        val fileName = "IMG_${System.currentTimeMillis()}.jpg"
+        val cacheDir = requireContext().externalCacheDir ?: requireContext().cacheDir
+        val imageFile = File(cacheDir, fileName)
+        imageFile.parentFile?.mkdirs()
+
+        val uri = FileProvider.getUriForFile(
+            requireContext(),
+            "com.noisefit.luna.fileprovider",
+            imageFile
+        )
+        viewModel.cameraUri = uri
+        takePictureLauncher.launch(uri)
+    }
+
+    private fun handlePickedUri(uri: Uri, fallbackMime: String) {
+        val mime = viewModel.getMimeType(requireContext(), uri) ?: fallbackMime
+        val name = viewModel.getDisplayName(requireContext(), uri) ?: "file"
+        val isImage = mime.startsWith("image/")
+        val isSupportedDoc = mime == "application/pdf"
+
+        if (!(isImage || isSupportedDoc)) {
+            context.showShortToast(getString(R.string.text_unsupported_file_type))
+            return
+        }
+
+        if (isImage) {
+            val compressedUri = viewModel.compressImage(
+                requireContext(),
+                uri,
+                quality = viewModel.DEFAULT_IMAGE_QUALITY
+            )
+            if (compressedUri == null) {
+                context.showShortToast(getString(R.string.text_something_went_wrong_single))
+                return
+            }
+            val compressedSize = viewModel.getFileSize(requireContext(), compressedUri)
+            if (compressedSize < 0L) {
+                context.showShortToast(getString(R.string.text_something_went_wrong_single))
+                return
+            }
+            if (compressedSize > viewModel.IMAGE_MAX_BYTES) {
+                context.showShortToast(getString(R.string.text_file_too_large_max_5_mb))
+                return
+            }
+            viewModel.setPendingAttachment(compressedUri, "image/jpeg", name, compressedSize)
+            LOGS.d("Image compressed -> $compressedUri image/jpeg $name $compressedSize")
+        } else {
+            val size = viewModel.getFileSize(requireContext(), uri)
+            if (size < 0L) {
+                context.showShortToast(getString(R.string.text_something_went_wrong_single))
+                return
+            }
+            if (size > viewModel.IMAGE_MAX_BYTES) {
+                context.showShortToast(getString(R.string.text_file_too_large_max_5_mb))
+                return
+            }
+            viewModel.setPendingAttachment(uri, mime, name, size)
+            LOGS.d("Doc picked -> $uri $mime $name $size")
+        }
+    }
+
+    private fun convertHeicToJpeg(sourceUri: Uri, quality: Int): Uri? {
+        return try {
+            val resolver = requireContext().contentResolver
+            val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                val source = ImageDecoder.createSource(resolver, sourceUri)
+                ImageDecoder.decodeBitmap(source)
+            } else {
+                resolver.openInputStream(sourceUri)?.use { BitmapFactory.decodeStream(it) }
+            }
+
+            if (bitmap == null) return null
+
+            val outFile = File(requireContext().cacheDir, "heic_${System.currentTimeMillis()}.jpg")
+            FileOutputStream(outFile).use { fos ->
+                bitmap.compress(Bitmap.CompressFormat.JPEG, quality.coerceIn(0, 100), fos)
+            }
+            bitmap.recycle()
+
+            FileProvider.getUriForFile(
+                requireContext(),
+                "com.noisefit.luna.fileprovider",
+                outFile
+            )
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    private fun sendMessage(message: String) {
+        hideKeyboard()
+        viewModel.showSuggestedQuestions.value = false
+        if (message.isNotEmpty()) {
+            viewModel.addSentMessageWithPendingAttachment(message)
+            viewModel.addThinkingMessage()
+            binding.lytChatBox.chatEtx.setText("")
+            viewModel.askQuestionStream(message.replace("\n", ""))
+        }
+    }
+
+    private fun setSuggestedQuestions(suggestions: ArrayList<String>) {
+        binding.lytSuggestions.apply {
+            root.visible()
+            rvSuggestions.layoutManager =
+                LinearLayoutManager(rvSuggestions.context, LinearLayoutManager.HORIZONTAL, false)
+            rvSuggestions.adapter = SuggestionAdapter(suggestions) { ques ->
+                sendMessage(ques)
+            }
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // Restore previous soft input behavior
         previousSoftInputMode?.let { requireActivity().window.setSoftInputMode(it) }
         previousSoftInputMode = null
     }

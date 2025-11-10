@@ -2285,6 +2285,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_analyse_this">Analyse this</string>
     <string name="text_talk_with_life_os">Talk with Life OS</string>
     <string name="text_insight_more">That’s all we had for now. Anything specific you’re looking for?</string>
+    <string name="text_couldn_t_generate_a_response">Couldn’t generate a response.</string>
 
 
 </resources>

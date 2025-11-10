@@ -34,6 +34,14 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.TypefaceSpan
 import android.graphics.Color
 import com.bumptech.glide.Glide
+import android.app.Dialog
+import android.view.View
+import android.view.Window
+import android.view.WindowManager
+import android.widget.ImageView
+import android.graphics.drawable.ColorDrawable
+import android.content.Context
+
 // Removed standalone attachment bindings; sent message now renders attachment inline
 
 
@@ -226,6 +234,13 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
                     Glide.with(binding.cardImage.context)
                         .load(src)
                         .into(binding.ivImage)
+
+                    // Show full-screen preview on tap
+                    binding.cardImage.setOnClickListener {
+                        if (src.isNotEmpty()) {
+                            showImagePreviewDialog(binding.cardImage.context, src)
+                        }
+                    }
                 } else {
                     binding.cardImage.gone()
                     binding.lytDoc.visible()
@@ -278,12 +293,12 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
             data: ChatGptOverview.RetryMessage,
             position: Int
         ) {
-            binding.logo.loadImage(binding.logo.context, R.drawable.ic_chat_error)
+            //binding.logo.loadImage(binding.logo.context, R.drawable.ic_chat_error)
             binding.tvMessage.text = data.message
 
-            binding.tvRetry.setOnClickListener {
+            /*binding.tvRetry.setOnClickListener {
                 itemClickListener?.invoke(data, bindingAdapterPosition)
-            }
+            }*/
         }
     }
 
@@ -323,14 +338,12 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
         ) {
             binding.apply {
                 lottie.repeatCount = LottieDrawable.INFINITE
-                lottie.setAnimation(R.raw.anim_ai_thinking)
+                lottie.setAnimation(R.raw.anim_ai_thinking_2)
                 lottie.playAnimation()
             }
         }
 
     }
-
-    
 
 
 }
@@ -359,19 +372,23 @@ private object ChatMarkwonProvider {
                                 StyleSpan(Typeface.BOLD),
                                 AbsoluteSizeSpan(spToPx(ctx, 18), false)
                             )
+
                             2 -> arrayOf(
                                 StyleSpan(Typeface.BOLD),
                                 AbsoluteSizeSpan(spToPx(ctx, 16), false)
                             )
+
                             3 -> arrayOf(
                                 AbsoluteSizeSpan(spToPx(ctx, 14), false)
                             )
+
                             in 4..Int.MAX_VALUE -> arrayOf(
                                 AbsoluteSizeSpan(spToPx(ctx, 14), false),
                                 ForegroundColorSpan(
                                     Color.argb((0.7f * 255).toInt(), 255, 255, 255)
                                 )
                             )
+
                             else -> emptyArray()
                         }
                     }
@@ -380,7 +397,31 @@ private object ChatMarkwonProvider {
             .build()
     }
 }
+
 private fun spToPx(context: android.content.Context, sp: Int): Int {
     val scaledDensity = context.resources.displayMetrics.scaledDensity
     return (sp * scaledDensity).toInt()
+}
+
+private fun showImagePreviewDialog(context: Context, imageUrl: String) {
+    val dialog = Dialog(context)
+    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+    dialog.setContentView(com.noisefit.luna.R.layout.dialog_image_preview)
+    dialog.window?.apply {
+        setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
+        setBackgroundDrawable(ColorDrawable(android.graphics.Color.BLACK))
+        clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+    }
+
+    val imageView: ImageView = dialog.findViewById(com.noisefit.luna.R.id.ivPreview)
+    val close: View = dialog.findViewById(com.noisefit.luna.R.id.ivClose)
+
+    Glide.with(context)
+        .load(imageUrl)
+        .into(imageView)
+
+    close.setOnClickListener { dialog.dismiss() }
+    imageView.setOnClickListener { /* swallow to avoid dismiss */ }
+    dialog.setCancelable(true)
+    dialog.show()
 }

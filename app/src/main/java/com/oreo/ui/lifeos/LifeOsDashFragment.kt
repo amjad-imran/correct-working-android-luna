@@ -3,7 +3,6 @@ package com.oreo.ui.lifeos
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -80,14 +79,9 @@ class LifeOsDashFragment :
 
     override fun initListener() {
         binding.lytHeader.lytChatBox.root.setOnClickListener {
-            val sharedView = binding.lytHeader.lytChatBox.root
-            val transitionName = sharedView.transitionName
-            val extras = FragmentNavigatorExtras(sharedView to transitionName)
+            // Navigate without shared element extras
             findNavController().navigate(
-                R.id.action_navigation_lifeOsFragment_to_lifeOsChatFragment,
-                null,
-                null,
-                extras
+                R.id.action_navigation_lifeOsFragment_to_lifeOsChatFragment
             )
         }
         binding.lytHeader.lytChatBox.btnAction.setOnClickListener {

@@ -1279,13 +1279,44 @@
         android:name="com.oreo.ui.lifeos.LifeOsDashFragment">
         <action
             android:id="@+id/action_navigation_lifeOsFragment_to_lifeOsChatFragment"
-            app:destination="@id/lifeOsChatFragment" />
+            app:destination="@id/lifeOsChatFragment"
+            app:popUpTo="@id/navigation_lifeOsFragment" />
     </fragment>
     <fragment
         android:id="@+id/lifeOsChatFragment"
         android:name="com.oreo.ui.lifeos.LifeOsChatFragment"
         android:label="fragment_life_os_chat"
-        tools:layout="@layout/fragment_life_os_chat" />
+        tools:layout="@layout/fragment_life_os_chat" >
+        <action
+            android:id="@+id/action_lifeOsChatFragment_self"
+            app:destination="@id/lifeOsChatFragment"
+            app:popUpTo="@id/lifeOsChatFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="threadId"
+            app:argType="string" />
+
+        <argument
+            android:name="userMessage"
+            app:argType="string" />
+
+        <argument
+            android:name="aiTopic"
+            app:argType="com.oreo.ui.chatGpt.AITopics" />
+        <argument
+            android:name="meal"
+            android:defaultValue="@null"
+            app:argType="com.noisefit.data.model.AiMeals"
+            app:nullable="true" />
+        <argument
+            android:name="workout"
+            android:defaultValue="@null"
+            app:argType="com.noisefit.data.model.AiWorkout"
+            app:nullable="true" />
+        <argument
+            android:name="planType"
+            app:argType="com.oreo.ui.chatGpt.PlanType" />
+    </fragment>
     <fragment
         android:id="@+id/lifeOsInsightFrag"
         android:name="com.oreo.ui.lifeos.LifeOsInsightFrag"
