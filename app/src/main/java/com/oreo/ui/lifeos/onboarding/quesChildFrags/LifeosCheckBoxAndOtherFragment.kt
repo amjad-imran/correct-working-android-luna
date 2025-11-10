@@ -31,7 +31,7 @@ class LifeosCheckBoxAndOtherFragment : BaseFragment<FragmentLifeosCheckBoxAndOth
 
         val ansAdapter = AnswersWithCheckboxAdapter(
             onSelectionChanged = {
-
+                parentViewModel.saveSelectedItems(it)
             }
         )
 

@@ -1,6 +1,7 @@
 package com.noisefit.data.repository.abstraction
 
 import android.net.Uri
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.model.GoalModel
 import com.noisefit_commans.data.model.timeline.MealAiResponse
@@ -24,6 +25,7 @@ import com.oreo.data.model.circadian.CircadianResponseModel
 import com.noisefit_commans.data.model.timeline.TimelineScreenResponse
 import com.oreo.data.model.dataSharingVendorModels.DataSharingVendorListResponseItem
 import com.oreo.data.model.downloadMyData.DownloadMyDataResponse
+import com.oreo.data.model.lifeos.onboarding.OnBoardQuesGetResponse
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
@@ -111,4 +113,8 @@ interface UserRepository {
     suspend fun getDownloadMyDataPDF(days: Int): Flow<Resource<BaseApiResponse<DownloadMyDataResponse>>>
     suspend fun getDataSharingVendorList(): Flow<Resource<BaseApiResponse<List<DataSharingVendorListResponseItem>>>>
     suspend fun submitDataSharingVendorToggleState(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
+
+    suspend fun getLifeOsOnboardQuesAnsList(): Flow<Resource<BaseApiResponse<OnBoardQuesGetResponse>>>
+
+    suspend fun submitLifeOsOnboardQuesAnsList(req: JsonArray): Flow<Resource<BaseApiResponse<Any>>>
 }

@@ -10,7 +10,10 @@ data class Question(
     val answer: List<AnswerX>,
     val id: Int,
     val text: String,
-    val type: String
+    val type: String,
+
+    // for app
+    var isSavedByUser: Boolean ?= false
 ) : Parcelable
 
 @Parcelize

@@ -1,5 +1,6 @@
 package com.noisefit.data.remote.abstraction
 
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.model.AiMealResponse
 import com.noisefit.data.model.AiWorkoutResponse
@@ -78,6 +79,7 @@ import com.oreo.data.model.circadian.CircadianResponseModel
 import com.noisefit_commans.data.model.timeline.TimelineScreenResponse
 import com.oreo.data.model.dataSharingVendorModels.DataSharingVendorListResponseItem
 import com.oreo.data.model.downloadMyData.DownloadMyDataResponse
+import com.oreo.data.model.lifeos.onboarding.OnBoardQuesGetResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -863,6 +865,17 @@ interface NetworkService {
     suspend fun submitDataSharingVendorToggleState(
         @Url url: String,
         @Body req: JsonObject
+    ): BaseApiResponse<Any>
+
+    @GET
+    suspend fun getLifeOsOnboardQuesAnsList(
+        @Url url: String,
+    ): BaseApiResponse<OnBoardQuesGetResponse>
+
+    @POST
+    suspend fun submitLifeOsOnboardQuesAnsList(
+        @Url url: String,
+        @Body req: JsonArray
     ): BaseApiResponse<Any>
 
     /**

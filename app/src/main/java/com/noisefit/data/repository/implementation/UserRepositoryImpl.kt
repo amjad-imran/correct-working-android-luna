@@ -2,6 +2,7 @@ package com.noisefit.data.repository.implementation
 
 import android.net.Uri
 import com.google.gson.Gson
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.dataConverter.OfflineDataMapper
@@ -54,6 +55,7 @@ import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.dataSharingVendorModels.DataSharingVendorListResponseItem
 import com.oreo.data.model.downloadMyData.DownloadMyDataResponse
+import com.oreo.data.model.lifeos.onboarding.OnBoardQuesGetResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -747,6 +749,23 @@ class UserRepositoryImpl(
         return safeApiCallFlow(dispatcher) {
             remoteDataSource.submitDataSharingVendorToggleState(
                 "${BuildConfig.OREO_BASE_URL}/vendors/v2/customers/consent",
+                req
+            )
+        }
+    }
+
+    override suspend fun getLifeOsOnboardQuesAnsList(): Flow<Resource<BaseApiResponse<OnBoardQuesGetResponse>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.getLifeOsOnboardQuesAnsList(
+                "${BuildConfig.OREO_BASE_URL}/ai/v1/onboarding/questions"
+            )
+        }
+    }
+
+    override suspend fun submitLifeOsOnboardQuesAnsList(req: JsonArray): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.submitLifeOsOnboardQuesAnsList(
+                "${BuildConfig.OREO_BASE_URL}/ai/v1/onboarding/submit",
                 req
             )
         }

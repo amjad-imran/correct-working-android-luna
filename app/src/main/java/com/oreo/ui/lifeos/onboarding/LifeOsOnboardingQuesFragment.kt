@@ -6,6 +6,9 @@ import androidx.fragment.app.viewModels
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLifeOsOnboardingQuesBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.lifeos.onboarding.quesChildFrags.LifeosCheckBoxAndOtherFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,11 +24,63 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
     }
 
     override fun initListener() {
+        binding.tvSkip.setOnClickListener {
+            viewModel.switchToNextQuestion()
+        }
 
+        binding.ivBack.setOnClickListener {
+            viewModel.switchToPrevQuestion()
+        }
+
+        binding.btnNext.setOnClickListener {
+            viewModel.switchToPrevQuestion()
+        }
+    }
+
+    private fun setLinearProgressIndicatorUi() {
+        val totalQues = viewModel.onBoardResponseData?.questions?.size
+        val curProgress = viewModel.curQuesIndex?.plus(1)
+        if(totalQues==null || curProgress==null){
+            binding.tvSkip.gone()
+            return
+        }
+
+        binding.indicatorProgress.apply {
+            if(this.max != totalQues) max = totalQues
+            progress = curProgress
+        }
+        if(totalQues==curProgress){
+            binding.tvSkip.gone()
+        }else{
+            binding.tvSkip.visible()
+        }
+
+        if(curProgress==1){
+            binding.ivBack.gone()
+        }else{
+            binding.ivBack.visible()
+        }
     }
 
     override fun subscribeObservers() {
         viewModel.curQues.observe(this){
+
+            setLinearProgressIndicatorUi()
+
+            when(it.type){
+                "mcq-single" -> {
+
+                }
+
+                "mcq-multiple" -> {
+
+                }
+
+                "picker" -> {
+
+                }
+            }
+
             val childFrag = LifeosCheckBoxAndOtherFragment().apply {
                 this.arguments = Bundle().apply {
                     putParcelable("question", it)
@@ -36,6 +91,14 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
                 .replace(R.id.childFragmentContainer, childFrag)
                 .commit()
         }
+    }
+
+    private fun setSaveBtnState(){
+        val curQues = viewModel.curQues
+        if(curQues==null){
+            return
+        }
+
     }
 
 }
