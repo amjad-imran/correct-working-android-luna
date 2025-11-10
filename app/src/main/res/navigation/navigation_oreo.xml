@@ -1600,5 +1600,10 @@
             app:argType="com.oreo.data.model.dataSharingVendorModels.DataSharingVendorListResponseItem" />
 
     </fragment>
+    <fragment
+        android:id="@+id/lifeOsOnboardingQuesFragment"
+        android:name="com.oreo.ui.lifeos.onboarding.LifeOsOnboardingQuesFragment"
+        android:label="fragment_life_os_onboarding_ques"
+        tools:layout="@layout/fragment_life_os_onboarding_ques" />
 
 </navigation>
