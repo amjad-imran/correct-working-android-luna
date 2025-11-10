@@ -65,7 +65,58 @@ class LifeOsChatFragment :
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val editText = binding.lytChatBox.chatEtx
+        editText.requestFocus()
+        editText.setHint(getString(R.string.text_ask_anything))
+
+        setupImeAnimation()
+
+        registerAttachmentPickers()
+        setActionButtonState(editText.text?.toString().orEmpty())
+        viewModel.generateThreadId()
+
+        // Setup chat list
+        binding.rvChats.apply {
+            itemAnimator = null
+            layoutManager = LinearLayoutManager(context)
+            adapter = mAdapter
+        }
+        mAdapter.itemClickListener = { item, _ ->
+            if (item is ChatGptOverview.RetryMessage) {
+                viewModel.retryApi()
+            }
+        }
+
+        val showIme: () -> Unit = {
+            ViewCompat.getWindowInsetsController(view)?.show(WindowInsetsCompat.Type.ime())
+                ?: run {
+                    requireContext().getSystemService<InputMethodManager>()?.showSoftInput(
+                        editText,
+                        InputMethodManager.SHOW_IMPLICIT
+                    )
+                }
+        }
+
+        // No shared element transition; show IME immediately
+        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+        view.post {
+            showIme()
+            kickstartImeTranslation()
+        }
+    }
+
+
     override fun initListener() {
+        binding.ivBack.setOnClickListener {
+            navigateUpSafe()
+        }
+        binding.ivNewChat.setOnClickListener {
+            navigate(LifeOsDashFragmentDirections.actionNavigationLifeOsFragmentToLifeOsChatFragment())
+        }
+
         binding.lytChatBox.chatEtx.setOnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEND) {
                 val message = v.text?.toString()?.trim().orEmpty()
@@ -111,6 +162,11 @@ class LifeOsChatFragment :
     }
 
     override fun subscribeObservers() {
+        viewModel.showSuggestedQuestions.observe(this){
+
+        }
+
+
         viewModel.attachmentPreview.observe(this) { data ->
             val enteredText = binding.lytChatBox.chatEtx.text?.toString().orEmpty()
             setActionButtonState(enteredText)
@@ -128,7 +184,8 @@ class LifeOsChatFragment :
                     com.bumptech.glide.Glide.with(binding.root.context)
                         .load(data.uri)
                         .into(binding.lytChatBox.ivAttachmentImage)
-                } catch (_: Exception) {}
+                } catch (_: Exception) {
+                }
             } else {
                 binding.lytChatBox.ivAttachmentImage.gone()
                 binding.lytChatBox.lytAttachmentDoc.visible()
@@ -141,7 +198,9 @@ class LifeOsChatFragment :
 
         viewModel.scrollToBottom.observe(this) {
             it.getContent()?.let {
-                binding.rvChats.smoothScrollToPosition((binding.rvChats.adapter?.itemCount ?: 1) - 1)
+                binding.rvChats.smoothScrollToPosition(
+                    (binding.rvChats.adapter?.itemCount ?: 1) - 1
+                )
             }
         }
 
@@ -155,47 +214,6 @@ class LifeOsChatFragment :
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val editText = binding.lytChatBox.chatEtx
-        editText.requestFocus()
-
-        setupImeAnimation()
-
-        registerAttachmentPickers()
-        setActionButtonState(editText.text?.toString().orEmpty())
-        viewModel.generateThreadId()
-
-        // Setup chat list
-        binding.rvChats.apply {
-            itemAnimator = null
-            layoutManager = LinearLayoutManager(context)
-            adapter = mAdapter
-        }
-        mAdapter.itemClickListener = { item, _ ->
-            if (item is ChatGptOverview.RetryMessage) {
-                viewModel.retryApi()
-            }
-        }
-
-        val showIme: () -> Unit = {
-            ViewCompat.getWindowInsetsController(view)?.show(WindowInsetsCompat.Type.ime())
-                ?: run {
-                    requireContext().getSystemService<InputMethodManager>()?.showSoftInput(
-                        editText,
-                        InputMethodManager.SHOW_IMPLICIT
-                    )
-                }
-        }
-
-        // No shared element transition; show IME immediately
-        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
-        view.post {
-            showIme()
-            kickstartImeTranslation()
-        }
-    }
 
     private fun hideKeyboard() {
         val imm = requireContext().getSystemService<InputMethodManager>()
@@ -221,14 +239,20 @@ class LifeOsChatFragment :
 
         ViewCompat.setWindowInsetsAnimationCallback(
             root,
-            object : WindowInsetsAnimationCompat.Callback(WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_STOP) {
+            object :
+                WindowInsetsAnimationCompat.Callback(WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_STOP) {
                 override fun onProgress(
                     insets: WindowInsetsCompat,
                     runningAnimations: MutableList<WindowInsetsAnimationCompat>
                 ): WindowInsetsCompat {
                     val sysBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
                     val imeBottom = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
-                    root.setPadding(root.paddingLeft, root.paddingTop, root.paddingRight, sysBars.bottom + imeBottom)
+                    root.setPadding(
+                        root.paddingLeft,
+                        root.paddingTop,
+                        root.paddingRight,
+                        sysBars.bottom + imeBottom
+                    )
                     return insets
                 }
             }
@@ -247,7 +271,8 @@ class LifeOsChatFragment :
                 if (granted) {
                     launchCameraPicker()
                 } else {
-                    val showRationale = shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)
+                    val showRationale =
+                        shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)
                     if (showRationale) {
                         context.showShortToast(getString(R.string.text_camera_permission))
                     } else {
@@ -302,7 +327,10 @@ class LifeOsChatFragment :
         pickDocumentLauncher =
             registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
                 uri?.let {
-                    handlePickedUri(it, viewModel.getMimeType(requireContext(), it) ?: "application/octet-stream")
+                    handlePickedUri(
+                        it,
+                        viewModel.getMimeType(requireContext(), it) ?: "application/octet-stream"
+                    )
                 }
             }
     }
@@ -317,7 +345,10 @@ class LifeOsChatFragment :
                         false,
                         getString(R.string.text_go_to_settings),
                         object : com.noisefit_commans.data.BinaryActionCallback {
-                            override fun yes() { openAppSettings() }
+                            override fun yes() {
+                                openAppSettings()
+                            }
+
                             override fun no() {}
                         }
                     )
@@ -335,7 +366,8 @@ class LifeOsChatFragment :
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
             startActivity(intent)
-        } catch (_: Exception) { }
+        } catch (_: Exception) {
+        }
     }
 
     private fun launchCameraPicker() {

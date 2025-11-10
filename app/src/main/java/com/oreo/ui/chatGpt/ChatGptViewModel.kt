@@ -108,6 +108,8 @@ class ChatGptViewModel
     var pendingAttachment: AttachmentData? = null
     val attachmentPreview = MutableLiveData<AttachmentData?>(null)
 
+    val showSuggestedQuestions = MutableLiveData<Boolean>(false)
+
     fun setPendingAttachment(uri: Uri, mimeType: String, fileName: String, sizeBytes: Long) {
         val data = AttachmentData(uri, mimeType, fileName, sizeBytes)
         pendingAttachment = data
@@ -128,7 +130,7 @@ class ChatGptViewModel
             "Hello $userName, my name is Luna. I am an AI coach that can guide you with personalized nutritional advice, workout questions and to understand how to improve your health parameters tracked by the Luna ring. What do you need help with?"
     }
 
-    fun addTopData() {
+    fun addInitData() {
         if (workout != null || meal != null) {
             val messages = _chatGptOverview.value ?: ArrayList()
             if (workout != null) {
@@ -138,7 +140,8 @@ class ChatGptViewModel
                 messages.add(ChatGptOverview.HeaderMeal(meal!!))
             }
             _chatGptOverview.value = (messages)
-
+        }else{
+            showSuggestedQuestions.postValue(true)
         }
     }
 
@@ -252,16 +255,14 @@ class ChatGptViewModel
                             it.threadId?.let { id ->
                                 threadId = id
 
-                                addTopData()
-                                generateInitMessage()
+                                addInitData()
+                                //generateInitMessage()
                             }
                         }
                     }
                 }
             }
         }
-
-
     }
 
     fun generateInitMessage() {

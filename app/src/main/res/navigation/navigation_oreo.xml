@@ -1279,7 +1279,8 @@
         android:name="com.oreo.ui.lifeos.LifeOsDashFragment">
         <action
             android:id="@+id/action_navigation_lifeOsFragment_to_lifeOsChatFragment"
-            app:destination="@id/lifeOsChatFragment" />
+            app:destination="@id/lifeOsChatFragment"
+            app:popUpTo="@id/navigation_lifeOsFragment" />
     </fragment>
     <fragment
         android:id="@+id/lifeOsChatFragment"
