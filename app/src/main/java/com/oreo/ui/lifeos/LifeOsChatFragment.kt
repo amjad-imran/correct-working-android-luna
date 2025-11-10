@@ -27,6 +27,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.core.view.isVisible
 import com.oreo.ui.chatGpt.ChatGptAdapter
 import com.oreo.data.model.ChatGptOverview
 import com.noisefit.luna.R
@@ -40,6 +41,7 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.chatGpt.ATTACHMENT_KEY
 import com.oreo.ui.chatGpt.ChatGptViewModel
+import com.oreo.ui.chatGpt.SuggestionAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.FileOutputStream
@@ -162,8 +164,20 @@ class LifeOsChatFragment :
     }
 
     override fun subscribeObservers() {
-        viewModel.showSuggestedQuestions.observe(this){
-
+        viewModel.showSuggestedQuestions.observe(this){ show ->
+            if (show) {
+                setSuggestedQuestions(
+                    arrayListOf(
+                        "Teach me about my sleep score",
+                        "Create a diet plan for me",
+                        "Create a workout plan for me"
+                    )
+                )
+                binding.ivLogoTop.gone()
+            } else {
+                binding.ivLogoTop.visible()
+                binding.lytSuggestions.root.gone()
+            }
         }
 
 
@@ -468,11 +482,22 @@ class LifeOsChatFragment :
 
     private fun sendMessage(message: String) {
         hideKeyboard()
+        viewModel.showSuggestedQuestions.value = false
         if (message.isNotEmpty()) {
             viewModel.addSentMessageWithPendingAttachment(message)
             viewModel.addThinkingMessage()
             binding.lytChatBox.chatEtx.setText("")
             viewModel.askQuestionStream(message.replace("\n", ""))
+        }
+    }
+
+    private fun setSuggestedQuestions(suggestions: ArrayList<String>) {
+        binding.lytSuggestions.apply {
+            root.visible()
+            rvSuggestions.layoutManager = LinearLayoutManager(rvSuggestions.context, LinearLayoutManager.HORIZONTAL, false)
+            rvSuggestions.adapter = SuggestionAdapter(suggestions) { ques ->
+                sendMessage(ques)
+            }
         }
     }
 
