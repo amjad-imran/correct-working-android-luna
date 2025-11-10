@@ -74,10 +74,11 @@ class LifeOsChatFragment :
         editText.requestFocus()
         editText.setHint(getString(R.string.text_ask_anything))
 
+        setActionButtonState()
+
         setupImeAnimation()
 
         registerAttachmentPickers()
-        setActionButtonState(editText.text?.toString().orEmpty())
         viewModel.generateThreadId()
 
         // Setup chat list
@@ -102,7 +103,6 @@ class LifeOsChatFragment :
                 }
         }
 
-        // No shared element transition; show IME immediately
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
         view.post {
             showIme()
@@ -145,15 +145,19 @@ class LifeOsChatFragment :
         }
 
         binding.lytChatBox.chatEtx.addTextChangedListener(afterTextChanged = {
-            setActionButtonState(it?.toString().orEmpty())
+            setActionButtonState()
         })
 
         binding.lytChatBox.btnAction.setOnClickListener {
+            if (viewModel.fetchInProgress.value == true) {
+                viewModel.stopResponseGeneration()
+                return@setOnClickListener
+            }
             val text = binding.lytChatBox.chatEtx.text?.toString().orEmpty().trim()
             if (text.isEmpty() && viewModel.pendingAttachment == null) {
                 navigate(R.id.chatGptAudioFragment)
             } else {
-                val message = if (text.isEmpty()) getString(R.string.text_analyse_this) else text
+                val message = text.ifEmpty { getString(R.string.text_analyse_this) }
                 sendMessage(message)
             }
         }
@@ -164,11 +168,18 @@ class LifeOsChatFragment :
     }
 
     override fun subscribeObservers() {
-        viewModel.showSuggestedQuestions.observe(this){ show ->
+
+        viewModel.fetchInProgress.observe(this) {
+            setActionButtonState()
+        }
+
+        viewModel.showSuggestedQuestions.observe(this) { show ->
             if (show) {
                 setSuggestedQuestions(
                     arrayListOf(
                         "Teach me about my sleep score",
+                        "Create a diet plan for me",
+                        "Teach me about my sleep score jkdshf kjd gfkjsd fhk",
                         "Create a diet plan for me",
                         "Create a workout plan for me"
                     )
@@ -182,8 +193,8 @@ class LifeOsChatFragment :
 
 
         viewModel.attachmentPreview.observe(this) { data ->
-            val enteredText = binding.lytChatBox.chatEtx.text?.toString().orEmpty()
-            setActionButtonState(enteredText)
+            //val enteredText = binding.lytChatBox.chatEtx.text?.toString().orEmpty()
+            setActionButtonState()
             if (data == null) {
                 binding.lytChatBox.lytAttachment.gone()
                 return@observe
@@ -234,10 +245,30 @@ class LifeOsChatFragment :
         imm?.hideSoftInputFromWindow(view?.windowToken, 0)
     }
 
-    private fun setActionButtonState(text: String) {
+    private fun setActionButtonState() {
+        val text = binding.lytChatBox.chatEtx.text?.toString().orEmpty()
         val hasAttachment = viewModel.pendingAttachment != null
+
+        val isGenerating = viewModel.fetchInProgress.value ?: false
+
+        if (isGenerating) {
+            binding.lytChatBox.btnAction.setImageResource(R.drawable.ic_ai_stop)
+            binding.lytChatBox.btnAction.alpha = 1f
+            return
+        }
+
         val showSend = text.isNotEmpty() || hasAttachment
-        val res = if (showSend) R.drawable.ic_ai_send_message_2 else R.drawable.image_ai_mic
+
+        val res = R.drawable.image_ai_message_send_3
+
+        //val res = if (showSend) R.drawable.ic_ai_send_message_2 else R.drawable.image_ai_mic
+
+        if (showSend) {
+            binding.lytChatBox.btnAction.alpha = 1f
+        } else {
+            binding.lytChatBox.btnAction.alpha = 0.5f
+        }
+
         binding.lytChatBox.btnAction.setImageResource(res)
     }
 
@@ -494,7 +525,8 @@ class LifeOsChatFragment :
     private fun setSuggestedQuestions(suggestions: ArrayList<String>) {
         binding.lytSuggestions.apply {
             root.visible()
-            rvSuggestions.layoutManager = LinearLayoutManager(rvSuggestions.context, LinearLayoutManager.HORIZONTAL, false)
+            rvSuggestions.layoutManager =
+                LinearLayoutManager(rvSuggestions.context, LinearLayoutManager.HORIZONTAL, false)
             rvSuggestions.adapter = SuggestionAdapter(suggestions) { ques ->
                 sendMessage(ques)
             }

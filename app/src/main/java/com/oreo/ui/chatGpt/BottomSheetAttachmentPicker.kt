@@ -13,6 +13,9 @@ class BottomSheetAttachmentPicker :
         BottomSheetAttachmentPickerBinding::inflate
     ) {
     override fun initListener() {
+        binding.tvDismiss.setOnClickListener {
+            navigateUpSafe()
+        }
 
         binding.ivCamera.setOnClickListener {
             setFragmentResult(
