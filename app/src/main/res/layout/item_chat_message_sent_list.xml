@@ -20,8 +20,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardImage"
-            android:layout_width="138dp"
-            android:layout_height="92dp"
+            android:layout_width="260dp"
+            android:layout_height="142dp"
             android:layout_marginBottom="6dp"
             android:visibility="gone"
             tools:visibility="visible"
@@ -29,8 +29,8 @@
 
             <ImageView
                 android:id="@+id/ivImage"
-                android:layout_width="138dp"
-                android:layout_height="92dp"
+                android:layout_width="260dp"
+                android:layout_height="142dp"
                 android:scaleType="centerCrop" />
         </androidx.cardview.widget.CardView>
 
