@@ -63,6 +63,7 @@ import com.moengage.core.internal.utils.showToast
 import com.oreo.data.model.IrregularEventsChipModel
 import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.chatGpt.PlanType
+import com.oreo.ui.lifeos.LifeOsChatFragment
 import com.oreo.util.setSafeOnClickListener
 
 
@@ -177,17 +178,25 @@ class OreoReadinessFragment :
         }
     }
 
-    private fun handleNudges(){
+    private fun handleNudges() {
         val data = mainViewModel.localDataStore.getNudgeReadinessData()
         val list = ArrayList<Nudges>()
-        data?.cue1?.let { list.add(Nudges(
-            it.title ?: "",
-            it.description ?: ""
-        )) }
-        data?.cue2?.let { list.add(Nudges(
-            it.title ?: "",
-            it.description ?: ""
-        )) }
+        data?.cue1?.let {
+            list.add(
+                Nudges(
+                    it.title ?: "",
+                    it.description ?: ""
+                )
+            )
+        }
+        data?.cue2?.let {
+            list.add(
+                Nudges(
+                    it.title ?: "",
+                    it.description ?: ""
+                )
+            )
+        }
         setReadinessBannerViewPager(list)
     }
 
@@ -565,7 +574,7 @@ class OreoReadinessFragment :
 
     }
 
-    private fun displayWomansDayCard(){
+    private fun displayWomansDayCard() {
 
         binding.lytWomenDayAnnouncement.lytDietAnnc.apply {
             root.setBackgroundResource(R.drawable.bg_comfort_food_for_you_readiness)
@@ -644,7 +653,7 @@ class OreoReadinessFragment :
         }
 
     private fun handleComfortDietFoodClick(triple: Triple<Boolean, Boolean, Boolean>) {
-        if(triple.third) {
+        if (triple.third) {
             // Workout
             val workoutSetup = triple.first
             if (workoutSetup) {
@@ -662,18 +671,16 @@ class OreoReadinessFragment :
                     context.showShortToast(getString(R.string.text_luna_ai_message))
                     return
                 }
-                val (frag, bundle) = ChatGptFragment.getStartData(
-                    null,
-                    null,
-                    getString(R.string.text_build_me_a_workout_plan),
-                    null,
-                    AITopics.GENERAL,
+                val (frag, bundle) = LifeOsChatFragment.getStartData(
+                    threadId = null,
+                    userMessage = getString(R.string.text_build_me_a_workout_plan),
+                    title = null,
+                    aiTopic = AITopics.GENERAL,
                     planType = PlanType.WORKOUT
                 )
                 navigate(frag, bundle)
             }
-        }
-        else {
+        } else {
             // Diet
             val mealSetup = triple.second
             if (mealSetup) {
@@ -690,12 +697,11 @@ class OreoReadinessFragment :
                     context.showShortToast(getString(R.string.text_luna_ai_message))
                     return
                 }
-                val (frag, bundle) = ChatGptFragment.getStartData(
-                    null,
-                    null,
+                val (frag, bundle) = LifeOsChatFragment.getStartData(
+                    threadId = null,
                     getString(R.string.text_build_me_a_weekly_diet_plan),
-                    null,
-                    AITopics.GENERAL,
+                    title = null,
+                    aiTopic = AITopics.GENERAL,
                     planType = PlanType.DIET
                 )
                 navigate(frag, bundle)
@@ -927,15 +933,15 @@ class OreoReadinessFragment :
              }
          }*/
 
-        mainViewModel.nudgeReadinessData.observe(this){
+        mainViewModel.nudgeReadinessData.observe(this) {
             it.getContent()?.let {
-                if(mainViewModel.selectedDate.equals(LocalDate.now().toString())) {
+                if (mainViewModel.selectedDate.equals(LocalDate.now().toString())) {
                     handleNudges()
                 }
             }
         }
 
-        mViewModel.planState.observe(this){
+        mViewModel.planState.observe(this) {
             it.getContent()?.let { triple ->
                 handleComfortDietFoodClick(triple)
             }
@@ -1109,11 +1115,11 @@ class OreoReadinessFragment :
     }*/
 
     fun setAddEventLayout(mainData: OreoReadinessModel, readinessVal: Int) {
-        if (mainData.date.equals(LocalDate.now().toString()).not()){
+        if (mainData.date.equals(LocalDate.now().toString()).not()) {
             binding.divider111.root.gone()
             binding.lytIrregularityEvents.root.gone()
             return
-        }else{
+        } else {
             binding.divider111.root.visible()
             binding.lytIrregularityEvents.root.visible()
         }
@@ -1126,14 +1132,19 @@ class OreoReadinessFragment :
         binding.lytIrregularityEvents.tvCardTitle.text = addEventData.title
         binding.lytIrregularityEvents.tvCardDesc.text = addEventData.desc
 
-        addEventData.cardBg?.let { binding.lytIrregularityEvents.lytAddEventCard.setBackgroundResource(it) }
+        addEventData.cardBg?.let {
+            binding.lytIrregularityEvents.lytAddEventCard.setBackgroundResource(
+                it
+            )
+        }
 
         val category = addEventData.chipList
         for (item in category) {
             val mChip =
                 layoutInflater.inflate(R.layout.layout_add_event_readiness_chip, chipGrp, false)
 
-            mChip.background = mViewModel.getAddEventChipBg(item.key.equals("others"), addEventData.cardState)
+            mChip.background =
+                mViewModel.getAddEventChipBg(item.key.equals("others"), addEventData.cardState)
 
             val tvTxt = mChip.findViewById<TextView>(R.id.tvTitle)
             tvTxt.text = item.displayName
@@ -1151,20 +1162,17 @@ class OreoReadinessFragment :
                             "editData" to null
                         )
                     )
-                }
-                else if(mChip.tag.toString().equals("sleep")){
+                } else if (mChip.tag.toString().equals("sleep")) {
                     val timelineData = mainViewModel.localDataStore.getTimelineActivitiesData()
-                    val mostRecentSleep = timelineData?.
-                    find { it.event.equals("sleep") }
-                    if(mostRecentSleep==null){
-                        val mostRecentNap = timelineData?.
-                        find { it.event.equals("nap") }
-                        if(mostRecentNap==null) {
+                    val mostRecentSleep = timelineData?.find { it.event.equals("sleep") }
+                    if (mostRecentSleep == null) {
+                        val mostRecentNap = timelineData?.find { it.event.equals("nap") }
+                        if (mostRecentNap == null) {
                             showToast(
                                 requireContext(),
                                 getString(R.string.text_something_went_wrong)
                             )
-                        }else{
+                        } else {
                             mostRecentNap.canBeEditedOrDeleted = 1
                             navigate(
                                 R.id.addActivityTimelineFragment,
@@ -1176,7 +1184,7 @@ class OreoReadinessFragment :
                                 )
                             )
                         }
-                    }else{
+                    } else {
                         mostRecentSleep.canBeEditedOrDeleted = 1
                         navigate(
                             R.id.addActivityTimelineFragment,
@@ -1188,14 +1196,13 @@ class OreoReadinessFragment :
                             )
                         )
                     }
-                }
-                else{
+                } else {
                     val curKey = mChip.tag.toString()
-                    val lunaOpt = if(curKey.equals("recovery") || curKey.equals("supplements")){
+                    val lunaOpt = if (curKey.equals("recovery") || curKey.equals("supplements")) {
                         tvTxt.text.toString()
                         /*category.find { tvTxt.text.toString().equals(it.displayName) }?.actualName
                             ?: ""*/
-                    }else{
+                    } else {
                         null
                     }
                     navigate(
@@ -1533,9 +1540,9 @@ class OreoReadinessFragment :
         if (it.date.equals(LocalDate.now().toString())) {
             handleNudges()
             mViewModel.loadAlertsData()
-            if(mViewModel.getLdwReadinessData()){
+            if (mViewModel.getLdwReadinessData()) {
                 displayWomansDayCard()
-            }else{
+            } else {
                 binding.dividerWomenDayAnnouncement.root.gone()
                 binding.lytWomenDayAnnouncement.root.gone()
             }

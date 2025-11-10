@@ -28,6 +28,9 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.navArgs
+import com.noisefit.data.model.AiMeals
+import com.noisefit.data.model.AiWorkout
 import com.oreo.ui.chatGpt.ChatGptAdapter
 import com.oreo.data.model.ChatGptOverview
 import com.noisefit.luna.R
@@ -39,8 +42,10 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
+import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ATTACHMENT_KEY
 import com.oreo.ui.chatGpt.ChatGptViewModel
+import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.chatGpt.SuggestionAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
@@ -53,11 +58,36 @@ class LifeOsChatFragment :
     private var previousSoftInputMode: Int? = null
     private val viewModel: ChatGptViewModel by viewModels()
     private val mAdapter: ChatGptAdapter by lazy { ChatGptAdapter() }
+    private val args: LifeOsChatFragmentArgs by navArgs()
 
     private lateinit var takePictureLauncher: ActivityResultLauncher<Uri>
     private lateinit var pickImageLauncher: ActivityResultLauncher<String>
     private lateinit var pickDocumentLauncher: ActivityResultLauncher<Array<String>>
     private lateinit var requestCameraPermission: ActivityResultLauncher<String>
+
+
+    companion object {
+        fun getStartData(
+            threadId: String?,
+            userMessage: String?,
+            title: String?,
+            aiTopic: AITopics,
+            meal: AiMeals? = null,
+            workout: AiWorkout? = null,
+            planType: PlanType? = null,
+        ): Pair<Int, Bundle?> {
+            return Pair(R.id.lifeOsChatFragment, Bundle().apply {
+                putString("threadId", threadId ?: "")
+                putString("userMessage", userMessage ?: "")
+                putString("title", title ?: "")
+                putSerializable("aiTopic", aiTopic)
+                putSerializable("planType", planType ?: PlanType.NONE)
+                putParcelable("meal", meal)
+                putParcelable("workout", workout)
+            })
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,6 +102,12 @@ class LifeOsChatFragment :
         val editText = binding.lytChatBox.chatEtx
         editText.requestFocus()
         editText.setHint(getString(R.string.text_ask_anything))
+
+        viewModel.threadId = args.threadId
+        viewModel.userMessage = args.userMessage
+        viewModel.meal = args.meal
+        viewModel.workout = args.workout
+        viewModel.planType = args.planType
 
         setActionButtonState()
 
@@ -117,7 +153,7 @@ class LifeOsChatFragment :
             viewModel.retryApi()
         }
         binding.ivNewChat.setOnClickListener {
-            navigate(LifeOsDashFragmentDirections.actionNavigationLifeOsFragmentToLifeOsChatFragment())
+            //navigate(LifeOsChatFragmentDirections.actionLifeOsChatFragmentSelf())
         }
 
         binding.lytChatBox.chatEtx.setOnEditorActionListener { v, actionId, _ ->
