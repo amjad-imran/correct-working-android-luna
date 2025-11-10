@@ -2,6 +2,8 @@ package com.oreo.ui.chatGpt
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Matrix
+import androidx.exifinterface.media.ExifInterface
 import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.core.content.FileProvider
@@ -784,16 +786,45 @@ class ChatGptViewModel
             }
 
             val opts = BitmapFactory.Options().apply { inSampleSize = inSample.coerceAtLeast(1) }
-            val bitmap = resolver.openInputStream(sourceUri)
+            val originalBitmap = resolver.openInputStream(sourceUri)
                 ?.use { BitmapFactory.decodeStream(it, null, opts) }
                 ?: return null
+
+            val orientedBitmap = try {
+                val orientation = resolver.openInputStream(sourceUri)?.use { input ->
+                    ExifInterface(input).getAttributeInt(
+                        ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_NORMAL
+                    )
+                } ?: ExifInterface.ORIENTATION_NORMAL
+
+                val matrix: Matrix? = when (orientation) {
+                    ExifInterface.ORIENTATION_ROTATE_90 -> Matrix().apply { postRotate(90f) }
+                    ExifInterface.ORIENTATION_ROTATE_180 -> Matrix().apply { postRotate(180f) }
+                    ExifInterface.ORIENTATION_ROTATE_270 -> Matrix().apply { postRotate(270f) }
+                    ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> Matrix().apply { preScale(-1f, 1f) }
+                    ExifInterface.ORIENTATION_FLIP_VERTICAL -> Matrix().apply { preScale(1f, -1f) }
+                    ExifInterface.ORIENTATION_TRANSPOSE -> Matrix().apply { postRotate(90f); preScale(-1f, 1f) }
+                    ExifInterface.ORIENTATION_TRANSVERSE -> Matrix().apply { postRotate(270f); preScale(-1f, 1f) }
+                    else -> null
+                }
+
+                if (matrix != null) {
+                    Bitmap.createBitmap(
+                        originalBitmap, 0, 0, originalBitmap.width, originalBitmap.height, matrix, true
+                    )
+                } else originalBitmap
+            } catch (_: Exception) { originalBitmap }
 
             val outFile =
                 File(context.cacheDir, "compressed_${System.currentTimeMillis()}.jpg")
             FileOutputStream(outFile).use { fos ->
-                bitmap.compress(Bitmap.CompressFormat.JPEG, quality.coerceIn(0, 100), fos)
+                orientedBitmap.compress(Bitmap.CompressFormat.JPEG, quality.coerceIn(0, 100), fos)
             }
-            bitmap.recycle()
+            if (orientedBitmap !== originalBitmap) {
+                originalBitmap.recycle()
+            }
+            orientedBitmap.recycle()
 
             FileProvider.getUriForFile(
                 context,
