@@ -91,6 +91,21 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:visibility="visible" />
 
+
+    <Button
+        android:id="@+id/btnRetry"
+        style="@style/SecondaryButtonStyle"
+        android:layout_width="wrap_content"
+        android:text="@string/text_retry"
+        app:backgroundTint="@null"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/lytChatBox"
+        android:drawableLeft="@drawable/ic_retry_chat"/>
+
     <include
         android:id="@+id/lytChatBox"
         layout="@layout/layout_ai_chat_box"

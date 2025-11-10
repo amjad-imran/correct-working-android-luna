@@ -66,6 +66,7 @@ class ChatGptViewModel
     val resourceProvider: ResourcesProvider,
 ) : BaseViewModel() {
 
+    var cameraUri: Uri? = null
 
     val IMAGE_MAX_BYTES = 5 * 1024 * 1024 // 5 MB
     val DEFAULT_IMAGE_QUALITY = 80 // JPEG quality (0-100)
@@ -97,6 +98,7 @@ class ChatGptViewModel
     var planType: PlanType? = null
 
     val fetchInProgress = MutableLiveData<Boolean>()
+    val showRetry = MutableLiveData<Boolean>()
     private val sourcePattern = "【\\d+:\\d+†[^]]+】"
 
 
@@ -140,7 +142,7 @@ class ChatGptViewModel
                 messages.add(ChatGptOverview.HeaderMeal(meal!!))
             }
             _chatGptOverview.value = (messages)
-        }else{
+        } else {
             showSuggestedQuestions.postValue(true)
         }
     }
@@ -169,6 +171,7 @@ class ChatGptViewModel
     }
 
     fun addThinkingMessage() {
+        showRetry.postValue(false)
         val messages = _chatGptOverview.value ?: ArrayList()
         messages.removeAll {
             it is ChatGptOverview.ThinkingMessage || it is ChatGptOverview.RetryMessage
@@ -180,6 +183,7 @@ class ChatGptViewModel
 
     fun addReceivedMessage(message: String, uuid: UUID = UUID.randomUUID()) {
         viewModelScope.launch(Dispatchers.Main) {
+            showRetry.postValue(false)
             val messages = _chatGptOverview.value ?: ArrayList()
             messages.removeAll {
                 it is ChatGptOverview.ThinkingMessage || it is ChatGptOverview.RetryMessage
@@ -201,6 +205,7 @@ class ChatGptViewModel
                 it is ChatGptOverview.ThinkingMessage || it is ChatGptOverview.RetryMessage
             }
             messages.add(ChatGptOverview.RetryMessage(message))
+            showRetry.postValue(true)
             _chatGptOverview.postValue(messages)
         }
     }
@@ -208,6 +213,7 @@ class ChatGptViewModel
     fun removeThinkingState() {
         viewModelScope.launch(Dispatchers.IO) {
             val messages = _chatGptOverview.value ?: ArrayList()
+            showRetry.postValue(false)
             messages.removeAll {
                 it is ChatGptOverview.ThinkingMessage || it is ChatGptOverview.RetryMessage
             }
@@ -386,10 +392,7 @@ class ChatGptViewModel
                     videoState.postValue(false)
                     if (responseBuilder.isEmpty()) {
                         addErrorState(
-                            String.format(
-                                resourceProvider.getString(R.string.text_ai_error_message),
-                                userName ?: ""
-                            )
+                            resourceProvider.getString(R.string.text_couldn_t_generate_a_response)
                         )
                         GlobalScope.launch(Dispatchers.IO) {
                             syncRepository.logErrorServer(
@@ -578,7 +581,8 @@ class ChatGptViewModel
                 if (it.sender.equals("assistant", true)) {
                     tempMessage.add(ChatGptOverview.ReceivedMessage(it.message ?: ""))
                 } else if (it.sender.equals("user", true)) {
-                    val metaUrl = it.metadata?.takeIf { url -> url.isNotBlank() } ?: it.attachmentUrl
+                    val metaUrl =
+                        it.metadata?.takeIf { url -> url.isNotBlank() } ?: it.attachmentUrl
                     val (attSrc, attMime, attName) = if (!metaUrl.isNullOrBlank()) {
                         val parsed = parseAttachmentFromUrl(metaUrl)
                         Triple(parsed.first, parsed.second, parsed.third)

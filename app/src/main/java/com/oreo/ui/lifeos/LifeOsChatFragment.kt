@@ -54,7 +54,6 @@ class LifeOsChatFragment :
     private val viewModel: ChatGptViewModel by viewModels()
     private val mAdapter: ChatGptAdapter by lazy { ChatGptAdapter() }
 
-    private var cameraUri: Uri? = null
     private lateinit var takePictureLauncher: ActivityResultLauncher<Uri>
     private lateinit var pickImageLauncher: ActivityResultLauncher<String>
     private lateinit var pickDocumentLauncher: ActivityResultLauncher<Array<String>>
@@ -114,6 +113,9 @@ class LifeOsChatFragment :
         binding.ivBack.setOnClickListener {
             navigateUpSafe()
         }
+        binding.btnRetry.setOnClickListener {
+            viewModel.retryApi()
+        }
         binding.ivNewChat.setOnClickListener {
             navigate(LifeOsDashFragmentDirections.actionNavigationLifeOsFragmentToLifeOsChatFragment())
         }
@@ -130,7 +132,8 @@ class LifeOsChatFragment :
             try {
                 ViewCompat.getWindowInsetsController(requireView())
                     ?.hide(WindowInsetsCompat.Type.ime())
-            } catch (_: Exception) {}
+            } catch (_: Exception) {
+            }
             binding.lytChatBox.chatEtx.clearFocus()
             hideKeyboard()
             resetImePadding()
@@ -175,7 +178,13 @@ class LifeOsChatFragment :
     }
 
     override fun subscribeObservers() {
-
+        viewModel.showRetry.observe(this) {
+            if(it){
+                binding.btnRetry.visible()
+            }else{
+                binding.btnRetry.gone()
+            }
+        }
         viewModel.fetchInProgress.observe(this) {
             setActionButtonState()
         }
@@ -356,7 +365,7 @@ class LifeOsChatFragment :
 
         takePictureLauncher =
             registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-                val uri = cameraUri
+                val uri = viewModel.cameraUri
                 if (success && uri != null) {
                     handlePickedUri(uri, "image/jpeg")
                 }
@@ -460,7 +469,7 @@ class LifeOsChatFragment :
             "com.noisefit.luna.fileprovider",
             imageFile
         )
-        cameraUri = uri
+        viewModel.cameraUri = uri
         takePictureLauncher.launch(uri)
     }
 

@@ -293,12 +293,12 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
             data: ChatGptOverview.RetryMessage,
             position: Int
         ) {
-            binding.logo.loadImage(binding.logo.context, R.drawable.ic_chat_error)
+            //binding.logo.loadImage(binding.logo.context, R.drawable.ic_chat_error)
             binding.tvMessage.text = data.message
 
-            binding.tvRetry.setOnClickListener {
+            /*binding.tvRetry.setOnClickListener {
                 itemClickListener?.invoke(data, bindingAdapterPosition)
-            }
+            }*/
         }
     }
 
@@ -338,7 +338,7 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
         ) {
             binding.apply {
                 lottie.repeatCount = LottieDrawable.INFINITE
-                lottie.setAnimation(R.raw.anim_ai_thinking)
+                lottie.setAnimation(R.raw.anim_ai_thinking_2)
                 lottie.playAnimation()
             }
         }
