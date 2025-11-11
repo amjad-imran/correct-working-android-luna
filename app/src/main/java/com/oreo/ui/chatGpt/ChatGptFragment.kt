@@ -168,9 +168,9 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                 this.rvSuggestions.context,
                 LinearLayoutManager.HORIZONTAL, false
             )
-            this.rvSuggestions.adapter = SuggestionAdapter(suggestions) {
+            /*this.rvSuggestions.adapter = SuggestionAdapter(suggestions) {
                 sendMessage(it)
-            }
+            }*/
         }
     }
 

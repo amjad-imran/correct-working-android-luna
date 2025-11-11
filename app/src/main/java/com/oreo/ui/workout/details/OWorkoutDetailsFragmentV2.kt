@@ -57,6 +57,7 @@ import com.oreo.data.model.health.Nudges
 import com.oreo.ui.activity.all.DELETE_WORKOUT_REQUEST_KEY
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.custom.OnHeartRateChartClickAction
+import com.oreo.ui.lifeos.LifeOsChatFragment
 import com.oreo.ui.readiness.NudgeBannerListener
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -431,9 +432,14 @@ class OWorkoutDetailsFragmentV2 :
                 setClickListener(object :
                     NudgeBannerListener {
                     override fun onAiClicked() {
+                        val (frag, bundle) = LifeOsChatFragment.getStartData(
+                            threadId = null,
+                            userMessage = null,
+                            title = null,
+                            aiTopic = AITopics.WORKOUT
+                        )
                         navigate(
-                            R.id.aiTopQuestionsFragment,
-                            bundleOf("aiTopic" to AITopics.WORKOUT)
+                            frag, bundle
                         )
                     }
                 }

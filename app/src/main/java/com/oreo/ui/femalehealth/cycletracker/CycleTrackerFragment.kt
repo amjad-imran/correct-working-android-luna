@@ -14,6 +14,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
@@ -955,9 +956,18 @@ class CycleTrackerFragment :
                                     this["source"] = "cycle"
                                 }
                             )
-                            navigate(
+                            /*navigate(
                                 R.id.aiTopQuestionsFragment,
                                 bundleOf("aiTopic" to AITopics.MENSTRUAL_HEALTH)
+                            )*/
+                            val (frag, bundle) = LifeOsChatFragment.getStartData(
+                                threadId = null,
+                                userMessage = null,
+                                title = null,
+                                aiTopic = AITopics.MENSTRUAL_HEALTH
+                            )
+                            navigate(
+                                frag, bundle
                             )
                         }
                     }

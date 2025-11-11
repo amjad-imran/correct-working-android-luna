@@ -12,6 +12,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLifeOsDashBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.dpToPixel
+import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.chatGpt.audio.AudioAiFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -79,9 +80,14 @@ class LifeOsDashFragment :
 
     override fun initListener() {
         binding.lytHeader.lytChatBox.root.setOnClickListener {
-            // Navigate without shared element extras
+            val (frag, bundle) = LifeOsChatFragment.getStartData(
+                threadId = null,
+                userMessage = null,
+                title = null,
+                aiTopic = AITopics.GENERAL
+            )
             findNavController().navigate(
-                R.id.action_navigation_lifeOsFragment_to_lifeOsChatFragment
+                frag, bundle
             )
         }
         binding.lytHeader.lytChatBox.btnAction.setOnClickListener {

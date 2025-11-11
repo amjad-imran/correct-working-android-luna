@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -40,6 +41,7 @@ import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.Stress
 import com.oreo.data.model.StressNudge
 import com.oreo.ui.chatGpt.AITopics
+import com.oreo.ui.lifeos.LifeOsChatFragment
 import com.oreo.ui.readiness.NudgeBannerListener
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.stress.banner.OreoStressBannerFragment
@@ -645,9 +647,18 @@ class OStressDataMovementFragment :
                                     this["source"] = "stress"
                                 }
                             )
-                            navigate(
+                            /*navigate(
                                 R.id.aiTopQuestionsFragment,
                                 bundleOf("aiTopic" to AITopics.STRESS)
+                            )*/
+                            val (frag, bundle) = LifeOsChatFragment.getStartData(
+                                threadId = null,
+                                userMessage = null,
+                                title = null,
+                                aiTopic = AITopics.STRESS
+                            )
+                            navigate(
+                                frag, bundle
                             )
                         }
                     }

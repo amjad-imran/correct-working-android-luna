@@ -48,6 +48,8 @@ import android.content.Context
 class ChatGptAdapter :
     RecyclerView.Adapter<ChatGptViewItemsHolder>() {
 
+    var itemClickListener: ChatClickListener? = null
+
     private val asyncListDiffer =
         AsyncListDiffer(this, object : DiffUtil.ItemCallback<ChatGptOverview>() {
             override fun areItemsTheSame(
@@ -96,8 +98,8 @@ class ChatGptAdapter :
 //            recyclerView.scrollToPosition(currentList.size - 1)
 //        }
 //    }
-    var itemClickListener: ((item: ChatGptOverview, position: Int) -> Unit)? =
-        null
+    /*var itemClickListener: ((item: ChatGptOverview, position: Int) -> Unit)? =
+        null*/
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -214,8 +216,7 @@ class ChatGptAdapter :
 sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    var itemClickListener: ((item: ChatGptOverview, position: Int) -> Unit)? =
-        null
+    var itemClickListener: ChatClickListener?=null
 
     class ChatMessageSentViewHolder(private val binding: ItemChatMessageSentListBinding) :
         ChatGptViewItemsHolder(binding) {
@@ -324,6 +325,17 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
 
                 markwon.setMarkdown(tvMessage, data.message)
                 //logo.visible()
+
+                binding.ivCopy.setOnClickListener {
+                    itemClickListener?.onCopyMessage()
+                }
+                binding.ivLike.setOnClickListener {
+                    itemClickListener?.onLikeMessage()
+
+                }
+                binding.ivDislike.setOnClickListener {
+                    itemClickListener?.onDislikeMessage()
+                }
             }
         }
 
@@ -424,4 +436,11 @@ private fun showImagePreviewDialog(context: Context, imageUrl: String) {
     imageView.setOnClickListener { /* swallow to avoid dismiss */ }
     dialog.setCancelable(true)
     dialog.show()
+}
+
+
+interface ChatClickListener {
+    fun onCopyMessage()
+    fun onLikeMessage()
+    fun onDislikeMessage()
 }

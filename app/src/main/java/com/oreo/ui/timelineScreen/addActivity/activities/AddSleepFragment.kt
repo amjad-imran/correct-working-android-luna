@@ -30,6 +30,7 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.OAddSleep
 import com.oreo.ui.chatGpt.AITopics
+import com.oreo.ui.lifeos.LifeOsChatFragment
 import com.oreo.ui.sleep2.add.OAddSleepViewModel
 import com.oreo.ui.timelineScreen.addActivity.AddActivityItemsEnum
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
@@ -102,14 +103,15 @@ class AddSleepFragment :
             }
             else{
 
-                if (sharedViewModel.localDataStore.isAiChatSplashShown()) {
-                    navigate(
-                        R.id.aiTopQuestionsFragment,
-                        bundleOf("aiTopic" to AITopics.SLEEP)
-                    )
-                } else {
-                    navigate(R.id.aiChatOnboardFragment)
-                }
+                val (frag, bundle) = LifeOsChatFragment.getStartData(
+                    threadId = null,
+                    userMessage = null,
+                    title = null,
+                    aiTopic = AITopics.GENERAL
+                )
+                navigate(
+                    frag, bundle
+                )
 
             }
         }

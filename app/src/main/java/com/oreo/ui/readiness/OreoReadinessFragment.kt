@@ -59,6 +59,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import javax.inject.Inject
 import androidx.core.graphics.toColorInt
+import androidx.navigation.findNavController
 import com.moengage.core.internal.utils.showToast
 import com.oreo.data.model.IrregularEventsChipModel
 import com.oreo.ui.chatGpt.ChatGptFragment
@@ -225,9 +226,18 @@ class OreoReadinessFragment :
                             )
 
 
-                            navigate(
+                            /*navigate(
                                 R.id.aiTopQuestionsFragment,
                                 bundleOf("aiTopic" to AITopics.READINESS)
+                            )*/
+                            val (frag, bundle) = LifeOsChatFragment.getStartData(
+                                threadId = null,
+                                userMessage = null,
+                                title = null,
+                                aiTopic = AITopics.READINESS
+                            )
+                            navigate(
+                                frag, bundle
                             )
                         }
                     }

@@ -44,6 +44,7 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ATTACHMENT_KEY
+import com.oreo.ui.chatGpt.ChatClickListener
 import com.oreo.ui.chatGpt.ChatGptViewModel
 import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.chatGpt.SuggestionAdapter
@@ -64,6 +65,13 @@ class LifeOsChatFragment :
     private lateinit var pickImageLauncher: ActivityResultLauncher<String>
     private lateinit var pickDocumentLauncher: ActivityResultLauncher<Array<String>>
     private lateinit var requestCameraPermission: ActivityResultLauncher<String>
+
+
+    private val suggestionsAdapter : SuggestionAdapter by lazy {
+        SuggestionAdapter() { ques ->
+            sendMessage(ques)
+        }
+    }
 
 
     companion object {
@@ -109,9 +117,12 @@ class LifeOsChatFragment :
         viewModel.workout = args.workout
         viewModel.planType = args.planType
 
+        viewModel.getAiTopQuestions(args.aiTopic)
+
         setActionButtonState()
 
         setupImeAnimation()
+        setSuggestedQuestionsRecycler()
 
         registerAttachmentPickers()
         viewModel.generateThreadId()
@@ -121,10 +132,19 @@ class LifeOsChatFragment :
             layoutManager = LinearLayoutManager(context)
             adapter = mAdapter
         }
-        mAdapter.itemClickListener = { item, _ ->
-            if (item is ChatGptOverview.RetryMessage) {
-                viewModel.retryApi()
+        mAdapter.itemClickListener =object : ChatClickListener {
+            override fun onCopyMessage() {
+
             }
+
+            override fun onLikeMessage() {
+
+            }
+
+            override fun onDislikeMessage() {
+
+            }
+
         }
 
         val showIme: () -> Unit = {
@@ -214,6 +234,9 @@ class LifeOsChatFragment :
     }
 
     override fun subscribeObservers() {
+        viewModel.questions.observe(this){
+            suggestionsAdapter.setDataSet(it)
+        }
         viewModel.showRetry.observe(this) {
             if(it){
                 binding.btnRetry.visible()
@@ -227,7 +250,9 @@ class LifeOsChatFragment :
 
         viewModel.showSuggestedQuestions.observe(this) { show ->
             if (show) {
-                setSuggestedQuestions(
+                binding.lytSuggestions.root.visible()
+
+                /*setSuggestedQuestions(
                     arrayListOf(
                         "Teach me about my sleep score",
                         "Create a diet plan for me",
@@ -235,7 +260,7 @@ class LifeOsChatFragment :
                         "Create a diet plan for me",
                         "Create a workout plan for me"
                     )
-                )
+                )*/
                 binding.ivLogo.visible()
                 binding.ivLogoTop.gone()
             } else {
@@ -595,14 +620,11 @@ class LifeOsChatFragment :
         }
     }
 
-    private fun setSuggestedQuestions(suggestions: ArrayList<String>) {
+    private fun setSuggestedQuestionsRecycler() {
         binding.lytSuggestions.apply {
-            root.visible()
             rvSuggestions.layoutManager =
                 LinearLayoutManager(rvSuggestions.context, LinearLayoutManager.HORIZONTAL, false)
-            rvSuggestions.adapter = SuggestionAdapter(suggestions) { ques ->
-                sendMessage(ques)
-            }
+            rvSuggestions.adapter = suggestionsAdapter
         }
     }
 

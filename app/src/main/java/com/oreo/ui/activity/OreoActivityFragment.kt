@@ -14,6 +14,7 @@ import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
@@ -45,6 +46,7 @@ import com.oreo.ui.calendar.SELECTED_DATE
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.custom.OnDayTimeClickAction
 import com.oreo.ui.custom.ScrollListener
+import com.oreo.ui.lifeos.LifeOsChatFragment
 import com.oreo.ui.readiness.NudgeBannerListener
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.sleep.scoredetails.ClickViewType
@@ -221,10 +223,20 @@ class OreoActivityFragment :
                                 hashMapOf("source" to "activity")
                             )
 
+                            val (frag, bundle) = LifeOsChatFragment.getStartData(
+                                threadId = null,
+                                userMessage = null,
+                                title = null,
+                                aiTopic = AITopics.ACTIVITY
+                            )
                             navigate(
+                                frag, bundle
+                            )
+
+                            /*navigate(
                                 R.id.aiTopQuestionsFragment,
                                 bundleOf("aiTopic" to AITopics.ACTIVITY)
-                            )
+                            )*/
                         }
                     }
                 )

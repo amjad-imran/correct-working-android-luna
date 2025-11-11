@@ -31,12 +31,14 @@ import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChatGptOverview
 import com.oreo.data.model.ai.ChatMessage
+import com.oreo.data.model.ai.TopQuestions
 import com.oreo.data.repository.abstraction.ErrorServerCases
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import okhttp3.Call
@@ -87,6 +89,8 @@ class ChatGptViewModel
         get() = _scrollToBottom
 
     val threadTitle = MutableLiveData<String>()
+    val questions = MutableLiveData<List<TopQuestions>>(arrayListOf())
+
 
     val aiGeneratedPlanSaved = MutableLiveData<Event<Boolean>>()
     val showSavePlan = MutableLiveData<Event<AiPlanType>>()
@@ -112,7 +116,7 @@ class ChatGptViewModel
     var pendingAttachment: AttachmentData? = null
     val attachmentPreview = MutableLiveData<AttachmentData?>(null)
 
-    val showSuggestedQuestions = MutableLiveData<Boolean>(false)
+    val showSuggestedQuestions = MutableLiveData<Boolean>()
 
     fun setPendingAttachment(uri: Uri, mimeType: String, fileName: String, sizeBytes: Long) {
         val data = AttachmentData(uri, mimeType, fileName, sizeBytes)
@@ -133,6 +137,48 @@ class ChatGptViewModel
         initMessage =
             "Hello $userName, my name is Luna. I am an AI coach that can guide you with personalized nutritional advice, workout questions and to understand how to improve your health parameters tracked by the Luna ring. What do you need help with?"
     }
+
+    fun getAiTopQuestions(aiTopic: AITopics) {
+        viewModelScope.launch {
+            oreoDeviceRepository.getAiTopQuestions(aiTopic).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getAiTopQuestions(aiTopic)
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            questions.value = it.questions ?: arrayListOf()
+                            //showHistoryIcon.value = it.hasHistory
+                        }
+                    }
+                }
+            }
+        }
+
+
+    }
+
 
     fun addInitData() {
         if (workout != null || meal != null) {

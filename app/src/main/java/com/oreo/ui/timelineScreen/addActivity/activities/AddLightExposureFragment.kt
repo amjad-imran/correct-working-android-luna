@@ -23,6 +23,7 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
+import com.oreo.ui.lifeos.LifeOsChatFragment
 import com.oreo.ui.timelineScreen.addActivity.AddActivityItemsEnum
 import com.oreo.ui.timelineScreen.addActivity.AddActivityTimelineSharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -116,14 +117,15 @@ class AddLightExposureFragment :
                     if (sharedViewModel.ringDataStore.getRingDevice() == null) {
                         context.showShortToast(getString(R.string.text_luna_ai_message))
                     }else {
-                        if (sharedViewModel.localDataStore.isAiChatSplashShown()) {
-                            navigate(
-                                R.id.aiTopQuestionsFragment,
-                                bundleOf("aiTopic" to AITopics.GENERAL)
-                            )
-                        } else {
-                            navigate(R.id.aiChatOnboardFragment)
-                        }
+                        val (frag, bundle) = LifeOsChatFragment.getStartData(
+                            threadId = null,
+                            userMessage = null,
+                            title = null,
+                            aiTopic = AITopics.GENERAL
+                        )
+                        navigate(
+                            frag, bundle
+                        )
                     }
                 }
             }

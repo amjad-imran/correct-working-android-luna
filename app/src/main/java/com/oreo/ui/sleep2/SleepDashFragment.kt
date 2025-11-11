@@ -16,6 +16,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
@@ -61,6 +62,7 @@ import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.home.summary.DashNapAdapter
 import com.oreo.ui.home.summary.OnNapSelectedAction
 import com.oreo.ui.internal.OHMInternalAdapter
+import com.oreo.ui.lifeos.LifeOsChatFragment
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.sleep.banner.OreoSleepBannerFragment
 import com.oreo.ui.sleep2.help.LearnMoreFragment
@@ -178,7 +180,17 @@ class SleepDashFragment :
                 MoEngageLunaAppEvents.aichat_initiated_clicked,
                 hashMapOf("source" to "sleep")
             )
-            navigate(R.id.aiTopQuestionsFragment, bundleOf("aiTopic" to AITopics.SLEEP))
+            //navigate(R.id.aiTopQuestionsFragment, bundleOf("aiTopic" to AITopics.SLEEP))
+
+            val (frag, bundle) = LifeOsChatFragment.getStartData(
+                threadId = null,
+                userMessage = null,
+                title = null,
+                aiTopic = AITopics.SLEEP
+            )
+            navigate(
+                frag, bundle
+            )
 
             /*val (frag, bundle) = ChatGptFragment.getStartData(
                 null,
