@@ -1,6 +1,6 @@
 package com.oreo.ui.chatGpt.history
 
-import android.icu.text.CaseMap.Title
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,8 +8,6 @@ import com.noisefit.luna.databinding.RowChatHistoryHeaderBinding
 import com.noisefit.luna.databinding.RowChatHistoryThreadBinding
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.ai.ChatHistoryItem
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 
 class ChatHistoryAdapter(
@@ -31,15 +29,29 @@ class ChatHistoryAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: ChatHistoryItem) {
 
-            binding.tvHeadline.text = data.title
+            binding.tvTitle.text = data.title
+            binding.tvMessage.text = data.title
+
+            val timeAgo = if (data.timestamp != null) {
+                DateUtils.getRelativeTimeSpanString(
+                    data.timestamp!! * 1000,
+                    System.currentTimeMillis(),
+                    DateUtils.MINUTE_IN_MILLIS
+                )
+            } else {
+                ""
+            }
 
 
-            binding.tvMessage.text =
-                LocalDate.parse(data.date).format(DateTimeFormatter.ofPattern("dd MMM, yyyy"))
+
+
+            binding.tvTime.text = timeAgo
+
+            //LocalDate.parse(data.date).format(DateTimeFormatter.ofPattern("dd MMM, yyyy"))
 
             binding.root.setOnClickListener {
                 data.threadId?.let {
-                    listener.onThreadClicked(it, data.title?:"")
+                    listener.onThreadClicked(it, data.title ?: "")
                 }
             }
         }

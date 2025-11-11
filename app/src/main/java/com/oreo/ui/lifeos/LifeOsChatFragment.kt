@@ -2,6 +2,9 @@ package com.oreo.ui.lifeos
 
 import android.Manifest
 import android.content.Intent
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -29,6 +32,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
+import androidx.lifecycle.lifecycleScope
 import com.noisefit.data.model.AiMeals
 import com.noisefit.data.model.AiWorkout
 import com.oreo.ui.chatGpt.ChatGptAdapter
@@ -44,12 +48,26 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ATTACHMENT_KEY
+import com.oreo.ui.chatGpt.ChatClickListener
 import com.oreo.ui.chatGpt.ChatGptViewModel
 import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.chatGpt.SuggestionAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
+import java.util.UUID
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import com.noisefit.luna.BuildConfig
+import com.noisefit_commans.common.copyToClipBoard
 
 @AndroidEntryPoint
 class LifeOsChatFragment :
@@ -60,10 +78,20 @@ class LifeOsChatFragment :
     private val mAdapter: ChatGptAdapter by lazy { ChatGptAdapter() }
     private val args: LifeOsChatFragmentArgs by navArgs()
 
+    // Track last reviewed message to enforce one-time like/dislike
+    private var lastReviewedMessageId: UUID? = null
+
     private lateinit var takePictureLauncher: ActivityResultLauncher<Uri>
     private lateinit var pickImageLauncher: ActivityResultLauncher<String>
     private lateinit var pickDocumentLauncher: ActivityResultLauncher<Array<String>>
     private lateinit var requestCameraPermission: ActivityResultLauncher<String>
+
+
+    private val suggestionsAdapter: SuggestionAdapter by lazy {
+        SuggestionAdapter() { ques ->
+            sendMessage(ques)
+        }
+    }
 
 
     companion object {
@@ -109,22 +137,58 @@ class LifeOsChatFragment :
         viewModel.workout = args.workout
         viewModel.planType = args.planType
 
+        viewModel.getAiTopQuestions(args.aiTopic)
+
         setActionButtonState()
 
         setupImeAnimation()
+        setSuggestedQuestionsRecycler()
 
         registerAttachmentPickers()
-        viewModel.generateThreadId()
+
+        if (viewModel.planType == PlanType.NONE) {
+            if (viewModel.threadId.isNullOrEmpty()) {
+                viewModel.generateThreadId()
+            } else {
+                viewModel.loadMessagesByThreadId(viewModel.threadId!!)
+                binding.ivLogo.gone()
+            }
+            binding.lytChatBox.ivAddAttachment.visible()
+        } else {
+            binding.lytChatBox.ivAddAttachment.gone()
+            viewModel.generateInitMessage()
+        }
 
         binding.rvChats.apply {
             itemAnimator = null
             layoutManager = LinearLayoutManager(context)
             adapter = mAdapter
         }
-        mAdapter.itemClickListener = { item, _ ->
-            if (item is ChatGptOverview.RetryMessage) {
-                viewModel.retryApi()
+        mAdapter.itemClickListener = object : ChatClickListener {
+            override fun onCopyMessage(message: ChatGptOverview.ReceivedMessage) {
+                val plain = markdownToPlainText(message.message)
+                try {
+                    plain.copyToClipBoard()
+                } catch (_: Exception) {
+                }
             }
+
+            override fun onLikeMessage(message: ChatGptOverview.ReceivedMessage) {
+                val isAlreadyLiked = mAdapter.checkRateState(message.id)
+                if (isAlreadyLiked) return
+
+                mAdapter.markLiked(message.id)
+                viewModel.postChatReview(message.message, 1, message.id)
+            }
+
+            override fun onDislikeMessage(message: ChatGptOverview.ReceivedMessage) {
+                val isAlreadyLiked = mAdapter.checkRateState(message.id)
+                if (isAlreadyLiked) return
+
+                mAdapter.markDisliked(message.id)
+                viewModel.postChatReview(message.message, 0, message.id)
+            }
+
         }
 
         val showIme: () -> Unit = {
@@ -153,7 +217,14 @@ class LifeOsChatFragment :
             viewModel.retryApi()
         }
         binding.ivNewChat.setOnClickListener {
-            //navigate(LifeOsChatFragmentDirections.actionLifeOsChatFragmentSelf())
+            navigate(
+                LifeOsChatFragmentDirections.actionLifeOsChatFragmentSelf(
+                    "",
+                    "",
+                    args.aiTopic,
+                    PlanType.NONE,
+                )
+            )
         }
 
         binding.lytChatBox.chatEtx.setOnEditorActionListener { v, actionId, _ ->
@@ -214,10 +285,13 @@ class LifeOsChatFragment :
     }
 
     override fun subscribeObservers() {
+        viewModel.questions.observe(this) {
+            suggestionsAdapter.setDataSet(it)
+        }
         viewModel.showRetry.observe(this) {
-            if(it){
+            if (it) {
                 binding.btnRetry.visible()
-            }else{
+            } else {
                 binding.btnRetry.gone()
             }
         }
@@ -227,7 +301,9 @@ class LifeOsChatFragment :
 
         viewModel.showSuggestedQuestions.observe(this) { show ->
             if (show) {
-                setSuggestedQuestions(
+                binding.lytSuggestions.root.visible()
+
+                /*setSuggestedQuestions(
                     arrayListOf(
                         "Teach me about my sleep score",
                         "Create a diet plan for me",
@@ -235,7 +311,7 @@ class LifeOsChatFragment :
                         "Create a diet plan for me",
                         "Create a workout plan for me"
                     )
-                )
+                )*/
                 binding.ivLogo.visible()
                 binding.ivLogoTop.gone()
             } else {
@@ -595,14 +671,11 @@ class LifeOsChatFragment :
         }
     }
 
-    private fun setSuggestedQuestions(suggestions: ArrayList<String>) {
+    private fun setSuggestedQuestionsRecycler() {
         binding.lytSuggestions.apply {
-            root.visible()
             rvSuggestions.layoutManager =
                 LinearLayoutManager(rvSuggestions.context, LinearLayoutManager.HORIZONTAL, false)
-            rvSuggestions.adapter = SuggestionAdapter(suggestions) { ques ->
-                sendMessage(ques)
-            }
+            rvSuggestions.adapter = suggestionsAdapter
         }
     }
 
@@ -610,5 +683,76 @@ class LifeOsChatFragment :
         super.onDestroyView()
         previousSoftInputMode?.let { requireActivity().window.setSoftInputMode(it) }
         previousSoftInputMode = null
+    }
+
+    private fun getLatestReceivedMessage(): ChatGptOverview.ReceivedMessage? {
+        val list = viewModel.chatGptOverview.value ?: return null
+        for (i in list.size - 1 downTo 0) {
+            val item = list[i]
+            if (item is ChatGptOverview.ReceivedMessage) return item
+        }
+        return null
+    }
+
+    private fun markdownToPlainText(markdown: String): String {
+        var text = markdown
+        // Remove code fences
+        text = text.replace(Regex("""```[\n\r]?[\s\S]*?```"""), "")
+        // Inline code
+        text = text.replace(Regex("""`([^`]+)`"""), "$1")
+        // Images ![alt](url) -> alt
+        text = text.replace(Regex("""!\[([^\]]*)\]\(([^)]+)\)"""), "$1")
+        // Links [text](url) -> text
+        text = text.replace(Regex("""\[([^\]]+)\]\(([^)]+)\)"""), "$1")
+        // Headings ###, ##, #
+        text = text.replace(Regex("""^#{1,6}\s*""", RegexOption.MULTILINE), "")
+        // Blockquotes
+        text = text.replace(Regex("""\n>+\s?"""), "\n")
+        // Bold/Italic
+        text = text.replace(Regex("""[*_]{1,3}([^*_]+)[*_]{1,3}"""), "$1")
+        // Unordered/ordered list markers
+        text = text.replace(Regex("""^\s*[-*+]\s+""", RegexOption.MULTILINE), "• ")
+        text = text.replace(Regex("""^\s*\d+\.\s+""", RegexOption.MULTILINE), "• ")
+        // Tables: strip pipes
+        text = text.replace(Regex("""^\|""", RegexOption.MULTILINE), "")
+        text = text.replace("|", " ")
+        // Extra whitespace
+        text = text.replace(Regex("""\r"""), "")
+        return text.trim()
+    }
+
+
+    private fun addCommonHeaders(builder: Request.Builder) {
+        try {
+            val token = viewModel.localDataStore.getUserToken()
+            token?.let {
+                builder.addHeader("access-token", "Bearer ${it.access_token}")
+            }
+        } catch (_: Exception) {
+        }
+        builder.addHeader("wearable-type", "ring")
+        val tz = try {
+            viewModel.localDataStore.getLastKnownTimezone()
+        } catch (_: Exception) {
+            null
+        }
+        builder.addHeader("timezone", tz ?: TimeZone.getDefault().id)
+        val offset = try {
+            viewModel.localDataStore.getLastKnownOffset()
+        } catch (_: Exception) {
+            null
+        }
+        val fallbackOffset = TimeZone.getDefault().rawOffset.toLong() / (60 * 1000)
+        builder.addHeader("offset", (offset ?: fallbackOffset.toString()))
+    }
+
+    private fun jsonEscape(text: String): String {
+        // returns quoted JSON string value, safe for inclusion
+        val escaped = text
+            .replace("\\", "\\\\")
+            .replace("\"", "\\\"")
+            .replace("\n", "\\n")
+            .replace("\r", "")
+        return "\"$escaped\""
     }
 }

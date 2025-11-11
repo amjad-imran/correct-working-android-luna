@@ -20,6 +20,7 @@ import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.custom.SwipeHelper
+import com.oreo.ui.lifeos.LifeOsChatFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -39,16 +40,14 @@ class ChatHistoryFragment :
                     return
                 }
 
-                navigate(
-                    ChatHistoryFragmentDirections.actionChatHistoryFragmentToChatGptFragment(
-                        threadId, "", "", title, AITopics.GENERAL,
-                        PlanType.NONE,
-                        null,
-                        null,
-                        null,
-                        -1
-                    )
+                val (frag, bundle) = LifeOsChatFragment.getStartData(
+                    threadId = threadId,
+                    userMessage = "",
+                    title = title,
+                    aiTopic = AITopics.GENERAL,
+                    planType = PlanType.NONE,
                 )
+                navigate(frag, bundle)
             }
         })
     }
@@ -56,22 +55,26 @@ class ChatHistoryFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.toolbar.tvTitle.text = getString(R.string.text_chat_history)
+        binding.tvTitle.text = getString(R.string.text_recents)
         setRecycler()
         viewModel.getChatHistory()
     }
 
 
     override fun initListener() {
-        binding.toolbar.backBtn.setOnClickListener {
+        binding.ivBack.setOnClickListener {
             navigateUpSafe()
         }
 
-        binding.ivNew.setOnClickListener {
+        binding.ivNewChat.setOnClickListener {
+            val (frag, bundle) = LifeOsChatFragment.getStartData(
+                threadId = null,
+                userMessage = null,
+                title = null,
+                aiTopic = AITopics.GENERAL
+            )
             navigate(
-                ChatHistoryFragmentDirections.actionChatHistoryFragmentToAiTopQuestionsFragment(
-                    AITopics.GENERAL
-                )
+                frag, bundle
             )
         }
 

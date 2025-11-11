@@ -13,6 +13,7 @@ import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
@@ -37,6 +38,7 @@ import com.oreo.data.model.CircadianMidPointState
 import com.oreo.data.model.CircadianMidPointStatus
 import com.oreo.data.model.circadian.CircadianResponseModel
 import com.oreo.ui.chatGpt.AITopics
+import com.oreo.ui.lifeos.LifeOsChatFragment
 import com.oreo.ui.stress.help.StressInfoCardAction
 import com.oreo.ui.stress.help.StressUnderstandingImageAdapter
 import dagger.hilt.android.AndroidEntryPoint
@@ -714,9 +716,19 @@ class CircadianAlignmentFragment :
                     this["source"] = "circadian"
                 }
             )
-            navigate(
+            /*navigate(
                 R.id.aiTopQuestionsFragment,
                 bundleOf("aiTopic" to AITopics.CIRCADIAN)
+            )*/
+
+            val (frag, bundle) = LifeOsChatFragment.getStartData(
+                threadId = null,
+                userMessage = null,
+                title = null,
+                aiTopic = AITopics.CIRCADIAN
+            )
+            navigate(
+                frag, bundle
             )
             /* } else {
                  navigate(R.id.aiChatOnboardFragment)

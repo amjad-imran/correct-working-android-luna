@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.AiShareTemplate1Binding
@@ -35,6 +36,7 @@ import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.AiDailySummaryModel
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
+import com.oreo.ui.lifeos.LifeOsChatFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.FileOutputStream
@@ -269,10 +271,19 @@ class AiSummaryFragment :
             navigateUpSafe()
         }
         binding.btnAsk.setOnClickListener {
+            val (frag, bundle) = LifeOsChatFragment.getStartData(
+                threadId = null,
+                userMessage = null,
+                title = null,
+                aiTopic = AITopics.GENERAL
+            )
             navigate(
+                frag, bundle
+            )
+            /*navigate(
                 R.id.aiTopQuestionsFragment,
                 bundleOf("aiTopic" to AITopics.GENERAL)
-            )
+            )*/
         }
 
         binding.ivShare.setOnClickListener {

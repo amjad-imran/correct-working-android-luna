@@ -16,10 +16,10 @@ sealed class ChatGptOverview(var id: UUID = UUID.randomUUID()) {
     ) : ChatGptOverview()
 
     class ReceivedMessage(
-        val message: String
+        val message: String,
+        val isGenerating: Boolean
     ) : ChatGptOverview()
 
-    
 
     class ThinkingMessage(
     ) : ChatGptOverview()

@@ -2,12 +2,16 @@ package com.oreo.ui.chatGpt
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Matrix
+import androidx.exifinterface.media.ExifInterface
 import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.core.content.FileProvider
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import com.google.gson.JsonObject
 import com.grapesnberries.curllogger.CurlLoggerInterceptor
 import com.here.oksse.OkSse
 import com.here.oksse.ServerSentEvent
@@ -24,17 +28,20 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.Token
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ChatGptOverview
 import com.oreo.data.model.ai.ChatMessage
+import com.oreo.data.model.ai.TopQuestions
 import com.oreo.data.repository.abstraction.ErrorServerCases
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import okhttp3.Call
@@ -48,7 +55,10 @@ import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import java.io.File
 import java.io.FileOutputStream
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 import java.util.TimeZone
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -85,6 +95,8 @@ class ChatGptViewModel
         get() = _scrollToBottom
 
     val threadTitle = MutableLiveData<String>()
+    val questions = MutableLiveData<List<TopQuestions>>(arrayListOf())
+
 
     val aiGeneratedPlanSaved = MutableLiveData<Event<Boolean>>()
     val showSavePlan = MutableLiveData<Event<AiPlanType>>()
@@ -110,7 +122,7 @@ class ChatGptViewModel
     var pendingAttachment: AttachmentData? = null
     val attachmentPreview = MutableLiveData<AttachmentData?>(null)
 
-    val showSuggestedQuestions = MutableLiveData<Boolean>(false)
+    val showSuggestedQuestions = MutableLiveData<Boolean>()
 
     fun setPendingAttachment(uri: Uri, mimeType: String, fileName: String, sizeBytes: Long) {
         val data = AttachmentData(uri, mimeType, fileName, sizeBytes)
@@ -131,6 +143,48 @@ class ChatGptViewModel
         initMessage =
             "Hello $userName, my name is Luna. I am an AI coach that can guide you with personalized nutritional advice, workout questions and to understand how to improve your health parameters tracked by the Luna ring. What do you need help with?"
     }
+
+    fun getAiTopQuestions(aiTopic: AITopics) {
+        viewModelScope.launch {
+            oreoDeviceRepository.getAiTopQuestions(aiTopic).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getAiTopQuestions(aiTopic)
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            questions.value = it.questions ?: arrayListOf()
+                            //showHistoryIcon.value = it.hasHistory
+                        }
+                    }
+                }
+            }
+        }
+
+
+    }
+
 
     fun addInitData() {
         if (workout != null || meal != null) {
@@ -181,7 +235,7 @@ class ChatGptViewModel
         _scrollToBottom.postValue(Event(true))
     }
 
-    fun addReceivedMessage(message: String, uuid: UUID = UUID.randomUUID()) {
+    fun addReceivedMessage(message: String, uuid: UUID = UUID.randomUUID(),isGenerating: Boolean) {
         viewModelScope.launch(Dispatchers.Main) {
             showRetry.postValue(false)
             val messages = _chatGptOverview.value ?: ArrayList()
@@ -191,7 +245,7 @@ class ChatGptViewModel
             if (messages.lastOrNull() is ChatGptOverview.ReceivedMessage) {
                 messages.removeAt(messages.lastIndex)
             }
-            messages.add(ChatGptOverview.ReceivedMessage(message).apply {
+            messages.add(ChatGptOverview.ReceivedMessage(message,isGenerating).apply {
                 id = uuid
             })
             _chatGptOverview.value = (messages)
@@ -374,12 +428,13 @@ class ChatGptViewModel
                             if (eventBuffer.isNotEmpty()) {
                                 val cleaned = cleanServerResponse(eventBuffer.toString())
                                 responseBuilder.append(cleaned)
-                                addReceivedMessage(responseBuilder.toString(), uuid)
+                                addReceivedMessage(responseBuilder.toString(), uuid,true)
                                 eventBuffer.setLength(0)
                             }
                         }
                     }
                 }
+                addReceivedMessage(responseBuilder.toString(), uuid,false)
 
                 fetchInProgress.postValue(false)
                 videoState.postValue(false)
@@ -448,7 +503,7 @@ class ChatGptViewModel
             } else {
                 initMessage
             }
-            addReceivedMessage(message ?: "")
+            addReceivedMessage(message ?: "", UUID.randomUUID(),false)
         }
         return
     }
@@ -575,11 +630,11 @@ class ChatGptViewModel
         setLoading(true)
         viewModelScope.launch(Dispatchers.IO) {
             val tempMessage = ArrayList<ChatGptOverview>()
-            tempMessage.add(ChatGptOverview.ReceivedMessage(initMessage))
+            tempMessage.add(ChatGptOverview.ReceivedMessage(initMessage,false))
 
             messages?.forEach {
                 if (it.sender.equals("assistant", true)) {
-                    tempMessage.add(ChatGptOverview.ReceivedMessage(it.message ?: ""))
+                    tempMessage.add(ChatGptOverview.ReceivedMessage(it.message ?: "",false))
                 } else if (it.sender.equals("user", true)) {
                     val metaUrl =
                         it.metadata?.takeIf { url -> url.isNotBlank() } ?: it.attachmentUrl
@@ -789,16 +844,71 @@ class ChatGptViewModel
             }
 
             val opts = BitmapFactory.Options().apply { inSampleSize = inSample.coerceAtLeast(1) }
-            val bitmap = resolver.openInputStream(sourceUri)
+            val originalBitmap = resolver.openInputStream(sourceUri)
                 ?.use { BitmapFactory.decodeStream(it, null, opts) }
                 ?: return null
+
+            val orientedBitmap = try {
+                val orientation = resolver.openInputStream(sourceUri)?.use { input ->
+                    ExifInterface(input).getAttributeInt(
+                        ExifInterface.TAG_ORIENTATION,
+                        ExifInterface.ORIENTATION_NORMAL
+                    )
+                } ?: ExifInterface.ORIENTATION_NORMAL
+
+                val matrix: Matrix? = when (orientation) {
+                    ExifInterface.ORIENTATION_ROTATE_90 -> Matrix().apply { postRotate(90f) }
+                    ExifInterface.ORIENTATION_ROTATE_180 -> Matrix().apply { postRotate(180f) }
+                    ExifInterface.ORIENTATION_ROTATE_270 -> Matrix().apply { postRotate(270f) }
+                    ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> Matrix().apply {
+                        preScale(
+                            -1f,
+                            1f
+                        )
+                    }
+
+                    ExifInterface.ORIENTATION_FLIP_VERTICAL -> Matrix().apply { preScale(1f, -1f) }
+                    ExifInterface.ORIENTATION_TRANSPOSE -> Matrix().apply {
+                        postRotate(90f); preScale(
+                        -1f,
+                        1f
+                    )
+                    }
+
+                    ExifInterface.ORIENTATION_TRANSVERSE -> Matrix().apply {
+                        postRotate(270f); preScale(
+                        -1f,
+                        1f
+                    )
+                    }
+
+                    else -> null
+                }
+
+                if (matrix != null) {
+                    Bitmap.createBitmap(
+                        originalBitmap,
+                        0,
+                        0,
+                        originalBitmap.width,
+                        originalBitmap.height,
+                        matrix,
+                        true
+                    )
+                } else originalBitmap
+            } catch (_: Exception) {
+                originalBitmap
+            }
 
             val outFile =
                 File(context.cacheDir, "compressed_${System.currentTimeMillis()}.jpg")
             FileOutputStream(outFile).use { fos ->
-                bitmap.compress(Bitmap.CompressFormat.JPEG, quality.coerceIn(0, 100), fos)
+                orientedBitmap.compress(Bitmap.CompressFormat.JPEG, quality.coerceIn(0, 100), fos)
             }
-            bitmap.recycle()
+            if (orientedBitmap !== originalBitmap) {
+                originalBitmap.recycle()
+            }
+            orientedBitmap.recycle()
 
             FileProvider.getUriForFile(
                 context,
@@ -809,6 +919,68 @@ class ChatGptViewModel
             null
         }
     }
+
+    fun postChatReview(text: String, reviewFlag: Int, messageId: UUID) {
+        if (threadId == null) {
+            return
+        }
+        val date = try {
+            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+            sdf.timeZone = TimeZone.getDefault()
+            sdf.format(Date())
+        } catch (_: Exception) {
+            ""
+        }
+
+
+        viewModelScope.launch {
+
+            val request = JsonObject().apply {
+                this.addProperty("thread_id",threadId)
+                this.addProperty("text",text)
+                this.addProperty("date",date)
+                this.addProperty("review","$reviewFlag")
+            }
+
+
+            oreoDeviceRepository.markAiMessageState(request).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        //setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        postChatReview(text, reviewFlag, messageId)
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+
+                        }
+                    }
+                }
+            }
+        }
+
+
+    }
+
 
     fun getMimeType(context: Context, uri: Uri): String? =
         context.contentResolver.getType(uri)

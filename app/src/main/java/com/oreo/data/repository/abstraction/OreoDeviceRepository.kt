@@ -60,4 +60,7 @@ interface OreoDeviceRepository {
     suspend fun saveWorkoutPlan(): Flow<Resource<BaseApiResponse<Any>?>>
 
     suspend fun saveMealPlan(): Flow<Resource<BaseApiResponse<Any>?>>
+
+    suspend fun markAiMessageState(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>?>>
+
 }

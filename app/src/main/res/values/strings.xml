@@ -2300,6 +2300,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_save_amp_exit"><![CDATA[Save & Exit]]></string>
     <string name="text_continue_setup">Continue setup</string>
     <string name="text_type_your_answer_freely">Type your answer freely</string>
+    <string name="text_recents">Recents</string>
 
 
 </resources>

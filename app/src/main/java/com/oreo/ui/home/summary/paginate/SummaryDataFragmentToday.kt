@@ -30,6 +30,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
@@ -90,6 +91,7 @@ import com.oreo.ui.home.summary.HomeRecyclerViewHolder
 import com.oreo.ui.home.summary.OSummaryHealthOverviewAdapter
 import com.oreo.ui.home.summary.OSummaryHealthOverviewClickEnum
 import com.oreo.ui.home.summary.update.UpdateLaunchMode
+import com.oreo.ui.lifeos.LifeOsChatFragment
 import com.oreo.ui.sleep.nap.BOTTOM_NAP_RESULT
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
@@ -467,7 +469,17 @@ class SummaryDataFragmentToday :
                             }
                         )
 
-                        if (viewModel.isChatSplashShown()) {
+                        val (frag, bundle) = LifeOsChatFragment.getStartData(
+                            threadId = null,
+                            userMessage = null,
+                            title = null,
+                            aiTopic = AITopics.GENERAL
+                        )
+                        navigate(
+                            frag, bundle
+                        )
+
+                        /*if (viewModel.isChatSplashShown()) {
                             navigate(
                                 R.id.aiTopQuestionsFragment,
                                 bundleOf("aiTopic" to AITopics.GENERAL)
@@ -476,7 +488,7 @@ class SummaryDataFragmentToday :
                         } else {
                             navigate(R.id.aiChatOnboardFragment)
                             //navigate(R.id.chatSplashFragment)
-                        }
+                        }*/
                     }
                 }
 

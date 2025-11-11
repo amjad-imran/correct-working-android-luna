@@ -72,6 +72,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.findNavController
 import com.oreo.data.model.FabItems
 import com.oreo.data.model.FabModel
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
@@ -1709,8 +1710,19 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     return
                 }
 
-                navController?.navigate(R.id.aiTopQuestionsFragment,
-                    bundleOf("aiTopic" to AITopics.GENERAL))
+                /*navController?.navigate(R.id.aiTopQuestionsFragment,
+                    bundleOf("aiTopic" to AITopics.GENERAL))*/
+
+
+                val (frag, bundle) = LifeOsChatFragment.getStartData(
+                    threadId = null,
+                    userMessage = null,
+                    title = null,
+                    aiTopic = AITopics.GENERAL
+                )
+                navController?.navigate(
+                    frag, bundle
+                )
 
                 /*val (frag, bundle) = ChatGptFragment.getStartData(
                     null,
