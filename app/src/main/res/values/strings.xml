@@ -2286,6 +2286,20 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_talk_with_life_os">Talk with Life OS</string>
     <string name="text_insight_more">That’s all we had for now. Anything specific you’re looking for?</string>
     <string name="text_couldn_t_generate_a_response">Couldn’t generate a response.</string>
+    <string name="text_the_ultimate_operating_system_for_your_life">The ultimate operating system for your life</string>
+    <string name="text_begin">Begin</string>
+    <string name="text_curated_insights">Curated Insights</string>
+    <string name="text_learn_tangible_ways_to_improve_with_curated_insights">Learn tangible ways to improve with curated insights</string>
+    <string name="text_log_your_meals_to_learn_what_helps_and_what_harms_recovery">Log your meals to learn what helps and what harms recovery</string>
+    <string name="text_dive_deep_with_your_biomarkers">Dive deep with your biomarkers</string>
+    <string name="text_learn_how_exercise_affects_your_mood_and_sleep">Learn how exercise affects your mood and sleep</string>
+    <string name="text_your_personal_health_assistant_with_you_24x7">Your personal health assistant with you 24x7</string>
+    <string name="text_is_ready">IS READY</string>
+    <string name="text_are_you_sure">Are you sure?</string>
+    <string name="text_these_answers_help_lifeos_understand_your_routines_goals_and_day_to_day_lifestyle">These answers help LifeOS understand your routines, goals, and day-to-day lifestyle.</string>
+    <string name="text_save_amp_exit"><![CDATA[Save & Exit]]></string>
+    <string name="text_continue_setup">Continue setup</string>
+    <string name="text_type_your_answer_freely">Type your answer freely</string>
 
 
 </resources>

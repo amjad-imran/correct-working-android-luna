@@ -286,6 +286,8 @@ private const val NUDGE_ACTIVITY_API_TIMESTAMP = "NUDGE_ACTIVITY_API_TIMESTAMP"
 private const val NUDGE_CYCLE_TRACKER_DATA = "NUDGE_CYCLE_TRACKER_DATA"
 private const val NUDGE_CYCLE_TRACKER_API_TIMESTAMP = "NUDGE_CYCLE_TRACKER_API_TIMESTAMP"
 
+private const val LIFEOS_ONBOARD_INITIATED = "LIFEOS_ONBOARD_INITIATED"
+
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -900,6 +902,7 @@ class DataStoredImpl
         mPrefs.edit()?.remove(NUDGE_ACTIVITY_API_TIMESTAMP)?.apply()
         mPrefs.edit()?.remove(NUDGE_CYCLE_TRACKER_DATA)?.apply()
         mPrefs.edit()?.remove(NUDGE_CYCLE_TRACKER_API_TIMESTAMP)?.apply()
+        mPrefs.edit()?.remove(LIFEOS_ONBOARD_INITIATED)?.apply()
 
         mPrefs.edit()?.remove(GOOGLE_FIT_STATUS)?.apply()
         mPrefs.edit()?.remove(GOOGLE_FIT_CROSSED)?.apply()
@@ -2500,6 +2503,18 @@ class DataStoredImpl
 
     override fun getNudgeCycleTrackerLastApiTimestamp(): Long {
         return mPrefs.getLong(NUDGE_CYCLE_TRACKER_API_TIMESTAMP, 0)
+    }
+
+    override fun isLifeOsOnboardInitiated(): Boolean {
+        return mPrefs.getBoolean(LIFEOS_ONBOARD_INITIATED, false)
+    }
+
+    override fun setLifeOsOnboardInitiated(isInitiated: Boolean?) {
+        if(isInitiated == null){
+            mPrefs.edit()?.remove(LIFEOS_ONBOARD_INITIATED)?.commit()
+            return
+        }
+        mPrefs.edit().putBoolean(LIFEOS_ONBOARD_INITIATED, isInitiated).commit()
     }
 
 }

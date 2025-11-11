@@ -41,6 +41,11 @@ class LifeOsDashFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if(!viewModel.localDataStore.isLifeOsOnboardInitiated()){
+            navigate(R.id.lifeOsOnboardBeginFragment)
+        }
+
         setupQuestionsRecycler()
         setupWhatsNewRecycler()
         setupInsightsPager()

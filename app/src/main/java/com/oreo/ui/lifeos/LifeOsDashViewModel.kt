@@ -3,11 +3,14 @@ package com.oreo.ui.lifeos
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class LifeOsDashViewModel @Inject constructor() : ViewModel() {
+class LifeOsDashViewModel @Inject constructor(
+    val localDataStore: DataStoredInterface,
+) : ViewModel() {
 
     private val _questions = MutableLiveData<List<String>>()
     val questions: LiveData<List<String>> get() = _questions

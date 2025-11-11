@@ -610,6 +610,9 @@ interface DataStoredInterface {
     fun setNudgeCycleTrackerLastApiTimestamp(timestamp: Long)
     fun getNudgeCycleTrackerLastApiTimestamp() : Long
 
+    fun isLifeOsOnboardInitiated(): Boolean
+    fun setLifeOsOnboardInitiated(isInitiated: Boolean?)
+
 }
 
 enum class AppTrackEvent {
