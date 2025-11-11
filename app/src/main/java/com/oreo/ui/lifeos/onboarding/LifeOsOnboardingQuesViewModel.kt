@@ -154,7 +154,7 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
     }
 
     fun processData(mainData: OnBoardQuesGetResponse){
-        mainData.questions.forEach {
+        mainData.questions?.forEach {
             it.answer.forEach { ans ->
                 ans.state = if(ans.addOntext.equals("1")){
                     States.OTHER
@@ -165,7 +165,7 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
                 }
             }
         }
-        mainData.questions.first().let {
+        mainData.questions?.first().let {
             curQues.postValue(it)
         }
     }

@@ -9,6 +9,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
+import com.oreo.ui.lifeos.onboarding.quesChildFrags.LifeOsOnboardTextFldOrNoneFragment
 import com.oreo.ui.lifeos.onboarding.quesChildFrags.LifeosCheckBoxAndOtherFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -67,29 +68,39 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
 
             setLinearProgressIndicatorUi()
 
-            when(it.type){
+            val childFrag = when(it.type){
                 "mcq-single" -> {
-
+                    LifeosCheckBoxAndOtherFragment().apply {
+                        this.arguments = Bundle().apply {
+                            putParcelable("question", it)
+                        }
+                    }
                 }
 
                 "mcq-multiple" -> {
-
+                    LifeosCheckBoxAndOtherFragment().apply {
+                        this.arguments = Bundle().apply {
+                            putParcelable("question", it)
+                        }
+                    }
                 }
 
                 "picker" -> {
-
+                    LifeOsOnboardTextFldOrNoneFragment().apply {
+                        this.arguments = Bundle().apply {
+                            putParcelable("question", it)
+                        }
+                    }
                 }
+
+                else -> null
             }
 
-            val childFrag = LifeosCheckBoxAndOtherFragment().apply {
-                this.arguments = Bundle().apply {
-                    putParcelable("question", it)
-                }
+            childFrag?.let {
+                childFragmentManager.beginTransaction()
+                    .replace(R.id.childFragmentContainer, childFrag)
+                    .commit()
             }
-
-            childFragmentManager.beginTransaction()
-                .replace(R.id.childFragmentContainer, childFrag)
-                .commit()
         }
     }
 
