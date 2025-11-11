@@ -361,7 +361,16 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
 
                 markwon.setMarkdown(tvMessage, data.message)
 
-                // Update like/dislike icons based on state flags
+                if(data.isGenerating){
+                    binding.ivLike.gone()
+                    binding.ivDislike.gone()
+                    binding.ivCopy.gone()
+                }else{
+                    binding.ivLike.visible()
+                    binding.ivDislike.visible()
+                    binding.ivCopy.visible()
+                }
+
                 binding.ivLike.setImageResource(
                     if (liked) R.drawable.ic_thumbs_up_v2_filled else R.drawable.ic_thumbs_up_v2
                 )

@@ -235,7 +235,7 @@ class ChatGptViewModel
         _scrollToBottom.postValue(Event(true))
     }
 
-    fun addReceivedMessage(message: String, uuid: UUID = UUID.randomUUID()) {
+    fun addReceivedMessage(message: String, uuid: UUID = UUID.randomUUID(),isGenerating: Boolean) {
         viewModelScope.launch(Dispatchers.Main) {
             showRetry.postValue(false)
             val messages = _chatGptOverview.value ?: ArrayList()
@@ -245,7 +245,7 @@ class ChatGptViewModel
             if (messages.lastOrNull() is ChatGptOverview.ReceivedMessage) {
                 messages.removeAt(messages.lastIndex)
             }
-            messages.add(ChatGptOverview.ReceivedMessage(message).apply {
+            messages.add(ChatGptOverview.ReceivedMessage(message,isGenerating).apply {
                 id = uuid
             })
             _chatGptOverview.value = (messages)
@@ -428,12 +428,13 @@ class ChatGptViewModel
                             if (eventBuffer.isNotEmpty()) {
                                 val cleaned = cleanServerResponse(eventBuffer.toString())
                                 responseBuilder.append(cleaned)
-                                addReceivedMessage(responseBuilder.toString(), uuid)
+                                addReceivedMessage(responseBuilder.toString(), uuid,true)
                                 eventBuffer.setLength(0)
                             }
                         }
                     }
                 }
+                addReceivedMessage(responseBuilder.toString(), uuid,false)
 
                 fetchInProgress.postValue(false)
                 videoState.postValue(false)
@@ -502,7 +503,7 @@ class ChatGptViewModel
             } else {
                 initMessage
             }
-            addReceivedMessage(message ?: "")
+            addReceivedMessage(message ?: "", UUID.randomUUID(),false)
         }
         return
     }
@@ -629,11 +630,11 @@ class ChatGptViewModel
         setLoading(true)
         viewModelScope.launch(Dispatchers.IO) {
             val tempMessage = ArrayList<ChatGptOverview>()
-            tempMessage.add(ChatGptOverview.ReceivedMessage(initMessage))
+            tempMessage.add(ChatGptOverview.ReceivedMessage(initMessage,false))
 
             messages?.forEach {
                 if (it.sender.equals("assistant", true)) {
-                    tempMessage.add(ChatGptOverview.ReceivedMessage(it.message ?: ""))
+                    tempMessage.add(ChatGptOverview.ReceivedMessage(it.message ?: "",false))
                 } else if (it.sender.equals("user", true)) {
                     val metaUrl =
                         it.metadata?.takeIf { url -> url.isNotBlank() } ?: it.attachmentUrl
