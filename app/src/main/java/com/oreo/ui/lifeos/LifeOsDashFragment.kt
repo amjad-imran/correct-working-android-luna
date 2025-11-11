@@ -79,6 +79,25 @@ class LifeOsDashFragment :
     }
 
     override fun initListener() {
+
+        binding.lytToolbar.ivNewChat.setOnClickListener {
+            val (frag, bundle) = LifeOsChatFragment.getStartData(
+                threadId = null,
+                userMessage = null,
+                title = null,
+                aiTopic = AITopics.GENERAL
+            )
+            findNavController().navigate(
+                frag, bundle
+            )
+        }
+
+        binding.lytHeader.lytChatBox.chatEtx.apply {
+            setCursorVisible(false)
+            setFocusable(false)
+            setFocusableInTouchMode(false)
+            setClickable(true)
+        }
         binding.lytHeader.lytChatBox.root.setOnClickListener {
             val (frag, bundle) = LifeOsChatFragment.getStartData(
                 threadId = null,
@@ -90,6 +109,18 @@ class LifeOsDashFragment :
                 frag, bundle
             )
         }
+        binding.lytHeader.lytChatBox.chatEtx.setOnClickListener {
+            val (frag, bundle) = LifeOsChatFragment.getStartData(
+                threadId = null,
+                userMessage = null,
+                title = null,
+                aiTopic = AITopics.GENERAL
+            )
+            findNavController().navigate(
+                frag, bundle
+            )
+        }
+
         binding.lytHeader.lytChatBox.btnAction.setOnClickListener {
             val (frag, bundle) = AudioAiFragment.getStartData(
                 PlanType.NONE

@@ -145,7 +145,19 @@ class LifeOsChatFragment :
         setSuggestedQuestionsRecycler()
 
         registerAttachmentPickers()
-        viewModel.generateThreadId()
+
+        if (viewModel.planType == PlanType.NONE) {
+            if (viewModel.threadId.isNullOrEmpty()) {
+                viewModel.generateThreadId()
+            } else {
+                viewModel.loadMessagesByThreadId(viewModel.threadId!!)
+                binding.ivLogo.gone()
+            }
+            binding.lytChatBox.ivAddAttachment.visible()
+        } else {
+            binding.lytChatBox.ivAddAttachment.gone()
+            viewModel.generateInitMessage()
+        }
 
         binding.rvChats.apply {
             itemAnimator = null
@@ -205,7 +217,14 @@ class LifeOsChatFragment :
             viewModel.retryApi()
         }
         binding.ivNewChat.setOnClickListener {
-            //navigate(LifeOsChatFragmentDirections.actionLifeOsChatFragmentSelf())
+            navigate(
+                LifeOsChatFragmentDirections.actionLifeOsChatFragmentSelf(
+                    "",
+                    "",
+                    args.aiTopic,
+                    PlanType.NONE,
+                )
+            )
         }
 
         binding.lytChatBox.chatEtx.setOnEditorActionListener { v, actionId, _ ->

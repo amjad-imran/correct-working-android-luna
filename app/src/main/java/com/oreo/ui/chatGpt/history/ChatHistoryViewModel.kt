@@ -68,7 +68,10 @@ class ChatHistoryViewModel @Inject constructor(
 
     private fun generateData(data: List<ChatHistoryItem>) {
 
-        val result = ArrayList<ChatHistoryItem>()
+        _chatHistory.postValue(data)
+
+
+        /*val result = ArrayList<ChatHistoryItem>()
         val datesSet = HashSet<String>()
         val todayDate = LocalDate.now().toString()
         val yesterdayDate = LocalDate.now().minusDays(1).toString()
@@ -99,7 +102,7 @@ class ChatHistoryViewModel @Inject constructor(
                 isHeader = false
             })
         }
-        _chatHistory.postValue(result)
+        _chatHistory.postValue(result)*/
     }
 
     fun deleteChatHistory(threadId: String) {
