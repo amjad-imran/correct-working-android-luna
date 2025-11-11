@@ -2738,24 +2738,14 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             if (data.data.nudges.isNullOrEmpty()) {
                 binding.tvNudge.text = ""
+                binding.tvDayStatus.text = ""
                 binding.tvShimmer.visible()
                 binding.tvShimmer.fadeIn { }
             } else {
                 val nudge = data.data.nudges.firstOrNull()
-                binding.tvShimmer.apply {
-                    visible()
-                    fadeOut {
-                        gone()
-                        binding.tvDayStatus.apply {
-                            text = nudge?.label ?: ""
-                            fadeIn { }
-                        }
-                        binding.tvNudge.apply {
-                            text = nudge?.message ?: ""
-                            fadeIn { }
-                        }
-                    }
-                }
+                binding.tvShimmer.gone()
+                binding.tvDayStatus.text = nudge?.label ?: ""
+                binding.tvNudge.text = nudge?.message ?: ""
             }
 
             if (data.data.totalScoreImpact == null || data.data.totalScoreImpact == 0) {
