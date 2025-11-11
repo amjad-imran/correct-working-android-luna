@@ -41,6 +41,7 @@ import android.view.WindowManager
 import android.widget.ImageView
 import android.graphics.drawable.ColorDrawable
 import android.content.Context
+import java.util.UUID
 
 // Removed standalone attachment bindings; sent message now renders attachment inline
 
@@ -49,6 +50,27 @@ class ChatGptAdapter :
     RecyclerView.Adapter<ChatGptViewItemsHolder>() {
 
     var itemClickListener: ChatClickListener? = null
+
+    private val likedMessageIds = mutableSetOf<java.util.UUID>()
+    private val dislikedMessageIds = mutableSetOf<java.util.UUID>()
+
+    fun markLiked(id: java.util.UUID) {
+        likedMessageIds.add(id)
+        dislikedMessageIds.remove(id)
+        notifyItemChangedById(id)
+    }
+
+    fun markDisliked(id: java.util.UUID) {
+        dislikedMessageIds.add(id)
+        likedMessageIds.remove(id)
+        notifyItemChangedById(id)
+    }
+
+    private fun notifyItemChangedById(id: java.util.UUID) {
+        val list = asyncListDiffer.currentList
+        val index = list.indexOfFirst { it.id == id }
+        if (index != -1) notifyItemChanged(index)
+    }
 
     private val asyncListDiffer =
         AsyncListDiffer(this, object : DiffUtil.ItemCallback<ChatGptOverview>() {
@@ -172,7 +194,9 @@ class ChatGptAdapter :
 
             is ChatGptViewItemsHolder.ChatMessageReceivedViewHolder -> holder.bind(
                 asyncListDiffer.currentList[position] as ChatGptOverview.ReceivedMessage,
-                position
+                position,
+                likedMessageIds.contains((asyncListDiffer.currentList[position] as ChatGptOverview.ReceivedMessage).id),
+                dislikedMessageIds.contains((asyncListDiffer.currentList[position] as ChatGptOverview.ReceivedMessage).id)
             )
 
             is ChatGptViewItemsHolder.ChatMessageRetryViewHolder -> holder.bind(
@@ -210,13 +234,23 @@ class ChatGptAdapter :
             is ChatGptOverview.HeaderMeal -> R.layout.item_ai_header_meal
         }
     }
+
+    fun checkRateState(id: java.util.UUID): Boolean {
+        if (likedMessageIds.contains(id)) {
+            return true
+        }
+        if (dislikedMessageIds.contains(id)) {
+            return true
+        }
+        return false
+    }
 }
 
 
 sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    var itemClickListener: ChatClickListener?=null
+    var itemClickListener: ChatClickListener? = null
 
     class ChatMessageSentViewHolder(private val binding: ItemChatMessageSentListBinding) :
         ChatGptViewItemsHolder(binding) {
@@ -308,7 +342,9 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
 
         fun bind(
             data: ChatGptOverview.ReceivedMessage,
-            position: Int
+            position: Int,
+            liked: Boolean,
+            disliked: Boolean
         ) {
             binding.apply {
                 tvMessage.visible()
@@ -324,17 +360,23 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
                     .build()*/
 
                 markwon.setMarkdown(tvMessage, data.message)
-                //logo.visible()
+
+                // Update like/dislike icons based on state flags
+                binding.ivLike.setImageResource(
+                    if (liked) R.drawable.ic_thumbs_up_v2_filled else R.drawable.ic_thumbs_up_v2
+                )
+                binding.ivDislike.setImageResource(
+                    if (disliked) R.drawable.ic_thumbs_down_v2_filled else R.drawable.ic_thumbs_down_v2
+                )
 
                 binding.ivCopy.setOnClickListener {
-                    itemClickListener?.onCopyMessage()
+                    itemClickListener?.onCopyMessage(data)
                 }
                 binding.ivLike.setOnClickListener {
-                    itemClickListener?.onLikeMessage()
-
+                    itemClickListener?.onLikeMessage(data)
                 }
                 binding.ivDislike.setOnClickListener {
-                    itemClickListener?.onDislikeMessage()
+                    itemClickListener?.onDislikeMessage(data)
                 }
             }
         }
@@ -440,7 +482,7 @@ private fun showImagePreviewDialog(context: Context, imageUrl: String) {
 
 
 interface ChatClickListener {
-    fun onCopyMessage()
-    fun onLikeMessage()
-    fun onDislikeMessage()
+    fun onCopyMessage(message: com.oreo.data.model.ChatGptOverview.ReceivedMessage)
+    fun onLikeMessage(message: com.oreo.data.model.ChatGptOverview.ReceivedMessage)
+    fun onDislikeMessage(message: com.oreo.data.model.ChatGptOverview.ReceivedMessage)
 }

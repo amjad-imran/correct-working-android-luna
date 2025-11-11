@@ -199,7 +199,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             adapter = mAdapter
         }
 
-        mAdapter.itemClickListener = { item, position ->
+       /* mAdapter.itemClickListener = { item, position ->
             when (item) {
                 is ChatGptOverview.SentMessage -> {
 
@@ -221,7 +221,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                 is ChatGptOverview.HeaderMeal -> {}
                 is ChatGptOverview.HeaderWorkout -> {}
             }
-        }
+        }*/
     }
 
     override fun initListener() {

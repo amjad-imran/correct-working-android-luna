@@ -9,7 +9,9 @@ import android.net.Uri
 import androidx.core.content.FileProvider
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import com.google.gson.JsonObject
 import com.grapesnberries.curllogger.CurlLoggerInterceptor
 import com.here.oksse.OkSse
 import com.here.oksse.ServerSentEvent
@@ -26,6 +28,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.Token
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
@@ -52,7 +55,10 @@ import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import java.io.File
 import java.io.FileOutputStream
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 import java.util.TimeZone
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -853,19 +859,45 @@ class ChatGptViewModel
                     ExifInterface.ORIENTATION_ROTATE_90 -> Matrix().apply { postRotate(90f) }
                     ExifInterface.ORIENTATION_ROTATE_180 -> Matrix().apply { postRotate(180f) }
                     ExifInterface.ORIENTATION_ROTATE_270 -> Matrix().apply { postRotate(270f) }
-                    ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> Matrix().apply { preScale(-1f, 1f) }
+                    ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> Matrix().apply {
+                        preScale(
+                            -1f,
+                            1f
+                        )
+                    }
+
                     ExifInterface.ORIENTATION_FLIP_VERTICAL -> Matrix().apply { preScale(1f, -1f) }
-                    ExifInterface.ORIENTATION_TRANSPOSE -> Matrix().apply { postRotate(90f); preScale(-1f, 1f) }
-                    ExifInterface.ORIENTATION_TRANSVERSE -> Matrix().apply { postRotate(270f); preScale(-1f, 1f) }
+                    ExifInterface.ORIENTATION_TRANSPOSE -> Matrix().apply {
+                        postRotate(90f); preScale(
+                        -1f,
+                        1f
+                    )
+                    }
+
+                    ExifInterface.ORIENTATION_TRANSVERSE -> Matrix().apply {
+                        postRotate(270f); preScale(
+                        -1f,
+                        1f
+                    )
+                    }
+
                     else -> null
                 }
 
                 if (matrix != null) {
                     Bitmap.createBitmap(
-                        originalBitmap, 0, 0, originalBitmap.width, originalBitmap.height, matrix, true
+                        originalBitmap,
+                        0,
+                        0,
+                        originalBitmap.width,
+                        originalBitmap.height,
+                        matrix,
+                        true
                     )
                 } else originalBitmap
-            } catch (_: Exception) { originalBitmap }
+            } catch (_: Exception) {
+                originalBitmap
+            }
 
             val outFile =
                 File(context.cacheDir, "compressed_${System.currentTimeMillis()}.jpg")
@@ -886,6 +918,68 @@ class ChatGptViewModel
             null
         }
     }
+
+    fun postChatReview(text: String, reviewFlag: Int, messageId: UUID) {
+        if (threadId == null) {
+            return
+        }
+        val date = try {
+            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+            sdf.timeZone = TimeZone.getDefault()
+            sdf.format(Date())
+        } catch (_: Exception) {
+            ""
+        }
+
+
+        viewModelScope.launch {
+
+            val request = JsonObject().apply {
+                this.addProperty("thread_id",threadId)
+                this.addProperty("text",text)
+                this.addProperty("date",date)
+                this.addProperty("review","$reviewFlag")
+            }
+
+
+            oreoDeviceRepository.markAiMessageState(request).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        //setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        postChatReview(text, reviewFlag, messageId)
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+
+                        }
+                    }
+                }
+            }
+        }
+
+
+    }
+
 
     fun getMimeType(context: Context, uri: Uri): String? =
         context.contentResolver.getType(uri)

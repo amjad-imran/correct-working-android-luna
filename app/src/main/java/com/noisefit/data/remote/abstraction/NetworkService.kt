@@ -574,6 +574,12 @@ interface NetworkService {
         @Url url: String
     ): BaseApiResponse<AiCreds>
 
+    @POST
+    suspend fun markAiMessageState(
+        @Url url: String,
+        @Body requestObject: JsonObject
+    ): BaseApiResponse<Any>
+
 
     @GET
     suspend fun generateThreadTitle(
