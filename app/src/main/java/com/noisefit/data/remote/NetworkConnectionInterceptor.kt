@@ -40,6 +40,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
@@ -66,6 +68,11 @@ class NetworkConnectionInterceptor(
     private val database: OreoDataBase,
     private val tokenRefreshApi: TokenRefreshApi,
 ) : Interceptor {
+
+    companion object {
+        private val tokenRefreshMutex = Mutex()
+        @Volatile private var lastRefreshSuccessAt: Long = 0L
+    }
 
     private val STATUS_CODE_LOGOUT = 401
     private val STATUS_CODE_REFRESH = 403
@@ -164,38 +171,39 @@ class NetworkConnectionInterceptor(
                     throw IOException(FORCE_UPDATE)
                 }
 
-                STATUS_CODE_REFRESH -> {//Refresh token
-                    /*val lastTimestamp = localDataStore.getLastTokenRefreshTimestamp()
-                    val currentTimestamp = System.currentTimeMillis()
-                    val difference = (currentTimestamp - lastTimestamp)
-                    if (difference < (10 * 1000) && lastTimestamp != 0L) {
-                        throw IOException("Error Connecting to internet")
-                    }
-
-                    localDataStore.saveLastTokenRefreshTimestamp()*/
+                STATUS_CODE_REFRESH -> { // Refresh token
                     runBlocking {
-
-                        getUpdatedToken().collect { resource ->
-                            when (resource) {
-                                is Resource.Success -> {
-                                    resource.data?.let {
-
-                                        localDataStore.updateUserToken(it.data)
-
-                                        response = chain.proceed(getHeaders(chain))
+                        tokenRefreshMutex.withLock {
+                            val recentlyRefreshed = System.currentTimeMillis() - lastRefreshSuccessAt < 5_000L
+                            if (!recentlyRefreshed) {
+                                var refreshSucceeded = false
+                                getUpdatedToken().collect { resource ->
+                                    when (resource) {
+                                        is Resource.Success -> {
+                                            resource.data?.let {
+                                                localDataStore.updateUserToken(it.data)
+                                                lastRefreshSuccessAt = System.currentTimeMillis()
+                                                refreshSucceeded = true
+                                            }
+                                        }
+                                        is Resource.Loading -> {}
+                                        is Resource.GenericError -> {
+                                            refreshSucceeded = false
+                                        }
+                                        is Resource.NetworkError -> {
+                                            refreshSucceeded = false
+                                        }
                                     }
                                 }
-
-                                is Resource.Loading -> {}
-                                is Resource.GenericError -> {
-                                    logoutUser()
-                                }
-
-                                is Resource.NetworkError -> {
+                                if (!refreshSucceeded) {
                                     logoutUser()
                                 }
                             }
                         }
+                        try {
+                            response.close()
+                        } catch (_: Exception) {}
+                        response = chain.proceed(getHeaders(chain))
                     }
 
                 }

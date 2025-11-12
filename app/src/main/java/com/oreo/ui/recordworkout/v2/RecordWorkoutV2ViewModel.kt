@@ -28,6 +28,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import android.os.SystemClock
 import java.time.LocalDate
 import java.time.Period
 import java.util.Locale
@@ -56,6 +57,9 @@ class RecordWorkoutV2ViewModel @Inject constructor(
     var sportStartTime = 0L
     var workoutDuration = 0L
     var timer: Timer? = null
+    // Monotonic duration tracking
+    private var baseDurationSec: Long = 0L
+    private var resumeRealtimeMs: Long = 0L
 
     var displayTimer = MutableLiveData<String>()
     var countDownTimer = MutableLiveData<String?>()
@@ -106,7 +110,17 @@ class RecordWorkoutV2ViewModel @Inject constructor(
         return System.currentTimeMillis() / 1000
     }
 
+    private fun computedDurationSec(): Long {
+        return if (resumeRealtimeMs > 0L) {
+            val delta = (SystemClock.elapsedRealtime() - resumeRealtimeMs) / 1000
+            baseDurationSec + delta
+        } else {
+            baseDurationSec
+        }
+    }
+
     fun updateTimer() {
+        workoutDuration = computedDurationSec()
         val hours = workoutDuration / 3600
         val minutes = (workoutDuration % 3600) / 60
         val seconds = workoutDuration % 60
@@ -121,10 +135,10 @@ class RecordWorkoutV2ViewModel @Inject constructor(
 
     fun starTimer() {
         timer?.cancel()
+        resumeRealtimeMs = SystemClock.elapsedRealtime()
         timer = Timer().apply {
             scheduleAtFixedRate(object : TimerTask() {
                 override fun run() {
-                    workoutDuration += 1
                     updateTimer()
                 }
             }, 0, 1000)
@@ -132,6 +146,8 @@ class RecordWorkoutV2ViewModel @Inject constructor(
     }
 
     fun pauseTimer() {
+        baseDurationSec = computedDurationSec()
+        resumeRealtimeMs = 0L
         timer?.cancel()
     }
 
@@ -141,6 +157,13 @@ class RecordWorkoutV2ViewModel @Inject constructor(
 
     fun stopTimer() {
         timer?.cancel()
+    }
+
+    fun initFromOngoing(durationSec: Long, sportStatus: Int) {
+        baseDurationSec = durationSec
+        workoutDuration = baseDurationSec
+        resumeRealtimeMs = 0L
+        updateTimer()
     }
 
 
