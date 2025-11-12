@@ -27,7 +27,7 @@ object ShareUtil {
             val emailIntent = Intent(Intent.ACTION_SEND)
             emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject)
-            emailIntent.putExtra(Intent.EXTRA_TEXT, subject)
+            //emailIntent.putExtra(Intent.EXTRA_TEXT, subject)
             emailIntent.selector = selectorIntent
             context.startActivity(Intent.createChooser(emailIntent, "Send email"))
         } catch (exp: Exception) {

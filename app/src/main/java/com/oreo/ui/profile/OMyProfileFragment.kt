@@ -168,7 +168,12 @@ class OMyProfileFragment :
                     this["target"] = "live_support"
                 })
 
-            Freshchat.showConversations(requireContext())
+            //Freshchat.showConversations(requireContext())
+
+            context?.let {
+                ShareUtil.composeEmail(it,"luna.support@nexxbase.com","APP SUPPORT")
+            }
+
         }
 
         binding.rowSettings.setOnClickListener {
