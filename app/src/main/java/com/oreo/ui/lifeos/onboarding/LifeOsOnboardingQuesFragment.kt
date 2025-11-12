@@ -34,7 +34,7 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
     override fun initListener() {
         binding.viewSkip.setOnClickListener {
             viewModel.curQues.value?.let { ques ->
-                viewModel.saveCurrentQues(ques.id, ArrayList())
+                viewModel.saveCurrentQues(ques.id, null)
             }
         }
 
@@ -43,11 +43,7 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
         }
 
         binding.btnNext.setOnClickListener {
-            if(binding.btnNext.text.equals(getString(R.string.text_next))) {
-                viewModel.nextBtnClicked.postValue(true)
-            }else{
-
-            }
+            viewModel.nextBtnClicked.postValue(true)
         }
 
         binding.btnClose.setOnClickListener {
@@ -66,8 +62,8 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
         val totalQues = viewModel.onBoardResponseData?.questions?.size
         val curProgress = viewModel.curQuesIndex?.plus(1)
         if(totalQues==null || curProgress==null){
-            binding.tvSkip.invisible()
-            binding.viewSkip.invisible()
+            /*binding.tvSkip.invisible()
+            binding.viewSkip.invisible()*/
             return
         }
 
@@ -76,12 +72,12 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
             progress = curProgress
         }
         if(totalQues==curProgress){
-            binding.tvSkip.invisible()
-            binding.viewSkip.invisible()
+            /*binding.tvSkip.invisible()
+            binding.viewSkip.invisible()*/
             binding.btnNext.text = getString(R.string.text_done)
         }else{
-            binding.tvSkip.visible()
-            binding.viewSkip.visible()
+            /*binding.tvSkip.visible()
+            binding.viewSkip.visible()*/
             binding.btnNext.text = getString(R.string.text_next)
         }
 

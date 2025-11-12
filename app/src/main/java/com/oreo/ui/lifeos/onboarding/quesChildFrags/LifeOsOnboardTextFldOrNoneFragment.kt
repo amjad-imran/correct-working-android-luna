@@ -12,6 +12,7 @@ import com.noisefit_commans.data.model.lifeos.onboarding.AnswerX
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.hideKeyboard
 import com.noisefit_commans.data.model.lifeos.onboarding.Question
+import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.lifeos.onboarding.LifeOsOnboardingQuesViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -36,6 +37,7 @@ class LifeOsOnboardTextFldOrNoneFragment : BaseFragment<FragmentLifeOsOnboardTex
 
         val ques = arguments?.getParcelable<Question>("question")
         ques?.let {
+            LOGS.d("sacaknscac : $ques")
             quesId = it.id
             allAns = it.answer
             setUi(ques)
@@ -48,22 +50,37 @@ class LifeOsOnboardTextFldOrNoneFragment : BaseFragment<FragmentLifeOsOnboardTex
             ansX = it
             binding.tvNoIssues.text = it.text
             tvNoIssuesSelected = it.isSelected
-            funSetNoneAnsBg()
         }
 
         ques.answer.find { it.text.isEmpty() }?.let {
             textFieldAnsX = it
+            if(it.addOntext.isNotEmpty()){
+                textFieldAnsX?.isSelected = true
+                binding.etAnswer.setText(it.userInputText)
+            }
+
+            if(!it.userInputText.isNullOrEmpty()){
+                textFieldAnsX?.isSelected = true
+                binding.etAnswer.setText(it.userInputText)
+            }
         }
+
+        if(ansX?.isSelected == true || textFieldAnsX?.isSelected == true){
+            parentViewModel.setNextBtnEnableState(true)
+        }
+
+        funSetNoneAnsBg()
     }
 
     override fun initListener() {
 
         val tvNoIssues = binding.tvNoIssues
         val etAnswer = binding.etAnswer
-        binding.lytNoIssues.setOnClickListener {
+        binding.tvNoIssues.setOnClickListener {
             tvNoIssuesSelected = !tvNoIssuesSelected
             tvNoIssues.isSelected = tvNoIssuesSelected
             funSetNoneAnsBg()
+            ansX?.isSelected = tvNoIssuesSelected
 
             if (tvNoIssues.isSelected) {
                 // Clear text and hide keyboard
@@ -77,6 +94,8 @@ class LifeOsOnboardTextFldOrNoneFragment : BaseFragment<FragmentLifeOsOnboardTex
                 parentViewModel.setNextBtnEnableState(true)
                 val currentQ = parentViewModel.curQues.value
                 currentQ?.let {
+                    textFieldAnsX?.userInputText = null
+                    textFieldAnsX?.isSelected = false
                     parentViewModel.saveCurrentQues(
                         it.id,
                         allAns
@@ -105,9 +124,9 @@ class LifeOsOnboardTextFldOrNoneFragment : BaseFragment<FragmentLifeOsOnboardTex
 
     private fun funSetNoneAnsBg(){
         if(tvNoIssuesSelected){
-            binding.lytNoIssues.setBackgroundResource(R.drawable.bg_mcq_selected_lifeos_inboard)
+            binding.tvNoIssues.setBackgroundResource(R.drawable.bg_mcq_selected_lifeos_inboard)
         }else{
-            binding.lytNoIssues.setBackgroundResource(R.drawable.bg_mcq_lifeos_onboard)
+            binding.tvNoIssues.setBackgroundResource(R.drawable.bg_mcq_lifeos_onboard)
         }
     }
 
@@ -125,7 +144,14 @@ class LifeOsOnboardTextFldOrNoneFragment : BaseFragment<FragmentLifeOsOnboardTex
 
             override fun afterTextChanged(s: Editable?) {
                 val input = s?.toString()
-                parentViewModel.setNextBtnEnableState(input.isNullOrEmpty().not())
+                if(input.isNullOrEmpty().not()){
+                    textFieldAnsX?.userInputText = input
+                    textFieldAnsX?.isSelected = true
+                    parentViewModel.setNextBtnEnableState(true)
+                }else{
+                    parentViewModel.setNextBtnEnableState(false)
+                    textFieldAnsX?.isSelected = false
+                }
             }
         }
         binding.etAnswer.addTextChangedListener(watcher)
@@ -146,9 +172,7 @@ class LifeOsOnboardTextFldOrNoneFragment : BaseFragment<FragmentLifeOsOnboardTex
     }
 
     private fun performSave(isExit: Boolean){
-        val input = binding.etAnswer.text.toString()
-        if(input.isNotEmpty() && quesId != null && textFieldAnsX!=null){
-            textFieldAnsX!!.userInputText = input
+        if(ansX?.isSelected==true || textFieldAnsX?.isSelected==true /*input.isNotEmpty() && quesId != null && textFieldAnsX!=null*/){
             parentViewModel.saveCurrentQues(
                 quesId = quesId!!,
                 list = allAns,

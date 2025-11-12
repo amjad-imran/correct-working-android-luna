@@ -36,27 +36,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvQues" />
 
-    <LinearLayout
-        android:id="@+id/lytNoIssues"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/tvNoIssues"
+        style="@style/S14"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_mcq_lifeos_onboard"
         android:layout_marginTop="12dp"
+        android:background="@drawable/bg_mcq_lifeos_onboard"
+        android:gravity="center_vertical"
+        android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etAnswer">
-
-        <TextView
-            android:id="@+id/tvNoIssues"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            style="@style/S14"
-            android:lineHeight="20dp"
-            android:gravity="center_vertical"
-            tools:text="No, I have nothing to report"
-            app:layout_constraintTop_toBottomOf="@+id/etAnswer" />
-
-    </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/etAnswer"
+        tools:text="No, I have nothing to report" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
