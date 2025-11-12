@@ -33,7 +33,9 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
 
     override fun initListener() {
         binding.tvSkip.setOnClickListener {
-            viewModel.switchToNextQuestion()
+            viewModel.curQues.value?.let { ques ->
+                viewModel.saveCurrentQues(ques.id, ArrayList())
+            }
         }
 
         binding.ivBack.setOnClickListener {

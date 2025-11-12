@@ -10,14 +10,12 @@ import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.data.model.lifeos.onboarding.AnswerX
 import com.noisefit_commans.data.model.lifeos.onboarding.LifeOSOnboardMCQquesStates
 import com.noisefit_commans.data.model.lifeos.onboarding.OnBoardQuesGetResponse
 import com.noisefit_commans.data.model.lifeos.onboarding.Question
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.util.SortedMap
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,9 +28,6 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
     val curQues = MutableLiveData<Question>()
 
     var curQuesIndex: Int ?= null
-
-    val quesAnsMap = HashMap<Int, HashSet<Int>>()
-    val otherTextMap = HashMap<Int, String>() // {quesId, textField txt}
 
     val updateNextButtonState = MutableLiveData<Boolean>()
     val nextBtnClicked = MutableLiveData<Boolean>()
@@ -214,7 +209,7 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
         curQues.postValue(prevQuesData)
     }
 
-    fun saveSelectedItems(updatedList: List<AnswerX>) {
+    /*fun saveSelectedItems(updatedList: List<AnswerX>) {
         updatedList.forEach {
             LOGS.d("cjbsiajckascjn, $it")
         }
@@ -233,7 +228,7 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
 
             LOGS.d("ajsbkcac : $")
         }
-    }
+    }*/
 
     fun submitQuesAnsToServer(){
         viewModelScope.launch {
@@ -242,13 +237,11 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
             savedQuesAns.forEach { map ->
                 val quesId = map.key
                 val ansId = JsonArray().apply {
-                    map.value.filter {
-                        it.isSelected
-                    }.forEach {
+                    map.value.forEach {
                         this.add(it.id)
                     }
                 }
-                val addOnText = map.value.find { it.state== LifeOSOnboardMCQquesStates.OTHER }?.addOntext ?: ""
+                val addOnText = map.value.find { it.state== LifeOSOnboardMCQquesStates.OTHER }?.userInputText ?: ""
 
                 val jsonObject = JsonObject().apply {
                     this.add("ans_id", ansId)
