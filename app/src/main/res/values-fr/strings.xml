@@ -935,7 +935,7 @@
     <string name="text_call">Appeler</string>
     <string name="text_help">Aide et assistance</string>
     <string name="text_warranty_registered"> Ajouter du texte </string>
-    <string name="text_bad_feedback_msg">Si vous avez une question, écrivez-nous à luna.support@nexxbase.com</string>
+    <string name="text_bad_feedback_msg">Si vous avez une question, écrivez-nous à support@lunazone.com</string>
     <string name="text_got_something_to_share_tell_us">Vous avez quelque chose à partager ? Dites-le-nous.</string>
     <string name="text_log_in">Se connecter</string>
     <string name="text_privacy_message">Bienvenue chez Luna Ring. Vous pouvez utiliser cette application pour gérer votre bague et consulter vos données de santé et d\'exercice. Nous respecterons strictement les lois, règlements et politiques de confidentialité en vigueur pour protéger vos informations personnelles. Pour fournir les services de base, l\'application doit être connectée à Internet.</string>
@@ -2418,5 +2418,6 @@ onjour, Luna"</string>
     <string name="text_only_the_sleep_data_shown_above_will_be_shared_you_can_stop_sharing_anytime_by_turning_off_the_toggle">Seules les données de sommeil affichées ci-dessus seront partagées. Vous pouvez arrêter le partage à tout moment en désactivant le commutateur.</string>
     <string name="text_workout_no_internet">Entraînement enregistré. Nous le traiterons lorsque vous serez en ligne.</string>
     <string name="text_analyse_this">Analysez ceci</string>
+    <string name="text_email_support">Assistance par e-mail</string>
 
 </resources>

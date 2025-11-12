@@ -17,9 +17,9 @@ class BottomSheetBadRating : BaseBottomSheetWithTransparent<BottomSheetBadRating
     override fun initListener() {
         binding.tvDesc.makeLinks(
             false,
-            Pair("luna.support@nexxbase.com", View.OnClickListener {
+            Pair("support@lunazone.com", View.OnClickListener {
                 context?.let {
-                    ShareUtil.composeEmail(it,"luna.support@nexxbase.com","")
+                    ShareUtil.composeEmail(it,"support@lunazone.com","")
                 }
             })
         )

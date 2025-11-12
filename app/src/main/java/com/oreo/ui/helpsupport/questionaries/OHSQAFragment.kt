@@ -70,7 +70,7 @@ class OHSQAFragment :
             val isCall = bundle.getBoolean("call")
             if (isCall) {
                 context?.let {
-                    ShareUtil.composeEmail(it,"luna.support@nexxbase.com","")
+                    ShareUtil.composeEmail(it,"support@lunazone.com","")
                 }
             } else {
                 binding.lytHelpful.ivThumbsDown.alpha = 0.5f
