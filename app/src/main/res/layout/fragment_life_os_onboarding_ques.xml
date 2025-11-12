@@ -42,6 +42,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnClose" />
 
+    <View
+        android:id="@+id/viewSkip"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvSkip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tvSkip"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/btnNext"
         style="@style/PrimaryButtonStyle"

@@ -29,12 +29,15 @@ class LifeOsOnboardTextFldOrNoneFragment : BaseFragment<FragmentLifeOsOnboardTex
     private var ansX: AnswerX ?= null
     private var textFieldAnsX: AnswerX ?= null
 
+    private var allAns: List<AnswerX> ?= null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val ques = arguments?.getParcelable<Question>("question")
         ques?.let {
             quesId = it.id
+            allAns = it.answer
             setUi(ques)
         }
     }
@@ -44,6 +47,8 @@ class LifeOsOnboardTextFldOrNoneFragment : BaseFragment<FragmentLifeOsOnboardTex
         ques.answer.find { it.text.isNotEmpty() == true }?.let {
             ansX = it
             binding.tvNoIssues.text = it.text
+            tvNoIssuesSelected = it.isSelected
+            funSetNoneAnsBg()
         }
 
         ques.answer.find { it.text.isEmpty() }?.let {
@@ -74,9 +79,7 @@ class LifeOsOnboardTextFldOrNoneFragment : BaseFragment<FragmentLifeOsOnboardTex
                 currentQ?.let {
                     parentViewModel.saveCurrentQues(
                         it.id,
-                        ArrayList<AnswerX>().apply {
-                            ansX?.let { this.add(ansX!!) }
-                        }
+                        allAns
                     )
                 }
             }
@@ -130,18 +133,27 @@ class LifeOsOnboardTextFldOrNoneFragment : BaseFragment<FragmentLifeOsOnboardTex
         parentViewModel.nextBtnClicked.observe(this){
             if(it){
                 parentViewModel.nextBtnClicked.value = false
-
-                val input = binding.etAnswer.text.toString()
-                if(input.isNotEmpty() && quesId != null && textFieldAnsX!=null){
-                    textFieldAnsX!!.userInputText = input
-                    parentViewModel.saveCurrentQues(
-                        quesId = quesId!!,
-                        list = listOf(
-                            textFieldAnsX!!
-                        )
-                    )
-                }
+                performSave(false)
             }
+        }
+
+        parentViewModel.saveAndExitBtnClickedBs.observe(this) {
+            if (it) {
+                parentViewModel.saveAndExitBtnClickedBs.value = false
+                performSave(true)
+            }
+        }
+    }
+
+    private fun performSave(isExit: Boolean){
+        val input = binding.etAnswer.text.toString()
+        if(input.isNotEmpty() && quesId != null && textFieldAnsX!=null){
+            textFieldAnsX!!.userInputText = input
+            parentViewModel.saveCurrentQues(
+                quesId = quesId!!,
+                list = allAns,
+                isSaveAndExit = isExit
+            )
         }
     }
 

@@ -20,11 +20,11 @@ class LifeOsChildMcqSingleFragment : BaseFragment<FragmentLifeOsChildMcqSingleBi
 
     var quesId: Int ?= null
 
-    private val adapter: LifeOsOnboardMcqSingleAdapter by lazy {
+    private val myAdapter: LifeOsOnboardMcqSingleAdapter by lazy {
         LifeOsOnboardMcqSingleAdapter(object : OnMcqItemClicked {
             override fun onItemClick(data: AnswerX, position: Int) {
-                adapter.updateItem(data, position)
-                parentViewModel.setNextBtnEnableState(adapter.getSelectedValue()!=null)
+                myAdapter.updateItem(data, position)
+                parentViewModel.setNextBtnEnableState(myAdapter.getSelectedValue()!=null)
             }
         })
     }
@@ -36,20 +36,18 @@ class LifeOsChildMcqSingleFragment : BaseFragment<FragmentLifeOsChildMcqSingleBi
         ques?.let {
             quesId = it.id
             setUi(ques)
-            setAdapter()
-        }
-    }
-
-    private fun setAdapter() {
-        binding.rvAnswers.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = adapter
         }
     }
 
     private fun setUi(ques: Question) {
         binding.tvQues.text = ques.text
-        adapter.setData(ques.answer)
+
+        // set rv
+        binding.rvAnswers.apply {
+            this.layoutManager = LinearLayoutManager(requireContext())
+            this.adapter = myAdapter
+        }
+        myAdapter.setData(ques.answer)
     }
 
     override fun initListener() {
@@ -60,17 +58,26 @@ class LifeOsChildMcqSingleFragment : BaseFragment<FragmentLifeOsChildMcqSingleBi
         parentViewModel.nextBtnClicked.observe(this) {
             if (it) {
                 parentViewModel.nextBtnClicked.value = false
-
-                val selected = adapter.getSelectedValue()
-                val arrayList = ArrayList<AnswerX>()
-                selected?.let { arrayList.add(selected) }
-                quesId?.let { qId ->
-                    parentViewModel.saveCurrentQues(
-                        quesId = qId,
-                        list = arrayList
-                    )
-                }
+                performSave(false)
             }
+        }
+
+        parentViewModel.saveAndExitBtnClickedBs.observe(this) {
+            if (it) {
+                parentViewModel.saveAndExitBtnClickedBs.value = false
+                performSave(true)
+            }
+        }
+    }
+
+    private fun performSave(isExit: Boolean){
+        val allItems = myAdapter.getAllItems()
+        quesId?.let { qId ->
+            parentViewModel.saveCurrentQues(
+                quesId = qId,
+                list = allItems,
+                isSaveAndExit = isExit
+            )
         }
     }
 

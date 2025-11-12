@@ -15,7 +15,7 @@ import com.noisefit.luna.databinding.ItemLifeosOnboardCheckboxTextBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.data.model.lifeos.onboarding.AnswerX
 import com.noisefit_commans.data.model.lifeos.onboarding.LifeOSOnboardMCQquesStates
-import com.noisefit_commans.ui.setVisibilityByCondition
+import com.noisefit_commans.ui.visible
 
 class AnswersWithCheckboxAdapter(
     private val onSelectionChanged: ((List<AnswerX>) -> Unit),
@@ -40,7 +40,15 @@ class AnswersWithCheckboxAdapter(
                 if(item.state != LifeOSOnboardMCQquesStates.OTHER){
                     binding.lytInputField.root.gone()
                 }else{
-                    binding.lytInputField.root.setVisibilityByCondition(item.isSelected)
+                    if(item.isSelected){
+                        binding.lytInputField.root.visible()
+                        if(!item.userInputText.isNullOrEmpty()){
+                            binding.lytInputField.descInputLayout.setText(item.userInputText)
+                        }
+                    }else{
+                        binding.lytInputField.root.gone()
+                    }
+
                     if (currentWatcher==null) {
                         val watcher = object : TextWatcher {
                             override fun beforeTextChanged(
@@ -57,7 +65,7 @@ class AnswersWithCheckboxAdapter(
                                 val p = bindingAdapterPosition
                                 if (p != RecyclerView.NO_POSITION) {
                                     items[p].userInputText = s?.toString()
-                                    onSelectionChanged?.invoke(items)
+                                    onSelectionChanged.invoke(items)
                                 }
                             }
                         }
@@ -83,6 +91,8 @@ class AnswersWithCheckboxAdapter(
                     // Handle keyboard and input field visibility
                     if (nowSelected) {
                         setNoneItemUnselected()
+                    }else{
+                        clicked.userInputText = null
                     }
                 }
 
@@ -119,7 +129,7 @@ class AnswersWithCheckboxAdapter(
 
             }
 
-            onSelectionChanged?.invoke(items)
+            onSelectionChanged.invoke(items)
         }
 
         private fun setNoneItemUnselected(){
@@ -150,6 +160,8 @@ class AnswersWithCheckboxAdapter(
     fun getSelectedValue(): List<AnswerX> {
         return items.filter { it.isSelected }
     }
+
+    fun getAllData(): List<AnswerX> = items
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         val inflater = LayoutInflater.from(parent.context)

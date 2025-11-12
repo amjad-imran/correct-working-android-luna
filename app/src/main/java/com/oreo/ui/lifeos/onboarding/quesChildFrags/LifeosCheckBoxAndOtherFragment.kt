@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.databinding.FragmentLifeosCheckBoxAndOtherBinding
-import com.noisefit_commans.utils.LOGS
 
 class LifeosCheckBoxAndOtherFragment : BaseFragment<FragmentLifeosCheckBoxAndOtherBinding>(FragmentLifeosCheckBoxAndOtherBinding::inflate) {
 
@@ -18,7 +17,7 @@ class LifeosCheckBoxAndOtherFragment : BaseFragment<FragmentLifeosCheckBoxAndOth
         factoryProducer = { defaultViewModelProviderFactory }
     )
 
-    private val adapter: AnswersWithCheckboxAdapter by lazy {
+    private val myAdapter: AnswersWithCheckboxAdapter by lazy {
         AnswersWithCheckboxAdapter(
             onSelectionChanged = {
                 parentViewModel.setNextBtnEnableState(it.find { it.isSelected }!=null)
@@ -42,12 +41,11 @@ class LifeosCheckBoxAndOtherFragment : BaseFragment<FragmentLifeosCheckBoxAndOth
         binding.tvQues.text = ques.text
 
         binding.rvAnswers.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = adapter
+            this.layoutManager = LinearLayoutManager(requireContext())
+            this.adapter = myAdapter
         }
-        LOGS.d("sacknlasa : ${ques.answer}")
 
-        adapter.updateDataSet(ques.answer)
+        myAdapter.updateDataSet(ques.answer)
     }
 
     override fun initListener() {
@@ -58,14 +56,26 @@ class LifeosCheckBoxAndOtherFragment : BaseFragment<FragmentLifeosCheckBoxAndOth
         parentViewModel.nextBtnClicked.observe(this) {
             if (it) {
                 parentViewModel.nextBtnClicked.value = false
-                val selectedItems = adapter.getSelectedValue()
-                quesId?.let { qId ->
-                    parentViewModel.saveCurrentQues(
-                        quesId = qId,
-                        list = selectedItems
-                    )
-                }
+                performSave(false)
             }
+        }
+
+        parentViewModel.saveAndExitBtnClickedBs.observe(this) {
+            if (it) {
+                parentViewModel.saveAndExitBtnClickedBs.value = false
+                performSave(true)
+            }
+        }
+    }
+
+    private fun performSave(isExit: Boolean){
+        val getAllItems = myAdapter.getAllData()
+        quesId?.let { qId ->
+            parentViewModel.saveCurrentQues(
+                quesId = qId,
+                list = getAllItems,
+                isSaveAndExit = isExit
+            )
         }
     }
 

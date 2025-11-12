@@ -32,9 +32,9 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
     val updateNextButtonState = MutableLiveData<Boolean>()
     val nextBtnClicked = MutableLiveData<Boolean>()
 
-    val savedQuesAns = HashMap<Int, List<AnswerX>>()
-
     val navigateToFinishScreen = MutableLiveData<Boolean>()
+
+    val saveAndExitBtnClickedBs = MutableLiveData<Boolean>()
 
     fun getOnboardQues() {
         viewModelScope.launch {
@@ -149,11 +149,6 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
                             resource.data?.data?.let {
                                 localDataStore.setLifeOsOnboardData(it)
                                 onBoardResponseData = it
-
-                                val curQ = it.questions?.indexOfFirst {!it.isSavedByUser}
-                                if(curQ != -1){
-                                    curQuesIndex = curQ
-                                }
                                 processData(it)
                             }
                         }
@@ -164,15 +159,27 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
     }
 
     fun processData(mainData: OnBoardQuesGetResponse){
-        mainData.questions?.forEach {
+        mainData.questions?.forEachIndexed { idx, it ->
+            val curQuesAns = mainData.answers?.find { it1-> it1.ques_id==it.id}
+            /*if(curQuesAns != null){
+                it.isSavedByUser = true
+            }*/
             it.answer.forEach { ans ->
+
+                ans.isSelected = curQuesAns?.ans_id?.contains(ans.id) == true
+
                 ans.state = if(ans.addOntext.equals("1")){
+                    ans.userInputText = curQuesAns?.addOntext
                     LifeOSOnboardMCQquesStates.OTHER
                 }else if(ans.text.equals("none", ignoreCase = true)){
                     LifeOSOnboardMCQquesStates.NONE
                 }else{
                     LifeOSOnboardMCQquesStates.NORMAL
                 }
+            }
+
+            if(curQuesIndex == null && !it.isSavedByUser){
+                curQuesIndex = idx
             }
         }
 
@@ -209,39 +216,18 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
         curQues.postValue(prevQuesData)
     }
 
-    /*fun saveSelectedItems(updatedList: List<AnswerX>) {
-        updatedList.forEach {
-            LOGS.d("cjbsiajckascjn, $it")
-        }
-
-        curQues.value?.let { it ->
-            val updatedAns = updatedList.filter { it.isSelected }.map { it.id }.toSet()
-            if(updatedAns.isEmpty()){
-                return@let
-            }
-            quesAnsMap[it.id] = HashSet(updatedAns)
-
-            // save other text
-            updatedList.find { it.state==LifeOSOnboardMCQquesStates.OTHER && it.isSelected }?.let { it1 ->
-                otherTextMap[it.id] = it1.userInputText ?: ""
-            }
-
-            LOGS.d("ajsbkcac : $")
-        }
-    }*/
-
     fun submitQuesAnsToServer(){
         viewModelScope.launch {
             val reqArray = JsonArray()
 
-            savedQuesAns.forEach { map ->
-                val quesId = map.key
+            onBoardResponseData?.questions?.filter { it.isSavedByUser }?.forEach { ques ->
+                val quesId = ques.id
                 val ansId = JsonArray().apply {
-                    map.value.forEach {
+                    ques.answer.filter { it.isSelected }.forEach {
                         this.add(it.id)
                     }
                 }
-                val addOnText = map.value.find { it.state== LifeOSOnboardMCQquesStates.OTHER }?.userInputText ?: ""
+                val addOnText = ques.answer.find { it.state== LifeOSOnboardMCQquesStates.OTHER }?.userInputText ?: ""
 
                 val jsonObject = JsonObject().apply {
                     this.add("ans_id", ansId)
@@ -293,10 +279,15 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
         updateNextButtonState.postValue(bool)
     }
 
-    fun saveCurrentQues(quesId: Int, list: List<AnswerX>){
-        onBoardResponseData?.questions?.find { it.id==quesId }?.let { it.isSavedByUser = true }
-        savedQuesAns[quesId] = list
-        if(curQuesIndex==onBoardResponseData?.questions?.size?.minus(1)){
+    fun saveCurrentQues(quesId: Int, list: List<AnswerX>?, isSaveAndExit: Boolean = false){
+        onBoardResponseData?.questions?.find { it.id==quesId }?.let {
+            if(list!=null) {
+                it.answer = list
+            }
+            it.isSavedByUser = true
+        }
+
+        if(isSaveAndExit || curQuesIndex==onBoardResponseData?.questions?.size?.minus(1)){
             submitQuesAnsToServer()
         }else{
             switchToNextQuestion()

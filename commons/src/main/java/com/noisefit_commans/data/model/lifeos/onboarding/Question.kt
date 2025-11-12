@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Question(
-    val answer: List<AnswerX>,
+    var answer: List<AnswerX>,
     val id: Int,
     val text: String,
     val type: String,

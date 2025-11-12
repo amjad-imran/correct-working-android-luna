@@ -84,6 +84,8 @@ class LifeOsOnboardMcqSingleAdapter(val mListener: OnMcqItemClicked) :
         return null
     }
 
+    fun getAllItems(): List<AnswerX> = mDataSet
+
     fun setData(resultData: List<AnswerX>?) {
         mDataSet.clear()
         notifyDataSetChanged()

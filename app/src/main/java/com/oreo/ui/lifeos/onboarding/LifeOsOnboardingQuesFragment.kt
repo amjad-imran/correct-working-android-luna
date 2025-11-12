@@ -32,7 +32,7 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
     }
 
     override fun initListener() {
-        binding.tvSkip.setOnClickListener {
+        binding.viewSkip.setOnClickListener {
             viewModel.curQues.value?.let { ques ->
                 viewModel.saveCurrentQues(ques.id, ArrayList())
             }
@@ -51,11 +51,11 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
         }
 
         binding.btnClose.setOnClickListener {
-
             setFragmentResultListener(LIFEOS_ONBOARD_BS_KEY) { _, bundle ->
                 val isSaveAndExit = bundle.getBoolean("saveAndExit")
                 if(isSaveAndExit){
-
+                    viewModel.saveAndExitBtnClickedBs.postValue(true)
+                    viewModel.submitQuesAnsToServer()
                 }
             }
             navigate(R.id.lifeOSOnboardSkipOrConBottomSheet)
@@ -66,7 +66,8 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
         val totalQues = viewModel.onBoardResponseData?.questions?.size
         val curProgress = viewModel.curQuesIndex?.plus(1)
         if(totalQues==null || curProgress==null){
-            binding.tvSkip.gone()
+            binding.tvSkip.invisible()
+            binding.viewSkip.invisible()
             return
         }
 
@@ -76,14 +77,16 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
         }
         if(totalQues==curProgress){
             binding.tvSkip.invisible()
+            binding.viewSkip.invisible()
             binding.btnNext.text = getString(R.string.text_done)
         }else{
             binding.tvSkip.visible()
+            binding.viewSkip.visible()
             binding.btnNext.text = getString(R.string.text_next)
         }
 
         if(curProgress==1){
-            binding.ivBack.gone()
+            binding.ivBack.invisible()
         }else{
             binding.ivBack.visible()
         }
