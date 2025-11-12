@@ -86,8 +86,7 @@ class RecordWorkoutFragmentV2 :
 
         if(ongoingWorkoutArgs!=null ){
             LOGS.d("RECORD_WORKOUT  ongoing - $ongoingWorkoutArgs")
-
-            viewModel.workoutDuration = ongoingWorkoutArgs.duration.toLong()
+            viewModel.initFromOngoing(ongoingWorkoutArgs.duration.toLong(), ongoingWorkoutArgs.sportStatus)
             if (ongoingWorkoutArgs.sportStatus == 1 || ongoingWorkoutArgs.sportStatus == 3) {
                 startWorkoutUi()
             } else if (ongoingWorkoutArgs.sportStatus == 2) {
