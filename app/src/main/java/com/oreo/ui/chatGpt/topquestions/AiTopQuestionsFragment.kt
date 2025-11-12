@@ -178,10 +178,12 @@ class AiTopQuestionsFragment :
                     meal = null,
                     workout = null,
                     planType = PlanType.NONE,
-                    attachmentUri = if(att?.uri!=null){att.uri.toString()} else null,
+                    attachmentUri = if (att?.uri != null) {
+                        att.uri.toString()
+                    } else null,
                     attachmentMime = att?.mimeType,
                     attachmentName = att?.fileName,
-                    attachmentSize = att?.sizeBytes?:-1
+                    attachmentSize = att?.sizeBytes ?: -1
                 )
                 navigate(frag, bundle)
                 chatHelperViewModel.clearPendingAttachment()
@@ -239,7 +241,8 @@ class AiTopQuestionsFragment :
                     com.bumptech.glide.Glide.with(binding.root.context)
                         .load(data.uri)
                         .into(binding.lytChatBox.ivAttachmentImage)
-                } catch (_: Exception) { }
+                } catch (_: Exception) {
+                }
             } else {
                 binding.lytChatBox.ivAttachmentImage.visibility = View.GONE
                 binding.lytChatBox.lytAttachmentDoc.visibility = View.VISIBLE
@@ -266,7 +269,8 @@ class AiTopQuestionsFragment :
                 if (granted) {
                     launchCameraPicker()
                 } else {
-                    val showRationale = shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)
+                    val showRationale =
+                        shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)
                     if (showRationale) {
                         context.showShortToast(getString(R.string.text_camera_permission))
                     } else {
@@ -283,13 +287,56 @@ class AiTopQuestionsFragment :
             }
 
         pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-            uri?.let { handlePickedUri(it, chatHelperViewModel.getMimeType(requireContext(), it) ?: "image/*") }
+            uri?.let {
+                val mime = viewModel.getMimeType(requireContext(), it) ?: "image/*"
+                val isHeic = mime.equals("image/heic", true) || mime.equals("image/heif", true)
+                if (isHeic) {
+                    val converted = viewModel.convertHeicToJpeg(
+                        requireContext(),
+                        it,
+                        viewModel.DEFAULT_IMAGE_QUALITY
+                    )
+                    if (converted == null) {
+                        context.showShortToast(getString(R.string.text_something_went_wrong_single))
+                        return@let
+                    }
+
+                    val size = viewModel.getFileSize(requireContext(), converted)
+                    if (size < 0L) {
+                        context.showShortToast(getString(R.string.text_something_went_wrong_single))
+                        return@let
+                    }
+                    if (size > viewModel.IMAGE_MAX_BYTES) {
+                        context.showShortToast(getString(R.string.text_file_too_large_max_5_mb))
+                        return@let
+                    }
+
+                    val originalName = viewModel.getDisplayName(requireContext(), it) ?: "image"
+                    val jpgName = if (originalName.contains('.')) {
+                        originalName.substringBeforeLast('.') + ".jpg"
+                    } else {
+                        "$originalName.jpg"
+                    }
+                    chatHelperViewModel.setPendingAttachment(
+                        converted,
+                        "image/jpeg",
+                        jpgName,
+                        size
+                    )
+                } else {
+                    handlePickedUri(it, mime)
+                }
+            }
         }
 
         pickDocumentLauncher =
             registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
                 uri?.let {
-                    handlePickedUri(it, chatHelperViewModel.getMimeType(requireContext(), it) ?: "application/octet-stream")
+                    handlePickedUri(
+                        it,
+                        chatHelperViewModel.getMimeType(requireContext(), it)
+                            ?: "application/octet-stream"
+                    )
                 }
             }
     }
@@ -320,12 +367,14 @@ class AiTopQuestionsFragment :
 
     private fun openAppSettings() {
         try {
-            val intent = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                data = Uri.fromParts("package", requireContext().packageName, null)
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
+            val intent =
+                Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = Uri.fromParts("package", requireContext().packageName, null)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
             startActivity(intent)
-        } catch (_: Exception) { }
+        } catch (_: Exception) {
+        }
     }
 
     private fun launchCameraPicker() {
@@ -383,7 +432,12 @@ class AiTopQuestionsFragment :
                 context.showShortToast(getString(R.string.text_file_too_large_max_5_mb))
                 return
             }
-            chatHelperViewModel.setPendingAttachment(compressedUri, "image/jpeg", name, compressedSize)
+            chatHelperViewModel.setPendingAttachment(
+                compressedUri,
+                "image/jpeg",
+                name,
+                compressedSize
+            )
         } else {
             val size = chatHelperViewModel.getFileSize(requireContext(), uri)
             if (size < 0L) {
@@ -473,7 +527,8 @@ fun AiTopQuestionMain(
 @Preview
 @Composable
 fun AskQuestionPreview() {
-    AskQuestion(modifier = Modifier,
+    AskQuestion(
+        modifier = Modifier,
         onSendClicked = {
 
         }, onAiAudioClicked = {
@@ -518,17 +573,17 @@ fun AskQuestion(
                     onSendClicked(text)
                 },
             ),
-        trailingIcon = {
-            if (text.isNotEmpty()) {
-                Image(
-                    painter = painterResource(R.drawable.ic_ai_send_message_2),
-                    modifier = Modifier.clickable {
-                        onSendClicked(text)
-                    },
-                    contentDescription = "Send"
-                )
-            }
-        },
+            trailingIcon = {
+                if (text.isNotEmpty()) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_ai_send_message_2),
+                        modifier = Modifier.clickable {
+                            onSendClicked(text)
+                        },
+                        contentDescription = "Send"
+                    )
+                }
+            },
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color(0xc009284c),
                 unfocusedContainerColor = Color(0xc009284c),
@@ -542,19 +597,20 @@ fun AskQuestion(
             )
         )
 
-        if(text.isEmpty()){
+        if (text.isEmpty()) {
             Spacer(modifier = Modifier.width(8.dp))
 
-            Box(modifier = Modifier
-                .width(48.dp)
-                .height(48.dp)
-                .background(
-                    color = Color(0xFFFFFFFF),
-                    shape = RoundedCornerShape(size = 48.dp)
-                )
-                .clickable {
-                    onAiAudioClicked()
-                }) {
+            Box(
+                modifier = Modifier
+                    .width(48.dp)
+                    .height(48.dp)
+                    .background(
+                        color = Color(0xFFFFFFFF),
+                        shape = RoundedCornerShape(size = 48.dp)
+                    )
+                    .clickable {
+                        onAiAudioClicked()
+                    }) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_ai_mic_black),
                     modifier = Modifier

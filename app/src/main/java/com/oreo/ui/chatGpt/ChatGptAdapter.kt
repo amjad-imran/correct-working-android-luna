@@ -442,11 +442,15 @@ private object ChatMarkwonProvider {
                             )
 
                             3 -> arrayOf(
+                                StyleSpan(Typeface.BOLD),
+                                AbsoluteSizeSpan(spToPx(ctx, 14), false)
+                            )
+                            4 -> arrayOf(
                                 AbsoluteSizeSpan(spToPx(ctx, 14), false)
                             )
 
-                            in 4..Int.MAX_VALUE -> arrayOf(
-                                AbsoluteSizeSpan(spToPx(ctx, 14), false),
+                            in 5..Int.MAX_VALUE -> arrayOf(
+                                AbsoluteSizeSpan(spToPx(ctx, 12), false),
                                 ForegroundColorSpan(
                                     Color.argb((0.7f * 255).toInt(), 255, 255, 255)
                                 )
