@@ -220,8 +220,7 @@ class ChatGptViewModel
             )
         )
         _chatGptOverview.value = messages
-        // clear attachment preview state once committed
-        attachmentPreview.postValue(null)
+        clearPendingAttachment()
     }
 
     fun addThinkingMessage() {
@@ -438,8 +437,6 @@ class ChatGptViewModel
 
                 fetchInProgress.postValue(false)
                 videoState.postValue(false)
-                pendingAttachment = null
-                attachmentPreview.postValue(null)
                 checkForPlans(responseBuilder.toString())
             } catch (t: Throwable) {
                 if (fetchInProgress.value == true) {
