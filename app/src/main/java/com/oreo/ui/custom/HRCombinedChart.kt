@@ -550,46 +550,90 @@ class HRCombinedChart : View {
     private fun calculateYAxisValue(yAxisCount: Int): ArrayList<Int> {
         var minHrValue = xMin
         var maxHrValue = max
-        return getPointsBetween(maxHrValue, yAxisCount)
+        return getPointsBetween(minHrValue,maxHrValue, yAxisCount)
     }
 
-    private fun getPointsBetween(end: Int, numPoints: Int): ArrayList<Int> {
+    private fun getPointsBetween(start:Int,end: Int, numPoints: Int): ArrayList<Int> {
         val points = ArrayList<Int>()
         if (end == 120) {
             if (numPoints == 3) {
-                points.add(40)
-                points.add(80)
-                points.add(120)
+                if(start==0){
+                    points.add(0)
+                    points.add(60)
+                    points.add(120)
+                }else{
+                    points.add(40)
+                    points.add(80)
+                    points.add(120)
+                }
             } else {
-                points.add(40)
-                points.add(60)
-                points.add(80)
-                points.add(100)
-                points.add(120)
+                if(start==0){
+                    points.add(0)
+                    points.add(30)
+                    points.add(60)
+                    points.add(90)
+                    points.add(120)
+                }else{
+                    points.add(40)
+                    points.add(60)
+                    points.add(80)
+                    points.add(100)
+                    points.add(120)
+                }
+
             }
         } else if (end == 160) {
             if (numPoints == 3) {
-                points.add(40)
-                points.add(100)
-                points.add(160)
+                if(start==0){
+                    points.add(0)
+                    points.add(80)
+                    points.add(160)
+                }else{
+                    points.add(40)
+                    points.add(100)
+                    points.add(160)
+                }
             } else {
-                points.add(40)
-                points.add(70)
-                points.add(100)
-                points.add(130)
-                points.add(160)
+                if(start==0){
+                    points.add(0)
+                    points.add(40)
+                    points.add(80)
+                    points.add(120)
+                    points.add(160)
+                }else{
+                    points.add(40)
+                    points.add(70)
+                    points.add(100)
+                    points.add(130)
+                    points.add(160)
+                }
             }
         } else {
             if (numPoints == 3) {
-                points.add(40)
-                points.add(120)
-                points.add(200)
+                if(start==0){
+                    points.add(0)
+                    points.add(100)
+                    points.add(200)
+                }else{
+                    points.add(40)
+                    points.add(120)
+                    points.add(200)
+                }
             } else {
-                points.add(40)
-                points.add(80)
-                points.add(120)
-                points.add(160)
-                points.add(200)
+                if(start==0){
+                    points.add(0)
+                    points.add(50)
+                    points.add(100)
+                    points.add(150)
+                    points.add(200)
+                }else{
+                    points.add(40)
+                    points.add(80)
+                    points.add(120)
+                    points.add(160)
+                    points.add(200)
+                }
+
             }
         }
         return points
