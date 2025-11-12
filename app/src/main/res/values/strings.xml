@@ -936,7 +936,7 @@
     <string name="text_call">Call</string>
     <string name="text_help">Help and support</string>
     <string name="text_warranty_registered"> Add text </string>
-    <string name="text_bad_feedback_msg">If you have any query, write to us on luna.support@nexxbase.com</string>
+    <string name="text_bad_feedback_msg">If you have any query, write to us on support@lunazone.com</string>
     <string name="text_got_something_to_share_tell_us">Got something to share? Tell us.</string>
     <string name="text_log_in">Log in</string>
     <string name="text_privacy_message">Welcome to Luna Ring. You can use this App to manage your ring and view related exercise and health data. We will strictly abide by relevant laws, regulations and privacy policies to protect your personal information. To provide the most basic services, the App needs to be connected to the internet.</string>
@@ -2275,6 +2275,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_only_the_sleep_data_shown_above_will_be_shared_you_can_stop_sharing_anytime_by_turning_off_the_toggle">Only the sleep data shown above will be shared. You can stop sharing anytime by turning off the toggle.</string>
     <string name="text_workout_no_internet">Workout saved. We’ll process it when you’re online.</string>
     <string name="text_analyse_this">Analyse this</string>
+    <string name="text_email_support">Email support</string>
 
 
 </resources>

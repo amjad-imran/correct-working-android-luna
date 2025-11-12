@@ -314,7 +314,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/rowSettings"
-                    app:text="@string/text_live_support" />
+                    app:text="@string/text_email_support" />
 
                 <com.noisefit_commans.ui.custom.SettingsRow
                     android:id="@+id/rowAbout"
