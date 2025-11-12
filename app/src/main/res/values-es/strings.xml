@@ -914,7 +914,7 @@
     <string name="text_call">Llamar</string>
     <string name="text_help">Ayuda y soporte</string>
     <string name="text_warranty_registered">Agregar texto</string>
-    <string name="text_bad_feedback_msg">Si tienes alguna consulta, escríbenos a luna.support@nexxbase.com</string>
+    <string name="text_bad_feedback_msg">Si tienes alguna consulta, escríbenos a support@lunazone.com</string>
     <string name="text_got_something_to_share_tell_us">¿Tienes algo para compartir? Dínoslo.</string>
     <string name="text_log_in">Iniciar sesión</string>
     <string name="text_privacy_message">Bienvenido a Luna Ring. Puedes usar esta app para gestionar tu anillo y ver datos relacionados con ejercicios y salud. Cumpliremos estrictamente con las leyes, regulaciones y políticas de privacidad relevantes para proteger tu información personal. Para proporcionar los servicios más básicos, la app debe estar conectada a internet.</string>
@@ -2269,5 +2269,6 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_only_the_sleep_data_shown_above_will_be_shared_you_can_stop_sharing_anytime_by_turning_off_the_toggle">Solo se compartirán los datos de sueño mostrados arriba. Puedes dejar de compartir en cualquier momento desactivando el interruptor.</string>
     <string name="text_workout_no_internet">Entrenamiento guardado. Lo procesaremos cuando estés en línea.</string>
     <string name="text_analyse_this">Analiza esto</string>
+    <string name="text_email_support">Soporte por correo electrónico</string>
 
 </resources>
