@@ -1,4 +1,4 @@
-package com.oreo.data.model.lifeos.onboarding
+package com.noisefit_commans.data.model.lifeos.onboarding
 
 data class OnBoardQuesGetResponse(
     val answers: List<Answer> ?= null,

@@ -18,6 +18,7 @@ import com.noisefit_commans.models.LocationDataModel
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.models.WatchFace
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
+import com.noisefit_commans.data.model.lifeos.onboarding.OnBoardQuesGetResponse
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.data.model.timeline.Measurements
 
@@ -612,6 +613,8 @@ interface DataStoredInterface {
 
     fun isLifeOsOnboardInitiated(): Boolean
     fun setLifeOsOnboardInitiated(isInitiated: Boolean?)
+
+    fun setLifeOsOnboardData(data: OnBoardQuesGetResponse)
 
 }
 

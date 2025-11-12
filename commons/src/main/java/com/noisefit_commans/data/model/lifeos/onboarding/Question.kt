@@ -1,7 +1,6 @@
-package com.oreo.data.model.lifeos.onboarding
+package com.noisefit_commans.data.model.lifeos.onboarding
 
 import android.os.Parcelable
-import com.oreo.ui.lifeos.onboarding.LifeOsOnboardingQuesViewModel
 import kotlinx.parcelize.Parcelize
 
 
@@ -13,7 +12,7 @@ data class Question(
     val type: String,
 
     // for app
-    var isSavedByUser: Boolean ?= false
+    var isSavedByUser: Boolean = false
 ) : Parcelable
 
 @Parcelize
@@ -25,5 +24,5 @@ data class AnswerX(
     // for app
     var isSelected: Boolean = false,
     var userInputText: String ?= null, // used only for 'Other'
-    var state: LifeOsOnboardingQuesViewModel.States ?= null,
+    var state: LifeOSOnboardMCQquesStates ?= null,
 ) : Parcelable

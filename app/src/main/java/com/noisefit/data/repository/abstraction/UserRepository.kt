@@ -25,7 +25,7 @@ import com.oreo.data.model.circadian.CircadianResponseModel
 import com.noisefit_commans.data.model.timeline.TimelineScreenResponse
 import com.oreo.data.model.dataSharingVendorModels.DataSharingVendorListResponseItem
 import com.oreo.data.model.downloadMyData.DownloadMyDataResponse
-import com.oreo.data.model.lifeos.onboarding.OnBoardQuesGetResponse
+import com.noisefit_commans.data.model.lifeos.onboarding.OnBoardQuesGetResponse
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {

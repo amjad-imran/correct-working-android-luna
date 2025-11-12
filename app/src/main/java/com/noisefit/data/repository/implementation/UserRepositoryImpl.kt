@@ -55,7 +55,7 @@ import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.dataSharingVendorModels.DataSharingVendorListResponseItem
 import com.oreo.data.model.downloadMyData.DownloadMyDataResponse
-import com.oreo.data.model.lifeos.onboarding.OnBoardQuesGetResponse
+import com.noisefit_commans.data.model.lifeos.onboarding.OnBoardQuesGetResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

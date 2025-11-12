@@ -2,7 +2,6 @@ package com.noisefit.data.local.dataStored.implementation
 
 
 import android.content.SharedPreferences
-import androidx.compose.ui.unit.min
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.noisefit.data.remote.response.CatWiseWatchFacesItem
@@ -48,6 +47,7 @@ import com.noisefit_commans.data.model.circadian.NudgeCircadianGraph
 import com.noisefit_commans.data.model.comfortDietWorkout.ComfortDietWorkoutModel
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.data.model.timeline.Measurements
+import com.noisefit_commans.data.model.lifeos.onboarding.OnBoardQuesGetResponse
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -287,6 +287,7 @@ private const val NUDGE_CYCLE_TRACKER_DATA = "NUDGE_CYCLE_TRACKER_DATA"
 private const val NUDGE_CYCLE_TRACKER_API_TIMESTAMP = "NUDGE_CYCLE_TRACKER_API_TIMESTAMP"
 
 private const val LIFEOS_ONBOARD_INITIATED = "LIFEOS_ONBOARD_INITIATED"
+private const val LIFEOS_ONBOARD_QUES_DATA = "LIFEOS_ONBOARD_QUES_DATA"
 
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
@@ -2515,6 +2516,10 @@ class DataStoredImpl
             return
         }
         mPrefs.edit().putBoolean(LIFEOS_ONBOARD_INITIATED, isInitiated).commit()
+    }
+
+    override fun setLifeOsOnboardData(data: OnBoardQuesGetResponse) {
+        mPrefs.edit()?.putString(NUDGE_CYCLE_TRACKER_DATA, gson.toJson(data))?.apply()
     }
 
 }

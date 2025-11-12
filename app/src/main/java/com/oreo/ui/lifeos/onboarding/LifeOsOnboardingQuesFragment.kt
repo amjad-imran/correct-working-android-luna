@@ -10,7 +10,9 @@ import com.noisefit.luna.databinding.FragmentLifeOsOnboardingQuesBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.oreo.ui.lifeos.onboarding.quesChildFrags.LifeOsChildMcqSingleFragment
 import com.oreo.ui.lifeos.onboarding.quesChildFrags.LifeOsOnboardTextFldOrNoneFragment
 import com.oreo.ui.lifeos.onboarding.quesChildFrags.LifeosCheckBoxAndOtherFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,7 +41,11 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
         }
 
         binding.btnNext.setOnClickListener {
-            viewModel.switchToPrevQuestion()
+            if(binding.btnNext.text.equals(getString(R.string.text_next))) {
+                viewModel.nextBtnClicked.postValue(true)
+            }else{
+
+            }
         }
 
         binding.btnClose.setOnClickListener {
@@ -83,12 +89,12 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
 
     override fun subscribeObservers() {
         viewModel.curQues.observe(this){
-
+            viewModel.updateNextButtonState.postValue(it.answer.find { it.isSelected } != null)
             setLinearProgressIndicatorUi()
 
             val childFrag = when(it.type){
                 "mcq-single" -> {
-                    LifeosCheckBoxAndOtherFragment().apply {
+                    LifeOsChildMcqSingleFragment().apply {
                         this.arguments = Bundle().apply {
                             putParcelable("question", it)
                         }
@@ -120,14 +126,37 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
                     .commit()
             }
         }
-    }
 
-    private fun setSaveBtnState(){
-        val curQues = viewModel.curQues
-        if(curQues==null){
-            return
+        viewModel.updateNextButtonState.observe(this){
+            binding.btnNext.isEnabled = it
         }
 
+        viewModel.navigateToFinishScreen.observe(this){
+            if(it){
+                viewModel.navigateToFinishScreen.value = false
+                navigateUpSafe()
+                navigate(R.id.lifeOsOnboardFinishFragment)
+            }
+        }
+
+        //
+        viewModel.getApiErrors().observe(this) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
+        viewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
+            }
+        }
+        viewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
     }
 
 }
