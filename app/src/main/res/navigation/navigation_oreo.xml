@@ -1645,5 +1645,10 @@
         android:name="com.oreo.ui.lifeos.onboarding.LifeOSOnboardSkipOrConBottomSheet"
         android:label="fragment_life_o_s_onboard_skip_or_con_bottom_sheet"
         tools:layout="@layout/fragment_life_o_s_onboard_skip_or_con_bottom_sheet" />
+    <fragment
+        android:id="@+id/lifeOsOnboardFinishFragment"
+        android:name="com.oreo.ui.lifeos.onboarding.LifeOsOnboardFinishFragment"
+        android:label="fragment_life_os_onboard_finish"
+        tools:layout="@layout/fragment_life_os_onboard_finish" />
 
 </navigation>

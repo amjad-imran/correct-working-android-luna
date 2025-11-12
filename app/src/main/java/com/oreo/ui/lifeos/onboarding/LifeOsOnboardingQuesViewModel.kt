@@ -2,25 +2,28 @@ package com.oreo.ui.lifeos.onboarding
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.noisefit.data.local.dataStored.implementation.DataStoredImpl
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.LOGS
-import com.oreo.data.model.lifeos.onboarding.AnswerX
-import com.oreo.data.model.lifeos.onboarding.OnBoardQuesGetResponse
-import com.oreo.data.model.lifeos.onboarding.Question
+import com.noisefit_commans.data.model.lifeos.onboarding.AnswerX
+import com.noisefit_commans.data.model.lifeos.onboarding.LifeOSOnboardMCQquesStates
+import com.noisefit_commans.data.model.lifeos.onboarding.OnBoardQuesGetResponse
+import com.noisefit_commans.data.model.lifeos.onboarding.Question
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.SortedMap
 import javax.inject.Inject
 
 @HiltViewModel
 class LifeOsOnboardingQuesViewModel @Inject constructor(
     private val userRepository: UserRepository,
+    private val localDataStore: DataStoredImpl,
 ): BaseViewModel() {
 
     var onBoardResponseData: OnBoardQuesGetResponse ?= null
@@ -30,6 +33,13 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
 
     val quesAnsMap = HashMap<Int, HashSet<Int>>()
     val otherTextMap = HashMap<Int, String>() // {quesId, textField txt}
+
+    val updateNextButtonState = MutableLiveData<Boolean>()
+    val nextBtnClicked = MutableLiveData<Boolean>()
+
+    val savedQuesAns = HashMap<Int, List<AnswerX>>()
+
+    val navigateToFinishScreen = MutableLiveData<Boolean>()
 
     fun getOnboardQues() {
         viewModelScope.launch {
@@ -142,8 +152,13 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
 
                         is Resource.Success -> {
                             resource.data?.data?.let {
-                                curQuesIndex = 0
+                                localDataStore.setLifeOsOnboardData(it)
                                 onBoardResponseData = it
+
+                                val curQ = it.questions?.indexOfFirst {!it.isSavedByUser}
+                                if(curQ != -1){
+                                    curQuesIndex = curQ
+                                }
                                 processData(it)
                             }
                         }
@@ -157,15 +172,16 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
         mainData.questions?.forEach {
             it.answer.forEach { ans ->
                 ans.state = if(ans.addOntext.equals("1")){
-                    States.OTHER
+                    LifeOSOnboardMCQquesStates.OTHER
                 }else if(ans.text.equals("none", ignoreCase = true)){
-                    States.NONE
+                    LifeOSOnboardMCQquesStates.NONE
                 }else{
-                    States.NORMAL
+                    LifeOSOnboardMCQquesStates.NORMAL
                 }
             }
         }
-        mainData.questions?.first().let {
+
+        mainData.questions?.getOrNull(curQuesIndex ?:-1)?.let {
             curQues.postValue(it)
         }
     }
@@ -199,6 +215,10 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
     }
 
     fun saveSelectedItems(updatedList: List<AnswerX>) {
+        updatedList.forEach {
+            LOGS.d("cjbsiajckascjn, $it")
+        }
+
         curQues.value?.let { it ->
             val updatedAns = updatedList.filter { it.isSelected }.map { it.id }.toSet()
             if(updatedAns.isEmpty()){
@@ -207,7 +227,7 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
             quesAnsMap[it.id] = HashSet(updatedAns)
 
             // save other text
-            updatedList.find { it.state==States.OTHER && it.isSelected }?.let { it1 ->
+            updatedList.find { it.state==LifeOSOnboardMCQquesStates.OTHER && it.isSelected }?.let { it1 ->
                 otherTextMap[it.id] = it1.userInputText ?: ""
             }
 
@@ -219,16 +239,16 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
         viewModelScope.launch {
             val reqArray = JsonArray()
 
-            onBoardResponseData?.questions?.filter { it.isSavedByUser==true }?.forEach { ques ->
-                val quesId = ques.id
+            savedQuesAns.forEach { map ->
+                val quesId = map.key
                 val ansId = JsonArray().apply {
-                    ques.answer.filter {
+                    map.value.filter {
                         it.isSelected
                     }.forEach {
                         this.add(it.id)
                     }
                 }
-                val addOnText = ques.answer.find { it.state== States.OTHER }?.addOntext ?: ""
+                val addOnText = map.value.find { it.state== LifeOSOnboardMCQquesStates.OTHER }?.addOntext ?: ""
 
                 val jsonObject = JsonObject().apply {
                     this.add("ans_id", ansId)
@@ -264,7 +284,7 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-
+                            navigateToFinishScreen()
                         }
                     }
                 }
@@ -272,9 +292,22 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
         }
     }
 
-    enum class States {
-        OTHER, NONE, NORMAL
+    private fun navigateToFinishScreen(){
+        navigateToFinishScreen.postValue(true)
     }
 
+    fun setNextBtnEnableState(bool: Boolean) {
+        updateNextButtonState.postValue(bool)
+    }
+
+    fun saveCurrentQues(quesId: Int, list: List<AnswerX>){
+        onBoardResponseData?.questions?.find { it.id==quesId }?.let { it.isSavedByUser = true }
+        savedQuesAns[quesId] = list
+        if(curQuesIndex==onBoardResponseData?.questions?.size?.minus(1)){
+            submitQuesAnsToServer()
+        }else{
+            switchToNextQuestion()
+        }
+    }
 
 }

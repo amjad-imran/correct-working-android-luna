@@ -13,14 +13,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ItemLifeosOnboardCheckboxTextBinding
 import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.visible
-import com.oreo.data.model.lifeos.onboarding.AnswerX
-import com.oreo.ui.lifeos.onboarding.LifeOsOnboardingQuesViewModel.States
+import com.noisefit_commans.data.model.lifeos.onboarding.AnswerX
+import com.noisefit_commans.data.model.lifeos.onboarding.LifeOSOnboardMCQquesStates
+import com.noisefit_commans.ui.setVisibilityByCondition
 
 class AnswersWithCheckboxAdapter(
-    private val isOther: (AnswerX) -> Boolean = { it.addOntext=="1" },
-    private val isNone:  (AnswerX) -> Boolean = { it.text.equals("None",  ignoreCase = true) },
-    private val onSelectionChanged: ((List<AnswerX>) -> Unit)? = null
+    private val onSelectionChanged: ((List<AnswerX>) -> Unit),
 ) : RecyclerView.Adapter<AnswersWithCheckboxAdapter.VH>() {
     private val items = mutableListOf<AnswerX>()
 
@@ -34,30 +32,24 @@ class AnswersWithCheckboxAdapter(
             with(binding) {
                 tvText.text = item.text
 
-                if(item.isSelected){
-                    ivCheckBox.setImageResource(R.drawable.ic_checked_lifeos_onboard)
-                }else{
-                    ivCheckBox.setImageResource(R.drawable.ic_lifeos_onboard_chechbox_empty)
-                }
+                ivCheckBox.setImageResource(
+                    if (item.isSelected) R.drawable.ic_checked_lifeos_onboard
+                    else R.drawable.ic_lifeos_onboard_chechbox_empty
+                )
 
-                if(item.state != States.OTHER){
+                if(item.state != LifeOSOnboardMCQquesStates.OTHER){
                     binding.lytInputField.root.gone()
                 }else{
+                    binding.lytInputField.root.setVisibilityByCondition(item.isSelected)
                     if (currentWatcher==null) {
                         val watcher = object : TextWatcher {
                             override fun beforeTextChanged(
-                                s: CharSequence?,
-                                start: Int,
-                                count: Int,
-                                after: Int
+                                s: CharSequence?, start: Int, count: Int, after: Int
                             ) {
                             }
 
                             override fun onTextChanged(
-                                s: CharSequence?,
-                                start: Int,
-                                before: Int,
-                                count: Int
+                                s: CharSequence?, start: Int, before: Int, count: Int
                             ) {
                             }
 
@@ -78,33 +70,25 @@ class AnswersWithCheckboxAdapter(
             }
         }
 
-        private fun onRowClick(position: Int, state: States?) {
+        private fun onRowClick(position: Int, state: LifeOSOnboardMCQquesStates?) {
             if (position !in 0..(items.size-1)) return
             val clicked = items[position]
 
             when(state){
-                States.OTHER -> {
+                LifeOSOnboardMCQquesStates.OTHER -> {
                     val nowSelected = !clicked.isSelected
-                    val et = binding.lytInputField.descInputLayout
                     clicked.isSelected = nowSelected
                     notifyItemChanged(position)
 
-                    if(nowSelected){
+                    // Handle keyboard and input field visibility
+                    if (nowSelected) {
                         setNoneItemUnselected()
-                        binding.lytInputField.root.visible()
-                        if (!et.hasFocus()) et.requestFocus()
-                        showKeyboard(et)
-                    }else{
-                        et.clearFocus()
-                        hideKeyboard(et)
-                        binding.lytInputField.root.gone()
                     }
                 }
 
-                States.NONE -> {
-                    val view = binding.root
-                    if(isKeyboardVisible(view)){
-                        hideKeyboard(view)
+                LifeOSOnboardMCQquesStates.NONE -> {
+                    if (isKeyboardVisible(binding.root)) {
+                        hideKeyboard(binding.root)
                     }
                     val nowSelected = !clicked.isSelected
                     if(nowSelected){
@@ -121,9 +105,8 @@ class AnswersWithCheckboxAdapter(
 
                 /*States.NORMAL,*/
                 else -> {
-                    val view = binding.root
-                    if(isKeyboardVisible(view)){
-                        hideKeyboard(view)
+                    if (isKeyboardVisible(binding.root)) {
+                        hideKeyboard(binding.root)
                     }
 
                     val nowSelected = !clicked.isSelected
@@ -141,7 +124,7 @@ class AnswersWithCheckboxAdapter(
 
         private fun setNoneItemUnselected(){
             val noneItem = items.indexOfFirst {
-                it.state == States.NONE && it.isSelected
+                it.state == LifeOSOnboardMCQquesStates.NONE && it.isSelected
             }
             if(noneItem == -1) return
             items[noneItem].isSelected = false
@@ -162,6 +145,10 @@ class AnswersWithCheckboxAdapter(
             val insets = ViewCompat.getRootWindowInsets(view) ?: return false
             return insets.isVisible(WindowInsetsCompat.Type.ime())
         }
+    }
+
+    fun getSelectedValue(): List<AnswerX> {
+        return items.filter { it.isSelected }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {

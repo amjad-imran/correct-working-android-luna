@@ -1,14 +1,17 @@
 package com.oreo.ui.lifeos.onboarding.quesChildFrags
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLifeOsOnboardTextFldOrNoneBinding
+import com.noisefit_commans.data.model.lifeos.onboarding.AnswerX
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.hideKeyboard
-import com.oreo.data.model.lifeos.onboarding.Question
+import com.noisefit_commans.data.model.lifeos.onboarding.Question
 import com.oreo.ui.lifeos.onboarding.LifeOsOnboardingQuesViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -22,19 +25,30 @@ class LifeOsOnboardTextFldOrNoneFragment : BaseFragment<FragmentLifeOsOnboardTex
     )
 
     private var tvNoIssuesSelected = false
+    private var quesId: Int ?= null
+    private var ansX: AnswerX ?= null
+    private var textFieldAnsX: AnswerX ?= null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val ques = arguments?.getParcelable<Question>("question")
         ques?.let {
+            quesId = it.id
             setUi(ques)
         }
     }
 
     private fun setUi(ques: Question) {
         binding.tvQues.text = ques.text
-        binding.tvNoIssues.text = ques.answer?.find { it.text?.isNotEmpty() == true }?.text
+        ques.answer.find { it.text.isNotEmpty() == true }?.let {
+            ansX = it
+            binding.tvNoIssues.text = it.text
+        }
+
+        ques.answer.find { it.text.isEmpty() }?.let {
+            textFieldAnsX = it
+        }
     }
 
     override fun initListener() {
@@ -55,7 +69,16 @@ class LifeOsOnboardTextFldOrNoneFragment : BaseFragment<FragmentLifeOsOnboardTex
 
             lifecycleScope.launch {
                 delay(100L)
-                parentViewModel.switchToNextQuestion()
+                parentViewModel.setNextBtnEnableState(true)
+                val currentQ = parentViewModel.curQues.value
+                currentQ?.let {
+                    parentViewModel.saveCurrentQues(
+                        it.id,
+                        ArrayList<AnswerX>().apply {
+                            ansX?.let { this.add(ansX!!) }
+                        }
+                    )
+                }
             }
         }
 
@@ -86,7 +109,40 @@ class LifeOsOnboardTextFldOrNoneFragment : BaseFragment<FragmentLifeOsOnboardTex
     }
 
     override fun subscribeObservers() {
+        val watcher = object : TextWatcher {
+            override fun beforeTextChanged(
+                s: CharSequence?, start: Int, count: Int, after: Int
+            ) {
+            }
 
+            override fun onTextChanged(
+                s: CharSequence?, start: Int, before: Int, count: Int
+            ) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                val input = s?.toString()
+                parentViewModel.setNextBtnEnableState(input.isNullOrEmpty().not())
+            }
+        }
+        binding.etAnswer.addTextChangedListener(watcher)
+
+        parentViewModel.nextBtnClicked.observe(this){
+            if(it){
+                parentViewModel.nextBtnClicked.value = false
+
+                val input = binding.etAnswer.text.toString()
+                if(input.isNotEmpty() && quesId != null && textFieldAnsX!=null){
+                    textFieldAnsX!!.userInputText = input
+                    parentViewModel.saveCurrentQues(
+                        quesId = quesId!!,
+                        list = listOf(
+                            textFieldAnsX!!
+                        )
+                    )
+                }
+            }
+        }
     }
 
 }
