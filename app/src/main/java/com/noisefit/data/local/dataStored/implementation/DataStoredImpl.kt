@@ -904,6 +904,7 @@ class DataStoredImpl
         mPrefs.edit()?.remove(NUDGE_CYCLE_TRACKER_DATA)?.apply()
         mPrefs.edit()?.remove(NUDGE_CYCLE_TRACKER_API_TIMESTAMP)?.apply()
         mPrefs.edit()?.remove(LIFEOS_ONBOARD_INITIATED)?.apply()
+        mPrefs.edit()?.remove(LIFEOS_ONBOARD_QUES_DATA)?.apply()
 
         mPrefs.edit()?.remove(GOOGLE_FIT_STATUS)?.apply()
         mPrefs.edit()?.remove(GOOGLE_FIT_CROSSED)?.apply()
