@@ -881,7 +881,7 @@ interface NetworkService {
     @POST
     suspend fun submitLifeOsOnboardQuesAnsList(
         @Url url: String,
-        @Body req: JsonArray
+        @Body req: JsonObject
     ): BaseApiResponse<Any>
 
     /**

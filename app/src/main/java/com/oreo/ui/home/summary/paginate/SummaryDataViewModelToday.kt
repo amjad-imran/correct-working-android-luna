@@ -1377,7 +1377,7 @@ class SummaryDataViewModelToday @Inject constructor(
             }
 
             //
-            getLifeOsCard()?.let { userActivities.add(it) }
+//            getLifeOsCard()?.let { userActivities.add(it) }
             //
             /*getWorkoutHistoryCard(healthData.activity)?.let { userActivities.add(it) }*/
 

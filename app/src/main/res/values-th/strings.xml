@@ -2306,5 +2306,32 @@
     <string name="text_workout_no_internet">บันทึกการออกกำลังกายแล้ว เราจะประมวลผลเมื่อคุณออนไลน์</string>
     <string name="text_analyse_this">วิเคราะห์สิ่งนี้</string>
     <string name="text_email_support">การสนับสนุนทางอีเมล</string>
+    <string name="text_analyse_this_file">วิเคราะห์ไฟล์นี้</string>
+    <string name="text_personalise">ปรับให้เป็นส่วนตัว</string>
+    <string name="text_talk_to_your_data">พูดคุยกับข้อมูลของคุณ</string>
+    <string name="text_life_os">Life OS</string>
+
+    <string name="transition_chat_box">transition_chat_box</string>
+    <string name="text_insights">ข้อมูลเชิงลึก</string>
+    <string name="text_talk_with_life_os">พูดคุยกับ Life OS</string>
+    <string name="text_insight_more">หมดแล้วสำหรับตอนนี้ คุณกำลังมองหาอะไรเป็นพิเศษหรือไม่?</string>
+    <string name="text_couldn_t_generate_a_response">ไม่สามารถสร้างคำตอบได้</string>
+    <string name="text_the_ultimate_operating_system_for_your_life">ระบบปฏิบัติการที่ดีที่สุดสำหรับชีวิตของคุณ</string>
+    <string name="text_begin">เริ่มต้น</string>
+    <string name="text_curated_insights">ข้อมูลเชิงลึกที่คัดสรร</string>
+    <string name="text_learn_tangible_ways_to_improve_with_curated_insights">เรียนรู้วิธีปรับปรุงอย่างเป็นรูปธรรมจากข้อมูลเชิงลึกที่คัดสรร</string>
+    <string name="text_log_your_meals_to_learn_what_helps_and_what_harms_recovery">บันทึกมื้ออาหารของคุณเพื่อเรียนรู้สิ่งที่ช่วยหรือทำลายการฟื้นตัว</string>
+    <string name="text_dive_deep_with_your_biomarkers">เจาะลึกไปกับไบโอมาร์กเกอร์ของคุณ</string>
+    <string name="text_learn_how_exercise_affects_your_mood_and_sleep">เรียนรู้ว่าการออกกำลังกายมีผลต่ออารมณ์และการนอนอย่างไร</string>
+    <string name="text_your_personal_health_assistant_with_you_24x7">ผู้ช่วยด้านสุขภาพส่วนบุคคลของคุณตลอด 24 ชั่วโมง</string>
+    <string name="text_is_ready">พร้อมแล้ว</string>
+    <string name="text_are_you_sure">คุณแน่ใจหรือ?</string>
+    <string name="text_these_answers_help_lifeos_understand_your_routines_goals_and_day_to_day_lifestyle">คำตอบเหล่านี้ช่วยให้ LifeOS เข้าใจรูปแบบชีวิต เป้าหมาย และกิจวัตรประจำวันของคุณ</string>
+    <string name="text_save_amp_exit"><![CDATA[บันทึก & ออก]]></string>
+    <string name="text_continue_setup">ดำเนินการตั้งค่าต่อ</string>
+    <string name="text_type_your_answer_freely">พิมพ์คำตอบได้อย่างอิสระ</string>
+    <string name="text_recents">ล่าสุด</string>
+    <string name="text_get_more_from_life_os">รับประโยชน์เพิ่มเติมจาก Life OS</string>
+    <string name="text_tell_us_how_you_live_work_and_recover_luna_will_personalise_your_experience_to_help_you_live_better">บอกเราว่าคุณใช้ชีวิต ทำงาน และฟื้นตัวอย่างไร — Luna จะปรับประสบการณ์ของคุณเพื่อช่วยให้คุณใช้ชีวิตได้ดีขึ้น</string>
 
 </resources>

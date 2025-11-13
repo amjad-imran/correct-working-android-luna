@@ -762,7 +762,7 @@ class UserRepositoryImpl(
         }
     }
 
-    override suspend fun submitLifeOsOnboardQuesAnsList(req: JsonArray): Flow<Resource<BaseApiResponse<Any>>> {
+    override suspend fun submitLifeOsOnboardQuesAnsList(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
         return safeApiCallFlow(dispatcher) {
             remoteDataSource.submitLifeOsOnboardQuesAnsList(
                 "${BuildConfig.OREO_BASE_URL}/ai/v1/onboarding/submit",

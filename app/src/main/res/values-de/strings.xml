@@ -2298,7 +2298,34 @@
     <string name="text_camera_perssision_message">Die Luna Ring App benötigt die Kameraberechtigung, um ein Bild aufzunehmen.</string>
     <string name="text_only_the_sleep_data_shown_above_will_be_shared_you_can_stop_sharing_anytime_by_turning_off_the_toggle">Nur die oben angezeigten Schlafdaten werden geteilt. Du kannst das Teilen jederzeit beenden, indem du den Schalter ausschaltest.</string>
     <string name="text_workout_no_internet">Training gespeichert. Wir verarbeiten es, sobald du online bist.</string>
+    <string name="text_analyse_this_file">Analysiere diese Datei</string>
+    <string name="text_personalise">Personalisieren</string>
+    <string name="text_talk_to_your_data">Sprich mit deinen Daten</string>
+    <string name="text_life_os">Life OS</string>
+
+    <string name="transition_chat_box">transition_chat_box</string>
+    <string name="text_insights">Einblicke</string>
     <string name="text_analyse_this">Analysiere dies</string>
+    <string name="text_talk_with_life_os">Sprich mit Life OS</string>
+    <string name="text_insight_more">Das war’s fürs Erste. Suchst du etwas Bestimmtes?</string>
+    <string name="text_couldn_t_generate_a_response">Konnte keine Antwort generieren.</string>
+    <string name="text_the_ultimate_operating_system_for_your_life">Das ultimative Betriebssystem für dein Leben</string>
+    <string name="text_begin">Beginnen</string>
+    <string name="text_curated_insights">Kuratiere Einblicke</string>
+    <string name="text_learn_tangible_ways_to_improve_with_curated_insights">Lerne konkrete Wege zur Verbesserung durch kuratierte Einblicke</string>
+    <string name="text_log_your_meals_to_learn_what_helps_and_what_harms_recovery">Protokolliere deine Mahlzeiten, um zu lernen, was dir hilft oder schadet</string>
+    <string name="text_dive_deep_with_your_biomarkers">Tauche tief in deine Biomarker ein</string>
+    <string name="text_learn_how_exercise_affects_your_mood_and_sleep">Erfahre, wie Bewegung deine Stimmung und deinen Schlaf beeinflusst</string>
+    <string name="text_your_personal_health_assistant_with_you_24x7">Dein persönlicher Gesundheitsassistent – 24/7 bei dir</string>
+    <string name="text_is_ready">IST BEREIT</string>
+    <string name="text_are_you_sure">Bist du sicher?</string>
+    <string name="text_these_answers_help_lifeos_understand_your_routines_goals_and_day_to_day_lifestyle">Diese Antworten helfen LifeOS, deine Routinen, Ziele und deinen Alltag zu verstehen.</string>
+    <string name="text_save_amp_exit"><![CDATA[Speichern & Beenden]]></string>
+    <string name="text_continue_setup">Setup fortsetzen</string>
+    <string name="text_type_your_answer_freely">Gib deine Antwort frei ein</string>
+    <string name="text_recents">Zuletzt</string>
     <string name="text_email_support">E-Mail-Support</string>
+    <string name="text_get_more_from_life_os">Hol mehr aus Life OS heraus</string>
+    <string name="text_tell_us_how_you_live_work_and_recover_luna_will_personalise_your_experience_to_help_you_live_better">Erzähl uns, wie du lebst, arbeitest und regenerierst — Luna personalisiert deine Erfahrung, um dir zu helfen, besser zu leben.</string>
 
 </resources>

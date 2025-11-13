@@ -2300,5 +2300,32 @@
     <string name="text_workout_no_internet">Training opgeslagen. We verwerken het zodra je online bent.</string>
     <string name="text_analyse_this">Analyseer dit</string>
     <string name="text_email_support">E-mailondersteuning</string>
+    <string name="text_analyse_this_file">Analyseer dit bestand</string>
+    <string name="text_personalise">Personaliseren</string>
+    <string name="text_talk_to_your_data">Praat met je data</string>
+    <string name="text_life_os">Life OS</string>
+
+    <string name="transition_chat_box">transition_chat_box</string>
+    <string name="text_insights">Inzichten</string>
+    <string name="text_talk_with_life_os">Praat met Life OS</string>
+    <string name="text_insight_more">Dat was het voor nu. Zoek je iets specifieks?</string>
+    <string name="text_couldn_t_generate_a_response">Kan geen reactie genereren.</string>
+    <string name="text_the_ultimate_operating_system_for_your_life">Het ultieme besturingssysteem voor je leven</string>
+    <string name="text_begin">Begin</string>
+    <string name="text_curated_insights">Geselecteerde inzichten</string>
+    <string name="text_learn_tangible_ways_to_improve_with_curated_insights">Leer concrete manieren om te verbeteren met geselecteerde inzichten</string>
+    <string name="text_log_your_meals_to_learn_what_helps_and_what_harms_recovery">Log je maaltijden om te leren wat herstel helpt of schaadt</string>
+    <string name="text_dive_deep_with_your_biomarkers">Duik diep in je biomarkers</string>
+    <string name="text_learn_how_exercise_affects_your_mood_and_sleep">Leer hoe beweging je humeur en slaap beïnvloedt</string>
+    <string name="text_your_personal_health_assistant_with_you_24x7">Je persoonlijke gezondheidsassistent, 24/7 bij je</string>
+    <string name="text_is_ready">IS KLAAR</string>
+    <string name="text_are_you_sure">Weet je het zeker?</string>
+    <string name="text_these_answers_help_lifeos_understand_your_routines_goals_and_day_to_day_lifestyle">Deze antwoorden helpen LifeOS je routines, doelen en dagelijkse levensstijl te begrijpen.</string>
+    <string name="text_save_amp_exit"><![CDATA[Opslaan & Afsluiten]]></string>
+    <string name="text_continue_setup">Setup voortzetten</string>
+    <string name="text_type_your_answer_freely">Typ je antwoord vrij</string>
+    <string name="text_recents">Recent</string>
+    <string name="text_get_more_from_life_os">Haal meer uit Life OS</string>
+    <string name="text_tell_us_how_you_live_work_and_recover_luna_will_personalise_your_experience_to_help_you_live_better">Vertel ons hoe je leeft, werkt en herstelt — Luna personaliseert je ervaring om je te helpen beter te leven.</string>
 
 </resources>

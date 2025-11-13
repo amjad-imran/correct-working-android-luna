@@ -2300,6 +2300,32 @@
     <string name="text_only_the_sleep_data_shown_above_will_be_shared_you_can_stop_sharing_anytime_by_turning_off_the_toggle">Verranno condivisi solo i dati del sonno mostrati sopra. Puoi interrompere la condivisione in qualsiasi momento disattivando l\'interruttore.</string>
     <string name="text_workout_no_internet">Allenamento salvato. Lo elaboreremo quando sarai online.</string>
     <string name="text_analyse_this">Analizza questo</string>
-    <string name="text_email_support">Assistenza via e-mail</string>
+    <string name="text_analyse_this_file">Analizza questo file</string>
+    <string name="text_personalise">Personalizza</string>
+    <string name="text_talk_to_your_data">Parla con i tuoi dati</string>
+    <string name="text_life_os">Life OS</string>
+
+    <string name="transition_chat_box">transition_chat_box</string>
+    <string name="text_insights">Approfondimenti</string>
+    <string name="text_talk_with_life_os">Parla con Life OS</string>
+    <string name="text_insight_more">È tutto per ora. Cerchi qualcosa in particolare?</string>
+    <string name="text_couldn_t_generate_a_response">Impossibile generare una risposta.</string>
+    <string name="text_the_ultimate_operating_system_for_your_life">Il sistema operativo definitivo per la tua vita</string>
+    <string name="text_begin">Inizia</string>
+    <string name="text_curated_insights">Approfondimenti curati</string>
+    <string name="text_learn_tangible_ways_to_improve_with_curated_insights">Scopri modi concreti per migliorare con approfondimenti curati</string>
+    <string name="text_log_your_meals_to_learn_what_helps_and_what_harms_recovery">Registra i tuoi pasti per capire cosa aiuta o ostacola il recupero</string>
+    <string name="text_dive_deep_with_your_biomarkers">Approfondisci i tuoi biomarcatori</string>
+    <string name="text_learn_how_exercise_affects_your_mood_and_sleep">Scopri come l’esercizio influisce sull’umore e sul sonno</string>
+    <string name="text_your_personal_health_assistant_with_you_24x7">Il tuo assistente sanitario personale, sempre con te</string>
+    <string name="text_is_ready">È PRONTO</string>
+    <string name="text_are_you_sure">Sei sicuro?</string>
+    <string name="text_these_answers_help_lifeos_understand_your_routines_goals_and_day_to_day_lifestyle">Queste risposte aiutano LifeOS a capire le tue routine, i tuoi obiettivi e il tuo stile di vita quotidiano.</string>
+    <string name="text_save_amp_exit"><![CDATA[Salva & Esci]]></string>
+    <string name="text_continue_setup">Continua configurazione</string>
+    <string name="text_type_your_answer_freely">Scrivi la tua risposta liberamente</string>
+    <string name="text_recents">Recenti</string>
+    <string name="text_get_more_from_life_os">Ottieni di più da Life OS</string>
+    <string name="text_tell_us_how_you_live_work_and_recover_luna_will_personalise_your_experience_to_help_you_live_better">Dicci come vivi, lavori e recuperi — Luna personalizzerà la tua esperienza per aiutarti a vivere meglio.</string>
 
 </resources>

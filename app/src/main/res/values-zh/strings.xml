@@ -2294,8 +2294,32 @@
     <string name="text_workout_no_internet">已保存锻炼。你在线时我们会处理。</string>
     <string name="text_analyse_this">分析这个</string>
     <string name="text_email_support">电子邮件支持</string>
+    <string name="text_analyse_this_file">分析此文件</string>
+    <string name="text_personalise">个性化</string>
+    <string name="text_talk_to_your_data">与您的数据对话</string>
+    <string name="text_life_os">Life OS</string>
 
-
-
+    <string name="transition_chat_box">transition_chat_box</string>
+    <string name="text_insights">洞察</string>
+    <string name="text_talk_with_life_os">与 Life OS 对话</string>
+    <string name="text_insight_more">目前就这些。你在找什么特定内容吗？</string>
+    <string name="text_couldn_t_generate_a_response">无法生成回应。</string>
+    <string name="text_the_ultimate_operating_system_for_your_life">你生活的终极操作系统</string>
+    <string name="text_begin">开始</string>
+    <string name="text_curated_insights">精选洞察</string>
+    <string name="text_learn_tangible_ways_to_improve_with_curated_insights">通过精选洞察学习可改善生活的具体方式</string>
+    <string name="text_log_your_meals_to_learn_what_helps_and_what_harms_recovery">记录您的饮食，了解哪些有益或有害于恢复</string>
+    <string name="text_dive_deep_with_your_biomarkers">深入了解您的生物标记</string>
+    <string name="text_learn_how_exercise_affects_your_mood_and_sleep">了解运动如何影响情绪和睡眠</string>
+    <string name="text_your_personal_health_assistant_with_you_24x7">您的 24×7 私人健康助手</string>
+    <string name="text_is_ready">已准备就绪</string>
+    <string name="text_are_you_sure">你确定吗？</string>
+    <string name="text_these_answers_help_lifeos_understand_your_routines_goals_and_day_to_day_lifestyle">这些回答将帮助 LifeOS 理解您的日常习惯、目标和生活方式。</string>
+    <string name="text_save_amp_exit"><![CDATA[保存 & 退出]]></string>
+    <string name="text_continue_setup">继续设置</string>
+    <string name="text_type_your_answer_freely">自由输入您的答案</string>
+    <string name="text_recents">最近</string>
+    <string name="text_get_more_from_life_os">获得更多 Life OS 功能</string>
+    <string name="text_tell_us_how_you_live_work_and_recover_luna_will_personalise_your_experience_to_help_you_live_better">告诉我们你的生活、工作和恢复方式 — Luna 将个性化你的体验，帮助你过上更好的生活。</string>
 
 </resources>

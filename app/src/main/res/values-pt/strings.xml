@@ -2324,5 +2324,32 @@
     <string name="text_workout_no_internet">Treino salvo. Processaremos quando você estiver online.</string>
     <string name="text_analyse_this">Analise isto</string>
     <string name="text_email_support">Suporte por e-mail</string>
+    <string name="text_analyse_this_file">Analise este arquivo</string>
+    <string name="text_personalise">Personalizar</string>
+    <string name="text_talk_to_your_data">Converse com seus dados</string>
+    <string name="text_life_os">Life OS</string>
+
+    <string name="transition_chat_box">transition_chat_box</string>
+    <string name="text_insights">Insights</string>
+    <string name="text_talk_with_life_os">Converse com o Life OS</string>
+    <string name="text_insight_more">Isso é tudo por enquanto. Está procurando algo específico?</string>
+    <string name="text_couldn_t_generate_a_response">Não foi possível gerar uma resposta.</string>
+    <string name="text_the_ultimate_operating_system_for_your_life">O sistema operacional definitivo para a sua vida</string>
+    <string name="text_begin">Começar</string>
+    <string name="text_curated_insights">Insights selecionados</string>
+    <string name="text_learn_tangible_ways_to_improve_with_curated_insights">Aprenda maneiras concretas de melhorar com insights selecionados</string>
+    <string name="text_log_your_meals_to_learn_what_helps_and_what_harms_recovery">Registre suas refeições para aprender o que ajuda ou prejudica sua recuperação</string>
+    <string name="text_dive_deep_with_your_biomarkers">Aprofunde-se nos seus biomarcadores</string>
+    <string name="text_learn_how_exercise_affects_your_mood_and_sleep">Aprenda como exercícios afetam seu humor e sono</string>
+    <string name="text_your_personal_health_assistant_with_you_24x7">Seu assistente pessoal de saúde com você 24/7</string>
+    <string name="text_is_ready">ESTÁ PRONTO</string>
+    <string name="text_are_you_sure">Tem certeza?</string>
+    <string name="text_these_answers_help_lifeos_understand_your_routines_goals_and_day_to_day_lifestyle">Essas respostas ajudam o LifeOS a entender suas rotinas, metas e estilo de vida diário.</string>
+    <string name="text_save_amp_exit"><![CDATA[Salvar & Sair]]></string>
+    <string name="text_continue_setup">Continuar configuração</string>
+    <string name="text_type_your_answer_freely">Digite sua resposta livremente</string>
+    <string name="text_recents">Recentes</string>
+    <string name="text_get_more_from_life_os">Obtenha mais do Life OS</string>
+    <string name="text_tell_us_how_you_live_work_and_recover_luna_will_personalise_your_experience_to_help_you_live_better">Conte-nos como você vive, trabalha e se recupera — Luna personalizará sua experiência para ajudá-lo a viver melhor.</string>
 
 </resources>

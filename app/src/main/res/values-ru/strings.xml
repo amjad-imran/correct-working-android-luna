@@ -2324,5 +2324,32 @@
     <string name="text_workout_no_internet">Тренировка сохранена. Мы обработаем её, когда вы будете в сети.</string>
     <string name="text_analyse_this">Проанализируйте это</string>
     <string name="text_email_support">Поддержка по электронной почте</string>
+    <string name="text_analyse_this_file">Анализировать этот файл</string>
+    <string name="text_personalise">Персонализировать</string>
+    <string name="text_talk_to_your_data">Пообщайтесь со своими данными</string>
+    <string name="text_life_os">Life OS</string>
+
+    <string name="transition_chat_box">transition_chat_box</string>
+    <string name="text_insights">Аналитика</string>
+    <string name="text_talk_with_life_os">Пообщаться с Life OS</string>
+    <string name="text_insight_more">Это всё на данный момент. Ищете что-то конкретное?</string>
+    <string name="text_couldn_t_generate_a_response">Не удалось сгенерировать ответ.</string>
+    <string name="text_the_ultimate_operating_system_for_your_life">Идеальная операционная система для вашей жизни</string>
+    <string name="text_begin">Начать</string>
+    <string name="text_curated_insights">Подборка аналитики</string>
+    <string name="text_learn_tangible_ways_to_improve_with_curated_insights">Узнайте практические способы улучшения с помощью подобранной аналитики</string>
+    <string name="text_log_your_meals_to_learn_what_helps_and_what_harms_recovery">Записывайте свою еду, чтобы понять, что помогает или вредит восстановлению</string>
+    <string name="text_dive_deep_with_your_biomarkers">Погрузитесь в анализ своих биомаркеров</string>
+    <string name="text_learn_how_exercise_affects_your_mood_and_sleep">Узнайте, как упражнения влияют на настроение и сон</string>
+    <string name="text_your_personal_health_assistant_with_you_24x7">Ваш персональный помощник по здоровью — 24/7 рядом</string>
+    <string name="text_is_ready">ГОТОВО</string>
+    <string name="text_are_you_sure">Вы уверены?</string>
+    <string name="text_these_answers_help_lifeos_understand_your_routines_goals_and_day_to_day_lifestyle">Эти ответы помогают LifeOS понять ваши привычки, цели и образ жизни.</string>
+    <string name="text_save_amp_exit"><![CDATA[Сохранить & Выйти]]></string>
+    <string name="text_continue_setup">Продолжить настройку</string>
+    <string name="text_type_your_answer_freely">Введите ваш ответ свободно</string>
+    <string name="text_recents">Недавние</string>
+    <string name="text_get_more_from_life_os">Получите больше от Life OS</string>
+    <string name="text_tell_us_how_you_live_work_and_recover_luna_will_personalise_your_experience_to_help_you_live_better">Расскажите нам, как вы живёте, работаете и восстанавливаетесь — Луна персонализирует ваш опыт, чтобы помочь вам жить лучше.</string>
 
 </resources>

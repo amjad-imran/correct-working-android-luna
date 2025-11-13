@@ -248,7 +248,11 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
                 return@launch
             }
 
-            userRepository.submitLifeOsOnboardQuesAnsList(reqArray).collect{ resource ->
+            val mainReqObj = JsonObject().apply {
+                this.add("data", reqArray)
+            }
+
+            userRepository.submitLifeOsOnboardQuesAnsList(mainReqObj).collect{ resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
