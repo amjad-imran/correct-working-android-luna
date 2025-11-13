@@ -12,6 +12,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLifeOsDashBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.dpToPixel
+import com.noisefit_commans.ui.visible
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.chatGpt.audio.AudioAiFragment
@@ -42,14 +43,56 @@ class LifeOsDashFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        if(!viewModel.localDataStore.isLifeOsOnboardInitiated()){
-            navigate(R.id.lifeOsOnboardBeginFragment)
-        }
-
         setupQuestionsRecycler()
         setupWhatsNewRecycler()
         setupInsightsPager()
+        viewModel.getLifeOsData()
+    }
+
+    private fun setLytOnboardQuesProgress() {
+        val onboardQuesData = viewModel.localDataStore.getLifeOsOnboardData()
+        val ansSize = onboardQuesData?.answers?.size
+        val quesSize = onboardQuesData?.questions?.size
+        if(quesSize!=null && ansSize!=null &&
+            ansSize >= quesSize
+        ){
+            return
+        }
+
+        binding.lytHeader.lytOnboardQuesProgress.progressIndicator.apply {
+            max = quesSize!!
+            progress = ansSize!!
+            /*class AngularGradientDrawable : Drawable() {
+                private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+                override fun draw(canvas: Canvas) {
+                    val b = bounds
+                    val cx = b.exactCenterX()
+                    val cy = b.exactCenterY()
+
+                    // Conic (sweep) gradient across the rect
+                    val shader = SweepGradient(
+                        cx, cy,
+                        intArrayOf(
+                            "#FFFFB8".toColorInt(),
+                            "#A6EAF7".toColorInt(),
+                            "#AEA2F7".toColorInt(),
+                            "#F2C7EF".toColorInt(),
+                            "#FFFFB8".toColorInt(), // close the loop
+                        ),
+                        null
+                    )
+                    paint.shader = shader
+                    canvas.drawRect(b, paint)
+                }
+
+                override fun setAlpha(alpha: Int) { paint.alpha = alpha }
+                override fun setColorFilter(colorFilter: ColorFilter?) { paint.colorFilter = colorFilter }
+                override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
+            }
+            progressDrawable = AngularGradientDrawable()*/
+        }
+        binding.lytHeader.lytOnboardQuesProgress.root.visible()
     }
 
     private fun setupQuestionsRecycler() {
@@ -140,6 +183,10 @@ class LifeOsDashFragment :
         binding.lytDashInsights.ivMore.setOnClickListener {
             navigate(R.id.lifeOsInsightFrag)
         }
+
+        binding.lytHeader.lytOnboardQuesProgress.root.setOnClickListener {
+            navigate(R.id.lifeOsOnboardingQuesFragment)
+        }
     }
 
     override fun subscribeObservers() {
@@ -151,6 +198,24 @@ class LifeOsDashFragment :
             binding.lytDashWhatsNew.tvTitle.text = "What’s new with Life OS?"
             binding.lytDashWhatsNew.tvVersion.text = "Version 1.2"
             whatsNewAdapter.submit(list)
+        }
+
+        viewModel.destinationData.observe(this){
+            setDestination(it)
+        }
+    }
+
+    private fun setDestination(dest: LifeOsDashViewModel.LifeOsDestinations) {
+        when(dest){
+            LifeOsDashViewModel.LifeOsDestinations.BEGIN_FRAG -> {
+                navigate(R.id.lifeOsOnboardBeginFragment)
+            }
+            LifeOsDashViewModel.LifeOsDestinations.QUES_FRAG -> {
+                navigate(R.id.lifeOsOnboardingQuesFragment)
+            }
+            LifeOsDashViewModel.LifeOsDestinations.LIFE_OS_MAIN -> {
+                setLytOnboardQuesProgress()
+            }
         }
     }
 

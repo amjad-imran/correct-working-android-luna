@@ -28,7 +28,9 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
             .addCallback(viewLifecycleOwner) {
 
             }
-        viewModel.getOnboardQues()
+        viewModel.getOnboardQues(){
+            navigateUpSafe()
+        }
     }
 
     override fun initListener() {

@@ -148,8 +148,12 @@ class LifeOsOnboardTextFldOrNoneFragment : BaseFragment<FragmentLifeOsOnboardTex
                     textFieldAnsX?.userInputText = input
                     textFieldAnsX?.isSelected = true
                     parentViewModel.setNextBtnEnableState(true)
+
+                    ansX?.isSelected = false
+                    tvNoIssuesSelected = false
+                    funSetNoneAnsBg()
                 }else{
-                    parentViewModel.setNextBtnEnableState(false)
+                    parentViewModel.setNextBtnEnableState(ansX?.isSelected ?: false)
                     textFieldAnsX?.isSelected = false
                 }
             }

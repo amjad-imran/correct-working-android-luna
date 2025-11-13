@@ -2519,7 +2519,12 @@ class DataStoredImpl
     }
 
     override fun setLifeOsOnboardData(data: OnBoardQuesGetResponse) {
-        mPrefs.edit()?.putString(NUDGE_CYCLE_TRACKER_DATA, gson.toJson(data))?.apply()
+        mPrefs.edit()?.putString(LIFEOS_ONBOARD_QUES_DATA, gson.toJson(data))?.apply()
+    }
+
+    override fun getLifeOsOnboardData(): OnBoardQuesGetResponse? {
+        return mPrefs.getString(LIFEOS_ONBOARD_QUES_DATA, null)
+            ?.let { Gson().fromJson<OnBoardQuesGetResponse>(it) }
     }
 
 }

@@ -36,7 +36,7 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
 
     val saveAndExitBtnClickedBs = MutableLiveData<Boolean>()
 
-    fun getOnboardQues() {
+    fun getOnboardQues(isAllQuesDone: () -> Unit) {
         viewModelScope.launch {
             /*val jsonRes = """
                 {
@@ -137,7 +137,7 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
                                 (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                     object : BinaryActionCallback {
                                         override fun yes() {
-                                            getOnboardQues()
+                                            getOnboardQues(isAllQuesDone)
                                         }
 
                                         override fun no() {}
@@ -149,7 +149,7 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
                             resource.data?.data?.let {
                                 localDataStore.setLifeOsOnboardData(it)
                                 onBoardResponseData = it
-                                processData(it)
+                                processData(it, isAllQuesDone)
                             }
                         }
                     }
@@ -158,12 +158,12 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
         }
     }
 
-    fun processData(mainData: OnBoardQuesGetResponse){
+    fun processData(mainData: OnBoardQuesGetResponse, isAllQuesDone: () -> Unit){
         mainData.questions?.forEachIndexed { idx, it ->
             val curQuesAns = mainData.answers?.find { it1-> it1.ques_id==it.id}
-            /*if(curQuesAns != null){
+            if(curQuesAns != null){
                 it.isSavedByUser = true
-            }*/
+            }
             it.answer.forEach { ans ->
 
                 ans.isSelected = curQuesAns?.ans_id?.contains(ans.id) == true
@@ -183,7 +183,12 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
             }
         }
 
-        mainData.questions?.getOrNull(curQuesIndex ?:-1)?.let {
+        if(curQuesIndex == null){
+            curQuesIndex = mainData.questions?.size?.minus(1)
+            /*isAllQuesDone()
+            return*/
+        }
+        mainData.questions?.getOrNull(curQuesIndex?:-1)?.let {
             curQues.postValue(it)
         }
     }
@@ -238,6 +243,11 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
                 reqArray.add(jsonObject)
             }
 
+            if(reqArray.isEmpty){
+                navigateToFinishScreen()
+                return@launch
+            }
+
             userRepository.submitLifeOsOnboardQuesAnsList(reqArray).collect{ resource ->
                 when (resource) {
                     is Resource.GenericError -> {
@@ -253,7 +263,7 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        getOnboardQues()
+                                        submitQuesAnsToServer()
                                     }
 
                                     override fun no() {}
@@ -263,6 +273,7 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
+                            onBoardResponseData?.let { data -> localDataStore.setLifeOsOnboardData(data) }
                             navigateToFinishScreen()
                         }
                     }

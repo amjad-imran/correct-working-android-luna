@@ -616,6 +616,7 @@ interface DataStoredInterface {
 
     fun setLifeOsOnboardData(data: OnBoardQuesGetResponse)
 
+    fun getLifeOsOnboardData(): OnBoardQuesGetResponse?
 }
 
 enum class AppTrackEvent {
