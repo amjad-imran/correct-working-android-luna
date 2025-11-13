@@ -1376,6 +1376,9 @@ class SummaryDataViewModelToday @Inject constructor(
                 getTimelineCard()?.let { userActivities.add(it) }
             }
 
+            //
+            getLifeOsCard()?.let { userActivities.add(it) }
+            //
             /*getWorkoutHistoryCard(healthData.activity)?.let { userActivities.add(it) }*/
 
             if (lunaManaged) {
@@ -1613,6 +1616,10 @@ class SummaryDataViewModelToday @Inject constructor(
                 chosen
             }
         }
+    }
+
+    fun getLifeOsCard() : OHealthOverview.LifeOsCard? {
+        return OHealthOverview.LifeOsCard
     }
 
     private suspend fun getOneTapVitalsCard(

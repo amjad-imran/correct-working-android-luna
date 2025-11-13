@@ -243,6 +243,8 @@ sealed class OHealthOverview {
         HR, STRESS, SPO2, SKIN_TEMP
     }
 
+    object LifeOsCard: OHealthOverview()
+
 }
 
 enum class FemaleHealthCardState {

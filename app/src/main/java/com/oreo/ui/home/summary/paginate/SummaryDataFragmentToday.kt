@@ -723,6 +723,10 @@ class SummaryDataFragmentToday :
                         }
                     }
                 }
+
+                OSummaryHealthOverviewClickEnum.LifeOsCardClicked -> {
+                    mainViewModel.navigateTo(BottomNavOption.LUNA_AI)
+                }
             }
         }
 
