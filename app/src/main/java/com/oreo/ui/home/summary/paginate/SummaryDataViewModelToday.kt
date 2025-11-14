@@ -1218,12 +1218,12 @@ class SummaryDataViewModelToday @Inject constructor(
             }
 
 
-            val hasCaffeineKey = priorityList.find { it.key.equals("caffeine_intake", true) }
+            /*val hasCaffeineKey = priorityList.find { it.key.equals("caffeine_intake", true) }
             if (hasCaffeineKey == null) {
                 getCaffeineCardData()?.let {
                     userActivities.add(it)
                 }
-            }
+            }*/
 
 
             priorityList.forEach { item ->
@@ -1345,9 +1345,9 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
 
                     "caffeine_intake" -> {
-                        getCaffeineCardData()?.let {
+                        /*getCaffeineCardData()?.let {
                             userActivities.add(it)
-                        }
+                        }*/
                     }
 
                     "circadian_alignment" -> {
@@ -3183,7 +3183,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     add(itemsMap["stress"]!!.copy(priority = priorityList.size))
                     add(itemsMap["daily_goals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["cycle_tracker"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))
+                    /*add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))*/
                     add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
                 }
 
@@ -3199,7 +3199,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
                     add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
                     add(itemsMap["cycle_tracker"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))
+                    /*add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))*/
                     add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
                 }
 
@@ -3216,7 +3216,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
                     add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
                     add(itemsMap["cycle_tracker"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))
+                    /*add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))*/
                 }
             }
 
