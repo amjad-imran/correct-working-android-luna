@@ -50,14 +50,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivMore" />
 
-    <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/progressIndicator"
+    <com.oreo.ui.lifeos.AngularGradientLinearProgress
+        android:id="@+id/angularProgress"
         android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:layout_marginTop="16dp"
-        app:indicatorColor="#AEA2F7"
+        android:layout_height="4dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView214"
-        app:trackColor="#33FFFFFF" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView214" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

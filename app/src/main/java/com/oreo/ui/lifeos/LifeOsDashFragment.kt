@@ -2,6 +2,7 @@ package com.oreo.ui.lifeos
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.graphics.toColorInt
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +13,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLifeOsDashBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.dpToPixel
+import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.visible
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.PlanType
@@ -53,45 +55,18 @@ class LifeOsDashFragment :
         val onboardQuesData = viewModel.localDataStore.getLifeOsOnboardData()
         val ansSize = onboardQuesData?.answers?.size
         val quesSize = onboardQuesData?.questions?.size
-        if(quesSize!=null && ansSize!=null &&
+        if(quesSize==null || ansSize==null ||
             ansSize >= quesSize
         ){
+            binding.lytHeader.lytOnboardQuesProgress.root.gone()
             return
         }
 
-        binding.lytHeader.lytOnboardQuesProgress.progressIndicator.apply {
-            max = quesSize!!
-            progress = ansSize!!
-            /*class AngularGradientDrawable : Drawable() {
-                private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        val progressView = binding.lytHeader.lytOnboardQuesProgress.angularProgress
+        progressView.trackColor = "#33FFFFFF".toColorInt()
+        progressView.progress = ansSize/quesSize.toFloat()
 
-                override fun draw(canvas: Canvas) {
-                    val b = bounds
-                    val cx = b.exactCenterX()
-                    val cy = b.exactCenterY()
-
-                    // Conic (sweep) gradient across the rect
-                    val shader = SweepGradient(
-                        cx, cy,
-                        intArrayOf(
-                            "#FFFFB8".toColorInt(),
-                            "#A6EAF7".toColorInt(),
-                            "#AEA2F7".toColorInt(),
-                            "#F2C7EF".toColorInt(),
-                            "#FFFFB8".toColorInt(), // close the loop
-                        ),
-                        null
-                    )
-                    paint.shader = shader
-                    canvas.drawRect(b, paint)
-                }
-
-                override fun setAlpha(alpha: Int) { paint.alpha = alpha }
-                override fun setColorFilter(colorFilter: ColorFilter?) { paint.colorFilter = colorFilter }
-                override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
-            }
-            progressDrawable = AngularGradientDrawable()*/
-        }
+//        progressView.animateProgressTo(0.4f)
         binding.lytHeader.lytOnboardQuesProgress.root.visible()
     }
 
