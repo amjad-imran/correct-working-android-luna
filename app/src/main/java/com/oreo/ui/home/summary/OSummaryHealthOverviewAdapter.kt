@@ -887,6 +887,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             }
             binding.tvSkinAgo.text = data.skinTempLastTime ?: "-"
 
+            binding.ivSkinIcon.setImageResource(
+                if(data.isMetric) R.drawable.ic_temp_measure
+                else R.drawable.ic_temp_measure_farenheit
+            )
+
             binding.itemHR.setOnClickListener {
                 if (expandedTile != null) return@setOnClickListener
                 onItemClicked(
