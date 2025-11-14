@@ -161,9 +161,17 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
     fun processData(mainData: OnBoardQuesGetResponse, isAllQuesDone: () -> Unit){
         mainData.questions?.forEachIndexed { idx, it ->
             val curQuesAns = mainData.answers?.find { it1-> it1.ques_id==it.id}
-            if(curQuesAns != null){
+            if(
+                curQuesAns != null &&
+                curQuesAns.ans_id.isNotEmpty() == true ||
+                curQuesAns?.addOntext?.isNotEmpty() == true
+            ){
                 it.isSavedByUser = true
             }
+            else{
+                if(curQuesIndex == null) curQuesIndex = idx
+            }
+
             it.answer.forEach { ans ->
 
                 ans.isSelected = curQuesAns?.ans_id?.contains(ans.id) == true
@@ -176,10 +184,6 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
                 }else{
                     LifeOSOnboardMCQquesStates.NORMAL
                 }
-            }
-
-            if(curQuesIndex == null && !it.isSavedByUser){
-                curQuesIndex = idx
             }
         }
 

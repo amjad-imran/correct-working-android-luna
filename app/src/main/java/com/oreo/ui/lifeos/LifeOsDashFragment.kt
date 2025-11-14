@@ -48,16 +48,33 @@ class LifeOsDashFragment :
         setupQuestionsRecycler()
         setupWhatsNewRecycler()
         setupInsightsPager()
+    }
+
+    override fun onResume() {
+        super.onResume()
         viewModel.getLifeOsData()
+        setLytOnboardQuesProgress()
+        viewModel.destinationData.observe(this){
+            setDestination(it)
+        }
     }
 
     private fun setLytOnboardQuesProgress() {
         val onboardQuesData = viewModel.localDataStore.getLifeOsOnboardData()
-        val ansSize = onboardQuesData?.answers?.size
-        val quesSize = onboardQuesData?.questions?.size
-        if(quesSize==null || ansSize==null ||
-            ansSize >= quesSize
-        ){
+        if(onboardQuesData==null || onboardQuesData.questions.isNullOrEmpty() || onboardQuesData.answers.isNullOrEmpty()){
+            binding.lytHeader.lytOnboardQuesProgress.root.gone()
+            return
+        }
+        val quesSize = onboardQuesData.questions!!.size
+
+        var ansSize = 0
+        onboardQuesData.answers?.forEach {
+            if (it.ans_id.isNotEmpty() || it.addOntext.isNotEmpty()) {
+                ansSize++
+            }
+        }
+
+        if(ansSize >= quesSize){
             binding.lytHeader.lytOnboardQuesProgress.root.gone()
             return
         }
@@ -174,10 +191,6 @@ class LifeOsDashFragment :
             binding.lytDashWhatsNew.tvVersion.text = "Version 1.2"
             whatsNewAdapter.submit(list)
         }
-
-        viewModel.destinationData.observe(this){
-            setDestination(it)
-        }
     }
 
     private fun setDestination(dest: LifeOsDashViewModel.LifeOsDestinations) {
@@ -189,7 +202,6 @@ class LifeOsDashFragment :
                 navigate(R.id.lifeOsOnboardingQuesFragment)
             }
             LifeOsDashViewModel.LifeOsDestinations.LIFE_OS_MAIN -> {
-                setLytOnboardQuesProgress()
             }
         }
     }
