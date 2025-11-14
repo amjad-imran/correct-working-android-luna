@@ -89,7 +89,8 @@ class TroubleShootBottomSheetFragment :
 
             TroubleShootActionType.CONTACT_US -> {
                 context?.let {
-                    Freshchat.showConversations(requireContext())
+                    ShareUtil.composeEmail(it,"support@lunazone.com","APP SUPPORT")
+                    /*Freshchat.showConversations(requireContext())*/
                     //ShareUtil.openExternalUrl(it, SUPPORT_URL)
                 }
             }
@@ -295,7 +296,7 @@ class TroubleShootBottomSheetFragment :
                 title = getString(R.string.text_still_not_connecting),
                 message = getString(R.string.text_reach_out_to_us_by_tapping),
                 image = R.drawable.image_ts_4,
-                ctaText = getString(R.string.text_live_support),
+                ctaText = getString(R.string.text_email_support),
                 action = TroubleShootActionType.CONTACT_US
             )
         )

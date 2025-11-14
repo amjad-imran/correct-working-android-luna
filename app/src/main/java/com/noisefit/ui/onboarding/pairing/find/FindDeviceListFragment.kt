@@ -399,7 +399,10 @@ class FindDeviceListFragment :
 
         binding.tvTroubleShoot.setOnClickListener {
             if(viewModel.troubleshootScrPos==5){
-                Freshchat.showConversations(requireContext())
+//                Freshchat.showConversations(requireContext())
+                context?.let {
+                    ShareUtil.composeEmail(it,"support@lunazone.com","APP SUPPORT")
+                }
             }
             if (viewModel.troubleshootScrPos<5){
                 viewModel.troubleshootScrPos++
@@ -495,7 +498,7 @@ class FindDeviceListFragment :
                 )
                 binding.videoOnboard.visible()
                 binding.imgOnBoard.gone()
-                binding.tvTroubleShoot.text = getString(R.string.text_contact_support)
+                binding.tvTroubleShoot.text = getString(R.string.text_email_support)
             }
 
             else -> {
