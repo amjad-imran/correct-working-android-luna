@@ -2306,5 +2306,6 @@
     <string name="text_workout_no_internet">บันทึกการออกกำลังกายแล้ว เราจะประมวลผลเมื่อคุณออนไลน์</string>
     <string name="text_analyse_this">วิเคราะห์สิ่งนี้</string>
     <string name="text_email_support">การสนับสนุนทางอีเมล</string>
+    <string name="text_app_support">การสนับสนุนแอป</string>
 
 </resources>

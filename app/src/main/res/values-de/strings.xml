@@ -2300,5 +2300,6 @@
     <string name="text_workout_no_internet">Training gespeichert. Wir verarbeiten es, sobald du online bist.</string>
     <string name="text_analyse_this">Analysiere dies</string>
     <string name="text_email_support">E-Mail-Support</string>
+    <string name="text_app_support">App-Support</string>
 
 </resources>

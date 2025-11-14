@@ -89,7 +89,7 @@ class TroubleShootBottomSheetFragment :
 
             TroubleShootActionType.CONTACT_US -> {
                 context?.let {
-                    ShareUtil.composeEmail(it,"support@lunazone.com","APP SUPPORT")
+                    ShareUtil.composeEmail(it,"support@lunazone.com","[${getString(R.string.text_app_support)}]")
                     /*Freshchat.showConversations(requireContext())*/
                     //ShareUtil.openExternalUrl(it, SUPPORT_URL)
                 }

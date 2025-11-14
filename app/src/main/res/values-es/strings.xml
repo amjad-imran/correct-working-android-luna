@@ -2270,5 +2270,6 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_workout_no_internet">Entrenamiento guardado. Lo procesaremos cuando estés en línea.</string>
     <string name="text_analyse_this">Analiza esto</string>
     <string name="text_email_support">Soporte por correo electrónico</string>
+    <string name="text_app_support">Soporte de la aplicación</string>
 
 </resources>

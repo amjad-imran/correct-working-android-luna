@@ -2419,5 +2419,6 @@ onjour, Luna"</string>
     <string name="text_workout_no_internet">Entraînement enregistré. Nous le traiterons lorsque vous serez en ligne.</string>
     <string name="text_analyse_this">Analysez ceci</string>
     <string name="text_email_support">Assistance par e-mail</string>
+    <string name="text_app_support">Assistance de l\'application</string>
 
 </resources>

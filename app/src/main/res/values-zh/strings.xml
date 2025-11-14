@@ -2294,8 +2294,6 @@
     <string name="text_workout_no_internet">已保存锻炼。你在线时我们会处理。</string>
     <string name="text_analyse_this">分析这个</string>
     <string name="text_email_support">电子邮件支持</string>
-
-
-
+    <string name="text_app_support">应用支持</string>
 
 </resources>

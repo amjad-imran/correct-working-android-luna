@@ -2301,5 +2301,7 @@
     <string name="text_workout_no_internet">Allenamento salvato. Lo elaboreremo quando sarai online.</string>
     <string name="text_analyse_this">Analizza questo</string>
     <string name="text_email_support">Assistenza via e-mail</string>
+    <string name="text_app_support">Assistenza app</string>
+
 
 </resources>

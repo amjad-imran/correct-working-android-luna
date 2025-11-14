@@ -2324,5 +2324,6 @@
     <string name="text_workout_no_internet">Тренировка сохранена. Мы обработаем её, когда вы будете в сети.</string>
     <string name="text_analyse_this">Проанализируйте это</string>
     <string name="text_email_support">Поддержка по электронной почте</string>
+    <string name="text_app_support">Поддержка приложения</string>
 
 </resources>

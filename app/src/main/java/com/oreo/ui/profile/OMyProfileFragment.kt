@@ -171,7 +171,7 @@ class OMyProfileFragment :
             //Freshchat.showConversations(requireContext())
 
             context?.let {
-                ShareUtil.composeEmail(it,"support@lunazone.com","APP SUPPORT")
+                ShareUtil.composeEmail(it,"support@lunazone.com","[${getString(R.string.text_app_support)}]")
             }
 
         }

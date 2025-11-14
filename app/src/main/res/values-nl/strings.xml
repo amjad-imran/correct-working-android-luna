@@ -2300,5 +2300,6 @@
     <string name="text_workout_no_internet">Training opgeslagen. We verwerken het zodra je online bent.</string>
     <string name="text_analyse_this">Analyseer dit</string>
     <string name="text_email_support">E-mailondersteuning</string>
+    <string name="text_app_support">App-ondersteuning</string>
 
 </resources>

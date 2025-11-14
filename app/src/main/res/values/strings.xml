@@ -2276,6 +2276,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_workout_no_internet">Workout saved. We’ll process it when you’re online.</string>
     <string name="text_analyse_this">Analyse this</string>
     <string name="text_email_support">Email support</string>
+    <string name="text_app_support">APP SUPPORT</string>
 
 
 </resources>
