@@ -31,6 +31,7 @@ import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.viewModels
@@ -205,8 +206,10 @@ class LifeOsDashFragment :
                         color = Color.White,
                         fontSize = 12.sp,
                         fontFamily = FontFamily(Font(com.noisefit_commans.R.font.gilroy_regular)),
+                        fontWeight = FontWeight(400),
                         platformStyle = PlatformTextStyle(includeFontPadding = false)
-                    )
+                    ),
+                    lineHeight = 17.sp
                 )
 
                 Spacer(Modifier.height(16.dp))
