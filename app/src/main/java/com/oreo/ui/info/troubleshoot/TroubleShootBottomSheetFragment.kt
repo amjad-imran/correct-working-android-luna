@@ -28,9 +28,12 @@ import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayoutMediator
+import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.BottomSheetTroubleshootBinding
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.constants.WatchInfoGlobals
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.tryCatch
@@ -40,6 +43,7 @@ import com.noisefit_commans.utils.share.ShareUtil
 import com.noisefit_commans.utils.share.ShareUtil.SUPPORT_URL
 import com.oreo.ui.device.FIND_RING_LOCATION_PERM_REQUEST
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -49,6 +53,9 @@ class TroubleShootBottomSheetFragment :
     ), OnCompleteListener<LocationSettingsResponse> {
 
     private val args: TroubleShootBottomSheetFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var ringDataStore: RingDataStore
 
     private val descriptionSliderAdapter by lazy {
         TroubleshootAdapter(object : TroubleShootAction {
@@ -89,7 +96,21 @@ class TroubleShootBottomSheetFragment :
 
             TroubleShootActionType.CONTACT_US -> {
                 context?.let {
-                    ShareUtil.composeEmail(it,"support@lunazone.com","[${getString(R.string.text_app_support)}]")
+                    val body = """
+                    Platform: Android
+                    App version: ${BuildConfig.VERSION_NAME}
+                    Firmware: ${WatchInfoGlobals.firmwareVersionRing ?: "-"}
+                    Serial number: : ${ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw ?: "-"}
+                    
+                    
+                """.trimIndent()
+
+                    ShareUtil.composeEmail(
+                        it,
+                        "support@lunazone.com",
+                        "[${getString(R.string.text_app_support)}]",
+                        body
+                    )
                     /*Freshchat.showConversations(requireContext())*/
                     //ShareUtil.openExternalUrl(it, SUPPORT_URL)
                 }

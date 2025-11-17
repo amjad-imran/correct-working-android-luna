@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.freshchat.consumer.sdk.Freshchat
+import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentMyProfileOreoBinding
 import com.noisefit.oreo.OreoMainViewModel
@@ -31,6 +32,7 @@ import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.noisefit_commans.utils.share.ShareUtil
 import com.oreo.ui.chatGpt.PlanType
 import com.noisefit.ui.profile.ProfileViewModel.DownloadMyDataBS.*
+import com.noisefit_commans.constants.WatchInfoGlobals
 import com.oreo.ui.profile.downloadMyData.ProcessAndDownloadMyDataBottomSheet
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -171,7 +173,20 @@ class OMyProfileFragment :
             //Freshchat.showConversations(requireContext())
 
             context?.let {
-                ShareUtil.composeEmail(it,"support@lunazone.com","[${getString(R.string.text_app_support)}]")
+                val body = """
+                    Platform: Android
+                    App version: ${BuildConfig.VERSION_NAME}
+                    Firmware: ${WatchInfoGlobals.firmwareVersionRing ?: "-"}
+                    Serial number: : ${viewModel.ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw ?: "-"}
+                    
+                    
+                """.trimIndent()
+                ShareUtil.composeEmail(
+                    it,
+                    "support@lunazone.com",
+                    "[${getString(R.string.text_app_support)}]",
+                    body
+                )
             }
 
         }

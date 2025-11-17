@@ -44,6 +44,7 @@ import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.ui.onboarding.pairing.pair.NearbyDevicesAdapter
 import com.noisefit.ui.onboarding.pairing.pair.NearbyDevicesClickListener
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
@@ -401,7 +402,20 @@ class FindDeviceListFragment :
             if(viewModel.troubleshootScrPos==5){
 //                Freshchat.showConversations(requireContext())
                 context?.let {
-                    ShareUtil.composeEmail(it,"support@lunazone.com","[${getString(R.string.text_app_support)}]")
+                val body = """
+                    Platform: Android
+                    App version: ${BuildConfig.VERSION_NAME}
+                    Firmware: ${WatchInfoGlobals.firmwareVersionRing ?: "-"}
+                    Serial number: : ${viewModel.ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw ?: "-"}
+                    
+                    
+                """.trimIndent()
+                    ShareUtil.composeEmail(
+                        it,
+                        "support@lunazone.com",
+                        "[${getString(R.string.text_app_support)}]",
+                        body
+                    )
                 }
             }
             if (viewModel.troubleshootScrPos<5){
