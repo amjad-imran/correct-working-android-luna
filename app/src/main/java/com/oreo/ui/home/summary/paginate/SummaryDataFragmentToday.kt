@@ -320,12 +320,13 @@ class SummaryDataFragmentToday :
                 }
 
                 OSummaryHealthOverviewClickEnum.OnCircadianAlignmentCardClicked -> {
-                    viewModel.sessionManager.logMoEngageAppEvent(
+                    viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.circadian_entry)
+                    /*viewModel.sessionManager.logMoEngageAppEvent(
                         MoEngageLunaAppEvents.insight_clicked,
                         HashMap<String, Any>().apply {
                             this["section"] = "circadian"
                         }
-                    )
+                    )*/
                     navigate(R.id.circadianAlignmentFragment)
                 }
 
@@ -333,6 +334,9 @@ class SummaryDataFragmentToday :
                     if (viewModel.ringDataStore.getRingDevice() == null) {
                         context.showShortToast(getString(R.string.text_luna_ai_message))
                     }else {
+                        mainViewModel.sessionManager.logMoEngageAppEvent(
+                            MoEngageLunaAppEvents.homepage_dhd
+                        )
                         navigate(R.id.aiSummaryFragment)
                     }
                 }
@@ -443,10 +447,7 @@ class SummaryDataFragmentToday :
                         navigate(R.id.stressSplashFragment)
                     }
                     mainViewModel.sessionManager.logMoEngageAppEvent(
-                        MoEngageLunaAppEvents.insight_clicked,
-                        HashMap<String, Any>().apply {
-                            this["insight"] = "stress"
-                        }
+                        MoEngageLunaAppEvents.homepage_stress
                     )
                 }
 
@@ -460,11 +461,7 @@ class SummaryDataFragmentToday :
                         context.showShortToast(getString(R.string.text_luna_ai_message))
                     }else {
                         mainViewModel.sessionManager.logMoEngageAppEvent(
-                            MoEngageLunaAppEvents.aichat_initiated_clicked,
-                            HashMap<String, Any>().apply {
-                                this["source"] = "activity"
-                                this["value"] = "homepage"
-                            }
+                            MoEngageLunaAppEvents.homepage_luna_ai
                         )
 
                         if (viewModel.isChatSplashShown()) {
@@ -662,10 +659,7 @@ class SummaryDataFragmentToday :
 
                 OSummaryHealthOverviewClickEnum.OnHeartRateCardClicked -> {
                     viewModel.sessionManager.logMoEngageAppEvent(
-                        MoEngageLunaAppEvents.insight_clicked,
-                        HashMap<String, Any>().apply {
-                            this["insight"] = "heart_rate"
-                        }
+                        MoEngageLunaAppEvents.homepage_heart_rate
                     )
                     navigate(R.id.fragmentHeartRateDetails)
                 }
@@ -676,7 +670,7 @@ class SummaryDataFragmentToday :
 
                 is OSummaryHealthOverviewClickEnum.OnLogActivityClicked -> {
                     viewModel.sessionManager.logMoEngageAppEvent(
-                        MoEngageLunaAppEvents.insight_log
+                        MoEngageLunaAppEvents.timeline_log_button
                     )
                     if(viewModel.sessionManager.connectStateRing.value is ConnectState.ConnectSuccess){
                         navigate(

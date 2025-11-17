@@ -231,6 +231,7 @@ object MoEngageLunaAppEvents {
     const val luna_readiness_contrib_hrv_balance_click = "luna_readiness_contrib_hrv_balance_click"
     const val luna_readiness_contrib_skin_temp_click = "luna_readiness_contrib_skin_temp_click"
     const val luna_readiness_heart_rate_info_click = "luna_readiness_heart_rate_info_click"
+    const val homepage_heart_rate = "homepage_heart_rate"
     const val luna_readiness_hrv_info_click = "luna_readiness_hrv_info_click"
 
     const val luna_activity_workouts_item_click = "luna_activity_workouts_item_click"
@@ -246,6 +247,7 @@ object MoEngageLunaAppEvents {
     const val luna_overall_stress_page_visit = "luna_overall_stress_page_visit"
     const val luna_non_active_stress_page_visit = "luna_non_active_stress_page_visit"
     const val luna_stress_i_page_visit = "luna_stress_i_page_visit"
+    const val homepage_stress = "homepage_stress"
 
     const val luna_cycle_tracking_page_visit = "luna_cycle_tracking_page_visit"
     const val luna_cycle_tracking_calendar_button_click = "luna_cycle_tracking_calendar_button_click"
@@ -269,12 +271,15 @@ object MoEngageLunaAppEvents {
     const val quiz_started = "quiz_started"
     const val quiz_restarted = "quiz_restarted"
     const val insight_logged = "insight_logged"
+    const val circadian_entry = "circadian_entry"
+    const val quiz_resaved = "quiz_resaved"
 
     // Timeline
     const val calendar_day_selected = "calendar_day_selected"
     const val page_scrolled = "page_scrolled"
     const val insight_log_deleted = "insight_log_deleted"
     const val insight_log_edited = "insight_log_edited"
+    const val timeline_log_button = "timeline_log_button"
 
     // Luna Ai / Workout / Nutrition
     const val lunaai_wid_sel_click = "lunaai_wid_sel_click"
@@ -292,6 +297,7 @@ object MoEngageLunaAppEvents {
     const val homepage_luna_sent = "homepage_luna_sent"
     const val homepage_luna_sent_double = "homepage_luna_sent_double"
     const val homepage_dhd_share = "homepage_dhd_share"
+    const val homepage_luna_ai = "homepage_luna_ai"
 
     // One Tap Vitals
 
