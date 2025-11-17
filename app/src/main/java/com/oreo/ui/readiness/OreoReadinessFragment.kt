@@ -234,7 +234,8 @@ class OreoReadinessFragment :
                                 threadId = null,
                                 userMessage = null,
                                 title = null,
-                                aiTopic = AITopics.READINESS
+                                aiTopic = AITopics.READINESS,
+                                srcKey = "readiness"
                             )
                             navigate(
                                 frag, bundle

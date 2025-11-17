@@ -108,6 +108,7 @@ class ChatGptViewModel
     var meal: AiMeals? = null
     var workout: AiWorkout? = null
     var planType: PlanType? = null
+    var srcKey: String? = null
 
     val fetchInProgress = MutableLiveData<Boolean>()
     val showRetry = MutableLiveData<Boolean>()

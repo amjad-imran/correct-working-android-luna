@@ -186,7 +186,8 @@ class SleepDashFragment :
                 threadId = null,
                 userMessage = null,
                 title = null,
-                aiTopic = AITopics.SLEEP
+                aiTopic = AITopics.SLEEP,
+                srcKey = "sleep"
             )
             navigate(
                 frag, bundle

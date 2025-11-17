@@ -964,7 +964,8 @@ class CycleTrackerFragment :
                                 threadId = null,
                                 userMessage = null,
                                 title = null,
-                                aiTopic = AITopics.MENSTRUAL_HEALTH
+                                aiTopic = AITopics.MENSTRUAL_HEALTH,
+                                srcKey = "cycle_tracker"
                             )
                             navigate(
                                 frag, bundle

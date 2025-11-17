@@ -473,7 +473,8 @@ class SummaryDataFragmentToday :
                             threadId = null,
                             userMessage = null,
                             title = null,
-                            aiTopic = AITopics.GENERAL
+                            aiTopic = AITopics.GENERAL,
+                            srcKey = "homepage",
                         )
                         navigate(
                             frag, bundle

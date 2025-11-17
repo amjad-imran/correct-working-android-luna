@@ -68,6 +68,7 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import com.noisefit.luna.BuildConfig
 import com.noisefit_commans.common.copyToClipBoard
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 
 @AndroidEntryPoint
 class LifeOsChatFragment :
@@ -103,6 +104,7 @@ class LifeOsChatFragment :
             meal: AiMeals? = null,
             workout: AiWorkout? = null,
             planType: PlanType? = null,
+            srcKey: String? = null,
         ): Pair<Int, Bundle?> {
             return Pair(R.id.lifeOsChatFragment, Bundle().apply {
                 putString("threadId", threadId ?: "")
@@ -112,6 +114,7 @@ class LifeOsChatFragment :
                 putSerializable("planType", planType ?: PlanType.NONE)
                 putParcelable("meal", meal)
                 putParcelable("workout", workout)
+                putString("sourceKey", srcKey)
             })
         }
     }
@@ -136,6 +139,7 @@ class LifeOsChatFragment :
         viewModel.meal = args.meal
         viewModel.workout = args.workout
         viewModel.planType = args.planType
+        viewModel.srcKey = args.sourceKey
 
         viewModel.getAiTopQuestions(args.aiTopic)
 
@@ -236,6 +240,9 @@ class LifeOsChatFragment :
         }
 
         binding.lytChatBox.ivAddAttachment.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.luna_file_upload_plus
+            )
             try {
                 ViewCompat.getWindowInsetsController(requireView())
                     ?.hide(WindowInsetsCompat.Type.ime())
@@ -247,15 +254,24 @@ class LifeOsChatFragment :
             kickstartImeTranslation()
             setFragmentResultListener(ATTACHMENT_KEY) { _, bundle ->
                 when (bundle.getString("type")) {
-                    "camera" -> launchCameraPicker()
-                    "photo" -> pickImageLauncher.launch("image/*")
-                    "file" -> pickDocumentLauncher.launch(
-                        arrayOf(
-                            "application/pdf",
-                            "application/msword",
-                            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    "camera" -> {
+                        logChatPlusActionEvent(0)
+                        launchCameraPicker()
+                    }
+                    "photo" -> {
+                        logChatPlusActionEvent(2)
+                        pickImageLauncher.launch("image/*")
+                    }
+                    "file" -> {
+                        logChatPlusActionEvent(1)
+                        pickDocumentLauncher.launch(
+                            arrayOf(
+                                "application/pdf",
+                                "application/msword",
+                                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                            )
                         )
-                    )
+                    }
                 }
             }
             navigate(R.id.bottomSheetAttachmentPicker)
@@ -282,6 +298,24 @@ class LifeOsChatFragment :
         binding.lytChatBox.ivRemoveAttachment.setOnClickListener {
             viewModel.clearPendingAttachment()
         }
+    }
+
+    private fun logChatPlusActionEvent(key: Int){
+        if(viewModel.srcKey==null){
+            return
+        }
+
+        val eventName = when(key){
+            0 -> MoEngageLunaAppEvents.luna_file_upload_camera
+            1 -> MoEngageLunaAppEvents.luna_file_upload_file
+            else -> MoEngageLunaAppEvents.luna_file_upload_image
+        }
+        viewModel.sessionManager.logMoEngageAppEvent(
+            eventName,
+            hashMapOf(
+                "source" to viewModel.srcKey!!
+            )
+        )
     }
 
     override fun subscribeObservers() {

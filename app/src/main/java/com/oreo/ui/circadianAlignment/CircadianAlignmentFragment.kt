@@ -725,7 +725,8 @@ class CircadianAlignmentFragment :
                 threadId = null,
                 userMessage = null,
                 title = null,
-                aiTopic = AITopics.CIRCADIAN
+                aiTopic = AITopics.CIRCADIAN,
+                srcKey = "circadian"
             )
             navigate(
                 frag, bundle

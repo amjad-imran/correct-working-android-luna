@@ -304,4 +304,12 @@ object MoEngageLunaAppEvents {
     const val pdf_click = "pdf_click"
     const val pdf_download = "pdf_download"
 
+    // Life OS event
+
+    const val luna_file_upload_plus = "luna_file_upload_plus"
+    const val luna_file_upload_image = "luna_file_upload_image"
+    const val luna_file_upload_file = "luna_file_upload_file"
+    const val luna_file_upload_camera = "luna_file_upload_camera"
+
+
 }

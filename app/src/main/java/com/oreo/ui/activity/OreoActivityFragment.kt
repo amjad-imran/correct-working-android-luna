@@ -227,7 +227,8 @@ class OreoActivityFragment :
                                 threadId = null,
                                 userMessage = null,
                                 title = null,
-                                aiTopic = AITopics.ACTIVITY
+                                aiTopic = AITopics.ACTIVITY,
+                                srcKey = "activity"
                             )
                             navigate(
                                 frag, bundle
