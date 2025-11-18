@@ -106,12 +106,10 @@ import com.noisefit.luna.databinding.LayoutTimelineCardDashBinding
 import com.noisefit.luna.databinding.LayoutOneTapVitalsCardBinding
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.ui.fadeIn
-import com.noisefit_commans.ui.fadeOut
 import com.noisefit_commans.ui.playAnimation
 import com.oreo.data.model.OHealthOverview.VitalsType
 import com.oreo.ui.chatGpt.SummaryStates
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
-import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.MEAL_INTAKE_KEY_KEY
 import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.SYMPTOM_KEY
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -1169,7 +1167,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     VitalsType.SKIN_TEMP -> binding.ivSkinIcon
                     null -> binding.ivHrIcon
                 }
-                ivAnchor.setImageResource(getIcon(data.expandedType))
+                ivAnchor.setImageResource(getIcon(data.expandedType, data.isMetric))
                 if (data.isRetry.not()) {
                     animateImageView(ivAnchor, srcView, {
                         if (data.expandedType == OHealthOverview.VitalsType.HR) {
@@ -1333,12 +1331,13 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
         }
 
-        private fun getIcon(type: VitalsType?): Int {
+        private fun getIcon(type: VitalsType?, isMetric: Boolean): Int {
             return when (type) {
                 VitalsType.HR -> R.drawable.ic_hr_measure
                 VitalsType.STRESS -> R.drawable.ic_stress_measure
                 VitalsType.SPO2 -> R.drawable.ic_spo2_measure
-                VitalsType.SKIN_TEMP -> R.drawable.ic_temp_measure
+                VitalsType.SKIN_TEMP -> if(isMetric) R.drawable.ic_temp_measure
+                                        else R.drawable.ic_temp_measure_farenheit
                 null -> R.drawable.ic_hr_measure
             }
         }
