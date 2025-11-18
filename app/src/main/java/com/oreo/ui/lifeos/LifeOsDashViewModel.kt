@@ -20,7 +20,7 @@ class LifeOsDashViewModel @Inject constructor(
     private val _whatsNew = MutableLiveData<List<String>>()
     val whatsNew: LiveData<List<String>> get() = _whatsNew
 
-    val destinationData = MutableLiveData<LifeOsDestinations>()
+    val destinationData = MutableLiveData<LifeOsDestinations?>()
 
 
     init {

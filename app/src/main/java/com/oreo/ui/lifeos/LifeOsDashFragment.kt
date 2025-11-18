@@ -85,9 +85,6 @@ class LifeOsDashFragment :
         super.onResume()
         viewModel.getLifeOsData()
         setLytOnboardQuesProgress()
-        viewModel.destinationData.observe(this){
-            setDestination(it)
-        }
     }
 
     private fun setLytOnboardQuesProgress() {
@@ -361,6 +358,11 @@ class LifeOsDashFragment :
     }
 
     override fun subscribeObservers() {
+        viewModel.destinationData.observe(this){
+            if(it==null) return@observe
+            setDestination(it)
+        }
+
         viewModel.questions.observe(viewLifecycleOwner) { list ->
             questionsAdapter.submit(list)
         }
@@ -383,6 +385,7 @@ class LifeOsDashFragment :
             LifeOsDashViewModel.LifeOsDestinations.LIFE_OS_MAIN -> {
             }
         }
+        viewModel.destinationData.value = null
     }
 
     private fun setupInsightsPager() {
