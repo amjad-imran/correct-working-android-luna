@@ -460,7 +460,7 @@ class LifeOsChatFragment :
         ViewCompat.setOnApplyWindowInsetsListener(root) { v, insets ->
             val sysBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             val imeBottom = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
-            v.setPadding(v.paddingLeft, v.paddingTop, v.paddingRight, sysBars.bottom + imeBottom)
+            v.setPadding(v.paddingLeft, v.paddingTop, v.paddingRight, /*sysBars.bottom +*/ imeBottom)
             insets
         }
 
@@ -478,7 +478,7 @@ class LifeOsChatFragment :
                         root.paddingLeft,
                         root.paddingTop,
                         root.paddingRight,
-                        sysBars.bottom + imeBottom
+                        /*sysBars.bottom +*/ imeBottom
                     )
                     return insets
                 }
@@ -491,7 +491,7 @@ class LifeOsChatFragment :
                         root.paddingLeft,
                         root.paddingTop,
                         root.paddingRight,
-                        sysBars.bottom + imeBottom
+                        /*sysBars.bottom +*/ imeBottom
                     )
                 }
             }
