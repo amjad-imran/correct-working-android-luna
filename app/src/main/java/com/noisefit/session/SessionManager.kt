@@ -1,5 +1,7 @@
 package com.noisefit.session
 
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothManager
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -794,5 +796,13 @@ class SessionManager
             nfcSleepErr.postValue(Event(false))
         }
     }
+
+    fun isBluetoothOn(context: Context): Boolean {
+        val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        val bluetoothAdapter = bluetoothManager.adapter
+
+        return bluetoothAdapter?.isEnabled == true
+    }
+
 }
 
