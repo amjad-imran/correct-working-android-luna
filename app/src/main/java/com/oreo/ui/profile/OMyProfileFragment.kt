@@ -49,6 +49,8 @@ class OMyProfileFragment :
     override fun onResume() {
         super.onResume()
 
+        viewModel.sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
+
         val user = viewModel.localDataStore.getUser()
         val title = "Hey, ${user?.firstName?.trim()?.ifEmpty { "Stranger" }}"
         binding.tvName.text = title
@@ -174,17 +176,22 @@ class OMyProfileFragment :
 
             context?.let {
                 val body = """
+                        
+                        
+               
+                    
+                    
+                    
                     Platform: Android
                     App version: ${BuildConfig.VERSION_NAME}
                     Firmware: ${WatchInfoGlobals.firmwareVersionRing ?: "-"}
                     Serial number: : ${viewModel.ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw ?: "-"}
-                    
-                    
                 """.trimIndent()
+
                 ShareUtil.composeEmail(
                     it,
                     "support@lunazone.com",
-                    "[${getString(R.string.text_app_support)}]",
+                    "[APP SUPPORT]",
                     body
                 )
             }

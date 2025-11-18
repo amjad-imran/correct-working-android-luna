@@ -48,6 +48,7 @@ import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
@@ -90,6 +91,8 @@ class FindDeviceListFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
 
         binding.tvTroubleShoot.gone()
         binding.imageView75.gone()
@@ -402,18 +405,23 @@ class FindDeviceListFragment :
             if(viewModel.troubleshootScrPos==5){
 //                Freshchat.showConversations(requireContext())
                 context?.let {
-                val body = """
+                    val body = """
+                        
+                        
+               
+                    
+                    
+                    
                     Platform: Android
                     App version: ${BuildConfig.VERSION_NAME}
                     Firmware: ${WatchInfoGlobals.firmwareVersionRing ?: "-"}
                     Serial number: : ${viewModel.ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw ?: "-"}
-                    
-                    
                 """.trimIndent()
+
                     ShareUtil.composeEmail(
                         it,
                         "support@lunazone.com",
-                        "[${getString(R.string.text_app_support)}]",
+                        "[APP SUPPORT]",
                         body
                     )
                 }
