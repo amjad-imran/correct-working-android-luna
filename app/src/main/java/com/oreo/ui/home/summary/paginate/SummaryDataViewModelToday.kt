@@ -1448,20 +1448,24 @@ class SummaryDataViewModelToday @Inject constructor(
             }
 
             VitalsType.STRESS -> {
-                val stressValue = healthData.stress?.stressValue?.value
-                val stressLastTime: String? =
-                    healthData.stress?.stressValue?.lastUpdated?.let { ts ->
-                        val diff = DateFormats.getTimeStamp() - ts
-                        when {
-                            diff < 60_000 -> resourceProvider.getString(R.string.text_just_now)
-                            diff < 60 * 60_000 -> "${diff / 60_000} min ago"
-                            else -> "${diff / (60 * 60_000)} hr ago"
+                val stressValue = healthData.stress?.stressValue?.value?:0
+                if(stressValue>0){
+                    val stressLastTime: String? =
+                        healthData.stress?.stressValue?.lastUpdated?.let { ts ->
+                            val diff = DateFormats.getTimeStamp() - ts
+                            when {
+                                diff < 60_000 -> resourceProvider.getString(R.string.text_just_now)
+                                diff < 60 * 60_000 -> "${diff / 60_000} min ago"
+                                else -> "${diff / (60 * 60_000)} hr ago"
+                            }
                         }
+                    if (stressLastTime == null) {
+                        null
+                    } else {
+                        Pair(stressValue.toString(), stressLastTime)
                     }
-                if (stressValue == null || stressLastTime == null) {
+                }else{
                     null
-                } else {
-                    Pair(stressValue.toString(), stressLastTime)
                 }
             }
 
