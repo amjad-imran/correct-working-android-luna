@@ -711,7 +711,7 @@ class SummaryDataFragmentToday :
     }
 
     private fun performOneTapVitalsOp(type: OHealthOverview.VitalsType) {
-        if(viewModel.sessionManager.isBluetoothOn(requireContext())){
+        if(!viewModel.sessionManager.isBluetoothOn(requireContext())){
             context.showShortToast(getString(R.string.text_please_make_sure_the_bluetooth_is_turned_on))
             return
         }
