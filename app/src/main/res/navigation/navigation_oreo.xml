@@ -1655,5 +1655,14 @@
         android:name="com.oreo.ui.lifeos.onboarding.LifeOsOnboardFinishFragment"
         android:label="fragment_life_os_onboard_finish"
         tools:layout="@layout/fragment_life_os_onboard_finish" />
+    <fragment
+        android:id="@+id/addHabitsFragment"
+        android:name="com.oreo.ui.timelineScreen.habits.AddHabitsFragment"
+        android:label="fragment_add_habits"
+        tools:layout="@layout/fragment_add_habits" />
+    <fragment
+        android:id="@+id/addHabitsBeginBottomSheet"
+        android:name="com.oreo.ui.timelineScreen.habits.AddHabitsBeginBottomSheet"
+        android:label="AddHabitsBeginBottomSheet" />
 
 </navigation>

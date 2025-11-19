@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/list"
+            style="@style/ModalStyleDialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_12dp"
+            android:layout_marginTop="@dimen/dimen_12dp"
+            android:layout_marginEnd="@dimen/dimen_12dp"
+            android:layout_marginBottom="@dimen/dimen_12dp"
+            tools:context=".ui.onboarding.PrivacyBottomDialogFragment"
+            tools:listitem="@layout/fragment_privacy_bottom_dialog_list_dialog_item">
+
+            <View
+                android:id="@+id/view40"
+                android:layout_width="80dp"
+                android:layout_height="4dp"
+                android:layout_marginTop="4dp"
+                android:alpha="0.5"
+                android:background="@drawable/back_bottom_sheet_drag"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btnAddHabits"
+                style="@style/PrimaryButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_marginTop="36dp"
+                android:layout_marginBottom="40dp"
+                android:paddingHorizontal="24dp"
+                android:text="@string/text_add_habits"
+                app:backgroundTint="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView214" />
+
+            <ImageView
+                android:id="@+id/btnCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_close_add_habits"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView124"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="50dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view40"
+                tools:src="@tools:sample/backgrounds/scenic" />
+
+            <TextView
+                android:id="@+id/textView213"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                style="@style/S20"
+                android:textAlignment="center"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/text_turn_habits_into_insights"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView124" />
+
+            <TextView
+                android:id="@+id/textView214"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                style="@style/S14"
+                android:textAlignment="center"
+                android:lineHeight="20sp"
+                android:textColor="#C3C3C3"
+                android:layout_marginHorizontal="48dp"
+                android:layout_marginTop="12dp"
+                android:text="Add your daily habits and let LifeOS understand what shapes your wellbeing."
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView213" />=
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+</layout>

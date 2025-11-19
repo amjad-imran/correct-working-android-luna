@@ -18,6 +18,7 @@ import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChartModel
 import com.oreo.ui.calendar.SELECTED_DATE
 import com.oreo.ui.custom.ScrollListener
+import com.oreo.ui.timelineScreen.habits.ADD_HABITS_BEGIN_KEY
 import com.oreo.util.setSafeOnClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -46,6 +47,10 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
 
 
     override fun initListener() {
+
+        binding.lytSetupHabits.root.setOnClickListener {
+            navigate(R.id.addHabitsFragment)
+        }
 
         binding.ivAddLogFab.setOnClickListener {
             mainViewModel.sessionManager.logMoEngageAppEvent(
@@ -194,7 +199,9 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
 
                 mainViewModel.selectedDate = pagerAdapter?.getDate(position)
                 //setTabDates(position)
-                binding.ivAddLogFab.setVisibilityByCondition(LocalDate.parse(mainViewModel.selectedDate)==LocalDate.now())
+                val todayDate = LocalDate.now()
+                binding.ivAddLogFab.setVisibilityByCondition(LocalDate.parse(mainViewModel.selectedDate)==todayDate)
+                binding.lytSetupHabits.root.setVisibilityByCondition(LocalDate.parse(mainViewModel.selectedDate)==todayDate)
 
                 if (!binding.tabLayout.isInteracting) {
                     setTopBar()
@@ -206,6 +213,16 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
             }
         })
 
+    }
+
+    private fun displayAddHabitsBS(){
+        setFragmentResultListener(ADD_HABITS_BEGIN_KEY) { _, bundle ->
+            val addHabit = bundle.getBoolean("addHabits")
+            if(addHabit==true){
+                navigate(R.id.addHabitsFragment)
+            }
+        }
+        navigate(R.id.addHabitsBeginBottomSheet)
     }
 
 }
