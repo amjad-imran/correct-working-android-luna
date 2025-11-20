@@ -13,6 +13,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import androidx.core.graphics.toColorInt
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -64,9 +66,16 @@ class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabi
     }
 
     override fun initListener() {
+        binding.toolbar.backBtn.setOnClickListener {
+            navigateUpSafe()
+        }
+
         binding.tvSave.setOnClickListener {
             // You can return selected habit IDs to caller
             val selected = viewModel.uiState.value.selectedHabits.toList()
+            viewModel.saveHabitsToServer(selected){
+                displaySuccessBottomSheet()
+            }
             // e.g. setResult(RESULT_OK, Intent().putStringArrayListExtra("selectedHabits", ArrayList(selected)))
             // finish()
         }
@@ -80,6 +89,22 @@ class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabi
             }
         })
 
+    }
+
+    private fun displaySuccessBottomSheet() {
+        setFragmentResultListener(ADD_HABITS_SUCCESS_BS_KEY) { _, bundle ->
+            val isOkayClicked = bundle.getBoolean("okayClicked")
+            if(isOkayClicked==true){
+                navigateUpSafe()
+            }
+        }
+        navigate(
+            R.id.addHabitsSuccessBottomSheet,
+            bundleOf(
+                "successTitle" to getString(R.string.text_habits_saved),
+                "buttonText" to getString(R.string.text_done),
+            )
+        )
     }
 
     override fun subscribeObservers() {

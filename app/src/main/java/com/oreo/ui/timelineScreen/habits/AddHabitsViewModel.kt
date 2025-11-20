@@ -131,4 +131,8 @@ class AddHabitsViewModel @Inject constructor(
             sections = buildSections(categoryId, currentSearchQuery)
         )
     }
+
+    fun saveHabitsToServer(selected: List<String>, success: () -> Unit){
+        success()
+    }
 }

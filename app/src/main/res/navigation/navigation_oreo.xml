@@ -1660,9 +1660,24 @@
         android:name="com.oreo.ui.timelineScreen.habits.AddHabitsFragment"
         android:label="fragment_add_habits"
         tools:layout="@layout/fragment_add_habits" />
-    <fragment
+    <dialog
         android:id="@+id/addHabitsBeginBottomSheet"
         android:name="com.oreo.ui.timelineScreen.habits.AddHabitsBeginBottomSheet"
         android:label="AddHabitsBeginBottomSheet" />
+    <dialog
+        android:id="@+id/addHabitsSuccessBottomSheet"
+        android:name="com.oreo.ui.timelineScreen.habits.AddHabitsSuccessBottomSheet"
+        android:label="AddHabitsSuccessBottomSheet" >
+
+        <argument
+            android:name="successTitle"
+            app:argType="string" />
+
+        <argument
+            android:name="ButtonText"
+            app:argType="string" />
+
+    </dialog>
+
 
 </navigation>

@@ -2308,6 +2308,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_turn_habits_into_insights">Turn habits into insights</string>
     <string name="text_setup_habits">Setup Habits</string>
     <string name="text_search_recents">Search Recents</string>
+    <string name="text_habits_saved">Habits Saved!</string>
 
 
 </resources>
