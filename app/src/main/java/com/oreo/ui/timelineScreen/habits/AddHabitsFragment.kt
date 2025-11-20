@@ -1,12 +1,18 @@
 package com.oreo.ui.timelineScreen.habits
 
+import android.graphics.Canvas
+import android.graphics.ColorFilter
+import android.graphics.LinearGradient
+import android.graphics.Paint
+import android.graphics.PixelFormat
+import android.graphics.RectF
+import android.graphics.Shader
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.core.graphics.toColorInt
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -42,6 +48,14 @@ class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabi
             tvTitle.text = getString(R.string.text_add_habits)
             backBtn.setImageResource(R.drawable.ic_close_add_habits)
         }
+
+        binding.searchBox.background = createSearchBarBg(
+            cornerRadius = 100f,
+            borderWidth = 3f,
+            backgroundColor = "#0D1113".toColorInt(),
+            borderStartColor = "#26FFFFFF".toColorInt(),
+            borderEndColor = "#00FFFFFF".toColorInt(),
+        )
     }
 
     private fun setRecycler() {
@@ -105,6 +119,61 @@ class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabi
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
 
+    }
+
+    private fun createSearchBarBg(
+        borderWidth: Float = 8f,
+        cornerRadius: Float = 24f,
+        backgroundColor: Int = 0x0FFFFFFF,
+        borderStartColor: Int = 0xFFFF00FF.toInt(),
+        borderEndColor: Int = 0xFF00FFFF.toInt()
+    ): Drawable{
+
+        val gradientColors = intArrayOf(borderStartColor, borderEndColor)
+
+        // Background fill paint
+        val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = backgroundColor
+            style = Paint.Style.FILL
+        }
+
+        // Gradient border paint
+        val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            shader = LinearGradient(
+                0f, 0f, 0f, 400f,
+                gradientColors, null, Shader.TileMode.CLAMP
+            )
+            style = Paint.Style.STROKE
+            strokeWidth = borderWidth
+        }
+
+        return object : Drawable() {
+            override fun draw(canvas: Canvas) {
+                val halfBorder = borderWidth / 2
+
+                // Background rect
+                val fillRect = RectF(
+                    0f,
+                    0f,
+                    bounds.width().toFloat(),
+                    bounds.height().toFloat()
+                )
+                canvas.drawRoundRect(fillRect, cornerRadius, cornerRadius, fillPaint)
+
+                // Border rect
+                val strokeRect = RectF(
+                    halfBorder,
+                    halfBorder,
+                    bounds.width() - halfBorder,
+                    bounds.height() - halfBorder
+                )
+                canvas.drawRoundRect(strokeRect, cornerRadius, cornerRadius, strokePaint)
+            }
+
+            override fun setAlpha(alpha: Int) {}
+            override fun setColorFilter(cf: ColorFilter?) {}
+            override fun getOpacity() = PixelFormat.TRANSLUCENT
+        }
     }
 
 }

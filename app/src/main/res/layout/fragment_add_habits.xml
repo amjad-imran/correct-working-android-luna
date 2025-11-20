@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#0D1113"
     tools:context="com.oreo.ui.timelineScreen.habits.AddHabitsFragment">
 
     <include
@@ -33,7 +34,6 @@
         android:layout_marginStart="@dimen/dimen_16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="@dimen/side_margin"
-        android:background="@drawable/back_modal_v2_10"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

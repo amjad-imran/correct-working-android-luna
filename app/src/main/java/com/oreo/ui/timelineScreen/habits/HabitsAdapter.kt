@@ -1,8 +1,17 @@
 package com.oreo.ui.timelineScreen.habits
 
 // HabitsAdapter.kt
+import android.graphics.Canvas
+import android.graphics.ColorFilter
+import android.graphics.LinearGradient
+import android.graphics.Paint
+import android.graphics.PixelFormat
+import android.graphics.RectF
+import android.graphics.Shader
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -50,7 +59,9 @@ class HabitsAdapter(
                     ItemHabitAddHabitsBinding.inflate(
                         inflater, parent, false
                     ),
-                    onHabitClicked
+                    onHabitClicked,
+                    createSelectedGradientBorderDrawable(),
+                    createUnselectedGradientBorderDrawable()
                 )
             }
         }
@@ -72,17 +83,19 @@ class HabitsAdapter(
 
     class HabitViewHolder(
         private val binding: ItemHabitAddHabitsBinding,
-        private val onHabitClicked: (Habit) -> Unit
+        private val onHabitClicked: (Habit) -> Unit,
+        private val selectedBg: Drawable,
+        private val unselectedBg: Drawable,
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(habit: Habit, selectedHabits: Set<String>) {
             binding.tvText.text = habit.name
             val isSelected = selectedHabits.contains(habit.id)
             if(isSelected){
-                binding.root.setBackgroundResource(R.drawable.bg_log_45_perc_transparent_circadian)
-                binding.ivIcon.setImageResource(R.drawable.ic_check_circadian)
+                binding.root.background = selectedBg
+                binding.ivIcon.setImageResource(R.drawable.ic_checked_lifeos_onboard)
             }else{
-                binding.root.setBackgroundResource(R.drawable.bg_log_45_perc_transparent_circadian)
+                binding.root.background = unselectedBg
                 binding.ivIcon.setImageResource(R.drawable.ic_add)
             }
 
@@ -108,4 +121,109 @@ class HabitsAdapter(
             return oldItem == newItem
         }
     }
+
+    fun createSelectedGradientBorderDrawable(): Drawable {
+        val borderWidth = 2f
+        val gradientColors = intArrayOf("#1AFFFFFF".toColorInt(),"#00FFFFFF".toColorInt())
+        val backgroundColor = "#29FFFFFF".toColorInt()
+
+        // Paint for the background fill
+        val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = backgroundColor
+            style = Paint.Style.FILL
+        }
+
+        // Paint for the gradient border stroke
+        val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            shader = LinearGradient(
+                0f, 0f, 0f, 400f,
+                gradientColors,
+                null,
+                Shader.TileMode.CLAMP
+            )
+            style = Paint.Style.STROKE
+            strokeWidth = borderWidth
+        }
+
+        return object : Drawable() {
+            override fun draw(canvas: Canvas) {
+                val halfBorder = borderWidth / 2
+
+                // Full rect for background fill
+                val fillRect = RectF(
+                    0f,
+                    0f,
+                    bounds.width().toFloat(),
+                    bounds.height().toFloat()
+                )
+                canvas.drawRoundRect(fillRect, 24f, 24f, fillPaint)
+
+                // Inset rect for border
+                val strokeRect = RectF(
+                    halfBorder,
+                    halfBorder,
+                    bounds.width() - halfBorder,
+                    bounds.height() - halfBorder
+                )
+                canvas.drawRoundRect(strokeRect, 24f, 24f, strokePaint)
+            }
+
+            override fun setAlpha(alpha: Int) {}
+            override fun setColorFilter(cf: ColorFilter?) {}
+            override fun getOpacity() = PixelFormat.TRANSLUCENT
+        }
+    }
+
+    fun createUnselectedGradientBorderDrawable(): Drawable {
+        val borderWidth = 2f
+        val gradientColors = intArrayOf("#1AFFFFFF".toColorInt(),"#00FFFFFF".toColorInt())
+        val backgroundColor = "#0FFFFFFF".toColorInt()
+
+        // Paint for the background fill
+        val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = backgroundColor
+            style = Paint.Style.FILL
+        }
+
+        // Paint for the gradient border stroke
+        val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            shader = LinearGradient(
+                0f, 0f, 0f, 400f,
+                gradientColors,
+                null,
+                Shader.TileMode.CLAMP
+            )
+            style = Paint.Style.STROKE
+            strokeWidth = borderWidth
+        }
+
+        return object : Drawable() {
+            override fun draw(canvas: Canvas) {
+                val halfBorder = borderWidth / 2
+
+                // Full rect for background fill
+                val fillRect = RectF(
+                    0f,
+                    0f,
+                    bounds.width().toFloat(),
+                    bounds.height().toFloat()
+                )
+                canvas.drawRoundRect(fillRect, 24f, 24f, fillPaint)
+
+                // Inset rect for border
+                val strokeRect = RectF(
+                    halfBorder,
+                    halfBorder,
+                    bounds.width() - halfBorder,
+                    bounds.height() - halfBorder
+                )
+                canvas.drawRoundRect(strokeRect, 24f, 24f, strokePaint)
+            }
+
+            override fun setAlpha(alpha: Int) {}
+            override fun setColorFilter(cf: ColorFilter?) {}
+            override fun getOpacity() = PixelFormat.TRANSLUCENT
+        }
+    }
+
 }
