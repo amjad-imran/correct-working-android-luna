@@ -102,8 +102,8 @@ class TroubleShootBottomSheetFragment :
             TroubleShootActionType.CONTACT_US -> {
                 context?.let {
                     val body = """
-                        
-                        
+                    
+                    
                
                     
                     

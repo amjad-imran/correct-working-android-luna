@@ -406,8 +406,8 @@ class FindDeviceListFragment :
 //                Freshchat.showConversations(requireContext())
                 context?.let {
                     val body = """
-                        
-                        
+                    
+                    
                
                     
                     
