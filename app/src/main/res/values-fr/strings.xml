@@ -2446,5 +2446,7 @@ onjour, Luna"</string>
     <string name="text_email_support">Support e-mail</string>
     <string name="text_get_more_from_life_os">Tirez davantage de Life OS</string>
     <string name="text_tell_us_how_you_live_work_and_recover_luna_will_personalise_your_experience_to_help_you_live_better">Dites-nous comment vous vivez, travaillez et récupérez — Luna personnalisera votre expérience pour vous aider à mieux vivre.</string>
+    <string name="text_email_support">Assistance par e-mail</string>
+    <string name="text_app_support">Assistance de l\'application</string>
 
 </resources>
