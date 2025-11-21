@@ -1334,8 +1334,8 @@
         android:label="fragment_life_os_insight_details"
         tools:layout="@layout/fragment_life_os_insight_details">
         <argument
-            android:name="insightId"
-            app:argType="string" />
+            android:name="insightData"
+            app:argType="com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel" />
     </fragment>
     <fragment
         android:id="@+id/aiSummaryFragment"

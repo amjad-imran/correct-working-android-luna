@@ -2,20 +2,108 @@ package com.oreo.ui.lifeos
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import com.noisefit.luna.databinding.FragmentLifeOsInsightDetailsBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LifeOsInsightDetailsFragment :
     BaseFragment<FragmentLifeOsInsightDetailsBinding>(FragmentLifeOsInsightDetailsBinding::inflate) {
 
-    val args: LifeOsInsightDetailsFragmentArgs by navArgs()
+    private val viewModel: LifeOsInsightDetailsViewModel by viewModels()
+
+    private val args: LifeOsInsightDetailsFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val jsonRes = """
+            {
+    "relevancy": 0.95,
+    "title": "HRV dropped ~37% last night",
+    "description": "Your average sleep HRV fell from ~56 ms (prior week average) to 35 ms on 2025-11-17 — a ~37% drop. That large decline suggests reduced physiological recovery overnight (could reflect higher daytime stress, recent training load, illness, or alcohol/caffeine late in the day). Your readiness score also fell to 54 the same day, which supports the idea your body felt less recovered despite an OK sleep duration.",
+    "suggestions": "Prioritize an easy/recovery day today — avoid high-intensity training until HRV recovers.",
+    "related_suggested_questions": [
+      "Did you feel more stressed or have unusual symptoms on 2025-11-16/17?",
+      "Was there alcohol, extra caffeine, or a late heavy meal the night before the HRV drop?",
+      "How does this HRV drop compare to other low-readiness days in the past month?"
+    ],
+    "graphs": "hrv",
+    "graph": [
+      {
+        "date": "2025-11-09",
+        "master_avg_hrv": 47
+      },
+      {
+        "date": "2025-11-10",
+        "master_avg_hrv": 70
+      },
+      {
+        "date": "2025-11-11",
+        "master_avg_hrv": 36
+      },
+      {
+        "date": "2025-11-12",
+        "master_avg_hrv": 50
+      },
+      {
+        "date": "2025-11-13",
+        "master_avg_hrv": 50
+      },
+      {
+        "date": "2025-11-14",
+        "master_avg_hrv": 51
+      },
+      {
+        "date": "2025-11-15",
+        "master_avg_hrv": 50
+      },
+      {
+        "date": "2025-11-16",
+        "master_avg_hrv": 40
+      },
+      {
+        "date": "2025-11-17",
+        "master_avg_hrv": 35
+      }
+    ]
+  }
+        """.trimIndent()
+        viewModel.insightData = Gson().fromJson(jsonRes, InsightItemResponseModel::class.java)
+//        viewModel.insightData = args.insightData
+        setUi()
+        setRecycler()
+    }
+
+    private fun setRecycler() {
+        viewModel.insightData?.related_suggested_questions?.let { list ->
+            binding.rvRelatedSuggestedQues.apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = RelatedSuggestedQuesAdapter(
+                    list
+                ){
+                    handleRelatedQuesClick(it)
+                }
+            }
+        }
+    }
+
+    private fun handleRelatedQuesClick(data: String) {
+
+    }
+
+    private fun setUi() {
+        val data = viewModel.insightData
+        if(data==null) return
+        binding.tvTitle.text = data.title
+        binding.tvMessage.text = data.description
+
+        binding.tvLifeOsSuggestedQues.text = data.suggestions
     }
 
     override fun initListener() {

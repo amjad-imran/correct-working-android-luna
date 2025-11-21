@@ -87,6 +87,7 @@
                 style="@style/S14"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:lineSpacingExtra="3sp"
                 tools:text="@tools:sample/lorem/random" />
 
@@ -98,18 +99,53 @@
 
             <TextView
                 style="@style/S12"
+                android:fontFamily="@font/gilroy_bold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:fontFamily="@font/gilroy_bold"
-                tools:text="LifeOS Suggests" />
+                android:text="LifeOS Suggests" />
 
             <TextView
+                android:id="@+id/tvLifeOsSuggestedQues"
                 style="@style/S14"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 tools:text="Morning light exposure or a caffeine cut-off by 3 PM to re-align." />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp">
+
+                <ImageView
+                    android:id="@+id/imageView125"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_dig_deeper" />
+
+                <TextView
+                    android:id="@+id/textView217"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="4dp"
+                    style="@style/S12"
+                    android:fontFamily="@font/gilroy_medium"
+                    android:text="@string/text_dig_deeper"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/imageView125"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRelatedSuggestedQues"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
