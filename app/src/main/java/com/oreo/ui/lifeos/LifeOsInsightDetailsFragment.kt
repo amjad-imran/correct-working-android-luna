@@ -22,7 +22,7 @@ class LifeOsInsightDetailsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val jsonRes = """
+        /*val jsonRes = """
             {
     "relevancy": 0.95,
     "title": "HRV dropped ~37% last night",
@@ -74,8 +74,8 @@ class LifeOsInsightDetailsFragment :
     ]
   }
         """.trimIndent()
-        viewModel.insightData = Gson().fromJson(jsonRes, InsightItemResponseModel::class.java)
-//        viewModel.insightData = args.insightData
+        viewModel.insightData = Gson().fromJson(jsonRes, InsightItemResponseModel::class.java)*/
+        viewModel.insightData = args.insightData
         setUi()
         setRecycler()
     }

@@ -16,11 +16,11 @@ class LifeOsInsightFrag :
     private val viewModel: LifeOsInsightsViewModel by viewModels()
 
     private val insightAdapter by lazy {
-        LifeOsInsightListAdapter { text ->
+        LifeOsInsightListAdapter { insightItem ->
             navigate(
                 R.id.lifeOsInsightDetailsFragment,
                 android.os.Bundle().apply {
-                    putString("insightId", "")
+                    putParcelable("insightData", insightItem)
                 }
             )
         }

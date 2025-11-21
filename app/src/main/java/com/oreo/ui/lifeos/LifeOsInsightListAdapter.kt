@@ -4,19 +4,20 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.FragmentLifeOsInsightCardBinding
+import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
 
 class LifeOsInsightListAdapter(
-    private val onClick: (String) -> Unit
+    private val onClick: (InsightItemResponseModel) -> Unit
 ) : RecyclerView.Adapter<LifeOsInsightListAdapter.ViewHolder>() {
 
-    private val items = ArrayList<String>()
+    private val items = ArrayList<InsightItemResponseModel>()
 
     inner class ViewHolder(val binding: FragmentLifeOsInsightCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(text: String) {
-            binding.tvTitle.text = text
+        fun bind(data: InsightItemResponseModel) {
+            binding.tvTitle.text = data.title
             binding.tvTime.text = "4 hrs ago"
-            binding.root.setOnClickListener { onClick(text) }
+            binding.root.setOnClickListener { onClick(data) }
         }
     }
 
@@ -33,7 +34,7 @@ class LifeOsInsightListAdapter(
 
     override fun getItemCount(): Int = items.size
 
-    fun submit(list: List<String>) {
+    fun submit(list: List<InsightItemResponseModel>) {
         items.clear()
         items.addAll(list)
         notifyDataSetChanged()
