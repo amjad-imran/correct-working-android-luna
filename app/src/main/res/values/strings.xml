@@ -2309,6 +2309,8 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_setup_habits">Setup Habits</string>
     <string name="text_search_recents">Search Recents</string>
     <string name="text_habits_saved">Habits Saved!</string>
+    <string name="text_dig_deeper">Dig Deeper</string>
+    <string name="text_lifeos_suggests">LifeOS Suggests</string>
 
 
 </resources>
