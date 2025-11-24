@@ -18,6 +18,7 @@ import android.graphics.drawable.Drawable
 import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
+import androidx.annotation.StyleRes
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewConfiguration
@@ -164,6 +165,42 @@ class HRCombinedChart : View {
         resMap = HashMap()
         initPaint()
         initBitmap()
+    }
+
+    /**
+     * Apply a CombineLineChart style at runtime (parity with XML attrs).
+     */
+    fun applyStyle(@StyleRes styleRes: Int) {
+        val ta = context.obtainStyledAttributes(styleRes, R.styleable.CombineLineChart)
+        try {
+            bgColor = ta.getColor(R.styleable.CombineLineChart_bgColor, bgColor)
+            bgLeftColor = ta.getColor(R.styleable.CombineLineChart_bgLeftColor, bgLeftColor)
+            bgRightColor = ta.getColor(R.styleable.CombineLineChart_bgRightColor, bgRightColor)
+            bgTopColor = ta.getColor(R.styleable.CombineLineChart_bgTopColor, bgTopColor)
+            bgBottomColor = ta.getColor(R.styleable.CombineLineChart_bgBottomColor, bgBottomColor)
+            xTextColor = ta.getColor(R.styleable.CombineLineChart_xTextColor, xTextColor)
+            gridColor = ta.getColor(R.styleable.CombineLineChart_gridColor, gridColor)
+            max = ta.getInt(R.styleable.CombineLineChart_xMax, max)
+            xMin = ta.getInt(R.styleable.CombineLineChart_xMin, xMin)
+            xTextSize = ta.getDimension(R.styleable.CombineLineChart_xTextSize, xTextSize)
+            yTextSize = ta.getDimension(R.styleable.CombineLineChart_yTextSize, yTextSize)
+            combineTextSize = ta.getDimension(R.styleable.CombineLineChart_combineTextSize, combineTextSize)
+            leftWith = ta.getDimension(R.styleable.CombineLineChart_leftWith, leftWith)
+            rightWith = ta.getDimension(R.styleable.CombineLineChart_rightWith, rightWith)
+            bottomWith = ta.getDimension(R.styleable.CombineLineChart_bottomWith, bottomWith)
+            topWith = ta.getDimension(R.styleable.CombineLineChart_topWith, topWith)
+            restLineColor = ta.getColor(R.styleable.CombineLineChart_restLineColor, restLineColor)
+            highColor = ta.getColor(R.styleable.CombineLineChart_highColor, highColor)
+            mediumColor = ta.getColor(R.styleable.CombineLineChart_mediumColor, mediumColor)
+            lowColor = ta.getColor(R.styleable.CombineLineChart_lowColor, lowColor)
+            chartLineWidth = ta.getDimension(R.styleable.CombineLineChart_chartLineWidth, chartLineWidth)
+            showXAxis = ta.getBoolean(R.styleable.CombineLineChart_showXAxis, showXAxis)
+        } finally {
+            ta.recycle()
+        }
+        initPaint()
+        requestLayout()
+        invalidate()
     }
 
     private fun initBitmap() {

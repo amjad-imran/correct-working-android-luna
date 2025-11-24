@@ -6,14 +6,40 @@ import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
+import com.oreo.ui.lifeos.charts.DayTimeChartPayload
+import com.oreo.ui.lifeos.charts.HrChartPayload
+import com.oreo.ui.lifeos.charts.InsightCardUiModel
+import com.oreo.ui.lifeos.charts.SleepChartPayload
+import com.oreo.ui.lifeos.charts.StressChartPayload
+import com.oreo.ui.lifeos.charts.TimeSeriesPayload
+import com.oreo.ui.custom.sleep.internal.SleepSingleGradientChartType
+import com.oreo.ui.custom.HRCombineModel
+import com.oreo.ui.custom.StressCombineModel
+import com.noisefit.luna.R
+import com.noisefit_commans.data.model.CountCardData
+import com.noisefit_commans.models.SleepData
+import kotlin.math.sin
+import kotlin.math.PI
+import java.util.ArrayList
+import android.graphics.Color
+import com.oreo.data.dataConverter.OreoHRDataConvertor
+import com.oreo.ui.lifeos.charts.GraphConvertorUtil
+import com.oreo.data.model.DayTimeDataModel as DTModel
+import com.oreo.data.model.Item as DTItem
+import com.oreo.data.model.Section as DTSection
+import com.oreo.ui.custom.Item as ChartItem
+import com.oreo.ui.custom.Section as ChartSection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class LifeOsInsightsViewModel @Inject constructor() : ViewModel() {
+class LifeOsInsightsViewModel @Inject constructor(
+    val hrDataConvertor: OreoHRDataConvertor,
+) : ViewModel() {
 
     private val _insights = MutableLiveData<List<InsightItemResponseModel>>()
-    val insights: LiveData<List<InsightItemResponseModel>> get() = _insights
+    private val _cards = MutableLiveData<List<InsightCardUiModel>>()
+    val cards: LiveData<List<InsightCardUiModel>> get() = _cards
 
     init {
         loadInsights()
@@ -177,7 +203,199 @@ class LifeOsInsightsViewModel @Inject constructor() : ViewModel() {
         """.trimIndent()
 
         val type = object : TypeToken<List<InsightItemResponseModel>>() {}.type
-        _insights.value = Gson().fromJson(jsonRes, type)
+        val raw = Gson().fromJson<List<InsightItemResponseModel>>(jsonRes, type)
+        //_insights.value = raw
 
+        val dummy = buildDummyCards()
+        _cards.value = dummy
+
+    }
+
+    private fun buildDummyCards(): List<InsightCardUiModel> {
+        val list = ArrayList<InsightCardUiModel>()
+
+        val hrItems = ArrayList<Int>()
+        for (i in 0 until 288) {
+            val v = (50..150).random()
+            hrItems.add(v)
+        }
+
+        val hrData =  GraphConvertorUtil.parseHrData(hrItems)
+        val combinedHrData  = hrDataConvertor.getHrCombinedData(
+            null,hrData
+        )
+
+
+        list.add(
+            InsightCardUiModel(
+                id = 1L,
+                title = "Heart rate demo",
+                timeText = "now",
+                chartKey = "hr",
+                payload = HrChartPayload(combinedHrData, yAxisCount = 5, minYAxis = hrData.minValues,
+                    maxYAxis = hrData.maxValues),
+                styleRes = R.style.HrChartStyle,
+                raw = null
+            )
+        )
+
+
+
+        // 2) Stress chart dummy
+        val stressItems = ArrayList<ChartItem>()
+        for (i in 0 until 96) {
+            val v = (30..100).random()
+            stressItems.add(ChartItem(value = v, index = i, minValue = 0, maxValue = 100))
+        }
+
+        val stressModel = StressCombineModel(sections = arrayListOf(), items = stressItems, high = 75, medium = 50)
+        list.add(
+            InsightCardUiModel(
+                id = 2L,
+                title = "Stress demo",
+                timeText = "today",
+                chartKey = "stress",
+                payload = StressChartPayload(stressModel),
+                styleRes = R.style.StressChartStyle,
+                raw = null
+            )
+        )
+
+        // 3) Daytime activity dummy
+        val dtItems = ArrayList<DTItem>()
+        for (i in 0 until 48) {
+            val v = when {
+                i in 0..5 -> 0 // inactive
+                i in 6..10 -> 1 // low
+                i in 11..20 -> 2 // medium
+                i in 21..25 -> 3 // high
+                i in 26..30 -> 2
+                i in 31..40 -> 1
+                else -> 0
+            }
+            dtItems.add(DTItem(value = v, index = i))
+        }
+        val dtSections = listOf(
+            DTSection(type = "sleep", start = 0, end = 6, color = Color.parseColor("#33224460"), imageRes = R.drawable.image_blur_avg),
+            DTSection(type = "nap", start = 28, end = 30, color = Color.parseColor("#33406080"), imageRes = R.drawable.image_blur_avg)
+        )
+        val dtModel = DTModel(sections = dtSections, items = dtItems)
+        list.add(
+            InsightCardUiModel(
+                id = 3L,
+                title = "Daytime movement demo",
+                timeText = "this week",
+                chartKey = "daytime",
+                payload = DayTimeChartPayload(dtModel),
+                styleRes = R.style.DayTimeGraphStyle,
+                raw = null
+            )
+        )
+
+        // 4) Sleep dummy
+        val totals = CountCardData(
+            count = "7h 20m",
+            type = "sleep",
+            countSubText = "duration"
+        )
+        val breakup = arrayListOf<SleepData.SleepDataBreakup>().apply {
+            add(SleepData.SleepDataBreakup(startTime = "23:00", endTime = "00:00", sleepType = "light", duration = 60))
+            add(SleepData.SleepDataBreakup(startTime = "00:00", endTime = "01:30", sleepType = "deep", duration = 90))
+            add(SleepData.SleepDataBreakup(startTime = "01:30", endTime = "02:00", sleepType = "awake", duration = 30))
+            add(SleepData.SleepDataBreakup(startTime = "02:00", endTime = "03:00", sleepType = "rem", duration = 60))
+            add(SleepData.SleepDataBreakup(startTime = "03:00", endTime = "06:20", sleepType = "light", duration = 200))
+        }
+        list.add(
+            InsightCardUiModel(
+                id = 4L,
+                title = "Sleep analysis demo",
+                timeText = "last night",
+                chartKey = "sleep",
+                payload = SleepChartPayload(totals = totals, breakup = breakup, interactive = true),
+                raw = null
+            )
+        )
+
+        // 5) Health monitor internal graphs (day-level gradient charts)
+        val today = java.time.LocalDate.now()
+        fun dates(n: Int) = (0 until n).map { i -> today.minusDays((n - 1 - i).toLong()) }
+
+        fun sinSeries(n: Int, base: Float, amp: Float, clampMin: Float? = null, clampMax: Float? = null): List<Float?> {
+            return (0 until n).map { i ->
+                val v = base + (amp * kotlin.math.sin(2 * kotlin.math.PI * i / n)).toFloat()
+                val c1 = clampMin?.let { kotlin.math.max(v, it) } ?: v
+                val c2 = clampMax?.let { kotlin.math.min(c1, it) } ?: c1
+                c2
+            }
+        }
+
+        // Respiratory rate – day (bar)
+        list.add(InsightCardUiModel(
+            id = 5L,
+            title = "Respiratory rate (day demo)",
+            timeText = "day",
+            chartKey = "respiratory_day",
+            payload = TimeSeriesPayload(
+                values = sinSeries(7, 16f, 1.2f),
+                dates = dates(7),
+                unitLabel = "rpm"
+            )
+        ))
+
+        // Resting HR – week (line)
+        list.add(InsightCardUiModel(
+            id = 6L,
+            title = "Resting HR (week demo)",
+            timeText = "week",
+            chartKey = "resting_hr_week",
+            payload = TimeSeriesPayload(
+                values = sinSeries(6, 62f, 6f),
+                dates = dates(6),
+                unitLabel = "bpm"
+            )
+        ))
+
+        // HRV – month (line)
+        list.add(InsightCardUiModel(
+            id = 7L,
+            title = "HRV (month demo)",
+            timeText = "month",
+            chartKey = "hrv_month",
+            payload = TimeSeriesPayload(
+                values = sinSeries(6, 40f, 8f),
+                dates = dates(6),
+                unitLabel = "ms"
+            )
+        ))
+
+        // Skin temperature – day (gradient)
+        list.add(InsightCardUiModel(
+            id = 8L,
+            title = "Skin temperature (day demo)",
+            timeText = "day",
+            chartKey = "skin_temp_day",
+            payload = TimeSeriesPayload(
+                values = sinSeries(7, 0.0f, 0.8f),
+                dates = dates(7),
+                unitLabel = "°",
+                chartType = SleepSingleGradientChartType.FLOAT
+            )
+        ))
+
+        // Blood oxygen – daily (gradient)
+        list.add(InsightCardUiModel(
+            id = 9L,
+            title = "Blood oxygen (daily demo)",
+            timeText = "daily",
+            chartKey = "blood_oxygen_daily",
+            payload = TimeSeriesPayload(
+                values = sinSeries(48, 97f, 1.0f, 90f, 100f),
+                dates = dates(48),
+                unitLabel = "%",
+                chartType = SleepSingleGradientChartType.PERCENT
+            )
+        ))
+
+        return list
     }
 }

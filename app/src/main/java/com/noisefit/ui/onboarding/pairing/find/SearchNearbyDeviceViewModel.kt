@@ -10,6 +10,7 @@ import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.response.RingInfoResponse
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.ColorFitNetworkDevice
@@ -33,7 +34,8 @@ class SearchNearbyDeviceViewModel
 constructor(
     private val deviceRepository: DeviceRepository,
     val localDataStore: DataStoredInterface,
-    val sessionManager: SessionManager
+    val sessionManager: SessionManager,
+    val ringDataStore: RingDataStore,
 ) : BaseViewModel() {
 
     var selectedColorFitDevice: ColorFitDevice? = null

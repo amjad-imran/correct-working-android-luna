@@ -142,10 +142,10 @@ class CustomHomescreenViewModel @Inject constructor(
         remainingCards.forEach { it.apply { switchState = true } }
 
         //handle new cards
-        val caffeineCard = card.find { it.key.equals("caffeine_intake", true) }
+        /*val caffeineCard = card.find { it.key.equals("caffeine_intake", true) }
         if (caffeineCard == null) {
             itemsMap["caffeine_intake"]?.let { cardsToAdd.add(0, it) }
-        }
+        }*/
 
         val circadianCard = card.find { it.key.equals("circadian_alignment", true) }
         if (circadianCard == null) {
@@ -304,13 +304,13 @@ class CustomHomescreenViewModel @Inject constructor(
                 )
             }
 
-            this["caffeine_intake"] = CustomHomeScreenItem(
+            /*this["caffeine_intake"] = CustomHomeScreenItem(
                 R.drawable.icon_caffeine_intake,
                 "caffeine_intake",
                 resourceProvider.getString(R.string.text_caffeine_window),
                 true,
                 this.size + 1
-            )
+            )*/
 
             this["sleep"] = CustomHomeScreenItem(
                 R.drawable.icon_sleep,

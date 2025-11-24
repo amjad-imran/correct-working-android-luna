@@ -569,7 +569,9 @@ class CycleTrackerFragment :
                 )
             )
 
-            if(it==LocalDate.now()){
+            binding.dividerWomenDayAnnouncement.root.gone()
+            binding.lytWomenDayAnnouncement.root.gone()
+            /*if(it==LocalDate.now()){
                 if(viewModel.localDataStore.getLdwCycleTrackerData()){
                     displayWomansDayCard()
                 }else{
@@ -579,7 +581,7 @@ class CycleTrackerFragment :
             }else{
                 binding.dividerWomenDayAnnouncement.root.gone()
                 binding.lytWomenDayAnnouncement.root.gone()
-            }
+            }*/
 
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.day_change_click,
