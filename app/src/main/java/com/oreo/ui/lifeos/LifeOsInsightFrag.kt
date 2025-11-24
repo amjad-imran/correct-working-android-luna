@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLifeOsInsightBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.oreo.ui.chatGpt.AITopics
+import com.oreo.ui.lifeos.charts.InsightCardUiModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,12 +19,13 @@ class LifeOsInsightFrag :
 
     private val insightAdapter by lazy {
         LifeOsInsightListAdapter { insightItem ->
-            navigate(
-                R.id.lifeOsInsightDetailsFragment,
-                android.os.Bundle().apply {
-                    putParcelable("insightData", insightItem)
-                }
-            )
+            val raw = insightItem.raw
+            if (raw != null) {
+                navigate(
+                    R.id.lifeOsInsightDetailsFragment,
+                    android.os.Bundle().apply { putParcelable("insightData", raw) }
+                )
+            }
         }
     }
 
@@ -35,8 +38,15 @@ class LifeOsInsightFrag :
         binding.ivBack.setOnClickListener {
             navigateUpSafe()
         }
+
         binding.ivNewChat.setOnClickListener {
-            navigate(R.id.lifeOsChatFragment)
+            val (frag, bundle) = LifeOsChatFragment.getStartData(
+                threadId = null,
+                userMessage = null,
+                title = null,
+                aiTopic = AITopics.GENERAL
+            )
+            navigate(frag,bundle)
         }
     }
 
@@ -48,8 +58,8 @@ class LifeOsInsightFrag :
     }
 
     override fun subscribeObservers() {
-        viewModel.insights.observe(viewLifecycleOwner) { list ->
-            insightAdapter.submit(list)
+        viewModel.cards.observe(viewLifecycleOwner) { list ->
+            insightAdapter.submitList(list)
         }
     }
 }

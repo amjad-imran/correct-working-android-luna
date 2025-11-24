@@ -16,6 +16,24 @@
         <!-- Customize your theme here. -->
         <!--<item name="android:background">@color/md_theme_light_background</item>-->
 
+</style>
+
+    <!-- Style to configure HRCombinedChart at runtime via applyStyle(...) -->
+    <style name="HrChartStyle">
+        <item name="bgColor">@android:color/transparent</item>
+        <item name="bottomWith">30dp</item>
+        <item name="chartLineWidth">2dp</item>
+        <item name="combineTextSize">16sp</item>
+        <item name="gridColor">#80FFFFFF</item>
+        <item name="highColor">#ff3371</item>
+        <item name="rightWith">30dp</item>
+        <item name="lowColor">#ff3371</item>
+        <item name="mediumColor">#ff3371</item>
+        <item name="restLineColor">#40FFFFFF</item>
+        <item name="topWith">30dp</item>
+        <item name="xTextColor">#FFFFFF</item>
+        <item name="xTextSize">11sp</item>
+        <item name="yTextSize">11sp</item>
     </style>
 
     <style name="ToolbarTextTheme" parent="@android:style/TextAppearance.Medium">
