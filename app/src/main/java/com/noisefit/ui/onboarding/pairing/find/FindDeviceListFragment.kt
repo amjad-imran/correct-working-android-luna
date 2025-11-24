@@ -44,9 +44,11 @@ import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.ui.onboarding.pairing.pair.NearbyDevicesAdapter
 import com.noisefit.ui.onboarding.pairing.pair.NearbyDevicesClickListener
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.constants.WatchInfoGlobals
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.ErrorResponse
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
@@ -89,6 +91,8 @@ class FindDeviceListFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.sessionManager.sendQueryAction(QueryAction.QueryFirmwareVersion)
 
         binding.tvTroubleShoot.gone()
         binding.imageView75.gone()
@@ -399,7 +403,28 @@ class FindDeviceListFragment :
 
         binding.tvTroubleShoot.setOnClickListener {
             if(viewModel.troubleshootScrPos==5){
-                Freshchat.showConversations(requireContext())
+//                Freshchat.showConversations(requireContext())
+                context?.let {
+                    val body = """
+                        
+                        
+               
+                    
+                    
+                    
+                    Platform: Android
+                    App version: ${BuildConfig.VERSION_NAME}
+                    Firmware: ${WatchInfoGlobals.firmwareVersionRing ?: "-"}
+                    Serial number: : ${viewModel.ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw ?: "-"}
+                """.trimIndent()
+
+                    ShareUtil.composeEmail(
+                        it,
+                        "support@lunazone.com",
+                        "[APP SUPPORT]",
+                        body
+                    )
+                }
             }
             if (viewModel.troubleshootScrPos<5){
                 viewModel.troubleshootScrPos++
@@ -495,7 +520,7 @@ class FindDeviceListFragment :
                 )
                 binding.videoOnboard.visible()
                 binding.imgOnBoard.gone()
-                binding.tvTroubleShoot.text = getString(R.string.text_contact_support)
+                binding.tvTroubleShoot.text = getString(R.string.text_email_support)
             }
 
             else -> {

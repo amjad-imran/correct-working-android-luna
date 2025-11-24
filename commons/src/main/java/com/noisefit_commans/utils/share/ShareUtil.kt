@@ -20,13 +20,14 @@ object ShareUtil {
     const val SUPPORT_URL = "https://luna.freshdesk.com/support/tickets/new"
 
 
-    fun composeEmail(context: Context, email: String, subject: String?) {
+    fun composeEmail(context: Context, email: String, subject: String?, body: String ?= null) {
         try {
             val selectorIntent = Intent(Intent.ACTION_SENDTO)
             selectorIntent.data = Uri.parse("mailto:")
             val emailIntent = Intent(Intent.ACTION_SEND)
             emailIntent.putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
             emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject)
+            emailIntent.putExtra(Intent.EXTRA_TEXT, body)
             //emailIntent.putExtra(Intent.EXTRA_TEXT, subject)
             emailIntent.selector = selectorIntent
             context.startActivity(Intent.createChooser(emailIntent, "Send email"))

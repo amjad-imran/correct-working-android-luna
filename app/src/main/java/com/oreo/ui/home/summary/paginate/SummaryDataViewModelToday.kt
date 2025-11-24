@@ -1218,12 +1218,12 @@ class SummaryDataViewModelToday @Inject constructor(
             }
 
 
-            val hasCaffeineKey = priorityList.find { it.key.equals("caffeine_intake", true) }
+            /*val hasCaffeineKey = priorityList.find { it.key.equals("caffeine_intake", true) }
             if (hasCaffeineKey == null) {
                 getCaffeineCardData()?.let {
                     userActivities.add(it)
                 }
-            }
+            }*/
 
 
             priorityList.forEach { item ->
@@ -1345,9 +1345,9 @@ class SummaryDataViewModelToday @Inject constructor(
                     }
 
                     "caffeine_intake" -> {
-                        getCaffeineCardData()?.let {
+                        /*getCaffeineCardData()?.let {
                             userActivities.add(it)
-                        }
+                        }*/
                     }
 
                     "circadian_alignment" -> {
@@ -1451,20 +1451,24 @@ class SummaryDataViewModelToday @Inject constructor(
             }
 
             VitalsType.STRESS -> {
-                val stressValue = healthData.stress?.stressValue?.value
-                val stressLastTime: String? =
-                    healthData.stress?.stressValue?.lastUpdated?.let { ts ->
-                        val diff = DateFormats.getTimeStamp() - ts
-                        when {
-                            diff < 60_000 -> resourceProvider.getString(R.string.text_just_now)
-                            diff < 60 * 60_000 -> "${diff / 60_000} min ago"
-                            else -> "${diff / (60 * 60_000)} hr ago"
+                val stressValue = healthData.stress?.stressValue?.value?:0
+                if(stressValue>0){
+                    val stressLastTime: String? =
+                        healthData.stress?.stressValue?.lastUpdated?.let { ts ->
+                            val diff = DateFormats.getTimeStamp() - ts
+                            when {
+                                diff < 60_000 -> resourceProvider.getString(R.string.text_just_now)
+                                diff < 60 * 60_000 -> "${diff / 60_000} min ago"
+                                else -> "${diff / (60 * 60_000)} hr ago"
+                            }
                         }
+                    if (stressLastTime == null) {
+                        null
+                    } else {
+                        Pair(stressValue.toString(), stressLastTime)
                     }
-                if (stressValue == null || stressLastTime == null) {
+                }else{
                     null
-                } else {
-                    Pair(stressValue.toString(), stressLastTime)
                 }
             }
 
@@ -3190,7 +3194,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     add(itemsMap["stress"]!!.copy(priority = priorityList.size))
                     add(itemsMap["daily_goals"]!!.copy(priority = priorityList.size))
                     add(itemsMap["cycle_tracker"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))
+                    /*add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))*/
                     add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
                 }
 
@@ -3206,7 +3210,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
                     add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
                     add(itemsMap["cycle_tracker"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))
+                    /*add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))*/
                     add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
                 }
 
@@ -3223,7 +3227,7 @@ class SummaryDataViewModelToday @Inject constructor(
                     add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
                     add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
                     add(itemsMap["cycle_tracker"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))
+                    /*add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))*/
                 }
             }
 

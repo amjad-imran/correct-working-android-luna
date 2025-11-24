@@ -417,6 +417,10 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
 
         binding.timePicker.setOnTimeChangeListener(object : TimeRangePicker.OnTimeChangeListener {
             override fun onStartTimeChange(startTime: TimeRangePicker.Time) {
+                uiController.logAppEvent(
+                    MoEngageLunaAppEvents.sleep_planner_setup_alarm_info,
+                    hashMapOf("source" to "sleep", "target" to "clock_time_set")
+                )
                 viewModel.updateTime(startTime.localTime, binding.timePicker.endTime.localTime)
                 if (viewModel.editModeSelectedTime != null) {
                     viewModel.deleteMode.postValue(false)
@@ -426,6 +430,10 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
             }
 
             override fun onEndTimeChange(endTime: TimeRangePicker.Time) {
+                uiController.logAppEvent(
+                    MoEngageLunaAppEvents.sleep_planner_setup_alarm_info,
+                    hashMapOf("source" to "sleep", "target" to "clock_time_set")
+                )
                 viewModel.updateTime(binding.timePicker.startTime.localTime, endTime.localTime)
                 if (viewModel.editModeSelectedTime != null) {
                     viewModel.deleteMode.postValue(false)

@@ -1551,12 +1551,14 @@ class OreoReadinessFragment :
         if (it.date.equals(LocalDate.now().toString())) {
             handleNudges()
             mViewModel.loadAlertsData()
-            if (mViewModel.getLdwReadinessData()) {
+            binding.dividerWomenDayAnnouncement.root.gone()
+            binding.lytWomenDayAnnouncement.root.gone()
+            /*if(mViewModel.getLdwReadinessData()){
                 displayWomansDayCard()
-            } else {
+            }else{
                 binding.dividerWomenDayAnnouncement.root.gone()
                 binding.lytWomenDayAnnouncement.root.gone()
-            }
+            }*/
         } else {
             binding.lytRScoreData.lytAScoreBanner.root.gone()
             binding.lytIrregularityEvents.root.gone()

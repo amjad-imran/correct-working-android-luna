@@ -15,6 +15,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.circadian.CircadianQuizResponseModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -120,6 +121,14 @@ class QuizCircadianFragment :
         }
 
         binding.btnNext.setOnClickListener {
+            if(binding.btnNext.text.equals(getString(R.string.text_get_started))){
+                mainViewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.quiz_resaved,
+                    hashMapOf(
+                        "source" to "circadian"
+                    )
+                )
+            }
             val current = binding.viewPager.currentItem
             val lastIndex = (binding.viewPager.adapter?.itemCount ?: 1) - 1
             if (current < lastIndex) {

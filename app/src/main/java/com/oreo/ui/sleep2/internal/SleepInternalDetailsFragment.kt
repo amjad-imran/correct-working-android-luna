@@ -251,6 +251,19 @@ class SleepInternalDetailsFragment :
             navigate(frag, bundle)
         }
         binding.lytSelector.tvDaily.setOnClickListener {
+            if(
+                viewModel.titleUpdate.value?.first.equals(getString(R.string.text_skin_temperature))==true &&
+                "readiness".equals(viewModel.source)
+            ) {
+                uiController.logAppEvent(
+                    MoEngageLunaAppEvents.score_clicked,
+                    hashMapOf(
+                        "source" to "readiness",
+                        "interval" to "daily",
+                    )
+                )
+            }
+
             uiController.logAppEvent(
                 viewModel.getContriIntervalChangeType(),
                 hashMapOf(
@@ -262,6 +275,19 @@ class SleepInternalDetailsFragment :
             viewModel.reloadData()
         }
         binding.lytSelector.tvDay.setOnClickListener {
+            if(
+                viewModel.titleUpdate.value?.first.equals(getString(R.string.text_skin_temperature))==true &&
+                "readiness".equals(viewModel.source)
+            ) {
+                uiController.logAppEvent(
+                    MoEngageLunaAppEvents.score_clicked,
+                    hashMapOf(
+                        "source" to "readiness",
+                        "interval" to "day",
+                    )
+                )
+            }
+
             uiController.logAppEvent(
                 viewModel.getContriIntervalChangeType(),
                 hashMapOf(
@@ -274,6 +300,19 @@ class SleepInternalDetailsFragment :
         }
 
         binding.lytSelector.tvWeek.setOnClickListener {
+            if(
+                viewModel.titleUpdate.value?.first.equals(getString(R.string.text_skin_temperature))==true &&
+                "readiness".equals(viewModel.source)
+            ) {
+                uiController.logAppEvent(
+                    MoEngageLunaAppEvents.score_clicked,
+                    hashMapOf(
+                        "source" to "readiness",
+                        "interval" to "week",
+                    )
+                )
+            }
+
             uiController.logAppEvent(
                 viewModel.getContriIntervalChangeType(),
                 hashMapOf(
@@ -286,6 +325,19 @@ class SleepInternalDetailsFragment :
         }
 
         binding.lytSelector.tvMonth.setOnClickListener {
+            if(
+                viewModel.titleUpdate.value?.first.equals(getString(R.string.text_skin_temperature))==true &&
+                "readiness".equals(viewModel.source)
+            ) {
+                uiController.logAppEvent(
+                    MoEngageLunaAppEvents.score_clicked,
+                    hashMapOf(
+                        "source" to "readiness",
+                        "interval" to "month",
+                    )
+                )
+            }
+
             uiController.logAppEvent(
                 viewModel.getContriIntervalChangeType(),
                 hashMapOf(
