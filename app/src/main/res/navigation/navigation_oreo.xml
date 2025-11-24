@@ -935,6 +935,13 @@
             android:defaultValue="@null"
             app:argType="com.noisefit.data.model.AiWorkout"
             app:nullable="true" />
+
+        <argument
+            android:name="insightHeader1"
+            android:defaultValue="@null"
+            app:argType="com.noisefit.data.model.AiHeaderInsight1"
+            app:nullable="true" />
+
         <argument
             android:name="planType"
             app:argType="com.oreo.ui.chatGpt.PlanType" />
@@ -1312,6 +1319,11 @@
             android:name="workout"
             android:defaultValue="@null"
             app:argType="com.noisefit.data.model.AiWorkout"
+            app:nullable="true" />
+        <argument
+            android:name="headerInsight1"
+            android:defaultValue="@null"
+            app:argType="com.noisefit.data.model.AiHeaderInsight1"
             app:nullable="true" />
         <argument
             android:name="planType"

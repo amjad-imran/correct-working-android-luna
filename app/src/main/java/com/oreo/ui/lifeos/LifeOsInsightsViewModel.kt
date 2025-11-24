@@ -13,13 +13,10 @@ import com.oreo.ui.lifeos.charts.SleepChartPayload
 import com.oreo.ui.lifeos.charts.StressChartPayload
 import com.oreo.ui.lifeos.charts.TimeSeriesPayload
 import com.oreo.ui.custom.sleep.internal.SleepSingleGradientChartType
-import com.oreo.ui.custom.HRCombineModel
 import com.oreo.ui.custom.StressCombineModel
 import com.noisefit.luna.R
 import com.noisefit_commans.data.model.CountCardData
 import com.noisefit_commans.models.SleepData
-import kotlin.math.sin
-import kotlin.math.PI
 import java.util.ArrayList
 import android.graphics.Color
 import com.oreo.data.dataConverter.OreoHRDataConvertor
@@ -28,7 +25,6 @@ import com.oreo.data.model.DayTimeDataModel as DTModel
 import com.oreo.data.model.Item as DTItem
 import com.oreo.data.model.Section as DTSection
 import com.oreo.ui.custom.Item as ChartItem
-import com.oreo.ui.custom.Section as ChartSection
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -206,12 +202,12 @@ class LifeOsInsightsViewModel @Inject constructor(
         val raw = Gson().fromJson<List<InsightItemResponseModel>>(jsonRes, type)
         //_insights.value = raw
 
-        val dummy = buildDummyCards()
+        val dummy = buildDummyCards(raw.first())
         _cards.value = dummy
 
     }
 
-    private fun buildDummyCards(): List<InsightCardUiModel> {
+    private fun buildDummyCards(rawData: InsightItemResponseModel): List<InsightCardUiModel> {
         val list = ArrayList<InsightCardUiModel>()
 
         val hrItems = ArrayList<Int>()
@@ -235,7 +231,7 @@ class LifeOsInsightsViewModel @Inject constructor(
                 payload = HrChartPayload(combinedHrData, yAxisCount = 5, minYAxis = hrData.minValues,
                     maxYAxis = hrData.maxValues),
                 styleRes = R.style.HrChartStyle,
-                raw = null
+                raw = rawData
             )
         )
 

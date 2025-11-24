@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
 import androidx.lifecycle.lifecycleScope
+import com.noisefit.data.model.AiHeaderInsight1
 import com.noisefit.data.model.AiMeals
 import com.noisefit.data.model.AiWorkout
 import com.oreo.ui.chatGpt.ChatGptAdapter
@@ -103,6 +104,7 @@ class LifeOsChatFragment :
             aiTopic: AITopics,
             meal: AiMeals? = null,
             workout: AiWorkout? = null,
+            headerInsight1: AiHeaderInsight1? = null,
             planType: PlanType? = null,
             srcKey: String? = null,
         ): Pair<Int, Bundle?> {
@@ -114,6 +116,7 @@ class LifeOsChatFragment :
                 putSerializable("planType", planType ?: PlanType.NONE)
                 putParcelable("meal", meal)
                 putParcelable("workout", workout)
+                putParcelable("headerInsight1", headerInsight1)
                 putString("sourceKey", srcKey)
             })
         }
@@ -138,6 +141,7 @@ class LifeOsChatFragment :
         viewModel.userMessage = args.userMessage
         viewModel.meal = args.meal
         viewModel.workout = args.workout
+        viewModel.headerInsight1 = args.headerInsight1
         viewModel.planType = args.planType
         viewModel.srcKey = args.sourceKey
 
@@ -160,7 +164,12 @@ class LifeOsChatFragment :
             binding.lytChatBox.ivAddAttachment.visible()
         } else {
             binding.lytChatBox.ivAddAttachment.gone()
-            viewModel.generateInitMessage()
+            if(viewModel.headerInsight1 != null){
+                viewModel.generateThreadId()
+            }
+            else {
+                viewModel.generateInitMessage()
+            }
         }
 
         binding.rvChats.apply {

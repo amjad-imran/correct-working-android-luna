@@ -6,13 +6,16 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.noisefit.data.model.AiHeaderInsight1
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLifeOsInsightDetailsBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.utils.LOGS
+import com.oreo.ui.chatGpt.AITopics
+import com.oreo.ui.chatGpt.PlanType
+import com.oreo.ui.chatGpt.audio.AudioAiFragment
 import com.oreo.ui.lifeos.insightsLvl1.HELP_US_IMPROVE_BS_INSIGHTS
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.collections.listOf
 
 @AndroidEntryPoint
 class LifeOsInsightDetailsFragment :
@@ -97,7 +100,20 @@ class LifeOsInsightDetailsFragment :
     }
 
     private fun handleRelatedQuesClick(data: String) {
-
+        val (frag, bundle) = LifeOsChatFragment.getStartData(
+            threadId = null,
+            userMessage = null,
+            title = null,
+            headerInsight1 = AiHeaderInsight1(
+                headerText = getString(R.string.text_follow_up_to),
+                mainText = viewModel.insightData?.title ?: "",
+                footerText = data
+            ),
+            aiTopic = AITopics.GENERAL
+        )
+        navigate(
+            frag, bundle
+        )
     }
 
     private fun setUi() {
@@ -112,6 +128,43 @@ class LifeOsInsightDetailsFragment :
     override fun initListener() {
         binding.icThumbsDown.setOnClickListener {
             displayHelpUsImproveBS()
+        }
+
+        binding.lytChatBox.chatEtx.apply {
+            setCursorVisible(false)
+            setFocusable(false)
+            setFocusableInTouchMode(false)
+            setClickable(true)
+        }
+
+        binding.lytChatBox.root.setOnClickListener {
+            val (frag, bundle) = LifeOsChatFragment.getStartData(
+                threadId = null,
+                userMessage = null,
+                title = null,
+                aiTopic = AITopics.GENERAL
+            )
+            navigate(
+                frag, bundle
+            )
+        }
+        binding.lytChatBox.chatEtx.setOnClickListener {
+            val (frag, bundle) = LifeOsChatFragment.getStartData(
+                threadId = null,
+                userMessage = null,
+                title = null,
+                aiTopic = AITopics.GENERAL
+            )
+            navigate(
+                frag, bundle
+            )
+        }
+
+        binding.lytChatBox.btnAction.setOnClickListener {
+            val (frag, bundle) = AudioAiFragment.getStartData(
+                PlanType.NONE
+            )
+            navigate(frag, bundle)
         }
     }
 

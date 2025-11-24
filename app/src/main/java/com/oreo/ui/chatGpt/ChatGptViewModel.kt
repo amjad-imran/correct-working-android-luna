@@ -16,6 +16,7 @@ import com.grapesnberries.curllogger.CurlLoggerInterceptor
 import com.here.oksse.OkSse
 import com.here.oksse.ServerSentEvent
 import com.noisefit.data.base.ResourcesProvider
+import com.noisefit.data.model.AiHeaderInsight1
 import com.noisefit.data.model.AiMeals
 import com.noisefit.data.model.AiWorkout
 import com.noisefit.data.remote.base.Resource
@@ -107,6 +108,7 @@ class ChatGptViewModel
     var userMessage: String? = null
     var meal: AiMeals? = null
     var workout: AiWorkout? = null
+    var headerInsight1: AiHeaderInsight1? = null
     var planType: PlanType? = null
     var srcKey: String? = null
 
@@ -188,13 +190,16 @@ class ChatGptViewModel
 
 
     fun addInitData() {
-        if (workout != null || meal != null) {
+        if (workout != null || meal != null || headerInsight1 != null) {
             val messages = _chatGptOverview.value ?: ArrayList()
             if (workout != null) {
                 messages.add(ChatGptOverview.HeaderWorkout(workout!!))
             }
             if (meal != null) {
                 messages.add(ChatGptOverview.HeaderMeal(meal!!))
+            }
+            if (headerInsight1 != null) {
+                messages.add(ChatGptOverview.HeaderInsight1(headerInsight1!!))
             }
             _chatGptOverview.value = (messages)
         } else {

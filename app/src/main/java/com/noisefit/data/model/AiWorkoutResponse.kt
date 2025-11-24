@@ -21,4 +21,10 @@ data class AiWorkout(
     val description: String? = null,
 ) : Parcelable
 
+@Parcelize
+data class AiHeaderInsight1(
+    val headerText: String? = null,
+    val mainText: String? = null,
+    val footerText: String? = null,
+) : Parcelable
 

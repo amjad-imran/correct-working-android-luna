@@ -41,6 +41,7 @@ import android.view.WindowManager
 import android.widget.ImageView
 import android.graphics.drawable.ColorDrawable
 import android.content.Context
+import com.noisefit.luna.databinding.ItemAiHeaderInsight1Binding
 import java.util.UUID
 
 // Removed standalone attachment bindings; sent message now renders attachment inline
@@ -176,6 +177,14 @@ class ChatGptAdapter :
                 )
             )
 
+            R.layout.item_ai_header_insight_1 -> ChatGptViewItemsHolder.ChatInsight1HeaderViewHolder(
+                ItemAiHeaderInsight1Binding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
 
             else -> throw IllegalArgumentException("Invalid ViewType Provided")
         }
@@ -218,6 +227,11 @@ class ChatGptAdapter :
                 asyncListDiffer.currentList[position] as ChatGptOverview.HeaderMeal,
                 position
             )
+
+            is ChatGptViewItemsHolder.ChatInsight1HeaderViewHolder -> holder.bind(
+                asyncListDiffer.currentList[position] as ChatGptOverview.HeaderInsight1,
+                position
+            )
         }
     }
 
@@ -232,6 +246,7 @@ class ChatGptAdapter :
             is ChatGptOverview.ThinkingMessage -> R.layout.item_chat_message_thinking
             is ChatGptOverview.HeaderWorkout -> R.layout.item_ai_header_workout
             is ChatGptOverview.HeaderMeal -> R.layout.item_ai_header_meal
+            is ChatGptOverview.HeaderInsight1 -> R.layout.item_ai_header_insight_1
         }
     }
 
@@ -408,6 +423,22 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
 
     }
 
+    class ChatInsight1HeaderViewHolder(private val binding: ItemAiHeaderInsight1Binding) :
+        ChatGptViewItemsHolder(binding) {
+
+        fun bind(
+            allData: ChatGptOverview.HeaderInsight1,
+            position: Int
+        ) {
+            val data = allData.data
+            binding.apply {
+                tvHeader.text = data.headerText
+                tvTextMain.text = data.mainText
+                tvFooter.text = data.footerText
+            }
+        }
+
+    }
 
 }
 

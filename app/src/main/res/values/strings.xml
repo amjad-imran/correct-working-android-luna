@@ -2320,6 +2320,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_out_of_date">Out of date</string>
     <string name="text_too_short">Too short</string>
     <string name="text_this_isn_t_helpful">This isn\'t helpful</string>
+    <string name="text_follow_up_to">Follow Up to</string>
 
 
 </resources>

@@ -1,5 +1,6 @@
 package com.oreo.data.model
 
+import com.noisefit.data.model.AiHeaderInsight1
 import com.noisefit.data.model.AiMeals
 import com.noisefit.data.model.AiWorkout
 import java.util.UUID
@@ -34,6 +35,10 @@ sealed class ChatGptOverview(var id: UUID = UUID.randomUUID()) {
 
     class RetryMessage(
         val message: String
+    ) : ChatGptOverview()
+
+    class HeaderInsight1(
+        val data: AiHeaderInsight1
     ) : ChatGptOverview()
 
 }
