@@ -36,6 +36,45 @@
         <item name="yTextSize">11sp</item>
     </style>
 
+    <!-- StressCombinedChart style -->
+    <style name="StressChartStyle">
+        <item name="bgColor">@android:color/transparent</item>
+        <item name="bottomWith">30dp</item>
+        <item name="chartLineWidth">2dp</item>
+        <item name="combineTextSize">16sp</item>
+        <item name="gridColor">#80FFFFFF</item>
+        <item name="highColor">#ff922d</item>
+        <item name="mediumColor">#ffe561</item>
+        <item name="lowColor">#12cba9</item>
+        <item name="rightWith">26dp</item>
+        <item name="restLineColor">#40FFFFFF</item>
+        <item name="topWith">50dp</item>
+        <item name="xMax">100</item>
+        <item name="xMin">0</item>
+        <item name="xTextColor">#FFFFFF</item>
+        <item name="xTextSize">12sp</item>
+        <item name="yTextSize">12sp</item>
+    </style>
+
+    <!-- ODayTimeInteractiveGraph style -->
+    <style name="DayTimeGraphStyle">
+        <item name="bgColor">@android:color/transparent</item>
+        <item name="bottomWith">30dp</item>
+        <item name="chartLineWidth">2dp</item>
+        <item name="combineTextSize">16sp</item>
+        <item name="gridColor">#80FFFFFF</item>
+        <item name="highColor">#ff922d</item>
+        <item name="mediumColor">#ffe561</item>
+        <item name="lowColor">#12cba9</item>
+        <item name="restLineColor">#40FFFFFF</item>
+        <item name="topWith">42dp</item>
+        <item name="xMax">100</item>
+        <item name="xMin">0</item>
+        <item name="xTextColor">#FFFFFF</item>
+        <item name="xTextSize">12sp</item>
+        <item name="yTextSize">12sp</item>
+    </style>
+
     <style name="ToolbarTextTheme" parent="@android:style/TextAppearance.Medium">
         <item name="android:textColor">@color/md_theme_light_text_color_h3</item>
         <item name="android:textSize">@dimen/text_16sp</item>

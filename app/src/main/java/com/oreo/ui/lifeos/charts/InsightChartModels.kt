@@ -16,6 +16,7 @@ data class InsightCardUiModel(
     val timeText: String?,
     val chartKey: String?,
     val payload: Any?,
+    val styleRes: Int? = null,
     val raw: InsightItemResponseModel? = null
 )
 

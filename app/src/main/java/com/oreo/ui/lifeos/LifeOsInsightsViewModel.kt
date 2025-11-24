@@ -215,8 +215,7 @@ class LifeOsInsightsViewModel @Inject constructor(
         val list = ArrayList<InsightCardUiModel>()
 
         val hrItems = ArrayList<Int>()
-        val points = 288
-        for (i in 0 until points) {
+        for (i in 0 until 288) {
             val v = (50..150).random()
             hrItems.add(v)
         }
@@ -235,6 +234,7 @@ class LifeOsInsightsViewModel @Inject constructor(
                 chartKey = "hr",
                 payload = HrChartPayload(combinedHrData, yAxisCount = 5, minYAxis = hrData.minValues,
                     maxYAxis = hrData.maxValues),
+                styleRes = R.style.HrChartStyle,
                 raw = null
             )
         )
@@ -243,15 +243,12 @@ class LifeOsInsightsViewModel @Inject constructor(
 
         // 2) Stress chart dummy
         val stressItems = ArrayList<ChartItem>()
-        for (i in 0 until points) {
-            val v = (50 + 30 * sin(2 * PI * (i + 8) / points)).toInt().coerceIn(0, 100)
+        for (i in 0 until 96) {
+            val v = (30..100).random()
             stressItems.add(ChartItem(value = v, index = i, minValue = 0, maxValue = 100))
         }
-        val stressSections = listOf(
-            ChartSection(type = "high", start = 10, end = 15, color = Color.parseColor("#33ff0000"), imageRes = R.drawable.image_blur_avg),
-            ChartSection(type = "calm", start = 70, end = 80, color = Color.parseColor("#333fe8b5"), imageRes = R.drawable.image_blur_avg)
-        )
-        val stressModel = StressCombineModel(sections = stressSections, items = stressItems, high = 75, medium = 50)
+
+        val stressModel = StressCombineModel(sections = arrayListOf(), items = stressItems, high = 75, medium = 50)
         list.add(
             InsightCardUiModel(
                 id = 2L,
@@ -259,6 +256,7 @@ class LifeOsInsightsViewModel @Inject constructor(
                 timeText = "today",
                 chartKey = "stress",
                 payload = StressChartPayload(stressModel),
+                styleRes = R.style.StressChartStyle,
                 raw = null
             )
         )
@@ -289,6 +287,7 @@ class LifeOsInsightsViewModel @Inject constructor(
                 timeText = "this week",
                 chartKey = "daytime",
                 payload = DayTimeChartPayload(dtModel),
+                styleRes = R.style.DayTimeGraphStyle,
                 raw = null
             )
         )

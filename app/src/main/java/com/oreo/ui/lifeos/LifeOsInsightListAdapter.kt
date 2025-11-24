@@ -46,7 +46,7 @@ class LifeOsInsightListAdapter(
 
             binding.root.setOnClickListener { onClick(item) }
 
-            val view = provideChartView(item.chartKey, item.payload)
+            val view = provideChartView(item.chartKey, item.payload, item.styleRes)
             binding.chartContainer.removeAllViews()
             if (view != null) {
                 binding.chartContainer.addView(view)
@@ -76,19 +76,22 @@ class LifeOsInsightListAdapter(
          * Simple factory/hook: provide chart view for a given type and payload.
          * Extend this with more cases as new chart types arrive.
          */
-        private fun provideChartView(chartType: String?, payload: Any?): View? {
+        private fun provideChartView(chartType: String?, payload: Any?, styleRes: Int?): View? {
             val ctx = binding.chartContainer.context
             return when (chartType?.lowercase()) {
                 "hr" -> {
                     val data = payload as? HrChartPayload
                     val v = (currentChartView as? HRCombinedChart) ?: HRCombinedChart(ctx)
-                    v.applyStyle(R.style.HrChartStyle)
+                    // Apply default HR style unless a custom one is provided
+                    v.applyStyle(styleRes ?: R.style.HrChartStyle)
                     data?.let { v.updateData(it.model, it.yAxisCount, it.minYAxis, it.maxYAxis) }
                     v
                 }
                 "stress" -> {
                     val data = payload as? com.oreo.ui.lifeos.charts.StressChartPayload
                     val v = (currentChartView as? StressCombinedChart) ?: StressCombinedChart(ctx)
+                    // Apply default Stress style unless a custom one is provided
+                    v.applyStyle(styleRes ?: R.style.StressChartStyle)
                     data?.let { v.updateData(it.model) }
                     v
                 }
@@ -96,6 +99,8 @@ class LifeOsInsightListAdapter(
                     val data = payload as? DayTimeChartPayload
                     val v = (currentChartView as? ODayTimeInteractiveGraph) ?: ODayTimeInteractiveGraph(ctx)
                     v.enableInteractiveMode(true)
+                    // Apply default DayTime style unless a custom one is provided
+                    v.applyStyle(styleRes ?: R.style.DayTimeGraphStyle)
                     data?.let { v.updateData(it.model) }
                     v
                 }
