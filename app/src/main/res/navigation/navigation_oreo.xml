@@ -1678,6 +1678,13 @@
             app:argType="string" />
 
     </dialog>
+    <dialog
+        android:id="@+id/helpUsImproveBottomSheet"
+        android:name="com.oreo.ui.lifeos.insightsLvl1.HelpUsImproveBottomSheet"
+        android:label="fragment_help_us_improve_bottom_sheet"
+        tools:layout="@layout/fragment_help_us_improve_bottom_sheet" >
+
+    </dialog>
 
 
 </navigation>

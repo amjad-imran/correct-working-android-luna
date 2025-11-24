@@ -2313,6 +2313,12 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_lifeos_suggests">LifeOS Suggests</string>
     <string name="text_we_re_getting_to_know_you">We’re getting to know you.</string>
     <string name="text_as_you_move_rest_and_go_about_your_day_lifeos_will_start_generating_insights_here">As you move, rest, and go about your day, LifeOS will start generating insights here.</string>
+    <string name="text_please_provide_detailed_feedback">Please provide detailed feedback</string>
+    <string name="text_help_us_improve">Help us improve</string>
+    <string name="text_inaccurate">Inaccurate</string>
+    <string name="text_out_of_date">Out of date</string>
+    <string name="text_too_short">Too short</string>
+    <string name="text_this_isn_t_helpful">This isn\'t helpful</string>
 
 
 </resources>

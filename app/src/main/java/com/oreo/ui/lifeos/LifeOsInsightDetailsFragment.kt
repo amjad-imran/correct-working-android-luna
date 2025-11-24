@@ -2,14 +2,17 @@ package com.oreo.ui.lifeos
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.Gson
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLifeOsInsightDetailsBinding
 import com.noisefit_commans.ui.BaseFragment
-import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
+import com.noisefit_commans.utils.LOGS
+import com.oreo.ui.lifeos.insightsLvl1.HELP_US_IMPROVE_BS_INSIGHTS
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.collections.listOf
 
 @AndroidEntryPoint
 class LifeOsInsightDetailsFragment :
@@ -107,7 +110,37 @@ class LifeOsInsightDetailsFragment :
     }
 
     override fun initListener() {
+        binding.icThumbsDown.setOnClickListener {
+            displayHelpUsImproveBS()
+        }
+    }
 
+    private fun displayHelpUsImproveBS() {
+        setFragmentResultListener(HELP_US_IMPROVE_BS_INSIGHTS){ _, bundle ->
+            val feedbackText = bundle.getString("feedbackText")
+            val reasons = bundle.getStringArrayList("reasons")
+            LOGS.d("aclnacacpa : feedbackText: $feedbackText, reasons: $reasons")
+            if(feedbackText.isNullOrEmpty()){
+                return@setFragmentResultListener
+            }
+            viewModel.submitDislikeBtmShtData(feedbackText, reasons){
+                navigateUpSafe()
+            }
+        }
+        navigate(
+            R.id.helpUsImproveBottomSheet,
+            Bundle().apply {
+                putStringArrayList(
+                    "reasons",
+                    ArrayList<String>().apply {
+                        this.add(getString(R.string.text_inaccurate))
+                        this.add(getString(R.string.text_out_of_date))
+                        this.add(getString(R.string.text_too_short))
+                        this.add(getString(R.string.text_this_isn_t_helpful))
+                    }
+                )
+            }
+        )
     }
 
     override fun subscribeObservers() {

@@ -771,4 +771,13 @@ class UserRepositoryImpl(
         }
     }
 
+    override suspend fun submitInsightDislikeFeedbackData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.submitLifeOsOnboardQuesAnsList(
+                "${BuildConfig.OREO_BASE_URL}/--", // TODO: Replace with correct
+                req
+            )
+        }
+    }
+
 }
