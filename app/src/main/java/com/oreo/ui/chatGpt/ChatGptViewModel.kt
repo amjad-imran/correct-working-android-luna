@@ -190,16 +190,13 @@ class ChatGptViewModel
 
 
     fun addInitData() {
-        if (workout != null || meal != null || headerInsight1 != null) {
+        if (workout != null || meal != null) {
             val messages = _chatGptOverview.value ?: ArrayList()
             if (workout != null) {
                 messages.add(ChatGptOverview.HeaderWorkout(workout!!))
             }
             if (meal != null) {
                 messages.add(ChatGptOverview.HeaderMeal(meal!!))
-            }
-            if (headerInsight1 != null) {
-                messages.add(ChatGptOverview.HeaderInsight1(headerInsight1!!))
             }
             _chatGptOverview.value = (messages)
         } else {
@@ -223,6 +220,17 @@ class ChatGptViewModel
                 attachmentSource = att?.uri?.toString(),
                 attachmentMimeType = att?.mimeType,
                 attachmentName = att?.fileName
+            )
+        )
+        _chatGptOverview.value = messages
+        clearPendingAttachment()
+    }
+
+    fun addInsight1HeaderMsg(message: AiHeaderInsight1) {
+        val messages = _chatGptOverview.value ?: ArrayList()
+        messages.add(
+            ChatGptOverview.HeaderInsight1(
+                message
             )
         )
         _chatGptOverview.value = messages
@@ -287,7 +295,7 @@ class ChatGptViewModel
         }
     }
 
-    fun generateThreadId() {
+    fun generateThreadId(sendInsightHeaderMsg: (() -> Unit) ?= null) {
         viewModelScope.launch {
             oreoDeviceRepository.generateThreadId().collect { resource ->
                 when (resource) {
@@ -320,7 +328,8 @@ class ChatGptViewModel
                             it.threadId?.let { id ->
                                 threadId = id
 
-                                addInitData()
+                                if(sendInsightHeaderMsg!=null) sendInsightHeaderMsg()
+                                else addInitData()
                                 //generateInitMessage()
                             }
                         }
