@@ -24,6 +24,7 @@ import com.oreo.data.model.TrendsValues
 import com.oreo.data.model.health.SleepMovementBreakup
 import com.oreo.data.model.lifeos.dashModels.InsightGraph
 import com.oreo.ui.custom.sleep.internal.GraphDataModel
+import com.oreo.ui.lifeos.charts.PayloadData
 import com.oreo.ui.lifeos.charts.TrendGraphData
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import java.time.LocalDate
@@ -56,9 +57,11 @@ class GraphDataConvertor @Inject constructor(
             title = "Heart rate demo",
             timeText = "now",
             chartKey = GraphsKey.HEART_RATE,
-            payload = HrChartPayload(
-                combinedHrData, yAxisCount = 5, minYAxis = hrData.minValues,
-                maxYAxis = hrData.maxValues
+            payload = PayloadData(
+                hrData = HrChartPayload(
+                    combinedHrData, yAxisCount = 5, minYAxis = hrData.minValues,
+                    maxYAxis = hrData.maxValues
+                )
             ),
             styleRes = R.style.HrChartStyle,
             raw = rawData
@@ -83,7 +86,7 @@ class GraphDataConvertor @Inject constructor(
             title = "Stress demo",
             timeText = "today",
             chartKey = GraphsKey.STRESS,
-            payload = StressChartPayload(stressModel),
+            payload = PayloadData(stressData = StressChartPayload(stressModel)),
             styleRes = R.style.StressChartStyle,
             raw = null
         )
@@ -101,7 +104,7 @@ class GraphDataConvertor @Inject constructor(
             title = "Daytime movement demo",
             timeText = "this week",
             chartKey = GraphsKey.DAY_TIME_MOVEMENT,
-            payload = DayTimeChartPayload(dtModel),
+            payload = PayloadData(dayTimeData = DayTimeChartPayload(dtModel)),
             styleRes = R.style.DayTimeGraphStyle,
             raw = null
         )
@@ -117,7 +120,7 @@ class GraphDataConvertor @Inject constructor(
             title = "Sleep analysis demo",
             timeText = "last night",
             chartKey = GraphsKey.SLEEP_BREAKUP,
-            payload = mainObj.breakup_sleep,
+            payload = PayloadData(sleepBreakup = mainObj.breakup_sleep),
             raw = null
         )
     }
@@ -133,7 +136,7 @@ class GraphDataConvertor @Inject constructor(
             title = "Sleep Movement demo",
             timeText = "last night",
             chartKey = GraphsKey.SLEEP_MOVEMENT,
-            payload = getMovementBreakup(mainObj.sleep_movement),
+            payload = PayloadData(sleepMovement = getMovementBreakup(mainObj.sleep_movement)),
             raw = null
         )
     }
@@ -199,7 +202,7 @@ class GraphDataConvertor @Inject constructor(
             title = "Rem Day demo",
             timeText = "last night",
             chartKey = GraphsKey.REM_DAY,
-            payload = TrendGraphData(
+            payload =  PayloadData(trendData = TrendGraphData(
                 dataList,
                 yAxisRange,
                 avgValue,
@@ -207,7 +210,7 @@ class GraphDataConvertor @Inject constructor(
                 contributor,
                 optimalRange,
                 nonNullDataCount
-            ),
+            )),
             raw = null
         )
     }

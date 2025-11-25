@@ -27,6 +27,7 @@ import com.oreo.ui.custom.sleep.internal.SleepSingleBarChart
 import com.oreo.ui.lifeos.charts.DayTimeChartPayload
 import com.oreo.ui.lifeos.charts.HrChartPayload
 import com.oreo.ui.lifeos.charts.InsightCardUiModel
+import com.oreo.ui.lifeos.charts.PayloadData
 import com.oreo.ui.lifeos.charts.TimeSeriesPayload
 import com.oreo.ui.lifeos.charts.TrendGraphData
 
@@ -82,25 +83,25 @@ class LifeOsInsightListAdapter(
          * Simple factory/hook: provide chart view for a given type and payload.
          * Extend this with more cases as new chart types arrive.
          */
-        private fun provideChartView(graphsKey: GraphsKey?, payload: Any?, styleRes: Int?): View? {
+        private fun provideChartView(graphsKey: GraphsKey?, payload: PayloadData?, styleRes: Int?): View? {
             val ctx = binding.chartContainer.context
             return when (graphsKey) {
                 GraphsKey.HEART_RATE-> {
-                    val data = payload as? HrChartPayload
+                    val data = payload?.hrData
                     val v = (currentChartView as? HRCombinedChart) ?: HRCombinedChart(ctx)
                     v.applyStyle(styleRes ?: R.style.HrChartStyle)
                     data?.let { v.updateData(it.model, it.yAxisCount, it.minYAxis, it.maxYAxis) }
                     v
                 }
                 GraphsKey.STRESS -> {
-                    val data = payload as? com.oreo.ui.lifeos.charts.StressChartPayload
+                    val data = payload?.stressData
                     val v = (currentChartView as? StressCombinedChart) ?: StressCombinedChart(ctx)
                     v.applyStyle(styleRes ?: R.style.StressChartStyle)
                     data?.let { v.updateData(it.model) }
                     v
                 }
                 GraphsKey.DAY_TIME_MOVEMENT -> {
-                    val data = payload as? DayTimeChartPayload
+                    val data = payload?.dayTimeData
                     val v = (currentChartView as? ODayTimeInteractiveGraph) ?: ODayTimeInteractiveGraph(ctx)
                     v.enableInteractiveMode(true)
                     v.applyStyle(styleRes ?: R.style.DayTimeGraphStyle)
@@ -108,7 +109,7 @@ class LifeOsInsightListAdapter(
                     v
                 }
                 GraphsKey.SLEEP_BREAKUP -> {
-                    val data = payload as? ArrayList<SleepData.SleepDataBreakup>
+                    val data = payload?.sleepBreakup as? ArrayList
                     val v = (currentChartView as? SleepGraphViewOreo) ?: SleepGraphViewOreo(ctx)
                     v.enableInteractiveMode(false)
                     v.init(false)
@@ -118,8 +119,7 @@ class LifeOsInsightListAdapter(
                     v
                 }
                 GraphsKey.SLEEP_MOVEMENT -> {
-                    val data = payload as? Pair<List<OreoSleepData.OreoSleepMovementDataBreakup>,
-                            CountCardData>
+                    val data = payload?.sleepMovement
                     val v = (currentChartView as? NightTimeGraphViewOreo) ?: NightTimeGraphViewOreo(ctx)
 
 
@@ -134,7 +134,7 @@ class LifeOsInsightListAdapter(
 
                 }
                 GraphsKey.REM_DAY -> {
-                    val data = payload as? TrendGraphData
+                    val data = payload?.trendData
 
                     val v = (currentChartView as? SleepSingleBarChart) ?: SleepSingleBarChart(ctx,null)
                     v.setDataSet(
