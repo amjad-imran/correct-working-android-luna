@@ -153,10 +153,23 @@ class LifeOsChatFragment :
         setSuggestedQuestionsRecycler()
 
         registerAttachmentPickers()
+        binding.rvChats.apply {
+            itemAnimator = null
+            layoutManager = LinearLayoutManager(context)
+            adapter = mAdapter
+        }
 
         if (viewModel.planType == PlanType.NONE) {
             if (viewModel.threadId.isNullOrEmpty()) {
-                viewModel.generateThreadId()
+                val sendInsight = viewModel.headerInsight1?.let { headerInsight1 ->
+                    binding.ivLogo.gone()
+                    sendInsight1HeaderMessage(headerInsight1)
+                }
+                viewModel.generateThreadId(
+                    sendInsightHeaderMsg = {
+                        sendInsight
+                    }
+                )
             } else {
                 viewModel.loadMessagesByThreadId(viewModel.threadId!!)
                 binding.ivLogo.gone()
@@ -164,19 +177,10 @@ class LifeOsChatFragment :
             binding.lytChatBox.ivAddAttachment.visible()
         } else {
             binding.lytChatBox.ivAddAttachment.gone()
-            if(viewModel.headerInsight1 != null){
-                viewModel.generateThreadId()
-            }
-            else {
-                viewModel.generateInitMessage()
-            }
+            viewModel.generateInitMessage()
         }
 
-        binding.rvChats.apply {
-            itemAnimator = null
-            layoutManager = LinearLayoutManager(context)
-            adapter = mAdapter
-        }
+
         mAdapter.itemClickListener = object : ChatClickListener {
             override fun onCopyMessage(message: ChatGptOverview.ReceivedMessage) {
                 val plain = markdownToPlainText(message.message)
@@ -719,6 +723,17 @@ class LifeOsChatFragment :
         } catch (_: Exception) {
             null
         }
+    }
+
+    private fun sendInsight1HeaderMessage(message: AiHeaderInsight1) {
+        hideKeyboard()
+        viewModel.showSuggestedQuestions.value = false
+        viewModel.addInsight1HeaderMsg(message)
+        viewModel.addThinkingMessage()
+        binding.lytChatBox.chatEtx.setText("")
+
+        val formattedMsg = "${message.headerText}\n${message.mainText}\n\n${message.footerText}"
+        viewModel.askQuestionStream(formattedMsg.replace("\n", ""))
     }
 
     private fun sendMessage(message: String) {
