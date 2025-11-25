@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLifeOsInsightCardBinding
+import com.noisefit_commans.ui.loadImage
 import com.oreo.ui.lifeos.charts.InsightCardUiModel
 
 class LifeOsInsightCardFragment : Fragment(R.layout.fragment_life_os_insight_card) {
@@ -17,12 +18,15 @@ class LifeOsInsightCardFragment : Fragment(R.layout.fragment_life_os_insight_car
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentLifeOsInsightCardBinding.bind(view)
 
-        val text = arguments?.getString(ARG_TEXT).orEmpty()
-        val time = arguments?.getString(ARG_TIME).orEmpty()
-        val insightList = arguments?.getStringArrayList(ARG_LIST)
+        val insightData = arguments?.getParcelable<InsightCardUiModel>(ARG_INSIGHT_DATA)
 
-        binding.tvTitle.text = text
-        if (time.isNotEmpty()) binding.tvTime.text = time
+        binding.tvTitle.text = insightData?.raw?.title
+        if(insightData?.raw?.insightIcon==null){
+            binding.ivInsight.setImageResource(R.drawable.ic_lifeos_star_small)
+        }else{
+            binding.ivInsight.loadImage(requireContext(), insightData.raw.insightIcon)
+        }
+//        if (time.isNotEmpty()) binding.tvTime.text = time
 
         binding.root.setOnClickListener {
             val bundle = Bundle().apply {
@@ -38,18 +42,14 @@ class LifeOsInsightCardFragment : Fragment(R.layout.fragment_life_os_insight_car
     }
 
     companion object {
-        private const val ARG_TEXT = "arg_text"
-        private const val ARG_TIME = "arg_time"
-        private const val ARG_LIST = "arg_list"
+        private const val ARG_INSIGHT_DATA = "arg_insight_data"
 
         fun newInstance(
             data: InsightCardUiModel
         ): LifeOsInsightCardFragment {
             val f = LifeOsInsightCardFragment()
             f.arguments = Bundle().apply {
-                /*putString(ARG_TEXT, text)
-                putString(ARG_TIME, time)
-                if (!list.isNullOrEmpty()) putStringArrayList(ARG_LIST, list)*/
+                putParcelable(ARG_INSIGHT_DATA, data)
             }
             return f
         }

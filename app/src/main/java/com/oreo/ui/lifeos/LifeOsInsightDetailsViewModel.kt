@@ -9,6 +9,7 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
+import com.oreo.ui.lifeos.charts.InsightCardUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.util.ArrayList
@@ -20,7 +21,7 @@ class LifeOsInsightDetailsViewModel @Inject constructor(
 ): BaseViewModel() {
 
 
-    var insightData: InsightItemResponseModel ?= null
+    var insightData: InsightCardUiModel?= null
 
     fun submitDislikeBtmShtData(
         feedbackText: String,

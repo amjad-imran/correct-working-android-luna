@@ -13,7 +13,8 @@ data class InsightItemResponseModel(
     val graph_type: String? = null,
     val related_suggested_questions: List<String>? = null,
     val suggestions: String? = null,
-    val title: String? = null
+    val title: String? = null,
+    val insightIcon: String? = null,
 ) : Parcelable
 
 

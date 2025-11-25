@@ -80,6 +80,7 @@ import com.noisefit_commans.data.model.timeline.TimelineScreenResponse
 import com.oreo.data.model.dataSharingVendorModels.DataSharingVendorListResponseItem
 import com.oreo.data.model.downloadMyData.DownloadMyDataResponse
 import com.noisefit_commans.data.model.lifeos.onboarding.OnBoardQuesGetResponse
+import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -877,6 +878,12 @@ interface NetworkService {
     suspend fun getLifeOsOnboardQuesAnsList(
         @Url url: String,
     ): BaseApiResponse<OnBoardQuesGetResponse>
+
+    @GET
+    suspend fun getInsightLvl1List(
+        @Url url: String,
+        @Query("duration") duration: String,
+    ): BaseApiResponse< List<InsightItemResponseModel> >
 
     @POST
     suspend fun submitLifeOsOnboardQuesAnsList(
