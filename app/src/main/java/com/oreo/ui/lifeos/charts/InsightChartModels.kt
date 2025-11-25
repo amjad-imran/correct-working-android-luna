@@ -7,7 +7,9 @@ import com.oreo.data.model.DayTimeDataModel
 import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
 import com.oreo.ui.custom.HRCombineModel
 import com.oreo.ui.custom.StressCombineModel
+import com.oreo.ui.custom.sleep.internal.GraphDataModel
 import com.oreo.ui.custom.sleep.internal.SleepSingleGradientChartType
+import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import java.time.LocalDate
 
 /** UI model the adapter will consume. */
@@ -18,7 +20,17 @@ data class InsightCardUiModel(
     val chartKey: GraphsKey?,
     val payload: Any?,
     val styleRes: Int? = null,
-    val raw: InsightItemResponseModel? = null
+    val raw: InsightItemResponseModel? = null,
+)
+
+data class TrendGraphData(
+    val list: List<GraphDataModel>? = null,
+    val yAxisRange: List<Pair<Int, String>>? = null,
+    val avgValue: Pair<Float, String>? = null,
+    val selectedPosition: Int? = null,
+    val contributorType: SleepInternalLaunchState? = null,
+    val optimalRange: Pair<Float, Float>? = null,
+    val nonNullDataCount: Int? = null
 )
 
 /**

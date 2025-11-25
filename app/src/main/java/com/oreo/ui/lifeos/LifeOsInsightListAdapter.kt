@@ -28,6 +28,7 @@ import com.oreo.ui.lifeos.charts.DayTimeChartPayload
 import com.oreo.ui.lifeos.charts.HrChartPayload
 import com.oreo.ui.lifeos.charts.InsightCardUiModel
 import com.oreo.ui.lifeos.charts.TimeSeriesPayload
+import com.oreo.ui.lifeos.charts.TrendGraphData
 
 class LifeOsInsightListAdapter(
     private val onClick: (InsightCardUiModel) -> Unit
@@ -132,17 +133,22 @@ class LifeOsInsightListAdapter(
                     v
 
                 }
-                /*GraphsKey.REM_DAY -> {
-                    val data = payload as? Pair<List<OreoSleepData.OreoSleepMovementDataBreakup>,
-                            CountCardData>
-                    val v = (currentChartView as? SleepSingleBarChart) ?: SleepSingleBarChart(ctx)
+                GraphsKey.REM_DAY -> {
+                    val data = payload as? TrendGraphData
 
-
-
-
+                    val v = (currentChartView as? SleepSingleBarChart) ?: SleepSingleBarChart(ctx,null)
+                    v.setDataSet(
+                        data?.list?:arrayListOf(),
+                        data?.yAxisRange?:arrayListOf(),
+                        data?.avgValue,
+                        -1,
+                        data?.contributorType,
+                        data?.optimalRange,
+                        data?.nonNullDataCount?:0
+                    )
                     v
 
-                }*/
+                }
 
                 /*"respiratory_daily" -> dailyGradient(payload)
                 "respiratory_day" -> dayBar(payload)
