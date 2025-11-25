@@ -2,6 +2,7 @@ package com.oreo.ui.lifeos.charts
 
 import com.noisefit_commans.data.model.CountCardData
 import com.noisefit_commans.models.SleepData
+import com.oreo.data.dataConverter.GraphsKey
 import com.oreo.data.model.DayTimeDataModel
 import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
 import com.oreo.ui.custom.HRCombineModel
@@ -14,7 +15,7 @@ data class InsightCardUiModel(
     val id: Long,
     val title: String?,
     val timeText: String?,
-    val chartKey: String?,
+    val chartKey: GraphsKey?,
     val payload: Any?,
     val styleRes: Int? = null,
     val raw: InsightItemResponseModel? = null
@@ -36,12 +37,6 @@ data class StressChartPayload(
 
 data class DayTimeChartPayload(
     val model: DayTimeDataModel?
-)
-
-data class SleepChartPayload(
-    val totals: CountCardData? = null,
-    val breakup: ArrayList<SleepData.SleepDataBreakup>? = null,
-    val interactive: Boolean = true
 )
 
 // Health monitor single-line gradient chart payload (daily/day/week/month)

@@ -78,13 +78,14 @@ data class SleepHourlyBreakup(
     val end_time: String,
 )
 
+@Parcelize
 data class SleepMovementBreakup(
     val date: String,//023-05-15
     val duration: Int,
     val movement_type: String,
     val start_time: String,
     val end_time: String,
-)
+): Parcelable
 
 data class CommonListDataModel(
     val value: List<Int>,
