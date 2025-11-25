@@ -1,5 +1,6 @@
 package com.oreo.ui.lifeos.charts
 
+import android.os.Parcelable
 import com.noisefit_commans.data.model.CountCardData
 import com.noisefit_commans.models.SleepData
 import com.oreo.data.dataConverter.GraphsKey
@@ -8,9 +9,11 @@ import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
 import com.oreo.ui.custom.HRCombineModel
 import com.oreo.ui.custom.StressCombineModel
 import com.oreo.ui.custom.sleep.internal.SleepSingleGradientChartType
+import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
 
 /** UI model the adapter will consume. */
+@Parcelize
 data class InsightCardUiModel(
     val id: Long,
     val title: String?,
@@ -19,7 +22,7 @@ data class InsightCardUiModel(
     val payload: Any?,
     val styleRes: Int? = null,
     val raw: InsightItemResponseModel? = null
-)
+) : Parcelable
 
 /**
  * Typed payload wrappers to avoid casting in renderers.

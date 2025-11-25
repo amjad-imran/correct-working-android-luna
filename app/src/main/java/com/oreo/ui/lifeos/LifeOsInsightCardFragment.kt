@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLifeOsInsightCardBinding
+import com.oreo.ui.lifeos.charts.InsightCardUiModel
 
 class LifeOsInsightCardFragment : Fragment(R.layout.fragment_life_os_insight_card) {
 
@@ -42,15 +43,13 @@ class LifeOsInsightCardFragment : Fragment(R.layout.fragment_life_os_insight_car
         private const val ARG_LIST = "arg_list"
 
         fun newInstance(
-            text: String,
-            time: String = "4 hrs ago",
-            list: ArrayList<String>? = null
+            data: InsightCardUiModel
         ): LifeOsInsightCardFragment {
             val f = LifeOsInsightCardFragment()
             f.arguments = Bundle().apply {
-                putString(ARG_TEXT, text)
+                /*putString(ARG_TEXT, text)
                 putString(ARG_TIME, time)
-                if (!list.isNullOrEmpty()) putStringArrayList(ARG_LIST, list)
+                if (!list.isNullOrEmpty()) putStringArrayList(ARG_LIST, list)*/
             }
             return f
         }
