@@ -89,7 +89,9 @@ class LifeOsInsightsViewModel @Inject constructor(
             InsightItemResponseModel(
                 graph_type = "sleep_stage"
             ),
-            InsightItemResponseModel(graph_type = "sleep_movement"),))
+            InsightItemResponseModel(graph_type = "sleep_movement"),
+            InsightItemResponseModel(graph_type = "rem_day"),
+            ))
         _cards.value = dummy
 
     }
@@ -118,6 +120,9 @@ class LifeOsInsightsViewModel @Inject constructor(
                     }
                     "sleep_movement" -> {
                         list.add(graphDataConvertor.generateSleepMovementData(it))
+                    }
+                    "rem_day" -> {
+                        list.add(graphDataConvertor.generateRemDayData(it))
                     }
                 }
             }

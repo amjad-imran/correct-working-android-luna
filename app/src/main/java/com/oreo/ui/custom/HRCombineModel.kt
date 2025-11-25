@@ -1,10 +1,14 @@
 package com.oreo.ui.custom;
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+
+@Parcelize
 data class HRCombineModel(
     val sections: List<Section>? = null,
     val items: List<Item>? = null
-)
+) : Parcelable
 
 /*data class Item(
     val `value`: Int,
