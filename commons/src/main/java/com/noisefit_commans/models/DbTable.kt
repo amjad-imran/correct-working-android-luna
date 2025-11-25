@@ -1,10 +1,12 @@
 package com.noisefit_commans.models
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
 
 @Entity(
@@ -105,6 +107,7 @@ data class SleepData(
     var sleepArray: ArrayList<SleepDataBreakup>? = null
 ) : ColorfitData() {
 
+    @Parcelize
     class SleepDataBreakup(
         @SerializedName("start_time") var startTime: String? = null,
         @SerializedName("end_time") var endTime: String? = null,
@@ -114,7 +117,7 @@ data class SleepData(
         @SerializedName("start_date") var startDate: String? = null,
         @SerializedName("end_date") var endDate: String? = null,
         @SerializedName("duration") var duration: Int = 0
-    )
+    ): Parcelable
 }
 
 @Entity(tableName = "google_fit")

@@ -8,7 +8,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLifeOsInsightCardBinding
+import com.noisefit_commans.data.model.CountCardData
+import com.noisefit_commans.data.model.OreoSleepData
+import com.noisefit_commans.models.SleepData
+import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepGraphViewOreo
+import com.oreo.data.dataConverter.GraphsKey
+import com.oreo.data.model.health.SleepMovementBreakup
 import com.oreo.ui.custom.HRCombinedChart
 import com.oreo.ui.custom.ODayTimeInteractiveGraph
 import com.oreo.ui.custom.StressCombinedChart
@@ -21,7 +27,6 @@ import com.oreo.ui.custom.sleep.internal.SleepSingleBarChart
 import com.oreo.ui.lifeos.charts.DayTimeChartPayload
 import com.oreo.ui.lifeos.charts.HrChartPayload
 import com.oreo.ui.lifeos.charts.InsightCardUiModel
-import com.oreo.ui.lifeos.charts.SleepChartPayload
 import com.oreo.ui.lifeos.charts.TimeSeriesPayload
 
 class LifeOsInsightListAdapter(
@@ -37,7 +42,7 @@ class LifeOsInsightListAdapter(
     inner class ViewHolder(val binding: FragmentLifeOsInsightCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        private var currentChartKey: String? = null
+        private var currentChartKey: GraphsKey? = null
         private var currentChartView: View? = null
 
         fun bind(item: InsightCardUiModel) {
@@ -76,46 +81,70 @@ class LifeOsInsightListAdapter(
          * Simple factory/hook: provide chart view for a given type and payload.
          * Extend this with more cases as new chart types arrive.
          */
-        private fun provideChartView(chartType: String?, payload: Any?, styleRes: Int?): View? {
+        private fun provideChartView(graphsKey: GraphsKey?, payload: Any?, styleRes: Int?): View? {
             val ctx = binding.chartContainer.context
-            return when (chartType?.lowercase()) {
-                "hr" -> {
+            return when (graphsKey) {
+                GraphsKey.HEART_RATE-> {
                     val data = payload as? HrChartPayload
                     val v = (currentChartView as? HRCombinedChart) ?: HRCombinedChart(ctx)
-                    // Apply default HR style unless a custom one is provided
                     v.applyStyle(styleRes ?: R.style.HrChartStyle)
                     data?.let { v.updateData(it.model, it.yAxisCount, it.minYAxis, it.maxYAxis) }
                     v
                 }
-                "stress" -> {
+                GraphsKey.STRESS -> {
                     val data = payload as? com.oreo.ui.lifeos.charts.StressChartPayload
                     val v = (currentChartView as? StressCombinedChart) ?: StressCombinedChart(ctx)
-                    // Apply default Stress style unless a custom one is provided
                     v.applyStyle(styleRes ?: R.style.StressChartStyle)
                     data?.let { v.updateData(it.model) }
                     v
                 }
-                "daytime" -> {
+                GraphsKey.DAY_TIME_MOVEMENT -> {
                     val data = payload as? DayTimeChartPayload
                     val v = (currentChartView as? ODayTimeInteractiveGraph) ?: ODayTimeInteractiveGraph(ctx)
                     v.enableInteractiveMode(true)
-                    // Apply default DayTime style unless a custom one is provided
                     v.applyStyle(styleRes ?: R.style.DayTimeGraphStyle)
                     data?.let { v.updateData(it.model) }
                     v
                 }
-                "sleep" -> {
-                    val data = payload as? SleepChartPayload
+                GraphsKey.SLEEP_BREAKUP -> {
+                    val data = payload as? ArrayList<SleepData.SleepDataBreakup>
                     val v = (currentChartView as? SleepGraphViewOreo) ?: SleepGraphViewOreo(ctx)
-                    v.enableInteractiveMode(data?.interactive ?: true)
+                    v.enableInteractiveMode(false)
                     v.init(false)
-                    data?.totals?.let { v.setData(it) }
-                    data?.breakup?.let { v.setData(it) }
+                    //data?.totals?.let { v.setData(it) }
+                    data?.let { v.setData(it) }
                     v.invalidate()
                     v
                 }
-                // Respiratory rate
-                "respiratory_daily" -> dailyGradient(payload)
+                GraphsKey.SLEEP_MOVEMENT -> {
+                    val data = payload as? Pair<List<OreoSleepData.OreoSleepMovementDataBreakup>,
+                            CountCardData>
+                    val v = (currentChartView as? NightTimeGraphViewOreo) ?: NightTimeGraphViewOreo(ctx)
+
+
+                    v.init(false)
+
+                    v.setData(data?.second)
+                    v.setData(
+                        data?.first
+                    )
+                    v.invalidate()
+                    v
+
+                }
+                /*GraphsKey.REM_DAY -> {
+                    val data = payload as? Pair<List<OreoSleepData.OreoSleepMovementDataBreakup>,
+                            CountCardData>
+                    val v = (currentChartView as? SleepSingleBarChart) ?: SleepSingleBarChart(ctx)
+
+
+
+
+                    v
+
+                }*/
+
+                /*"respiratory_daily" -> dailyGradient(payload)
                 "respiratory_day" -> dayBar(payload)
                 "respiratory_week" -> weekMonthLine(payload)
                 "respiratory_month" -> weekMonthLine(payload)
@@ -138,7 +167,7 @@ class LifeOsInsightListAdapter(
                 "blood_oxygen_daily" -> dailyGradient(payload)
                 "blood_oxygen_day" -> dayBar(payload)
                 "blood_oxygen_week" -> weekMonthLine(payload)
-                "blood_oxygen_month" -> weekMonthLine(payload)
+                "blood_oxygen_month" -> weekMonthLine(payload)*/
                 else -> null
             }
         }
