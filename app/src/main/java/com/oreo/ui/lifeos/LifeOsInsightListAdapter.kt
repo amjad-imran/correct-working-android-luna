@@ -133,7 +133,7 @@ class LifeOsInsightListAdapter(
                     v
 
                 }
-                GraphsKey.REM_DAY -> {
+                GraphsKey.TREND_SLEEP_SINGLE -> {
                     val data = payload?.trendData
 
                     val v = (currentChartView as? SleepSingleBarChart) ?: SleepSingleBarChart(ctx,null)
@@ -143,6 +143,23 @@ class LifeOsInsightListAdapter(
                         data?.avgValue,
                         -1,
                         data?.contributorType,
+                        data?.optimalRange,
+                        data?.nonNullDataCount?:0
+                    )
+                    v
+
+                }
+                GraphsKey.TREND_SLEEP_SINGLE_LINE_GRADIENT -> {
+                    val data = payload?.trendData
+
+                    val v = (currentChartView as? SleepSingleGradientLineChartInternal) ?: SleepSingleGradientLineChartInternal(ctx,null)
+                    v.setDataSet(
+                        data?.list?:arrayListOf(),
+                        data?.yAxisRange?:arrayListOf(),
+                        data?.xAxisRange?:arrayListOf(),
+                        data?.avgValue,
+                        -1,
+                        data?.chartType?:SleepSingleGradientChartType.DEFAULT,
                         data?.optimalRange,
                         data?.nonNullDataCount?:0
                     )

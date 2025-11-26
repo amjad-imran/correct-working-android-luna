@@ -3,14 +3,10 @@ package com.oreo.ui.lifeos
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.oreo.data.dataConverter.GraphDataConvertor
 import com.oreo.data.dataConverter.OreoHRDataConvertor
 import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
-import com.oreo.ui.custom.sleep.internal.SleepSingleGradientChartType
 import com.oreo.ui.lifeos.charts.InsightCardUiModel
-import com.oreo.ui.lifeos.charts.TimeSeriesPayload
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -121,8 +117,11 @@ class LifeOsInsightsViewModel @Inject constructor(
                     "sleep_movement" -> {
                         list.add(graphDataConvertor.generateSleepMovementData(it))
                     }
-                    "rem_day" -> {
-                        list.add(graphDataConvertor.generateRemDayData(it))
+                    else -> {
+                        val data = graphDataConvertor.handleTrendsData(it)
+                        data?.let {
+                            list.add(data)
+                        }
                     }
                 }
             }

@@ -11,6 +11,7 @@ import com.oreo.ui.custom.HRCombineModel
 import com.oreo.ui.custom.StressCombineModel
 import com.oreo.ui.custom.sleep.internal.GraphDataModel
 import com.oreo.ui.custom.sleep.internal.SleepSingleGradientChartType
+import com.oreo.ui.sleep2.internal.InternalSelectedPeriod
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import kotlinx.parcelize.Parcelize
 import java.time.LocalDate
@@ -43,11 +44,15 @@ data class PayloadData(
 data class TrendGraphData(
     val list: List<GraphDataModel>? = null,
     val yAxisRange: List<Pair<Int, String>>? = null,
+    val xAxisRange: List<LocalDate>?=null,
     val avgValue: Pair<Float, String>? = null,
     val selectedPosition: Int? = null,
     val contributorType: SleepInternalLaunchState? = null,
     val optimalRange: Pair<Float, Float>? = null,
-    val nonNullDataCount: Int? = null
+    val nonNullDataCount: Int? = null,
+    val chartType: SleepSingleGradientChartType?=null,
+    val showOverlay: Boolean?=null,
+    val selectedPeriod: InternalSelectedPeriod?=null,
 ) : Parcelable
 
 /**
