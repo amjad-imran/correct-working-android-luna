@@ -8,6 +8,7 @@ import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
+import androidx.lifecycle.ViewModel
 import com.oreo.data.dataConverter.GraphDataConvertor
 import com.oreo.data.dataConverter.OreoHRDataConvertor
 import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
@@ -159,8 +160,11 @@ class LifeOsInsightsViewModel @Inject constructor(
                     "sleep_movement" -> {
                         list.add(graphDataConvertor.generateSleepMovementData(it))
                     }
-                    "rem_day" -> {
-                        list.add(graphDataConvertor.generateRemDayData(it))
+                    else -> {
+                        val data = graphDataConvertor.handleTrendsData(it)
+                        data?.let {
+                            list.add(data)
+                        }
                     }
                 }
             }
