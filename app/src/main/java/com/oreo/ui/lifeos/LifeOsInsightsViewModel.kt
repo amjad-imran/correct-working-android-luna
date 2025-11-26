@@ -2,19 +2,27 @@ package com.oreo.ui.lifeos
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.noisefit.data.remote.base.Resource
+import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit_commans.data.BinaryActionCallback
+import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.ui.BaseViewModel
 import androidx.lifecycle.ViewModel
 import com.oreo.data.dataConverter.GraphDataConvertor
 import com.oreo.data.dataConverter.OreoHRDataConvertor
 import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
 import com.oreo.ui.lifeos.charts.InsightCardUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LifeOsInsightsViewModel @Inject constructor(
     val hrDataConvertor: OreoHRDataConvertor,
     val graphDataConvertor: GraphDataConvertor,
-) : ViewModel() {
+    private val userRepository: UserRepository,
+) : BaseViewModel() {
 
     private val _insights = MutableLiveData<List<InsightItemResponseModel>>()
     private val _cards = MutableLiveData<List<InsightCardUiModel>>()
@@ -72,6 +80,41 @@ class LifeOsInsightsViewModel @Inject constructor(
         val type = object : TypeToken<List<InsightItemResponseModel>>() {}.type
         val raw = Gson().fromJson<List<InsightItemResponseModel>>(jsonRes, type)
         //_insights.value = raw*/
+
+        //--
+        /*viewModelScope.launch {
+            userRepository.getInsightLvl1List("day").collect{ resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        loadInsights()
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            generateData(it)
+                        }
+                    }
+                }
+            }
+        }*/
+        //--
 
         val dummy = generateData(arrayListOf(InsightItemResponseModel(
             graph_type = "hr"

@@ -56,6 +56,7 @@ import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.dataSharingVendorModels.DataSharingVendorListResponseItem
 import com.oreo.data.model.downloadMyData.DownloadMyDataResponse
 import com.noisefit_commans.data.model.lifeos.onboarding.OnBoardQuesGetResponse
+import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -767,6 +768,15 @@ class UserRepositoryImpl(
             remoteDataSource.submitLifeOsOnboardQuesAnsList(
                 "${BuildConfig.OREO_BASE_URL}/ai/v1/onboarding/submit",
                 req
+            )
+        }
+    }
+
+    override suspend fun getInsightLvl1List(duration: String): Flow<Resource<BaseApiResponse<List<InsightItemResponseModel>>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.getInsightLvl1List(
+                "${BuildConfig.OREO_BASE_URL}/ai/v2/insights/level1",
+                duration
             )
         }
     }

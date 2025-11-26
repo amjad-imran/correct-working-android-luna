@@ -49,6 +49,7 @@ import com.noisefit_commans.ui.visible
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.chatGpt.audio.AudioAiFragment
+import com.oreo.ui.lifeos.charts.InsightCardUiModel
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.recyclerview.widget.RecyclerView as RV
 
@@ -78,7 +79,7 @@ class LifeOsDashFragment :
         super.onViewCreated(view, savedInstanceState)
         setupQuestionsRecycler()
         setupWhatsNewRecycler()
-        setupInsightsPager()
+//        setupInsightsPager(list)
     }
 
     override fun onResume() {
@@ -372,6 +373,17 @@ class LifeOsDashFragment :
             binding.lytDashWhatsNew.tvVersion.text = "Version 1.2"
             whatsNewAdapter.submit(list)
         }
+
+        viewModel.insightsCardsData.observe(viewLifecycleOwner){ list ->
+            if(list.isEmpty()){
+                binding.lytDashInsights.root.gone()
+                binding.lytDashInsightsEmpty.root.visible()
+            }else{
+                binding.lytDashInsightsEmpty.root.gone()
+                binding.lytDashInsights.root.visible()
+                setupInsightsPager(list)
+            }
+        }
     }
 
     private fun setDestination(dest: LifeOsDashViewModel.LifeOsDestinations) {
@@ -388,7 +400,7 @@ class LifeOsDashFragment :
         viewModel.destinationData.value = null
     }
 
-    private fun setupInsightsPager() {
+    private fun setupInsightsPager(insights: List<InsightCardUiModel>) {
         val pager = binding.lytDashInsights.vpInsights
         pager.adapter = LifeOsInsightsPagerAdapter(this, insights)
         pager.offscreenPageLimit = 3

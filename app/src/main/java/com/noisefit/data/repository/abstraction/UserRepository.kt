@@ -26,6 +26,7 @@ import com.noisefit_commans.data.model.timeline.TimelineScreenResponse
 import com.oreo.data.model.dataSharingVendorModels.DataSharingVendorListResponseItem
 import com.oreo.data.model.downloadMyData.DownloadMyDataResponse
 import com.noisefit_commans.data.model.lifeos.onboarding.OnBoardQuesGetResponse
+import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
@@ -117,5 +118,7 @@ interface UserRepository {
     suspend fun getLifeOsOnboardQuesAnsList(): Flow<Resource<BaseApiResponse<OnBoardQuesGetResponse>>>
 
     suspend fun submitLifeOsOnboardQuesAnsList(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
+
+    suspend fun getInsightLvl1List(duration: String): Flow<Resource<BaseApiResponse<List<InsightItemResponseModel>>>>
     suspend fun submitInsightDislikeFeedbackData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
 }

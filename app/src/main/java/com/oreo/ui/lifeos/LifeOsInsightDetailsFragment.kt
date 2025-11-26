@@ -10,7 +10,6 @@ import com.noisefit.data.model.AiHeaderInsight1
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLifeOsInsightDetailsBinding
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.chatGpt.audio.AudioAiFragment
@@ -87,7 +86,7 @@ class LifeOsInsightDetailsFragment :
     }
 
     private fun setRecycler() {
-        viewModel.insightData?.related_suggested_questions?.let { list ->
+        viewModel.insightData?.raw?.related_suggested_questions?.let { list ->
             binding.rvRelatedSuggestedQues.apply {
                 layoutManager = LinearLayoutManager(context)
                 adapter = RelatedSuggestedQuesAdapter(
@@ -119,10 +118,10 @@ class LifeOsInsightDetailsFragment :
     private fun setUi() {
         val data = viewModel.insightData
         if(data==null) return
-        binding.tvTitle.text = data.title
-        binding.tvMessage.text = data.description
+        binding.tvTitle.text = data.raw?.title
+        binding.tvMessage.text = data.raw?.description
 
-        binding.tvLifeOsSuggestedQues.text = data.suggestions
+        binding.tvLifeOsSuggestedQues.text = data.raw?.suggestions
     }
 
     override fun initListener() {
@@ -172,7 +171,6 @@ class LifeOsInsightDetailsFragment :
         setFragmentResultListener(HELP_US_IMPROVE_BS_INSIGHTS){ _, bundle ->
             val feedbackText = bundle.getString("feedbackText")
             val reasons = bundle.getStringArrayList("reasons")
-            LOGS.d("aclnacacpa : feedbackText: $feedbackText, reasons: $reasons")
             if(feedbackText.isNullOrEmpty()){
                 return@setFragmentResultListener
             }
