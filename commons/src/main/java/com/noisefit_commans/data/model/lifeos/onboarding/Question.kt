@@ -12,7 +12,9 @@ data class Question(
     val type: String,
 
     // for app
-    var isSavedByUser: Boolean = false
+    var isSavedByUser: Boolean = false,
+    val personalizeTitle: String ?= null,
+    var personalizeDesc: String ?= null,
 ) : Parcelable
 
 @Parcelize

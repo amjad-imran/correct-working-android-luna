@@ -28,6 +28,8 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
             .addCallback(viewLifecycleOwner) {
 
             }
+
+        viewModel.personalizeQuesId = arguments?.getInt(PersonalizeLifeOsFragment.PERSONALIZE_QUES_ID_KEY)
         viewModel.getOnboardQues(){
             navigateUpSafe()
         }
@@ -48,7 +50,15 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
             viewModel.nextBtnClicked.postValue(true)
         }
 
+        binding.btnSaveChanges.setOnClickListener {
+            viewModel.nextBtnClicked.postValue(true)
+        }
+
         binding.btnClose.setOnClickListener {
+            if(viewModel.personalizeQuesId!=null){
+                navigateUpSafe()
+                return@setOnClickListener
+            }
             setFragmentResultListener(LIFEOS_ONBOARD_BS_KEY) { _, bundle ->
                 val isSaveAndExit = bundle.getBoolean("saveAndExit")
                 if(isSaveAndExit){
@@ -61,6 +71,14 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
     }
 
     private fun setLinearProgressIndicatorUi() {
+        binding.btnSaveChanges.invisible()
+        binding.tvTitle.invisible()
+
+        binding.indicatorProgress.visible()
+        binding.tvSkip.visible()
+        binding.viewSkip.visible()
+        binding.btnNext.visible()
+
         val totalQues = viewModel.onBoardResponseData?.questions?.size
         val curProgress = viewModel.curQuesIndex?.plus(1)
         if(totalQues==null || curProgress==null){
@@ -93,7 +111,12 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
     override fun subscribeObservers() {
         viewModel.curQues.observe(this){
             viewModel.updateNextButtonState.postValue(it.answer.find { it.isSelected } != null)
-            setLinearProgressIndicatorUi()
+
+            if(viewModel.personalizeQuesId==null) {
+                setLinearProgressIndicatorUi()
+            }else{
+                setPersonalizeUi(it.personalizeTitle)
+            }
 
             val childFrag = when(it.type){
                 "mcq-single" -> {
@@ -132,13 +155,15 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
 
         viewModel.updateNextButtonState.observe(this){
             binding.btnNext.isEnabled = it
+            binding.btnSaveChanges.isEnabled = it
         }
 
         viewModel.navigateToFinishScreen.observe(this){
             if(it){
                 viewModel.navigateToFinishScreen.value = false
                 navigateUpSafe()
-                navigate(R.id.lifeOsOnboardFinishFragment)
+                if(viewModel.personalizeQuesId==null)
+                    navigate(R.id.lifeOsOnboardFinishFragment)
             }
         }
 
@@ -159,6 +184,22 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
             it.getContent()?.let { message ->
                 context.showShortToast(message)
             }
+        }
+    }
+
+    private fun setPersonalizeUi(personalizeTitle: String?) {
+        binding.btnNext.invisible()
+        binding.ivBack.invisible()
+        binding.indicatorProgress.invisible()
+        binding.viewSkip.invisible()
+        binding.tvSkip.invisible()
+
+        binding.btnClose.setImageResource(R.drawable.image_back_btn)
+        binding.btnSaveChanges.visible()
+
+        binding.tvTitle.apply {
+            text = personalizeTitle ?: "Health Goals"
+            visible()
         }
     }
 

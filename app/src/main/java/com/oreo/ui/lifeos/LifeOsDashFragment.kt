@@ -297,6 +297,10 @@ class LifeOsDashFragment :
 
     override fun initListener() {
 
+        binding.lytHeader.ivPersonalize.setOnClickListener {
+            navigate(R.id.personalizeLifeOsFragment)
+        }
+
         binding.lytToolbar.ivNewChat.setOnClickListener {
             val (frag, bundle) = LifeOsChatFragment.getStartData(
                 threadId = null,

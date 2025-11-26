@@ -1698,5 +1698,11 @@
 
     </dialog>
 
+    <fragment
+        android:id="@+id/personalizeLifeOsFragment"
+        android:name="com.oreo.ui.lifeos.onboarding.PersonalizeLifeOsFragment"
+        android:label="fragment_personalize_life_os"
+        tools:layout="@layout/fragment_personalize_life_os" />
+
 
 </navigation>

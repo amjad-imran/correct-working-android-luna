@@ -24,6 +24,8 @@
         android:layout_height="2dp"
         android:indeterminate="false"
         app:trackCornerRadius="4dp"
+        android:visibility="invisible"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/btnClose"
         app:layout_constraintEnd_toStartOf="@+id/tvSkip"
         app:layout_constraintStart_toEndOf="@+id/btnClose"
@@ -32,12 +34,28 @@
         app:trackColor="#1AFFFFFF"/>
 
     <TextView
+        android:id="@+id/tvTitle"
+        style="@style/S16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        tools:text="Health Goals"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/btnClose"
+        app:layout_constraintEnd_toStartOf="@id/tvSkip"
+        app:layout_constraintStart_toEndOf="@+id/btnClose"
+        app:layout_constraintTop_toTopOf="@+id/btnClose"
+        tools:visibility="visible" />
+
+    <TextView
         android:id="@+id/tvSkip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/S14"
         android:layout_marginEnd="16dp"
         android:text="@string/text_skip2"
+        android:visibility="invisible"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/btnClose"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnClose" />
@@ -46,6 +64,8 @@
         android:id="@+id/viewSkip"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:visibility="invisible"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/tvSkip"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tvSkip"
@@ -55,6 +75,8 @@
         android:id="@+id/btnNext"
         style="@style/PrimaryButtonStyle"
         android:layout_width="wrap_content"
+        android:visibility="invisible"
+        tools:visibility="visible"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="20dp"
         android:paddingHorizontal="44dp"
@@ -63,6 +85,20 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <Button
+        android:id="@+id/btnSaveChanges"
+        style="@style/PrimaryButtonStyle"
+        android:layout_width="wrap_content"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        android:layout_marginBottom="20dp"
+        android:paddingHorizontal="44dp"
+        android:text="@string/text_save_changes"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <ImageView
         android:id="@+id/ivBack"
         android:layout_width="wrap_content"
@@ -70,6 +106,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginBottom="20dp"
         android:visibility="invisible"
+        tools:visibility="visible"
         android:src="@drawable/ic_question_back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

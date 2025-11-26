@@ -36,6 +36,8 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
 
     val saveAndExitBtnClickedBs = MutableLiveData<Boolean>()
 
+    var personalizeQuesId: Int ?= null
+
     fun getOnboardQues(isAllQuesDone: () -> Unit) {
         viewModelScope.launch {
             /*val jsonRes = """
@@ -159,7 +161,13 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
     }
 
     fun processData(mainData: OnBoardQuesGetResponse, isAllQuesDone: () -> Unit){
+        var personalizeQues: Question ?= null
+
         mainData.questions?.forEachIndexed { idx, it ->
+            if(personalizeQuesId!=null && it.id==personalizeQuesId){
+                personalizeQues = it
+            }
+
             val curQuesAns = mainData.answers?.find { it1-> it1.ques_id==it.id}
             if(
                 curQuesAns != null &&
@@ -185,6 +193,11 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
                     LifeOSOnboardMCQquesStates.NORMAL
                 }
             }
+        }
+
+        if(personalizeQues!=null){
+            curQues.postValue(personalizeQues)
+            return
         }
 
         if(curQuesIndex == null){
@@ -306,7 +319,12 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
             it.isSavedByUser = true
         }
 
-        if(isSaveAndExit || curQuesIndex==onBoardResponseData?.questions?.size?.minus(1)){
+        if(
+            personalizeQuesId!=null ||
+            isSaveAndExit ||
+            curQuesIndex==onBoardResponseData?.questions?.size?.minus(1)
+        )
+        {
             submitQuesAnsToServer()
         }else{
             switchToNextQuestion()
