@@ -14,7 +14,6 @@ import com.oreo.ui.custom.sleep.internal.SleepSingleGradientChartType
 import com.oreo.ui.sleep2.internal.InternalSelectedPeriod
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import kotlinx.parcelize.Parcelize
-import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import java.time.LocalDate
 
 /** UI model the adapter will consume. */
