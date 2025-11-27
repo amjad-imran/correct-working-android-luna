@@ -93,11 +93,11 @@
                 android:lineSpacingExtra="3sp"
                 tools:text="@tools:sample/lorem/random" />
 
-            <View
+            <FrameLayout
+                android:id="@+id/chartContainer"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:layout_marginTop="16dp"
-                android:background="@color/white" />
+                android:layout_height="180dp"
+                android:layout_marginTop="16dp" />
 
             <TextView
                 style="@style/S12"

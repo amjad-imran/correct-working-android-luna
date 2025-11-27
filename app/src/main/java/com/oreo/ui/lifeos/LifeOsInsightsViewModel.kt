@@ -117,10 +117,12 @@ class LifeOsInsightsViewModel @Inject constructor(
         //--
 
         val dummy = generateData(arrayListOf(InsightItemResponseModel(
-            graph_type = "hr"
+            graph_type = "hr",
+            title = "Sleep midpoint shifted later by ~50 minutes over recent nights",
         ),
             InsightItemResponseModel(
-                graph_type = "stress"
+                graph_type = "stress",
+                title = "Deep sleep has decreased ~18% over the recent days",
             ),
             InsightItemResponseModel(
                 graph_type = "daytime"

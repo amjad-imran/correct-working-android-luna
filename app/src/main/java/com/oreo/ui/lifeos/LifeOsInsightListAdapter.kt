@@ -48,7 +48,7 @@ class LifeOsInsightListAdapter(
         private var currentChartView: View? = null
 
         fun bind(item: InsightCardUiModel) {
-            binding.tvTitle.text = item.title
+            binding.tvTitle.text = item.raw?.title ?: ""
             binding.tvTime.text = item.timeText ?: ""
 
             binding.root.setOnClickListener { onClick(item) }
