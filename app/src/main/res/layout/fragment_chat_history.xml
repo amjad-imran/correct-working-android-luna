@@ -55,8 +55,33 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <View
+        android:id="@+id/searchBox"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="@dimen/dimen_16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="@dimen/side_margin"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lytToolbar" />
 
-
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/etSearch"
+        style="@style/EditTextStyleSearchV2"
+        android:layout_width="0dp"
+        android:background="@android:color/transparent"
+        android:drawableStart="@drawable/ic_search_chat_history"
+        android:drawablePadding="16dp"
+        android:hint="@string/text_search_recents"
+        android:inputType="textCapWords"
+        android:textColorHint="@color/white_64"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@id/searchBox"
+        app:layout_constraintEnd_toEndOf="@+id/searchBox"
+        app:layout_constraintStart_toStartOf="@+id/searchBox"
+        app:layout_constraintTop_toTopOf="@+id/searchBox" />
 
     <ImageView
         android:id="@+id/ivNoData"
@@ -89,12 +114,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lytToolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/searchBox" />
 
     <include
         android:id="@+id/progressBar"

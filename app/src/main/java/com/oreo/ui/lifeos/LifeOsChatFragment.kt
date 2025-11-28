@@ -173,6 +173,7 @@ class LifeOsChatFragment :
             } else {
                 viewModel.loadMessagesByThreadId(viewModel.threadId!!)
                 binding.ivLogo.gone()
+                binding.ivLogoTop.visible()
             }
             binding.lytChatBox.ivAddAttachment.visible()
         } else {

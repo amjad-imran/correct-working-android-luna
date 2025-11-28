@@ -29,13 +29,13 @@
             android:layout_width="wrap_content"
             android:layout_height="24dp"
             android:adjustViewBounds="true"
-            android:visibility="gone"
-            tools:visibility="visible"
             android:src="@drawable/image_life_os_logo"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/ivBack"
             app:layout_constraintEnd_toStartOf="@+id/ivNewChat"
             app:layout_constraintStart_toEndOf="@+id/ivBack"
-            app:layout_constraintTop_toTopOf="@+id/ivBack" />
+            app:layout_constraintTop_toTopOf="@+id/ivBack"
+            tools:visibility="visible" />
 
 
         <ImageView

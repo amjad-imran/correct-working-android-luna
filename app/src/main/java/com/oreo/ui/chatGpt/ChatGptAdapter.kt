@@ -387,7 +387,7 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
                 }
 
                 binding.ivLike.setImageResource(
-                    if (liked) R.drawable.ic_thumbs_up_v2_filled else R.drawable.ic_thumbs_up_v2
+                    if (liked) R.drawable.ic_thumbs_up_v2_filled else R.drawable.ic_thumbs_up_v2_lifeos_chat
                 )
                 binding.ivDislike.setImageResource(
                     if (disliked) R.drawable.ic_thumbs_down_v2_filled else R.drawable.ic_thumbs_down_v2
