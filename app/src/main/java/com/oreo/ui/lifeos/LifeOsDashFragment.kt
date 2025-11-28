@@ -60,8 +60,16 @@ class LifeOsDashFragment :
     private val viewModel: LifeOsDashViewModel by viewModels()
 
     private val questionsAdapter by lazy {
-        LifeOsQuestionAdapter {
-
+        LifeOsQuestionAdapter { data ->
+            val (frag, bundle) = LifeOsChatFragment.getStartData(
+                threadId = null,
+                userMessage = data,
+                title = null,
+                aiTopic = AITopics.GENERAL,
+            )
+            navigate(
+                frag, bundle
+            )
         }
     }
 
@@ -351,6 +359,10 @@ class LifeOsDashFragment :
 
         binding.lytToolbar.ivHistory.setOnClickListener {
             navigate(R.id.chatHistoryFragment)
+        }
+
+        binding.lytToolbar.view1.setOnClickListener {
+            navigate(R.id.lifeOsInsightFrag)
         }
 
         binding.lytDashInsights.ivMore.setOnClickListener {

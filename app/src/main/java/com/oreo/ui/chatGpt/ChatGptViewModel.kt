@@ -200,7 +200,12 @@ class ChatGptViewModel
             }
             _chatGptOverview.value = (messages)
         } else {
-            showSuggestedQuestions.postValue(true)
+            if(userMessage.isNullOrEmpty().not()){
+                showSuggestedQuestions.postValue(false)
+                generateInitMessage()
+            }else {
+                showSuggestedQuestions.postValue(true)
+            }
         }
     }
 

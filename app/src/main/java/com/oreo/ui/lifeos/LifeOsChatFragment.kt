@@ -161,15 +161,14 @@ class LifeOsChatFragment :
 
         if (viewModel.planType == PlanType.NONE) {
             if (viewModel.threadId.isNullOrEmpty()) {
-                val sendInsight = viewModel.headerInsight1?.let { headerInsight1 ->
-                    binding.ivLogo.gone()
-                    sendInsight1HeaderMessage(headerInsight1)
-                }
-                viewModel.generateThreadId(
-                    sendInsightHeaderMsg = {
-                        sendInsight
+                if(viewModel.headerInsight1==null){
+                    viewModel.generateThreadId()
+                }else{
+                    viewModel.generateThreadId {
+                        binding.ivLogo.gone()
+                        sendInsight1HeaderMessage(viewModel.headerInsight1!!)
                     }
-                )
+                }
             } else {
                 viewModel.loadMessagesByThreadId(viewModel.threadId!!)
                 binding.ivLogo.gone()
