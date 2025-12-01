@@ -32,7 +32,8 @@ import com.oreo.ui.lifeos.charts.TimeSeriesPayload
 import com.oreo.ui.lifeos.charts.TrendGraphData
 
 class LifeOsInsightListAdapter(
-    private val onClick: (InsightCardUiModel) -> Unit
+    private val isFromLifeOsDash: Boolean = false,
+    private val onClick: (InsightCardUiModel) -> Unit,
 ) : ListAdapter<InsightCardUiModel, LifeOsInsightListAdapter.ViewHolder>(Diff) {
 
     init {
@@ -266,9 +267,26 @@ class LifeOsInsightListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
+        val binding = FragmentLifeOsInsightCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        if(isFromLifeOsDash){
+            val view = binding.root
+            view.post {
+                val rvWidth = parent.width
+                if (rvWidth > 0) {
+                    val density = parent.resources.displayMetrics.density
+                    val peekPx = (40f * density).toInt()
+                    val spacePx = (16f * density).toInt()
+
+                    val itemWidth = rvWidth - peekPx - spacePx
+
+                    view.layoutParams = view.layoutParams.apply {
+                        width = itemWidth
+                    }
+                }
+            }
+        }
         return ViewHolder(
-            FragmentLifeOsInsightCardBinding.inflate(inflater, parent, false)
+            binding
         )
     }
 

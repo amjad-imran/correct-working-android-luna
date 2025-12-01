@@ -37,11 +37,11 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.CompositePageTransformer
-import androidx.viewpager2.widget.MarginPageTransformer
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLifeOsDashBinding
+import com.noisefit_commans.common.MarginLeftRightItemDecoration
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.gone
@@ -49,9 +49,7 @@ import com.noisefit_commans.ui.visible
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.chatGpt.audio.AudioAiFragment
-import com.oreo.ui.lifeos.charts.InsightCardUiModel
 import dagger.hilt.android.AndroidEntryPoint
-import androidx.recyclerview.widget.RecyclerView as RV
 
 @AndroidEntryPoint
 class LifeOsDashFragment :
@@ -69,6 +67,15 @@ class LifeOsDashFragment :
             )
             navigate(
                 frag, bundle
+            )
+        }
+    }
+
+    private val insightAdapter by lazy {
+        LifeOsInsightListAdapter(true){ insightItem ->
+            navigate(
+                R.id.lifeOsInsightDetailsFragment,
+                Bundle().apply { putParcelable("insightData", insightItem) }
             )
         }
     }
@@ -297,6 +304,18 @@ class LifeOsDashFragment :
     }
 
     private fun setupWhatsNewRecycler() {
+        binding.lytDashInsights.rvInsights.apply {
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = insightAdapter
+            PagerSnapHelper().attachToRecyclerView(this)
+            addItemDecoration(
+                MarginLeftRightItemDecoration(
+                    12
+                )
+            )
+        }
+
+
         binding.lytDashWhatsNew.rvNewFeatureList.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = whatsNewAdapter
@@ -395,9 +414,9 @@ class LifeOsDashFragment :
                 binding.lytDashInsights.root.gone()
                 binding.lytDashInsightsEmpty.root.visible()
             }else{
+                insightAdapter.submitList(list)
                 binding.lytDashInsightsEmpty.root.gone()
                 binding.lytDashInsights.root.visible()
-                setupInsightsPager(list)
             }
         }
     }
@@ -416,18 +435,4 @@ class LifeOsDashFragment :
         viewModel.destinationData.value = null
     }
 
-    private fun setupInsightsPager(insights: List<InsightCardUiModel>) {
-        val pager = binding.lytDashInsights.vpInsights
-        pager.adapter = LifeOsInsightsPagerAdapter(this, insights)
-        pager.offscreenPageLimit = 3
-        pager.clipToPadding = false
-        pager.clipChildren = false
-        (pager.getChildAt(0) as? RV)?.overScrollMode = RV.OVER_SCROLL_NEVER
-
-        val transformer = CompositePageTransformer().apply {
-            addTransformer(MarginPageTransformer(10f.dpToPixel().toInt()))
-
-        }
-        pager.setPageTransformer(transformer)
-    }
 }

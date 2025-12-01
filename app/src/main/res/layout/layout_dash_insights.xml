@@ -56,20 +56,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/vpInsights"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvInsights"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:overScrollMode="never"
-        android:paddingHorizontal="20dp"
-        app:layout_constrainedHeight="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivMore"
-        tools:itemCount="3" />
+        app:layout_constraintTop_toBottomOf="@+id/ivMore" />
 
     <include
         layout="@layout/layout_divider"
@@ -78,6 +71,6 @@
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/vpInsights" />
+        app:layout_constraintTop_toBottomOf="@id/rvInsights" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

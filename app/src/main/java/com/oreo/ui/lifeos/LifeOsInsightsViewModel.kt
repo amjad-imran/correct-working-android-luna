@@ -82,7 +82,7 @@ class LifeOsInsightsViewModel @Inject constructor(
         //_insights.value = raw*/
 
         //--
-        /*viewModelScope.launch {
+        viewModelScope.launch {
             userRepository.getInsightLvl1List("day").collect{ resource ->
                 when (resource) {
                     is Resource.GenericError -> {
@@ -108,15 +108,16 @@ class LifeOsInsightsViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            generateData(it)
+                            val dummy = generateData(it)
+                            _cards.value = dummy
                         }
                     }
                 }
             }
-        }*/
+        }
         //--
 
-        val dummy = generateData(arrayListOf(InsightItemResponseModel(
+        /*val dummy = generateData(arrayListOf(InsightItemResponseModel(
             graph_type = "hr",
             title = "Sleep midpoint shifted later by ~50 minutes over recent nights",
         ),
@@ -133,7 +134,7 @@ class LifeOsInsightsViewModel @Inject constructor(
             InsightItemResponseModel(graph_type = "sleep_movement"),
             InsightItemResponseModel(graph_type = "rem_day"),
             ))
-        _cards.value = dummy
+        _cards.value = dummy*/
 
     }
 

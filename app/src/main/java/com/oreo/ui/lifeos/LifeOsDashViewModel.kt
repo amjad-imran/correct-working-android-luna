@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.oreo.data.dataConverter.GraphDataConvertor
 import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
 import com.oreo.ui.lifeos.charts.InsightCardUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,6 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LifeOsDashViewModel @Inject constructor(
     val localDataStore: DataStoredInterface,
+    val graphDataConvertor: GraphDataConvertor,
 ) : ViewModel() {
 
     private val _questions = MutableLiveData<List<String>>()
@@ -32,6 +34,7 @@ class LifeOsDashViewModel @Inject constructor(
     init {
         loadSuggestedQuestions()
         loadWhatsNew()
+        loadInsightsData()
     }
 
     fun getLifeOsData(){
@@ -72,7 +75,7 @@ class LifeOsDashViewModel @Inject constructor(
 
     fun loadInsightsData() {
         viewModelScope.launch {
-            val jsonRes = """
+            /*val jsonRes = """
             [
                 {
                     "relevancy": 0.95,
@@ -84,12 +87,7 @@ class LifeOsDashViewModel @Inject constructor(
                         "Were there differences in caffeine, alcohol, or evening activity on nights you slept more?",
                         "How did your morning mood, focus, or energy compare after the longer sleep?"
                     ],
-                    "graph_type": "total_duration",
-                    "graph": {
-                        "2025-11-25": 19110,
-                        "2025-11-18": 12540,
-                        "2025-11-19": 14340
-                    }
+                    "graph_type": "total_duration"
                 },
                 {
                     "relevancy": 0.85,
@@ -101,12 +99,7 @@ class LifeOsDashViewModel @Inject constructor(
                         "Was there evening light exposure, caffeine, or social activity that might explain the later midpoint?",
                         "Do you notice feeling more jet-lagged or groggy after nights with later midpoints?"
                     ],
-                    "graph_type": "circadian_mid_point",
-                    "graph": {
-                        "2025-11-25": "05:23:30",
-                        "2025-11-18": "22:14:30",
-                        "2025-11-19": "21:59:30"
-                    }
+                    "graph_type": "circadian_mid_point"
                 },
                 {
                     "relevancy": 0.8,
@@ -118,12 +111,7 @@ class LifeOsDashViewModel @Inject constructor(
                         "Was the longer sleep the night before associated with the lower stress that day?",
                         "Which calming activities (breathing, walks, less screen time) were present on your lower-stress day?"
                     ],
-                    "graph_type": "hrv",
-                    "graph": {
-                        "2025-11-25": 70,
-                        "2025-11-18": null,
-                        "2025-11-19": null
-                    }
+                    "graph_type": "hrv"
                 }
             ]
         """.trimIndent()
@@ -136,12 +124,167 @@ class LifeOsDashViewModel @Inject constructor(
                 return@launch
             }
 
-            processInsightsData(rawListData)
+            processInsightsData(rawListData)*/
+
+            val dummy = generateData(arrayListOf(InsightItemResponseModel(
+                graph_type = "hr",
+                title = "Sleep midpoint shifted later by ~50 minutes over recent nights",
+            ),
+                InsightItemResponseModel(
+                    graph_type = "stress",
+                    title = "Deep sleep has decreased ~18% over the recent days",
+                ),
+                InsightItemResponseModel(
+                    graph_type = "daytime"
+                ),
+                InsightItemResponseModel(
+                    graph_type = "sleep_stage"
+                ),
+                InsightItemResponseModel(graph_type = "sleep_movement"),
+                InsightItemResponseModel(graph_type = "rem_day"),
+            ))
+            _insightsCardsData.value = dummy
         }
     }
 
     private fun processInsightsData(rawListData: List<InsightItemResponseModel>){
 
+    }
+
+    private fun generateData(data: List<InsightItemResponseModel>): List<InsightCardUiModel> {
+        val list = ArrayList<InsightCardUiModel>()
+
+        data.forEach { it ->
+
+            if (it.graph_type.isNullOrEmpty().not()) {
+                when (it.graph_type) {
+                    "hr" -> {
+                        list.add(graphDataConvertor.generateHrGraphData(it))
+                    }
+
+                    "stress" -> {
+                        list.add(graphDataConvertor.generateStressGraphData(it))
+                    }
+
+                    "daytime" -> {
+                        list.add(graphDataConvertor.generateDayTimeGraphData(it))
+                    }
+
+                    "sleep_stage" -> {
+                        list.add(graphDataConvertor.generateSleepBreakupGraphData(it))
+                    }
+                    "sleep_movement" -> {
+                        list.add(graphDataConvertor.generateSleepMovementData(it))
+                    }
+                    else -> {
+                        val data = graphDataConvertor.handleTrendsData(it)
+                        data?.let {
+                            list.add(data)
+                        }
+                    }
+                }
+            }
+
+        }
+
+
+        // 5) Health monitor internal graphs (day-level gradient charts)
+        val today = java.time.LocalDate.now()
+        fun dates(n: Int) = (0 until n).map { i -> today.minusDays((n - 1 - i).toLong()) }
+
+        fun sinSeries(
+            n: Int,
+            base: Float,
+            amp: Float,
+            clampMin: Float? = null,
+            clampMax: Float? = null
+        ): List<Float?> {
+            return (0 until n).map { i ->
+                val v = base + (amp * kotlin.math.sin(2 * kotlin.math.PI * i / n)).toFloat()
+                val c1 = clampMin?.let { kotlin.math.max(v, it) } ?: v
+                val c2 = clampMax?.let { kotlin.math.min(c1, it) } ?: c1
+                c2
+            }
+        }
+
+        // Respiratory rate – day (bar)
+        /* list.add(
+             InsightCardUiModel(
+                 id = 5L,
+                 title = "Respiratory rate (day demo)",
+                 timeText = "day",
+                 chartKey = "respiratory_day",
+                 payload = TimeSeriesPayload(
+                     values = sinSeries(7, 16f, 1.2f),
+                     dates = dates(7),
+                     unitLabel = "rpm"
+                 )
+             )
+         )
+
+         // Resting HR – week (line)
+         list.add(
+             InsightCardUiModel(
+                 id = 6L,
+                 title = "Resting HR (week demo)",
+                 timeText = "week",
+                 chartKey = "resting_hr_week",
+                 payload = TimeSeriesPayload(
+                     values = sinSeries(6, 62f, 6f),
+                     dates = dates(6),
+                     unitLabel = "bpm"
+                 )
+             )
+         )
+
+         // HRV – month (line)
+         list.add(
+             InsightCardUiModel(
+                 id = 7L,
+                 title = "HRV (month demo)",
+                 timeText = "month",
+                 chartKey = "hrv_month",
+                 payload = TimeSeriesPayload(
+                     values = sinSeries(6, 40f, 8f),
+                     dates = dates(6),
+                     unitLabel = "ms"
+                 )
+             )
+         )
+
+         // Skin temperature – day (gradient)
+         list.add(
+             InsightCardUiModel(
+                 id = 8L,
+                 title = "Skin temperature (day demo)",
+                 timeText = "day",
+                 chartKey = "skin_temp_day",
+                 payload = TimeSeriesPayload(
+                     values = sinSeries(7, 0.0f, 0.8f),
+                     dates = dates(7),
+                     unitLabel = "°",
+                     chartType = SleepSingleGradientChartType.FLOAT
+                 )
+             )
+         )
+
+         // Blood oxygen – daily (gradient)
+         list.add(
+             InsightCardUiModel(
+                 id = 9L,
+                 title = "Blood oxygen (daily demo)",
+                 timeText = "daily",
+                 chartKey = "blood_oxygen_daily",
+                 payload = TimeSeriesPayload(
+                     values = sinSeries(48, 97f, 1.0f, 90f, 100f),
+                     dates = dates(48),
+                     unitLabel = "%",
+                     chartType = SleepSingleGradientChartType.PERCENT
+                 )
+             )
+         )*/
+
+        return list
     }
 
     fun loadWhatsNew() {
