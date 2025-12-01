@@ -405,8 +405,9 @@ class LifeOsDashFragment :
         }
 
         viewModel.whatsNew.observe(viewLifecycleOwner) { data ->
-            binding.lytDashWhatsNew.tvTitle.text = "What’s new with Life OS?"
-            binding.lytDashWhatsNew.tvVersion.text = "Version ${data.version}"
+            binding.lytDashWhatsNew.tvTitle.text = getString(R.string.text_what_s_new_with_life_os)
+            binding.lytDashWhatsNew.tvVersion.text =
+                getString(R.string.text_version_val, data.version.toString())
             data.whatsNewList?.let { whatsNewAdapter.submit(it) }
         }
 

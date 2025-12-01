@@ -2325,6 +2325,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_try_meal_logging_now">Try meal logging now!</string>
     <string name="text_personalise_life_os">Personalise Life OS</string>
     <string name="text_version_val">Version %1$s</string>
+    <string name="text_what_s_new_with_life_os">What’s new with Life OS?</string>
 
 
 </resources>
