@@ -7,6 +7,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.dataConverter.GraphDataConvertor
 import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
+import com.oreo.data.model.lifeos.dashModels.LifeOsWhatsNewResponse
 import com.oreo.ui.lifeos.charts.InsightCardUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -21,8 +22,8 @@ class LifeOsDashViewModel @Inject constructor(
     private val _questions = MutableLiveData<List<String>>()
     val questions: LiveData<List<String>> get() = _questions
 
-    private val _whatsNew = MutableLiveData<List<String>>()
-    val whatsNew: LiveData<List<String>> get() = _whatsNew
+    private val _whatsNew = MutableLiveData<LifeOsWhatsNewResponse>()
+    val whatsNew: LiveData<LifeOsWhatsNewResponse> get() = _whatsNew
 
     val destinationData = MutableLiveData<LifeOsDestinations?>()
 
@@ -286,10 +287,13 @@ class LifeOsDashViewModel @Inject constructor(
     }
 
     fun loadWhatsNew() {
-        _whatsNew.value = listOf(
-            "New Timeline: streamlined logging for Supplements and Recovery",
-            "AI coaching improvements: better context understanding and tips",
-            "Dashboard tweaks: faster loading and refreshed visuals"
+        _whatsNew.value = LifeOsWhatsNewResponse(
+            version = 1.2f,
+            whatsNewList = listOf(
+                "<b>New Timeline:</b> streamlined logging for Supplements and Recovery",
+                "<b>AI coaching improvements:</b> better context understanding and tips",
+                "<b>Dashboard tweaks:</b> faster loading and refreshed visuals"
+            )
         )
     }
 

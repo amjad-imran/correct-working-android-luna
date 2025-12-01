@@ -404,10 +404,10 @@ class LifeOsDashFragment :
             questionsAdapter.submit(list)
         }
 
-        viewModel.whatsNew.observe(viewLifecycleOwner) { list ->
+        viewModel.whatsNew.observe(viewLifecycleOwner) { data ->
             binding.lytDashWhatsNew.tvTitle.text = "What’s new with Life OS?"
-            binding.lytDashWhatsNew.tvVersion.text = "Version 1.2"
-            whatsNewAdapter.submit(list)
+            binding.lytDashWhatsNew.tvVersion.text = "Version ${data.version}"
+            data.whatsNewList?.let { whatsNewAdapter.submit(it) }
         }
 
         viewModel.insightsCardsData.observe(viewLifecycleOwner){ list ->

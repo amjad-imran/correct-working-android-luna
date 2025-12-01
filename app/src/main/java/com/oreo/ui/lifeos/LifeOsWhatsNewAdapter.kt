@@ -1,5 +1,6 @@
 package com.oreo.ui.lifeos
 
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +16,7 @@ class LifeOsWhatsNewAdapter : RecyclerView.Adapter<LifeOsWhatsNewAdapter.ViewHol
     inner class ViewHolder(val binding: ItemAiWhatsNewBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(text: String) {
-            binding.tvTitle.text = text
+            binding.tvTitle.text = Html.fromHtml(text)
 
             if (bindingAdapterPosition == items.size - 1) {
                 binding.lytDivider.root.invisible()
