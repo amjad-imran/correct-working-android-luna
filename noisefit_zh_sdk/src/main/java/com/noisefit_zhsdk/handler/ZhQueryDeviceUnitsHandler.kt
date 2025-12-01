@@ -1040,6 +1040,10 @@ constructor(
                     )
                 }
             }
+
+            override fun onRingWearingStatus(p0: Int) {
+
+            }
         })
 
         /**
