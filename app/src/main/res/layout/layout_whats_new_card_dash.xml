@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/bg_whats_new_card_dash"
     android:padding="12dp">
 
     <ImageView
@@ -51,6 +52,9 @@
         style="@style/S10"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:lineHeight="12sp"
+        android:fontFamily="@font/gilroy_medium"
+        android:textColor="#CD9F9F9F"
         android:layout_marginTop="8dp"
         android:text="@string/text_no_more_manual_entries_write_your_meal_however_you_like_our_ai_figures_out_calories_and_macros_automatically"
         app:layout_constraintEnd_toEndOf="@+id/textView219"

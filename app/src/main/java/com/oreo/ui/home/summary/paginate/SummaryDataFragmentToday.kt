@@ -53,6 +53,7 @@ import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
@@ -96,6 +97,7 @@ import com.oreo.ui.sleep.nap.BOTTOM_NAP_RESULT
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
+import com.oreo.util.uiUtils.GenerateCustomDrawables
 import com.oreo.widget.water.WaterWidgetUpdater
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -270,6 +272,25 @@ class SummaryDataFragmentToday :
             binding.contentMain.lytCustomHomeScreen.root.visible()
         } else {
             binding.contentMain.lytCustomHomeScreen.root.gone()
+        }
+
+        val whatsNewCardInteractDone = viewModel.localDataStore.isWhatsNewCardInteractionDone()
+        if(!whatsNewCardInteractDone && viewModel.registerDate > 6){
+            binding.contentMain.lytWhatsNewCard.lytTryMealLogging.background =
+                GenerateCustomDrawables.chatHistorySearchBar(
+                    borderWidth = 2f,
+                    backgroundColor = "#1F9FB1FF".toColorInt(),
+                    cornerRadius = 12f.dpToPixel(),
+                    borderStartColor = "#1EFFFFFF".toColorInt(),
+                    borderEndColor = "#00FFFFFF".toColorInt(),
+                )
+
+            val versionNo = "14.0.1"
+            binding.contentMain.lytWhatsNewCard.tvVersion.text =
+                getString(R.string.text_version_val, versionNo)
+            binding.contentMain.lytWhatsNewCard.root.visible()
+        } else {
+            binding.contentMain.lytWhatsNewCard.root.gone()
         }
 
         val measurements = viewModel.localDataStore.getMeasurementsData()
@@ -867,6 +888,26 @@ class SummaryDataFragmentToday :
         lytCustomHomeScreen.btnCancel.setOnClickListener {
             lytCustomHomeScreen.root.gone()
             viewModel.localDataStore.setDisplayEditHomeScreenCard(false)
+        }
+
+        val whatsNewCard = binding.contentMain.lytWhatsNewCard
+        whatsNewCard.apply {
+            ivClose.setOnClickListener {
+                whatsNewCard.root.gone()
+                viewModel.localDataStore.setIsWhatsNewCardInteractionDone(true)
+            }
+
+            lytTryMealLogging.setOnClickListener {
+                ivClose.performClick()
+                navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to CircadianAlignmentViewModel.meal_window_key,
+                        "srcKey" to "lunaDash",
+                    )
+                )
+            }
         }
 
         /*binding.contentMain.lytNotificationCard.ivNotificationSteps.setOnClickListener {

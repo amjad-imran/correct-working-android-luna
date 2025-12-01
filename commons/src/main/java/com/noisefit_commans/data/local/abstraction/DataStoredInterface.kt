@@ -617,6 +617,9 @@ interface DataStoredInterface {
     fun setLifeOsOnboardData(data: OnBoardQuesGetResponse)
 
     fun getLifeOsOnboardData(): OnBoardQuesGetResponse?
+
+    fun isWhatsNewCardInteractionDone(): Boolean
+    fun setIsWhatsNewCardInteractionDone(isDone: Boolean)
 }
 
 enum class AppTrackEvent {

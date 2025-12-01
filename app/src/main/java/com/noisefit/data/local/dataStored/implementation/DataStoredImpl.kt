@@ -289,6 +289,8 @@ private const val NUDGE_CYCLE_TRACKER_API_TIMESTAMP = "NUDGE_CYCLE_TRACKER_API_T
 private const val LIFEOS_ONBOARD_INITIATED = "LIFEOS_ONBOARD_INITIATED"
 private const val LIFEOS_ONBOARD_QUES_DATA = "LIFEOS_ONBOARD_QUES_DATA"
 
+private const val WHATS_NEW_DASH_CARD_INTERACTION_DONE = "WHATS_NEW_DASH_CARD_INTERACTION_DONE"
+
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -905,6 +907,8 @@ class DataStoredImpl
         mPrefs.edit()?.remove(NUDGE_CYCLE_TRACKER_API_TIMESTAMP)?.apply()
         mPrefs.edit()?.remove(LIFEOS_ONBOARD_INITIATED)?.apply()
         mPrefs.edit()?.remove(LIFEOS_ONBOARD_QUES_DATA)?.apply()
+
+        mPrefs.edit()?.remove(WHATS_NEW_DASH_CARD_INTERACTION_DONE)?.apply()
 
         mPrefs.edit()?.remove(GOOGLE_FIT_STATUS)?.apply()
         mPrefs.edit()?.remove(GOOGLE_FIT_CROSSED)?.apply()
@@ -2526,6 +2530,14 @@ class DataStoredImpl
     override fun getLifeOsOnboardData(): OnBoardQuesGetResponse? {
         return mPrefs.getString(LIFEOS_ONBOARD_QUES_DATA, null)
             ?.let { Gson().fromJson<OnBoardQuesGetResponse>(it) }
+    }
+
+    override fun isWhatsNewCardInteractionDone(): Boolean {
+        return mPrefs.getBoolean(WHATS_NEW_DASH_CARD_INTERACTION_DONE, false)
+    }
+
+    override fun setIsWhatsNewCardInteractionDone(isDone: Boolean) {
+        mPrefs.edit().putBoolean(WHATS_NEW_DASH_CARD_INTERACTION_DONE, isDone).commit()
     }
 
 }
