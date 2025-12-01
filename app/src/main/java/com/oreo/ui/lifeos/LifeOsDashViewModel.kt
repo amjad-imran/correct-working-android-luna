@@ -2,11 +2,9 @@ package com.oreo.ui.lifeos
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.dataConverter.GraphDataConvertor
 import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
 import com.oreo.ui.lifeos.charts.InsightCardUiModel
@@ -18,7 +16,7 @@ import javax.inject.Inject
 class LifeOsDashViewModel @Inject constructor(
     val localDataStore: DataStoredInterface,
     val graphDataConvertor: GraphDataConvertor,
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val _questions = MutableLiveData<List<String>>()
     val questions: LiveData<List<String>> get() = _questions

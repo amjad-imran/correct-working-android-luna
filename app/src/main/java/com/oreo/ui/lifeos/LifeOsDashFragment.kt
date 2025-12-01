@@ -45,6 +45,7 @@ import com.noisefit_commans.common.MarginLeftRightItemDecoration
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.PlanType
@@ -417,6 +418,26 @@ class LifeOsDashFragment :
                 insightAdapter.submitList(list)
                 binding.lytDashInsightsEmpty.root.gone()
                 binding.lytDashInsights.root.visible()
+            }
+        }
+
+        //
+        viewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
+        viewModel.getApiErrors().observe(viewLifecycleOwner) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
+
+        viewModel.getLoading().observe(this) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
             }
         }
     }
