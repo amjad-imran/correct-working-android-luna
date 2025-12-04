@@ -3,11 +3,18 @@ package com.oreo.ui.lifeos
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.noisefit.data.remote.base.Resource
+import com.noisefit_commans.data.BinaryActionCallback
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.dataConverter.GraphDataConvertor
 import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
 import com.oreo.data.model.lifeos.dashModels.LifeOsWhatsNewResponse
+import com.oreo.data.repository.abstraction.OreoDeviceRepository
+import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.lifeos.charts.InsightCardUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -17,6 +24,7 @@ import javax.inject.Inject
 class LifeOsDashViewModel @Inject constructor(
     val localDataStore: DataStoredInterface,
     val graphDataConvertor: GraphDataConvertor,
+    val oreoDeviceRepository: OreoDeviceRepository,
 ) : BaseViewModel() {
 
     private val _questions = MutableLiveData<List<String>>()
@@ -64,86 +72,237 @@ class LifeOsDashViewModel @Inject constructor(
         }
     }
 
-    fun loadSuggestedQuestions() {
+    /*fun loadSuggestedQuestions() {
         _questions.value = listOf(
             "Teach me about my sleep score",
             "Create a diet plan for me",
             "Create a workout plan for me"
         )
+    }*/
+
+    fun loadSuggestedQuestions(aiTopic: AITopics = AITopics.GENERAL) {
+        viewModelScope.launch {
+            oreoDeviceRepository.getAiTopQuestions(aiTopic).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        loadSuggestedQuestions(aiTopic)
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            val fata = it
+                            _questions.value = it.questions?.map { it.question as String }
+                            //showHistoryIcon.value = it.hasHistory
+                        }
+                    }
+                }
+            }
+        }
+
+
     }
 
     fun loadInsightsData() {
-        viewModelScope.launch {
-            /*val jsonRes = """
+
+        val jsonRes = """
             [
-                {
-                    "relevancy": 0.95,
-                    "title": "Total sleep duration increased 42% compared to the previous period",
-                    "description": "Your average total sleep went from 3h 44m to 5h 19m (a 42% increase). That’s a meaningful gain in time in bed — likely giving your body more opportunity for recovery and memory consolidation. While 5h 19m is an improvement, it's still under typical adult recommendations, so there may be room to keep building consistency.",
-                    "suggestions": "Try keeping a consistent bedtime and wake time for the next week; aim to gradually add 20–30 minutes to your sleep window until you reach your target. Limit late caffeine and wind down with low-light, low-screen activities 30–60 minutes before bed.",
-                    "related_suggested_questions": [
-                        "Did you change your bedtime or wake time the night(s) you slept longer?",
-                        "Were there differences in caffeine, alcohol, or evening activity on nights you slept more?",
-                        "How did your morning mood, focus, or energy compare after the longer sleep?"
-                    ],
-                    "graph_type": "total_duration"
-                },
-                {
-                    "relevancy": 0.85,
-                    "title": "Circadian midpoint shifted later by ~7h 16m",
-                    "description": "Your sleep midpoint moved from around 22:07 on earlier nights to 05:23 on Nov 25 — a shift of roughly 7h 16m. That large change suggests your sleep timing moved much later (or your most recent night was shifted across the typical night boundary), which can affect daytime alertness and make it harder to maintain regular rhythms.",
-                    "suggestions": "If you want to bring your rhythm earlier, get bright light exposure in the morning and dim lights in the evening. Keep wake time consistent and avoid late-night bright screens or heavy meals.",
-                    "related_suggested_questions": [
-                        "Did you go to bed much later or sleep in on Nov 25 compared to other days?",
-                        "Was there evening light exposure, caffeine, or social activity that might explain the later midpoint?",
-                        "Do you notice feeling more jet-lagged or groggy after nights with later midpoints?"
-                    ],
-                    "graph_type": "circadian_mid_point"
-                },
-                {
-                    "relevancy": 0.8,
-                    "title": "Daily stress levels dropped ~25% on Nov 25 versus earlier last week",
-                    "description": "Your stress score fell from an average of 64 in prior days to 48 on Nov 25 (about a 25% drop). That lines up with more calm minutes recorded that day and could reflect lower perceived pressure, better rest, or effective coping strategies — though day-to-day context matters.",
-                    "suggestions": "Keep the practices that coincided with this calmer day (short breaks, breathing exercises, an earlier wind-down). Consider tracking what changed (workload, exercise, social time) so you can repeat helpful habits.",
-                    "related_suggested_questions": [
-                        "Did you change your schedule, workload, or exercise on Nov 25?",
-                        "Was the longer sleep the night before associated with the lower stress that day?",
-                        "Which calming activities (breathing, walks, less screen time) were present on your lower-stress day?"
-                    ],
-                    "graph_type": "hrv"
-                }
-            ]
+  {
+    "relevancy": 0.95,
+    "title": "Total sleep increased 11% this month compared to last month",
+    "description": "Your average nightly sleep time rose from 5h 38m last month to 6h 16m this month — an 11% increase. That change mostly came from a handful of longer sleeps (several 8+ hour nights) and later wake times this month, which gave you more opportunity to complete additional sleep cycles. More total sleep usually helps daytime energy and cognitive performance, but inconsistent timing (late mid-sleep times on some days) can blunt circadian benefits.",
+    "suggestions": "Keep the longer total sleep by protecting wake time consistency — aim to wake within a 30-minute window most days while preserving the earlier bedtime that allowed extra sleep on longer nights.",
+    "related_suggested_questions": [
+      "Which days had the longest sleeps and what was different about your evening (workouts, alcohol, naps)?",
+      "Did later wake times fall on weekends or recovery days?",
+      "Did nights with extra sleep align with lower stress or lighter training days?"
+    ],
+    "graph_type": "total_duration_month",
+    "graph": [
+      {
+        "date": "2025-06-01",
+        "value1": null
+      },
+      {
+        "date": "2025-07-01",
+        "value1": null
+      },
+      {
+        "date": "2025-08-01",
+        "value1": 24720
+      },
+      {
+        "date": "2025-09-01",
+        "value1": 24727
+      },
+      {
+        "date": "2025-10-01",
+        "value1": 21200
+      },
+      {
+        "date": "2025-11-01",
+        "value1": 22583
+      }
+    ]
+  },
+  {
+    "relevancy": 0.87,
+    "title": "Deep sleep rose ~7% this month compared to last month",
+    "description": "Your average deep sleep increased from 1h 21m last month to 1h 27m this month — about a 7% gain. Small increases like this often reflect better recovery habits (extra sleep opportunity, fewer late nights) or well-timed easier training days. Improved deep sleep supports physical recovery and strength gains.",
+    "suggestions": "Keep one to two deliberate recovery evenings per week (low-intensity activity, earlier dinner, reduced alcohol) to help maintain deeper NREM sleep.",
+    "related_suggested_questions": [
+      "Were nights with more deep sleep preceded by lighter training or rest days?",
+      "Did alcohol or late caffeine appear more often on nights with reduced deep sleep?",
+      "Are your longest deep-sleep nights also the ones with earlier bedtimes or cooler sleep temps?"
+    ],
+    "graph_type": "deep_sleep_month",
+    "graph": [
+      {
+        "date": "2025-06-01",
+        "value1": null
+      },
+      {
+        "date": "2025-07-01",
+        "value1": null
+      },
+      {
+        "date": "2025-08-01",
+        "value1": 5880
+      },
+      {
+        "date": "2025-09-01",
+        "value1": 5640
+      },
+      {
+        "date": "2025-10-01",
+        "value1": 5158
+      },
+      {
+        "date": "2025-11-01",
+        "value1": 5223
+      }
+    ]
+  },
+  {
+    "relevancy": 0.8,
+    "title": "HRV stayed stable (about 51 ms) month‑over‑month",
+    "description": "Your nightly average HRV this month was ~51 ms — essentially unchanged from the previous month (≈51 ms). That stability suggests your autonomic recovery has been steady: training load, sleep quality, and daily stressors appear roughly balanced overall, even with ups and downs in nightly sleep duration.",
+    "suggestions": "Keep the habits that support steady HRV: consistent sleep timing, hydration, and a short nightly breathing or relaxation routine after heavier days.",
+    "related_suggested_questions": [
+      "Which weeks showed the highest HRV and what habits (sleep timing, reduced alcohol, lower stress) lined up then?",
+      "Do big swings in total sleep or a few high-stress days correlate with short HRV dips?",
+      "When HRV was higher, did you notice differences in perceived recovery or workout performance?"
+    ],
+    "graph_type": "hrv_month",
+    "graph": [
+      {
+        "date": "2025-06-01",
+        "value1": null
+      },
+      {
+        "date": "2025-07-01",
+        "value1": null
+      },
+      {
+        "date": "2025-08-01",
+        "value1": 43
+      },
+      {
+        "date": "2025-09-01",
+        "value1": 55
+      },
+      {
+        "date": "2025-10-01",
+        "value1": 48
+      },
+      {
+        "date": "2025-11-01",
+        "value1": 51
+      }
+    ]
+  }
+]
         """.trimIndent()
 
-            val type = object : TypeToken<List<InsightItemResponseModel>>() {}.type
-            val rawListData = Gson().fromJson<List<InsightItemResponseModel>>(jsonRes, type)
+        val type = object : TypeToken<List<InsightItemResponseModel>>() {}.type
+        val raw = Gson().fromJson<List<InsightItemResponseModel>>(jsonRes, type)
+        val dummy = generateData(raw)
+        _insightsCardsData.value = dummy
 
-            if(rawListData.isNullOrEmpty()){
-                _insightsCardsData.value = ArrayList()
-                return@launch
+        //--
+        /*viewModelScope.launch {
+            userRepository.getInsightLvl1List("day").collect{ resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        loadInsights()
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            val dummy = generateData(it)
+                            _cards.value = dummy
+                        }
+                    }
+                }
             }
+        }*/
+        //--
 
-            processInsightsData(rawListData)*/
-
-            val dummy = generateData(arrayListOf(InsightItemResponseModel(
-                graph_type = "hr",
-                title = "Sleep midpoint shifted later by ~50 minutes over recent nights",
+        /*val dummy = generateData(arrayListOf(InsightItemResponseModel(
+            graph_type = "hr",
+            title = "Sleep midpoint shifted later by ~50 minutes over recent nights",
+        ),
+            InsightItemResponseModel(
+                graph_type = "stress",
+                title = "Deep sleep has decreased ~18% over the recent days",
             ),
-                InsightItemResponseModel(
-                    graph_type = "stress",
-                    title = "Deep sleep has decreased ~18% over the recent days",
-                ),
-                InsightItemResponseModel(
-                    graph_type = "daytime"
-                ),
-                InsightItemResponseModel(
-                    graph_type = "sleep_stage"
-                ),
-                InsightItemResponseModel(graph_type = "sleep_movement"),
-                InsightItemResponseModel(graph_type = "rem_day"),
+            InsightItemResponseModel(
+                graph_type = "daytime"
+            ),
+            InsightItemResponseModel(
+                graph_type = "sleep_stage"
+            ),
+            InsightItemResponseModel(graph_type = "sleep_movement"),
+            InsightItemResponseModel(graph_type = "rem_day"),
             ))
-            _insightsCardsData.value = dummy
-        }
+        _cards.value = dummy*/
+
     }
 
     private fun processInsightsData(rawListData: List<InsightItemResponseModel>){
@@ -176,7 +335,7 @@ class LifeOsDashViewModel @Inject constructor(
                         list.add(graphDataConvertor.generateSleepMovementData(it))
                     }
                     else -> {
-                        val data = graphDataConvertor.handleTrendsData(it)
+                        val data = graphDataConvertor.generateTrendsGraphInsightsData(it)
                         data?.let {
                             list.add(data)
                         }

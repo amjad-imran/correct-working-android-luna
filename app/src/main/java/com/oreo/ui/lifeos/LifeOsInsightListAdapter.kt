@@ -8,13 +8,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLifeOsInsightCardBinding
-import com.noisefit_commans.data.model.CountCardData
-import com.noisefit_commans.data.model.OreoSleepData
-import com.noisefit_commans.models.SleepData
 import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepGraphViewOreo
 import com.oreo.data.dataConverter.GraphsKey
-import com.oreo.data.model.health.SleepMovementBreakup
 import com.oreo.ui.custom.HRCombinedChart
 import com.oreo.ui.custom.ODayTimeInteractiveGraph
 import com.oreo.ui.custom.StressCombinedChart
@@ -27,12 +23,10 @@ import com.oreo.ui.custom.sleep.internal.SleepHourVsNeedChartInternal
 import com.oreo.ui.custom.sleep.internal.SleepRestorativeChartInternal
 import com.oreo.ui.custom.sleep.internal.SleepSingleBarChart
 import com.oreo.ui.custom.sleep.internal.SleepTimingChartInternal
-import com.oreo.ui.lifeos.charts.DayTimeChartPayload
-import com.oreo.ui.lifeos.charts.HrChartPayload
+import com.oreo.ui.lifeos.charts.BarChartSingleInsight1
 import com.oreo.ui.lifeos.charts.InsightCardUiModel
 import com.oreo.ui.lifeos.charts.PayloadData
 import com.oreo.ui.lifeos.charts.TimeSeriesPayload
-import com.oreo.ui.lifeos.charts.TrendGraphData
 
 class LifeOsInsightListAdapter(
     private val isFromLifeOsDash: Boolean = false,
@@ -140,15 +134,18 @@ class LifeOsInsightListAdapter(
                 GraphsKey.TREND_SLEEP_SINGLE -> {
                     val data = payload?.trendData
 
-                    val v = (currentChartView as? SleepSingleBarChart) ?: SleepSingleBarChart(ctx,null)
+                    if(data?.xAxisRangeInsights.isNullOrEmpty()) return null
+
+                    val v = (currentChartView as? BarChartSingleInsight1) ?: BarChartSingleInsight1(ctx,null)
                     v.setDataSet(
-                        data?.list?:arrayListOf(),
-                        data?.yAxisRange?:arrayListOf(),
-                        data?.avgValue,
+                        data.list?:arrayListOf(),
+                        data.yAxisRange?:arrayListOf(),
+                        data.avgValue,
                         -1,
-                        data?.contributorType,
-                        data?.optimalRange,
-                        data?.nonNullDataCount?:0
+                        data.contributorType,
+                        data.optimalRange,
+                        data.nonNullDataCount?:0,
+                        data.xAxisRangeInsights
                     )
                     v
 
@@ -213,15 +210,6 @@ class LifeOsInsightListAdapter(
                     v
 
                 }
-
-
-                /*
-                TODO: DAY:
-                TODO: [cir. mid-point] SleepTimingChartInternal -> SleepTimingGraphFragment --= need to verify
-                TODO: [hr vs need] SleepHourVsNeedChartInternal -> SleepMultiLineChartFragment --= need to verify
-                TODO: [rest. sleep] SleepRestorativeChartInternal -> SleepMultiBarChartFragment --= need to verify
-                TODO: [sleep time] SleepTimingChartInternal -> SleepTimingGraphFragment --= need to verify
-                */
 
                 /*"respiratory_daily" -> dailyGradient(payload)
                 "respiratory_day" -> dayBar(payload)

@@ -55,6 +55,7 @@ data class TrendGraphData(
     val selectedPeriod: InternalSelectedPeriod?=null,
     val maxDeviation: Int?=null,
     val maxValue: Int?=null,
+    val xAxisRangeInsights: List<String>?=null,
 ) : Parcelable
 
 /**

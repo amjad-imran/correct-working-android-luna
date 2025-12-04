@@ -1,6 +1,7 @@
 package com.oreo.data.dataConverter
 
 import com.google.gson.Gson
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
@@ -45,7 +46,8 @@ import kotlin.math.roundToInt
 
 class GraphDataConvertor @Inject constructor(
     val hrDataConvertor: OreoHRDataConvertor,
-    val sessionManager: SessionManager
+    val sessionManager: SessionManager,
+    val resourcesProvider: ResourcesProvider
 ) {
 
 
@@ -303,13 +305,13 @@ class GraphDataConvertor @Inject constructor(
         }
     }
 
-    private fun generateSleepMultiBarChartData(data: InsightItemResponseModel,
+    private fun generateSleepMultiBarChartData(rawData: InsightItemResponseModel,
                                                period: InternalSelectedPeriod,
                                                contributor: SleepInternalLaunchState): InsightCardUiModel? {
 
-        val mainObjString =
+        /*val mainObjString =
             "{\"trends_breakup\":[ { \"date\": \"2025-12-01\" }, { \"date\": \"2025-12-02\", \"value1\": 4230, \"value2\": 4380 }, { \"date\": \"2025-12-03\" } ]}"
-        val mainObj = Gson().fromJson<InsightGraph>(mainObjString, InsightGraph::class.java)
+        val mainObj = Gson().fromJson<InsightGraph>(mainObjString, InsightGraph::class.java)*/
 
 
         fun convertData(data: List<TrendsValues>?): List<GraphDataModel> {
@@ -333,7 +335,7 @@ class GraphDataConvertor @Inject constructor(
             } ?: ArrayList()
         }
 
-        val dataList = convertData(mainObj.trends_breakup)
+        val dataList = convertData(rawData.graph)
 
         val maxValue = getMaxValue(
             dataListType1 = dataList,
@@ -354,7 +356,7 @@ class GraphDataConvertor @Inject constructor(
                     maxValue = yAxisRange.last().first
                 )
             ),
-            raw = data
+            raw = rawData
         )
     }
 
@@ -364,9 +366,9 @@ class GraphDataConvertor @Inject constructor(
         contributor: SleepInternalLaunchState
     ): InsightCardUiModel {
 
-        val mainObjString =
+        /*val mainObjString =
             "{\"trends_breakup\":[ { \"date\": \"2025-11-03\" }, { \"date\": \"2025-11-04\" }, { \"date\": \"2025-11-05\" }, { \"date\": \"2025-11-06\" }, { \"date\": \"2025-11-07\", \"value1\": 18000 }, { \"date\": \"2025-11-08\" }, { \"date\": \"2025-11-09\" } ]}"
-        val mainObj = Gson().fromJson<InsightGraph>(mainObjString, InsightGraph::class.java)
+        val mainObj = Gson().fromJson<InsightGraph>(mainObjString, InsightGraph::class.java)*/
 
 
         fun convertData(data: List<TrendsValues>?): List<GraphDataModel> {
@@ -404,7 +406,7 @@ class GraphDataConvertor @Inject constructor(
         }
 
 
-        val dataList = convertData(mainObj.trends_breakup)
+        val dataList = convertData(rawData.graph)
         val nonNullDataCount =
             getNonNullDataCount(contributor, dataList)
 
@@ -417,7 +419,7 @@ class GraphDataConvertor @Inject constructor(
             contributor,
             minValue = minMax.first
         )
-        val xAxisRange = getXAxisRange(mainObj.trends_breakup,period)
+        val xAxisRange = getXAxisRangeInsights(rawData.graph,period)
 
         val avgValue = getAvgValuePair(
             0f,
@@ -435,7 +437,7 @@ class GraphDataConvertor @Inject constructor(
                 trendData = TrendGraphData(
                     dataList,
                     yAxisRange,
-                    xAxisRange,
+                    null,
                     avgValue,
                     -1,
                     contributor,
@@ -443,6 +445,7 @@ class GraphDataConvertor @Inject constructor(
                     nonNullDataCount,
                     selectedPeriod = period,
                     showOverlay = showOverlay,
+                    xAxisRangeInsights = xAxisRange
                 )
             ),
             raw = rawData
@@ -455,9 +458,9 @@ class GraphDataConvertor @Inject constructor(
         period: InternalSelectedPeriod,
         contributor: SleepInternalLaunchState
     ): InsightCardUiModel {
-        val mainObjString =
+        /*val mainObjString =
             "{\"trends_breakup\":[ { \"date\": \"2025-11-03\" }, { \"date\": \"2025-11-04\" }, { \"date\": \"2025-11-05\" }, { \"date\": \"2025-11-06\" }, { \"date\": \"2025-11-07\", \"value1\": 18000 }, { \"date\": \"2025-11-08\" }, { \"date\": \"2025-11-09\" } ]}"
-        val mainObj = Gson().fromJson<InsightGraph>(mainObjString, InsightGraph::class.java)
+        val mainObj = Gson().fromJson<InsightGraph>(mainObjString, InsightGraph::class.java)*/
 
 
         fun convertData(data: List<TrendsValues>?): List<GraphDataModel> {
@@ -490,7 +493,7 @@ class GraphDataConvertor @Inject constructor(
             } ?: ArrayList()
         }
 
-        val dataList = convertData(mainObj?.trends_breakup)
+        val dataList = convertData(rawData.graph)
         val nonNullDataCount =
             getNonNullDataCount(contributor, dataList)
 
@@ -500,7 +503,7 @@ class GraphDataConvertor @Inject constructor(
         )
         val yAxisRange =
             getYAxisRange(minMax.second, contributor, minMax.first)
-        val xAxisRange = getXAxisRange(mainObj?.trends_breakup, period)
+        val xAxisRange = getXAxisRange(rawData.graph, period)
         val avgValue = getAvgValuePair(
             0f,
             contributorType = contributor
@@ -543,9 +546,9 @@ class GraphDataConvertor @Inject constructor(
 
 
     fun generateSleepSingleBarChartData(rawData: InsightItemResponseModel): InsightCardUiModel {
-        val mainObjString =
+        /*val mainObjString =
             "{\"trends_breakup\":[ { \"date\": \"2025-09-08\" }, { \"date\": \"2025-09-09\" }, { \"date\": \"2025-09-10\", \"value1\": 4830 }, { \"date\": \"2025-09-11\" }, { \"date\": \"2025-09-12\" }, { \"date\": \"2025-09-13\" }, { \"date\": \"2025-09-14\" } ]}"
-        val mainObj = Gson().fromJson<InsightGraph>(mainObjString, InsightGraph::class.java)
+        val mainObj = Gson().fromJson<InsightGraph>(mainObjString, InsightGraph::class.java)*/
 
         fun convertData(
             data: List<TrendsValues>?,
@@ -572,7 +575,7 @@ class GraphDataConvertor @Inject constructor(
         }
 
         val contributor = SleepInternalLaunchState.REM_SLEEP
-        val dataList = convertData(mainObj.trends_breakup, contributor)
+        val dataList = convertData(rawData.graph, contributor)
 
 
         val nonNullDataCount =
@@ -616,10 +619,10 @@ class GraphDataConvertor @Inject constructor(
         period: InternalSelectedPeriod,
         contributorType: SleepInternalLaunchState?,
     ): InsightCardUiModel {
-        val mainObjString =
+        /*val mainObjString =
             "{\"trends_breakup\":[ { \"date\": \"2025-12-01\" }, { \"date\": \"2025-12-02\", \"value1\": 17310, \"value2\": 33000 }, { \"date\": \"2025-12-03\" } ]}"
 
-        val mainObj = Gson().fromJson<InsightGraph>(mainObjString, InsightGraph::class.java)
+        val mainObj = Gson().fromJson<InsightGraph>(mainObjString, InsightGraph::class.java)*/
 
         fun convertData(data: List<TrendsValues>?): List<GraphDataModel> {
             return data?.map {
@@ -639,7 +642,7 @@ class GraphDataConvertor @Inject constructor(
             } ?: ArrayList()
         }
 
-        val dataList = convertData(mainObj?.trends_breakup)
+        val dataList = convertData(rawData.graph)
 
         val maxValue = getMaxValue(
             dataListType1 = dataList, contributorType = contributorType
@@ -668,10 +671,10 @@ class GraphDataConvertor @Inject constructor(
         period: InternalSelectedPeriod,
         contributorType: SleepInternalLaunchState?,
     ): InsightCardUiModel {
-        val mainObjString =
+        /*val mainObjString =
             "{\"trends_breakup\":[ { \"date\": \"2025-12-01\" }, { \"date\": \"2025-12-02\", \"master_mid_time\": \"05:27:00\" }, { \"date\": \"2025-12-03\" } ]}"
 
-        val mainObj = Gson().fromJson<InsightGraph>(mainObjString, InsightGraph::class.java)
+        val mainObj = Gson().fromJson<InsightGraph>(mainObjString, InsightGraph::class.java)*/
 
         fun convertData(data: List<TrendsValues>?): Pair<List<GraphDataModel>, Float> {
             val midTimeFormat = DateTimeFormatter.ofPattern("HH:mm:ss")
@@ -719,8 +722,8 @@ class GraphDataConvertor @Inject constructor(
         }
 
         //
-        val dataList = convertData(mainObj?.trends_breakup)
-        val xAxisRange = getXAxisRange(mainObj?.trends_breakup, period)
+        val dataList = convertData(rawData.graph)
+        val xAxisRange = getXAxisRange(rawData.graph, period)
         val yAxisRange = getYAxisRange(maxValue = dataList.second,contributorType = contributorType)
 
         val optimalRange = getOptimalRangeMinMax(contributorType)
@@ -741,6 +744,140 @@ class GraphDataConvertor @Inject constructor(
             ),
             raw = rawData
         )
+    }
+
+    fun generateTrendsGraphInsightsData(data: InsightItemResponseModel): InsightCardUiModel? {
+        if(data.graph_type==null) return null
+
+        val period = when {
+            data.graph_type.endsWith("week") -> InternalSelectedPeriod.WEEK
+            data.graph_type.endsWith("month") -> InternalSelectedPeriod.MONTH
+            else -> InternalSelectedPeriod.DAY
+        }
+
+        val contributor = when {
+            data.graph_type.contains("rem_sleep") -> SleepInternalLaunchState.REM_SLEEP
+            data.graph_type.contains("deep_sleep") -> SleepInternalLaunchState.DEEP_SLEEP
+            data.graph_type.contains("sleep_efficiency") -> SleepInternalLaunchState.EFFICIENCY
+            data.graph_type.contains("total_duration") -> SleepInternalLaunchState.SLEEP_DURATION
+            data.graph_type.contains("latency") -> SleepInternalLaunchState.LATENCY
+            data.graph_type.contains("restfullness") -> SleepInternalLaunchState.RESTFULNESS
+            data.graph_type.contains("hrv") -> SleepInternalLaunchState.HRV
+            data.graph_type.contains("rhr") -> SleepInternalLaunchState.RESTING_HEART_RATE
+            data.graph_type.contains("avg_skin_temp") -> SleepInternalLaunchState.SKIN_TEMPERATURE
+            data.graph_type.contains("avg_oxy") -> SleepInternalLaunchState.BLOOD_OXYGEN
+            data.graph_type.contains("avg_respiration") -> SleepInternalLaunchState.RESPIRATORY_RATE
+            data.graph_type.contains("circadian_mid_point") -> SleepInternalLaunchState.TIMING
+
+            else -> SleepInternalLaunchState.DEEP_SLEEP
+        }
+
+        //
+        fun convertData(
+            data: List<TrendsValues>?,
+            contributor: SleepInternalLaunchState
+        ): List<GraphDataModel> {
+            return data?.map {
+                GraphDataModel(
+                    date = LocalDate.parse(it.date),
+                    value1 = if (contributor == SleepInternalLaunchState.REM_SLEEP ||
+                        contributor == SleepInternalLaunchState.DEEP_SLEEP ||
+                        contributor == SleepInternalLaunchState.SLEEP_DURATION
+                    ) {
+                        if (it.value1 == null) {
+                            null
+                        } else {
+                            (it.value1 ?: 0.0f) / 60
+                        }
+                    } else if (contributor == SleepInternalLaunchState.RESTING_HEART_RATE) {
+                        if (it.value1 == 255f) null else it.value1
+                    } else {
+                        it.value1
+                    }
+                )
+            } ?: ArrayList()
+        }
+
+        val dataList = convertData(data.graph, contributor)
+
+        val nonNullDataCount =
+            getNonNullDataCount(contributor, dataList)
+
+        val minMax = getMinMaxValue(
+            dataListType1 = dataList,
+            contributorType = contributor
+        )
+
+        val xAxisRange = getXAxisRangeInsights(data.graph, period)
+        val yAxisRange = getYAxisRange(minMax.second, contributor)
+        val optimalRange = getOptimalRangeMinMax(contributor)
+
+        return InsightCardUiModel(
+            id = 6L,
+            title = "Rem Day demo",
+            timeText = "last night",
+            chartKey = GraphsKey.TREND_SLEEP_SINGLE,
+            payload = PayloadData(
+                trendData = TrendGraphData(
+                    dataList,
+                    yAxisRange,
+                    null,
+                    null,
+                    -1,
+                    contributor,
+                    optimalRange,
+                    nonNullDataCount,
+                    xAxisRangeInsights = xAxisRange
+                )
+            ),
+            raw = data
+        )
+        //
+    }
+
+    fun getXAxisRangeInsights(data: List<TrendsValues>?, period: InternalSelectedPeriod): List<String>{
+        when(period){
+            InternalSelectedPeriod.MONTH -> {
+                try {
+                    val monthList = ArrayList<String>()
+                    data?.forEach {
+                        val date = LocalDate.parse(it.date)
+                        val month3 = date.format(DateTimeFormatter.ofPattern("MMM", Locale.ENGLISH))
+                        monthList.add(
+                            month3
+                        )
+                    }
+                    return monthList
+                }catch (e: Exception){
+                    e
+                }
+            }
+
+            InternalSelectedPeriod.DAY -> {
+                return arrayListOf(
+                    resourcesProvider.getString(R.string.text_mon),
+                    resourcesProvider.getString(R.string.text_tue),
+                    resourcesProvider.getString(R.string.text_wed),
+                    resourcesProvider.getString(R.string.text_thu),
+                    resourcesProvider.getString(R.string.text_fri),
+                    resourcesProvider.getString(R.string.text_sat),
+                    resourcesProvider.getString(R.string.text_sun)
+                )
+            }
+            InternalSelectedPeriod.WEEK -> {
+                val weekNoList = ArrayList<String>()
+                data?.forEach {
+                    val date = LocalDate.parse(it.date)
+                    weekNoList.add(
+                        "W${date.get(WeekFields.ISO.weekOfWeekBasedYear())}"
+                    )
+                }
+            }
+
+            else -> {}
+        }
+
+        return emptyList()
     }
 
     fun getXAxisRange(

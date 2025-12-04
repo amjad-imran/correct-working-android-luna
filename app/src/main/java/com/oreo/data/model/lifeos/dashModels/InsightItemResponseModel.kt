@@ -9,7 +9,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class InsightItemResponseModel(
     val description: String? = null,
-    val graph: InsightGraph? = null,
+    val graph: List<TrendsValues>? = null,
     val graph_type: String? = null,
     val related_suggested_questions: List<String>? = null,
     val suggestions: String? = null,

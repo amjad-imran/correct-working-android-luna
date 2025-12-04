@@ -11,6 +11,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.grapesnberries.curllogger.CurlLoggerInterceptor
 import com.here.oksse.OkSse
@@ -156,7 +157,7 @@ class ChatGptViewModel
                     }
 
                     is Resource.Loading -> {
-                        setLoading(resource.loading)
+                        //setLoading(resource.loading)
                     }
 
                     is Resource.NetworkError -> {
@@ -390,7 +391,14 @@ class ChatGptViewModel
             val urlWithParams = when (planType) {
                 PlanType.WORKOUT -> "$baseUrl?message=$prompt"
                 PlanType.DIET -> "$baseUrl?message=$prompt"
-                PlanType.NONE, null -> "$baseUrl?message=$prompt&thread_id=$threadId"
+                PlanType.NONE, null ->
+                    if(headerInsight1?.insightData==null)
+                        "$baseUrl?message=$prompt&thread_id=$threadId"
+                    else{
+                        val insightsDataString = Gson().toJson(headerInsight1!!.insightData)
+                        headerInsight1?.insightData = null
+                        "$baseUrl?message=$prompt&thread_id=$threadId&insight_data=$insightsDataString"
+                    }
             }
 
             val ctx = resourceProvider.context

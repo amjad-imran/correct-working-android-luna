@@ -9,6 +9,8 @@ import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import androidx.lifecycle.ViewModel
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.oreo.data.dataConverter.GraphDataConvertor
 import com.oreo.data.dataConverter.OreoHRDataConvertor
 import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
@@ -24,7 +26,6 @@ class LifeOsInsightsViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : BaseViewModel() {
 
-    private val _insights = MutableLiveData<List<InsightItemResponseModel>>()
     private val _cards = MutableLiveData<List<InsightCardUiModel>>()
     val cards: LiveData<List<InsightCardUiModel>> get() = _cards
 
@@ -34,55 +35,132 @@ class LifeOsInsightsViewModel @Inject constructor(
 
     fun loadInsights() {
 
-        /*val jsonRes = """
+        val jsonRes = """
             [
-              {
-                "relevancy": 0.95,
-                "title": "HRV dropped ~37% last night",
-                "description": "Your average sleep HRV fell from ~56 ms (prior week average) to 35 ms on 2025-11-17 — a ~37% drop. That large decline suggests reduced physiological recovery overnight (could reflect higher daytime stress, recent training load, illness, or alcohol/caffeine late in the day). Your readiness score also fell to 54 the same day, which supports the idea your body felt less recovered despite an OK sleep duration.",
-                "suggestions":"Prioritize an easy/recovery day today — avoid high-intensity training until HRV recovers.",
-                "related_suggested_questions": [
-                  "Did you feel more stressed or have unusual symptoms on 2025-11-16/17?",
-                  "Was there alcohol, extra caffeine, or a late heavy meal the night before the HRV drop?",
-                  "How does this HRV drop compare to other low-readiness days in the past month?"
-                ],
-                "graph_type": "hrv",
-              
-              },
-              {
-                "relevancy": 0.88,
-                "title": "Deep sleep has decreased ~18% over the recent days",
-                "description": "Your deep sleep percentage averaged ~23.7% across earlier nights (Nov 9–13/14) but has fallen to ~19% in the most recent 3 nights (Nov 14–16) — about an 18% relative decrease. Less deep sleep can reduce physical recovery and explain lower HRV/readiness even when total sleep time looks adequate.",
-                "suggestions": "Keep a consistent wind‑down routine and aim for the same bedtime each night to support deeper sleep stages.",
-                "related_suggested_questions": [
-                  "Did late evening activity, caffeine, or alcohol increase on nights with lower deep sleep?",
-                  "Are nights with lower deep sleep followed by higher resting HR or lower HRV the next day?",
-                  "Does total sleep time or sleep fragmentation (awake minutes) differ on your deepest nights?"
-                ],
-                "graph_type": "deep_sleep",
-                
-              },
-              {
-                "relevancy": 0.82,
-                "title": "Sleep midpoint shifted later by ~50 minutes over recent nights",
-                "description": "Comparing recent 3-night windows, your average sleep midpoint moved later by roughly 50 minutes (recent nights average ~4:20 AM vs earlier window ~3:30 AM). That variability in sleep timing can fragment sleep architecture and affect recovery and daytime alertness.",
-                "suggestions": "Try to keep your bedtime and wake time within a 30‑minute window across the week (including weekends).",
-                "related_suggested_questions": [
-                  "Which nights had the latest bedtimes or wake times that drove this shift?",
-                  "Did nights with later midpoints have less deep sleep or lower HRV the next day?",
-                  "Are evening screen use, late caffeine, or social schedules correlating with these later midpoints?"
-                ],
-                "graph_type": "circadian_mid_point",
-              }
-            ]
+  {
+    "relevancy": 0.95,
+    "title": "Total sleep increased 11% this month compared to last month",
+    "description": "Your average nightly sleep time rose from 5h 38m last month to 6h 16m this month — an 11% increase. That change mostly came from a handful of longer sleeps (several 8+ hour nights) and later wake times this month, which gave you more opportunity to complete additional sleep cycles. More total sleep usually helps daytime energy and cognitive performance, but inconsistent timing (late mid-sleep times on some days) can blunt circadian benefits.",
+    "suggestions": "Keep the longer total sleep by protecting wake time consistency — aim to wake within a 30-minute window most days while preserving the earlier bedtime that allowed extra sleep on longer nights.",
+    "related_suggested_questions": [
+      "Which days had the longest sleeps and what was different about your evening (workouts, alcohol, naps)?",
+      "Did later wake times fall on weekends or recovery days?",
+      "Did nights with extra sleep align with lower stress or lighter training days?"
+    ],
+    "graph_type": "total_duration_month",
+    "graph": [
+      {
+        "date": "2025-06-01",
+        "value1": null
+      },
+      {
+        "date": "2025-07-01",
+        "value1": null
+      },
+      {
+        "date": "2025-08-01",
+        "value1": 24720
+      },
+      {
+        "date": "2025-09-01",
+        "value1": 24727
+      },
+      {
+        "date": "2025-10-01",
+        "value1": 21200
+      },
+      {
+        "date": "2025-11-01",
+        "value1": 22583
+      }
+    ]
+  },
+  {
+    "relevancy": 0.87,
+    "title": "Deep sleep rose ~7% this month compared to last month",
+    "description": "Your average deep sleep increased from 1h 21m last month to 1h 27m this month — about a 7% gain. Small increases like this often reflect better recovery habits (extra sleep opportunity, fewer late nights) or well-timed easier training days. Improved deep sleep supports physical recovery and strength gains.",
+    "suggestions": "Keep one to two deliberate recovery evenings per week (low-intensity activity, earlier dinner, reduced alcohol) to help maintain deeper NREM sleep.",
+    "related_suggested_questions": [
+      "Were nights with more deep sleep preceded by lighter training or rest days?",
+      "Did alcohol or late caffeine appear more often on nights with reduced deep sleep?",
+      "Are your longest deep-sleep nights also the ones with earlier bedtimes or cooler sleep temps?"
+    ],
+    "graph_type": "deep_sleep_month",
+    "graph": [
+      {
+        "date": "2025-06-01",
+        "value1": null
+      },
+      {
+        "date": "2025-07-01",
+        "value1": null
+      },
+      {
+        "date": "2025-08-01",
+        "value1": 5880
+      },
+      {
+        "date": "2025-09-01",
+        "value1": 5640
+      },
+      {
+        "date": "2025-10-01",
+        "value1": 5158
+      },
+      {
+        "date": "2025-11-01",
+        "value1": 5223
+      }
+    ]
+  },
+  {
+    "relevancy": 0.8,
+    "title": "HRV stayed stable (about 51 ms) month‑over‑month",
+    "description": "Your nightly average HRV this month was ~51 ms — essentially unchanged from the previous month (≈51 ms). That stability suggests your autonomic recovery has been steady: training load, sleep quality, and daily stressors appear roughly balanced overall, even with ups and downs in nightly sleep duration.",
+    "suggestions": "Keep the habits that support steady HRV: consistent sleep timing, hydration, and a short nightly breathing or relaxation routine after heavier days.",
+    "related_suggested_questions": [
+      "Which weeks showed the highest HRV and what habits (sleep timing, reduced alcohol, lower stress) lined up then?",
+      "Do big swings in total sleep or a few high-stress days correlate with short HRV dips?",
+      "When HRV was higher, did you notice differences in perceived recovery or workout performance?"
+    ],
+    "graph_type": "hrv_month",
+    "graph": [
+      {
+        "date": "2025-06-01",
+        "value1": null
+      },
+      {
+        "date": "2025-07-01",
+        "value1": null
+      },
+      {
+        "date": "2025-08-01",
+        "value1": 43
+      },
+      {
+        "date": "2025-09-01",
+        "value1": 55
+      },
+      {
+        "date": "2025-10-01",
+        "value1": 48
+      },
+      {
+        "date": "2025-11-01",
+        "value1": 51
+      }
+    ]
+  }
+]
         """.trimIndent()
 
         val type = object : TypeToken<List<InsightItemResponseModel>>() {}.type
         val raw = Gson().fromJson<List<InsightItemResponseModel>>(jsonRes, type)
-        //_insights.value = raw*/
+        val dummy = generateData(raw)
+        _cards.value = dummy
 
         //--
-        viewModelScope.launch {
+        /*viewModelScope.launch {
             userRepository.getInsightLvl1List("day").collect{ resource ->
                 when (resource) {
                     is Resource.GenericError -> {
@@ -114,7 +192,7 @@ class LifeOsInsightsViewModel @Inject constructor(
                     }
                 }
             }
-        }
+        }*/
         //--
 
         /*val dummy = generateData(arrayListOf(InsightItemResponseModel(
@@ -164,7 +242,7 @@ class LifeOsInsightsViewModel @Inject constructor(
                         list.add(graphDataConvertor.generateSleepMovementData(it))
                     }
                     else -> {
-                        val data = graphDataConvertor.handleTrendsData(it)
+                        val data = graphDataConvertor.generateTrendsGraphInsightsData(it)
                         data?.let {
                             list.add(data)
                         }

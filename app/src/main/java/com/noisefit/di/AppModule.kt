@@ -499,8 +499,9 @@ object AppModule {
     fun provideGraphDataGenerator(
         hrDataConverter: OreoHRDataConvertor,
         sessionManager: SessionManager,
+        resourcesProvider: ResourcesProvider,
     ): GraphDataConvertor {
-        return GraphDataConvertor(hrDataConverter,sessionManager)
+        return GraphDataConvertor(hrDataConverter,sessionManager, resourcesProvider)
     }
 
     @Singleton

@@ -7,7 +7,6 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.gson.Gson
 import com.noisefit.data.model.AiHeaderInsight1
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLifeOsInsightDetailsBinding
@@ -15,16 +14,18 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepGraphViewOreo
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.visible
 import com.oreo.data.dataConverter.GraphsKey
-import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.custom.HRCombinedChart
 import com.oreo.ui.custom.ODayTimeInteractiveGraph
 import com.oreo.ui.custom.StressCombinedChart
-import com.oreo.ui.custom.sleep.internal.SleepSingleBarChart
+import com.oreo.ui.custom.sleep.internal.SleepHourVsNeedChartInternal
+import com.oreo.ui.custom.sleep.internal.SleepRestorativeChartInternal
 import com.oreo.ui.custom.sleep.internal.SleepSingleGradientChartType
 import com.oreo.ui.custom.sleep.internal.SleepSingleGradientLineChartInternal
-import com.oreo.ui.lifeos.charts.InsightCardUiModel
+import com.oreo.ui.custom.sleep.internal.SleepTimingChartInternal
+import com.oreo.ui.lifeos.charts.BarChartSingleInsight1
 import com.oreo.ui.lifeos.charts.PayloadData
 import com.oreo.ui.lifeos.insightsLvl1.HELP_US_IMPROVE_BS_INSIGHTS
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,7 +43,7 @@ class LifeOsInsightDetailsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val jsonRes = """
+        /*val jsonRes = """
             {
     "relevancy": 0.95,
     "title": "HRV dropped ~37% last night",
@@ -65,24 +66,29 @@ class LifeOsInsightDetailsFragment :
             chartKey = null,
             payload = null,
             styleRes = null
-        )
-//        viewModel.insightData = args.insightData
+        )*/
+
+        viewModel.insightData = args.insightData
         setUi()
         setRecycler()
         setGraph()
     }
 
     private fun setGraph() {
-        val item = viewModel.insightData
-        val view = provideChartView(item?.chartKey, item?.payload, item?.styleRes)
-        binding.chartContainer.removeAllViews()
-        if (view != null) {
+        val data = viewModel.insightData
+        if(data==null) return
+
+        if(data.raw?.graph_type.isNullOrEmpty() || data.raw.graph == null){
             binding.chartContainer.gone()
-            binding.chartContainer.addView(view)
-            currentChartView = view
-        } else {
-            currentChartView = null
-            binding.chartContainer.gone()
+        }else{
+            val view = provideChartView(data.chartKey, data.payload, data.styleRes)
+            if (view != null) {
+                binding.chartContainer.visible()
+                binding.chartContainer.removeAllViews()
+                binding.chartContainer.addView(view)
+            } else {
+                binding.chartContainer.gone()
+            }
         }
     }
 
@@ -107,7 +113,8 @@ class LifeOsInsightDetailsFragment :
             headerInsight1 = AiHeaderInsight1(
                 headerText = getString(R.string.text_follow_up_to),
                 mainText = viewModel.insightData?.raw?.title ?: "",
-                footerText = data
+                footerText = data,
+                insightData = viewModel.insightData?.raw
             ),
             aiTopic = AITopics.GENERAL
         )
@@ -240,7 +247,7 @@ class LifeOsInsightDetailsFragment :
             GraphsKey.TREND_SLEEP_SINGLE -> {
                 val data = payload?.trendData
 
-                val v = (currentChartView as? SleepSingleBarChart) ?: SleepSingleBarChart(ctx,null)
+                val v = (currentChartView as? BarChartSingleInsight1) ?: BarChartSingleInsight1(ctx,null)
                 v.setDataSet(
                     data?.list?:arrayListOf(),
                     data?.yAxisRange?:arrayListOf(),
@@ -248,7 +255,8 @@ class LifeOsInsightDetailsFragment :
                     -1,
                     data?.contributorType,
                     data?.optimalRange,
-                    data?.nonNullDataCount?:0
+                    data?.nonNullDataCount?:0,
+                    data?.xAxisRangeInsights!!
                 )
                 v
 
@@ -266,6 +274,49 @@ class LifeOsInsightDetailsFragment :
                     data?.chartType?:SleepSingleGradientChartType.DEFAULT,
                     data?.optimalRange,
                     data?.nonNullDataCount?:0
+                )
+                v
+
+            }
+            GraphsKey.TREND_SLEEP_MULTI_BAR -> {
+                val data = payload?.trendData
+
+                val v = (currentChartView as? SleepRestorativeChartInternal) ?: SleepRestorativeChartInternal(ctx,null)
+                v.setDataSet(
+                    list = data?.list!!,
+                    yAxisRange = data.yAxisRange!!,
+                    maxValue = data.maxValue!!,
+                    selectedPosition = -1
+                )
+                v
+
+            }
+
+
+            GraphsKey.TREND_SLEEP_TIMING_INTERNAL -> {
+                val data = payload?.trendData
+
+                val v = (currentChartView as? SleepTimingChartInternal) ?: SleepTimingChartInternal(ctx,null)
+                v.setDataSet(
+                    data?.list ?: ArrayList(),
+                    data?.xAxisRange!!,
+                    data.yAxisRange!!,
+                    data.maxDeviation!!,
+                    data.optimalRange
+                )
+                v
+
+            }
+
+            GraphsKey.TREND_SLEEP_HOUR_VS_NEED_CHARD_INTERNAL -> {
+                val data = payload?.trendData
+
+                val v = (currentChartView as? SleepHourVsNeedChartInternal) ?: SleepHourVsNeedChartInternal(ctx,null)
+                v.setDataSet(
+                    data?.list ?: ArrayList(),
+                    data?.yAxisRange!!,
+                    data.maxValue!!,
+                    data.selectedPosition!!
                 )
                 v
 
