@@ -31,8 +31,12 @@ import com.oreo.ui.lifeos.charts.TrendGraphData
 import com.oreo.ui.sleep2.internal.InternalSelectedPeriod
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import java.time.DayOfWeek
+import java.time.Duration
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 import java.time.temporal.WeekFields
 import java.util.Locale
 import kotlin.collections.forEach
@@ -94,7 +98,7 @@ class GraphDataConvertor @Inject constructor(
             chartKey = GraphsKey.STRESS,
             payload = PayloadData(stressData = StressChartPayload(stressModel)),
             styleRes = R.style.StressChartStyle,
-            raw = null
+            raw = rawData
         )
     }
 
@@ -112,7 +116,7 @@ class GraphDataConvertor @Inject constructor(
             chartKey = GraphsKey.DAY_TIME_MOVEMENT,
             payload = PayloadData(dayTimeData = DayTimeChartPayload(dtModel)),
             styleRes = R.style.DayTimeGraphStyle,
-            raw = null
+            raw = rawData
         )
     }
 
@@ -127,7 +131,7 @@ class GraphDataConvertor @Inject constructor(
             timeText = "last night",
             chartKey = GraphsKey.SLEEP_BREAKUP,
             payload = PayloadData(sleepBreakup = mainObj.breakup_sleep),
-            raw = null
+            raw = rawData
         )
     }
 
@@ -143,7 +147,7 @@ class GraphDataConvertor @Inject constructor(
             timeText = "last night",
             chartKey = GraphsKey.SLEEP_MOVEMENT,
             payload = PayloadData(sleepMovement = getMovementBreakup(mainObj.sleep_movement)),
-            raw = null
+            raw = rawData
         )
     }
 
@@ -181,8 +185,24 @@ class GraphDataConvertor @Inject constructor(
 
 
     fun handleTrendsData(data: InsightItemResponseModel): InsightCardUiModel? {
-        val period = InternalSelectedPeriod.DAY
-        val contributor = SleepInternalLaunchState.SLEEP_DURATION
+
+        "rem_sleep_day"
+        val period = when {
+            data.graph_type?.endsWith("week") == true -> InternalSelectedPeriod.WEEK
+            data.graph_type?.endsWith("month") == true -> InternalSelectedPeriod.MONTH
+            else -> InternalSelectedPeriod.DAY
+        }
+
+        val contributor = when {
+            data.graph_type == null -> SleepInternalLaunchState.DEEP_SLEEP
+            data.graph_type.startsWith("circadian_mid_point_day") -> SleepInternalLaunchState.TIMING
+            data.graph_type.startsWith("hour_vs_need_day") -> SleepInternalLaunchState.HOUR_VS_NEED
+            data.graph_type.startsWith("restorative_sleep") -> SleepInternalLaunchState.RESTORATIVE_SLEEP
+            data.graph_type.startsWith("rem_sleep") -> SleepInternalLaunchState.REM_SLEEP
+            data.graph_type.startsWith("deep_sleep") -> SleepInternalLaunchState.DEEP_SLEEP
+            data.graph_type.startsWith("sleep_perf") -> SleepInternalLaunchState.SLEEP_PERFORMANCE
+            else -> SleepInternalLaunchState.DEEP_SLEEP
+        }
 
         when (period) {
             InternalSelectedPeriod.DAY, null -> {
@@ -206,11 +226,11 @@ class GraphDataConvertor @Inject constructor(
                     }
 
                     SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
-                        generateSleepSingleBarChartData(data)
+                        generateSleepMultiBarChartData(data,period, contributor)
                     }
 
                     SleepInternalLaunchState.HOUR_VS_NEED -> {
-                        generateSleepSingleBarChartData(data)
+                        generateSleepHourVsNeedChartInternalData(data,period, contributor)
                     }
 
                     SleepInternalLaunchState.SLEEP_TIME -> {
@@ -218,7 +238,7 @@ class GraphDataConvertor @Inject constructor(
                     }
 
                     SleepInternalLaunchState.TIMING -> {
-                        generateSleepSingleBarChartData(data)
+                        generateSleepTimingChartInternalData(data, period, contributor)
                     }
 
                     else -> null
@@ -281,6 +301,61 @@ class GraphDataConvertor @Inject constructor(
                 return generateSleepSingleBarChartData(data)
             }
         }
+    }
+
+    private fun generateSleepMultiBarChartData(data: InsightItemResponseModel,
+                                               period: InternalSelectedPeriod,
+                                               contributor: SleepInternalLaunchState): InsightCardUiModel? {
+
+        val mainObjString =
+            "{\"trends_breakup\":[ { \"date\": \"2025-12-01\" }, { \"date\": \"2025-12-02\", \"value1\": 4230, \"value2\": 4380 }, { \"date\": \"2025-12-03\" } ]}"
+        val mainObj = Gson().fromJson<InsightGraph>(mainObjString, InsightGraph::class.java)
+
+
+        fun convertData(data: List<TrendsValues>?): List<GraphDataModel> {
+            data?.map { Pair(((it.value2 ?: 0.0f) / 60), ((it.value1 ?: 0.0f) / 60)) }
+                ?: ArrayList()
+
+            return data?.map {
+                GraphDataModel(
+                    date = LocalDate.parse(it.date),
+                    value1 =if (it.value2 == null) {
+                        null
+                    } else {
+                        (it.value2 ?: 0.0f) / 60
+                    },
+                    value2 = if (it.value1 == null) {
+                        null
+                    } else {
+                        (it.value1 ?: 0.0f) / 60
+                    }
+                )
+            } ?: ArrayList()
+        }
+
+        val dataList = convertData(mainObj.trends_breakup)
+
+        val maxValue = getMaxValue(
+            dataListType1 = dataList,
+            contributorType = contributor
+        )
+        val yAxisRange =
+            getYAxisRange(maxValue, contributorType = contributor)
+
+        return InsightCardUiModel(
+            id = 6L,
+            title = "generateSleepMultiBarChartData() demo",
+            timeText = "last night",
+            chartKey = GraphsKey.TREND_SLEEP_MULTI_BAR,
+            payload = PayloadData(
+                trendData = TrendGraphData(
+                    list = dataList,
+                    yAxisRange = yAxisRange,
+                    maxValue = yAxisRange.last().first
+                )
+            ),
+            raw = data
+        )
     }
 
     fun generateSleepSingleLineChartData(
@@ -370,7 +445,7 @@ class GraphDataConvertor @Inject constructor(
                     showOverlay = showOverlay,
                 )
             ),
-            raw = null
+            raw = rawData
         )
 
     }
@@ -462,7 +537,7 @@ class GraphDataConvertor @Inject constructor(
                     chartType = type
                 )
             ),
-            raw = null
+            raw = rawData
         )
     }
 
@@ -532,7 +607,139 @@ class GraphDataConvertor @Inject constructor(
                     nonNullDataCount
                 )
             ),
-            raw = null
+            raw = rawData
+        )
+    }
+
+    fun generateSleepHourVsNeedChartInternalData(
+        rawData: InsightItemResponseModel,
+        period: InternalSelectedPeriod,
+        contributorType: SleepInternalLaunchState?,
+    ): InsightCardUiModel {
+        val mainObjString =
+            "{\"trends_breakup\":[ { \"date\": \"2025-12-01\" }, { \"date\": \"2025-12-02\", \"value1\": 17310, \"value2\": 33000 }, { \"date\": \"2025-12-03\" } ]}"
+
+        val mainObj = Gson().fromJson<InsightGraph>(mainObjString, InsightGraph::class.java)
+
+        fun convertData(data: List<TrendsValues>?): List<GraphDataModel> {
+            return data?.map {
+                GraphDataModel(
+                    date = LocalDate.parse(it.date),
+                    value1 = if (it.value1 == null) {
+                        null
+                    } else {
+                        (it.value1 ?: 0.0f) / 60
+                    },
+                    value2 = if (it.value2 == null) {
+                        null
+                    } else {
+                        (it.value2 ?: 0.0f) / 60
+                    }
+                )
+            } ?: ArrayList()
+        }
+
+        val dataList = convertData(mainObj?.trends_breakup)
+
+        val maxValue = getMaxValue(
+            dataListType1 = dataList, contributorType = contributorType
+        )
+        val yAxisRange = getYAxisRange(maxValue, contributorType)
+
+        return InsightCardUiModel(
+            id = 6L,
+            title = "Rem Day demo",
+            timeText = "last night",
+            chartKey = GraphsKey.TREND_SLEEP_HOUR_VS_NEED_CHARD_INTERNAL,
+            payload = PayloadData(
+                trendData = TrendGraphData(
+                    list = dataList,
+                    yAxisRange = yAxisRange,
+                    maxValue = yAxisRange.last().first,
+                    selectedPosition = -1
+                )
+            ),
+            raw = rawData
+        )
+    }
+
+    fun generateSleepTimingChartInternalData(
+        rawData: InsightItemResponseModel,
+        period: InternalSelectedPeriod,
+        contributorType: SleepInternalLaunchState?,
+    ): InsightCardUiModel {
+        val mainObjString =
+            "{\"trends_breakup\":[ { \"date\": \"2025-12-01\" }, { \"date\": \"2025-12-02\", \"master_mid_time\": \"05:27:00\" }, { \"date\": \"2025-12-03\" } ]}"
+
+        val mainObj = Gson().fromJson<InsightGraph>(mainObjString, InsightGraph::class.java)
+
+        fun convertData(data: List<TrendsValues>?): Pair<List<GraphDataModel>, Float> {
+            val midTimeFormat = DateTimeFormatter.ofPattern("HH:mm:ss")
+            val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+
+            val returnData = ArrayList<GraphDataModel>()
+
+            var maxDeviation = 0.0f//in minutes
+            data?.forEach {
+
+                val currentDay = LocalDate.parse(it.date).atStartOfDay()
+
+                if (it.master_mid_time == null) {
+                    returnData.add(
+                        GraphDataModel(
+                            date = LocalDate.parse(it.date), value1 = null
+                        )
+                    )
+                } else {
+                    val midTime = LocalTime.parse(it.master_mid_time, midTimeFormat)
+                    val dateToAppend = if (midTime.hour >= 20) {
+                        LocalDate.parse(it.date).minusDays(1).toString()
+                    } else {
+                        it.date
+                    }
+
+                    val startDate = "$dateToAppend ${it.master_mid_time}"
+
+                    val sleepStartTime = LocalDateTime.parse(startDate, dateTimeFormatter)
+
+                    val difference = Duration.between(currentDay, sleepStartTime).toMinutes()
+                    if (difference > maxDeviation) {
+                        maxDeviation = difference.toFloat()
+                    }
+
+                    returnData.add(
+                        GraphDataModel(
+                            date = LocalDate.parse(it.date), value1 = difference.toFloat()
+                        )
+                    )
+                }
+            }
+
+            return Pair(returnData, maxDeviation)
+        }
+
+        //
+        val dataList = convertData(mainObj?.trends_breakup)
+        val xAxisRange = getXAxisRange(mainObj?.trends_breakup, period)
+        val yAxisRange = getYAxisRange(maxValue = dataList.second,contributorType = contributorType)
+
+        val optimalRange = getOptimalRangeMinMax(contributorType)
+
+        return InsightCardUiModel(
+            id = 6L,
+            title = "Rem Day demo",
+            timeText = "last night",
+            chartKey = GraphsKey.TREND_SLEEP_TIMING_INTERNAL,
+            payload = PayloadData(
+                trendData = TrendGraphData(
+                    list = dataList.first,
+                    xAxisRange = xAxisRange,
+                    yAxisRange = yAxisRange,
+                    optimalRange = optimalRange,
+                    maxDeviation = yAxisRange.last().first
+                )
+            ),
+            raw = rawData
         )
     }
 
@@ -615,6 +822,121 @@ class GraphDataConvertor @Inject constructor(
         }
     }
 
+
+    fun getMaxValue(
+        dataListType1: List<GraphDataModel>? = null,
+        contributorType: SleepInternalLaunchState?
+    ): Float {
+        val nonNullValues = dataListType1?.mapNotNull { it.value1 }
+        return when (contributorType) {
+            SleepInternalLaunchState.SLEEP_PERFORMANCE -> 100.0f
+            SleepInternalLaunchState.HOUR_VS_NEED,
+            SleepInternalLaunchState.SLEEP_TIME -> {
+                var mMax = 0.0f
+                dataListType1?.forEach {
+
+                    var max = it.value1 ?: 0.0f
+                    if ((it.value2 ?: 0.0f) > max) {
+                        max = it.value2 ?: 0.0f
+                    }
+
+                    if (max > mMax) {
+                        mMax = max
+                    }
+                }
+
+                mMax += ((0.2) * mMax).toInt()
+                return mMax
+            }
+
+            SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
+                var mMax = 0.0f
+                dataListType1?.forEach {
+                    val sum = (it.value2 ?: 0.0f)
+                    if (sum > mMax) {
+                        mMax = sum
+                    }
+                }
+
+                mMax += ((0.2) * mMax).toInt()
+
+                return mMax
+            }
+
+            SleepInternalLaunchState.TIMING -> 100.0f
+            SleepInternalLaunchState.EFFICIENCY -> {
+                100.0f
+            }
+
+            SleepInternalLaunchState.DEEP_SLEEP, SleepInternalLaunchState.REM_SLEEP -> {
+                return if (nonNullValues.isNullOrEmpty()) {
+                    60.0f
+                } else {
+                    nonNullValues.max()
+                }
+            }
+
+            SleepInternalLaunchState.SLEEP_DURATION -> {
+                if (nonNullValues.isNullOrEmpty()) {
+                    12 * 60.0f
+                } else {
+                    nonNullValues.max()
+                }
+            }
+
+            SleepInternalLaunchState.LATENCY -> {
+                return if (nonNullValues.isNullOrEmpty()) {
+                    25.0f
+                } else {
+                    nonNullValues.max()
+                }
+            }
+
+            SleepInternalLaunchState.RESTFULNESS -> {
+                return if (nonNullValues.isNullOrEmpty()) {
+                    4.0f
+                } else {
+                    nonNullValues.max()
+                }
+            }
+
+            SleepInternalLaunchState.RESPIRATORY_RATE -> {
+                return if (nonNullValues.isNullOrEmpty()) {
+                    20.0f
+                } else {
+                    nonNullValues.max()
+                }
+            }
+
+            SleepInternalLaunchState.RESTING_HEART_RATE -> {
+                return if (nonNullValues.isNullOrEmpty()) {
+                    80.0f
+                } else {
+                    nonNullValues.max()
+                }
+            }
+
+            SleepInternalLaunchState.HRV -> {
+                return if (nonNullValues.isNullOrEmpty()) {
+                    80.0f
+                } else {
+                    nonNullValues.max()
+                }
+            }
+
+            SleepInternalLaunchState.SKIN_TEMPERATURE -> {
+                return if (nonNullValues.isNullOrEmpty()) {
+                    120.0f
+                } else {
+                    nonNullValues.max()
+                }
+            }
+
+            null -> 100.0f
+            else -> 100.0f
+        }
+    }
+
     fun getYAxisRange(
         maxValue: Float,
         contributorType: SleepInternalLaunchState?,
@@ -681,7 +1003,25 @@ class GraphDataConvertor @Inject constructor(
             }
 
             SleepInternalLaunchState.SLEEP_TIME -> default
-            SleepInternalLaunchState.TIMING -> default
+            SleepInternalLaunchState.TIMING -> {
+                return if (maxValue <= (6 * 60)) {
+                    arrayListOf(
+                        Pair(-6 * 60, "6 PM"),
+                        Pair(-3 * 60, "9 PM"),
+                        Pair(0, "12 AM"),
+                        Pair(3 * 60, "3 AM"),
+                        Pair(6 * 60, "6 AM")
+                    )
+                } else {
+                    arrayListOf(
+                        Pair(-12 * 60, "12 PM"),
+                        Pair(-6 * 60, "6 PM"),
+                        Pair(0, "12 AM"),
+                        Pair(6 * 60, "6 AM"),
+                        Pair(12 * 60, "12 PM")
+                    )
+                }
+            }
 
             SleepInternalLaunchState.REM_SLEEP, SleepInternalLaunchState.DEEP_SLEEP -> {
                 val newMax = maxValue + offset
@@ -1005,5 +1345,6 @@ class GraphDataConvertor @Inject constructor(
 
 enum class GraphsKey {
     HEART_RATE, STRESS, DAY_TIME_MOVEMENT, SLEEP_BREAKUP, SLEEP_MOVEMENT,
-    TREND_SLEEP_SINGLE, TREND_SLEEP_SINGLE_LINE_GRADIENT,
+    TREND_SLEEP_SINGLE, TREND_SLEEP_SINGLE_LINE_GRADIENT, TREND_SLEEP_TIMING_INTERNAL,
+    TREND_SLEEP_MULTI_BAR, TREND_SLEEP_HOUR_VS_NEED_CHARD_INTERNAL
 }

@@ -53,6 +53,8 @@ data class TrendGraphData(
     val chartType: SleepSingleGradientChartType?=null,
     val showOverlay: Boolean?=null,
     val selectedPeriod: InternalSelectedPeriod?=null,
+    val maxDeviation: Int?=null,
+    val maxValue: Int?=null,
 ) : Parcelable
 
 /**

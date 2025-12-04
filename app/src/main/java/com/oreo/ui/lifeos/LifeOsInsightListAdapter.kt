@@ -23,7 +23,10 @@ import com.oreo.ui.custom.sleep.internal.SleepSingleGradientChartType
 import com.oreo.ui.custom.sleep.internal.SleepSingleGradientLineChartInternal
 import com.oreo.ui.custom.sleep.internal.SleepSingleLineChartInternal
 import com.oreo.ui.custom.sleep.internal.SleepDailyGradientChartInternal
+import com.oreo.ui.custom.sleep.internal.SleepHourVsNeedChartInternal
+import com.oreo.ui.custom.sleep.internal.SleepRestorativeChartInternal
 import com.oreo.ui.custom.sleep.internal.SleepSingleBarChart
+import com.oreo.ui.custom.sleep.internal.SleepTimingChartInternal
 import com.oreo.ui.lifeos.charts.DayTimeChartPayload
 import com.oreo.ui.lifeos.charts.HrChartPayload
 import com.oreo.ui.lifeos.charts.InsightCardUiModel
@@ -167,6 +170,58 @@ class LifeOsInsightListAdapter(
                     v
 
                 }
+                GraphsKey.TREND_SLEEP_MULTI_BAR -> {
+                    val data = payload?.trendData
+
+                    val v = (currentChartView as? SleepRestorativeChartInternal) ?: SleepRestorativeChartInternal(ctx,null)
+                    v.setDataSet(
+                        list = data?.list!!,
+                        yAxisRange = data.yAxisRange!!,
+                        maxValue = data.maxValue!!,
+                        selectedPosition = -1
+                    )
+                    v
+
+                }
+
+
+                GraphsKey.TREND_SLEEP_TIMING_INTERNAL -> {
+                    val data = payload?.trendData
+
+                    val v = (currentChartView as? SleepTimingChartInternal) ?: SleepTimingChartInternal(ctx,null)
+                    v.setDataSet(
+                        data?.list ?: ArrayList(),
+                        data?.xAxisRange!!,
+                        data.yAxisRange!!,
+                        data.maxDeviation!!,
+                        data.optimalRange
+                    )
+                    v
+
+                }
+
+                GraphsKey.TREND_SLEEP_HOUR_VS_NEED_CHARD_INTERNAL -> {
+                    val data = payload?.trendData
+
+                    val v = (currentChartView as? SleepHourVsNeedChartInternal) ?: SleepHourVsNeedChartInternal(ctx,null)
+                    v.setDataSet(
+                        data?.list ?: ArrayList(),
+                        data?.yAxisRange!!,
+                        data.maxValue!!,
+                        data.selectedPosition!!
+                    )
+                    v
+
+                }
+
+
+                /*
+                TODO: DAY:
+                TODO: [cir. mid-point] SleepTimingChartInternal -> SleepTimingGraphFragment --= need to verify
+                TODO: [hr vs need] SleepHourVsNeedChartInternal -> SleepMultiLineChartFragment --= need to verify
+                TODO: [rest. sleep] SleepRestorativeChartInternal -> SleepMultiBarChartFragment --= need to verify
+                TODO: [sleep time] SleepTimingChartInternal -> SleepTimingGraphFragment --= need to verify
+                */
 
                 /*"respiratory_daily" -> dailyGradient(payload)
                 "respiratory_day" -> dayBar(payload)
