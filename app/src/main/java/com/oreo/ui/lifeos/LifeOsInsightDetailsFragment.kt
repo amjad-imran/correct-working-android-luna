@@ -145,8 +145,14 @@ class LifeOsInsightDetailsFragment :
         binding.lytChatBox.btnAction.setOnClickListener {
             val (frag, bundle) = LifeOsChatFragment.getStartData(
                 threadId = null,
-                userMessage = binding.lytChatBox.chatEtx.text.toString(),
+                userMessage = null,
                 title = null,
+                headerInsight1 = AiHeaderInsight1(
+                    headerText = null,
+                    mainText = binding.lytChatBox.chatEtx.text.toString(),
+                    footerText = null,
+                    insightData = viewModel.insightData?.raw
+                ),
                 aiTopic = AITopics.GENERAL
             )
             navigate(

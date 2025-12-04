@@ -166,7 +166,11 @@ class LifeOsChatFragment :
                 }else{
                     viewModel.generateThreadId {
                         binding.ivLogo.gone()
-                        sendInsight1HeaderMessage(viewModel.headerInsight1!!)
+                        if(viewModel.headerInsight1!!.headerText!=null){
+                            sendInsight1HeaderMessage(viewModel.headerInsight1!!)
+                        }else{
+                            viewModel.headerInsight1!!.mainText?.let { sendMessage(it) }
+                        }
                     }
                 }
             } else {

@@ -46,8 +46,21 @@ class LifeOsInsightListAdapter(
         private var currentChartView: View? = null
 
         fun bind(item: InsightCardUiModel) {
-            binding.tvTitle.text = item.raw?.title ?: ""
+            val title = item.raw?.title
+            binding.tvTitle.text = title ?: ""
             binding.tvTime.text = item.timeText ?: ""
+
+            val context = binding.root.context
+            binding.ivInsight.setImageResource(
+                when {
+                    title == null -> R.drawable.ic_misc_insight_item
+                    title.contains(context.getString(R.string.text_sleep), ignoreCase = true) -> R.drawable.ic_sleep_insight_item
+                    title.contains(context.getString(R.string.text_activity), ignoreCase = true) -> R.drawable.ic_activity_insight_item
+                    title.contains(context.getString(R.string.text_readiness), ignoreCase = true) -> R.drawable.ic_readiness_insight_item
+                    title.contains(context.getString(R.string.text_stress), ignoreCase = true) -> R.drawable.ic_stress_insight_item
+                    else -> R.drawable.ic_misc_insight_item
+                }
+            )
 
             binding.root.setOnClickListener { onClick(item) }
 
