@@ -772,11 +772,10 @@ class UserRepositoryImpl(
         }
     }
 
-    override suspend fun getInsightLvl1List(duration: String): Flow<Resource<BaseApiResponse<List<InsightItemResponseModel>>>> {
+    override suspend fun getInsightLvl1List(): Flow<Resource<BaseApiResponse<List<List<InsightItemResponseModel>>>>> {
         return safeApiCallFlow(dispatcher) {
             remoteDataSource.getInsightLvl1List(
                 "${BuildConfig.OREO_BASE_URL}/ai/v2/insights/level1",
-                duration
             )
         }
     }

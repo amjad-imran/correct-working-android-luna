@@ -882,8 +882,7 @@ interface NetworkService {
     @GET
     suspend fun getInsightLvl1List(
         @Url url: String,
-        @Query("duration") duration: String,
-    ): BaseApiResponse< List<InsightItemResponseModel> >
+    ): BaseApiResponse< List<List<InsightItemResponseModel>> >
 
     @POST
     suspend fun submitLifeOsOnboardQuesAnsList(

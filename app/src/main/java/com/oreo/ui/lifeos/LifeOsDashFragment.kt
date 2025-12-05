@@ -104,6 +104,11 @@ class LifeOsDashFragment :
         setLytOnboardQuesProgress()
     }
 
+    override fun onPause() {
+        super.onPause()
+        insightAdapter.submitList(emptyList())
+    }
+
     private fun setLytOnboardQuesProgress() {
         val onboardQuesData = viewModel.localDataStore.getLifeOsOnboardData()
         if(onboardQuesData==null || onboardQuesData.questions.isNullOrEmpty() || onboardQuesData.answers.isNullOrEmpty()){

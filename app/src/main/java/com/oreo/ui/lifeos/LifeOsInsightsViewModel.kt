@@ -35,7 +35,7 @@ class LifeOsInsightsViewModel @Inject constructor(
 
     fun loadInsights() {
 
-        val jsonRes = """
+        /*val jsonRes = """
             [
   {
     "relevancy": 0.95,
@@ -157,11 +157,11 @@ class LifeOsInsightsViewModel @Inject constructor(
         val type = object : TypeToken<List<InsightItemResponseModel>>() {}.type
         val raw = Gson().fromJson<List<InsightItemResponseModel>>(jsonRes, type)
         val dummy = generateData(raw)
-        _cards.value = dummy
+        _cards.value = dummy*/
 
         //--
-        /*viewModelScope.launch {
-            userRepository.getInsightLvl1List("day").collect{ resource ->
+        viewModelScope.launch {
+            userRepository.getInsightLvl1List().collect{ resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -186,16 +186,20 @@ class LifeOsInsightsViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            val dummy = generateData(it)
+                            val response = ArrayList<InsightItemResponseModel>()
+                            it.forEach { insightsList ->
+                                response.addAll(insightsList)
+                            }
+                            val dummy = generateData(response)
                             _cards.value = dummy
                         }
                     }
                 }
             }
-        }*/
+        }
         //--
 
-        /*val dummy = generateData(arrayListOf(InsightItemResponseModel(
+        val dummy = generateData(arrayListOf(InsightItemResponseModel(
             graph_type = "hr",
             title = "Sleep midpoint shifted later by ~50 minutes over recent nights",
         ),
@@ -212,7 +216,7 @@ class LifeOsInsightsViewModel @Inject constructor(
             InsightItemResponseModel(graph_type = "sleep_movement"),
             InsightItemResponseModel(graph_type = "rem_day"),
             ))
-        _cards.value = dummy*/
+        _cards.value = dummy
 
     }
 

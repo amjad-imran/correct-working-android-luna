@@ -119,6 +119,6 @@ interface UserRepository {
 
     suspend fun submitLifeOsOnboardQuesAnsList(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
 
-    suspend fun getInsightLvl1List(duration: String): Flow<Resource<BaseApiResponse<List<InsightItemResponseModel>>>>
+    suspend fun getInsightLvl1List(): Flow<Resource<BaseApiResponse<List<List<InsightItemResponseModel>>>>>
     suspend fun submitInsightDislikeFeedbackData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
 }

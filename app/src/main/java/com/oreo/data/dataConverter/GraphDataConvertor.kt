@@ -756,18 +756,18 @@ class GraphDataConvertor @Inject constructor(
         }
 
         val contributor = when {
-            data.graph_type.contains("rem_sleep") -> SleepInternalLaunchState.REM_SLEEP
-            data.graph_type.contains("deep_sleep") -> SleepInternalLaunchState.DEEP_SLEEP
-            data.graph_type.contains("sleep_efficiency") -> SleepInternalLaunchState.EFFICIENCY
-            data.graph_type.contains("total_duration") -> SleepInternalLaunchState.SLEEP_DURATION
-            data.graph_type.contains("latency") -> SleepInternalLaunchState.LATENCY
-            data.graph_type.contains("restfullness") -> SleepInternalLaunchState.RESTFULNESS
-            data.graph_type.contains("hrv") -> SleepInternalLaunchState.HRV
-            data.graph_type.contains("rhr") -> SleepInternalLaunchState.RESTING_HEART_RATE
-            data.graph_type.contains("avg_skin_temp") -> SleepInternalLaunchState.SKIN_TEMPERATURE
-            data.graph_type.contains("avg_oxy") -> SleepInternalLaunchState.BLOOD_OXYGEN
-            data.graph_type.contains("avg_respiration") -> SleepInternalLaunchState.RESPIRATORY_RATE
-            data.graph_type.contains("circadian_mid_point") -> SleepInternalLaunchState.TIMING
+            data.graph_type.contains("rem_sleep", ignoreCase = true) -> SleepInternalLaunchState.REM_SLEEP
+            data.graph_type.contains("deep_sleep", ignoreCase = true) -> SleepInternalLaunchState.DEEP_SLEEP //Verified
+            data.graph_type.contains("sleep_efficiency", ignoreCase = true) -> SleepInternalLaunchState.EFFICIENCY
+            data.graph_type.contains("total_duration", ignoreCase = true) -> SleepInternalLaunchState.SLEEP_DURATION //Verified
+            data.graph_type.contains("latency", ignoreCase = true) -> SleepInternalLaunchState.LATENCY
+            data.graph_type.contains("restfullness", ignoreCase = true) -> SleepInternalLaunchState.RESTFULNESS
+            data.graph_type.contains("hrv", ignoreCase = true) -> SleepInternalLaunchState.HRV //Verified
+            data.graph_type.contains("rhr", ignoreCase = true) -> SleepInternalLaunchState.RESTING_HEART_RATE
+            data.graph_type.contains("avg_skin_temp", ignoreCase = true) -> SleepInternalLaunchState.SKIN_TEMPERATURE
+            data.graph_type.contains("avg_oxy", ignoreCase = true) -> SleepInternalLaunchState.BLOOD_OXYGEN
+            data.graph_type.contains("avg_respiration", ignoreCase = true) -> SleepInternalLaunchState.RESPIRATORY_RATE
+            data.graph_type.contains("circadian_mid_point", ignoreCase = true) -> SleepInternalLaunchState.SLEEP_DURATION //Verified
 
             else -> SleepInternalLaunchState.DEEP_SLEEP
         }
@@ -865,12 +865,14 @@ class GraphDataConvertor @Inject constructor(
                 )
             }
             InternalSelectedPeriod.WEEK -> {
-                val weekNoList = ArrayList<String>()
-                data?.forEach {
-                    val date = LocalDate.parse(it.date)
-                    weekNoList.add(
-                        "W${date.get(WeekFields.ISO.weekOfWeekBasedYear())}"
-                    )
+                data?.let {
+                    val weekNoList = ArrayList<String>()
+                    it.forEach {
+                        val date = LocalDate.parse(it.date)
+                        val weekNo = date.get(WeekFields.ISO.weekOfWeekBasedYear())
+                        weekNoList.add("W$weekNo")
+                    }
+                    return weekNoList
                 }
             }
 
