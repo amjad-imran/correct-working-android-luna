@@ -138,6 +138,10 @@ class LifeOsInsightDetailsFragment :
     }
 
     override fun initListener() {
+        binding.ivBack.setOnClickListener {
+            navigateUpSafe()
+        }
+
         binding.icThumbsDown.setOnClickListener {
             displayHelpUsImproveBS()
         }

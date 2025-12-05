@@ -40,6 +40,10 @@ class LifeOsDashViewModel @Inject constructor(
     private val _insightsCardsData = MutableLiveData<List<InsightCardUiModel>>()
     val insightsCardsData: LiveData<List<InsightCardUiModel>> get() = _insightsCardsData
 
+    fun getUserFirstName(): String?{
+        return userRepository.getUser()?.firstName
+    }
+
     fun getLifeOsData(){
         viewModelScope.launch {
             val onBoardData = localDataStore.getLifeOsOnboardData()

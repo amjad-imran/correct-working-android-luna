@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/tvTitle"
+        android:id="@+id/tvTitleWithUserName"
         style="@style/S28"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
         android:layout_marginEnd="24dp"
         android:text="@string/text_personalise"
         android:textColor="#B3FFFFFF"
-        app:layout_constraintBottom_toBottomOf="@+id/tvTitle"
+        app:layout_constraintBottom_toBottomOf="@+id/tvTitleWithUserName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -63,7 +63,7 @@
         android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+        app:layout_constraintTop_toBottomOf="@id/tvTitleWithUserName" />
 
 
     <androidx.recyclerview.widget.RecyclerView

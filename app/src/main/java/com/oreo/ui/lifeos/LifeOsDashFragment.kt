@@ -93,9 +93,16 @@ class LifeOsDashFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUi()
         setupQuestionsRecycler()
         setupWhatsNewRecycler()
 //        setupInsightsPager(list)
+    }
+
+    private fun setUi() {
+        val userFirstName = viewModel.getUserFirstName() ?: "User"
+        binding.lytHeader.tvTitleWithUserName.text =
+            getString(R.string.text_back_at_it, userFirstName)
     }
 
     override fun onResume() {
