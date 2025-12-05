@@ -2329,4 +2329,32 @@
     <string name="text_tell_us_how_you_live_work_and_recover_luna_will_personalise_your_experience_to_help_you_live_better">Erzähl uns, wie du lebst, arbeitest und regenerierst — Luna personalisiert deine Erfahrung, um dir zu helfen, besser zu leben.</string>
     <string name="text_app_support">App-Support</string>
 
+    <string name="text_add_habits">Gewohnheiten hinzufügen</string>
+    <string name="text_turn_habits_into_insights">Gewohnheiten in Erkenntnisse umwandeln</string>
+    <string name="text_setup_habits">Gewohnheiten einrichten</string>
+    <string name="text_search_recents">Letzte durchsuchen</string>
+    <string name="text_habits_saved">Gewohnheiten gespeichert!</string>
+    <string name="text_dig_deeper">Tiefer graben</string>
+    <string name="text_lifeos_suggests">LifeOS schlägt vor</string>
+    <string name="text_we_re_getting_to_know_you">Wir lernen dich kennen.</string>
+    <string name="text_as_you_move_rest_and_go_about_your_day_lifeos_will_start_generating_insights_here">Während du dich bewegst, ruhst und deinen Tag verbringst, wird LifeOS hier beginnen, Erkenntnisse zu generieren.</string>
+    <string name="text_please_provide_detailed_feedback">Bitte gib detailliertes Feedback</string>
+    <string name="text_help_us_improve">Hilf uns, uns zu verbessern</string>
+    <string name="text_inaccurate">Ungenau</string>
+    <string name="text_out_of_date">Veraltet</string>
+    <string name="text_too_short">Zu kurz</string>
+    <string name="text_this_isn_t_helpful">Das ist nicht hilfreich</string>
+    <string name="text_follow_up_to">Folge auf</string>
+    <string name="text_no_more_manual_entries_write_your_meal_however_you_like_our_ai_figures_out_calories_and_macros_automatically">Keine manuellen Einträge mehr. Schreibe dein Mahlzeit, wie du willst, unser KI berechnet automatisch Kalorien und Makros.</string>
+    <string name="text_try_meal_logging_now">Versuche jetzt Mahlzeit-Logging!</string>
+    <string name="text_personalise_life_os">Life OS personalisieren</string>
+    <string name="text_version_val">Version %1$s</string>
+    <string name="text_what_s_new_with_life_os">Was gibt\'s Neues bei Life OS?</string>
+    <string name="text_back_at_it">Wieder dabei %1$s!</string>
+    <string name="text_find_out_what_your_body_s_trying_to_tell_you">Finde heraus, was dein Körper dir zu sagen versucht.</string>
+    <string name="text_what_habits_are_helping_me_recover">Welche Gewohnheiten helfen mir, mich zu erholen?</string>
+    <string name="text_how_do_i_improve_sleep_quality">Wie verbessere ich die Schlafqualität?</string>
+    <string name="text_low_calorie_snacks_for_me">Kalorienarme Snacks für mich</string>
+
+
 </resources>

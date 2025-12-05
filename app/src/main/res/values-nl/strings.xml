@@ -2329,4 +2329,31 @@
     <string name="text_tell_us_how_you_live_work_and_recover_luna_will_personalise_your_experience_to_help_you_live_better">Vertel ons hoe je leeft, werkt en herstelt — Luna personaliseert je ervaring om je te helpen beter te leven.</string>
     <string name="text_app_support">App-ondersteuning</string>
 
+    <string name="text_add_habits">Voeg gewoonten toe</string>
+    <string name="text_turn_habits_into_insights">Zet gewoonten om in inzichten</string>
+    <string name="text_setup_habits">Stel gewoonten in</string>
+    <string name="text_search_recents">Zoek recente items</string>
+    <string name="text_habits_saved">Gewoonten opgeslagen!</string>
+    <string name="text_dig_deeper">Dieper graven</string>
+    <string name="text_lifeos_suggests">LifeOS stelt voor</string>
+    <string name="text_we_re_getting_to_know_you">We leren je kennen.</string>
+    <string name="text_as_you_move_rest_and_go_about_your_day_lifeos_will_start_generating_insights_here">Terwijl je beweegt, rust en je dag doorkomt, zal LifeOS hier inzichten genereren.</string>
+    <string name="text_please_provide_detailed_feedback">Geef gedetailleerde feedback</string>
+    <string name="text_help_us_improve">Help ons verbeteren</string>
+    <string name="text_inaccurate">Onnauwkeurig</string>
+    <string name="text_out_of_date">Verouderd</string>
+    <string name="text_too_short">Te kort</string>
+    <string name="text_this_isn_t_helpful">Dit is niet behulpzaam</string>
+    <string name="text_follow_up_to">Opvolging naar</string>
+    <string name="text_no_more_manual_entries_write_your_meal_however_you_like_our_ai_figures_out_calories_and_macros_automatically">Geen handmatige invoer meer. Schrijf je maaltijd zoals je wilt, onze AI berekent automatisch calorieën en macronutriënten.</string>
+    <string name="text_try_meal_logging_now">Probeer maaltijdregistratie nu!</string>
+    <string name="text_personalise_life_os">Personaliseer Life OS</string>
+    <string name="text_version_val">Versie %1$s</string>
+    <string name="text_what_s_new_with_life_os">Wat is er nieuw met Life OS?</string>
+    <string name="text_back_at_it">Terug aan de slag %1$s!</string>
+    <string name="text_find_out_what_your_body_s_trying_to_tell_you">Ontdek wat je lichaam probeert je te vertellen.</string>
+    <string name="text_what_habits_are_helping_me_recover">Welke gewoonten helpen mij herstellen?</string>
+    <string name="text_how_do_i_improve_sleep_quality">Hoe verbeter ik de slaapkwaliteit?</string>
+    <string name="text_low_calorie_snacks_for_me">Lage-calorie snacks voor mij</string>
+
 </resources>

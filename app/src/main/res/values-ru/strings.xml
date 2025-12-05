@@ -2353,4 +2353,31 @@
     <string name="text_tell_us_how_you_live_work_and_recover_luna_will_personalise_your_experience_to_help_you_live_better">Расскажите нам, как вы живёте, работаете и восстанавливаетесь — Луна персонализирует ваш опыт, чтобы помочь вам жить лучше.</string>
     <string name="text_app_support">Поддержка приложения</string>
 
+    <string name="text_add_habits">Добавить привычки</string>
+    <string name="text_turn_habits_into_insights">Преобразовать привычки в инсайты</string>
+    <string name="text_setup_habits">Настроить привычки</string>
+    <string name="text_search_recents">Поиск недавних</string>
+    <string name="text_habits_saved">Привычки сохранены!</string>
+    <string name="text_dig_deeper">Копать глубже</string>
+    <string name="text_lifeos_suggests">LifeOS предлагает</string>
+    <string name="text_we_re_getting_to_know_you">Мы начинаем узнавать вас.</string>
+    <string name="text_as_you_move_rest_and_go_about_your_day_lifeos_will_start_generating_insights_here">Когда вы двигаетесь, отдыхаете и проводите свой день, LifeOS начнет генерировать инсайты здесь.</string>
+    <string name="text_please_provide_detailed_feedback">Пожалуйста, предоставьте подробную обратную связь</string>
+    <string name="text_help_us_improve">Помогите нам улучшить</string>
+    <string name="text_inaccurate">Неверно</string>
+    <string name="text_out_of_date">Устарело</string>
+    <string name="text_too_short">Слишком коротко</string>
+    <string name="text_this_isn_t_helpful">Это не полезно</string>
+    <string name="text_follow_up_to">Ответить на</string>
+    <string name="text_no_more_manual_entries_write_your_meal_however_you_like_our_ai_figures_out_calories_and_macros_automatically">Больше никаких ручных вводов. Пишите свой прием пищи как хотите, наш ИИ автоматически рассчитывает калории и макронутриенты.</string>
+    <string name="text_try_meal_logging_now">Попробуйте логирование приема пищи сейчас!</string>
+    <string name="text_personalise_life_os">Персонализировать Life OS</string>
+    <string name="text_version_val">Версия %1$s</string>
+    <string name="text_what_s_new_with_life_os">Что нового в Life OS?</string>
+    <string name="text_back_at_it">Возвращайся к этому %1$s!</string>
+    <string name="text_find_out_what_your_body_s_trying_to_tell_you">Узнайте, что ваше тело пытается вам сказать.</string>
+    <string name="text_what_habits_are_helping_me_recover">Какие привычки помогают мне восстанавливаться?</string>
+    <string name="text_how_do_i_improve_sleep_quality">Как улучшить качество сна?</string>
+    <string name="text_low_calorie_snacks_for_me">Низкокалорийные закуски для меня</string>
+
 </resources>

@@ -2323,4 +2323,31 @@
     <string name="text_tell_us_how_you_live_work_and_recover_luna_will_personalise_your_experience_to_help_you_live_better">告诉我们你的生活、工作和恢复方式 — Luna 将个性化你的体验，帮助你过上更好的生活。</string>
     <string name="text_app_support">应用支持</string>
 
+    <string name="text_add_habits">添加习惯</string>
+    <string name="text_turn_habits_into_insights">将习惯转化为见解</string>
+    <string name="text_setup_habits">设置习惯</string>
+    <string name="text_search_recents">搜索最近记录</string>
+    <string name="text_habits_saved">习惯已保存！</string>
+    <string name="text_dig_deeper">深入挖掘</string>
+    <string name="text_lifeos_suggests">LifeOS建议</string>
+    <string name="text_we_re_getting_to_know_you">我们正在了解你。</string>
+    <string name="text_as_you_move_rest_and_go_about_your_day_lifeos_will_start_generating_insights_here">当你移动、休息并度过一天时，LifeOS将开始在这里生成见解。</string>
+    <string name="text_please_provide_detailed_feedback">请提供详细反馈</string>
+    <string name="text_help_us_improve">帮助我们改进</string>
+    <string name="text_inaccurate">不准确</string>
+    <string name="text_out_of_date">过时</string>
+    <string name="text_too_short">太短</string>
+    <string name="text_this_isn_t_helpful">这没有帮助</string>
+    <string name="text_follow_up_to">跟进</string>
+    <string name="text_no_more_manual_entries_write_your_meal_however_you_like_our_ai_figures_out_calories_and_macros_automatically">不再手动输入。你可以随便写下你的餐点，我们的AI会自动计算卡路里和宏量营养素。</string>
+    <string name="text_try_meal_logging_now">现在试试餐点记录功能！</string>
+    <string name="text_personalise_life_os">个性化 Life OS</string>
+    <string name="text_version_val">版本 %1$s</string>
+    <string name="text_what_s_new_with_life_os">Life OS有什么新功能？</string>
+    <string name="text_back_at_it">重新开始 %1$s！</string>
+    <string name="text_find_out_what_your_body_s_trying_to_tell_you">找出你的身体想告诉你什么。</string>
+    <string name="text_what_habits_are_helping_me_recover">哪些习惯帮助我恢复健康？</string>
+    <string name="text_how_do_i_improve_sleep_quality">如何提高睡眠质量？</string>
+    <string name="text_low_calorie_snacks_for_me">低卡路里零食</string>
+
 </resources>

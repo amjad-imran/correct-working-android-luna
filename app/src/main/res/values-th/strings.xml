@@ -2335,4 +2335,31 @@
     <string name="text_tell_us_how_you_live_work_and_recover_luna_will_personalise_your_experience_to_help_you_live_better">บอกเราว่าคุณใช้ชีวิต ทำงาน และฟื้นตัวอย่างไร — Luna จะปรับประสบการณ์ของคุณเพื่อช่วยให้คุณใช้ชีวิตได้ดีขึ้น</string>
     <string name="text_app_support">การสนับสนุนแอป</string>
 
+    <string name="text_add_habits">เพิ่มนิสัย</string>
+    <string name="text_turn_habits_into_insights">เปลี่ยนนิสัยเป็นข้อมูลเชิงลึก</string>
+    <string name="text_setup_habits">ตั้งค่านิสัย</string>
+    <string name="text_search_recents">ค้นหาล่าสุด</string>
+    <string name="text_habits_saved">บันทึกนิสัยแล้ว!</string>
+    <string name="text_dig_deeper">ขุดลึกขึ้น</string>
+    <string name="text_lifeos_suggests">LifeOS แนะนำ</string>
+    <string name="text_we_re_getting_to_know_you">เรากำลังเริ่มทำความรู้จักกับคุณ</string>
+    <string name="text_as_you_move_rest_and_go_about_your_day_lifeos_will_start_generating_insights_here">ขณะที่คุณเคลื่อนไหว พักผ่อน และใช้ชีวิตประจำวัน LifeOS จะเริ่มสร้างข้อมูลเชิงลึกที่นี่</string>
+    <string name="text_please_provide_detailed_feedback">โปรดให้ข้อเสนอแนะอย่างละเอียด</string>
+    <string name="text_help_us_improve">ช่วยเราพัฒนา</string>
+    <string name="text_inaccurate">ไม่ถูกต้อง</string>
+    <string name="text_out_of_date">ล้าสมัย</string>
+    <string name="text_too_short">สั้นเกินไป</string>
+    <string name="text_this_isn_t_helpful">สิ่งนี้ไม่เป็นประโยชน์</string>
+    <string name="text_follow_up_to">ติดตามผล</string>
+    <string name="text_no_more_manual_entries_write_your_meal_however_you_like_our_ai_figures_out_calories_and_macros_automatically">ไม่ต้องป้อนข้อมูลด้วยมืออีกต่อไป เขียนมื้ออาหารของคุณตามที่คุณต้องการ AI ของเราคำนวณแคลอรี่และมโครฯ อัตโนมัติ</string>
+    <string name="text_try_meal_logging_now">ลองบันทึกมื้ออาหารตอนนี้!</string>
+    <string name="text_personalise_life_os">ปรับแต่ง Life OS</string>
+    <string name="text_version_val">เวอร์ชั่น %1$s</string>
+    <string name="text_what_s_new_with_life_os">อะไรใหม่ใน Life OS?</string>
+    <string name="text_back_at_it">กลับมาทำอีกครั้ง %1$s!</string>
+    <string name="text_find_out_what_your_body_s_trying_to_tell_you">ค้นหาสิ่งที่ร่างกายของคุณพยายามบอก</string>
+    <string name="text_what_habits_are_helping_me_recover">นิสัยไหนช่วยฉันฟื้นตัวได้บ้าง</string>
+    <string name="text_how_do_i_improve_sleep_quality">ฉันจะปรับปรุงคุณภาพการนอนได้อย่างไร</string>
+    <string name="text_low_calorie_snacks_for_me">ขนมแคลอรี่ต่ำสำหรับฉัน</string>
+
 </resources>

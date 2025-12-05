@@ -2353,4 +2353,33 @@
     <string name="text_tell_us_how_you_live_work_and_recover_luna_will_personalise_your_experience_to_help_you_live_better">Conte-nos como você vive, trabalha e se recupera — Luna personalizará sua experiência para ajudá-lo a viver melhor.</string>
     <string name="text_app_support">Suporte do aplicativo</string>
 
+    <string name="text_add_habits">Adicionar hábitos</string>
+    <string name="text_turn_habits_into_insights">Transformar hábitos em percepções</string>
+    <string name="text_setup_habits">Configurar hábitos</string>
+    <string name="text_search_recents">Pesquisar recentes</string>
+    <string name="text_habits_saved">Hábitos salvos!</string>
+    <string name="text_dig_deeper">Aprofundar</string>
+    <string name="text_lifeos_suggests">LifeOS sugere</string>
+    <string name="text_we_re_getting_to_know_you">Estamos começando a conhecê-lo.</string>
+    <string name="text_as_you_move_rest_and_go_about_your_day_lifeos_will_start_generating_insights_here">À medida que você se move, descansa e passa o dia, o LifeOS começará a gerar percepções aqui.</string>
+    <string name="text_please_provide_detailed_feedback">Por favor, forneça comentários detalhados</string>
+    <string name="text_help_us_improve">Ajude-nos a melhorar</string>
+    <string name="text_inaccurate">Inexato</string>
+    <string name="text_out_of_date">Desatualizado</string>
+    <string name="text_too_short">Muito curto</string>
+    <string name="text_this_isn_t_helpful">Isso não é útil</string>
+    <string name="text_follow_up_to">Acompanhamento para</string>
+    <string name="text_no_more_manual_entries_write_your_meal_however_you_like_our_ai_figures_out_calories_and_macros_automatically">Nada de entradas manuais. Escreva sua refeição como quiser, nossa IA calcula automaticamente calorias e macronutrientes.</string>
+    <string name="text_try_meal_logging_now">Experimente o registro de refeições agora!</string>
+    <string name="text_personalise_life_os">Personalize o Life OS</string>
+    <string name="text_version_val">Versão %1$s</string>
+    <string name="text_what_s_new_with_life_os">O que há de novo no Life OS?</string>
+    <string name="text_back_at_it">De volta ao trabalho %1$s!</string>
+    <string name="text_find_out_what_your_body_s_trying_to_tell_you">Descubra o que seu corpo está tentando lhe dizer.</string>
+    <string name="text_what_habits_are_helping_me_recover">Quais hábitos estão me ajudando a me recuperar?</string>
+    <string name="text_how_do_i_improve_sleep_quality">Como melhorar a qualidade do sono?</string>
+    <string name="text_low_calorie_snacks_for_me">Lanches de baixa caloria para mim</string>
+
+
+
 </resources>

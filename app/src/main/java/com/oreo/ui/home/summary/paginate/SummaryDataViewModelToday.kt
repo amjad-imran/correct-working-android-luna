@@ -1382,13 +1382,20 @@ class SummaryDataViewModelToday @Inject constructor(
             /*getWorkoutHistoryCard(healthData.activity)?.let { userActivities.add(it) }*/
 
             if (lunaManaged) {
-                getLunaAiCard()?.let {
+                getLifeOsCard()?.let {
                     if (userActivities.size > 2) {
                         userActivities.add(2, it)
                     } else {
                         userActivities.add(it)
                     }
                 }
+                /*getLunaAiCard()?.let {
+                    if (userActivities.size > 2) {
+                        userActivities.add(2, it)
+                    } else {
+                        userActivities.add(it)
+                    }
+                }*/
             }
 
             // Add naps if any (this could also be moved to a separate function)
