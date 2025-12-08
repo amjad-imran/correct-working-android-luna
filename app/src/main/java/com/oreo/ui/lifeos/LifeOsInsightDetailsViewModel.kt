@@ -23,7 +23,7 @@ class LifeOsInsightDetailsViewModel @Inject constructor(
 
     var insightData: InsightCardUiModel?= null
 
-    fun submitDislikeBtmShtData(
+    /*fun submitDislikeBtmShtData(
         feedbackText: String,
         reasons: ArrayList<String>?,
         onSuccess: () -> Unit
@@ -71,6 +71,6 @@ class LifeOsInsightDetailsViewModel @Inject constructor(
                 }
             }
         }
-    }
+    }*/
 
 }

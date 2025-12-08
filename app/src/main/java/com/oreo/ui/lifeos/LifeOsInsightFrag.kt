@@ -58,7 +58,14 @@ class LifeOsInsightFrag :
 
     override fun subscribeObservers() {
         viewModel.cards.observe(viewLifecycleOwner) { list ->
-            insightAdapter.submitList(list)
+            if(list.isEmpty()){
+                binding.llMainScrollView.gone()
+                binding.lytDashInsightsEmpty.visible()
+            }else{
+                binding.lytDashInsightsEmpty.gone()
+                binding.llMainScrollView.visible()
+                insightAdapter.submitList(list)
+            }
         }
 
         //

@@ -83,14 +83,6 @@ class LifeOsDashFragment :
 
     private val whatsNewAdapter by lazy { LifeOsWhatsNewAdapter() }
 
-    private val insights by lazy {
-        listOf(
-            "Your circadian rhythm shifted by 45 minutes later this week.",
-            "You slept 20m longer on average compared to last week.",
-            "Your activity score is trending up for 3 days."
-        )
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUi()
@@ -103,17 +95,14 @@ class LifeOsDashFragment :
         val userFirstName = viewModel.getUserFirstName() ?: "User"
         binding.lytHeader.tvTitleWithUserName.text =
             getString(R.string.text_back_at_it, userFirstName)
+
+        binding.lytDashInsights.insightsProgressBar.tvLoadingText.gone()
     }
 
     override fun onResume() {
         super.onResume()
         viewModel.getLifeOsData()
         setLytOnboardQuesProgress()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        insightAdapter.submitList(emptyList())
     }
 
     private fun setLytOnboardQuesProgress() {
@@ -431,6 +420,7 @@ class LifeOsDashFragment :
                 insightAdapter.submitList(list)
                 binding.lytDashInsightsEmpty.root.gone()
                 binding.lytDashInsights.root.visible()
+                binding.lytDashInsights.insightsProgressBar.root.gone()
             }
         }
 
@@ -447,11 +437,11 @@ class LifeOsDashFragment :
         }
 
         viewModel.getLoading().observe(this) {
-            if (it) {
+            /*if (it) {
                 binding.progressBar.root.visible()
             } else {
                 binding.progressBar.root.gone()
-            }
+            }*/
         }
     }
 

@@ -89,11 +89,11 @@ class LifeOsDashViewModel @Inject constructor(
             oreoDeviceRepository.getAiTopQuestions(aiTopic).collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
-                        sendMessage(resource.message)
+                        /*sendMessage(resource.message)*/
                     }
 
                     is Resource.Loading -> {
-//                        setLoading(resource.loading)
+                        /*setLoading(resource.loading)*/
                     }
 
                     is Resource.NetworkError -> {
@@ -114,7 +114,6 @@ class LifeOsDashViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            val fata = it
                             _questions.value = it.questions?.map { it.question as String }
                             //showHistoryIcon.value = it.hasHistory
                         }
@@ -128,7 +127,7 @@ class LifeOsDashViewModel @Inject constructor(
 
     fun loadInsightsData() {
 
-        val jsonRes = """
+        /*val jsonRes = """
             [
   [
     {
@@ -512,10 +511,15 @@ class LifeOsDashViewModel @Inject constructor(
             response.addAll(insightsList)
         }
         val dummy = generateData(response)
-        _insightsCardsData.value = dummy
+        _insightsCardsData.value = dummy*/
 
         //--
-        /*viewModelScope.launch {
+        viewModelScope.launch {
+            if(_insightsCardsData.value!=null){
+                _insightsCardsData.value = _insightsCardsData.value
+                return@launch
+            }
+
             userRepository.getInsightLvl1List().collect{ resource ->
                 when (resource) {
                     is Resource.GenericError -> {
@@ -540,8 +544,8 @@ class LifeOsDashViewModel @Inject constructor(
                     }
 
                     is Resource.Success -> {
-                        resource.data?.data?.let {
-                            if(it.isEmpty()){
+                        resource.data?.data.let {
+                            if(it.isNullOrEmpty()){
                                 _insightsCardsData.value = emptyList()
                                 return@let
                             }
@@ -549,13 +553,13 @@ class LifeOsDashViewModel @Inject constructor(
                             it.forEach { insightsList ->
                                 response.addAll(insightsList)
                             }
-                            val dummy = generateData(response)
+                            val dummy = generateData(response.take(3))
                             _insightsCardsData.value = dummy
                         }
                     }
                 }
             }
-        }*/
+        }
         //--
 
     }

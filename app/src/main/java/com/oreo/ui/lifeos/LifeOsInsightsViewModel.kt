@@ -35,7 +35,7 @@ class LifeOsInsightsViewModel @Inject constructor(
 
     fun loadInsights() {
 
-        val jsonRes = """
+        /*val jsonRes = """
             [
   [
     {
@@ -420,10 +420,10 @@ class LifeOsInsightsViewModel @Inject constructor(
             response.addAll(insightsList)
         }
         val dummy = generateData(response)
-        _cards.value = dummy
+        _cards.value = dummy*/
 
         //--
-        /*viewModelScope.launch {
+        viewModelScope.launch {
             userRepository.getInsightLvl1List().collect{ resource ->
                 when (resource) {
                     is Resource.GenericError -> {
@@ -448,7 +448,12 @@ class LifeOsInsightsViewModel @Inject constructor(
                     }
 
                     is Resource.Success -> {
-                        resource.data?.data?.let {
+                        resource.data?.data.let {
+                            if(it.isNullOrEmpty()){
+                                _cards.value = ArrayList()
+                                return@let
+                            }
+
                             val response = ArrayList<InsightItemResponseModel>()
                             it.forEach { insightsList ->
                                 response.addAll(insightsList)
@@ -459,7 +464,7 @@ class LifeOsInsightsViewModel @Inject constructor(
                     }
                 }
             }
-        }*/
+        }
         //--
 
     }

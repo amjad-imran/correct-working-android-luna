@@ -55,8 +55,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/imageView113"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView207"
-        app:layout_constraintTop_toTopOf="@+id/imageView113"
-        />
+        app:layout_constraintTop_toTopOf="@+id/imageView113" />
 
     <ImageView
         android:id="@+id/ivNewChat"
@@ -70,8 +69,10 @@
         app:layout_constraintTop_toTopOf="@+id/ivBack" />
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/llMainScrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:visibility="gone"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -105,6 +106,56 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/lytDashInsightsEmpty"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <TextView
+            android:id="@+id/textView218"
+            style="@style/S32"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:layout_marginHorizontal="80dp"
+            android:text="@string/text_we_re_getting_to_know_you"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView129"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:src="@drawable/img_inghts_empty_lifeos"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView218" />
+
+        <TextView
+            android:id="@+id/textView222"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/S16"
+            android:textAlignment="center"
+            android:textColor="#CCFFFFFF"
+            android:layout_marginTop="32dp"
+            android:lineHeight="20sp"
+            android:text="@string/text_as_you_move_rest_and_go_about_your_day_lifeos_will_start_generating_insights_here"
+            android:layout_marginHorizontal="26dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView129" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include
         android:id="@+id/progressBar"

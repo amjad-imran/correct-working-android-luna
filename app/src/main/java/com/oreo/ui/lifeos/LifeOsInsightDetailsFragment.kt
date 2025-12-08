@@ -3,7 +3,6 @@ package com.oreo.ui.lifeos
 import android.os.Bundle
 import android.view.View
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,7 +26,6 @@ import com.oreo.ui.custom.sleep.internal.SleepSingleGradientLineChartInternal
 import com.oreo.ui.custom.sleep.internal.SleepTimingChartInternal
 import com.oreo.ui.lifeos.charts.BarChartSingleInsight1
 import com.oreo.ui.lifeos.charts.PayloadData
-import com.oreo.ui.lifeos.insightsLvl1.HELP_US_IMPROVE_BS_INSIGHTS
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -142,9 +140,9 @@ class LifeOsInsightDetailsFragment :
             navigateUpSafe()
         }
 
-        binding.icThumbsDown.setOnClickListener {
+        /*binding.icThumbsDown.setOnClickListener {
             displayHelpUsImproveBS()
-        }
+        }*/
 
         binding.lytChatBox.btnAction.setOnClickListener {
             val (frag, bundle) = LifeOsChatFragment.getStartData(
@@ -165,7 +163,7 @@ class LifeOsInsightDetailsFragment :
         }
     }
 
-    private fun displayHelpUsImproveBS() {
+    /*private fun displayHelpUsImproveBS() {
         setFragmentResultListener(HELP_US_IMPROVE_BS_INSIGHTS){ _, bundle ->
             val feedbackText = bundle.getString("feedbackText")
             val reasons = bundle.getStringArrayList("reasons")
@@ -190,7 +188,7 @@ class LifeOsInsightDetailsFragment :
                 )
             }
         )
-    }
+    }*/
 
     override fun subscribeObservers() {
         binding.lytChatBox.chatEtx.addTextChangedListener { editable ->
