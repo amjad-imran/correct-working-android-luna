@@ -1,6 +1,7 @@
 package com.oreo.data.model.lifeos.dashModels
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import com.noisefit_commans.models.SleepData
 import com.oreo.data.model.TrendsValues
 import com.oreo.data.model.health.SleepMovementBreakup
@@ -15,6 +16,10 @@ data class InsightItemResponseModel(
     val suggestions: String? = null,
     val title: String? = null,
     val insightIcon: String? = null,
+    @SerializedName("date_time")
+    val dateTime: String? = null,
+    @SerializedName("insight_type")
+    val insightType: String? = null,
 ) : Parcelable
 
 

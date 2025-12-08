@@ -31,6 +31,7 @@ import com.oreo.ui.lifeos.charts.PayloadData
 import com.oreo.ui.lifeos.charts.TrendGraphData
 import com.oreo.ui.sleep2.internal.InternalSelectedPeriod
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
+import java.text.SimpleDateFormat
 import java.time.DayOfWeek
 import java.time.Duration
 import java.time.LocalDate
@@ -39,7 +40,9 @@ import java.time.LocalTime
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.temporal.WeekFields
+import java.util.Date
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 import kotlin.collections.forEach
 import kotlin.math.roundToInt
 
@@ -67,7 +70,7 @@ class GraphDataConvertor @Inject constructor(
         return InsightCardUiModel(
             id = 1L,
             title = "Heart rate demo",
-            timeText = "now",
+            timeText = getInsightRelevantGeneratedTime(rawData.dateTime).second,
             chartKey = GraphsKey.HEART_RATE,
             payload = PayloadData(
                 hrData = HrChartPayload(
@@ -96,7 +99,7 @@ class GraphDataConvertor @Inject constructor(
         return InsightCardUiModel(
             id = 2L,
             title = "Stress demo",
-            timeText = "today",
+            timeText = getInsightRelevantGeneratedTime(rawData.dateTime).second,
             chartKey = GraphsKey.STRESS,
             payload = PayloadData(stressData = StressChartPayload(stressModel)),
             styleRes = R.style.StressChartStyle,
@@ -114,7 +117,7 @@ class GraphDataConvertor @Inject constructor(
         return InsightCardUiModel(
             id = 3L,
             title = "Daytime movement demo",
-            timeText = "this week",
+            timeText = getInsightRelevantGeneratedTime(rawData.dateTime).second,
             chartKey = GraphsKey.DAY_TIME_MOVEMENT,
             payload = PayloadData(dayTimeData = DayTimeChartPayload(dtModel)),
             styleRes = R.style.DayTimeGraphStyle,
@@ -130,7 +133,7 @@ class GraphDataConvertor @Inject constructor(
         return InsightCardUiModel(
             id = 4L,
             title = "Sleep analysis demo",
-            timeText = "last night",
+            timeText = getInsightRelevantGeneratedTime(rawData.dateTime).second,
             chartKey = GraphsKey.SLEEP_BREAKUP,
             payload = PayloadData(sleepBreakup = mainObj.breakup_sleep),
             raw = rawData
@@ -146,7 +149,7 @@ class GraphDataConvertor @Inject constructor(
         return InsightCardUiModel(
             id = 5L,
             title = "Sleep Movement demo",
-            timeText = "last night",
+            timeText = getInsightRelevantGeneratedTime(rawData.dateTime).second,
             chartKey = GraphsKey.SLEEP_MOVEMENT,
             payload = PayloadData(sleepMovement = getMovementBreakup(mainObj.sleep_movement)),
             raw = rawData
@@ -347,7 +350,7 @@ class GraphDataConvertor @Inject constructor(
         return InsightCardUiModel(
             id = 6L,
             title = "generateSleepMultiBarChartData() demo",
-            timeText = "last night",
+            timeText = getInsightRelevantGeneratedTime(rawData.dateTime).second,
             chartKey = GraphsKey.TREND_SLEEP_MULTI_BAR,
             payload = PayloadData(
                 trendData = TrendGraphData(
@@ -431,7 +434,7 @@ class GraphDataConvertor @Inject constructor(
         return InsightCardUiModel(
             id = 6L,
             title = "generateSleepSingleLineChartData() demo",
-            timeText = "last night",
+            timeText = getInsightRelevantGeneratedTime(rawData.dateTime).second,
             chartKey = GraphsKey.TREND_SLEEP_SINGLE_LINE_GRADIENT,
             payload = PayloadData(
                 trendData = TrendGraphData(
@@ -525,7 +528,7 @@ class GraphDataConvertor @Inject constructor(
         return InsightCardUiModel(
             id = 6L,
             title = "Sleep single line gradient demo",
-            timeText = "last night",
+            timeText = getInsightRelevantGeneratedTime(rawData.dateTime).second,
             chartKey = GraphsKey.TREND_SLEEP_SINGLE_LINE_GRADIENT,
             payload = PayloadData(
                 trendData = TrendGraphData(
@@ -596,7 +599,7 @@ class GraphDataConvertor @Inject constructor(
         return InsightCardUiModel(
             id = 6L,
             title = "Rem Day demo",
-            timeText = "last night",
+            timeText = getInsightRelevantGeneratedTime(rawData.dateTime).second,
             chartKey = GraphsKey.TREND_SLEEP_SINGLE,
             payload = PayloadData(
                 trendData = TrendGraphData(
@@ -652,7 +655,7 @@ class GraphDataConvertor @Inject constructor(
         return InsightCardUiModel(
             id = 6L,
             title = "Rem Day demo",
-            timeText = "last night",
+            timeText = getInsightRelevantGeneratedTime(rawData.dateTime).second,
             chartKey = GraphsKey.TREND_SLEEP_HOUR_VS_NEED_CHARD_INTERNAL,
             payload = PayloadData(
                 trendData = TrendGraphData(
@@ -731,7 +734,7 @@ class GraphDataConvertor @Inject constructor(
         return InsightCardUiModel(
             id = 6L,
             title = "Rem Day demo",
-            timeText = "last night",
+            timeText = getInsightRelevantGeneratedTime(rawData.dateTime).second,
             chartKey = GraphsKey.TREND_SLEEP_TIMING_INTERNAL,
             payload = PayloadData(
                 trendData = TrendGraphData(
@@ -815,7 +818,7 @@ class GraphDataConvertor @Inject constructor(
         return InsightCardUiModel(
             id = 6L,
             title = "Rem Day demo",
-            timeText = "last night",
+            timeText = getInsightRelevantGeneratedTime(data.dateTime).second,
             chartKey = GraphsKey.TREND_SLEEP_SINGLE,
             payload = PayloadData(
                 trendData = TrendGraphData(
@@ -1478,6 +1481,64 @@ class GraphDataConvertor @Inject constructor(
                 it.value1 != null
             }
             return filteredData.size
+        }
+    }
+
+    fun getInsightRelevantGeneratedTime(dateTime: String?): Pair<Int, String>{ // Int - Quantity - 1/2/3 , String - will be : seconds/minutes/hour(s)/day(s)
+        try {
+            // Define the format of the incoming date-time string
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+
+            // Parse the provided date-time string into a Date object
+            val inputDate = dateFormat.parse(dateTime)
+
+            // Get the current date and time
+            val currentDate = Date()
+
+            // Calculate the difference in milliseconds
+            val diffInMillis = currentDate.time - inputDate.time
+
+            // Determine the most appropriate time unit and return the quantity and unit as a Pair
+            val seconds = TimeUnit.MILLISECONDS.toSeconds(diffInMillis)
+            val minutes = TimeUnit.MILLISECONDS.toMinutes(diffInMillis)
+            val hours = TimeUnit.MILLISECONDS.toHours(diffInMillis)
+            val days = TimeUnit.MILLISECONDS.toDays(diffInMillis)
+
+            return when {
+                seconds < 60 -> Pair(
+                    seconds.toInt(),
+                    "Just Now"
+                )
+
+                minutes < 60 -> {
+                    val mins = minutes.toInt()
+                    Pair(
+                        mins,
+                        if(mins==1) "$mins min ago"
+                        else "$mins mins ago"
+                        )
+                }
+
+                hours < 24 -> {
+                    val hours = hours.toInt()
+                    Pair(
+                        hours,
+                        if(hours==1) "$hours hr ago"
+                        else "$hours hrs ago"
+                    )
+                }
+
+                else -> {
+                    val days = days.toInt()
+                    Pair(
+                        days,
+                        if(days==1) "$days day ago"
+                        else "$days days ago"
+                    )
+                }
+            }
+        }catch (_: Exception){
+            return Pair(0, "Unknown")
         }
     }
 }
