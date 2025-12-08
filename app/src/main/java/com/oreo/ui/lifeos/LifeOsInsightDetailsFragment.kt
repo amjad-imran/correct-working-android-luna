@@ -130,6 +130,7 @@ class LifeOsInsightDetailsFragment :
         binding.tvLifeOsSuggestedQues.text = data.raw?.suggestions
 
         // Chat Box
+        binding.lytChatBox.ivAddAttachment.gone()
         binding.lytChatBox.btnAction.setImageResource(R.drawable.image_ai_message_send_3)
         binding.lytChatBox.btnAction.alpha = 0.5f
         binding.lytChatBox.btnAction.isClickable = false
@@ -145,21 +146,7 @@ class LifeOsInsightDetailsFragment :
         }*/
 
         binding.lytChatBox.btnAction.setOnClickListener {
-            val (frag, bundle) = LifeOsChatFragment.getStartData(
-                threadId = null,
-                userMessage = null,
-                title = null,
-                headerInsight1 = AiHeaderInsight1(
-                    headerText = null,
-                    mainText = binding.lytChatBox.chatEtx.text.toString(),
-                    footerText = null,
-                    insightData = viewModel.insightData?.raw
-                ),
-                aiTopic = AITopics.GENERAL
-            )
-            navigate(
-                frag, bundle
-            )
+            handleRelatedQuesClick(binding.lytChatBox.chatEtx.text.toString())
         }
     }
 
