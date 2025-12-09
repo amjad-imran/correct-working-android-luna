@@ -276,7 +276,7 @@ class SummaryDataFragmentToday :
 
         val whatsNewCardInteractDone = viewModel.localDataStore.isWhatsNewCardInteractionDone()
         if(!whatsNewCardInteractDone && viewModel.registerDate > 6){
-            binding.contentMain.lytWhatsNewCard.lytTryMealLogging.background =
+            binding.contentMain.lytWhatsNewCard.lytActionBtn.background =
                 GenerateCustomDrawables.chatHistorySearchBar(
                     borderWidth = 2f,
                     backgroundColor = "#1F9FB1FF".toColorInt(),
@@ -897,16 +897,9 @@ class SummaryDataFragmentToday :
                 viewModel.localDataStore.setIsWhatsNewCardInteractionDone(true)
             }
 
-            lytTryMealLogging.setOnClickListener {
+            lytActionBtn.setOnClickListener {
                 ivClose.performClick()
-                navigate(
-                    R.id.addActivityTimelineFragment,
-                    bundleOf(
-                        "showTimeline" to false,
-                        "key" to CircadianAlignmentViewModel.meal_window_key,
-                        "srcKey" to "lunaDash",
-                    )
-                )
+                mainViewModel.navigateTo(BottomNavOption.LUNA_AI)
             }
         }
 

@@ -2474,5 +2474,7 @@ onjour, Luna"</string>
     <string name="text_what_habits_are_helping_me_recover">Quelles habitudes m\'aident à récupérer ?</string>
     <string name="text_how_do_i_improve_sleep_quality">Comment améliorer la qualité du sommeil ?</string>
     <string name="text_low_calorie_snacks_for_me">En-cas faibles en calories pour moi</string>
+    <string name="text_lifeos_turns_your_sleep_activity_stress_and_habits_into_clear_insights_and_trends_you_can_act_on_every_day">LifeOS transforme votre sommeil, activité, stress et habitudes en informations claires et tendances sur lesquelles vous pouvez agir chaque jour.</string>
+    <string name="text_explore_lifeos">Explorer LifeOS</string>
 
 </resources>

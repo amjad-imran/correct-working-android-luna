@@ -2361,5 +2361,7 @@
     <string name="text_what_habits_are_helping_me_recover">นิสัยไหนช่วยฉันฟื้นตัวได้บ้าง</string>
     <string name="text_how_do_i_improve_sleep_quality">ฉันจะปรับปรุงคุณภาพการนอนได้อย่างไร</string>
     <string name="text_low_calorie_snacks_for_me">ขนมแคลอรี่ต่ำสำหรับฉัน</string>
+    <string name="text_lifeos_turns_your_sleep_activity_stress_and_habits_into_clear_insights_and_trends_you_can_act_on_every_day">LifeOS เปลี่ยนการนอนหลับ กิจกรรม ความเครียด และนิสัยของคุณให้เป็นข้อมูลที่ชัดเจนและแนวโน้มที่คุณสามารถทำได้ทุกวัน</string>
+    <string name="text_explore_lifeos">สำรวจ LifeOS</string>
 
 </resources>

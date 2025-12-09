@@ -2332,6 +2332,8 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_what_habits_are_helping_me_recover">What habits are helping me recover?</string>
     <string name="text_how_do_i_improve_sleep_quality">How do I improve sleep quality?</string>
     <string name="text_low_calorie_snacks_for_me">Low calorie snacks for me</string>
+    <string name="text_lifeos_turns_your_sleep_activity_stress_and_habits_into_clear_insights_and_trends_you_can_act_on_every_day">LifeOS turns your sleep, activity, stress, and habits into clear insights and trends you can act on every day.</string>
+    <string name="text_explore_lifeos">Explore LifeOS</string>
 
 
 </resources>

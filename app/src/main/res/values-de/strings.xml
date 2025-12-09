@@ -2355,6 +2355,7 @@
     <string name="text_what_habits_are_helping_me_recover">Welche Gewohnheiten helfen mir, mich zu erholen?</string>
     <string name="text_how_do_i_improve_sleep_quality">Wie verbessere ich die Schlafqualität?</string>
     <string name="text_low_calorie_snacks_for_me">Kalorienarme Snacks für mich</string>
-
+    <string name="text_lifeos_turns_your_sleep_activity_stress_and_habits_into_clear_insights_and_trends_you_can_act_on_every_day">LifeOS verwandelt deinen Schlaf, deine Aktivität, deinen Stress und deine Gewohnheiten in klare Einblicke und Trends, auf die du jeden Tag reagieren kannst.</string>
+    <string name="text_explore_lifeos">Erkunde LifeOS</string>
 
 </resources>
