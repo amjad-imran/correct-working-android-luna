@@ -489,7 +489,7 @@ class OSummaryHealthOverviewAdapter(val isToday: Boolean) : RecyclerView.Adapter
             )
 
             is HomeRecyclerViewHolder.ActivityViewHolder2 -> holder.bind(
-                items[position] as OHealthOverview.Activity, position, lastPosition, devicePaired
+                items[position] as OHealthOverview.Activity, position, lastPosition, devicePaired, isToday
             )
 
             is HomeRecyclerViewHolder.ActivityMinimalViewHolder -> holder.bind(
@@ -3415,7 +3415,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
     class ActivityViewHolder2(private val binding: ListActivityBurnCardItem2Binding) :
         HomeRecyclerViewHolder(binding) {
         fun bind(
-            data: OHealthOverview.Activity, position: Int, lastPosition: Int, devicePaired: Boolean
+            data: OHealthOverview.Activity,
+            position: Int,
+            lastPosition: Int,
+            devicePaired: Boolean,
+            isToday: Boolean
         ) {
             val scoreValue = data.data.activityScore
 
@@ -3436,12 +3440,16 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.tvStatus.text = data.data.status
             }
 
-
-            if (data.data.nudges.isNullOrEmpty()) {
+            if(isToday) {
+                if (data.data.nudges.isNullOrEmpty()) {
+                    binding.tvNudge.gone()
+                } else {
+                    binding.tvNudge.visible()
+                    binding.tvNudge.text = data.data.nudges.firstOrNull()?.message ?: ""
+                }
+            }
+            else{
                 binding.tvNudge.gone()
-            } else {
-                binding.tvNudge.visible()
-                binding.tvNudge.text = data.data.nudges.firstOrNull()?.message ?: ""
             }
 
             //binding.tvTotalCalories.text = caloriesGoalText
