@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="242dp"
+    android:layout_height="280dp"
     android:layout_marginTop="16dp">
 
     <ImageView
@@ -64,6 +64,7 @@
         style="@style/S14"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:lineHeight="20sp"
         android:lines="2"
         android:maxLines="2"
         android:ellipsize="end"
@@ -79,7 +80,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginTop="12dp"
-        android:background="#33FFFFFF"
+        android:background="#1AFFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTitle" />

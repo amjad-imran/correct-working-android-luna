@@ -91,10 +91,11 @@
 
             <TextView
                 android:id="@+id/tvMessage"
-                style="@style/S14"
+                style="@style/S16"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:textColor="#B7B7B7"
+                android:layout_marginTop="12dp"
                 android:lineSpacingExtra="3sp"
                 android:lineHeight="20sp"
                 tools:text="@tools:sample/lorem/random" />
@@ -106,8 +107,8 @@
                 android:layout_marginTop="16dp" />
 
             <TextView
-                style="@style/S12"
-                android:fontFamily="@font/gilroy_bold"
+                style="@style/S14"
+                android:textStyle="bold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -115,9 +116,10 @@
 
             <TextView
                 android:id="@+id/tvLifeOsSuggestedQues"
-                style="@style/S14"
+                style="@style/S16"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="#B7B7B7"
                 android:lineSpacingExtra="3sp"
                 android:lineHeight="20sp"
                 android:layout_marginTop="4dp"
@@ -142,8 +144,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="4dp"
-                    style="@style/S12"
-                    android:fontFamily="@font/gilroy_medium"
+                    style="@style/S14"
+                    android:textStyle="bold"
                     android:text="@string/text_dig_deeper"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

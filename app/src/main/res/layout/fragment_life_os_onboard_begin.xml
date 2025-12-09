@@ -7,6 +7,16 @@
     tools:context="com.oreo.ui.lifeos.onboarding.LifeOsOnboardBeginFragment">
 
     <ImageView
+        android:id="@+id/ivBackBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/ic_back_lifeos_onbaord"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
         android:id="@+id/imageView120"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -34,6 +34,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,6 +43,8 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLifeOsDashBinding
+import com.noisefit.oreo.BottomNavOption
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.common.MarginLeftRightItemDecoration
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.dpToPixel
@@ -50,13 +54,17 @@ import com.noisefit_commans.ui.visible
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.chatGpt.audio.AudioAiFragment
+import com.oreo.ui.lifeos.onboarding.LifeOsOnboardBeginFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.getValue
 
 @AndroidEntryPoint
 class LifeOsDashFragment :
     BaseFragment<FragmentLifeOsDashBinding>(FragmentLifeOsDashBinding::inflate) {
 
     private val viewModel: LifeOsDashViewModel by viewModels()
+
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
 
     private val questionsAdapter by lazy {
         LifeOsQuestionAdapter { data ->
@@ -448,6 +456,13 @@ class LifeOsDashFragment :
     private fun setDestination(dest: LifeOsDashViewModel.LifeOsDestinations) {
         when(dest){
             LifeOsDashViewModel.LifeOsDestinations.BEGIN_FRAG -> {
+                setFragmentResultListener(LifeOsOnboardBeginFragment.LIFE_OS_ONBOARD_BEGIN_KEY){ _, bundle ->
+                    val isBackClicked = bundle.getBoolean("isBackClicked")
+                    if(isBackClicked){
+                        navigateUpSafe()
+                        mainViewModel.navigateTo(BottomNavOption.HOME)
+                    }
+                }
                 navigate(R.id.lifeOsOnboardBeginFragment)
             }
             LifeOsDashViewModel.LifeOsDestinations.QUES_FRAG -> {

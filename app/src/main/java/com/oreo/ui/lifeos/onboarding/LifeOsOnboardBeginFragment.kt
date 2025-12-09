@@ -3,6 +3,7 @@ package com.oreo.ui.lifeos.onboarding
 import android.os.Bundle
 import android.view.View
 import androidx.activity.addCallback
+import androidx.fragment.app.setFragmentResult
 import com.noisefit.data.local.dataStored.implementation.DataStoredImpl
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLifeOsOnboardBeginBinding
@@ -15,6 +16,10 @@ class LifeOsOnboardBeginFragment : BaseFragment<FragmentLifeOsOnboardBeginBindin
 
     @Inject
     lateinit var localStoredImpl: DataStoredImpl
+
+    companion object{
+        const val LIFE_OS_ONBOARD_BEGIN_KEY = "LIFE_OS_ONBOARD_BEGIN_KEY"
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -62,6 +67,16 @@ class LifeOsOnboardBeginFragment : BaseFragment<FragmentLifeOsOnboardBeginBindin
             localStoredImpl.setLifeOsOnboardInitiated(true)
             navigateUpSafe()
             navigate(R.id.lifeOsOnboardingQuesFragment)
+        }
+
+        binding.ivBackBtn.setOnClickListener {
+            setFragmentResult(
+                LIFE_OS_ONBOARD_BEGIN_KEY,
+                Bundle().apply {
+                    putBoolean("isBackClicked", true)
+                }
+            )
+            navigateUpSafe()
         }
     }
 
