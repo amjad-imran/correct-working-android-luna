@@ -2327,5 +2327,14 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_low_calorie_snacks_for_me">Bocadillos bajos en calorías para mí</string>
     <string name="text_lifeos_turns_your_sleep_activity_stress_and_habits_into_clear_insights_and_trends_you_can_act_on_every_day">LifeOS convierte tu sueño, actividad, estrés y hábitos en información clara y tendencias en las que puedes actuar todos los días.</string>
     <string name="text_explore_lifeos">Explora LifeOS</string>
+    <string name="text_good_morning_val">Buenos días, %1$s</string>
+    <string name="text_good_afternoon_val">Buenas tardes, %1$s</string>
+    <string name="text_good_evening_val">Buenas noches, %1$s</string>
+    <string name="text_hi_text">Hola %1$s</string>
+    <string name="text_ask_lifeos">Pregunta a LifeOS</string>
+    <string name="text_know_more_with_lifeos">Saber más con LifeOS</string>
+    <string name="text_lifeos_whats_new_content_1"> * **Presentamos LifeOS: El sistema operativo de tu cuerpo**\n Una capa que unifica tus datos de salud en una vista unificada de cómo estás.</string>
+    <string name="text_lifeos_whats_new_content_2"> * **De los datos crudos a decisiones claras:**\n Decide qué es lo que realmente importa hoy y convierte las señales ruidosas en consejos accionables.</string>
+    <string name="text_lifeos_whats_new_content_3"> * **Aprende con el tiempo:**\n Se adapta a tu línea base y fases de vida para que la orientación siga siendo personal y oportuna.</string>
 
 </resources>

@@ -2357,5 +2357,14 @@
     <string name="text_low_calorie_snacks_for_me">Lage-calorie snacks voor mij</string>
     <string name="text_lifeos_turns_your_sleep_activity_stress_and_habits_into_clear_insights_and_trends_you_can_act_on_every_day">LifeOS zet je slaap, activiteit, stress en gewoonten om in duidelijke inzichten en trends waarop je elke dag kunt reageren.</string>
     <string name="text_explore_lifeos">Verken LifeOS</string>
+    <string name="text_good_morning_val">Goedemorgen, %1$s</string>
+    <string name="text_good_afternoon_val">Goedemiddag, %1$s</string>
+    <string name="text_good_evening_val">Goedenavond, %1$s</string>
+    <string name="text_hi_text">Hoi %1$s</string>
+    <string name="text_ask_lifeos">Vraag LifeOS</string>
+    <string name="text_know_more_with_lifeos">Meer weten met LifeOS</string>
+    <string name="text_lifeos_whats_new_content_1"> * **LifeOS voorstellen: Het besturingssysteem van je lichaam**\n Een laag die je gezondheidsdata verenigt in een allesomvattend overzicht van hoe het met je gaat.</string>
+    <string name="text_lifeos_whats_new_content_2"> * **Van ruwe data naar duidelijke beslissingen:**\n Beslist wat vandaag echt belangrijk is en zet ruis om in bruikbare adviezen.</string>
+    <string name="text_lifeos_whats_new_content_3"> * **Leert in de loop van de tijd:**\n Past zich aan je basislijn en levensfasen aan, zodat de begeleiding persoonlijk en op tijd blijft.</string>
 
 </resources>

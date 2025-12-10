@@ -2381,6 +2381,15 @@
     <string name="text_low_calorie_snacks_for_me">Lanches de baixa caloria para mim</string>
     <string name="text_lifeos_turns_your_sleep_activity_stress_and_habits_into_clear_insights_and_trends_you_can_act_on_every_day">LifeOS transforma o seu sono, atividade, stress e hábitos em informações claras e tendências nas quais você pode agir todos os dias.</string>
     <string name="text_explore_lifeos">Explore LifeOS</string>
+    <string name="text_good_morning_val">Bom dia, %1$s</string>
+    <string name="text_good_afternoon_val">Boa tarde, %1$s</string>
+    <string name="text_good_evening_val">Boa noite, %1$s</string>
+    <string name="text_hi_text">Oi %1$s</string>
+    <string name="text_ask_lifeos">Pergunte ao LifeOS</string>
+    <string name="text_know_more_with_lifeos">Saiba mais com o LifeOS</string>
+    <string name="text_lifeos_whats_new_content_1"> * **Apresentando o LifeOS: O sistema operacional do seu corpo**\n Uma camada que unifica seus dados de saúde em uma visão unificada de como você está.</string>
+    <string name="text_lifeos_whats_new_content_2"> * **De dados brutos a decisões claras:**\n Decide o que realmente importa hoje e transforma sinais ruidosos em orientações acionáveis.</string>
+    <string name="text_lifeos_whats_new_content_3"> * **Aprende ao longo do tempo:**\n Adapta-se à sua linha de base e fases de vida para que a orientação permaneça pessoal e oportuna.</string>
 
 
 </resources>

@@ -702,9 +702,9 @@ class LifeOsDashViewModel @Inject constructor(
         _whatsNew.value = LifeOsWhatsNewResponse(
             version = 1.2f,
             whatsNewList = listOf(
-                "<b>New Timeline:</b> streamlined logging for Supplements and Recovery",
-                "<b>AI coaching improvements:</b> better context understanding and tips",
-                "<b>Dashboard tweaks:</b> faster loading and refreshed visuals"
+                resourcesProvider.getString(R.string.text_lifeos_whats_new_content_1),
+                resourcesProvider.getString(R.string.text_lifeos_whats_new_content_2),
+                resourcesProvider.getString(R.string.text_lifeos_whats_new_content_3),
             )
         )
     }

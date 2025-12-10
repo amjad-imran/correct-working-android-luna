@@ -8,6 +8,7 @@ import com.noisefit.luna.databinding.ItemAiWhatsNewBinding
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
+import io.noties.markwon.Markwon
 
 class LifeOsWhatsNewAdapter : RecyclerView.Adapter<LifeOsWhatsNewAdapter.ViewHolder>() {
 
@@ -16,7 +17,9 @@ class LifeOsWhatsNewAdapter : RecyclerView.Adapter<LifeOsWhatsNewAdapter.ViewHol
     inner class ViewHolder(val binding: ItemAiWhatsNewBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(text: String) {
-            binding.tvTitle.text = Html.fromHtml(text)
+
+            val markwon = Markwon.create(this.binding.tvTitle.context)
+            markwon.setMarkdown(binding.tvTitle, text)
 
             if (bindingAdapterPosition == items.size - 1) {
                 binding.lytDivider.root.invisible()

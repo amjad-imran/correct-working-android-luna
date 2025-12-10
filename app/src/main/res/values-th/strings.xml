@@ -2363,5 +2363,14 @@
     <string name="text_low_calorie_snacks_for_me">ขนมแคลอรี่ต่ำสำหรับฉัน</string>
     <string name="text_lifeos_turns_your_sleep_activity_stress_and_habits_into_clear_insights_and_trends_you_can_act_on_every_day">LifeOS เปลี่ยนการนอนหลับ กิจกรรม ความเครียด และนิสัยของคุณให้เป็นข้อมูลที่ชัดเจนและแนวโน้มที่คุณสามารถทำได้ทุกวัน</string>
     <string name="text_explore_lifeos">สำรวจ LifeOS</string>
+    <string name="text_good_morning_val">สวัสดีตอนเช้า, %1$s</string>
+    <string name="text_good_afternoon_val">สวัสดีตอนบ่าย, %1$s</string>
+    <string name="text_good_evening_val">สวัสดีตอนเย็น, %1$s</string>
+    <string name="text_hi_text">สวัสดี %1$s</string>
+    <string name="text_ask_lifeos">ถาม LifeOS</string>
+    <string name="text_know_more_with_lifeos">เรียนรู้เพิ่มเติมกับ LifeOS</string>
+    <string name="text_lifeos_whats_new_content_1"> * **แนะนำ LifeOS: ระบบปฏิบัติการของร่างกายคุณ**\n ชั้นที่รวมข้อมูลสุขภาพของคุณเป็นมุมมองที่รวมถึงว่าคุณเป็นอย่างไร</string>
+    <string name="text_lifeos_whats_new_content_2"> * **จากข้อมูลดิบสู่การตัดสินใจที่ชัดเจน:**\n ตัดสินใจว่าอะไรที่สำคัญจริงๆ ในวันนี้และแปลงสัญญาณเสียงรบกวนเป็นคำแนะนำที่สามารถปฏิบัติได้</string>
+    <string name="text_lifeos_whats_new_content_3"> * **เรียนรู้ตามเวลา:**\n ปรับตัวให้เข้ากับระดับพื้นฐานและระยะเวลาชีวิตของคุณเพื่อให้คำแนะนำยังคงเป็นส่วนตัวและทันเวลา</string>
 
 </resources>
