@@ -1,5 +1,6 @@
 package com.oreo.ui.lifeos
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.compose.foundation.Canvas
@@ -56,6 +57,8 @@ import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.chatGpt.audio.AudioAiFragment
 import com.oreo.ui.lifeos.onboarding.LifeOsOnboardBeginFragment
 import dagger.hilt.android.AndroidEntryPoint
+import eightbitlab.com.blurview.RenderEffectBlur
+import eightbitlab.com.blurview.RenderScriptBlur
 import kotlin.getValue
 
 @AndroidEntryPoint
@@ -93,19 +96,40 @@ class LifeOsDashFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setBlur()
         setUi()
         setupQuestionsRecycler()
         setupWhatsNewRecycler()
 //        setupInsightsPager(list)
     }
 
-    private fun setUi() {
-        val userFirstName = viewModel.getUserFirstName() ?: "User"
-        binding.lytHeader.tvTitleWithUserName.text =
-            getString(R.string.text_back_at_it, userFirstName)
+    private fun setBlur() {
+        val activity = requireActivity()
 
-        binding.lytDashInsights.insightsProgressBar.tvLoadingText.gone()
+        val radius = 20f;
+        val decorView = activity.window.decorView;
+        val rootView = binding.root
+        val windowBackground = decorView.background
+
+        val blurAlgo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            RenderEffectBlur()
+        } else {
+            RenderScriptBlur(activity)
+        }
+        binding.blurView.setupWith(rootView, blurAlgo) // or RenderEffectBlur
+            .setFrameClearDrawable(windowBackground) // Optional
+            .setBlurRadius(radius)
+
     }
+
+    private fun setUi() {
+        binding.lytDashInsights.insightsProgressBar.tvLoadingText.gone()
+
+        binding.lytHeader.tvTitleWithUserName.text = viewModel.getGreetText()
+    }
+
+
 
     override fun onResume() {
         super.onResume()
@@ -400,6 +424,14 @@ class LifeOsDashFragment :
 
         binding.lytHeader.lytOnboardQuesProgress.root.setOnClickListener {
             navigate(R.id.lifeOsOnboardingQuesFragment)
+        }
+
+        binding.svMain.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+            if (scrollY == 0) {
+                binding.blurView.gone()
+            } else {
+                binding.blurView.visible()
+            }
         }
     }
 

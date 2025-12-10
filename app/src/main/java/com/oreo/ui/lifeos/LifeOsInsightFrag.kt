@@ -1,5 +1,6 @@
 package com.oreo.ui.lifeos
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -12,6 +13,8 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.oreo.ui.chatGpt.AITopics
 import dagger.hilt.android.AndroidEntryPoint
+import eightbitlab.com.blurview.RenderEffectBlur
+import eightbitlab.com.blurview.RenderScriptBlur
 
 @AndroidEntryPoint
 class LifeOsInsightFrag :
@@ -30,15 +33,36 @@ class LifeOsInsightFrag :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setBlur()
         setupRecycler()
     }
 
+    private fun setBlur() {
+        val activity = requireActivity()
+
+        val radius = 20f;
+        val decorView = activity.window.decorView;
+        val rootView = binding.root
+        val windowBackground = decorView.background
+
+        val blurAlgo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            RenderEffectBlur()
+        } else {
+            RenderScriptBlur(activity)
+        }
+        binding.blurView.setupWith(rootView, blurAlgo) // or RenderEffectBlur
+            .setFrameClearDrawable(windowBackground) // Optional
+            .setBlurRadius(radius)
+
+    }
+
     override fun initListener() {
-        binding.ivBack.setOnClickListener {
+        binding.lytToolbar.ivBack.setOnClickListener {
             navigateUpSafe()
         }
 
-        binding.ivNewChat.setOnClickListener {
+        binding.lytToolbar.ivNewChat.setOnClickListener {
             val (frag, bundle) = LifeOsChatFragment.getStartData(
                 threadId = null,
                 userMessage = null,
@@ -46,6 +70,14 @@ class LifeOsInsightFrag :
                 aiTopic = AITopics.GENERAL
             )
             navigate(frag,bundle)
+        }
+
+        binding.llMainScrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+            if (scrollY == 0) {
+                binding.blurView.gone()
+            } else {
+                binding.blurView.visible()
+            }
         }
     }
 

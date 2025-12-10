@@ -129,6 +129,9 @@ class LifeOsInsightDetailsFragment :
 
         binding.tvLifeOsSuggestedQues.text = data.raw?.suggestions
 
+        // set time
+        binding.tvTime.text = data.timeText
+
         // Chat Box
         binding.lytChatBox.ivAddAttachment.gone()
         binding.lytChatBox.btnAction.setImageResource(R.drawable.image_ai_message_send_3)

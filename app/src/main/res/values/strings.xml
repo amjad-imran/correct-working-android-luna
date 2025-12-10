@@ -2334,6 +2334,10 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_low_calorie_snacks_for_me">Low calorie snacks for me</string>
     <string name="text_lifeos_turns_your_sleep_activity_stress_and_habits_into_clear_insights_and_trends_you_can_act_on_every_day">LifeOS turns your sleep, activity, stress, and habits into clear insights and trends you can act on every day.</string>
     <string name="text_explore_lifeos">Explore LifeOS</string>
+    <string name="text_good_morning_val">Good morning, %1$s</string>
+    <string name="text_good_afternoon_val">Good afternoon, %1$s</string>
+    <string name="text_good_evening_val">Good evening, %1$s</string>
+    <string name="text_hi_text">Hi %1$s</string>
 
 
 </resources>

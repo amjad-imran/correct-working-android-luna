@@ -1487,7 +1487,7 @@ class GraphDataConvertor @Inject constructor(
     fun getInsightRelevantGeneratedTime(dateTime: String?): Pair<Int, String>{ // Int - Quantity - 1/2/3 , String - will be : seconds/minutes/hour(s)/day(s)
         try {
             // Define the format of the incoming date-time string
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
             // Parse the provided date-time string into a Date object
             val inputDate = dateFormat.parse(dateTime)

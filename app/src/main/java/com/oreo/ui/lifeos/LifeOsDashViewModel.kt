@@ -3,10 +3,10 @@ package com.oreo.ui.lifeos
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
+import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -19,6 +19,7 @@ import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.lifeos.charts.InsightCardUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,6 +28,7 @@ class LifeOsDashViewModel @Inject constructor(
     val graphDataConvertor: GraphDataConvertor,
     val oreoDeviceRepository: OreoDeviceRepository,
     private val userRepository: UserRepository,
+    private val resourcesProvider: ResourcesProvider,
 ) : BaseViewModel() {
 
     private val _questions = MutableLiveData<List<String>>()
@@ -39,10 +41,6 @@ class LifeOsDashViewModel @Inject constructor(
 
     private val _insightsCardsData = MutableLiveData<List<InsightCardUiModel>>()
     val insightsCardsData: LiveData<List<InsightCardUiModel>> get() = _insightsCardsData
-
-    fun getUserFirstName(): String?{
-        return userRepository.getUser()?.firstName
-    }
 
     fun getLifeOsData(){
         viewModelScope.launch {
@@ -709,6 +707,18 @@ class LifeOsDashViewModel @Inject constructor(
                 "<b>Dashboard tweaks:</b> faster loading and refreshed visuals"
             )
         )
+    }
+
+    fun getGreetText(): String {
+        val currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+        val userFirstName = userRepository.getUser()?.firstName ?: "User"
+        return when (currentHour) {
+            in 4..11 -> resourcesProvider.getString(R.string.text_good_morning_val, userFirstName)
+            in 12..16 -> resourcesProvider.getString(R.string.text_good_afternoon_val, userFirstName)
+            in 17..21 -> resourcesProvider.getString(R.string.text_good_evening_val, userFirstName)
+            else -> resourcesProvider.getString(R.string.text_hi_text, userFirstName)
+            /*in 22..23, in 0..3 -> "Hi $userFirstName"*/
+        }
     }
 
     enum class LifeOsDestinations{
