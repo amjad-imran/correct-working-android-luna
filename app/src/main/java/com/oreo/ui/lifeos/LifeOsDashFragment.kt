@@ -155,23 +155,21 @@ class LifeOsDashFragment :
 
         if(ansSize >= quesSize){
             binding.lytHeader.lytOnboardQuesProgress.root.gone()
+
+            binding.lytHeader.imageView117.visible()
+            binding.lytHeader.textView205.visible()
+            binding.lytHeader.ivPersonalize.visible()
             return
+        }else{
+            binding.lytHeader.ivPersonalize.invisible()
+            binding.lytHeader.imageView117.invisible()
+            binding.lytHeader.textView205.invisible()
         }
 
         binding.lytHeader.lytOnboardQuesProgress.root.visible()
 
         binding.lytHeader.lytOnboardQuesProgress.composeView.setContent {
             GradientBorderCard(ansSize/quesSize.toFloat())
-        }
-
-        if(ansSize/quesSize.toFloat() == 1f){
-            binding.lytHeader.imageView117.visible()
-            binding.lytHeader.textView205.visible()
-            binding.lytHeader.ivPersonalize.visible()
-        }else{
-            binding.lytHeader.ivPersonalize.invisible()
-            binding.lytHeader.imageView117.invisible()
-            binding.lytHeader.textView205.invisible()
         }
     }
 
