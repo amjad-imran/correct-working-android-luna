@@ -33,6 +33,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.data.model.AiHeaderInsight1
 import com.noisefit.data.model.AiMeals
 import com.noisefit.data.model.AiWorkout
@@ -69,6 +70,7 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import com.noisefit.luna.BuildConfig
 import com.noisefit_commans.common.copyToClipBoard
+import com.noisefit_commans.ui.scrollToBottom
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 
 @AndroidEntryPoint
@@ -127,7 +129,7 @@ class LifeOsChatFragment :
         super.onCreate(savedInstanceState)
         val window = requireActivity().window
         if (previousSoftInputMode == null) previousSoftInputMode = window.attributes.softInputMode
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -149,7 +151,7 @@ class LifeOsChatFragment :
 
         setActionButtonState()
 
-        setupImeAnimation()
+        //setupImeAnimation()
         setSuggestedQuestionsRecycler()
 
         registerAttachmentPickers()
@@ -222,18 +224,32 @@ class LifeOsChatFragment :
                 }
         }
 
-        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
         view.post {
             showIme()
-            kickstartImeTranslation()
+            //kickstartImeTranslation()
         }
     }
 
+
+    fun checkScrollState(recyclerView: RecyclerView) {
+        if (recyclerView.canScrollVertically(1)) {
+            // Show the button when scrolling up and more content is available to scroll down
+            binding.ivScrollDown.visibility = View.VISIBLE
+        } else if (!recyclerView.canScrollVertically(1)) {
+            // Hide the button when already at the bottom
+            binding.ivScrollDown.visibility = View.GONE
+        }
+    }
 
     override fun initListener() {
         binding.ivBack.setOnClickListener {
             navigateUpSafe()
         }
+
+        binding.ivScrollDown.setOnClickListener {
+            binding.rvChats.scrollToBottom()
+        }
+
         binding.btnRetry.setOnClickListener {
             viewModel.retryApi()
         }
@@ -267,8 +283,8 @@ class LifeOsChatFragment :
             }
             binding.lytChatBox.chatEtx.clearFocus()
             hideKeyboard()
-            resetImePadding()
-            kickstartImeTranslation()
+            //resetImePadding()
+            //kickstartImeTranslation()
             setFragmentResultListener(ATTACHMENT_KEY) { _, bundle ->
                 when (bundle.getString("type")) {
                     "camera" -> {
@@ -339,6 +355,14 @@ class LifeOsChatFragment :
         viewModel.questions.observe(this) {
             suggestionsAdapter.setDataSet(it)
         }
+
+        binding.rvChats.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                checkScrollState(recyclerView)
+            }
+        })
+
         viewModel.showRetry.observe(this) {
             if (it) {
                 binding.btnRetry.visible()
@@ -413,8 +437,14 @@ class LifeOsChatFragment :
         viewModel.chatGptOverview.observe(this) { list ->
             list?.let {
                 mAdapter.setDataSet(it)
-                binding.rvChats.post {
+                /*binding.rvChats.post {
                     binding.rvChats.smoothScrollToPosition(mAdapter.itemCount - 1)
+                }*/
+
+                nullableBinding?.rvChats?.post {
+                    nullableBinding?.rvChats?.let {
+                        checkScrollState(it)
+                    }
                 }
             }
         }
