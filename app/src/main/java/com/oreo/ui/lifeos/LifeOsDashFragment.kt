@@ -50,6 +50,7 @@ import com.noisefit_commans.common.MarginLeftRightItemDecoration
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.oreo.ui.chatGpt.AITopics
@@ -161,6 +162,16 @@ class LifeOsDashFragment :
 
         binding.lytHeader.lytOnboardQuesProgress.composeView.setContent {
             GradientBorderCard(ansSize/quesSize.toFloat())
+        }
+
+        if(ansSize/quesSize.toFloat() == 1f){
+            binding.lytHeader.imageView117.visible()
+            binding.lytHeader.textView205.visible()
+            binding.lytHeader.ivPersonalize.visible()
+        }else{
+            binding.lytHeader.ivPersonalize.invisible()
+            binding.lytHeader.imageView117.invisible()
+            binding.lytHeader.textView205.invisible()
         }
     }
 

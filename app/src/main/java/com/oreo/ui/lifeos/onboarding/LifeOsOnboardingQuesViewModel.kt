@@ -123,36 +123,34 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
             onBoardResponseData?.let { processData(it) }
             */
             //--
-            viewModelScope.launch {
-                userRepository.getLifeOsOnboardQuesAnsList().collect{ resource ->
-                    when (resource) {
-                        is Resource.GenericError -> {
-                            sendMessage(resource.message)
-                        }
+            userRepository.getLifeOsOnboardQuesAnsList().collect{ resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
 
-                        is Resource.Loading -> {
-                            setLoading(resource.loading)
-                        }
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
 
-                        is Resource.NetworkError -> {
-                            setApiErrors(resource.response.apply {
-                                (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                                    object : BinaryActionCallback {
-                                        override fun yes() {
-                                            getOnboardQues(isAllQuesDone)
-                                        }
-
-                                        override fun no() {}
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getOnboardQues(isAllQuesDone)
                                     }
-                            })
-                        }
 
-                        is Resource.Success -> {
-                            resource.data?.data?.let {
-                                localDataStore.setLifeOsOnboardData(it)
-                                onBoardResponseData = it
-                                processData(it, isAllQuesDone)
-                            }
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            localDataStore.setLifeOsOnboardData(it)
+                            onBoardResponseData = it
+                            processData(it, isAllQuesDone)
                         }
                     }
                 }

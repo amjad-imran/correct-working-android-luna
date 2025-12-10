@@ -51,8 +51,8 @@ class LifeOsDashViewModel @Inject constructor(
                 return@launch
             }
 
-            val isAllDone = onBoardData.questions?.size == onBoardData.answers?.size
-            if(!isAllDone){
+            val isAttempted = onBoardData.questions?.any { it.isSavedByUser } ?: false
+            if(!isAttempted){
                 destinationData.postValue(LifeOsDestinations.QUES_FRAG)
                 return@launch
             }

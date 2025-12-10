@@ -1,6 +1,7 @@
 package com.noisefit_commans.data.model.lifeos.onboarding
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 
@@ -13,6 +14,7 @@ data class Question(
 
     // for app
     var isSavedByUser: Boolean = false,
+    @SerializedName("short_type")
     val personalizeTitle: String ?= null,
     var personalizeDesc: String ?= null,
 ) : Parcelable

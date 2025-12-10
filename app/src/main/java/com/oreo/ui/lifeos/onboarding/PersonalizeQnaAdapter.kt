@@ -13,7 +13,7 @@ class PersonalizeQnaAdapter(private val onItemClick: (Question) -> Unit) :
 
     inner class ViewHolder(private val binding: ItemPersonalizeLifeosCardBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Question) {
-            binding.tvTitle.text = item.personalizeTitle ?: "Health Goals"
+            binding.tvTitle.text = item.personalizeTitle ?: "--"
             binding.tvDesc.text = item.personalizeDesc
 
             binding.root.setOnClickListener {

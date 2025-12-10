@@ -63,7 +63,7 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
                 val isSaveAndExit = bundle.getBoolean("saveAndExit")
                 if(isSaveAndExit){
                     viewModel.saveAndExitBtnClickedBs.postValue(true)
-                    viewModel.submitQuesAnsToServer()
+//                    viewModel.submitQuesAnsToServer()
                 }
             }
             navigate(R.id.lifeOSOnboardSkipOrConBottomSheet)
