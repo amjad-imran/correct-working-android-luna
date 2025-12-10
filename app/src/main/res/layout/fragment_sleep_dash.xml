@@ -59,7 +59,7 @@
 
             <include
                 android:id="@+id/lytAINudge"
-                layout="@layout/layout_sleep_ai_nudge"
+                layout="@layout/layout_talk_to_lifeos_sleep"
                 android:layout_marginStart="@dimen/side_margin"
                 android:layout_marginEnd="@dimen/side_margin"
                 android:layout_marginTop="24dp"

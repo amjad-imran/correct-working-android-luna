@@ -2338,6 +2338,8 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_good_afternoon_val">Good afternoon, %1$s</string>
     <string name="text_good_evening_val">Good evening, %1$s</string>
     <string name="text_hi_text">Hi %1$s</string>
+    <string name="text_ask_lifeos">Ask LifeOS</string>
+    <string name="text_know_more_with_lifeos">Know more with LifeOS</string>
 
 
 </resources>
