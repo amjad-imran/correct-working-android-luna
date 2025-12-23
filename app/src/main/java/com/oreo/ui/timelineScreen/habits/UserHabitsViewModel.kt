@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserHabitsViewModel @Inject constructor(
-    private val habitsByDateUC: GetHabitsByDateUseCase,
+    private val habitsByDateUC: dagger.Lazy<GetHabitsByDateUseCase>,
     private val getAllHabitUC: GetAllHabitsUseCase
 ) : BaseViewModel() {
     private val _allHabitsState = MutableLiveData<HabitsResponse>()
@@ -28,7 +28,7 @@ class UserHabitsViewModel @Inject constructor(
 
     fun getHabitsByDate(context: Context, date: String) {
         viewModelScope.launch {
-            habitsByDateUC.invoke(date).collect { resource ->
+            habitsByDateUC.get().invoke(date).collect { resource ->
                 when (resource) {
                     is Resource.Loading -> {
                         Toast.makeText(context, "All Habit API Loading", Toast.LENGTH_LONG).show()
