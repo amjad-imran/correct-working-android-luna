@@ -570,7 +570,12 @@
         <item name="android:windowBackground">#CC030F1D</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
 
+    <style name="BottomSheetBlur" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowBackground">#4D000000</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
     <style name="ModalStyleReadinessNew">

@@ -4,6 +4,7 @@ import android.net.Uri
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.model.GoalModel
+import com.noisefit.data.model.HabitsByDateResponse
 import com.noisefit_commans.data.model.timeline.MealAiResponse
 import com.noisefit.data.model.timeline.SupplementsListResponse
 import com.oreo.data.model.RingLocationData
@@ -121,4 +122,7 @@ interface UserRepository {
 
     suspend fun getInsightLvl1List(): Flow<Resource<BaseApiResponse<List<List<InsightItemResponseModel>>>>>
     suspend fun submitInsightDislikeFeedbackData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
+
+    suspend fun getUserHabitsByDate(date: String): Flow<Resource<BaseApiResponse<HabitsByDateResponse>>>
+
 }

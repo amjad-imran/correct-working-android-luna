@@ -2,6 +2,7 @@ package com.oreo.ui.timelineScreen
 
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
@@ -19,6 +20,7 @@ import com.oreo.data.model.ChartModel
 import com.oreo.ui.calendar.SELECTED_DATE
 import com.oreo.ui.custom.ScrollListener
 import com.oreo.ui.timelineScreen.habits.ADD_HABITS_BEGIN_KEY
+import com.oreo.ui.timelineScreen.habits.AddHabitsBeginBottomSheet
 import com.oreo.util.setSafeOnClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDate
@@ -35,6 +37,13 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
         super.onViewCreated(view, savedInstanceState)
         setUi()
         setViewPager()
+        checkUserHabits()
+    }
+    private fun checkUserHabits(){
+        if(viewModel.checkUserFirstTimeForAddHabits()){
+            AddHabitsBeginBottomSheet().show(parentFragmentManager, "AddHabitsBeginBottomSheet")
+            viewModel.setAddHabitFirstTimeVisibility()
+        }
     }
 
     private fun setUi() {
@@ -156,6 +165,38 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
             //setTabDates(pos)
 
         }
+
+        binding.lytSavedHabits.root.visibility = View.VISIBLE
+        val itemView = layoutInflater.inflate(
+            R.layout.item_habit,
+            null,
+            false
+        )
+        val itemView1 = layoutInflater.inflate(
+            R.layout.item_habit,
+            null,
+            false
+        )
+        binding.lytSavedHabits.apply {
+            this.lvHabits.addView(itemView.apply{
+                this.findViewById<TextView>(R.id.tvHabitTitle).text = "Cold Plunge"
+            })
+            this.lvHabits.addView(itemView1.apply{
+                this.findViewById<TextView>(R.id.tvHabitTitle).text = "Vitamin B12"
+            })
+            this.tvMoreHabits.text = "+2 more"
+        }
+
+
+        viewModel.habitsByDateState.observe(viewLifecycleOwner){ response ->
+            response.data?.options.let { list ->
+                if(list.isNullOrEmpty()){
+                    binding.lytSetupHabits.root.visibility = View.VISIBLE
+                }else{
+                    // show 3+2 habits
+                }
+            }
+        }
     }
 
     override fun onPositionSelected(position: Int, chartModel: ChartModel?) {
@@ -201,7 +242,6 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
                 //setTabDates(position)
                 val todayDate = LocalDate.now()
                 binding.ivAddLogFab.setVisibilityByCondition(LocalDate.parse(mainViewModel.selectedDate)==todayDate)
-                binding.lytSetupHabits.root.setVisibilityByCondition(LocalDate.parse(mainViewModel.selectedDate)==todayDate)
 
                 if (!binding.tabLayout.isInteracting) {
                     setTopBar()
@@ -210,6 +250,8 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
                 if (mainViewModel.shouldLoadMoreData()) {
                     LOGS.w("Loading more data")
                 }
+
+                viewModel.getUserSavedHabits(mainViewModel.selectedDate)
             }
         })
 

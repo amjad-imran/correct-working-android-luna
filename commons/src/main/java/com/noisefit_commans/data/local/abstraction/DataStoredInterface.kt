@@ -620,6 +620,8 @@ interface DataStoredInterface {
 
     fun isWhatsNewCardInteractionDone(): Boolean
     fun setIsWhatsNewCardInteractionDone(isDone: Boolean)
+    fun setUserFirstTimeForAddHabits(isFirstTime: Boolean)
+    fun getUserFirstTimeForAddHabits(): Boolean
 }
 
 enum class AppTrackEvent {

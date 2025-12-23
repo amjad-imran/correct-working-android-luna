@@ -52,7 +52,7 @@ class AddHabitsBeginBottomSheet :
     }
 
     override fun getTheme(): Int {
-        return R.style.MyCustomDialogStyleWithBlurEffect
+        return R.style.BottomSheetBlur
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

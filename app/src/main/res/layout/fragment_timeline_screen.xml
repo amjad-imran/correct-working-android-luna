@@ -73,17 +73,30 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:visibility="gone"
         android:layout_marginHorizontal="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tabLayout" />
+
+    <include
+        android:id="@+id/lytSavedHabits"
+        layout="@layout/layout_user_saved_habits_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"
+        android:layout_marginHorizontal="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lytSetupHabits" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPagerTimeline"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lytSetupHabits" />
+        app:layout_constraintTop_toBottomOf="@+id/lytSavedHabits" />
 
     <ImageView
         android:id="@+id/ivAddLogFab"

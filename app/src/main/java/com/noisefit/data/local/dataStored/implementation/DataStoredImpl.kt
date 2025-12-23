@@ -291,6 +291,7 @@ private const val LIFEOS_ONBOARD_QUES_DATA = "LIFEOS_ONBOARD_QUES_DATA"
 
 private const val WHATS_NEW_DASH_CARD_INTERACTION_DONE = "WHATS_NEW_DASH_CARD_INTERACTION_DONE"
 
+private const val USER_FIRST_TIME_TO_ADD_HABITS = "user_first_time_to_add_habits"
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -2539,5 +2540,12 @@ class DataStoredImpl
     override fun setIsWhatsNewCardInteractionDone(isDone: Boolean) {
         mPrefs.edit().putBoolean(WHATS_NEW_DASH_CARD_INTERACTION_DONE, isDone).commit()
     }
+
+    override fun setUserFirstTimeForAddHabits(isFirstTime: Boolean){
+        mPrefs.edit().putBoolean(USER_FIRST_TIME_TO_ADD_HABITS, isFirstTime).apply()
+    }
+
+    override fun getUserFirstTimeForAddHabits(): Boolean =
+        mPrefs.getBoolean(USER_FIRST_TIME_TO_ADD_HABITS, true)
 
 }

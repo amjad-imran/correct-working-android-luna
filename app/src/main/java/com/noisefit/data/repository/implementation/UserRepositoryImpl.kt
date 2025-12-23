@@ -12,6 +12,7 @@ import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.local.db.fromJson
 import com.noisefit.data.model.GoalModel
+import com.noisefit.data.model.HabitsByDateResponse
 import com.noisefit_commans.data.model.timeline.MealAiResponse
 import com.noisefit.data.model.timeline.SupplementsListResponse
 import com.noisefit.data.remote.CityData
@@ -786,6 +787,12 @@ class UserRepositoryImpl(
                 "${BuildConfig.OREO_BASE_URL}/--", // TODO: Replace with correct
                 req
             )
+        }
+    }
+
+    override suspend fun getUserHabitsByDate(date: String): Flow<Resource<BaseApiResponse<HabitsByDateResponse>>> {
+        return safeApiCallFlow(Dispatchers.IO) {
+            remoteDataSource.getUserHabitsByDate("${BuildConfig.OREO_BASE_URL}/protean/v3/time-tracker/user-habits", date)
         }
     }
 

@@ -1,18 +1,37 @@
 package com.oreo.ui.timelineScreen
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.base.ResourcesProvider
+import com.noisefit.data.model.HabitsByDateResponse
+import com.noisefit.data.model.HabitsResponse
+import com.noisefit.data.remote.base.Resource
+import com.noisefit.data.repository.implementation.UserRepositoryImpl
 import com.noisefit.luna.R
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.ChartModel
+import com.oreo.data.usecases.GetAllHabitsUseCase
+import com.oreo.data.usecases.GetHabitsByDateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class TimelineScreenViewmodel @Inject constructor(
-    private val resourcesProvider: ResourcesProvider
+    private val resourcesProvider: ResourcesProvider,
+    private val dataStore: DataStoredInterface,
+    private val habitsByDateUC: dagger.Lazy<GetHabitsByDateUseCase>,
+    private val getAllHabitUC: dagger.Lazy<GetAllHabitsUseCase>
 ) : BaseViewModel() {
+
+    private val _allHabitsState = MutableLiveData<HabitsResponse>()
+    val allHabitsState: LiveData<HabitsResponse> get() = _allHabitsState
+    private val _habitsByDateState = MutableLiveData<HabitsByDateResponse>()
+    val habitsByDateState: LiveData<HabitsByDateResponse> get() = _habitsByDateState
 
     fun getPrefixAndSuffixList(dataList: List<String>): Triple<ArrayList<ChartModel>, ArrayList<ChartModel>, ArrayList<ChartModel>> {
         val list = java.util.ArrayList<ChartModel>()
@@ -81,4 +100,55 @@ class TimelineScreenViewmodel @Inject constructor(
         return Triple(list, suffix, prefix)
     }
 
+    fun checkUserFirstTimeForAddHabits() = dataStore.getUserFirstTimeForAddHabits()
+    fun setAddHabitFirstTimeVisibility() = dataStore.setUserFirstTimeForAddHabits(false)
+
+    fun getUserSavedHabits(date:String?){
+        viewModelScope.launch {
+            date?.let {
+                habitsByDateUC.get()
+                    .invoke(it).collect { resource ->
+                        when (resource) {
+                            is Resource.Loading -> {
+                                // Do Nothing on this
+                            }
+                            is Resource.Success -> {
+                                resource.data?.data.let {
+                                    println("Sahil ******* Success")
+//                                    _habitsByDateState.postValue(it)
+                                }
+                            }
+                            is Resource.GenericError ->{
+                                println("Sahil ******* error: "+resource.errorBody)
+                            }
+                            is Resource.NetworkError -> {
+                                println("Sahil ******* error: "+resource.response)
+                            }
+                        }
+                    }
+            }
+        }
+    }
+
+
+    fun getAllUserHabits() {
+        viewModelScope.launch {
+            getAllHabitUC.get()
+                .invoke().collect { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
+                        // Do Nothing on this
+                    }
+                    is Resource.Success -> {
+                        resource.data?.data.let {
+                            _allHabitsState.postValue(it)
+                        }
+                    }
+                    else -> {
+                        // TODO: Need to add analytics
+                    }
+                }
+            }
+        }
+    }
 }
