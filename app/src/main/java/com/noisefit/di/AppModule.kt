@@ -54,6 +54,7 @@ import com.oreo.data.db.implementation.OreoStepsDataImpl
 import com.oreo.data.db.implementation.OreoStressDataImpl
 import com.oreo.data.repository.AlarmRepository
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
+import com.oreo.data.repository.abstraction.IUserHabitRepository
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
@@ -61,6 +62,10 @@ import com.oreo.data.repository.implementation.FemaleHealthRepositoryImpl
 import com.oreo.data.repository.implementation.OreoDeviceRepositoryImpl
 import com.oreo.data.repository.implementation.OreoSyncRepositoryImpl
 import com.oreo.data.repository.implementation.OreoUserActivityRepositoryImpl
+import com.oreo.data.repository.implementation.UserHabitRepositoryImpl
+import com.oreo.data.usecases.GetAllHabitsUseCase
+import com.oreo.data.usecases.GetHabitsByDateUseCase
+import com.oreo.data.usecases.SyncUserHabitsUseCase
 import com.oreo.util.alarm.AlarmUtil
 import dagger.Module
 import dagger.Provides
@@ -531,5 +536,25 @@ object AppModule {
         return appContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
 
+    @Singleton
+    @Provides
+    fun provideUserHabitRepository(networkService: NetworkService): IUserHabitRepository{
+        return UserHabitRepositoryImpl(networkService)
+    }
+
+    @Provides
+    fun provideAllHabitUseCase(repository: IUserHabitRepository): GetAllHabitsUseCase{
+        return GetAllHabitsUseCase(repository)
+    }
+
+    @Provides
+    fun provideHabitsByDateUseCase(repository: IUserHabitRepository): GetHabitsByDateUseCase{
+        return GetHabitsByDateUseCase(repository)
+    }
+
+    @Provides
+    fun provideSyncUserHabitsUseCase(repository: IUserHabitRepository): SyncUserHabitsUseCase{
+        return SyncUserHabitsUseCase(repository)
+    }
 
 }

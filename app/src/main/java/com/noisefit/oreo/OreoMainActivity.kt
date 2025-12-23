@@ -77,11 +77,13 @@ import com.oreo.data.model.FabItems
 import com.oreo.data.model.FabModel
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 import com.oreo.ui.lifeos.LifeOsChatFragment
+import com.oreo.ui.timelineScreen.habits.UserHabitsViewModel
 
 @AndroidEntryPoint
 class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
     private val viewModel: OreoMainViewModel by viewModels()
+    private val userHabitVM: UserHabitsViewModel by viewModels()
     private var navController: NavController? = null
     private val TAG = "oreoMainActivity"
 
@@ -133,6 +135,9 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         viewModel.sessionManager.getPairedState()
         checkBluetooth()
         firebaseViewModel.generateToken()
+
+        userHabitVM.getAllHabits(this)
+        userHabitVM.getHabitsByDate(this,"2025-12-10")
 
         intent?.let {
             Handler(Looper.getMainLooper()).postDelayed({
