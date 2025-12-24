@@ -2,24 +2,38 @@ package com.oreo.ui.timelineScreen.habits
 
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.noisefit.data.model.Options
+import com.noisefit.data.remote.base.Resource
+import com.noisefit_commans.data.BinaryActionCallback
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.LOGS
+import com.oreo.data.model.timeline.habits.CategoryUi
 import com.oreo.data.model.timeline.habits.Habit
-import com.oreo.data.model.timeline.habits.HabitSection
-import com.oreo.data.model.timeline.habits.HabitUiState
-import com.oreo.data.model.timeline.habits.HabitsResponse
+import com.oreo.data.model.timeline.habits.HabitListItem
+import com.oreo.data.model.timeline.habits.HabitUi
+import com.oreo.data.model.timeline.habits.HabitsUiState
+import com.oreo.data.model.timeline.habits.SectionBuildResult
+import com.oreo.data.usecases.GetAllHabitsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AddHabitsViewModel @Inject constructor(
-
+    private val getAllHabitUC: GetAllHabitsUseCase
 ): BaseViewModel() {
 
-    private val _uiState = MutableStateFlow(HabitUiState(isLoading = true))
-    val uiState: StateFlow<HabitUiState> = _uiState
+    companion object{
+        private const val MAX_SELECTION = 5
+    }
+
+    private val _uiState = MutableStateFlow(HabitsUiState(loading = true))
+    val uiState: StateFlow<HabitsUiState> = _uiState.asStateFlow()
 
     private var allHabits: List<Habit> = emptyList()
 
@@ -49,90 +63,107 @@ class AddHabitsViewModel @Inject constructor(
                 }
             """.trimIndent()
 
-            try {
-                _uiState.value = _uiState.value.copy(isLoading = true, error = null)
-                val response = Gson().fromJson(respJson, HabitsResponse::class.java)
-                allHabits = response.habits
+            _uiState.update { it.copy(loading = true, error = null) }
 
-                val defaultCategoryId = response.categories.firstOrNull()?.id
+            getAllHabitUC.invoke().collect { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
 
-                _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    categories = response.categories,
-                    selectedCategoryId = defaultCategoryId,
-                    sections = buildSections(defaultCategoryId, "")
-                )
-            } catch (e: Exception) {
-                _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    error = e.message ?: "Unknown error"
-                )
-            }
-        }
-    }
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
 
-    private fun buildSections(categoryId: String?, query: String): List<HabitSection> {
-        if (categoryId == null) return emptyList()
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        loadHabits()
+                                    }
 
-        val filteredBySearch: (Habit) -> Boolean = { habit ->
-            query.isBlank() || habit.name.contains(query, ignoreCase = true)
-        }
+                                    override fun no() {}
+                                }
+                        })
+                    }
 
-        return when (categoryId) {
-            "recent" -> {
-                val recentHabits = allHabits.filter { it.isRecent }.filter(filteredBySearch)
-
-                val lifestyleHabits = allHabits
-                    .filter { it.categoryId == "lifestyle" }
-                    .filter(filteredBySearch)
-
-                val sections = mutableListOf<HabitSection>()
-                if (recentHabits.isNotEmpty()) {
-                    sections += HabitSection("Your Recent Entries", recentHabits)
+                    is Resource.Success -> {
+                        resource.data?.data?.options?.let { sections ->
+                            processData(sections)
+                            LOGS.d("asjkcas : $sections")
+                        }
+                    }
                 }
-                if (lifestyleHabits.isNotEmpty()) {
-                    sections += HabitSection("Lifestyle", lifestyleHabits)
-                }
-                sections
             }
 
-            else -> {
-                val categoryHabits = allHabits
-                    .filter { it.categoryId == categoryId }
-                    .filter(filteredBySearch)
-
-                if (categoryHabits.isEmpty()) emptyList()
-                else listOf(HabitSection(
-                    title = _uiState.value.categories
-                        .firstOrNull { it.id == categoryId }?.name ?: "",
-                    habits = categoryHabits
-                ))
-            }
         }
     }
 
-    fun toggleHabitSelection(habitId: String) {
-        val current = _uiState.value.selectedHabits.toMutableSet()
-        if (current.contains(habitId)) current.remove(habitId) else current.add(habitId)
-        _uiState.value = _uiState.value.copy(selectedHabits = current)
+    private fun processData(sections: ArrayList<Options>) {
+        val categories: List<CategoryUi> = sections.map { section ->
+            CategoryUi(
+                id = section.type ?: "",
+                title = section.typeLabel ?: "",
+            )
+        }
+
+        val habits: List<HabitUi> = sections.flatMap { section ->
+            section.items.map { item ->
+
+                HabitUi(
+                    id = item.id.toString(),
+                    name = item.options ?: "",
+                    categoryId = section.type ?: ""
+                )
+            }
+        }
+
+        val built = buildSectionedRows(categories, habits)
+        val finalList = built.rows.toMutableList().apply { add(HabitListItem.EmptyBottom) }
+
+        _uiState.update {
+            it.copy(
+                loading = false,
+                categories = categories,
+                items = finalList,
+                headerPositions = built.headerPositions
+            )
+        }
     }
 
-    fun onSearchQueryChanged(query: String) {
-        currentSearchQuery = query
-        val categoryId = _uiState.value.selectedCategoryId
-        _uiState.value = _uiState.value.copy(
-            sections = buildSections(categoryId, currentSearchQuery)
-        )
-    }
-
-    fun onCategorySelected(categoryId: String) {
-        _uiState.value = _uiState.value.copy(
-            selectedCategoryId = categoryId,
-            sections = buildSections(categoryId, currentSearchQuery)
-        )
+    fun toggleHabit(habitId: String) {
+        _uiState.update { state ->
+            val newSet = state.selectedHabits.toMutableSet().apply {
+                if (contains(habitId)) remove(habitId) else add(habitId)
+            }
+            state.copy(selectedHabits = newSet)
+        }
     }
 
     fun saveHabitsToServer(selected: List<String>, success: () -> Unit){
         success()
     }
+
+    fun buildSectionedRows(
+        categories: List<CategoryUi>,
+        habits: List<HabitUi>
+    ): SectionBuildResult {
+        val rows = mutableListOf<HabitListItem>()
+        val headerPositions = mutableMapOf<String, Int>()
+
+        val habitsByCategory = habits.groupBy { it.categoryId }
+
+        categories.forEach { cat ->
+            headerPositions[cat.id] = rows.size
+            rows += HabitListItem.Header(cat)
+
+            habitsByCategory[cat.id].orEmpty().forEach { h ->
+                rows += HabitListItem.Row(h)
+            }
+        }
+
+        return SectionBuildResult(rows, headerPositions)
+    }
+
 }

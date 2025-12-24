@@ -12,6 +12,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentTimelineScreenBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.setVisibilityByCondition
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
@@ -166,7 +167,7 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
 
         }
 
-        binding.lytSavedHabits.root.visibility = View.VISIBLE
+//        binding.lytSavedHabits.root.visibility = View.VISIBLE
         val itemView = layoutInflater.inflate(
             R.layout.item_habit,
             null,
@@ -189,11 +190,13 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
 
 
         viewModel.habitsByDateState.observe(viewLifecycleOwner){ response ->
-            response.data?.options.let { list ->
+            response?.options.let { list ->
                 if(list.isNullOrEmpty()){
-                    binding.lytSetupHabits.root.visibility = View.VISIBLE
+                    binding.lytSavedHabits.root.gone()
+                    binding.lytSetupHabits.root.visible()
                 }else{
-                    // show 3+2 habits
+                    binding.lytSetupHabits.root.gone()
+                    binding.lytSavedHabits.root.visible()
                 }
             }
         }

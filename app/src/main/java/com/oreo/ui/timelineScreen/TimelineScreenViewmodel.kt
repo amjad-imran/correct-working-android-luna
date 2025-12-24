@@ -115,7 +115,7 @@ class TimelineScreenViewmodel @Inject constructor(
                             is Resource.Success -> {
                                 resource.data?.data.let {
                                     println("Sahil ******* Success")
-//                                    _habitsByDateState.postValue(it)
+                                    _habitsByDateState.postValue(it)
                                 }
                             }
                             is Resource.GenericError ->{

@@ -26,29 +26,3 @@ data class HabitsResponse(
     val categories: List<HabitCategory>,
     val habits: List<Habit>
 )
-
-// ------------------------
-
-sealed class HabitListItem {
-    data class Header(val title: String) : HabitListItem()
-    data class Row(val habit: Habit) : HabitListItem()
-}
-
-fun HabitUiState.toListItems(): List<HabitListItem> {
-    val items = mutableListOf<HabitListItem>()
-    sections.forEach { section ->
-        items += HabitListItem.Header(section.title)
-        items += section.habits.map { HabitListItem.Row(it) }
-    }
-    return items
-}
-
-// HabitUiState.kt
-data class HabitUiState(
-    val isLoading: Boolean = false,
-    val error: String? = null,
-    val categories: List<HabitCategory> = emptyList(),
-    val sections: List<HabitSection> = emptyList(),
-    val selectedCategoryId: String? = null,
-    val selectedHabits: Set<String> = emptySet(), // habit IDs
-)

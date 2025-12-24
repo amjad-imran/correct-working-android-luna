@@ -6,16 +6,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class HabitsResponse(
-    @SerializedName("success") var success: Boolean? = null,
-    @SerializedName("data") var data: Data? = Data(),
-    @SerializedName("message") var message: String? = null,
-    @SerializedName("time") var time: String? = null
-) : Parcelable {
-    @Parcelize
-    data class Data(
-        @SerializedName("options") var options: ArrayList<Options> = arrayListOf()
-    ) : Parcelable
-}
+    @SerializedName("options") var options: ArrayList<Options> = arrayListOf()
+) : Parcelable
 
 @Parcelize
 data class Items(

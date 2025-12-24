@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.DisplayMetrics
 import android.view.View
 import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
@@ -18,31 +19,67 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAddHabitsBinding
 import com.noisefit_commans.ui.BaseFragment
-import com.oreo.data.model.timeline.habits.toListItems
+import com.oreo.data.model.timeline.habits.CategoryUi
+import com.oreo.data.model.timeline.habits.HabitListItem
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabitsBinding::inflate) {
 
     private val viewModel: AddHabitsViewModel by viewModels()
+    private lateinit var mLayoutManager: LinearLayoutManager
 
     private val adapter by lazy {
         HabitsAdapter { habit ->
-            viewModel.toggleHabitSelection(habit.id)
+            viewModel.toggleHabit(habit.id)
         }
     }
+
+    private var scrollFromTab = false
+    private var tabFromScroll = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setUi()
         setRecycler()
+        setupTabClickScroll()
+        setupRecyclerScrollTabHighlight()
+    }
+
+    private fun smoothScrollToHeader(pos: Int) {
+        val scroller = object : LinearSmoothScroller(requireContext()) {
+            override fun getVerticalSnapPreference() = SNAP_TO_START
+            override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
+                return 80f / displayMetrics.densityDpi
+            }
+        }
+        scroller.targetPosition = pos
+        mLayoutManager.startSmoothScroll(scroller)
+    }
+
+    private fun setupTabClickScroll() {
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                if (tabFromScroll) return
+
+                val state = viewModel.uiState.value
+                val catId = tab.tag as? String ?: return
+                val pos = state.headerPositions[catId] ?: return
+
+                scrollFromTab = true
+                smoothScrollToHeader(pos)
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab) = onTabSelected(tab)
+        })
     }
 
     private fun setUi() {
@@ -61,7 +98,8 @@ class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabi
     }
 
     private fun setRecycler() {
-        binding.rvHabits.layoutManager = LinearLayoutManager(requireContext())
+        mLayoutManager = LinearLayoutManager(requireContext())
+        binding.rvHabits.layoutManager = mLayoutManager
         binding.rvHabits.adapter = adapter
     }
 
@@ -85,7 +123,7 @@ class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabi
             override fun afterTextChanged(s: Editable?) = Unit
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                viewModel.onSearchQueryChanged(s?.toString().orEmpty())
+//                viewModel.onSearchQueryChanged(s?.toString().orEmpty())
             }
         })
 
@@ -107,43 +145,76 @@ class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabi
         )
     }
 
+    private fun setupTabsIfNeeded(categories: List<CategoryUi>) {
+        val tabLayout = binding.tabLayout
+
+        // rebuild only if count differs or ids differ
+        val shouldRebuild =
+            tabLayout.tabCount != categories.size ||
+                    (0 until tabLayout.tabCount).any { idx ->
+                        tabLayout.getTabAt(idx)?.tag != categories.getOrNull(idx)?.id
+                    }
+
+        if (!shouldRebuild) return
+
+        tabLayout.removeAllTabs()
+        categories.forEach { cat ->
+            tabLayout.addTab(tabLayout.newTab().setText(cat.title).setTag(cat.id))
+        }
+    }
+
     override fun subscribeObservers() {
-        lifecycleScope.launch {
-            viewModel.uiState.collectLatest { state ->
-                val tabLayout = binding.tabLayout
-                // Tabs
-                if (tabLayout.tabCount == 0 && state.categories.isNotEmpty()) {
-                    state.categories.forEach { category ->
-                        tabLayout.addTab(tabLayout.newTab().setText(category.name).setTag(category.id))
-                    }
-                }
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModel.uiState.collect { state ->
+                // submit list
+                adapter.submitList(state.items)
+                adapter.updateSelectedHabits(state.selectedHabits)
 
-                // Select correct tab
-                val selectedId = state.selectedCategoryId
-                if (selectedId != null && tabLayout.tabCount > 0) {
-                    val index = state.categories.indexOfFirst { it.id == selectedId }
-                    if (index >= 0 && index != tabLayout.selectedTabPosition) {
-                        tabLayout.getTabAt(index)?.select()
-                    }
-                }
+                // tabs
+                setupTabsIfNeeded(state.categories)
 
-                // List items
-                adapter.submitList(state.toListItems())
-                adapter.selectedHabits = state.selectedHabits
+                // show error / loading (optional)
+//                binding.progress.isVisible = state.loading
+                state.error?.let { /* show toast/snackbar */ }
             }
         }
 
-        // Tab listener
-        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                val categoryId = tab?.tag as? String ?: return
-                viewModel.onCategorySelected(categoryId)
+    }
+
+    private fun setupRecyclerScrollTabHighlight() {
+        binding.rvHabits.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            override fun onScrolled(rv: RecyclerView, dx: Int, dy: Int) {
+                if (scrollFromTab) return
+
+                val firstVisible = mLayoutManager.findFirstVisibleItemPosition()
+                if (firstVisible == RecyclerView.NO_POSITION) return
+
+                val state = viewModel.uiState.value
+                val currentCategoryId = findCurrentCategoryId(firstVisible, state.items) ?: return
+                val tabIndex = state.categories.indexOfFirst { it.id == currentCategoryId }
+
+                if (tabIndex >= 0 && tabIndex != binding.tabLayout.selectedTabPosition) {
+                    tabFromScroll = true
+                    binding.tabLayout.getTabAt(tabIndex)?.select()
+                    tabFromScroll = false
+                }
             }
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
+            override fun onScrollStateChanged(rv: RecyclerView, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) scrollFromTab = false
+            }
         })
+    }
 
+    private fun findCurrentCategoryId(firstVisible: Int, list: List<HabitListItem>): String? {
+        var i = firstVisible
+        while (i >= 0) {
+            val row = list.getOrNull(i) ?: return null
+            if (row is HabitListItem.Header) return row.category.id
+            i--
+        }
+        return null
     }
 
     private fun createSearchBarBg(
