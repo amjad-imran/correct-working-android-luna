@@ -24,7 +24,7 @@ constructor(
 
         when (cDevice?.deviceType) {
 
-            DeviceType.NOISEFIT_LUNA.deviceType,-> {
+            DeviceType.NOISEFIT_LUNA.deviceType,DeviceType.LUNA_BAND.deviceType,-> {
                 return SDKWatchType.SDK_ZH
             }
 
