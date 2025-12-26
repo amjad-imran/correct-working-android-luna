@@ -6,7 +6,7 @@ data class CategoryUi(
 )
 
 data class HabitUi(
-    val id: String,          // item.id as String
+    val id: Int ?= null,          // item.id as String
     val name: String,        // item.options
     val categoryId: String   // section.type
 )
@@ -24,7 +24,7 @@ data class HabitsUiState(
     val categories: List<CategoryUi> = emptyList(),
     val items: List<HabitListItem> = emptyList(),
     val headerPositions: Map<String, Int> = emptyMap(),
-    val selectedHabits: Set<String> = emptySet(),
+    val selectedHabits: Set<Int> = emptySet(),
     val error: String? = null,
     val isSearchActive: Boolean = false,
 )

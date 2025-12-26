@@ -1,7 +1,10 @@
 package com.oreo.ui.timelineScreen.habits
 
 import androidx.lifecycle.viewModelScope
-import com.noisefit.data.model.Options
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
+import com.oreo.data.model.timeline.habits.HabitsByDateResponse
+import com.oreo.data.model.timeline.habits.Options
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -13,6 +16,7 @@ import com.oreo.data.model.timeline.habits.HabitUi
 import com.oreo.data.model.timeline.habits.HabitsUiState
 import com.oreo.data.model.timeline.habits.SectionBuildResult
 import com.oreo.data.usecases.GetAllHabitsUseCase
+import com.oreo.data.usecases.SubmitUserHabitsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,11 +27,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddHabitsViewModel @Inject constructor(
-    private val getAllHabitUC: GetAllHabitsUseCase
+    private val getAllHabitUC: GetAllHabitsUseCase,
+    private val submitUserHabitsUC: dagger.Lazy<SubmitUserHabitsUseCase>,
 ): BaseViewModel() {
 
     private val _uiState = MutableStateFlow(HabitsUiState(loading = true))
     val uiState: StateFlow<HabitsUiState> = _uiState.asStateFlow()
+
+    var selectedHabitsFromBundle: HabitsByDateResponse ?= null
 
     private var mainResponse = ArrayList<Options>()
     private var searchQuery: String = ""
@@ -85,11 +92,23 @@ class AddHabitsViewModel @Inject constructor(
             )
         }
 
+        val habitToBeMapped = selectedHabitsFromBundle?.options?.let { list ->
+            if (list.isEmpty()) {
+                emptySet()
+            } else {
+                val set = mutableSetOf<Int>()
+                list.forEach { item ->
+                    item.timeTrackerOptionId?.let { optId -> set.add(optId) }
+                }
+                set
+            }
+        } ?: emptySet()
+
         val habits: List<HabitUi> = sections.flatMap { section ->
             section.items.map { item ->
 
                 HabitUi(
-                    id = item.id.toString(),
+                    id = item.id,
                     name = item.options ?: "",
                     categoryId = section.type ?: ""
                 )
@@ -113,7 +132,8 @@ class AddHabitsViewModel @Inject constructor(
                 categories = categories,
                 items = finalList,
                 headerPositions = built.headerPositions,
-                isSearchActive = searchQuery.isNotEmpty()
+                isSearchActive = searchQuery.isNotEmpty(),
+                selectedHabits = habitToBeMapped
             )
         }
     }
@@ -128,7 +148,7 @@ class AddHabitsViewModel @Inject constructor(
         processData(mainResponse) // Revert to the full list of habits
     }
 
-    fun toggleHabit(habitId: String) {
+    fun toggleHabit(habitId: Int) {
         _uiState.update { state ->
             val newSet = state.selectedHabits.toMutableSet().apply {
                 if (contains(habitId)) remove(habitId) else add(habitId)
@@ -137,8 +157,51 @@ class AddHabitsViewModel @Inject constructor(
         }
     }
 
-    fun saveHabitsToServer(selected: List<String>, success: () -> Unit){
-        success()
+    fun saveHabitsToServer(selected: List<Int>, success: () -> Unit){
+        viewModelScope.launch {
+            val reqArray = JsonArray().apply {
+                selected.map { id ->
+                    add(
+                        JsonObject().apply { this.addProperty("option_id" , id) }
+                    )
+                }
+            }
+            val reqObj = JsonObject().apply {
+                add("habits", reqArray)
+            }
+
+            submitUserHabitsUC.get().invoke(reqObj).collect { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        loadHabits()
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            success()
+                        }
+                    }
+                }
+            }
+
+        }
     }
 
     fun buildSectionedRows(

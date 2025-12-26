@@ -2,7 +2,6 @@ package com.noisefit.data.repository.implementation
 
 import android.net.Uri
 import com.google.gson.Gson
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.dataConverter.OfflineDataMapper
@@ -12,7 +11,7 @@ import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.local.db.fromJson
 import com.noisefit.data.model.GoalModel
-import com.noisefit.data.model.HabitsByDateResponse
+import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.noisefit_commans.data.model.timeline.MealAiResponse
 import com.noisefit.data.model.timeline.SupplementsListResponse
 import com.noisefit.data.remote.CityData

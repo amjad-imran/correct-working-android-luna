@@ -1,7 +1,8 @@
 package com.oreo.data.repository.implementation
 
-import com.noisefit.data.model.HabitsByDateResponse
-import com.noisefit.data.model.HabitsResponse
+import com.google.gson.JsonObject
+import com.oreo.data.model.timeline.habits.HabitsByDateResponse
+import com.oreo.data.model.timeline.habits.HabitsResponse
 import com.noisefit.data.model.SyncHabitResponse
 import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource
@@ -27,5 +28,14 @@ class UserHabitRepositoryImpl(val networkService: NetworkService) : IUserHabitRe
 
     override suspend fun syncHabits(ids: List<String>): Flow<Resource<BaseApiResponse<SyncHabitResponse>>> {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun submitUserHabits(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(Dispatchers.IO) {
+            networkService.submitUserHabits(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/time-tracker/user-habits",
+                req
+            )
+        }
     }
 }

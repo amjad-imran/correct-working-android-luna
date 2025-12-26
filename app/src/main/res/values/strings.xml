@@ -2344,6 +2344,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_lifeos_whats_new_content_2"> * **From raw data to clear decisions:**\n Decides what actually matters today and turns noisy signals into actionable nudges.</string>
     <string name="text_lifeos_whats_new_content_3"> * **Learns over time:**\n Adapts to your baseline and life phases so guidance stays personal and timely. </string>
     <string name="synced_with_lifeos">Synced with LifeOS</string>
+    <string name="text_edit_habits">Edit Habits</string>
 
 
 </resources>

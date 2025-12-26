@@ -5,8 +5,8 @@ import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.noisefit.data.model.HabitsByDateResponse
-import com.noisefit.data.model.HabitsResponse
+import com.oreo.data.model.timeline.habits.HabitsByDateResponse
+import com.oreo.data.model.timeline.habits.HabitsResponse
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.usecases.GetAllHabitsUseCase

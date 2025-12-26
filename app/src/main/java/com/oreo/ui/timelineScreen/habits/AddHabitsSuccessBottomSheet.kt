@@ -38,7 +38,7 @@ class AddHabitsSuccessBottomSheet :
                     "okayClicked" to true,
                 )
             )
-            dismiss()
+            navigateUpSafe()
         }
     }
 

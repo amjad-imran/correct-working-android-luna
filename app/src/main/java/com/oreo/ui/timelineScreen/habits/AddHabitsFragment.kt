@@ -18,14 +18,18 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
+import com.moengage.core.internal.utils.showToast
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAddHabitsBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.hideKeyboard
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.oreo.data.model.timeline.habits.CategoryUi
 import com.oreo.data.model.timeline.habits.HabitListItem
@@ -35,11 +39,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabitsBinding::inflate) {
 
     private val viewModel: AddHabitsViewModel by viewModels()
+
+    private val args: AddHabitsFragmentArgs by navArgs()
     private lateinit var mLayoutManager: LinearLayoutManager
 
     private val adapter by lazy {
         HabitsAdapter { habit ->
-            viewModel.toggleHabit(habit.id)
+            binding.etSearch.hideKeyboard()
+            habit.id?.let { viewModel.toggleHabit(it) }
         }
     }
 
@@ -49,7 +56,9 @@ class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setUi()
+        viewModel.selectedHabitsFromBundle = args.selectedOptions
+
+        setUi(viewModel.selectedHabitsFromBundle?.options?.isEmpty()==true)
         setRecycler()
         setupTabClickScroll()
         setupRecyclerScrollTabHighlight()
@@ -84,9 +93,10 @@ class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabi
         })
     }
 
-    private fun setUi() {
+    private fun setUi(isAddHabitsTitle: Boolean) {
         binding.toolbar.apply {
-            tvTitle.text = getString(R.string.text_add_habits)
+            tvTitle.text = if (isAddHabitsTitle) getString(R.string.text_add_habits)
+                        else getString(R.string.text_edit_habits)
             backBtn.setImageResource(R.drawable.ic_close_add_habits)
         }
 
@@ -113,8 +123,12 @@ class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabi
         binding.tvSave.setOnClickListener {
             // You can return selected habit IDs to caller
             val selected = viewModel.uiState.value.selectedHabits.toList()
-            viewModel.saveHabitsToServer(selected){
-                displaySuccessBottomSheet()
+            if(selected.isEmpty()){
+                showToast(requireContext(), "Please Select At least 1 Habit")
+            }else {
+                viewModel.saveHabitsToServer(selected) {
+                    displaySuccessBottomSheet()
+                }
             }
             // e.g. setResult(RESULT_OK, Intent().putStringArrayListExtra("selectedHabits", ArrayList(selected)))
             // finish()
@@ -190,6 +204,27 @@ class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabi
                 // show error / loading (optional)
 //                binding.progress.isVisible = state.loading
                 state.error?.let { /* show toast/snackbar */ }
+            }
+        }
+
+        //
+        viewModel.getMessages().observe(viewLifecycleOwner) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
+
+        viewModel.getApiErrors().observe(viewLifecycleOwner) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
+
+        viewModel.getLoading().observe(viewLifecycleOwner) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
             }
         }
 

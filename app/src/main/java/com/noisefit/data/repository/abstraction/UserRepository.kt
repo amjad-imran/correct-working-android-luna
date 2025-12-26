@@ -1,10 +1,9 @@
 package com.noisefit.data.repository.abstraction
 
 import android.net.Uri
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.model.GoalModel
-import com.noisefit.data.model.HabitsByDateResponse
+import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.noisefit_commans.data.model.timeline.MealAiResponse
 import com.noisefit.data.model.timeline.SupplementsListResponse
 import com.oreo.data.model.RingLocationData

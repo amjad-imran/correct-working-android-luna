@@ -27,7 +27,7 @@ class HabitsAdapter(
     private val onHabitClicked: (HabitUi) -> Unit
 ) : ListAdapter<HabitListItem, RecyclerView.ViewHolder>(DiffCallback()) {
 
-    private var selectedHabits: Set<String> = emptySet()
+    private var selectedHabits: Set<Int> = emptySet()
 
     companion object {
         private const val TYPE_HEADER = 0
@@ -36,7 +36,7 @@ class HabitsAdapter(
         private const val PAYLOAD_SELECTION = "payload_selection"
     }
 
-    fun updateSelectedHabits(newSet: Set<String>) {
+    fun updateSelectedHabits(newSet: Set<Int>) {
         selectedHabits = newSet
         // simplest approach:
         notifyItemRangeChanged(0, itemCount, PAYLOAD_SELECTION)
@@ -107,13 +107,13 @@ class HabitsAdapter(
         private val unselectedBg: Drawable
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(habit: HabitUi, selectedHabits: Set<String>) {
+        fun bind(habit: HabitUi, selectedHabits: Set<Int>) {
             binding.tvText.text = habit.name
             bindSelectionOnly(habit, selectedHabits)
             binding.root.setOnClickListener { onHabitClicked(habit) }
         }
 
-        fun bindSelectionOnly(habit: HabitUi, selectedHabits: Set<String>) {
+        fun bindSelectionOnly(habit: HabitUi, selectedHabits: Set<Int>) {
             val isSelected = selectedHabits.contains(habit.id)
             if (isSelected) {
                 binding.root.background = selectedBg

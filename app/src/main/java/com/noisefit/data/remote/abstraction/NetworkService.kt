@@ -1,12 +1,11 @@
 package com.noisefit.data.remote.abstraction
 
-import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.model.AiMealResponse
 import com.noisefit.data.model.AiWorkoutResponse
 import com.noisefit.data.model.GoalModel
-import com.noisefit.data.model.HabitsByDateResponse
-import com.noisefit.data.model.HabitsResponse
+import com.oreo.data.model.timeline.habits.HabitsByDateResponse
+import com.oreo.data.model.timeline.habits.HabitsResponse
 import com.noisefit.data.model.referral.ReferralCodeResponse
 import com.noisefit.data.model.referral.ReferralInfoResponse
 import com.noisefit_commans.data.model.timeline.MealAiResponse
@@ -902,6 +901,12 @@ interface NetworkService {
         @Url url: String,
         @Query("searched_date") date: String
     ): BaseApiResponse<HabitsByDateResponse>
+
+    @POST
+    suspend fun submitUserHabits(
+        @Url url: String,
+        @Body req: JsonObject
+    ): BaseApiResponse<Any>
     /**
      * ---------------------------------------------------------------------------------
      *                                Oreo Services End

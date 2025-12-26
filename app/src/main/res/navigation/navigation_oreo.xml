@@ -1671,7 +1671,15 @@
         android:id="@+id/addHabitsFragment"
         android:name="com.oreo.ui.timelineScreen.habits.AddHabitsFragment"
         android:label="fragment_add_habits"
-        tools:layout="@layout/fragment_add_habits" />
+        tools:layout="@layout/fragment_add_habits" >
+
+        <argument
+            android:name="selectedOptions"
+            app:argType="com.oreo.data.model.timeline.habits.HabitsByDateResponse"
+            app:nullable="true"
+            android:defaultValue="@null" />
+
+    </fragment>
     <dialog
         android:id="@+id/addHabitsBeginBottomSheet"
         android:name="com.oreo.ui.timelineScreen.habits.AddHabitsBeginBottomSheet"

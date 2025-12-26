@@ -1,4 +1,4 @@
-package com.noisefit.data.model
+package com.oreo.data.model.timeline.habits
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
@@ -16,7 +16,12 @@ data class HabitsByDateResponse(
         @SerializedName("type") var type: String? = null,
         @SerializedName("typeLabel") var typeLabel: String? = null,
         @SerializedName("created_at") var createdAt: String? = null,
-        @SerializedName("is_completed") var isCompleted: Boolean? = null
-    ) : Parcelable
+        @SerializedName("is_completed") var isCompleted: Boolean? = null,
+
+        // for app
+        val state: State = State.Normal,
+    ) : Parcelable{
+        enum class State { Normal, Skipping }
+    }
 
 }

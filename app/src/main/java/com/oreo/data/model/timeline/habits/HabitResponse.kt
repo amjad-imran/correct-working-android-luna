@@ -1,4 +1,4 @@
-package com.noisefit.data.model
+package com.oreo.data.model.timeline.habits
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
