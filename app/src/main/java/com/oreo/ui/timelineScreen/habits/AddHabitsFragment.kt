@@ -25,6 +25,8 @@ import com.google.android.material.tabs.TabLayout
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAddHabitsBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.visible
 import com.oreo.data.model.timeline.habits.CategoryUi
 import com.oreo.data.model.timeline.habits.HabitListItem
 import dagger.hilt.android.AndroidEntryPoint
@@ -123,9 +125,16 @@ class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabi
             override fun afterTextChanged(s: Editable?) = Unit
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                viewModel.onSearchQueryChanged(s?.toString().orEmpty())
+                viewModel.onSearchQueryChanged(s?.toString().orEmpty())
             }
         })
+
+        binding.etSearch.setOnEditorActionListener { _, _, _ ->
+            if (binding.etSearch.text.isNullOrEmpty()) {
+                viewModel.resetSearch()
+            }
+            false
+        }
 
     }
 
@@ -171,7 +180,12 @@ class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabi
                 adapter.updateSelectedHabits(state.selectedHabits)
 
                 // tabs
-                setupTabsIfNeeded(state.categories)
+                if(state.isSearchActive){
+                    binding.tabLayout.gone()
+                }else {
+                    binding.tabLayout.visible()
+                    setupTabsIfNeeded(state.categories)
+                }
 
                 // show error / loading (optional)
 //                binding.progress.isVisible = state.loading

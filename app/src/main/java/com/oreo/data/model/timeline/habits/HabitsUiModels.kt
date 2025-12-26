@@ -26,8 +26,7 @@ data class HabitsUiState(
     val headerPositions: Map<String, Int> = emptyMap(),
     val selectedHabits: Set<String> = emptySet(),
     val error: String? = null,
-
-    val selectionLimitReached: Boolean = false
+    val isSearchActive: Boolean = false,
 )
 
 data class SectionBuildResult(

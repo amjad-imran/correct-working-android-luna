@@ -1,7 +1,6 @@
 package com.oreo.ui.timelineScreen.habits
 
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.noisefit.data.model.Options
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
@@ -9,7 +8,6 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.timeline.habits.CategoryUi
-import com.oreo.data.model.timeline.habits.Habit
 import com.oreo.data.model.timeline.habits.HabitListItem
 import com.oreo.data.model.timeline.habits.HabitUi
 import com.oreo.data.model.timeline.habits.HabitsUiState
@@ -28,16 +26,11 @@ class AddHabitsViewModel @Inject constructor(
     private val getAllHabitUC: GetAllHabitsUseCase
 ): BaseViewModel() {
 
-    companion object{
-        private const val MAX_SELECTION = 5
-    }
-
     private val _uiState = MutableStateFlow(HabitsUiState(loading = true))
     val uiState: StateFlow<HabitsUiState> = _uiState.asStateFlow()
 
-    private var allHabits: List<Habit> = emptyList()
-
-    private var currentSearchQuery: String = ""
+    private var mainResponse = ArrayList<Options>()
+    private var searchQuery: String = ""
 
     init {
         loadHabits()
@@ -45,23 +38,6 @@ class AddHabitsViewModel @Inject constructor(
 
     private fun loadHabits() {
         viewModelScope.launch {
-            val respJson = """
-                {
-                  "categories": [
-                    { "id": "recent", "name": "Recent Entries" },
-                    { "id": "lifestyle", "name": "Lifestyle" },
-                    { "id": "workout", "name": "Workout" },
-                    { "id": "supplements", "name": "Supplements" }
-                  ],
-                  "habits": [
-                    { "id": "1", "name": "Caffeine", "categoryId": "lifestyle", "isRecent": true },
-                    { "id": "2", "name": "Sauna", "categoryId": "lifestyle", "isRecent": true },
-                    { "id": "3", "name": "Cold Exposure", "categoryId": "lifestyle", "isRecent": true },
-                    { "id": "4", "name": "Vitamins", "categoryId": "supplements", "isRecent": true },
-                    { "id": "5", "name": "Alcohol", "categoryId": "lifestyle", "isRecent": false }
-                  ]
-                }
-            """.trimIndent()
 
             _uiState.update { it.copy(loading = true, error = null) }
 
@@ -90,6 +66,7 @@ class AddHabitsViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.options?.let { sections ->
+                            mainResponse = sections
                             processData(sections)
                             LOGS.d("asjkcas : $sections")
                         }
@@ -119,17 +96,36 @@ class AddHabitsViewModel @Inject constructor(
             }
         }
 
-        val built = buildSectionedRows(categories, habits)
-        val finalList = built.rows.toMutableList().apply { add(HabitListItem.EmptyBottom) }
+        val filteredHabits = if (searchQuery.isNotEmpty()) {
+            habits.filter { it.name.contains(searchQuery, ignoreCase = true) }
+        } else {
+            habits
+        }
+
+        val built = buildSectionedRows(categories, filteredHabits)
+        val finalList = built.rows.toMutableList().apply {
+            if(searchQuery.isEmpty()) add(HabitListItem.EmptyBottom)
+        }
 
         _uiState.update {
             it.copy(
                 loading = false,
                 categories = categories,
                 items = finalList,
-                headerPositions = built.headerPositions
+                headerPositions = built.headerPositions,
+                isSearchActive = searchQuery.isNotEmpty()
             )
         }
+    }
+
+    fun onSearchQueryChanged(query: String) {
+        searchQuery = query
+        processData(mainResponse)
+    }
+
+    fun resetSearch() {
+        searchQuery = ""
+        processData(mainResponse) // Revert to the full list of habits
     }
 
     fun toggleHabit(habitId: String) {
@@ -155,8 +151,10 @@ class AddHabitsViewModel @Inject constructor(
         val habitsByCategory = habits.groupBy { it.categoryId }
 
         categories.forEach { cat ->
-            headerPositions[cat.id] = rows.size
-            rows += HabitListItem.Header(cat)
+            if(searchQuery.isEmpty()){
+                headerPositions[cat.id] = rows.size
+                rows += HabitListItem.Header(cat)
+            }
 
             habitsByCategory[cat.id].orEmpty().forEach { h ->
                 rows += HabitListItem.Row(h)
