@@ -37,6 +37,7 @@ data class PayloadData(
     val sleepMovement: Pair<List<OreoSleepData.OreoSleepMovementDataBreakup>,
             CountCardData>? = null,
     val trendData: TrendGraphData? = null,
+    val timeSeriesPayload: TimeSeriesPayload? = null
 ) : Parcelable
 
 @Parcelize
@@ -82,8 +83,14 @@ data class DayTimeChartPayload(
 // Health monitor single-line gradient chart payload (daily/day/week/month)
 @Parcelize
 data class TimeSeriesPayload(
-    val values: List<Float?>,
-    val dates: List<LocalDate>,
-    val unitLabel: String,
-    val chartType: SleepSingleGradientChartType = SleepSingleGradientChartType.DEFAULT
+    val list: List<GraphDataModel>,
+    val yAxisRange: List<Pair<Int, String>>,
+    val xAxisRange: List<LocalDate>,
+    val avgValue: Pair<Float, String>?,
+    val selectedPosition: Int? = null,
+    val showOverlay: Boolean = false,
+    val launchState: SleepInternalLaunchState? = null,
+    val selectedPeriod: InternalSelectedPeriod?,
+    val nonNullDataCount: Int,
+    val unitLabel: String
 ) : Parcelable

@@ -22,12 +22,14 @@ import com.oreo.ui.lifeos.charts.StressChartPayload
 import java.util.ArrayList
 import javax.inject.Inject
 import com.oreo.data.model.DayTimeDataModel
+import com.oreo.data.model.TrendsGraphData
 import com.oreo.data.model.TrendsValues
 import com.oreo.data.model.health.SleepMovementBreakup
 import com.oreo.data.model.lifeos.dashModels.InsightGraph
 import com.oreo.ui.custom.sleep.internal.GraphDataModel
 import com.oreo.ui.custom.sleep.internal.SleepSingleGradientChartType
 import com.oreo.ui.lifeos.charts.PayloadData
+import com.oreo.ui.lifeos.charts.TimeSeriesPayload
 import com.oreo.ui.lifeos.charts.TrendGraphData
 import com.oreo.ui.sleep2.internal.InternalSelectedPeriod
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
@@ -231,7 +233,7 @@ class GraphDataConvertor @Inject constructor(
                     }
 
                     SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
-                        generateSleepMultiBarChartData(data,period, contributor)
+                        generateSleepMultiBarChartData(data, contributor)
                     }
 
                     SleepInternalLaunchState.HOUR_VS_NEED -> {
@@ -308,8 +310,7 @@ class GraphDataConvertor @Inject constructor(
         }
     }
 
-    private fun generateSleepMultiBarChartData(rawData: InsightItemResponseModel,
-                                               period: InternalSelectedPeriod,
+     fun generateSleepMultiBarChartData(rawData: InsightItemResponseModel,
                                                contributor: SleepInternalLaunchState): InsightCardUiModel? {
 
         /*val mainObjString =
@@ -553,6 +554,12 @@ class GraphDataConvertor @Inject constructor(
             "{\"trends_breakup\":[ { \"date\": \"2025-09-08\" }, { \"date\": \"2025-09-09\" }, { \"date\": \"2025-09-10\", \"value1\": 4830 }, { \"date\": \"2025-09-11\" }, { \"date\": \"2025-09-12\" }, { \"date\": \"2025-09-13\" }, { \"date\": \"2025-09-14\" } ]}"
         val mainObj = Gson().fromJson<InsightGraph>(mainObjString, InsightGraph::class.java)*/
 
+        val period = when {
+            rawData.graph_type?.endsWith("week") == true -> InternalSelectedPeriod.WEEK
+            rawData.graph_type?.endsWith("month") == true -> InternalSelectedPeriod.MONTH
+            else -> InternalSelectedPeriod.DAY
+        }
+
         fun convertData(
             data: List<TrendsValues>?,
             contributor: SleepInternalLaunchState
@@ -610,7 +617,8 @@ class GraphDataConvertor @Inject constructor(
                     -1,
                     contributor,
                     optimalRange,
-                    nonNullDataCount
+                    nonNullDataCount,
+                    xAxisRangeInsights = getXAxisRangeInsights(rawData.graph, period)
                 )
             ),
             raw = rawData
@@ -1541,10 +1549,278 @@ class GraphDataConvertor @Inject constructor(
             return Pair(0, "Unknown")
         }
     }
+
+    fun getBarPlotColorData(
+        pageData: InsightItemResponseModel,
+        contributor: SleepInternalLaunchState,
+        unitLabel: String
+    ): InsightCardUiModel? {
+        if (pageData.graph_type == null) return null
+
+        val period = when {
+            pageData.graph_type.endsWith("week") -> InternalSelectedPeriod.WEEK
+            pageData.graph_type.endsWith("month") -> InternalSelectedPeriod.MONTH
+            else -> InternalSelectedPeriod.DAY
+        }
+
+        fun convertData(data: List<TrendsValues>?): List<GraphDataModel> {
+            return data?.map {
+                GraphDataModel(
+                    date = LocalDate.parse(it.date),
+                    value1 = if (contributor == SleepInternalLaunchState.SLEEP_DURATION ||
+                        contributor == SleepInternalLaunchState.REM_SLEEP ||
+                        contributor == SleepInternalLaunchState.DEEP_SLEEP
+                    ) {
+                        if (it.value1 != null) {
+                            (it.value1 ?: 0.0f) / 60
+                        } else null
+                    } else if (it.value1 != null && contributor == SleepInternalLaunchState.SKIN_TEMPERATURE && sessionManager.isMetric()) {
+                        val convertedValue = AppConversionUtils.fahrenheitToCelsius(
+                            it.value1!!
+                        )
+                        if (convertedValue < 0) {
+                            0.0f
+                        } else {
+                            convertedValue
+                        }
+                    } else if (contributor == SleepInternalLaunchState.RESPIRATORY_RATE
+                        || contributor == SleepInternalLaunchState.RESTING_HEART_RATE
+                        || contributor == SleepInternalLaunchState.HRV
+                    ) {
+                        if (it.value1 == 255f) null else it.value1
+                    } else {
+                        it.value1
+                    }
+                )
+            } ?: ArrayList()
+        }
+
+        fun getNonNullDataCount(
+            contributorType: SleepInternalLaunchState?,
+            dataList: List<GraphDataModel>
+        ): Int {
+
+            if (contributorType == SleepInternalLaunchState.SLEEP_DURATION ||
+                contributorType == SleepInternalLaunchState.REM_SLEEP ||
+                contributorType == SleepInternalLaunchState.DEEP_SLEEP
+            ) {
+                val filteredData = dataList.filter {
+                    it.value1 != null && it.value1 != 0.0f
+                }
+                return filteredData.size
+
+            } else {
+                val filteredData = dataList.filter {
+                    it.value1 != null
+                }
+                return filteredData.size
+            }
+        }
+
+        fun getMinMaxValue(
+            dataListType1: List<GraphDataModel>? = null,
+            contributorType: SleepInternalLaunchState?
+        ): Pair<Float, Float> {
+            val nonNullValues = dataListType1?.mapNotNull { it.value1 }
+            return when (contributorType) {
+                SleepInternalLaunchState.HOUR_VS_NEED,
+                SleepInternalLaunchState.SLEEP_TIME -> {
+                    var mMax = 0.0f
+                    dataListType1?.forEach {
+
+                        var max = it.value1 ?: 0.0f
+                        if ((it.value2 ?: 0.0f) > max) {
+                            max = it.value2 ?: 0.0f
+                        }
+
+                        if (max > mMax) {
+                            mMax = max
+                        }
+                    }
+
+                    mMax += ((0.2) * mMax).toInt()
+                    return Pair(0f, mMax)
+                }
+
+                SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
+                    var mMax = 0.0f
+                    dataListType1?.forEach {
+                        val sum = (it.value2 ?: 0.0f)
+                        if (sum > mMax) {
+                            mMax = sum
+                        }
+                    }
+
+                    mMax += ((0.2) * mMax).toInt()
+
+                    return Pair(0f, mMax)
+                }
+
+                SleepInternalLaunchState.TIMING -> Pair(0f, 100.0f)
+
+                SleepInternalLaunchState.DEEP_SLEEP, SleepInternalLaunchState.REM_SLEEP -> {
+                    return if (nonNullValues.isNullOrEmpty()) {
+                        Pair(0f, 60.0f)
+                    } else {
+                        Pair(nonNullValues.filter { it != 0f }.minOrNull() ?: 0f, nonNullValues.max())
+                    }
+                }
+
+                SleepInternalLaunchState.SLEEP_DURATION -> {
+                    if (nonNullValues.isNullOrEmpty()) {
+                        Pair(0f, 12 * 60.0f)
+                    } else {
+                        Pair(0f, nonNullValues.max())
+                    }
+                }
+
+                SleepInternalLaunchState.LATENCY -> {
+                    return if (nonNullValues.isNullOrEmpty()) {
+                        Pair(0f, 25.0f)
+                    } else {
+                        Pair(nonNullValues.filter { it != 0f }.minOrNull() ?: 0f, nonNullValues.max())
+                    }
+                }
+
+                SleepInternalLaunchState.RESTFULNESS -> {
+                    return if (nonNullValues.isNullOrEmpty()) {
+                        Pair(0f, 4.0f)
+                    } else {
+                        Pair(nonNullValues.filter { it != 0f }.minOrNull() ?: 0f, nonNullValues.max())
+                    }
+                }
+
+                SleepInternalLaunchState.RESPIRATORY_RATE -> {
+                    return if (nonNullValues.isNullOrEmpty()) {
+                        Pair(0f, 20.0f)
+                    } else {
+                        Pair(nonNullValues.filter { it != 0f }.minOrNull() ?: 0f, nonNullValues.max())
+                    }
+                }
+
+                SleepInternalLaunchState.RESTING_HEART_RATE, SleepInternalLaunchState.HRV -> {
+                    return if (nonNullValues.isNullOrEmpty()) {
+                        Pair(0f, 80.0f)
+                    } else {
+                        Pair(nonNullValues.filter { it != 0f }.minOrNull() ?: 0f, nonNullValues.max())
+                    }
+                }
+
+                SleepInternalLaunchState.SKIN_TEMPERATURE -> {
+                    return if (nonNullValues.isNullOrEmpty()) {
+                        if (sessionManager.isMetric()) {
+                            Pair(0f, 48.0f)
+                        } else {
+                            Pair(0f, 120.0f)
+                        }
+                    } else {
+                        Pair(nonNullValues.filter { it != 0f }.minOrNull() ?: 0f, nonNullValues.max())
+                    }
+                }
+
+                SleepInternalLaunchState.SLEEP_PERFORMANCE,
+                SleepInternalLaunchState.BLOOD_OXYGEN,
+                SleepInternalLaunchState.EFFICIENCY -> {
+                    return if (nonNullValues.isNullOrEmpty()) {
+                        Pair(0f, 100.0f)
+                    } else {
+                        Pair(nonNullValues.filter { it != 0f }.minOrNull() ?: 0f, nonNullValues.max())
+                    }
+                }
+
+                null -> Pair(0f, 100.0f)
+                else -> Pair(0f, 100.0f)
+            }
+        }
+
+        fun getBarXAxisRange(pageData: TrendsGraphData?): List<LocalDate> =
+             when (period) {
+                InternalSelectedPeriod.MONTH -> {
+                    val monthListString = ArrayList<LocalDate>()
+                    var lastYearMonth: YearMonth? = null
+                    pageData?.data?.forEach {
+                        val currentYearMonth = LocalDate.parse(it.date).yearMonth
+                        if (lastYearMonth == null) {
+                            lastYearMonth = currentYearMonth
+                            monthListString.add(currentYearMonth.atDay(1))
+                        } else if (lastYearMonth != currentYearMonth) {
+                            lastYearMonth = currentYearMonth
+                            monthListString.add(currentYearMonth.atDay(1))
+                        }
+                    }
+                    monthListString
+                }
+
+                InternalSelectedPeriod.WEEK -> {
+                    val weekListReturn = ArrayList<LocalDate>()
+
+                    var lastWeek: Int? = null
+                    pageData?.data?.forEach {
+                        val date = LocalDate.parse(it.date)
+
+                        val weekFields = WeekFields.of(DayOfWeek.MONDAY, 7)
+                        val weekNumber = date.get(weekFields.weekOfWeekBasedYear())
+
+                        if (lastWeek == null) {
+                            lastWeek = weekNumber
+                            weekListReturn.add(date)
+                        } else if (lastWeek != weekNumber) {
+                            lastWeek = weekNumber
+                            weekListReturn.add(date)
+                        }
+                    }
+                    weekListReturn
+                }
+
+                else -> {
+                    val dayList = ArrayList<LocalDate>()
+                    pageData?.data?.forEach {
+                        dayList.add(LocalDate.parse(it.date))
+                    }
+                    dayList
+                }
+            }
+
+        val dataList = convertData(pageData.graph)
+        val nonNullDataCount = getNonNullDataCount(contributor, dataList)
+
+        val minMax = getMinMaxValue(
+            dataListType1 = dataList,
+            contributorType = contributor
+        )
+        val yAxisRange = getYAxisRange(minMax.second, contributor, minValue = minMax.first)
+        val xAxisRange = getBarXAxisRange(TrendsGraphData().apply {
+            data = pageData.graph
+            contributorType = contributor
+            selectedPeriod = period
+        })
+
+        val showOverlay = period != InternalSelectedPeriod.DAY
+
+        return InsightCardUiModel(
+            id = 6L,
+            title = "Rem Day demo",
+            timeText = getInsightRelevantGeneratedTime(pageData.dateTime).second,
+            chartKey = GraphsKey.BAR_PLOT_COLOR,
+            payload = PayloadData(
+                timeSeriesPayload = TimeSeriesPayload(
+                    list = dataList,
+                    yAxisRange = yAxisRange,
+                    xAxisRange = xAxisRange,
+                    avgValue = null,
+                    showOverlay = showOverlay,
+                    selectedPeriod = period,
+                    nonNullDataCount = nonNullDataCount,
+                    unitLabel = unitLabel
+                )
+            ),
+            raw = pageData
+        )
+    }
 }
 
 enum class GraphsKey {
     HEART_RATE, STRESS, DAY_TIME_MOVEMENT, SLEEP_BREAKUP, SLEEP_MOVEMENT,
     TREND_SLEEP_SINGLE, TREND_SLEEP_SINGLE_LINE_GRADIENT, TREND_SLEEP_TIMING_INTERNAL,
-    TREND_SLEEP_MULTI_BAR, TREND_SLEEP_HOUR_VS_NEED_CHARD_INTERNAL
+    TREND_SLEEP_MULTI_BAR, TREND_SLEEP_HOUR_VS_NEED_CHARD_INTERNAL, BAR_PLOT_COLOR
 }

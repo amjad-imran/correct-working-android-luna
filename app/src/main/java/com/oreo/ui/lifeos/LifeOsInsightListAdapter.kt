@@ -18,7 +18,6 @@ import com.oreo.ui.custom.sleep.internal.GraphDataModel
 import com.oreo.ui.custom.sleep.internal.SleepSingleGradientChartType
 import com.oreo.ui.custom.sleep.internal.SleepSingleGradientLineChartInternal
 import com.oreo.ui.custom.sleep.internal.SleepSingleLineChartInternal
-import com.oreo.ui.custom.sleep.internal.SleepDailyGradientChartInternal
 import com.oreo.ui.custom.sleep.internal.SleepHourVsNeedChartInternal
 import com.oreo.ui.custom.sleep.internal.SleepRestorativeChartInternal
 import com.oreo.ui.custom.sleep.internal.SleepSingleBarChart
@@ -27,6 +26,12 @@ import com.oreo.ui.lifeos.charts.BarChartSingleInsight1
 import com.oreo.ui.lifeos.charts.InsightCardUiModel
 import com.oreo.ui.lifeos.charts.PayloadData
 import com.oreo.ui.lifeos.charts.TimeSeriesPayload
+import com.oreo.ui.sleep2.internal.InternalSelectedPeriod
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.YearMonth
+import java.time.temporal.WeekFields
+import java.util.ArrayList
 
 class LifeOsInsightListAdapter(
     private val isFromLifeOsDash: Boolean = false,
@@ -178,7 +183,6 @@ class LifeOsInsightListAdapter(
                         data?.nonNullDataCount?:0
                     )
                     v
-
                 }
                 GraphsKey.TREND_SLEEP_MULTI_BAR -> {
                     val data = payload?.trendData
@@ -221,7 +225,10 @@ class LifeOsInsightListAdapter(
                         data.selectedPosition!!
                     )
                     v
+                }
 
+                GraphsKey.BAR_PLOT_COLOR -> {
+                    weekMonthLine(payload?.timeSeriesPayload)
                 }
 
                 /*"respiratory_daily" -> dailyGradient(payload)
@@ -252,39 +259,39 @@ class LifeOsInsightListAdapter(
             }
         }
 
-        private fun dailyGradient(payload: Any?): View? {
-            val ctx = binding.chartContainer.context
-            val data = payload as? TimeSeriesPayload ?: return null
-            val v = (currentChartView as? SleepDailyGradientChartInternal)
-                ?: SleepDailyGradientChartInternal(ctx, null)
-            val yAxis = buildYAxis(data.values)
-            val avgValue = data.values.filterNotNull().average().toFloat() to data.unitLabel
-            val list = data.dates.mapIndexed { idx, d -> GraphDataModel(value1 = data.values[idx], date = d) }
-            v.setDataSet(list, yAxis, avgValue, -1, null, null, null)
-            return v
-        }
+//        private fun dailyGradient(payload: Any?): View? {
+//            val ctx = binding.chartContainer.context
+//            val data = payload as? TimeSeriesPayload ?: return null
+//            val v = (currentChartView as? SleepDailyGradientChartInternal)
+//                ?: SleepDailyGradientChartInternal(ctx, null)
+//            val yAxis = buildYAxis(data.values)
+//            val avgValue = data.values.filterNotNull().average().toFloat() to data.unitLabel
+//            val list = data.dates.mapIndexed { idx, d -> GraphDataModel(value1 = data.values[idx], date = d) }
+//            v.setDataSet(list, yAxis, avgValue, -1, null, null, null)
+//            return v
+//        }
 
-        private fun dayGradient(payload: Any?, chartType: SleepSingleGradientChartType): View? {
-            val ctx = binding.chartContainer.context
-            val data = payload as? TimeSeriesPayload ?: return null
-            val v = (currentChartView as? SleepSingleGradientLineChartInternal)
-                ?: SleepSingleGradientLineChartInternal(ctx, null)
-            val yAxis = buildYAxis(data.values)
-            val avgValue = data.values.filterNotNull().average().toFloat() to data.unitLabel
-            val nonNull = data.values.count { it != null }
-            val list = data.dates.mapIndexed { idx, d -> GraphDataModel(value1 = data.values[idx], date = d) }
-            v.setDataSet(list, yAxis, data.dates, avgValue, -1, chartType, null, nonNull)
-            return v
-        }
+//        private fun dayGradient(payload: Any?, chartType: SleepSingleGradientChartType): View? {
+//            val ctx = binding.chartContainer.context
+//            val data = payload as? TimeSeriesPayload ?: return null
+//            val v = (currentChartView as? SleepSingleGradientLineChartInternal)
+//                ?: SleepSingleGradientLineChartInternal(ctx, null)
+//            val yAxis = buildYAxis(data.values)
+//            val avgValue = data.values.filterNotNull().average().toFloat() to data.unitLabel
+//            val nonNull = data.values.count { it != null }
+//            val list = data.dates.mapIndexed { idx, d -> GraphDataModel(value1 = data.values[idx], date = d) }
+//            v.setDataSet(list, yAxis, data.dates, avgValue, -1, chartType, null, nonNull)
+//            return v
+//        }
 
         private fun dayBar(payload: Any?): View? {
             val ctx = binding.chartContainer.context
             val data = payload as? TimeSeriesPayload ?: return null
             val v = (currentChartView as? SleepSingleBarChart) ?: SleepSingleBarChart(ctx, null)
-            val yAxis = buildYAxis(data.values)
-            val avgValue = data.values.filterNotNull().average().toFloat() to data.unitLabel
-            val nonNull = data.values.count { it != null }
-            val list = data.dates.mapIndexed { idx, d -> GraphDataModel(value1 = data.values[idx], date = d) }
+            val yAxis = buildYAxis(data.list.map { it.value1 })
+            val avgValue = data.list.mapNotNull { it.value1 }.average().toFloat() to "ms"
+            val nonNull = data.list.map { it.value1 }.count { it != null }
+            val list = data.list.map { it.value1 }.mapIndexed { idx, d -> GraphDataModel(value1 = data.list[idx].value1, date = data.list[idx].date) }
             v.setDataSet(list, yAxis, avgValue, -1, null, null, nonNull)
             return v
         }
@@ -294,14 +301,64 @@ class LifeOsInsightListAdapter(
             val data = payload as? TimeSeriesPayload ?: return null
             val v = (currentChartView as? SleepSingleLineChartInternal)
                 ?: SleepSingleLineChartInternal(ctx, null)
-            val yAxis = buildYAxis(data.values)
-            val avgValue = data.values.filterNotNull().average().toFloat() to data.unitLabel
-            val nonNull = data.values.count { it != null }
-            val list = data.dates.mapIndexed { idx, d -> GraphDataModel(value1 = data.values[idx], date = d) }
+            val yAxis = buildYAxis(data.list.map { it.value1 })
+            val avgValue = data.list.mapNotNull { it.value1 }.average().toFloat() to data.unitLabel
+            val nonNull = data.list.map { it.value1 }.count { it != null }
+            val list = data.list.map { it.value1 }.mapIndexed { idx, d -> GraphDataModel(value1 = data.list[idx].value1, date = data.list[idx].date) }
             val showOverlay = true
-            v.setDataSet(list, yAxis, data.dates, avgValue, -1, showOverlay, null, null, nonNull)
+            v.setDataSet(list, yAxis, getXAxisRange(data), avgValue, -1, showOverlay, null, data.selectedPeriod, nonNull)
             return v
         }
+
+        fun getXAxisRange(data: TimeSeriesPayload): List<LocalDate> {
+            return when (data.selectedPeriod) {
+                InternalSelectedPeriod.MONTH -> {
+                    val monthListString = ArrayList<LocalDate>()
+                    var lastYearMonth: YearMonth? = null
+                    data.list.forEach {
+                        val currentYearMonth = YearMonth.from(it.date)
+                        if (lastYearMonth == null) {
+                            lastYearMonth = currentYearMonth
+                            monthListString.add(currentYearMonth.atDay(1))
+                        } else if (lastYearMonth != currentYearMonth) {
+                            lastYearMonth = currentYearMonth
+                            monthListString.add(currentYearMonth.atDay(1))
+                        }
+                    }
+                    return monthListString
+                }
+
+                InternalSelectedPeriod.WEEK -> {
+                    val weekListReturn = ArrayList<LocalDate>()
+
+                    var lastWeek: Int? = null
+                    data.list.forEach {
+                        val date = it.date
+
+                        val weekFields = WeekFields.of(DayOfWeek.MONDAY, 7)
+                        val weekNumber = date.get(weekFields.weekOfWeekBasedYear())
+
+                        if (lastWeek == null) {
+                            lastWeek = weekNumber
+                            weekListReturn.add(date)
+                        } else if (lastWeek != weekNumber) {
+                            lastWeek = weekNumber
+                            weekListReturn.add(date)
+                        }
+                    }
+                    weekListReturn
+                }
+
+                else -> {
+                    val dayList = ArrayList<LocalDate>()
+                    data.list.forEach {
+                        dayList.add(it.date)
+                    }
+                    return dayList
+                }
+            }
+        }
+
 
         private fun buildYAxis(values: List<Float?>): List<Pair<Int, String>> {
             val nonNull = values.filterNotNull()
