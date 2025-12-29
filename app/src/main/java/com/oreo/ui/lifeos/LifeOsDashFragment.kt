@@ -164,9 +164,11 @@ class LifeOsDashFragment :
 
         binding.lytHeader.lytOnboardQuesProgress.root.visible()
 
-        binding.lytHeader.lytOnboardQuesProgress.composeView.setContent {
-            GradientBorderCard(ansSize/quesSize.toFloat())
-        }
+        setProgress((ansSize.toFloat() / quesSize.toFloat() * 100).toInt())
+    }
+
+    fun setProgress(progress: Int) {
+        binding.lytHeader.lytOnboardQuesProgress.progressBar.progress = progress
     }
 
     @Composable
