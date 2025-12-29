@@ -40,6 +40,14 @@
                 android:layout_marginTop="20dp" />
 
             <include
+                android:id="@+id/insightsProgressBar"
+                layout="@layout/insight_loader"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                tools:visibility="visible"
+                android:layout_marginTop="20dp" />
+
+            <include
                 android:id="@+id/lytDashInsightsEmpty"
                 layout="@layout/layout_dash_insights_empty"
                 android:layout_width="match_parent"

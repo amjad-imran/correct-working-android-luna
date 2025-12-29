@@ -125,12 +125,8 @@ class LifeOsDashFragment :
     }
 
     private fun setUi() {
-        binding.lytDashInsights.insightsProgressBar.tvLoadingText.gone()
-
         binding.lytHeader.tvTitleWithUserName.text = viewModel.getGreetText()
     }
-
-
 
     override fun onResume() {
         super.onResume()
@@ -462,6 +458,7 @@ class LifeOsDashFragment :
         }
 
         viewModel.insightsCardsData.observe(viewLifecycleOwner){ list ->
+            binding.insightsProgressBar.root.gone()
             if(list.isEmpty()){
                 binding.lytDashInsights.root.gone()
                 binding.lytDashInsightsEmpty.root.visible()
@@ -469,7 +466,6 @@ class LifeOsDashFragment :
                 insightAdapter.submitList(list)
                 binding.lytDashInsightsEmpty.root.gone()
                 binding.lytDashInsights.root.visible()
-                binding.lytDashInsights.insightsProgressBar.root.gone()
             }
         }
 
