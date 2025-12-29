@@ -24,6 +24,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -45,12 +47,12 @@ class TimelineScreenViewmodel @Inject constructor(
 
     // expose ONLY 3 visible items
     val visibleHabits: StateFlow<List<Options>> =
-        allHabits.map { it.take(3) }
+        allHabits.map { it.filterNot { it.isCompleted || it.isCancelled }.take(3) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     // for "+N more"
     val moreCount: StateFlow<Int> =
-        allHabits.map { (it.size - 3).coerceAtLeast(0) }
+        allHabits.map { (it.filterNot { it.isCompleted || it.isCancelled }.size - 3).coerceAtLeast(0) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0)
 
     fun getPrefixAndSuffixList(dataList: List<String>): Triple<ArrayList<ChartModel>, ArrayList<ChartModel>, ArrayList<ChartModel>> {
@@ -153,7 +155,7 @@ class TimelineScreenViewmodel @Inject constructor(
                             is Resource.Success -> {
                                 resource.data?.data?.let { resp ->
                                     habitsResponseData = resp
-                                    _allHabits.value = resp.options.filter { it.isCancelled!=true }
+                                    _allHabits.value = resp.options
                                 }
                             }
                         }
@@ -174,7 +176,9 @@ class TimelineScreenViewmodel @Inject constructor(
 
             // 2) after 1 sec remove it (DiffUtil animates removal & next item appears)
             delay(1000)
-            _allHabits.value = _allHabits.value.filterNot { it.timeTrackerOptionId == id }
+            _allHabits.value = _allHabits.value.map {
+                if (it.timeTrackerOptionId == id) it.copy(isCancelled = true) else it
+            }
 
             val reqArray = JsonArray()
             reqArray.add(

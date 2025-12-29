@@ -2336,5 +2336,16 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_lifeos_whats_new_content_1"> * **Presentamos LifeOS: El sistema operativo de tu cuerpo**\n Una capa que unifica tus datos de salud en una vista unificada de cómo estás.</string>
     <string name="text_lifeos_whats_new_content_2"> * **De los datos crudos a decisiones claras:**\n Decide qué es lo que realmente importa hoy y convierte las señales ruidosas en consejos accionables.</string>
     <string name="text_lifeos_whats_new_content_3"> * **Aprende con el tiempo:**\n Se adapta a tu línea base y fases de vida para que la orientación siga siendo personal y oportuna.</string>
+    <string name="synced_with_lifeos">Sincronizado con LifeOS</string>
+    <string name="text_edit_habits">Editar hábitos</string>
+    <string name="text_skipped">Omitido</string>
+    <string name="text_your_habits">Tus hábitos</string>
+    <string name="text_logged">Registrado</string>
+    <string name="text_reveal_your_unique_patterns">Revela tus patrones únicos</string>
+    <string name="text_your_day_so_far">Tu día hasta ahora</string>
+    <string name="text_nothing_here_yet_add_your_first_entry">Nada aquí aún. Agrega tu primer registro.</string>
+    <string name="text_add_to_timeline">Agregar a la línea de tiempo</string>
+    <string name="text_val_logged">%1$d/%2$d Registrado</string>
+    <string name="text_val_more">+%1$d más</string>
 
 </resources>

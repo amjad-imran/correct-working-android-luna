@@ -2390,5 +2390,16 @@
     <string name="text_lifeos_whats_new_content_1"> * **Представляем LifeOS: Операционная система вашего тела**\n Слой, который объединяет ваши данные о здоровье в единый обзор того, как вы себя чувствуете.</string>
     <string name="text_lifeos_whats_new_content_2"> * **От сырых данных к ясным решениям:**\n Решает, что действительно важно сегодня, и превращает шум в полезные подсказки.</string>
     <string name="text_lifeos_whats_new_content_3"> * **Учится со временем:**\n Адаптируется к вашему базовому уровню и жизненным фазам, чтобы руководство оставалось персонализированным и своевременным.</string>
+    <string name="synced_with_lifeos">Синхронизировано с LifeOS</string>
+    <string name="text_edit_habits">Редактировать привычки</string>
+    <string name="text_skipped">Пропущено</string>
+    <string name="text_your_habits">Ваши привычки</string>
+    <string name="text_logged">Зарегистрировано</string>
+    <string name="text_reveal_your_unique_patterns">Покажите свои уникальные паттерны</string>
+    <string name="text_your_day_so_far">Ваш день до сих пор</string>
+    <string name="text_nothing_here_yet_add_your_first_entry">Здесь еще ничего нет. Добавьте первый запись.</string>
+    <string name="text_add_to_timeline">Добавить в хронологию</string>
+    <string name="text_val_logged">%1$d/%2$d Зарегистрировано</string>
+    <string name="text_val_more">+%1$d больше</string>
 
 </resources>

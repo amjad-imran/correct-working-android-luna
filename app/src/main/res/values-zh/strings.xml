@@ -2360,5 +2360,16 @@
     <string name="text_lifeos_whats_new_content_1"> * **介绍 LifeOS：你的身体操作系统**\n 一个将你的健康数据统一展示的层，帮助你了解自己的健康状况。</string>
     <string name="text_lifeos_whats_new_content_2"> * **从原始数据到清晰决策：**\n 决定今天真正重要的内容，并将噪声信号转化为可操作的建议。</string>
     <string name="text_lifeos_whats_new_content_3"> * **随着时间学习：**\n 根据你的基准和生活阶段进行调整，以确保建议保持个人化并及时。</string>
+    <string name="synced_with_lifeos">与 LifeOS 同步</string>
+    <string name="text_edit_habits">编辑习惯</string>
+    <string name="text_skipped">跳过</string>
+    <string name="text_your_habits">您的习惯</string>
+    <string name="text_logged">已记录</string>
+    <string name="text_reveal_your_unique_patterns">揭示您的独特模式</string>
+    <string name="text_your_day_so_far">到目前为止您的一天</string>
+    <string name="text_nothing_here_yet_add_your_first_entry">这里还没有内容。添加您的第一条记录。</string>
+    <string name="text_add_to_timeline">添加到时间线</string>
+    <string name="text_val_logged">%1$d/%2$d 已记录</string>
+    <string name="text_val_more">+%1$d 更多</string>
 
 </resources>

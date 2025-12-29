@@ -2366,5 +2366,16 @@
     <string name="text_lifeos_whats_new_content_1"> * **LifeOS vorstellen: Dein Körper-Betriebssystem**\n Eine Schicht, die deine Gesundheitsdaten zu einer vereinheitlichten Ansicht darüber vereint, wie es dir geht.</string>
     <string name="text_lifeos_whats_new_content_2"> * **Von Rohdaten zu klaren Entscheidungen:**\n Entscheidet, was heute wirklich wichtig ist, und verwandelt Rauschen in handlungsorientierte Hinweise.</string>
     <string name="text_lifeos_whats_new_content_3"> * **Lernt im Laufe der Zeit:**\n Passt sich deinem Baseline und Lebensphasen an, damit die Anleitung persönlich und zeitgemäß bleibt.</string>
+    <string name="synced_with_lifeos">Mit LifeOS synchronisiert</string>
+    <string name="text_edit_habits">Gewohnheiten bearbeiten</string>
+    <string name="text_skipped">Übersprungen</string>
+    <string name="text_your_habits">Ihre Gewohnheiten</string>
+    <string name="text_logged">Protokolliert</string>
+    <string name="text_reveal_your_unique_patterns">Zeigen Sie Ihre einzigartigen Muster</string>
+    <string name="text_your_day_so_far">Ihr Tag bisher</string>
+    <string name="text_nothing_here_yet_add_your_first_entry">Noch nichts hier. Fügen Sie Ihren ersten Eintrag hinzu.</string>
+    <string name="text_add_to_timeline">Zur Zeitleiste hinzufügen</string>
+    <string name="text_val_logged">%1$d/%2$d protokolliert</string>
+    <string name="text_val_more">+%1$d mehr</string>
 
 </resources>

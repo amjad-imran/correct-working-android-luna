@@ -302,6 +302,9 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
         }
 
         binding.lytSavedHabits.tvMoreHabits.setOnClickListener {
+            if(viewModel.moreCount.value <= 0){
+                return@setOnClickListener
+            }
             navigate(
                 R.id.yourHabitsTimelineFragment,
                 bundleOf(
@@ -430,23 +433,37 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.allHabits.collect { list ->
+                viewModel.allHabits.collect { mList ->
                     if(viewModel.habitsResponseData?.options?.isEmpty() == true){
                         binding.lytSavedHabits.root.gone()
                         binding.lytSetupHabits.root.visible()
                     }else{
                         binding.lytSetupHabits.root.gone()
                         binding.lytSavedHabits.root.visible()
+                        val total = mList.size
+                        val curProgress = mList.filter { it.isCompleted || it.isCancelled }.size
+
+                        binding.lytSavedHabits.habitProgress.apply {
+                            this.max = total
+                            this.progress = curProgress
+                        }
+                        binding.lytSavedHabits.tvHabitsLogged.text =
+                            getString(R.string.text_val_logged, curProgress, total)
+
                         launch {
                             viewModel.visibleHabits.collect { list ->
                                 habitsAdapter.submitList(list)
                             }
                         }
+
                         launch {
                             viewModel.moreCount.collect { count ->
-                                binding.lytSavedHabits.tvMoreHabits.text = if (count > 0) "+$count more" else ""
+                                binding.lytSavedHabits.tvMoreHabits.text = if (count > 0) getString(
+                                    R.string.text_val_more, count
+                                ) else ""
                             }
                         }
+
                     }
                 }
             }

@@ -2372,5 +2372,16 @@
     <string name="text_lifeos_whats_new_content_1"> * **แนะนำ LifeOS: ระบบปฏิบัติการของร่างกายคุณ**\n ชั้นที่รวมข้อมูลสุขภาพของคุณเป็นมุมมองที่รวมถึงว่าคุณเป็นอย่างไร</string>
     <string name="text_lifeos_whats_new_content_2"> * **จากข้อมูลดิบสู่การตัดสินใจที่ชัดเจน:**\n ตัดสินใจว่าอะไรที่สำคัญจริงๆ ในวันนี้และแปลงสัญญาณเสียงรบกวนเป็นคำแนะนำที่สามารถปฏิบัติได้</string>
     <string name="text_lifeos_whats_new_content_3"> * **เรียนรู้ตามเวลา:**\n ปรับตัวให้เข้ากับระดับพื้นฐานและระยะเวลาชีวิตของคุณเพื่อให้คำแนะนำยังคงเป็นส่วนตัวและทันเวลา</string>
+    <string name="synced_with_lifeos">ซิงค์กับ LifeOS</string>
+    <string name="text_edit_habits">แก้ไขพฤติกรรม</string>
+    <string name="text_skipped">ข้าม</string>
+    <string name="text_your_habits">พฤติกรรมของคุณ</string>
+    <string name="text_logged">บันทึก</string>
+    <string name="text_reveal_your_unique_patterns">แสดงรูปแบบเฉพาะของคุณ</string>
+    <string name="text_your_day_so_far">วันของคุณจนถึงตอนนี้</string>
+    <string name="text_nothing_here_yet_add_your_first_entry">ยังไม่มีอะไรที่นี่ เพิ่มการบันทึกแรกของคุณ</string>
+    <string name="text_add_to_timeline">เพิ่มลงในไทม์ไลน์</string>
+    <string name="text_val_logged">%1$d/%2$d บันทึก</string>
+    <string name="text_val_more">+%1$d เพิ่มเติม</string>
 
 </resources>

@@ -2366,5 +2366,16 @@
     <string name="text_lifeos_whats_new_content_1"> * **LifeOS voorstellen: Het besturingssysteem van je lichaam**\n Een laag die je gezondheidsdata verenigt in een allesomvattend overzicht van hoe het met je gaat.</string>
     <string name="text_lifeos_whats_new_content_2"> * **Van ruwe data naar duidelijke beslissingen:**\n Beslist wat vandaag echt belangrijk is en zet ruis om in bruikbare adviezen.</string>
     <string name="text_lifeos_whats_new_content_3"> * **Leert in de loop van de tijd:**\n Past zich aan je basislijn en levensfasen aan, zodat de begeleiding persoonlijk en op tijd blijft.</string>
+    <string name="synced_with_lifeos">Gesynchroniseerd met LifeOS</string>
+    <string name="text_edit_habits">Gewoonten bewerken</string>
+    <string name="text_skipped">Overgeslagen</string>
+    <string name="text_your_habits">Jouw gewoonten</string>
+    <string name="text_logged">Ingelogd</string>
+    <string name="text_reveal_your_unique_patterns">Ontdek je unieke patronen</string>
+    <string name="text_your_day_so_far">Jouw dag tot nu toe</string>
+    <string name="text_nothing_here_yet_add_your_first_entry">Nog niets hier. Voeg je eerste invoer toe.</string>
+    <string name="text_add_to_timeline">Toevoegen aan tijdlijn</string>
+    <string name="text_val_logged">%1$d/%2$d Ingelogd</string>
+    <string name="text_val_more">+%1$d meer</string>
 
 </resources>

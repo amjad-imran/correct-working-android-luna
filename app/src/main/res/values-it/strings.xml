@@ -2367,5 +2367,16 @@
     <string name="text_lifeos_whats_new_content_1"> * **Introducendo LifeOS: Il sistema operativo del tuo corpo**\n Uno strato che unifica i tuoi dati sulla salute in una visione unificata di come stai.</string>
     <string name="text_lifeos_whats_new_content_2"> * **Da dati grezzi a decisioni chiare:**\n Decide cosa conta davvero oggi e trasforma i segnali rumorosi in suggerimenti azionabili.</string>
     <string name="text_lifeos_whats_new_content_3"> * **Impara nel tempo:**\n Si adatta alla tua baseline e alle fasi della vita in modo che la guida rimanga personale e tempestiva.</string>
+    <string name="synced_with_lifeos">Sincronizzato con LifeOS</string>
+    <string name="text_edit_habits">Modifica abitudini</string>
+    <string name="text_skipped">Saltato</string>
+    <string name="text_your_habits">Le tue abitudini</string>
+    <string name="text_logged">Registrato</string>
+    <string name="text_reveal_your_unique_patterns">Rivela i tuoi modelli unici</string>
+    <string name="text_your_day_so_far">La tua giornata finora</string>
+    <string name="text_nothing_here_yet_add_your_first_entry">Niente qui ancora. Aggiungi la tua prima voce.</string>
+    <string name="text_add_to_timeline">Aggiungi alla cronologia</string>
+    <string name="text_val_logged">%1$d/%2$d Registrato</string>
+    <string name="text_val_more">+%1$d in più</string>
 
 </resources>
