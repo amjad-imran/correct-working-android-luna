@@ -97,6 +97,7 @@ import kotlin.math.abs
 import androidx.core.graphics.toColorInt
 import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieDrawable
+import com.noisefit.luna.databinding.ItemTimelineChipLunaDashBinding
 import com.noisefit.luna.databinding.ItemTimelineDashBinding
 import com.noisefit.luna.databinding.LayoutCaffeineCalibratingBinding
 import com.noisefit.luna.databinding.LayoutCircadianOnboardingDashBinding
@@ -105,6 +106,7 @@ import com.noisefit.luna.databinding.LayoutDashNoSleepStatesCircadianBinding
 import com.noisefit.luna.databinding.LayoutLifeOsCardDashBinding
 import com.noisefit.luna.databinding.LayoutTimelineCardDashBinding
 import com.noisefit.luna.databinding.LayoutOneTapVitalsCardBinding
+import com.noisefit.luna.databinding.LayoutTimelineCardNewLunaDashBinding
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.ui.fadeIn
 import com.noisefit_commans.ui.playAnimation
@@ -366,6 +368,12 @@ class OSummaryHealthOverviewAdapter(val isToday: Boolean) : RecyclerView.Adapter
                 )
             )
 
+            R.layout.layout_timeline_card_new_luna_dash -> HomeRecyclerViewHolder.TimelineCardNewViewHolder(
+                LayoutTimelineCardNewLunaDashBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+
             R.layout.layout_one_tap_vitals_card -> HomeRecyclerViewHolder.OneTapVitalsViewHolder(
                 LayoutOneTapVitalsCardBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
@@ -585,6 +593,10 @@ class OSummaryHealthOverviewAdapter(val isToday: Boolean) : RecyclerView.Adapter
                 holder.bind(items[position] as OHealthOverview.TimelineDash)
             }
 
+            is HomeRecyclerViewHolder.TimelineCardNewViewHolder -> {
+                holder.bind(items[position] as OHealthOverview.TimelineNewDash)
+            }
+
             is HomeRecyclerViewHolder.OneTapVitalsViewHolder -> {
                 holder.bind(items[position] as OHealthOverview.OneTapVitals)
             }
@@ -644,6 +656,7 @@ class OSummaryHealthOverviewAdapter(val isToday: Boolean) : RecyclerView.Adapter
             is OHealthOverview.CircadianLockedOrNoSleepCard -> R.layout.layout_dash_no_sleep_states_circadian
 
             is OHealthOverview.TimelineDash -> R.layout.layout_timeline_card_dash
+            is OHealthOverview.TimelineNewDash -> R.layout.layout_timeline_card_new_luna_dash
             is OHealthOverview.OneTapVitals -> R.layout.layout_one_tap_vitals_card
             OHealthOverview.LifeOsCard -> R.layout.layout_life_os_card_dash
         }
@@ -772,6 +785,67 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         fun bind(data: OHealthOverview.LifeOsCard){
             binding.root.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.LifeOsCardClicked)
+            }
+        }
+
+    }
+
+    class TimelineCardNewViewHolder(private val binding: LayoutTimelineCardNewLunaDashBinding) :
+        HomeRecyclerViewHolder(binding) {
+
+        private val context = binding.root.context
+
+        fun bind(data: OHealthOverview.TimelineNewDash) {
+
+            // Timeline UI
+            if (data.listData.isNullOrEmpty()) {
+                binding.lytItemTimeline.gone()
+                binding.lytTimelineEmpty.visible()
+            } else {
+                binding.lytTimelineEmpty.gone()
+                binding.lytItemTimeline.visible()
+                setTimelineItemsChip(data.listData)
+            }
+
+            binding.lytTimelineEmpty.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnLogActivityClicked(null))
+            }
+
+            binding.tvAddToTimeline.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnLogActivityClicked(null))
+            }
+        }
+
+        private fun setTimelineItemsChip(listData: List<ItemTimelineResponseModel>) {
+            val chipGrp = binding.chipsPrograms
+            chipGrp.removeAllViews()
+
+            val layoutInflater = LayoutInflater.from(context)
+            for (item in listData.take(3)) {
+                val mChipBinding =
+                    ItemTimelineChipLunaDashBinding
+                        .inflate(layoutInflater, chipGrp, false)
+
+                mChipBinding.tvTitle.apply {
+                    text = item.title
+                    item.titleColor?.let { setTextColor(it) }
+                }
+
+                mChipBinding.tvDesc.text = item.desc
+
+                chipGrp.addView(mChipBinding.root)
+            }
+
+            if(listData.size > 3){
+                val mChipBinding =
+                    ItemTimelineChipLunaDashBinding
+                        .inflate(layoutInflater, chipGrp, false)
+
+                mChipBinding.tvTitle.gone()
+                mChipBinding.tvDesc.text = "+${listData.size-3} more"
+                chipGrp.addView(
+                    mChipBinding.root
+                )
             }
         }
 
