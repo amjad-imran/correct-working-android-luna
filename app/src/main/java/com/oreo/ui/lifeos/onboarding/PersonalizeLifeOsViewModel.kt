@@ -1,5 +1,6 @@
 package com.oreo.ui.lifeos.onboarding
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.remote.base.Resource
@@ -92,7 +93,9 @@ class PersonalizeLifeOsViewModel @Inject constructor(
                     desc.append(", ")
                 }
 
-                it.personalizeDesc = desc.substring(0, desc.length-2).toString()
+                if(desc.length > 2){
+                    it.personalizeDesc = desc.substring(0, desc.length-2).toString()
+                }
                 mList.add(it)
                 //
             }
