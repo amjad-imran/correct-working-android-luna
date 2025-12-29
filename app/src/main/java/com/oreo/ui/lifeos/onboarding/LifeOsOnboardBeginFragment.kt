@@ -26,7 +26,7 @@ class LifeOsOnboardBeginFragment : BaseFragment<FragmentLifeOsOnboardBeginBindin
 
         requireActivity().onBackPressedDispatcher
             .addCallback(viewLifecycleOwner) {
-
+                onBackPress()
             }
 
         setUi()
@@ -70,14 +70,18 @@ class LifeOsOnboardBeginFragment : BaseFragment<FragmentLifeOsOnboardBeginBindin
         }
 
         binding.ivBackBtn.setOnClickListener {
-            setFragmentResult(
-                LIFE_OS_ONBOARD_BEGIN_KEY,
-                Bundle().apply {
-                    putBoolean("isBackClicked", true)
-                }
-            )
-            navigateUpSafe()
+            onBackPress()
         }
+    }
+
+    private fun onBackPress(){
+        setFragmentResult(
+            LIFE_OS_ONBOARD_BEGIN_KEY,
+            Bundle().apply {
+                putBoolean("isBackClicked", true)
+            }
+        )
+        navigateUpSafe()
     }
 
     override fun subscribeObservers() {
