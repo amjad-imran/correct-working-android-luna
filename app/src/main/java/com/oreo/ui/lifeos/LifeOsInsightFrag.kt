@@ -4,6 +4,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLifeOsInsightBinding
@@ -58,6 +59,17 @@ class LifeOsInsightFrag :
     }
 
     override fun initListener() {
+        binding.lytInsightMore.btnTalkToLifeOs.setOnClickListener {
+            val (frag, bundle) = LifeOsChatFragment.getStartData(
+                threadId = null,
+                userMessage = null,
+                title = null,
+                aiTopic = AITopics.GENERAL
+            )
+            findNavController().navigate(
+                frag, bundle
+            )
+        }
         binding.lytToolbar.ivBack.setOnClickListener {
             navigateUpSafe()
         }

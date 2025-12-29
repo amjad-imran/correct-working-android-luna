@@ -42,6 +42,7 @@
 
 
             <include
+                android:id="@+id/lytInsightMore"
                 layout="@layout/layout_insight_more"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
