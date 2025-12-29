@@ -1,37 +1,57 @@
 package com.oreo.ui.timelineScreen
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.data.base.ResourcesProvider
-import com.noisefit.data.model.HabitsByDateResponse
-import com.noisefit.data.model.HabitsResponse
 import com.noisefit.data.remote.base.Resource
-import com.noisefit.data.repository.implementation.UserRepositoryImpl
 import com.noisefit.luna.R
+import com.noisefit_commans.data.BinaryActionCallback
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.model.ChartModel
+import com.oreo.data.model.timeline.habits.HabitsByDateResponse
+import com.oreo.data.model.timeline.habits.HabitsByDateResponse.Options
+import com.oreo.data.usecases.CancelHabitByIdAndDateUseCase
 import com.oreo.data.usecases.GetAllHabitsUseCase
 import com.oreo.data.usecases.GetHabitsByDateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.collections.map
 
 @HiltViewModel
 class TimelineScreenViewmodel @Inject constructor(
     private val resourcesProvider: ResourcesProvider,
     private val dataStore: DataStoredInterface,
     private val habitsByDateUC: dagger.Lazy<GetHabitsByDateUseCase>,
+    private val cancelHabitByIdAndDateUseCase: dagger.Lazy<CancelHabitByIdAndDateUseCase>,
     private val getAllHabitUC: dagger.Lazy<GetAllHabitsUseCase>
 ) : BaseViewModel() {
 
-    private val _allHabitsState = MutableLiveData<HabitsResponse>()
-    val allHabitsState: LiveData<HabitsResponse> get() = _allHabitsState
-    private val _habitsByDateState = MutableLiveData<HabitsByDateResponse>()
-    val habitsByDateState: LiveData<HabitsByDateResponse> get() = _habitsByDateState
+    var habitsResponseData: HabitsByDateResponse ?= null
+    private val _allHabits = MutableStateFlow<List<Options>>(emptyList())
+    val allHabits: StateFlow<List<Options>> = _allHabits.asStateFlow()
+
+    // expose ONLY 3 visible items
+    val visibleHabits: StateFlow<List<Options>> =
+        allHabits.map { it.take(3) }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    // for "+N more"
+    val moreCount: StateFlow<Int> =
+        allHabits.map { (it.size - 3).coerceAtLeast(0) }
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0)
 
     fun getPrefixAndSuffixList(dataList: List<String>): Triple<ArrayList<ChartModel>, ArrayList<ChartModel>, ArrayList<ChartModel>> {
         val list = java.util.ArrayList<ChartModel>()
@@ -110,19 +130,31 @@ class TimelineScreenViewmodel @Inject constructor(
                     .invoke(it).collect { resource ->
                         when (resource) {
                             is Resource.Loading -> {
-                                // Do Nothing on this
+                                setLoading(resource.loading)
                             }
-                            is Resource.Success -> {
-                                resource.data?.data.let {
-                                    println("Sahil ******* Success")
-                                    _habitsByDateState.postValue(it)
-                                }
+
+                            is Resource.GenericError -> {
+                                sendMessage(resource.message)
                             }
-                            is Resource.GenericError ->{
-                                println("Sahil ******* error: "+resource.errorBody)
-                            }
+
                             is Resource.NetworkError -> {
-                                println("Sahil ******* error: "+resource.response)
+                                setApiErrors(resource.response.apply {
+                                    (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                        object : BinaryActionCallback {
+                                            override fun yes() {
+                                                getUserSavedHabits(date)
+                                            }
+
+                                            override fun no() {}
+                                        }
+                                })
+                            }
+
+                            is Resource.Success -> {
+                                resource.data?.data?.let { resp ->
+                                    habitsResponseData = resp
+                                    _allHabits.value = resp.options.filter { it.isCancelled!=true }
+                                }
                             }
                         }
                     }
@@ -130,8 +162,69 @@ class TimelineScreenViewmodel @Inject constructor(
         }
     }
 
+    fun onCrossClicked(id: Int?, selectedDate: String?) {
+        if(id == null) return
 
-    fun getAllUserHabits() {
+        viewModelScope.launch {
+
+            // 1) mark as skipping (UI turns red + shows "Skipped")
+            _allHabits.value = _allHabits.value.map {
+                if (it.timeTrackerOptionId == id) it.copy(state = Options.State.Skipping) else it
+            }
+
+            // 2) after 1 sec remove it (DiffUtil animates removal & next item appears)
+            delay(1000)
+            _allHabits.value = _allHabits.value.filterNot { it.timeTrackerOptionId == id }
+
+            val reqArray = JsonArray()
+            reqArray.add(
+                JsonObject().apply {
+                    addProperty("habit_option_id", id)
+                    addProperty("date", selectedDate)
+                }
+            )
+
+            val reqObj = JsonObject().apply {
+                add("cancelled_habits", reqArray)
+            }
+
+            cancelHabitByIdAndDateUseCase.get().invoke(reqObj).collect { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
+                        /*setLoading(resource.loading)*/
+                    }
+
+                    is Resource.GenericError -> {
+                        /*sendMessage(resource.message)*/
+                    }
+
+                    is Resource.NetworkError -> {
+                        /*setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        onCrossClicked(id, selectedDate)
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })*/
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+
+                        }
+                    }
+                }
+            }
+
+        }
+
+    }
+
+
+    /*fun getAllUserHabits() {
         viewModelScope.launch {
             getAllHabitUC.get()
                 .invoke().collect { resource ->
@@ -150,5 +243,5 @@ class TimelineScreenViewmodel @Inject constructor(
                 }
             }
         }
-    }
+    }*/
 }

@@ -2,11 +2,15 @@ package com.oreo.ui.timelineScreen
 
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentTimelineScreenBinding
@@ -18,12 +22,15 @@ import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChartModel
+import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.oreo.ui.calendar.SELECTED_DATE
+import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 import com.oreo.ui.custom.ScrollListener
 import com.oreo.ui.timelineScreen.habits.ADD_HABITS_BEGIN_KEY
 import com.oreo.ui.timelineScreen.habits.AddHabitsBeginBottomSheet
 import com.oreo.util.setSafeOnClickListener
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 @AndroidEntryPoint
@@ -34,12 +41,237 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
     private val viewModel: TimelineScreenViewmodel by viewModels()
     private var pagerAdapter: TimelinePagerAdapter? = null
 
+    private val habitsAdapter by lazy {
+        ItemHabitsTimelineAdapter(
+            onCross = { habit ->
+                viewModel.onCrossClicked(habit.timeTrackerOptionId, mainViewModel.selectedDate)
+            },
+            onCheck = { habit ->
+                handleOnCheckClicked(habit, mainViewModel.selectedDate)
+            }
+        )
+    }
+
+    private fun handleOnCheckClicked(
+        habit: HabitsByDateResponse.Options,
+        selectedDate: String?
+    ) {
+        LOGS.d("alknsa : ${habit.type}")
+        when(habit.type){
+            "workout" -> {
+                navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to habit.type,
+                        "srcKey" to "habits_timeline",
+                        "habitData" to habit
+                    )
+                )
+            }
+
+            "supplements" -> {
+                navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to habit.type,
+                        "srcKey" to "habits_timeline",
+                        "editData" to null,
+                        "lunaOption" to habit.options
+                    )
+                )
+            }
+
+            "alcohol" -> {
+                navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to "alcohol",
+                        "srcKey" to "habits_timeline",
+                        "editData" to null,
+                        "lunaOption" to null
+                    )
+                )
+            }
+
+            "caffeine" -> {
+                navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to CircadianAlignmentViewModel.caffeine_window_key,
+                        "srcKey" to "habits_timeline",
+                        "editData" to null,
+                        "lunaOption" to null
+                    )
+                )
+            }
+
+            "light_exposure" -> {
+                navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to CircadianAlignmentViewModel.light_exposure_key,
+                        "srcKey" to "habits_timeline",
+                        "editData" to null,
+                        "lunaOption" to null
+                    )
+                )
+            }
+
+            "recovery" -> {
+                navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to habit.type,
+                        "srcKey" to "habits_timeline",
+                        "editData" to null,
+                        "lunaOption" to habit.options
+                    )
+                )
+            }
+
+            "sleep_env" -> {
+                val timelineData = mainViewModel.localDataStore.getTimelineActivitiesData()
+                val mostRecentSleep = timelineData?.find { it.event.equals("sleep") }
+                if (mostRecentSleep == null) {
+                    val mostRecentNap = timelineData?.find { it.event.equals("nap") }
+                    if (mostRecentNap == null) {
+                        navigate(
+                            R.id.addActivityTimelineFragment,
+                            bundleOf(
+                                "showTimeline" to false,
+                                "key" to CircadianAlignmentViewModel.sleep_key,
+                                "srcKey" to "habits_timeline",
+                                "editData" to null,
+                                "lunaOption" to null
+                            )
+                        )
+                    } else {
+                        mostRecentNap.canBeEditedOrDeleted = 1
+                        navigate(
+                            R.id.addActivityTimelineFragment,
+                            bundleOf(
+                                "showTimeline" to false,
+                                "key" to mostRecentNap.event,
+                                "srcKey" to null,
+                                "editData" to mostRecentNap
+                            )
+                        )
+                    }
+                } else {
+                    mostRecentSleep.canBeEditedOrDeleted = 1
+                    navigate(
+                        R.id.addActivityTimelineFragment,
+                        bundleOf(
+                            "showTimeline" to false,
+                            "key" to mostRecentSleep.event,
+                            "srcKey" to null,
+                            "editData" to mostRecentSleep
+                        )
+                    )
+                }
+            }
+
+            /*"sleep_env" -> {
+                val timelineData = mainViewModel.localDataStore.getTimelineActivitiesData()
+                val mostRecentSleep = timelineData?.find { it.event.equals("sleep") }
+                if (mostRecentSleep == null) {
+                    val mostRecentNap = timelineData?.find { it.event.equals("nap") }
+                    if (mostRecentNap == null) {
+                        navigate(
+                            R.id.addActivityTimelineFragment,
+                            bundleOf(
+                                "showTimeline" to false,
+                                "key" to CircadianAlignmentViewModel.sleep_key,
+                                "srcKey" to "habits_timeline",
+                                "editData" to null,
+                                "lunaOption" to null
+                            )
+                        )
+                    } else {
+                        val mRecentNap = mostRecentNap.copy().apply {
+                            val lunaTrackingOptionIds = this.metadata?.lunaTrackingOptionIds
+                            if(lunaTrackingOptionIds.isNullOrEmpty()){
+                                this.metadata?.copy(
+                                    lunaTrackingOptionIds = listOf(habit.timeTrackerOptionId!!)
+                                )
+                            }else{
+                                this.metadata?.copy(
+                                    lunaTrackingOptionIds = ArrayList(lunaTrackingOptionIds).apply {
+                                        add(habit.timeTrackerOptionId)
+                                    }
+                                )
+                            }
+                        }
+
+                        mRecentNap.canBeEditedOrDeleted = 1
+                        navigate(
+                            R.id.addActivityTimelineFragment,
+                            bundleOf(
+                                "showTimeline" to false,
+                                "key" to mRecentNap.event,
+                                "srcKey" to null,
+                                "editData" to mRecentNap
+                            )
+                        )
+                    }
+                } else {
+                    val mRecentSleep = mostRecentSleep.copy().apply {
+                        val lunaTrackingOptionIds = this.metadata?.lunaTrackingOptionIds
+                        if(lunaTrackingOptionIds.isNullOrEmpty()){
+                            this.metadata?.copy(
+                                lunaTrackingOptionIds = listOf(habit.timeTrackerOptionId!!)
+                            )
+                        }else{
+                            this.metadata?.copy(
+                                lunaTrackingOptionIds = ArrayList(lunaTrackingOptionIds).apply {
+                                    add(habit.timeTrackerOptionId)
+                                }
+                            )
+                        }
+                    }
+
+                    mRecentSleep.canBeEditedOrDeleted = 1
+                    navigate(
+                        R.id.addActivityTimelineFragment,
+                        bundleOf(
+                            "showTimeline" to false,
+                            "key" to mRecentSleep.event,
+                            "srcKey" to null,
+                            "editData" to mRecentSleep
+                        )
+                    )
+                }
+            }*/
+
+            else -> {}
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUi()
         setViewPager()
         checkUserHabits()
+        setRecycler()
     }
+
+    private fun setRecycler() {
+        binding.lytSavedHabits.rvHabits.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            itemAnimator = DefaultItemAnimator().apply {
+                supportsChangeAnimations = true
+            }
+
+            adapter = habitsAdapter
+        }
+    }
+
     private fun checkUserHabits(){
         if(viewModel.checkUserFirstTimeForAddHabits()){
             AddHabitsBeginBottomSheet().show(parentFragmentManager, "AddHabitsBeginBottomSheet")
@@ -60,6 +292,22 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
 
         binding.lytSetupHabits.root.setOnClickListener {
             navigate(R.id.addHabitsFragment)
+        }
+
+        binding.lytSavedHabits.tvCustomize.setOnClickListener {
+            navigate(
+                R.id.addHabitsFragment,
+                bundleOf("selectedOptions" to viewModel.habitsResponseData)
+            )
+        }
+
+        binding.lytSavedHabits.tvMoreHabits.setOnClickListener {
+            navigate(
+                R.id.yourHabitsTimelineFragment,
+                bundleOf(
+                    "date" to mainViewModel.selectedDate,
+                )
+            )
         }
 
         binding.ivAddLogFab.setOnClickListener {
@@ -167,14 +415,52 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
 
         }
 
-//        binding.lytSavedHabits.root.visibility = View.VISIBLE
+        /*viewModel.allHabits.observe(viewLifecycleOwner){ response ->
+            response?.options.let { list ->
+                if(list.isNullOrEmpty()){
+                    binding.lytSavedHabits.root.gone()
+                    binding.lytSetupHabits.root.visible()
+                }else{
+                    binding.lytSetupHabits.root.gone()
+                    binding.lytSavedHabits.root.visible()
+                    setLytSavedHabitsUi(list)
+                }
+            }
+        }*/
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.allHabits.collect { list ->
+                    if(viewModel.habitsResponseData?.options?.isEmpty() == true){
+                        binding.lytSavedHabits.root.gone()
+                        binding.lytSetupHabits.root.visible()
+                    }else{
+                        binding.lytSetupHabits.root.gone()
+                        binding.lytSavedHabits.root.visible()
+                        launch {
+                            viewModel.visibleHabits.collect { list ->
+                                habitsAdapter.submitList(list)
+                            }
+                        }
+                        launch {
+                            viewModel.moreCount.collect { count ->
+                                binding.lytSavedHabits.tvMoreHabits.text = if (count > 0) "+$count more" else ""
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /*private fun setLytSavedHabitsUi(list: ArrayList<HabitsByDateResponse.Options>) {
         val itemView = layoutInflater.inflate(
-            R.layout.item_habit,
+            R.layout.item_habit_timeline_screen,
             null,
             false
         )
         val itemView1 = layoutInflater.inflate(
-            R.layout.item_habit,
+            R.layout.item_habit_timeline_screen,
             null,
             false
         )
@@ -187,20 +473,7 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
             })
             this.tvMoreHabits.text = "+2 more"
         }
-
-
-        viewModel.habitsByDateState.observe(viewLifecycleOwner){ response ->
-            response?.options.let { list ->
-                if(list.isNullOrEmpty()){
-                    binding.lytSavedHabits.root.gone()
-                    binding.lytSetupHabits.root.visible()
-                }else{
-                    binding.lytSetupHabits.root.gone()
-                    binding.lytSavedHabits.root.visible()
-                }
-            }
-        }
-    }
+    }*/
 
     override fun onPositionSelected(position: Int, chartModel: ChartModel?) {
         if (mainViewModel.selectedDate == chartModel?.date!!) {

@@ -38,4 +38,14 @@ class UserHabitRepositoryImpl(val networkService: NetworkService) : IUserHabitRe
             )
         }
     }
+
+    override suspend fun cancelUserHabitsByIdAndDate(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(Dispatchers.IO) {
+            networkService.submitUserHabits(
+                "${BuildConfig.OREO_BASE_URL}/protean/v3/time-tracker/cancel-user-habit",
+                req
+            )
+        }
+    }
+
 }

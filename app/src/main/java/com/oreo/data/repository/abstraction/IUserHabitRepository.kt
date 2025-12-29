@@ -14,4 +14,5 @@ interface IUserHabitRepository {
     suspend fun syncHabits(ids: List<String>): Flow<Resource<BaseApiResponse<SyncHabitResponse>>>
 
     suspend fun submitUserHabits(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
+    suspend fun cancelUserHabitsByIdAndDate(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>>
 }

@@ -14,9 +14,11 @@ data class HabitsByDateResponse(
         @SerializedName("time_tracker_option_id") var timeTrackerOptionId: Int? = null,
         @SerializedName("options") var options: String? = null,
         @SerializedName("type") var type: String? = null,
+        @SerializedName("workout_type") var workoutType: String? = null,
         @SerializedName("typeLabel") var typeLabel: String? = null,
         @SerializedName("created_at") var createdAt: String? = null,
-        @SerializedName("is_completed") var isCompleted: Boolean? = null,
+        @SerializedName("is_completed") var isCompleted: Boolean = false,
+        @SerializedName("is_cancelled") var isCancelled: Boolean = false,
 
         // for app
         val state: State = State.Normal,
