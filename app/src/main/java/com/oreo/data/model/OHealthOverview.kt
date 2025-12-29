@@ -211,6 +211,10 @@ sealed class OHealthOverview {
         val listData: List<ItemTimelineResponseModel>?
     ) : OHealthOverview()
 
+    data class TimelineNewDash(
+        val listData: List<ItemTimelineResponseModel>?
+    ) : OHealthOverview()
+
     class CardTrackFemaleHealth(
         val state: FemaleHealthCardState
     ) : OHealthOverview()

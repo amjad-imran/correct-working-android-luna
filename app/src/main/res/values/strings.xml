@@ -2348,6 +2348,10 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_skipped">Skipped</string>
     <string name="text_your_habits">Your Habits</string>
     <string name="text_logged">Logged</string>
+    <string name="text_reveal_your_unique_patterns">Reveal your unique patterns</string>
+    <string name="text_your_day_so_far">Your day so far</string>
+    <string name="text_nothing_here_yet_add_your_first_entry">Nothing here yet. Add your first entry.</string>
+    <string name="text_add_to_timeline">Add to timeline</string>
 
 
 </resources>
