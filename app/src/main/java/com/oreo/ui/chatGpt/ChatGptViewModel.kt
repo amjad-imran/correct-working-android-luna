@@ -24,6 +24,7 @@ import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
+import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -373,6 +374,12 @@ class ChatGptViewModel
     private var currentCall: Call? = null
 
     fun askQuestionStream(prompt: String) {
+        if (ApplicationUtils.isInternetConnected().not()){
+            addErrorState(
+                resourceProvider.getString(R.string.connection_issue)
+            )
+            return
+        }
         fetchInProgress.value = true
         videoState.value = true
         lastApi = Pair(1, prompt)

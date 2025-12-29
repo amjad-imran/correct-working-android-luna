@@ -11,10 +11,13 @@ import com.noisefit_commans.ui.BaseViewModel
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.noisefit_commans.utils.GraphType
 import com.oreo.data.dataConverter.GraphDataConvertor
 import com.oreo.data.dataConverter.OreoHRDataConvertor
 import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
 import com.oreo.ui.lifeos.charts.InsightCardUiModel
+import com.oreo.ui.sleep2.internal.InternalSelectedPeriod
+import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -424,7 +427,7 @@ class LifeOsInsightsViewModel @Inject constructor(
 
         //--
         viewModelScope.launch {
-            userRepository.getInsightLvl1List().collect{ resource ->
+            userRepository.getInsightLvl1List().collect { resource ->
                 when (resource) {
                     is Resource.GenericError -> {
                         sendMessage(resource.message)
@@ -449,7 +452,7 @@ class LifeOsInsightsViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data.let {
-                            if(it.isNullOrEmpty()){
+                            if (it.isNullOrEmpty()) {
                                 _cards.value = ArrayList()
                                 return@let
                             }
@@ -472,28 +475,177 @@ class LifeOsInsightsViewModel @Inject constructor(
     private fun generateData(data: List<InsightItemResponseModel>): List<InsightCardUiModel> {
         val list = ArrayList<InsightCardUiModel>()
 
-        data.forEach { it ->
-
+        data.forEach {
             if (it.graph_type.isNullOrEmpty().not()) {
                 when (it.graph_type) {
-                    "hr" -> {
-                        list.add(graphDataConvertor.generateHrGraphData(it))
+                    GraphType.Day.REM_SLEEP,
+                    GraphType.Week.REM_SLEEP,
+                    GraphType.Month.REM_SLEEP -> {
+                        graphDataConvertor.generateSleepMultiBarChartData(
+                            it, SleepInternalLaunchState.REM_SLEEP
+                        )?.let { data ->
+                            list.add(data)
+                        }
+                        // REM_SLEEP (double_bar_plot with Deep Sleep)
                     }
 
-                    "stress" -> {
-                        list.add(graphDataConvertor.generateStressGraphData(it))
+                    GraphType.Day.DEEP_SLEEP,
+                    GraphType.Week.DEEP_SLEEP,
+                    GraphType.Month.DEEP_SLEEP -> {
+                        graphDataConvertor.generateSleepMultiBarChartData(
+                            it, SleepInternalLaunchState.DEEP_SLEEP
+                        )?.let { data ->
+                            list.add(data)
+                        }
+                        // DEEP_SLEEP (double_bar_plot with REM Sleep)
                     }
 
-                    "daytime" -> {
-                        list.add(graphDataConvertor.generateDayTimeGraphData(it))
+                    GraphType.Day.SLEEP_EFFICIENCY,
+                    GraphType.Week.SLEEP_EFFICIENCY,
+                    GraphType.Month.SLEEP_EFFICIENCY -> {
+                        graphDataConvertor.generateTrendsGraphInsightsData(it)?.let { data ->
+                            list.add(data)
+                        }
+                        // (standard_bar_plot)
                     }
 
-                    "sleep_stage" -> {
-                        list.add(graphDataConvertor.generateSleepBreakupGraphData(it))
+                    GraphType.Day.TOTAL_DURATION,
+                    GraphType.Week.TOTAL_DURATION,
+                    GraphType.Month.TOTAL_DURATION -> {
+                        graphDataConvertor.generateTrendsGraphInsightsData(it)?.let { data ->
+                            list.add(data)
+                        }
+                        // (standard_bar_plot)
                     }
-                    "sleep_movement" -> {
-                        list.add(graphDataConvertor.generateSleepMovementData(it))
+
+                    GraphType.Day.LATENCY,
+                    GraphType.Week.LATENCY,
+                    GraphType.Month.LATENCY -> {
+                        graphDataConvertor.generateTrendsGraphInsightsData(it)?.let { data ->
+                            list.add(data)
+                        }
+                        // (standard_bar_plot)
                     }
+
+                    GraphType.Day.RESTFULLNESS,
+                    GraphType.Week.RESTFULLNESS,
+                    GraphType.Month.RESTFULLNESS -> {
+                        graphDataConvertor.getBarPlotColorData(
+                            it,
+                            SleepInternalLaunchState.RESTFULNESS,
+                            "%"
+                        )?.let { plotData ->
+                            list.add(plotData)
+                        }
+                        // RESTFULNESS (bar_plot_color)
+                    }
+
+                    GraphType.Day.HRV,
+                    GraphType.Week.HRV,
+                    GraphType.Month.HRV -> {
+                        graphDataConvertor.getBarPlotColorData(
+                            it,
+                            SleepInternalLaunchState.HRV,
+                            "ms"
+                        )?.let { plotData ->
+                            list.add(plotData)
+                        }
+                        // HRV (bar_plot_color)
+                    }
+
+                    GraphType.Day.RHR,
+                    GraphType.Week.RHR,
+                    GraphType.Month.RHR -> {
+                        graphDataConvertor.getBarPlotColorData(
+                            it,
+                            SleepInternalLaunchState.RESTING_HEART_RATE,
+                            "bpm"
+                        )?.let { plotData ->
+                            list.add(plotData)
+                        }
+                        // RHR (bar_plot_color)
+                    }
+
+                    GraphType.Day.AVG_SKIN_TEMP,
+                    GraphType.Week.AVG_SKIN_TEMP,
+                    GraphType.Month.AVG_SKIN_TEMP -> {
+                        graphDataConvertor.getBarPlotColorData(
+                            it,
+                            SleepInternalLaunchState.SKIN_TEMPERATURE,
+                            "°C"
+                        )?.let { plotData ->
+                            list.add(plotData)
+                        }
+                        // SKIN_TEMP (bar_plot_color)
+                    }
+
+                    GraphType.Day.AVG_OXY,
+                    GraphType.Week.AVG_OXY,
+                    GraphType.Month.AVG_OXY -> {
+                        list.add(
+                            graphDataConvertor.generateSleepSingleLineChartData(
+                                it,
+                                getPeriod(it),
+                                SleepInternalLaunchState.SKIN_TEMPERATURE
+                            )
+                        )
+                        // SPO2 (line_plot)
+                    }
+
+                    GraphType.Day.AVG_RESPIRATION,
+                    GraphType.Week.AVG_RESPIRATION,
+                    GraphType.Month.AVG_RESPIRATION -> {
+                        list.add(
+                            graphDataConvertor.generateSleepSingleLineChartData(
+                                it,
+                                getPeriod(it),
+                                getContributor(it)
+                            )
+                        )
+                        // RESPIRATION (line_plot)
+                    }
+
+                    GraphType.Day.CIRCADIAN_MID_POINT -> {
+                        list.add(
+                            graphDataConvertor.generateSleepTimingChartInternalData(
+                                it,
+                                getPeriod(it),
+                                getContributor(it)
+                            )
+                        )
+                    }
+
+                    GraphType.Week.CIRCADIAN_MID_POINT,
+                    GraphType.Month.CIRCADIAN_MID_POINT -> {
+                        list.add(
+                            graphDataConvertor.generateSleepSingleLineChartData(
+                                it,
+                                getPeriod(it),
+                                getContributor(it)
+                            )
+                        )
+                        // Week -> line_plot
+                        // Month-> line_plot
+                    }
+//
+//                    "hr" -> {
+//                        list.add(graphDataConvertor.generateHrGraphData(it))
+//                    }
+//
+//                    "stress" -> {
+//                        list.add(graphDataConvertor.generateStressGraphData(it))
+//                    }
+//
+//                    "daytime" -> {
+//                        list.add(graphDataConvertor.generateDayTimeGraphData(it))
+//                    }
+//
+//                    "sleep_stage" -> {
+//                        list.add(graphDataConvertor.generateSleepBreakupGraphData(it))
+//                    }
+//                    "sleep_movement" -> {
+//                        list.add(graphDataConvertor.generateSleepMovementData(it))
+//                    }
                     else -> {
                         val data = graphDataConvertor.generateTrendsGraphInsightsData(it)
                         data?.let {
@@ -526,7 +678,7 @@ class LifeOsInsightsViewModel @Inject constructor(
         }
 
         // Respiratory rate – day (bar)
-       /* list.add(
+        /* list.add(
             InsightCardUiModel(
                 id = 5L,
                 title = "Respiratory rate (day demo)",
@@ -605,4 +757,22 @@ class LifeOsInsightsViewModel @Inject constructor(
         return list
     }
 
+    private fun getPeriod(data: InsightItemResponseModel) = when {
+        data.graph_type?.endsWith("week") == true -> InternalSelectedPeriod.WEEK
+        data.graph_type?.endsWith("month") == true -> InternalSelectedPeriod.MONTH
+        else -> InternalSelectedPeriod.DAY
+    }
+
+    private fun getContributor(data: InsightItemResponseModel): SleepInternalLaunchState {
+        return when {
+            data.graph_type == null -> SleepInternalLaunchState.DEEP_SLEEP
+            data.graph_type.startsWith("circadian_mid_point_day") -> SleepInternalLaunchState.TIMING
+            data.graph_type.startsWith("hour_vs_need_day") -> SleepInternalLaunchState.HOUR_VS_NEED
+            data.graph_type.startsWith("restorative_sleep") -> SleepInternalLaunchState.RESTORATIVE_SLEEP
+            data.graph_type.startsWith("rem_sleep") -> SleepInternalLaunchState.REM_SLEEP
+            data.graph_type.startsWith("deep_sleep") -> SleepInternalLaunchState.DEEP_SLEEP
+            data.graph_type.startsWith("sleep_perf") -> SleepInternalLaunchState.SLEEP_PERFORMANCE
+            else -> SleepInternalLaunchState.DEEP_SLEEP
+        }
+    }
 }

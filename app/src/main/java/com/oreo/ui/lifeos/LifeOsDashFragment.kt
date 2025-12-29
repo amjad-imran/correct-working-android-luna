@@ -125,12 +125,8 @@ class LifeOsDashFragment :
     }
 
     private fun setUi() {
-        binding.lytDashInsights.insightsProgressBar.tvLoadingText.gone()
-
         binding.lytHeader.tvTitleWithUserName.text = viewModel.getGreetText()
     }
-
-
 
     override fun onResume() {
         super.onResume()
@@ -168,9 +164,11 @@ class LifeOsDashFragment :
 
         binding.lytHeader.lytOnboardQuesProgress.root.visible()
 
-        binding.lytHeader.lytOnboardQuesProgress.composeView.setContent {
-            GradientBorderCard(ansSize/quesSize.toFloat())
-        }
+        setProgress((ansSize.toFloat() / quesSize.toFloat() * 100).toInt())
+    }
+
+    fun setProgress(progress: Int) {
+        binding.lytHeader.lytOnboardQuesProgress.progressBar.progress = progress
     }
 
     @Composable
@@ -462,6 +460,7 @@ class LifeOsDashFragment :
         }
 
         viewModel.insightsCardsData.observe(viewLifecycleOwner){ list ->
+            binding.insightsProgressBar.root.gone()
             if(list.isEmpty()){
                 binding.lytDashInsights.root.gone()
                 binding.lytDashInsightsEmpty.root.visible()
@@ -469,7 +468,6 @@ class LifeOsDashFragment :
                 insightAdapter.submitList(list)
                 binding.lytDashInsightsEmpty.root.gone()
                 binding.lytDashInsights.root.visible()
-                binding.lytDashInsights.insightsProgressBar.root.gone()
             }
         }
 

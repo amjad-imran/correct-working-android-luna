@@ -208,11 +208,19 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         if (isInteracting) return
         if (dataSet.isEmpty()) return
 
-        if (selectedPeriod == InternalSelectedPeriod.WEEK) {
-            if (dataSet.size % 7 != 0) {
-                return
-            }
-        }
+//        when (selectedPeriod) {
+//
+//            InternalSelectedPeriod.DAY -> {
+//                if (dataSet.count { it.value1    != null } < 2) return
+//            }
+//            InternalSelectedPeriod.WEEK -> {
+//                if (dataSet.isEmpty()) return
+//            }
+//            else -> {
+//                if (dataSet.isEmpty()) return
+//            }
+//        }
+
 
 
         val availableWidth = width.toFloat() - endPadding
@@ -226,8 +234,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
         var lastPos = 0
 
-        xAxisRange.forEachIndexed { index, value ->
-
+        xAxisRange.forEachIndexed { _, value ->
             val dataSize = getDataSize(value)
             val filterValues = try {
                 dataSet.subList(lastPos, (lastPos + dataSize))
@@ -349,10 +356,11 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     }
 
     private fun getDataSize(date: LocalDate): Int {
-        return if (selectedPeriod == InternalSelectedPeriod.MONTH) {
-            getDaysOfMonth(date.yearMonth)
-        } else {
-            7
+        return when (selectedPeriod) {
+            InternalSelectedPeriod.DAY -> 1
+            InternalSelectedPeriod.WEEK -> 7
+            InternalSelectedPeriod.MONTH -> getDaysOfMonth(date.yearMonth)
+            else -> 1
         }
     }
 
@@ -609,13 +617,32 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         val textY = height - dip2px(12f).toFloat()
 
         xAxisRange.forEach {
-            val displayMonth = if (selectedPeriod == InternalSelectedPeriod.MONTH) {
-                it.format(DateTimeFormatter.ofPattern("MMM",Locale(NoiseFitApplicationMain.appLanguage.languageCode)))
-            } else {
-                //for week
-                val weekFields = WeekFields.of(Locale.getDefault())
-                val weekNumber = it.get(weekFields.weekOfWeekBasedYear())
-                "W$weekNumber"
+            val displayMonth = when (selectedPeriod) {
+
+                    InternalSelectedPeriod.DAY -> {
+                        it.format(
+                            DateTimeFormatter.ofPattern(
+                                "EEE",
+                                Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                            )
+                        )
+                    }
+
+                    InternalSelectedPeriod.WEEK -> {
+                        val locale = Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                        val weekFields = WeekFields.of(locale)
+                        val weekNumber = it.get(weekFields.weekOfWeekBasedYear())
+                        "W$weekNumber"
+                    }
+
+                    else -> {
+                        it.format(
+                            DateTimeFormatter.ofPattern(
+                                "MMM",
+                                Locale(NoiseFitApplicationMain.appLanguage.languageCode)
+                            )
+                        )
+                    }
             }
             val textWidth = xAxisPaint.measureText(displayMonth)
             xAxisPaint.getTextBounds(displayMonth, 0, displayMonth.length, xTextBounds)

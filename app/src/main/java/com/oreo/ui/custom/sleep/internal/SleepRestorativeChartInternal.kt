@@ -50,7 +50,6 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
     private var vibrationUtils: VibrationUtils? = null
     private var listener: SleepSingleBarAction? = null
     private var touchX = 0f
-    private val endPadding = dip2px(30f)
     var dataStepWidth = 0F
 
 
@@ -144,7 +143,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
 
     private fun drawContent(canvas: Canvas) {
 
-        val availableWidth = (width - endPadding).toFloat()
+        val availableWidth = (width - getYAxisReservedWidth()).toFloat()
         dataStepWidth = availableWidth / 7
 
         val barWidth = dataStepWidth / 2
@@ -302,7 +301,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
     }
 
     private fun drawBackGrid(canvas: Canvas) {
-        val availableWidth = width.toFloat() - endPadding
+        val availableWidth = width.toFloat() - getYAxisReservedWidth()
 
         val stepWidth = availableWidth / 7
         var start = 0f
@@ -319,7 +318,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
     }
 
     private fun drawYAxis(canvas: Canvas) {
-        val availableWidth = width.toFloat() - endPadding
+        val availableWidth = width.toFloat() - getYAxisReservedWidth()
 
         val textBounds = Rect()
         val offsetWidth = dip2px(2f)
@@ -437,9 +436,8 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
 
     }
 
-
     private fun drawXAxis(canvas: Canvas) {
-        val availableWidth = width.toFloat() - endPadding
+        val availableWidth = width.toFloat() - getYAxisReservedWidth()
 
         val stepWidth = availableWidth / 7
 
@@ -468,6 +466,22 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
         val scale = context.resources.displayMetrics.density
         return (dpValue * scale + 0.5f).toInt()
     }
+
+    private fun getYAxisReservedWidth(): Int {
+        if (yAxisRange.isEmpty()) return dip2px(24f)
+
+        val bounds = Rect()
+        var maxWidth = 0
+
+        yAxisRange.forEach {
+            xAxisPaint.getTextBounds(it.second, 0, it.second.length, bounds)
+            maxWidth = maxOf(maxWidth, bounds.width())
+        }
+
+        // text width + small gap
+        return maxWidth + dip2px(8f)
+    }
+
 
     /**
      * array list of values -> Pair(deep minutes, rem minutes)

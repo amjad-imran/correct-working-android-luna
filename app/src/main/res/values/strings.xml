@@ -2354,6 +2354,9 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_add_to_timeline">Add to timeline</string>
     <string name="text_val_logged">%1$d/%2$d Logged</string>
     <string name="text_val_more">+%1$d more</string>
+    <string name="crafting_your_insights">Crafting your insights.</string>
+    <string name="insights_loading_desc">Your insights will be ready shortly</string>
+    <string name="connection_issue">Connection Issue</string>
 
 
 </resources>
