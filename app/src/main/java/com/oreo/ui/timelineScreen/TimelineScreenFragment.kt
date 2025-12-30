@@ -302,9 +302,6 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
         }
 
         binding.lytSavedHabits.tvMoreHabits.setOnClickListener {
-            if(viewModel.moreCount.value <= 0){
-                return@setOnClickListener
-            }
             navigate(
                 R.id.yourHabitsTimelineFragment,
                 bundleOf(
@@ -443,6 +440,9 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
                         val total = mList.size
                         val curProgress = mList.filter { it.isCompleted || it.isCancelled }.size
 
+                        if(total==curProgress) binding.lytSavedHabits.lytContentAndFooter.gone()
+                        else binding.lytSavedHabits.lytContentAndFooter.visible()
+
                         binding.lytSavedHabits.habitProgress.apply {
                             this.max = total
                             this.progress = curProgress
@@ -458,9 +458,18 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
 
                         launch {
                             viewModel.moreCount.collect { count ->
-                                binding.lytSavedHabits.tvMoreHabits.text = if (count > 0) getString(
-                                    R.string.text_val_more, count
-                                ) else ""
+                                if (count > 0){
+                                    binding.lytSavedHabits.tvMoreHabits.apply {
+                                        text = getString(R.string.text_val_more, count)
+                                        isClickable = true
+                                    }
+                                }
+                                else{
+                                    binding.lytSavedHabits.tvMoreHabits.apply {
+                                        text = ""
+                                        isClickable = false
+                                    }
+                                }
                             }
                         }
 
