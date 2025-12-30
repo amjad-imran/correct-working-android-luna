@@ -2401,5 +2401,11 @@
     <string name="text_add_to_timeline">Добавить в хронологию</string>
     <string name="text_val_logged">%1$d/%2$d Зарегистрировано</string>
     <string name="text_val_more">+%1$d больше</string>
+    <string name="text_discard_changes">Отменить изменения?</string>
+    <string name="text_discard">Отменить</string>
+    <string name="text_are_you_sure_habits_selected_so_far_will_not_be_saved">Вы уверены? Выбранные до сих пор привычки не будут сохранены.</string>
+    <string name="crafting_your_insights">Создание ваших инсайтов.</string>
+    <string name="insights_loading_desc">Ваши инсайты будут готовы через несколько минут.</string>
+    <string name="connection_issue">Проблема с подключением</string>
 
 </resources>
