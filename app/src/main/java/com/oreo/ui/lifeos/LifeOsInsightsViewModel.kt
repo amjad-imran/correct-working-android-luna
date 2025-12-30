@@ -605,16 +605,7 @@ class LifeOsInsightsViewModel @Inject constructor(
                         // RESPIRATION (line_plot)
                     }
 
-                    GraphType.Day.CIRCADIAN_MID_POINT -> {
-                        list.add(
-                            graphDataConvertor.generateSleepTimingChartInternalData(
-                                it,
-                                getPeriod(it),
-                                getContributor(it)
-                            )
-                        )
-                    }
-
+                    GraphType.Day.CIRCADIAN_MID_POINT,
                     GraphType.Week.CIRCADIAN_MID_POINT,
                     GraphType.Month.CIRCADIAN_MID_POINT -> {
                         list.add(

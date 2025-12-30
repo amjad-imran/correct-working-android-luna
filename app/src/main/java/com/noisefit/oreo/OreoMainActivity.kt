@@ -2000,7 +2000,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep_default)
                 binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
-                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_default)
+                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_default_lifeos_logo)
 
 
 
@@ -2027,7 +2027,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep)
                 binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
-                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_default)
+                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_default_lifeos_logo)
 
 
                 binding.navView.apply {
@@ -2052,7 +2052,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep_default)
                 binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness)
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
-                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_default)
+                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_default_lifeos_logo)
 
 
                 binding.navView.apply {
@@ -2076,7 +2076,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep_default)
                 binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity)
-                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_default)
+                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_default_lifeos_logo)
 
                 binding.navView.apply {
                     ivGlowHome.gone()
@@ -2098,7 +2098,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 binding.navView.ivSleep.setImageResource(R.drawable.ic_dash_oreo_sleep_default)
                 binding.navView.ivReadiness.setImageResource(R.drawable.ic_dash_oreo_readiness_default)
                 binding.navView.ivActivity.setImageResource(R.drawable.ic_dash_oreo_activity_default)
-                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_dash_luna_zone_selected)
+                binding.navView.ivLunaAi.setImageResource(R.drawable.ic_lifeos_logo)
 
                 binding.navView.apply {
                     ivGlowHome.gone()
