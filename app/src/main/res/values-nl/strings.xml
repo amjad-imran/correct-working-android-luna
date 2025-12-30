@@ -2380,5 +2380,8 @@
     <string name="text_discard_changes">Wijzigingen ongeldig maken?</string>
     <string name="text_discard">Ongeldig maken</string>
     <string name="text_are_you_sure_habits_selected_so_far_will_not_be_saved">Weet je het zeker? De tot nu toe geselecteerde gewoonten worden niet opgeslagen.</string>
+    <string name="crafting_your_insights">Jouw inzichten aan het creëren.</string>
+    <string name="insights_loading_desc">Je inzichten zijn binnenkort klaar.</string>
+    <string name="connection_issue">Verbindingsprobleem</string>
 
 </resources>

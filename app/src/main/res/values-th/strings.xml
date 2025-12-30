@@ -2386,5 +2386,8 @@
     <string name="text_discard_changes">ยกเลิกการเปลี่ยนแปลง?</string>
     <string name="text_discard">ยกเลิก</string>
     <string name="text_are_you_sure_habits_selected_so_far_will_not_be_saved">คุณมั่นใจหรือไม่? พฤติกรรมที่เลือกมาจนถึงตอนนี้จะไม่ได้รับการบันทึก</string>
+    <string name="crafting_your_insights">กำลังสร้างข้อมูลเชิงลึกของคุณ</string>
+    <string name="insights_loading_desc">ข้อมูลเชิงลึกของคุณจะพร้อมในไม่ช้า</string>
+    <string name="connection_issue">ปัญหาการเชื่อมต่อ</string>
 
 </resources>

@@ -2381,5 +2381,8 @@
     <string name="text_discard_changes">Scartare le modifiche?</string>
     <string name="text_discard">Scartare</string>
     <string name="text_are_you_sure_habits_selected_so_far_will_not_be_saved">Sei sicuro? Le abitudini selezionate finora non saranno salvate.</string>
+    <string name="crafting_your_insights">Creazione delle tue intuizioni.</string>
+    <string name="insights_loading_desc">Le tue intuizioni saranno pronte a breve.</string>
+    <string name="connection_issue">Problema di connessione</string>
 
 </resources>

@@ -2404,5 +2404,8 @@
     <string name="text_discard_changes">Descartar alterações?</string>
     <string name="text_discard">Descartar</string>
     <string name="text_are_you_sure_habits_selected_so_far_will_not_be_saved">Tem certeza? Os hábitos selecionados até agora não serão salvos.</string>
+    <string name="crafting_your_insights">Criando seus insights.</string>
+    <string name="insights_loading_desc">Seus insights estarão prontos em breve.</string>
+    <string name="connection_issue">Problema de conexão</string>
 
 </resources>

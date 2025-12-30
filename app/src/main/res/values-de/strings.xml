@@ -2380,5 +2380,8 @@
     <string name="text_discard_changes">Änderungen verwerfen?</string>
     <string name="text_discard">Verwerfen</string>
     <string name="text_are_you_sure_habits_selected_so_far_will_not_be_saved">Bist du sicher? Die bisher ausgewählten Gewohnheiten werden nicht gespeichert.</string>
+    <string name="crafting_your_insights">Erstellen deiner Einsichten.</string>
+    <string name="insights_loading_desc">Deine Einsichten werden in Kürze bereit sein.</string>
+    <string name="connection_issue">Verbindungsproblem</string>
 
 </resources>
