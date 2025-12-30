@@ -94,6 +94,8 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     private var launchState: SleepInternalLaunchState? = null
     private var selectedPeriod: InternalSelectedPeriod? = null
 
+    private var isDailyDataFormat: Boolean = true
+
 
     private val dataSet = ArrayList<GraphDataModel>()
     private var mSelectedPosition: Int? = null
@@ -356,6 +358,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
     }
 
     private fun getDataSize(date: LocalDate): Int {
+        if(isDailyDataFormat.not()) return 1
         return when (selectedPeriod) {
             InternalSelectedPeriod.DAY -> 1
             InternalSelectedPeriod.WEEK -> 7
@@ -666,12 +669,14 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         showOverlay: Boolean = false,
         launchState: SleepInternalLaunchState?,
         selectedPeriod: InternalSelectedPeriod?,
-        nonNullDataCount: Int
+        nonNullDataCount: Int,
+        isDailyDataFormat: Boolean = true
     ) {
         this.showOverlay = showOverlay
         this.launchState = launchState
         this.selectedPeriod = selectedPeriod
         this.nonNullDataCount = nonNullDataCount
+        this.isDailyDataFormat = isDailyDataFormat
 
         dataPosition.clear()
 

@@ -228,7 +228,7 @@ class LifeOsInsightListAdapter(
                 }
 
                 GraphsKey.BAR_PLOT_COLOR -> {
-                    weekMonthLine(payload?.timeSeriesPayload)
+                    drawBarPlotColorChart(payload?.timeSeriesPayload)
                 }
 
                 /*"respiratory_daily" -> dailyGradient(payload)
@@ -296,7 +296,7 @@ class LifeOsInsightListAdapter(
             return v
         }
 
-        private fun weekMonthLine(payload: Any?): View? {
+        private fun drawBarPlotColorChart(payload: Any?): View? {
             val ctx = binding.chartContainer.context
             val data = payload as? TimeSeriesPayload ?: return null
             val v = (currentChartView as? SleepSingleLineChartInternal)
@@ -306,7 +306,18 @@ class LifeOsInsightListAdapter(
             val nonNull = data.list.map { it.value1 }.count { it != null }
             val list = data.list.map { it.value1 }.mapIndexed { idx, d -> GraphDataModel(value1 = data.list[idx].value1, date = data.list[idx].date) }
             val showOverlay = true
-            v.setDataSet(list, yAxis, getXAxisRange(data), avgValue, -1, showOverlay, null, data.selectedPeriod, nonNull)
+            v.setDataSet(
+                list,
+                yAxis,
+                getXAxisRange(data),
+                avgValue,
+                -1,
+                showOverlay,
+                null,
+                data.selectedPeriod,
+                nonNull,
+                false
+            )
             return v
         }
 
