@@ -13,6 +13,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.DisplayMetrics
 import android.view.View
+import androidx.activity.addCallback
 import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
@@ -121,7 +122,6 @@ class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabi
         }
 
         binding.tvSave.setOnClickListener {
-            // You can return selected habit IDs to caller
             val selected = viewModel.uiState.value.selectedHabits.toList()
             if(selected.isEmpty()){
                 showToast(requireContext(), "Please Select At least 1 Habit")
@@ -132,6 +132,14 @@ class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabi
             }
             // e.g. setResult(RESULT_OK, Intent().putStringArrayListExtra("selectedHabits", ArrayList(selected)))
             // finish()
+        }
+
+        binding.toolbar.backBtn.setOnClickListener {
+            displayDiscardChangesBS()
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            displayDiscardChangesBS()
         }
 
         // Text watcher for search field
@@ -168,6 +176,16 @@ class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabi
         )
     }
 
+    private fun displayDiscardChangesBS() {
+        setFragmentResultListener(AddHabitsDiscardChangesBS.DISCARD_CHANGES_ADD_HABITS_KEY) { _, bundle ->
+            val isDiscardClicked = bundle.getBoolean("isDiscardClicked")
+            if(isDiscardClicked==true){
+                navigateUpSafe()
+            }
+        }
+        navigate(R.id.addHabitsDiscardChangesBS)
+    }
+
     private fun setupTabsIfNeeded(categories: List<CategoryUi>) {
         val tabLayout = binding.tabLayout
 
@@ -201,8 +219,6 @@ class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabi
                     setupTabsIfNeeded(state.categories)
                 }
 
-                // show error / loading (optional)
-//                binding.progress.isVisible = state.loading
                 state.error?.let { /* show toast/snackbar */ }
             }
         }

@@ -2354,6 +2354,9 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_add_to_timeline">Add to timeline</string>
     <string name="text_val_logged">%1$d/%2$d Logged</string>
     <string name="text_val_more">+%1$d more</string>
+    <string name="text_discard_changes">Discard Changes?</string>
+    <string name="text_discard">Discard</string>
+    <string name="text_are_you_sure_habits_selected_so_far_will_not_be_saved">Are you sure? Habits selected so far will not be saved.</string>
 
 
 </resources>
