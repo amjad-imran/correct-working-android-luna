@@ -230,7 +230,6 @@ class ChatGptViewModel
             )
         )
         _chatGptOverview.value = messages
-        clearPendingAttachment()
     }
 
     fun addInsight1HeaderMsg(message: AiHeaderInsight1) {
@@ -374,6 +373,9 @@ class ChatGptViewModel
     private var currentCall: Call? = null
 
     fun askQuestionStream(prompt: String) {
+        val attachment = pendingAttachment
+        clearPendingAttachment()
+
         if (ApplicationUtils.isInternetConnected().not()){
             addErrorState(
                 resourceProvider.getString(R.string.connection_issue)
@@ -409,7 +411,7 @@ class ChatGptViewModel
             }
 
             val ctx = resourceProvider.context
-            val att = pendingAttachment
+            val att = attachment
             val attachmentBody: RequestBody? = att?.let { a ->
                 try {
                     ctx.contentResolver.openInputStream(a.uri)?.use { input ->
