@@ -1736,6 +1736,10 @@
             android:defaultValue="@null" />
 
     </fragment>
+    <dialog
+        android:id="@+id/addHabitsDiscardChangesBS"
+        android:name="com.oreo.ui.timelineScreen.habits.AddHabitsDiscardChangesBS"
+        android:label="AddHabitsDiscardChangesBS" />
 
 
 </navigation>

@@ -2496,5 +2496,8 @@ onjour, Luna"</string>
     <string name="text_add_to_timeline">Ajouter à la chronologie</string>
     <string name="text_val_logged">%1$d/%2$d Enregistré</string>
     <string name="text_val_more">+%1$d de plus</string>
+    <string name="text_discard_changes">Annuler les modifications ?</string>
+    <string name="text_discard">Annuler</string>
+    <string name="text_are_you_sure_habits_selected_so_far_will_not_be_saved">Êtes-vous sûr ? Les habitudes sélectionnées jusqu\'à présent ne seront pas enregistrées.</string>
 
 </resources>

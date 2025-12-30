@@ -2347,5 +2347,8 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_add_to_timeline">Agregar a la línea de tiempo</string>
     <string name="text_val_logged">%1$d/%2$d Registrado</string>
     <string name="text_val_more">+%1$d más</string>
+    <string name="text_discard_changes">¿Descartar cambios?</string>
+    <string name="text_discard">Descartar</string>
+    <string name="text_are_you_sure_habits_selected_so_far_will_not_be_saved">¿Estás seguro? Los hábitos seleccionados hasta ahora no se guardarán.</string>
 
 </resources>
