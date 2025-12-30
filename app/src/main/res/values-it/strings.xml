@@ -2378,5 +2378,8 @@
     <string name="text_add_to_timeline">Aggiungi alla cronologia</string>
     <string name="text_val_logged">%1$d/%2$d Registrato</string>
     <string name="text_val_more">+%1$d in più</string>
+    <string name="text_discard_changes">Scartare le modifiche?</string>
+    <string name="text_discard">Scartare</string>
+    <string name="text_are_you_sure_habits_selected_so_far_will_not_be_saved">Sei sicuro? Le abitudini selezionate finora non saranno salvate.</string>
 
 </resources>

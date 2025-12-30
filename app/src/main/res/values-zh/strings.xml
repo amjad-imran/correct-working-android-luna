@@ -2371,5 +2371,8 @@
     <string name="text_add_to_timeline">添加到时间线</string>
     <string name="text_val_logged">%1$d/%2$d 已记录</string>
     <string name="text_val_more">+%1$d 更多</string>
+    <string name="text_discard_changes">放弃更改？</string>
+    <string name="text_discard">放弃</string>
+    <string name="text_are_you_sure_habits_selected_so_far_will_not_be_saved">你确定吗？到目前为止选择的习惯将不会被保存。</string>
 
 </resources>
