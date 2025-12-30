@@ -142,7 +142,7 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
     }
 
     private fun drawContent(canvas: Canvas) {
-
+        dataPosition.clear()
         val availableWidth = (width - getYAxisReservedWidth()).toFloat()
         dataStepWidth = availableWidth / 7
 
@@ -295,9 +295,11 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
     }
 
     private fun getYAxisValue(value: Float): Float {
-        val percent = (value / mMax.toFloat()) * 100
+        if (mMax <= 0) return height - bottomHeight.toFloat()
+        val safeValue = value.coerceAtMost(mMax.toFloat())
+        val percent = safeValue / mMax.toFloat()
         val availableHeight = height - bottomHeight - topHeight
-        return topHeight + availableHeight - (availableHeight * percent / 100)
+        return topHeight + availableHeight * (1f - percent)
     }
 
     private fun drawBackGrid(canvas: Canvas) {
