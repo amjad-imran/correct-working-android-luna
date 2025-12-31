@@ -81,6 +81,7 @@ import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.data.model.sleep.HealthTrend
+import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.SummaryStates
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
@@ -248,6 +249,7 @@ class SummaryDataFragmentToday :
                 viewModel.circadianGraphData = mainViewModel.circadianGraphData
                 viewModel.timeTrackerActivities = mainViewModel.timeTrackerActivities
                 viewModel.nudgeCircadianData = mainViewModel.nudgeCircadianData
+                viewModel.habitTimelineData = mainViewModel.habitTimelineData
                 setUi(dash.first, dash.second, dash.third)
             }
         }
@@ -743,6 +745,23 @@ class SummaryDataFragmentToday :
                 OSummaryHealthOverviewClickEnum.LifeOsCardClicked -> {
                     mainViewModel.navigateTo(BottomNavOption.LUNA_AI)
                 }
+
+                OSummaryHealthOverviewClickEnum.OnViewAllHabitTimelineNewClicked -> {
+                    navigate(
+                        R.id.yourHabitsTimelineFragment,
+                        bundleOf(
+                            "date" to mainViewModel.selectedDate,
+                        )
+                    )
+                }
+
+                is OSummaryHealthOverviewClickEnum.OnCheckHabitTimelineNewClicked -> {
+                    val curHabit = type.item
+                    handleOnCheckHabitTimelineClicked(
+                        curHabit,
+                        mainViewModel.selectedDate
+                    )
+                }
             }
         }
 
@@ -876,6 +895,213 @@ class SummaryDataFragmentToday :
         }
     }
 
+    private fun handleOnCheckHabitTimelineClicked(
+        habit: HabitsByDateResponse.Options,
+        selectedDate: String?
+    ) {
+        when(habit.type){
+            "workout" -> {
+                val activityType = when(habit.workoutType) {
+                    "freestyle_workout" -> "freestyle"
+                    "outdoor_running" -> "running"
+                    "indoor_running" -> "running"
+                    "outdoor_cycling" -> "bicycling"
+                    "indoor_cycling" -> "bicycling"
+                    else -> null
+                }
+                navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to habit.type,
+                        "srcKey" to "habits_timeline",
+                        "habitData" to if(activityType==null) habit else habit.copy(workoutType = activityType)
+                    )
+                )
+            }
+
+            "supplements" -> {
+                navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to habit.type,
+                        "srcKey" to "habits_timeline",
+                        "editData" to null,
+                        "lunaOption" to habit.options
+                    )
+                )
+            }
+
+            "alcohol" -> {
+                navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to "alcohol",
+                        "srcKey" to "habits_timeline",
+                        "editData" to null,
+                        "lunaOption" to null
+                    )
+                )
+            }
+
+            "caffeine" -> {
+                navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to CircadianAlignmentViewModel.caffeine_window_key,
+                        "srcKey" to "habits_timeline",
+                        "editData" to null,
+                        "lunaOption" to null
+                    )
+                )
+            }
+
+            "light_exposure" -> {
+                navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to CircadianAlignmentViewModel.light_exposure_key,
+                        "srcKey" to "habits_timeline",
+                        "editData" to null,
+                        "lunaOption" to null
+                    )
+                )
+            }
+
+            "recovery" -> {
+                navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to habit.type,
+                        "srcKey" to "habits_timeline",
+                        "editData" to null,
+                        "lunaOption" to habit.options
+                    )
+                )
+            }
+
+            "sleep_env" -> {
+                val timelineData = mainViewModel.localDataStore.getTimelineActivitiesData()
+                val mostRecentSleep = timelineData?.find { it.event.equals("sleep") }
+                if (mostRecentSleep == null) {
+                    val mostRecentNap = timelineData?.find { it.event.equals("nap") }
+                    if (mostRecentNap == null) {
+                        navigate(
+                            R.id.addActivityTimelineFragment,
+                            bundleOf(
+                                "showTimeline" to false,
+                                "key" to CircadianAlignmentViewModel.sleep_key,
+                                "srcKey" to "habits_timeline",
+                                "editData" to null,
+                                "lunaOption" to null
+                            )
+                        )
+                    } else {
+                        mostRecentNap.canBeEditedOrDeleted = 1
+                        navigate(
+                            R.id.addActivityTimelineFragment,
+                            bundleOf(
+                                "showTimeline" to false,
+                                "key" to mostRecentNap.event,
+                                "srcKey" to null,
+                                "editData" to mostRecentNap
+                            )
+                        )
+                    }
+                } else {
+                    mostRecentSleep.canBeEditedOrDeleted = 1
+                    navigate(
+                        R.id.addActivityTimelineFragment,
+                        bundleOf(
+                            "showTimeline" to false,
+                            "key" to mostRecentSleep.event,
+                            "srcKey" to null,
+                            "editData" to mostRecentSleep
+                        )
+                    )
+                }
+            }
+
+            /*"sleep_env" -> {
+                val timelineData = mainViewModel.localDataStore.getTimelineActivitiesData()
+                val mostRecentSleep = timelineData?.find { it.event.equals("sleep") }
+                if (mostRecentSleep == null) {
+                    val mostRecentNap = timelineData?.find { it.event.equals("nap") }
+                    if (mostRecentNap == null) {
+                        navigate(
+                            R.id.addActivityTimelineFragment,
+                            bundleOf(
+                                "showTimeline" to false,
+                                "key" to CircadianAlignmentViewModel.sleep_key,
+                                "srcKey" to "habits_timeline",
+                                "editData" to null,
+                                "lunaOption" to null
+                            )
+                        )
+                    } else {
+                        val mRecentNap = mostRecentNap.copy().apply {
+                            val lunaTrackingOptionIds = this.metadata?.lunaTrackingOptionIds
+                            if(lunaTrackingOptionIds.isNullOrEmpty()){
+                                this.metadata?.copy(
+                                    lunaTrackingOptionIds = listOf(habit.timeTrackerOptionId!!)
+                                )
+                            }else{
+                                this.metadata?.copy(
+                                    lunaTrackingOptionIds = ArrayList(lunaTrackingOptionIds).apply {
+                                        add(habit.timeTrackerOptionId)
+                                    }
+                                )
+                            }
+                        }
+
+                        mRecentNap.canBeEditedOrDeleted = 1
+                        navigate(
+                            R.id.addActivityTimelineFragment,
+                            bundleOf(
+                                "showTimeline" to false,
+                                "key" to mRecentNap.event,
+                                "srcKey" to null,
+                                "editData" to mRecentNap
+                            )
+                        )
+                    }
+                } else {
+                    val mRecentSleep = mostRecentSleep.copy().apply {
+                        val lunaTrackingOptionIds = this.metadata?.lunaTrackingOptionIds
+                        if(lunaTrackingOptionIds.isNullOrEmpty()){
+                            this.metadata?.copy(
+                                lunaTrackingOptionIds = listOf(habit.timeTrackerOptionId!!)
+                            )
+                        }else{
+                            this.metadata?.copy(
+                                lunaTrackingOptionIds = ArrayList(lunaTrackingOptionIds).apply {
+                                    add(habit.timeTrackerOptionId)
+                                }
+                            )
+                        }
+                    }
+
+                    mRecentSleep.canBeEditedOrDeleted = 1
+                    navigate(
+                        R.id.addActivityTimelineFragment,
+                        bundleOf(
+                            "showTimeline" to false,
+                            "key" to mRecentSleep.event,
+                            "srcKey" to null,
+                            "editData" to mRecentSleep
+                        )
+                    )
+                }
+            }*/
+
+            else -> {}
+        }
+    }
 
     override fun initListener() {
 
@@ -1167,6 +1393,18 @@ class SummaryDataFragmentToday :
                     viewModel.updateActivityDataCard(activityData)?.let { card ->
                         healthOverviewAdapter.updateData(card)
                     }
+                }
+            }
+        }
+
+        mainViewModel.habitsData.observe(this){
+            it.getContent()?.let { listData ->
+                viewModel.habitTimelineData = listData
+                healthOverviewAdapter.getTimelineNewCardData()?.let { cardData ->
+                    val newData = cardData.copy(
+                        habitListData = listData
+                    )
+                    healthOverviewAdapter.updateData(newData)
                 }
             }
         }

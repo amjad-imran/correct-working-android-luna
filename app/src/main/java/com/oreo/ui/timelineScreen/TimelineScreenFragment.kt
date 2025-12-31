@@ -56,16 +56,23 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
         habit: HabitsByDateResponse.Options,
         selectedDate: String?
     ) {
-        LOGS.d("alknsa : ${habit.type}")
         when(habit.type){
             "workout" -> {
+                val activityType = when(habit.workoutType) {
+                    "freestyle_workout" -> "freestyle"
+                    "outdoor_running" -> "running"
+                    "indoor_running" -> "running"
+                    "outdoor_cycling" -> "bicycling"
+                    "indoor_cycling" -> "bicycling"
+                    else -> null
+                }
                 navigate(
                     R.id.addActivityTimelineFragment,
                     bundleOf(
                         "showTimeline" to false,
                         "key" to habit.type,
                         "srcKey" to "habits_timeline",
-                        "habitData" to habit
+                        "habitData" to if(activityType==null) habit else habit.copy(workoutType = activityType)
                     )
                 )
             }
@@ -257,7 +264,6 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
         super.onViewCreated(view, savedInstanceState)
         setUi()
         setViewPager()
-        checkUserHabits()
         setRecycler()
     }
 
@@ -432,6 +438,7 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.allHabits.collect { mList ->
                     if(viewModel.habitsResponseData?.options?.isEmpty() == true){
+                        checkUserHabits()
                         binding.lytSavedHabits.root.gone()
                         binding.lytSetupHabits.root.visible()
                     }else{

@@ -100,16 +100,23 @@ class YourHabitsTimelineFragment : BaseFragment<FragmentYourHabitsTimelineBindin
         habit: HabitsByDateResponse.Options,
         selectedDate: String?
     ) {
-        LOGS.d("alknsa : ${habit.type}")
         when(habit.type){
             "workout" -> {
+                val activityType = when(habit.workoutType) {
+                    "freestyle_workout" -> "freestyle"
+                    "outdoor_running" -> "running"
+                    "indoor_running" -> "running"
+                    "outdoor_cycling" -> "bicycling"
+                    "indoor_cycling" -> "bicycling"
+                    else -> null
+                }
                 navigate(
                     R.id.addActivityTimelineFragment,
                     bundleOf(
                         "showTimeline" to false,
                         "key" to habit.type,
                         "srcKey" to "habits_timeline",
-                        "habitData" to habit
+                        "habitData" to if(activityType==null) habit else habit.copy(workoutType = activityType)
                     )
                 )
             }
