@@ -99,6 +99,7 @@ import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.model.sleep.HealthTrend
+import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
@@ -260,6 +261,7 @@ class SummaryDataViewModelToday @Inject constructor(
     var timeTrackerActivitiesUpdated = MutableLiveData<Event<Boolean>>()
 
     var timeTrackerActivities: List<ItemTimelineResponseModel>? = null
+    var habitTimelineData: List<HabitsByDateResponse.Options>? = null
     var summaryAvailable: Boolean? = false
 
     var stateOneTapVitalsCard = MutableLiveData<OHealthOverview.OneTapVitals>()
@@ -1784,13 +1786,14 @@ class SummaryDataViewModelToday @Inject constructor(
             }
         }
 
-        /*return OHealthOverview.TimelineNewDash(
-            listData = data
-        )*/
-
-        return OHealthOverview.TimelineDash(
-            listData = data.take(3)
+        return OHealthOverview.TimelineNewDash(
+            listData = data,
+            habitListData = habitTimelineData
         )
+
+        /*return OHealthOverview.TimelineDash(
+            listData = data.take(3)
+        )*/
     }
 
     fun formatMlToLitersOrMl(ml: Int): String {

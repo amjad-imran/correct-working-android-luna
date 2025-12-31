@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
     android:background="@drawable/bg_white_6_perc_rounded_12dp">
 
     <TextView
@@ -42,13 +43,17 @@
             layout="@layout/layout_setup_habits_luna_dash"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:visibility="visible"
             android:layout_marginHorizontal="16dp" />
 
         <include
             android:id="@+id/lytSavedHabits"
-            layout="@layout/layout_setup_habits_luna_dash"
+            layout="@layout/layout_habits_timeline_luna_dash"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:visibility="visible"
             android:layout_marginHorizontal="16dp" />
 
         <View

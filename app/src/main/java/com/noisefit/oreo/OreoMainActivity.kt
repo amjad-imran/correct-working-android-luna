@@ -1613,6 +1613,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         }
 
         viewModel.getNudgeData()
+        viewModel.getUserSavedHabits()
 
 
         viewModel.checkForForceUpdate()

@@ -111,8 +111,10 @@ import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.ui.fadeIn
 import com.noisefit_commans.ui.playAnimation
 import com.oreo.data.model.OHealthOverview.VitalsType
+import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.oreo.ui.chatGpt.SummaryStates
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
+import com.oreo.ui.timelineScreen.ItemHabitsTimelineAdapter
 import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.SYMPTOM_KEY
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -176,6 +178,8 @@ sealed class OSummaryHealthOverviewClickEnum {
     object OnGetStartedCircadianOnboardingClicked : OSummaryHealthOverviewClickEnum()
 
     object OnTimelineCardClicked : OSummaryHealthOverviewClickEnum()
+    object OnViewAllHabitTimelineNewClicked : OSummaryHealthOverviewClickEnum()
+    data class OnCheckHabitTimelineNewClicked(val item: HabitsByDateResponse.Options): OSummaryHealthOverviewClickEnum()
     class OnLogActivityClicked(val key: String?) : OSummaryHealthOverviewClickEnum()
     //
 
@@ -771,6 +775,10 @@ class OSummaryHealthOverviewAdapter(val isToday: Boolean) : RecyclerView.Adapter
         notifyItemChanged(index)
     }
 
+    fun getTimelineNewCardData(): OHealthOverview.TimelineNewDash? {
+        return items.find { it is OHealthOverview.TimelineNewDash } as OHealthOverview.TimelineNewDash?
+    }
+
 }
 
 
@@ -796,6 +804,58 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         private val context = binding.root.context
 
         fun bind(data: OHealthOverview.TimelineNewDash) {
+            // Set Habit UI
+            val habitListData = data.habitListData
+            when {
+                habitListData == null -> {
+                    binding.lytHabitContainer.gone()
+                }
+
+                habitListData.isEmpty() -> {
+                    binding.lytHabitContainer.visible()
+
+                    binding.lytSavedHabits.root.gone()
+                    binding.lytSetUpHabits.root.visible()
+                }
+
+                else -> {
+                    binding.lytHabitContainer.visible()
+
+                    binding.lytSetUpHabits.root.gone()
+                    binding.lytSavedHabits.root.visible()
+
+                    val totalCount = habitListData.size
+                    val curLoggedCount = habitListData.filter { it.isCancelled || it.isCompleted }.size
+                    binding.lytSavedHabits.apply {
+                        tvHabitsLogged.text = context.getString(R.string.text_val_logged, curLoggedCount, totalCount)
+
+                        if(totalCount==curLoggedCount){
+                            rvHabits.gone()
+                        }else{
+                            rvHabits.visible()
+                            rvHabits.layoutManager = LinearLayoutManager(context)
+                            rvHabits.adapter = ItemHabitsTimelineAdapter(
+                                onCross = {},
+                                onCheck = { item ->
+                                    itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnCheckHabitTimelineNewClicked(item))
+                                },
+                                isFromLunaDash = true
+                            ).apply {
+                                this.submitList(habitListData.filterNot {
+                                    it.isCancelled || it.isCompleted
+                                }.take(3))
+                            }
+
+                        }
+
+                        tvViewAll.setOnClickListener {
+                            itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnViewAllHabitTimelineNewClicked)
+                        }
+                    }
+                }
+
+            }
+
 
             // Timeline UI
             if (data.listData.isNullOrEmpty()) {
@@ -813,6 +873,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
             binding.tvAddToTimeline.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnLogActivityClicked(null))
+            }
+
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnTimelineCardClicked)
             }
         }
 

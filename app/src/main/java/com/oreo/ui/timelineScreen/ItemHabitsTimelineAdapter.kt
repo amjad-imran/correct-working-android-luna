@@ -16,6 +16,7 @@ import com.oreo.data.model.timeline.habits.HabitsByDateResponse.*
 class ItemHabitsTimelineAdapter(
     private val onCross: (Options) -> Unit,
     private val onCheck: (Options) -> Unit,
+    private var isFromLunaDash: Boolean = false,
 ) : ListAdapter<Options, ItemHabitsTimelineAdapter.VH>(Diff) {
 
     object Diff : DiffUtil.ItemCallback<Options>() {
@@ -25,10 +26,16 @@ class ItemHabitsTimelineAdapter(
 
     inner class VH(private val binding: ItemHabitTimelineScreenBinding) : RecyclerView.ViewHolder(binding.root) {
         val context = binding.root.context
-        fun bind(item: Options) {
+        fun bind(item: Options, isLastItem: Boolean) {
             binding.tvHabitTitle.text = item.options
 
             val isSkipping = item.state == Options.State.Skipping
+
+            if(isFromLunaDash) {
+                binding.igCross.invisible()
+                if(isLastItem) binding.viewDivider.gone()
+            }
+            else binding.igCross.visible()
 
             if(isSkipping){
                 binding.lytContent.invisible()
@@ -73,6 +80,6 @@ class ItemHabitsTimelineAdapter(
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), position==itemCount-1)
     }
 }
