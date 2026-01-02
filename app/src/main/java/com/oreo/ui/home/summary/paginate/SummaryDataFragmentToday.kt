@@ -276,7 +276,7 @@ class SummaryDataFragmentToday :
             binding.contentMain.lytCustomHomeScreen.root.gone()
         }
 
-        val whatsNewCardInteractDone = viewModel.localDataStore.isWhatsNewCardInteractionDone()
+        /*val whatsNewCardInteractDone = viewModel.localDataStore.isWhatsNewCardInteractionDone()
         if(!whatsNewCardInteractDone && viewModel.registerDate > 6){
             binding.contentMain.lytWhatsNewCard.lytActionBtn.background =
                 GenerateCustomDrawables.chatHistorySearchBar(
@@ -293,7 +293,7 @@ class SummaryDataFragmentToday :
             binding.contentMain.lytWhatsNewCard.root.visible()
         } else {
             binding.contentMain.lytWhatsNewCard.root.gone()
-        }
+        }*/
 
         val measurements = viewModel.localDataStore.getMeasurementsData()
 
@@ -1116,7 +1116,7 @@ class SummaryDataFragmentToday :
             viewModel.localDataStore.setDisplayEditHomeScreenCard(false)
         }
 
-        val whatsNewCard = binding.contentMain.lytWhatsNewCard
+        /*val whatsNewCard = binding.contentMain.lytWhatsNewCard
         whatsNewCard.apply {
             ivClose.setOnClickListener {
                 whatsNewCard.root.gone()
@@ -1127,7 +1127,7 @@ class SummaryDataFragmentToday :
                 ivClose.performClick()
                 mainViewModel.navigateTo(BottomNavOption.LUNA_AI)
             }
-        }
+        }*/
 
         /*binding.contentMain.lytNotificationCard.ivNotificationSteps.setOnClickListener {
 
