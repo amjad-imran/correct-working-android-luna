@@ -865,15 +865,37 @@ class GraphDataConvertor @Inject constructor(
             }
 
             InternalSelectedPeriod.DAY -> {
-                return arrayListOf(
-                    resourcesProvider.getString(R.string.text_mon),
-                    resourcesProvider.getString(R.string.text_tue),
-                    resourcesProvider.getString(R.string.text_wed),
-                    resourcesProvider.getString(R.string.text_thu),
-                    resourcesProvider.getString(R.string.text_fri),
-                    resourcesProvider.getString(R.string.text_sat),
-                    resourcesProvider.getString(R.string.text_sun)
-                )
+                return try{
+
+                    fun dayName(dayInt: Int): String {
+                        return when(dayInt){
+                            1 -> resourcesProvider.getString(R.string.text_mon)
+                            2 -> resourcesProvider.getString(R.string.text_tue)
+                            3 -> resourcesProvider.getString(R.string.text_wed)
+                            4 -> resourcesProvider.getString(R.string.text_thu)
+                            5 -> resourcesProvider.getString(R.string.text_fri)
+                            6 -> resourcesProvider.getString(R.string.text_sat)
+                            else -> resourcesProvider.getString(R.string.text_sun)
+                        }
+                    }
+
+                    val fmt = DateTimeFormatter.ISO_LOCAL_DATE
+                    return data!!
+                        .sortedBy { LocalDate.parse(it.date, fmt) }
+                        .map { LocalDate.parse(it.date, fmt) }
+                        .map { dayName(it.dayOfWeek.value) }
+
+                }catch (_: Exception){
+                    arrayListOf(
+                        resourcesProvider.getString(R.string.text_mon),
+                        resourcesProvider.getString(R.string.text_tue),
+                        resourcesProvider.getString(R.string.text_wed),
+                        resourcesProvider.getString(R.string.text_thu),
+                        resourcesProvider.getString(R.string.text_fri),
+                        resourcesProvider.getString(R.string.text_sat),
+                        resourcesProvider.getString(R.string.text_sun)
+                    )
+                }
             }
             InternalSelectedPeriod.WEEK -> {
                 data?.let {
