@@ -8,7 +8,7 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:layout_width="match_parent"
-        android:layout_height="300dp">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/imageView113"
@@ -46,15 +46,18 @@
             app:layout_constraintStart_toEndOf="@+id/tvInsights"
             app:layout_constraintTop_toTopOf="@+id/tvInsights" />
 
-        <ProgressBar
-            android:id="@+id/progressBarDefault"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottieView"
+            android:layout_width="132dp"
+            android:layout_height="132dp"
+            android:layout_marginTop="32dp"
             app:layout_constraintBottom_toTopOf="@+id/tvLoadingTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintTop_toBottomOf="@+id/tvInsights"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/anim_add_friends" />
 
         <TextView
             android:id="@+id/tvLoadingTitle"
@@ -69,7 +72,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/tvLoadingDesc"
-            app:layout_constraintTop_toBottomOf="@+id/progressBarDefault" />
+            app:layout_constraintTop_toBottomOf="@+id/lottieView" />
 
         <TextView
             android:id="@+id/tvLoadingDesc"
@@ -80,11 +83,20 @@
             android:textColor="@color/white_80"
             android:textSize="@dimen/text_14sp"
             android:layout_marginTop="4dp"
+            android:layout_marginBottom="44dp"
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvLoadingTitle" />
+
+        <include
+            layout="@layout/layout_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

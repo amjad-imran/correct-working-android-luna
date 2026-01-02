@@ -126,9 +126,9 @@ class LifeOsInsightFrag :
 
         viewModel.getLoading().observe(this) {
             if (it) {
-                binding.progressBar.root.visible()
+                binding.lytInsightProgress.root.visible()
             } else {
-                binding.progressBar.root.gone()
+                binding.lytInsightProgress.root.gone()
             }
         }
     }

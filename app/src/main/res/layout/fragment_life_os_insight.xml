@@ -125,15 +125,15 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <include
-        android:id="@+id/progressBar"
-        layout="@layout/default_loader"
+        android:id="@+id/lytInsightProgress"
+        layout="@layout/layout_lifeos_insight_loading_screen"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/lytToolbar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
