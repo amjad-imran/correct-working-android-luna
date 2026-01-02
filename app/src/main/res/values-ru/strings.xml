@@ -2407,5 +2407,7 @@
     <string name="crafting_your_insights">Создание ваших инсайтов.</string>
     <string name="insights_loading_desc">Ваши инсайты будут готовы через несколько минут.</string>
     <string name="connection_issue">Проблема с подключением</string>
+    <string name="text_crafting_your_insights">Формируем ваши инсайты.</string>
+    <string name="text_your_insights_will_be_ready_shortly">Ваши инсайты скоро будут готовы</string>
 
 </resources>

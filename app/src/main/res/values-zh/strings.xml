@@ -2377,5 +2377,7 @@
     <string name="crafting_your_insights">正在创建您的洞察力。</string>
     <string name="insights_loading_desc">您的洞察力将在很快准备好。</string>
     <string name="connection_issue">连接问题</string>
+    <string name="text_crafting_your_insights">正在生成你的洞察。</string>
+    <string name="text_your_insights_will_be_ready_shortly">你的洞察将很快准备就绪</string>
 
 </resources>

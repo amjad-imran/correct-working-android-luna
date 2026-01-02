@@ -2384,5 +2384,7 @@
     <string name="crafting_your_insights">Creazione delle tue intuizioni.</string>
     <string name="insights_loading_desc">Le tue intuizioni saranno pronte a breve.</string>
     <string name="connection_issue">Problema di connessione</string>
+    <string name="text_crafting_your_insights">Stiamo preparando i tuoi insight.</string>
+    <string name="text_your_insights_will_be_ready_shortly">I tuoi insight saranno pronti a breve</string>
 
 </resources>

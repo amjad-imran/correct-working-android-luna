@@ -2353,5 +2353,7 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="crafting_your_insights">Creando tus ideas.</string>
     <string name="insights_loading_desc">Tus ideas estarán listas en breve.</string>
     <string name="connection_issue">Problema de conexión</string>
+    <string name="text_crafting_your_insights">Creando tus insights.</string>
+    <string name="text_your_insights_will_be_ready_shortly">Tus insights estarán listos en breve</string>
 
 </resources>

@@ -2389,5 +2389,7 @@
     <string name="crafting_your_insights">กำลังสร้างข้อมูลเชิงลึกของคุณ</string>
     <string name="insights_loading_desc">ข้อมูลเชิงลึกของคุณจะพร้อมในไม่ช้า</string>
     <string name="connection_issue">ปัญหาการเชื่อมต่อ</string>
+    <string name="text_crafting_your_insights">กำลังสร้างอินไซต์ของคุณ</string>
+    <string name="text_your_insights_will_be_ready_shortly">อินไซต์ของคุณจะพร้อมในอีกสักครู่</string>
 
 </resources>
