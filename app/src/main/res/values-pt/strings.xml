@@ -2328,6 +2328,7 @@
     <string name="text_personalise">Personalizar</string>
     <string name="text_talk_to_your_data">Converse com seus dados</string>
     <string name="text_life_os">Life OS</string>
+    <string name="life_os_chat_hint">Pergunte, envie ou digitalize — estou aqui para ajudar.</string>
 
     <string name="transition_chat_box">transition_chat_box</string>
     <string name="text_insights">Insights</string>
@@ -2387,9 +2388,9 @@
     <string name="text_hi_text">Oi %1$s</string>
     <string name="text_ask_lifeos">Pergunte ao LifeOS</string>
     <string name="text_know_more_with_lifeos">Saiba mais com o LifeOS</string>
-    <string name="text_lifeos_whats_new_content_1"> * **Apresentando o LifeOS: O sistema operacional do seu corpo**\n Uma camada que unifica seus dados de saúde em uma visão unificada de como você está.</string>
-    <string name="text_lifeos_whats_new_content_2"> * **De dados brutos a decisões claras:**\n Decide o que realmente importa hoje e transforma sinais ruidosos em orientações acionáveis.</string>
-    <string name="text_lifeos_whats_new_content_3"> * **Aprende ao longo do tempo:**\n Adapta-se à sua linha de base e fases de vida para que a orientação permaneça pessoal e oportuna.</string>
+    <string name="text_lifeos_whats_new_content_1">Novidade na Linha do tempo: registro simplificado de suplementos, álcool e recuperação (meditação, banho frio e muito mais).</string>
+    <string name="text_lifeos_whats_new_content_2">A Linha do tempo agora oferece suporte ao registro de suplementos, álcool e recuperação (meditação, banho frio e muito mais).</string>
+    <string name="text_lifeos_whats_new_content_3">Agora você pode registrar suplementos, álcool e recuperação (meditação, banho frio e muito mais) na sua Linha do tempo.</string>
     <string name="synced_with_lifeos">Sincronizado com LifeOS</string>
     <string name="text_edit_habits">Editar hábitos</string>
     <string name="text_skipped">Ignorado</string>

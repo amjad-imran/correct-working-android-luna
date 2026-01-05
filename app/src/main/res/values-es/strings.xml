@@ -2333,9 +2333,9 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_hi_text">Hola %1$s</string>
     <string name="text_ask_lifeos">Pregunta a LifeOS</string>
     <string name="text_know_more_with_lifeos">Saber más con LifeOS</string>
-    <string name="text_lifeos_whats_new_content_1"> * **Presentamos LifeOS: El sistema operativo de tu cuerpo**\n Una capa que unifica tus datos de salud en una vista unificada de cómo estás.</string>
-    <string name="text_lifeos_whats_new_content_2"> * **De los datos crudos a decisiones claras:**\n Decide qué es lo que realmente importa hoy y convierte las señales ruidosas en consejos accionables.</string>
-    <string name="text_lifeos_whats_new_content_3"> * **Aprende con el tiempo:**\n Se adapta a tu línea base y fases de vida para que la orientación siga siendo personal y oportuna.</string>
+    <string name="text_lifeos_whats_new_content_1">Novedades en la línea de tiempo: registro optimizado de suplementos, alcohol y recuperación (meditación, baños fríos y más).</string>
+    <string name="text_lifeos_whats_new_content_2">La línea de tiempo ahora admite el registro de suplementos, alcohol y recuperación (meditación, baños fríos y más).</string>
+    <string name="text_lifeos_whats_new_content_3">Ahora puedes registrar suplementos, alcohol y recuperación (meditación, baños fríos y más) en tu línea de tiempo.</string>
     <string name="synced_with_lifeos">Sincronizado con LifeOS</string>
     <string name="text_edit_habits">Editar hábitos</string>
     <string name="text_skipped">Omitido</string>

@@ -2328,6 +2328,7 @@
     <string name="text_personalise">Персонализировать</string>
     <string name="text_talk_to_your_data">Пообщайтесь со своими данными</string>
     <string name="text_life_os">Life OS</string>
+    <string name="life_os_chat_hint">Задавайте вопросы, загружайте или сканируйте — я здесь, чтобы помочь.</string>
 
     <string name="transition_chat_box">transition_chat_box</string>
     <string name="text_insights">Аналитика</string>
@@ -2387,9 +2388,9 @@
     <string name="text_hi_text">Привет, %1$s</string>
     <string name="text_ask_lifeos">Спросите LifeOS</string>
     <string name="text_know_more_with_lifeos">Узнайте больше с LifeOS</string>
-    <string name="text_lifeos_whats_new_content_1"> * **Представляем LifeOS: Операционная система вашего тела**\n Слой, который объединяет ваши данные о здоровье в единый обзор того, как вы себя чувствуете.</string>
-    <string name="text_lifeos_whats_new_content_2"> * **От сырых данных к ясным решениям:**\n Решает, что действительно важно сегодня, и превращает шум в полезные подсказки.</string>
-    <string name="text_lifeos_whats_new_content_3"> * **Учится со временем:**\n Адаптируется к вашему базовому уровню и жизненным фазам, чтобы руководство оставалось персонализированным и своевременным.</string>
+    <string name="text_lifeos_whats_new_content_1">Новое в ленте: упрощённый журнал добавок, алкоголя и восстановления (медитация, холодные ванны и другое).</string>
+    <string name="text_lifeos_whats_new_content_2">Лента теперь поддерживает ведение журнала добавок, алкоголя и восстановления (медитация, холодные ванны и другое).</string>
+    <string name="text_lifeos_whats_new_content_3">Теперь вы можете записывать добавки, алкоголь и восстановление (медитация, холодные ванны и другое) в своей ленте.</string>
     <string name="synced_with_lifeos">Синхронизировано с LifeOS</string>
     <string name="text_edit_habits">Редактировать привычки</string>
     <string name="text_skipped">Пропущено</string>

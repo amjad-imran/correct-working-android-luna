@@ -48,7 +48,7 @@
         android:id="@+id/imageView126"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/img_inghts_empty_lifeos"
+        android:src="@drawable/ic_no_insight"
         android:layout_marginTop="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

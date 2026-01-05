@@ -2422,6 +2422,7 @@ onjour, Luna"</string>
     <string name="text_personalise">Personnaliser</string>
     <string name="text_talk_to_your_data">Parlez à vos données</string>
     <string name="text_life_os">Life OS</string>
+    <string name="life_os_chat_hint">Demandez, téléversez ou scannez — je suis là pour vous guider.</string>
 
     <string name="transition_chat_box">transition_chat_box</string>
     <string name="text_insights">Aperçus</string>
@@ -2482,9 +2483,9 @@ onjour, Luna"</string>
     <string name="text_hi_text">Salut %1$s</string>
     <string name="text_ask_lifeos">Demander à LifeOS</string>
     <string name="text_know_more_with_lifeos">En savoir plus avec LifeOS</string>
-    <string name="text_lifeos_whats_new_content_1"> * **Présentation de LifeOS : Le système d\'exploitation de votre corps**\n Une couche qui unifie vos données de santé dans une vue unifiée de votre état.</string>
-    <string name="text_lifeos_whats_new_content_2"> * **Des données brutes aux décisions claires :**\n Décide ce qui est vraiment important aujourd\'hui et transforme les signaux bruyants en conseils exploitables.</string>
-    <string name="text_lifeos_whats_new_content_3"> * **Apprend au fil du temps :**\n S\'adapte à votre ligne de base et aux phases de vie pour que l\'orientation reste personnelle et opportune.</string>
+    <string name="text_lifeos_whats_new_content_1">Nouveauté dans la chronologie : journalisation simplifiée des compléments, de l’alcool et de la récupération (méditation, bain froid, etc.).</string>
+    <string name="text_lifeos_whats_new_content_2">La chronologie prend désormais en charge la journalisation des compléments, de l’alcool et de la récupération (méditation, bain froid, etc.).</string>
+    <string name="text_lifeos_whats_new_content_3">Vous pouvez désormais enregistrer les compléments, l’alcool et la récupération (méditation, bain froid, etc.) dans votre chronologie.</string>
     <string name="synced_with_lifeos">Synchronisé avec LifeOS</string>
     <string name="text_edit_habits">Modifier les habitudes</string>
     <string name="text_skipped">Ignoré</string>
