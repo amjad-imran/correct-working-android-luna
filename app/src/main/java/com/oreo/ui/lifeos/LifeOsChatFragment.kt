@@ -326,16 +326,15 @@ class LifeOsChatFragment :
                 return@setOnClickListener
             }
             val text = binding.lytChatBox.chatEtx.text?.toString().orEmpty().trim()
-            if (text.isEmpty() && viewModel.pendingAttachment == null) {
-                val (frag, bundle) = AudioAiFragment.getStartData(
-                    PlanType.NONE
-                )
-                navigateUpSafe()
-                navigate(frag, bundle)
-            } else {
-                val message = text.ifEmpty { getString(R.string.text_analyse_this) }
-                sendMessage(message)
-            }
+            if (text.isEmpty() && viewModel.pendingAttachment == null) return@setOnClickListener
+//                val (frag, bundle) = AudioAiFragment.getStartData(
+//                    PlanType.NONE
+//                )
+//                navigateUpSafe()
+//                navigate(frag, bundle)
+//            } else {
+            val message = text.ifEmpty { getString(R.string.text_analyse_this) }
+            sendMessage(message)
         }
 
         binding.lytChatBox.ivRemoveAttachment.setOnClickListener {
@@ -496,26 +495,11 @@ class LifeOsChatFragment :
             return
         }
 
-        val showSend = text.isNotEmpty() || hasAttachment
-
-        val res = R.drawable.image_ai_message_send_3
-
-        //val res = if (showSend) R.drawable.ic_ai_send_message_2 else R.drawable.image_ai_mic
-
-
-        if(viewModel.chatGptOverview.value.isNullOrEmpty()) {
-            binding.lytChatBox.btnAction.setImageResource(res)
-            if (showSend) {
-                binding.lytChatBox.btnAction.alpha = 1f
-            } else {
-                binding.lytChatBox.btnAction.alpha = 0.5f
-            }
-        }else{
+        binding.lytChatBox.btnAction.setImageResource(R.drawable.image_ai_message_send_3)
+        if (text.isNotEmpty() || hasAttachment) {
             binding.lytChatBox.btnAction.alpha = 1f
-            binding.lytChatBox.btnAction.setImageResource(
-                if (showSend) R.drawable.image_ai_message_send_3
-                else R.drawable.ic_mic_lifeos
-            )
+        } else {
+            binding.lytChatBox.btnAction.alpha = 0.5f
         }
     }
 
