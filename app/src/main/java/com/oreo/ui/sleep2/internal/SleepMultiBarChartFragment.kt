@@ -57,7 +57,8 @@ class SleepMultiBarChartFragment :
             dataList,
             yAxisRange,
             yAxisRange.last().first,
-            -1
+            -1,
+            null
         )
 
 
