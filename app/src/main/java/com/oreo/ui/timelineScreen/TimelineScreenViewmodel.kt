@@ -155,6 +155,7 @@ class TimelineScreenViewmodel @Inject constructor(
                             is Resource.Success -> {
                                 resource.data?.data?.let { resp ->
                                     habitsResponseData = resp
+                                    _allHabits.value = emptyList()
                                     _allHabits.value = resp.options
                                 }
                             }

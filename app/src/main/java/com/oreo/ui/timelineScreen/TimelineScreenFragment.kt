@@ -30,6 +30,7 @@ import com.oreo.ui.timelineScreen.habits.ADD_HABITS_BEGIN_KEY
 import com.oreo.ui.timelineScreen.habits.AddHabitsBeginBottomSheet
 import com.oreo.util.setSafeOnClickListener
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -316,6 +317,15 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
             )
         }
 
+        binding.lytSavedHabits.tvHabitsLogged.setOnClickListener {
+            navigate(
+                R.id.yourHabitsTimelineFragment,
+                bundleOf(
+                    "date" to mainViewModel.selectedDate,
+                )
+            )
+        }
+
         binding.ivAddLogFab.setOnClickListener {
             mainViewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.insight_log,
@@ -436,18 +446,22 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.allHabits.collect { mList ->
+                viewModel.allHabits.collectLatest { mList ->
                     if(viewModel.habitsResponseData?.options?.isEmpty() == true){
                         checkUserHabits()
                         binding.lytSavedHabits.root.gone()
                         binding.lytSetupHabits.root.visible()
                     }else{
+                        val todayDate = LocalDate.now()
+                        val isPrevOrCurDay = todayDate.toString() == mainViewModel.selectedDate ||
+                                todayDate.minusDays(1).toString() == mainViewModel.selectedDate
+
                         binding.lytSetupHabits.root.gone()
                         binding.lytSavedHabits.root.visible()
                         val total = mList.size
                         val curProgress = mList.filter { it.isCompleted || it.isCancelled }.size
 
-                        if(total==curProgress) binding.lytSavedHabits.lytContentAndFooter.gone()
+                        if(total==curProgress || !isPrevOrCurDay) binding.lytSavedHabits.lytContentAndFooter.gone()
                         else binding.lytSavedHabits.lytContentAndFooter.visible()
 
                         binding.lytSavedHabits.habitProgress.apply {
@@ -459,7 +473,10 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
 
                         launch {
                             viewModel.visibleHabits.collect { list ->
-                                habitsAdapter.submitList(list)
+                                habitsAdapter.submitList(
+                                    if (isPrevOrCurDay) list
+                                    else emptyList()
+                                )
                             }
                         }
 
