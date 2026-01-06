@@ -31,7 +31,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView230"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/anim_add_friends" />
+        app:lottie_rawRes="@raw/insights_loading_lottie" />
 
     <TextView
         android:id="@+id/textView231"
