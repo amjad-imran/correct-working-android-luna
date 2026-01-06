@@ -2278,6 +2278,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_personalise">Personalise</string>
     <string name="text_talk_to_your_data">Talk to your data</string>
     <string name="text_life_os">Life OS</string>
+    <string name="life_os_chat_hint">Ask, upload or scan - here to guide you.</string>
 
     <!-- Shared element transition names -->
     <string name="transition_chat_box">transition_chat_box</string>
@@ -2340,9 +2341,9 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_hi_text">Hi %1$s</string>
     <string name="text_ask_lifeos">Ask LifeOS</string>
     <string name="text_know_more_with_lifeos">Know more with LifeOS</string>
-    <string name="text_lifeos_whats_new_content_1"> * **Introducing LifeOS: Your body’s operating system**\n A layer that unifies your health data into a unified view of how you’re doing.</string>
-    <string name="text_lifeos_whats_new_content_2"> * **From raw data to clear decisions:**\n Decides what actually matters today and turns noisy signals into actionable nudges.</string>
-    <string name="text_lifeos_whats_new_content_3"> * **Learns over time:**\n Adapts to your baseline and life phases so guidance stays personal and timely. </string>
+    <string name="text_lifeos_whats_new_content_1">New in Timeline: Streamlined logging for Supplements, Alcohol, and Recovery (meditation, cold plunge, and more).</string>
+    <string name="text_lifeos_whats_new_content_2">Timeline now supports logging for Supplements, Alcohol, and Recovery (meditation, cold plunge, and more).</string>
+    <string name="text_lifeos_whats_new_content_3">You can now log Supplements, Alcohol, and Recovery (meditation, cold plunge, and more) on your Timeline.</string>
     <string name="synced_with_lifeos">Synced with LifeOS</string>
     <string name="text_edit_habits">Edit Habits</string>
     <string name="text_skipped">Skipped</string>

@@ -2298,6 +2298,7 @@
     <string name="text_personalise">个性化</string>
     <string name="text_talk_to_your_data">与您的数据对话</string>
     <string name="text_life_os">Life OS</string>
+    <string name="life_os_chat_hint">提问、上传或扫描——我在这里为你提供帮助。</string>
 
     <string name="transition_chat_box">transition_chat_box</string>
     <string name="text_insights">洞察</string>
@@ -2357,9 +2358,9 @@
     <string name="text_hi_text">你好，%1$s</string>
     <string name="text_ask_lifeos">询问 LifeOS</string>
     <string name="text_know_more_with_lifeos">了解更多 LifeOS</string>
-    <string name="text_lifeos_whats_new_content_1"> * **介绍 LifeOS：你的身体操作系统**\n 一个将你的健康数据统一展示的层，帮助你了解自己的健康状况。</string>
-    <string name="text_lifeos_whats_new_content_2"> * **从原始数据到清晰决策：**\n 决定今天真正重要的内容，并将噪声信号转化为可操作的建议。</string>
-    <string name="text_lifeos_whats_new_content_3"> * **随着时间学习：**\n 根据你的基准和生活阶段进行调整，以确保建议保持个人化并及时。</string>
+    <string name="text_lifeos_whats_new_content_1">时间线新功能：更简化的补充剂、酒精和恢复记录（冥想、冷水浴等）。</string>
+    <string name="text_lifeos_whats_new_content_2">时间线现已支持记录补充剂、酒精和恢复（冥想、冷水浴等）。</string>
+    <string name="text_lifeos_whats_new_content_3">现在你可以在时间线上记录补充剂、酒精和恢复（冥想、冷水浴等）。</string>
     <string name="synced_with_lifeos">与 LifeOS 同步</string>
     <string name="text_edit_habits">编辑习惯</string>
     <string name="text_skipped">跳过</string>

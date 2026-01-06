@@ -284,7 +284,8 @@ class LifeOsInsightDetailsFragment :
                     list = data?.list!!,
                     yAxisRange = data.yAxisRange!!,
                     maxValue = data.maxValue!!,
-                    selectedPosition = -1
+                    selectedPosition = -1,
+                    null
                 )
                 v
 

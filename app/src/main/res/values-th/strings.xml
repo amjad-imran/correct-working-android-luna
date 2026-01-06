@@ -2310,6 +2310,7 @@
     <string name="text_personalise">ปรับให้เป็นส่วนตัว</string>
     <string name="text_talk_to_your_data">พูดคุยกับข้อมูลของคุณ</string>
     <string name="text_life_os">Life OS</string>
+    <string name="life_os_chat_hint">ถาม อัปโหลด หรือสแกน — ฉันอยู่ที่นี่เพื่อช่วยคุณ</string>
 
     <string name="transition_chat_box">transition_chat_box</string>
     <string name="text_insights">ข้อมูลเชิงลึก</string>
@@ -2369,9 +2370,9 @@
     <string name="text_hi_text">สวัสดี %1$s</string>
     <string name="text_ask_lifeos">ถาม LifeOS</string>
     <string name="text_know_more_with_lifeos">เรียนรู้เพิ่มเติมกับ LifeOS</string>
-    <string name="text_lifeos_whats_new_content_1"> * **แนะนำ LifeOS: ระบบปฏิบัติการของร่างกายคุณ**\n ชั้นที่รวมข้อมูลสุขภาพของคุณเป็นมุมมองที่รวมถึงว่าคุณเป็นอย่างไร</string>
-    <string name="text_lifeos_whats_new_content_2"> * **จากข้อมูลดิบสู่การตัดสินใจที่ชัดเจน:**\n ตัดสินใจว่าอะไรที่สำคัญจริงๆ ในวันนี้และแปลงสัญญาณเสียงรบกวนเป็นคำแนะนำที่สามารถปฏิบัติได้</string>
-    <string name="text_lifeos_whats_new_content_3"> * **เรียนรู้ตามเวลา:**\n ปรับตัวให้เข้ากับระดับพื้นฐานและระยะเวลาชีวิตของคุณเพื่อให้คำแนะนำยังคงเป็นส่วนตัวและทันเวลา</string>
+    <string name="text_lifeos_whats_new_content_1">ใหม่ในไทม์ไลน์: การบันทึกอาหารเสริม แอลกอฮอล์ และการฟื้นฟูที่สะดวกยิ่งขึ้น (การทำสมาธิ แช่น้ำเย็น และอื่น ๆ)</string>
+    <string name="text_lifeos_whats_new_content_2">ไทม์ไลน์รองรับการบันทึกอาหารเสริม แอลกอฮอล์ และการฟื้นฟูแล้ว (การทำสมาธิ แช่น้ำเย็น และอื่น ๆ)</string>
+    <string name="text_lifeos_whats_new_content_3">ตอนนี้คุณสามารถบันทึกอาหารเสริม แอลกอฮอล์ และการฟื้นฟู (การทำสมาธิ แช่น้ำเย็น และอื่น ๆ) ในไทม์ไลน์ของคุณได้แล้ว</string>
     <string name="synced_with_lifeos">ซิงค์กับ LifeOS</string>
     <string name="text_edit_habits">แก้ไขพฤติกรรม</string>
     <string name="text_skipped">ข้าม</string>

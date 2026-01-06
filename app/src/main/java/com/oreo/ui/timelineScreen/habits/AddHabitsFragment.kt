@@ -59,7 +59,7 @@ class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabi
 
         viewModel.selectedHabitsFromBundle = args.selectedOptions
 
-        setUi(viewModel.selectedHabitsFromBundle?.options?.isEmpty()==true)
+        setUi(viewModel.selectedHabitsFromBundle?.options.isNullOrEmpty())
         setRecycler()
         setupTabClickScroll()
         setupRecyclerScrollTabHighlight()

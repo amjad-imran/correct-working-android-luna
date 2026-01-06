@@ -192,7 +192,8 @@ class LifeOsInsightListAdapter(
                         list = data?.list!!,
                         yAxisRange = data.yAxisRange!!,
                         maxValue = data.maxValue!!,
-                        selectedPosition = -1
+                        selectedPosition = -1,
+                        xAxisRange = data.xAxisRangeInsights
                     )
                     v
 

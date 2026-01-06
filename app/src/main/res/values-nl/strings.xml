@@ -2304,6 +2304,7 @@
     <string name="text_personalise">Personaliseren</string>
     <string name="text_talk_to_your_data">Praat met je data</string>
     <string name="text_life_os">Life OS</string>
+    <string name="life_os_chat_hint">Vraag, upload of scan — ik ben hier om je te helpen.</string>
 
     <string name="transition_chat_box">transition_chat_box</string>
     <string name="text_insights">Inzichten</string>
@@ -2363,9 +2364,9 @@
     <string name="text_hi_text">Hoi %1$s</string>
     <string name="text_ask_lifeos">Vraag LifeOS</string>
     <string name="text_know_more_with_lifeos">Meer weten met LifeOS</string>
-    <string name="text_lifeos_whats_new_content_1"> * **LifeOS voorstellen: Het besturingssysteem van je lichaam**\n Een laag die je gezondheidsdata verenigt in een allesomvattend overzicht van hoe het met je gaat.</string>
-    <string name="text_lifeos_whats_new_content_2"> * **Van ruwe data naar duidelijke beslissingen:**\n Beslist wat vandaag echt belangrijk is en zet ruis om in bruikbare adviezen.</string>
-    <string name="text_lifeos_whats_new_content_3"> * **Leert in de loop van de tijd:**\n Past zich aan je basislijn en levensfasen aan, zodat de begeleiding persoonlijk en op tijd blijft.</string>
+    <string name="text_lifeos_whats_new_content_1">Nieuw in de Tijdlijn: gestroomlijnde registratie van supplementen, alcohol en herstel (meditatie, koude douche en meer).</string>
+    <string name="text_lifeos_whats_new_content_2">De Tijdlijn ondersteunt nu het registreren van supplementen, alcohol en herstel (meditatie, koude douche en meer).</string>
+    <string name="text_lifeos_whats_new_content_3">Je kunt nu supplementen, alcohol en herstel (meditatie, koude douche en meer) registreren in je Tijdlijn.</string>
     <string name="synced_with_lifeos">Gesynchroniseerd met LifeOS</string>
     <string name="text_edit_habits">Gewoonten bewerken</string>
     <string name="text_skipped">Overgeslagen</string>

@@ -2304,6 +2304,7 @@
     <string name="text_personalise">Personalizza</string>
     <string name="text_talk_to_your_data">Parla con i tuoi dati</string>
     <string name="text_life_os">Life OS</string>
+    <string name="life_os_chat_hint">Chiedi, carica o scansiona — sono qui per guidarti.</string>
 
     <string name="transition_chat_box">transition_chat_box</string>
     <string name="text_insights">Approfondimenti</string>
@@ -2364,9 +2365,9 @@
     <string name="text_hi_text">Ciao %1$s</string>
     <string name="text_ask_lifeos">Chiedi a LifeOS</string>
     <string name="text_know_more_with_lifeos">Scopri di più con LifeOS</string>
-    <string name="text_lifeos_whats_new_content_1"> * **Introducendo LifeOS: Il sistema operativo del tuo corpo**\n Uno strato che unifica i tuoi dati sulla salute in una visione unificata di come stai.</string>
-    <string name="text_lifeos_whats_new_content_2"> * **Da dati grezzi a decisioni chiare:**\n Decide cosa conta davvero oggi e trasforma i segnali rumorosi in suggerimenti azionabili.</string>
-    <string name="text_lifeos_whats_new_content_3"> * **Impara nel tempo:**\n Si adatta alla tua baseline e alle fasi della vita in modo che la guida rimanga personale e tempestiva.</string>
+    <string name="text_lifeos_whats_new_content_1">Novità nella Timeline: registrazione semplificata di integratori, alcol e recupero (meditazione, bagno freddo e altro).</string>
+    <string name="text_lifeos_whats_new_content_2">La Timeline ora supporta la registrazione di integratori, alcol e recupero (meditazione, bagno freddo e altro).</string>
+    <string name="text_lifeos_whats_new_content_3">Ora puoi registrare integratori, alcol e recupero (meditazione, bagno freddo e altro) nella tua Timeline.</string>
     <string name="synced_with_lifeos">Sincronizzato con LifeOS</string>
     <string name="text_edit_habits">Modifica abitudini</string>
     <string name="text_skipped">Saltato</string>

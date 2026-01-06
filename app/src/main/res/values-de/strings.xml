@@ -2302,6 +2302,7 @@
     <string name="text_personalise">Personalisieren</string>
     <string name="text_talk_to_your_data">Sprich mit deinen Daten</string>
     <string name="text_life_os">Life OS</string>
+    <string name="life_os_chat_hint">Fragen, hochladen oder scannen — ich bin hier, um dich zu unterstützen.</string>
 
     <string name="transition_chat_box">transition_chat_box</string>
     <string name="text_insights">Einblicke</string>
@@ -2363,9 +2364,9 @@
     <string name="text_hi_text">Hallo %1$s</string>
     <string name="text_ask_lifeos">Frag LifeOS</string>
     <string name="text_know_more_with_lifeos">Erfahre mehr mit LifeOS</string>
-    <string name="text_lifeos_whats_new_content_1"> * **LifeOS vorstellen: Dein Körper-Betriebssystem**\n Eine Schicht, die deine Gesundheitsdaten zu einer vereinheitlichten Ansicht darüber vereint, wie es dir geht.</string>
-    <string name="text_lifeos_whats_new_content_2"> * **Von Rohdaten zu klaren Entscheidungen:**\n Entscheidet, was heute wirklich wichtig ist, und verwandelt Rauschen in handlungsorientierte Hinweise.</string>
-    <string name="text_lifeos_whats_new_content_3"> * **Lernt im Laufe der Zeit:**\n Passt sich deinem Baseline und Lebensphasen an, damit die Anleitung persönlich und zeitgemäß bleibt.</string>
+    <string name="text_lifeos_whats_new_content_1">Neu in der Timeline: Vereinfachte Protokollierung von Nahrungsergänzungsmitteln, Alkohol und Erholung (Meditation, Kältebad und mehr).</string>
+    <string name="text_lifeos_whats_new_content_2">Die Timeline unterstützt jetzt die Protokollierung von Nahrungsergänzungsmitteln, Alkohol und Erholung (Meditation, Kältebad und mehr).</string>
+    <string name="text_lifeos_whats_new_content_3">Du kannst jetzt Nahrungsergänzungsmittel, Alkohol und Erholung (Meditation, Kältebad und mehr) in deiner Timeline protokollieren.</string>
     <string name="synced_with_lifeos">Mit LifeOS synchronisiert</string>
     <string name="text_edit_habits">Gewohnheiten bearbeiten</string>
     <string name="text_skipped">Übersprungen</string>

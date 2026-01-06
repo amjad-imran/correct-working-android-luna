@@ -317,6 +317,13 @@ class GraphDataConvertor @Inject constructor(
             "{\"trends_breakup\":[ { \"date\": \"2025-12-01\" }, { \"date\": \"2025-12-02\", \"value1\": 4230, \"value2\": 4380 }, { \"date\": \"2025-12-03\" } ]}"
         val mainObj = Gson().fromJson<InsightGraph>(mainObjString, InsightGraph::class.java)*/
 
+         if(rawData.graph_type.isNullOrEmpty()) return null
+
+         val period = when {
+             rawData.graph_type.endsWith("week") -> InternalSelectedPeriod.WEEK
+             rawData.graph_type.endsWith("month") -> InternalSelectedPeriod.MONTH
+             else -> InternalSelectedPeriod.DAY
+         }
 
         fun convertData(data: List<TrendsValues>?): List<GraphDataModel> {
             data?.map { Pair(((it.value2 ?: 0.0f) / 60), ((it.value1 ?: 0.0f) / 60)) }
@@ -348,6 +355,8 @@ class GraphDataConvertor @Inject constructor(
         val yAxisRange =
             getYAxisRange(maxValue, contributorType = contributor)
 
+        val xAxisRange = getXAxisRangeInsights(rawData.graph, period)
+
         return InsightCardUiModel(
             id = 6L,
             title = "generateSleepMultiBarChartData() demo",
@@ -357,7 +366,8 @@ class GraphDataConvertor @Inject constructor(
                 trendData = TrendGraphData(
                     list = dataList,
                     yAxisRange = yAxisRange,
-                    maxValue = yAxisRange.last().first
+                    maxValue = yAxisRange.last().first,
+                    xAxisRangeInsights = xAxisRange
                 )
             ),
             raw = rawData
