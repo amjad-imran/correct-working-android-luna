@@ -47,6 +47,7 @@ class AudioAiCalibrationFragment :
                     planType = args.planType
                 })
             }else{
+                binding.tvRecord.text = getString(R.string.record)
                 checkMicrophonePermission {
                     binding.tvRecord.gone()
                     viewModel.startListening()
@@ -59,10 +60,9 @@ class AudioAiCalibrationFragment :
     override fun subscribeObservers() {
         viewModel.speechText.observe(this) {
             it?.getContent()?.let { data ->
-                binding.groupListening.gone()
-                viewModel.stopListening()
-
                 if (viewModel.isHeyLunaSpoken(data)) {
+                    binding.groupListening.gone()
+                    viewModel.stopListening()
                     viewModel.userAttemptsCount++
                     viewModel.completionState.postValue(viewModel.userAttemptsCount)
                     if (viewModel.userAttemptsCount >= 3) {
@@ -71,7 +71,7 @@ class AudioAiCalibrationFragment :
                 }else{
                     showSpeechError()
                 }
-            }
+            } ?: showSpeechError()
         }
 
         viewModel.completionState.observe(this) {
@@ -90,6 +90,8 @@ class AudioAiCalibrationFragment :
     }
 
     private fun showSpeechError(){
+        binding.groupListening.gone()
+        viewModel.stopListening()
         binding.tvRecord.apply {
             text = getString(R.string.text_try_again)
             visible()

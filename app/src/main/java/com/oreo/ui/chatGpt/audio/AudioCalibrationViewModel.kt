@@ -23,6 +23,7 @@ class AudioCalibrationViewModel @Inject constructor() : BaseViewModel() {
     var userAttemptsCount = 0
     private var speechRecognizer: SpeechRecognizer? = null
     val speechText = MutableLiveData<Event<String>?>()
+    private var isListeningSessionActive = false
 
     fun initSpeechRecognizer(context: Context) {
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context)
@@ -36,6 +37,8 @@ class AudioCalibrationViewModel @Inject constructor() : BaseViewModel() {
             override fun onEvent(eventType: Int, params: Bundle?) {}
 
             override fun onResults(results: Bundle) {
+                if (!isListeningSessionActive) return
+                isListeningSessionActive = false
                 val matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                 matches?.firstOrNull()?.let { speechText.postValue(Event(it)) }
             }
@@ -45,6 +48,8 @@ class AudioCalibrationViewModel @Inject constructor() : BaseViewModel() {
             }
 
             override fun onError(error: Int) {
+                if (!isListeningSessionActive) return
+                isListeningSessionActive = false
                 speechText.postValue(null)
             }
         })
@@ -52,9 +57,11 @@ class AudioCalibrationViewModel @Inject constructor() : BaseViewModel() {
 
     fun startListening(locale: Locale = Locale.getDefault()) {
         isRecording = true
+        isListeningSessionActive = true
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
             putExtra(RecognizerIntent.EXTRA_LANGUAGE, locale)
+            putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 3000L)
         }
 
         // optional small delay to improve recognition
@@ -110,11 +117,11 @@ class AudioCalibrationViewModel @Inject constructor() : BaseViewModel() {
         for (i in 0..words.size - targetLength) {
             val window = words.subList(i, i + targetLength).joinToString(" ")
             val similarityScore = similarity(window, normalizedTarget)
-            if (similarityScore >= 0.5f) return true
+            if (similarityScore >= 0.6f) return true
         }
 
         val fullSimilarity = similarity(normalizedInput, normalizedTarget)
-        if (fullSimilarity >= 0.5f) return true
+        if (fullSimilarity >= 0.6f) return true
 
         return false
     }
