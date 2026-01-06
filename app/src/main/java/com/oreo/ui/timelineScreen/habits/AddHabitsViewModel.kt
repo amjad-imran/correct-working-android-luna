@@ -3,9 +3,11 @@ package com.oreo.ui.timelineScreen.habits
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.noisefit.data.base.ResourcesProvider
 import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.oreo.data.model.timeline.habits.Options
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
@@ -29,6 +31,7 @@ import javax.inject.Inject
 class AddHabitsViewModel @Inject constructor(
     private val getAllHabitUC: GetAllHabitsUseCase,
     private val submitUserHabitsUC: dagger.Lazy<SubmitUserHabitsUseCase>,
+    private val resourcesProvider: dagger.Lazy<ResourcesProvider>,
 ): BaseViewModel() {
 
     private val _uiState = MutableStateFlow(HabitsUiState(loading = true))
@@ -109,7 +112,7 @@ class AddHabitsViewModel @Inject constructor(
         if(habitToBeMapped.isNotEmpty()){
             val selectedCat = CategoryUi(
                 id= "selected_category",
-                title = "Selected Habits"
+                title = resourcesProvider.get().getString(R.string.text_selected_habits)
             )
             finalCategories.add(selectedCat)
         }

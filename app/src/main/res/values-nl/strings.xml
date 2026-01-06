@@ -2386,5 +2386,6 @@
     <string name="connection_issue">Verbindingsprobleem</string>
     <string name="text_crafting_your_insights">We maken je inzichten.</string>
     <string name="text_your_insights_will_be_ready_shortly">Je inzichten zijn binnenkort klaar</string>
+    <string name="text_selected_habits">Geselecteerde gewoonten</string>
 
 </resources>

@@ -2410,5 +2410,6 @@
     <string name="connection_issue">Проблема с подключением</string>
     <string name="text_crafting_your_insights">Формируем ваши инсайты.</string>
     <string name="text_your_insights_will_be_ready_shortly">Ваши инсайты скоро будут готовы</string>
+    <string name="text_selected_habits">Выбранные привычки</string>
 
 </resources>

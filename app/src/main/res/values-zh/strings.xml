@@ -2380,5 +2380,6 @@
     <string name="connection_issue">连接问题</string>
     <string name="text_crafting_your_insights">正在生成你的洞察。</string>
     <string name="text_your_insights_will_be_ready_shortly">你的洞察将很快准备就绪</string>
+    <string name="text_selected_habits">已选择的习惯</string>
 
 </resources>
