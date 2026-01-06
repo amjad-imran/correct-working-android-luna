@@ -29,6 +29,7 @@ class AudioAiCalibrationFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.initSpeechRecognizer(requireContext())
     }
 
     override fun initListener() {
@@ -48,35 +49,27 @@ class AudioAiCalibrationFragment :
             }else{
                 checkMicrophonePermission {
                     binding.tvRecord.gone()
-                    viewModel.startNewRecording()
+                    viewModel.startListening()
+                    binding.groupListening.visible()
                 }
             }
         }
     }
 
     override fun subscribeObservers() {
-        viewModel.videoPlayState.observe(this) {
-            if (it) {
-                if (binding.videoView.isPlaying.not()) {
-                    binding.videoView.start()
-                }
-            } else {
-                binding.videoView.pause()
-            }
-        }
+        viewModel.speechText.observe(this) {
+            it?.getContent()?.let { data ->
+                binding.groupListening.gone()
+                viewModel.stopListening()
 
-        viewModel.currentTimer.observe(this) {
-            it.getContent()?.let { percent ->
-                if (percent == 100) {
-                    binding.groupListening.gone()
-                    val dataSize = viewModel.maxAmpList.size
-                    viewModel.completionState.postValue(dataSize)
-                    if (dataSize >= 3) {
-                        viewModel.sameMaxAmp()
+                if (viewModel.isHeyLunaSpoken(data)) {
+                    viewModel.userAttemptsCount++
+                    viewModel.completionState.postValue(viewModel.userAttemptsCount)
+                    if (viewModel.userAttemptsCount >= 3) {
                         stateAllSet()
                     }
-                } else {
-                    binding.groupListening.visible()
+                }else{
+                    showSpeechError()
                 }
             }
         }
@@ -89,20 +82,18 @@ class AudioAiCalibrationFragment :
             showProgressState(it)
         }
 
-        viewModel.getLoading().observe(this) {
-            if (it) {
-                binding.progressBar.root.visible()
-            } else {
-                binding.progressBar.root.gone()
-            }
-        }
-
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)
             }
         }
+    }
 
+    private fun showSpeechError(){
+        binding.tvRecord.apply {
+            text = getString(R.string.text_try_again)
+            visible()
+        }
     }
 
     /**
@@ -169,9 +160,9 @@ class AudioAiCalibrationFragment :
                 Manifest.permission.RECORD_AUDIO
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            binding.tvRecord.gone()
             callback.invoke()
         } else {
+            binding.tvRecord.gone()
             micPermissionResult.launch(Manifest.permission.RECORD_AUDIO)
         }
     }
@@ -180,7 +171,8 @@ class AudioAiCalibrationFragment :
         ActivityResultContracts.RequestPermission()
     ) {
         if (it) {
-            viewModel.startNewRecording()
+            viewModel.startListening()
+            binding.groupListening.visible()
         } else {
             context.showShortToast("Permission Required")
             navigateUpSafe()
