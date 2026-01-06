@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_life_os_audio"
+    android:background="@color/black"
     tools:context="com.oreo.ui.chatGpt.audio.AudioAiCalibrationFragment">
 
     <VideoView
@@ -15,137 +15,156 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/ivCross"
-        android:layout_width="38dp"
-        android:layout_height="38dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/ic_toolbar_cross_2"
+    <ImageButton
+        android:id="@+id/ivBack"
+        style="@style/ToolbarBackButton"
+        android:layout_margin="@dimen/side_margin"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageView62"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/image_luna_ai_logo"
-        app:layout_constraintBottom_toBottomOf="@+id/ivCross"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/ivCross" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/tvHeader"
         style="@style/S16"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginEnd="48dp"
         android:gravity="center"
-        android:textColor="#B3FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/tvMessage"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/ivBack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView62"
-        app:layout_constraintVertical_bias="0.19999999"
+        app:layout_constraintTop_toTopOf="@id/ivBack"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:text="Personalize Luna" />
+        android:text="@string/help_me_learn_your_voice" />
 
     <TextView
-        android:id="@+id/tvMessage"
-        style="@style/S24"
+        android:id="@+id/tvSayHiLuna"
+        style="@style/S20"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="166dp"
         android:layout_marginEnd="48dp"
         android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvHeader"
-        tools:text="Personalizing Luna\nfor you..." />
+        android:text="@string/say_hey_luna" />
+
+    <TextView
+        android:id="@+id/tvHeyLuna1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="@string/hey_luna"
+        style="@style/S16"
+        android:alpha="0.6"
+        app:layout_constraintTop_toBottomOf="@id/tvSayHiLuna"
+        app:layout_constraintStart_toStartOf="@id/tvSayHiLuna"
+        app:layout_constraintEnd_toEndOf="@id/tvSayHiLuna"
+        />
+
+    <TextView
+        android:id="@+id/tvHeyLuna2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/hey_luna"
+        android:alpha="0.6"
+        style="@style/S16"
+        app:layout_constraintTop_toBottomOf="@id/tvHeyLuna1"
+        app:layout_constraintStart_toStartOf="@id/tvSayHiLuna"
+        app:layout_constraintEnd_toEndOf="@id/tvSayHiLuna"
+        />
+
+    <TextView
+        android:id="@+id/tvHeyLuna3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/hey_luna"
+        android:alpha="0.6"
+        style="@style/S16"
+        app:layout_constraintTop_toBottomOf="@id/tvHeyLuna2"
+        app:layout_constraintStart_toStartOf="@id/tvSayHiLuna"
+        app:layout_constraintEnd_toEndOf="@id/tvSayHiLuna"
+        />
 
     <TextView
         android:id="@+id/tvListening"
         style="@style/S16"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="26dp"
         android:gravity="center"
         android:text="@string/text_listening_dot"
         android:textColor="#99FFFFFF"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/ivStart"
-        app:layout_constraintEnd_toEndOf="@+id/ivStart"
-        app:layout_constraintStart_toStartOf="@+id/ivStart"
-        tools:visibility="visible" />
-
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/ivAllSet"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginBottom="76dp"
-        android:background="#26FFFFFF"
-        android:src="@drawable/ic_ai_all_set"
-        android:visibility="invisible"
-        app:contentPadding="18dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="140dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView"
+        app:layout_constraintTop_toBottomOf="@+id/tvHeyLuna3"
         tools:visibility="visible" />
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/ivStart"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginBottom="76dp"
-        android:background="#26FFFFFF"
-        android:src="@drawable/ic_ai_mic"
-        android:visibility="invisible"
-        app:contentPadding="18dp"
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottieView"
+        android:layout_width="wrap_content"
+        android:layout_height="136dp"
+        android:scaleType="centerInside"
+        android:layout_marginTop="@dimen/dimen_8dp"
+        app:layout_constraintEnd_toEndOf="@id/tvListening"
+        app:layout_constraintStart_toStartOf="@id/tvListening"
+        app:layout_constraintTop_toBottomOf="@id/tvListening"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/voice_ai_listening" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupListening"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="lottieView, tvListening" />
+
+    <TextView
+        android:id="@+id/tvRecord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="70dp"
+        android:background="@drawable/bg_capsule_white"
+        android:paddingHorizontal="48dp"
+        android:paddingVertical="@dimen/dimen_16dp"
+        android:text="@string/record"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:shapeAppearance="@style/ShapeAppearance.App.CircleImageView"
-        tools:visibility="visible" />
-
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/progressBarRecording"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:indeterminate="false"
-        android:padding="0dp"
-        android:progress="30"
-        android:visibility="gone"
-        app:indicatorColor="@color/white"
-        app:indicatorSize="80dp"
-        app:layout_constraintBottom_toBottomOf="@+id/ivStart"
-        app:layout_constraintEnd_toEndOf="@+id/ivStart"
-        app:layout_constraintStart_toStartOf="@+id/ivStart"
-        app:layout_constraintTop_toTopOf="@+id/ivStart"
-        app:trackColor="#1effffff"
-        app:trackThickness="4dp"
-        tools:visibility="visible" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <include
         android:id="@+id/lytBottomChecks"
         layout="@layout/layout_calibration_bottom"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="18dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible" />
+        android:layout_marginEnd="4dp"
+        app:layout_constraintTop_toTopOf="@id/tvHeyLuna1"
+        app:layout_constraintBottom_toBottomOf="@id/tvHeyLuna3"
+        app:layout_constraintEnd_toStartOf="@id/tvHeyLuna1" />
 
+    <TextView
+        android:id="@+id/tvDone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/S18"
+        android:text="@string/done"
+        android:visibility="gone"
+        android:drawablePadding="30dp"
+        android:gravity="center"
+        app:drawableTopCompat="@drawable/ic_done"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <include
         android:id="@+id/progressBar"

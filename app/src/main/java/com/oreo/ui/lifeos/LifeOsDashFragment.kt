@@ -417,6 +417,13 @@ class LifeOsDashFragment :
             navigate(frag, bundle)
         }
 
+        binding.ivVoiceAI.setOnClickListener {
+            val (frag, bundle) = AudioAiFragment.getStartData(
+                PlanType.NONE
+            )
+            navigate(frag, bundle)
+        }
+
         binding.lytToolbar.ivHistory.setOnClickListener {
             navigate(R.id.chatHistoryFragment)
         }
