@@ -69,7 +69,8 @@ class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabi
         val scroller = object : LinearSmoothScroller(requireContext()) {
             override fun getVerticalSnapPreference() = SNAP_TO_START
             override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
-                return 80f / displayMetrics.densityDpi
+                val densityDpi = displayMetrics.densityDpi
+                return (densityDpi*0.01f) / densityDpi
             }
         }
         scroller.targetPosition = pos
