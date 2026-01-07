@@ -2,10 +2,7 @@ package com.oreo.ui.chatGpt.audio
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -96,6 +93,27 @@ class AudioAiCalibrationFragment :
             text = getString(R.string.text_try_again)
             visible()
         }
+        binding.lytBottomChecks.root.visible()
+        when(viewModel.userAttemptsCount){
+            0 -> {
+                binding.lytBottomChecks.ivCheck1.apply {
+                    setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_failed))
+                    visible()
+                }
+            }
+            1 -> {
+                binding.lytBottomChecks.ivCheck2.apply {
+                    setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_failed))
+                    visible()
+                }
+            }
+            2 -> {
+                binding.lytBottomChecks.ivCheck3.apply {
+                    setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_failed))
+                    visible()
+                }
+            }
+        }
     }
 
     /**
@@ -108,6 +126,12 @@ class AudioAiCalibrationFragment :
             1 -> {
                 binding.apply {
                     lytBottomChecks.apply {
+                        ivCheck1.setImageDrawable(
+                            ContextCompat.getDrawable(
+                                requireContext(),
+                                R.drawable.ic_check_ai
+                            )
+                        )
                         ivCheck1.visible()
                         ivCheck2.invisible()
                         ivCheck3.invisible()
@@ -120,6 +144,12 @@ class AudioAiCalibrationFragment :
             2 -> {
                 binding.apply {
                     lytBottomChecks.apply {
+                        ivCheck2.setImageDrawable(
+                            ContextCompat.getDrawable(
+                                requireContext(),
+                                R.drawable.ic_check_ai
+                            )
+                        )
                         ivCheck1.visible()
                         ivCheck2.visible()
                         ivCheck3.invisible()
