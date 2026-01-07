@@ -1741,5 +1741,10 @@
         android:name="com.oreo.ui.timelineScreen.habits.AddHabitsDiscardChangesBS"
         android:label="AddHabitsDiscardChangesBS" />
 
+    <fragment
+        android:id="@+id/choosePersonaVoiceFragment"
+        android:name="com.oreo.ui.chatGpt.audio.persona.ChoosePersonaVoiceFragment"
+        android:label="fragment_choose_persona_voice"
+        tools:layout="@layout/fragment_choose_persona_voice" />
 
 </navigation>
