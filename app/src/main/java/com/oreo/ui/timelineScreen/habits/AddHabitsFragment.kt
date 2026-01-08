@@ -16,6 +16,7 @@ import android.view.View
 import androidx.activity.addCallback
 import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -27,6 +28,7 @@ import com.google.android.material.tabs.TabLayout
 import com.moengage.core.internal.utils.showToast
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAddHabitsBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.hideKeyboard
@@ -35,11 +37,13 @@ import com.noisefit_commans.ui.visible
 import com.oreo.data.model.timeline.habits.CategoryUi
 import com.oreo.data.model.timeline.habits.HabitListItem
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.getValue
 
 @AndroidEntryPoint
 class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabitsBinding::inflate) {
 
     private val viewModel: AddHabitsViewModel by viewModels()
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
 
     private val args: AddHabitsFragmentArgs by navArgs()
     private lateinit var mLayoutManager: LinearLayoutManager
@@ -128,6 +132,7 @@ class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabi
                 showToast(requireContext(), "Please Select At least 1 Habit")
             }else {
                 viewModel.saveHabitsToServer(selected) {
+                    mainViewModel.getUserSavedHabits()
                     displaySuccessBottomSheet()
                 }
             }
