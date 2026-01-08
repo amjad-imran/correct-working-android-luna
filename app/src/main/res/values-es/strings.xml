@@ -2357,5 +2357,6 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_your_insights_will_be_ready_shortly">Tus insights estarán listos en breve</string>
     <string name="text_selected_habits">Hábitos seleccionados</string>
     <string name="text_val_habits_logged">%1$d/%2$d Hábitos registrados</string>
+    <string name="text_customize">Personalizar</string>
 
 </resources>

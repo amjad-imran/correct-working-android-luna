@@ -2382,5 +2382,6 @@
     <string name="text_your_insights_will_be_ready_shortly">你的洞察将很快准备就绪</string>
     <string name="text_selected_habits">已选择的习惯</string>
     <string name="text_val_habits_logged">%1$d/%2$d 记录的习惯</string>
+    <string name="text_customize">自定义</string>
 
 </resources>

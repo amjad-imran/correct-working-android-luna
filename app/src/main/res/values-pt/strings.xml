@@ -2412,5 +2412,6 @@
     <string name="text_your_insights_will_be_ready_shortly">Os seus insights estarão prontos em breve</string>
     <string name="text_selected_habits">Hábitos selecionados</string>
     <string name="text_val_habits_logged">%1$d/%2$d Hábitos registrados</string>
+    <string name="text_customize">Personalizar</string>
 
 </resources>
