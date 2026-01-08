@@ -4,7 +4,7 @@ import com.google.gson.JsonObject
 import com.noisefit.data.model.AiMealResponse
 import com.noisefit.data.model.AiWorkoutResponse
 import com.noisefit.data.remote.base.Resource
-import com.noisefit_commans.data.model.chatGPT.voice.persona.PersonaVoiceResponse
+import com.noisefit_commans.data.model.chatGPT.voice.persona.ItemPersonaVoiceResponse
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.oreo.data.model.AiCreds
 import com.oreo.data.model.AiDailySummaryModel
@@ -64,6 +64,6 @@ interface OreoDeviceRepository {
 
     suspend fun markAiMessageState(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>?>>
 
-    suspend fun getPersonaVoiceData(): Flow<Resource<BaseApiResponse<PersonaVoiceResponse>>>
+    suspend fun getPersonaVoiceData(): Flow<Resource<BaseApiResponse<List<ItemPersonaVoiceResponse>>>>
 
 }

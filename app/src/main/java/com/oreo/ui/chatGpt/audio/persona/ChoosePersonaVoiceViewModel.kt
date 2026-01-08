@@ -3,11 +3,10 @@ package com.oreo.ui.chatGpt.audio.persona
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
-import com.noisefit_commans.data.model.chatGPT.voice.persona.PersonaVoiceResponse
+import com.noisefit_commans.data.model.chatGPT.voice.persona.ItemPersonaVoiceResponse
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,8 +18,8 @@ class ChoosePersonaVoiceViewModel @Inject constructor(
     private val oreoDeviceRepository: OreoDeviceRepository,
 ): BaseViewModel() {
 
-    private val _personaData = MutableLiveData<PersonaVoiceResponse>()
-    val personaData: LiveData<PersonaVoiceResponse> get() = _personaData
+    private val _personaData = MutableLiveData<List<ItemPersonaVoiceResponse>>()
+    val personaData: LiveData<List<ItemPersonaVoiceResponse>> get() = _personaData
 
     init {
         loadPersonaData()
@@ -28,36 +27,32 @@ class ChoosePersonaVoiceViewModel @Inject constructor(
 
     private fun loadPersonaData() {
         viewModelScope.launch {
-            createDummyData()
+//            createDummyData()
             // Uncomment this line if you want to fetch data from your repository
-            // oreoDeviceRepository.getPersonaVoiceData().collect { resource ->
-            //     handleResource(resource)
-            // }
-        }
-    }
-
-    private fun handleResource(resource: Resource<PersonaVoiceResponse>) {
-        when (resource) {
-            is Resource.GenericError -> {
-                sendMessage(resource.message)
-            }
-            is Resource.Loading -> {
-                setLoading(resource.loading)
-            }
-            is Resource.NetworkError -> {
-                setApiErrors(resource.response.apply {
-                    (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
-                        object : BinaryActionCallback {
-                            override fun yes() { }
-                            override fun no() { }
-                        }
-                })
-            }
-            is Resource.Success -> {
-                resource.data?.let {
-                    _personaData.value = it  // Update LiveData with the result
-                }
-            }
+             oreoDeviceRepository.getPersonaVoiceData().collect { resource ->
+                 when (resource) {
+                     is Resource.GenericError -> {
+                         sendMessage(resource.message)
+                     }
+                     is Resource.Loading -> {
+                         setLoading(resource.loading)
+                     }
+                     is Resource.NetworkError -> {
+                         setApiErrors(resource.response.apply {
+                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                 object : BinaryActionCallback {
+                                     override fun yes() { }
+                                     override fun no() { }
+                                 }
+                         })
+                     }
+                     is Resource.Success -> {
+                         resource.data?.data?.let {
+                             _personaData.value = it
+                         }
+                     }
+                 }
+             }
         }
     }
 
@@ -110,7 +105,7 @@ class ChoosePersonaVoiceViewModel @Inject constructor(
         """.trimIndent()
 
         // Parse the JSON and update LiveData with the dummy data
-        val personaVoiceResponse = Gson().fromJson(jsonString, PersonaVoiceResponse::class.java)
-        _personaData.value = personaVoiceResponse
+        /*val personaVoiceResponse = Gson().fromJson(jsonString, PersonaVoiceResponse::class.java)
+        _personaData.value = personaVoiceResponse*/
     }
 }

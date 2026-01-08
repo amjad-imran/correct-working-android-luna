@@ -129,8 +129,19 @@ class ChoosePersonaVoiceFragment :
 
     override fun subscribeObservers() {
         viewModel.personaData.observe(this){
-            it.data?.let { data -> mAdapter.updateDataSet(data) }
+            mAdapter.updateDataSet(it)
         }
     }
+
+    /*private fun playMusic(songUrl: String){
+        MediaPlayer().apply {
+            setDataSource(songUrl)  // Set the URL of the song
+            prepareAsync()  // Prepare the player asynchronously
+            setOnPreparedListener {
+                // Start playback once prepared
+                start()
+            }
+        }.start()
+    }*/
 
 }

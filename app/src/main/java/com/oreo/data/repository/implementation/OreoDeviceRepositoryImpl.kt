@@ -8,7 +8,7 @@ import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.safeApiCallFlow
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
-import com.noisefit_commans.data.model.chatGPT.voice.persona.PersonaVoiceResponse
+import com.noisefit_commans.data.model.chatGPT.voice.persona.ItemPersonaVoiceResponse
 import com.noisefit_commans.data.response.BaseApiResponse
 import com.oreo.data.model.AiCreds
 import com.oreo.data.model.AiDailySummaryModel
@@ -214,10 +214,10 @@ class OreoDeviceRepositoryImpl(
         }
     }
 
-    override suspend fun getPersonaVoiceData(): Flow<Resource<BaseApiResponse<PersonaVoiceResponse>>> {
+    override suspend fun getPersonaVoiceData(): Flow<Resource<BaseApiResponse<List<ItemPersonaVoiceResponse>>>> {
         return safeApiCallFlow(dispatcher) {
             val url =
-                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/--" // TODO: update
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/ai/v2/persona"
             remoteDataSource.getPersonaVoiceData(url)
         }
     }

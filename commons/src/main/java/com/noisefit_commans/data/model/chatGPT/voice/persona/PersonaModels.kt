@@ -2,10 +2,6 @@ package com.noisefit_commans.data.model.chatGPT.voice.persona
 
 import com.google.gson.annotations.SerializedName
 
-data class PersonaVoiceResponse(
-    val data: List<ItemPersonaVoiceResponse> ?= null
-)
-
 data class ItemPersonaVoiceResponse(
     @SerializedName("id") val id: Int? = null,
     @SerializedName("persona_type") val personaType: String? = null,
