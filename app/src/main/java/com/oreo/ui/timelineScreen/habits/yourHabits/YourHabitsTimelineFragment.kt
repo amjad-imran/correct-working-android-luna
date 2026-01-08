@@ -14,7 +14,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentYourHabitsTimelineBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.timeline.habits.HabitsByDateResponse
@@ -56,9 +56,13 @@ class YourHabitsTimelineFragment : BaseFragment<FragmentYourHabitsTimelineBindin
 
     private fun setUi() {
         binding.lytToolbar.tvTitle.text = getString(R.string.text_your_habits)
+
+        binding.lytToolbar.ivAddFriend.invisible()
+        binding.lytToolbar.view1.setBackgroundResource(R.drawable.ic_customize_btn_your_habits)
         binding.lytToolbar.view1.visible()
-        binding.lytToolbar.ivAddFriend.visible()
-        binding.lytToolbar.ivAddFriend.setImageResource(R.drawable.ic_btn_customize)
+
+        binding.lytToolbar.backBtn.setImageResource(0)
+        binding.lytToolbar.backBtn.setBackgroundResource(R.drawable.ic_close_add_habits)
         binding.lytToolbar.backBtn.visible()
     }
 

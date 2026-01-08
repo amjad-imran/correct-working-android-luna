@@ -22,8 +22,6 @@
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:indeterminate="false"
-            android:max="100"
-            android:progress="5"
             android:progressDrawable="@drawable/circle_drawable"
             android:rotation="270"
             app:layout_constraintBottom_toBottomOf="@+id/tvHabitsLogged"
@@ -49,7 +47,6 @@
             android:id="@+id/tvCustomize"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dimen_12dp"
             android:drawableLeft="@drawable/ic_btn_customize"
             android:drawablePadding="@dimen/dimen_4dp"
             android:fontFamily="@font/gilroy_medium"
@@ -58,7 +55,6 @@
             android:textSize="@dimen/dimen_12sp"
             app:layout_constraintBottom_toBottomOf="@+id/tvHabitsLogged"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tvHabitsLogged"
             app:layout_constraintTop_toTopOf="@+id/tvHabitsLogged" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
