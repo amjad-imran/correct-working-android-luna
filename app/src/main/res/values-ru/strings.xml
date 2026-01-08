@@ -2411,5 +2411,6 @@
     <string name="text_crafting_your_insights">Формируем ваши инсайты.</string>
     <string name="text_your_insights_will_be_ready_shortly">Ваши инсайты скоро будут готовы</string>
     <string name="text_selected_habits">Выбранные привычки</string>
+    <string name="text_val_habits_logged">%1$d/%2$d Зарегистрированные привычки</string>
 
 </resources>

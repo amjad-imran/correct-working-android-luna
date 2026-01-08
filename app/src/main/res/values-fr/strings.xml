@@ -2506,5 +2506,6 @@ onjour, Luna"</string>
     <string name="text_crafting_your_insights">Nous préparons vos analyses.</string>
     <string name="text_your_insights_will_be_ready_shortly">Vos analyses seront prêtes sous peu</string>
     <string name="text_selected_habits">Habitudes sélectionnées</string>
+    <string name="text_val_habits_logged">%1$d/%2$d Habitudes enregistrées</string>
 
 </resources>
