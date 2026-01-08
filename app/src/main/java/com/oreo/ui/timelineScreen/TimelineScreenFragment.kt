@@ -468,8 +468,11 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
                             this.max = total
                             this.progress = curProgress
                         }
-                        binding.lytSavedHabits.tvHabitsLogged.text =
-                            getString(R.string.text_val_habits_logged, curProgress, total)
+
+                        if(total != 0) {
+                            binding.lytSavedHabits.tvHabitsLogged.text =
+                                getString(R.string.text_val_habits_logged, curProgress, total)
+                        }
 
                         launch {
                             viewModel.visibleHabits.collect { list ->
