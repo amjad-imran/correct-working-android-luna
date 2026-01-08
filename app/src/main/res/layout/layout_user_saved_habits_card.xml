@@ -19,8 +19,8 @@
         <ProgressBar
             android:id="@+id/habitProgress"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="@dimen/dimen_16dp"
-            android:layout_height="@dimen/dimen_16dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:indeterminate="false"
             android:max="100"
             android:progress="5"
