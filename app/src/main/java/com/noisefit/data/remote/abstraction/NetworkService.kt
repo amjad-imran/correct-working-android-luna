@@ -58,6 +58,7 @@ import com.oreo.data.model.RingWelcome
 import com.oreo.data.model.ServerUserHealthResponse
 import com.noisefit_commans.data.model.SleepPlannerData
 import com.noisefit_commans.data.model.caffeine.CaffeineGraphDataModel
+import com.noisefit_commans.data.model.chatGPT.voice.persona.ItemPersonaVoiceResponse
 import com.noisefit_commans.data.model.circadian.NudgeCircadianGraph
 import com.oreo.data.model.NotificationToggleModel
 import com.oreo.data.model.StressResultData
@@ -907,6 +908,11 @@ interface NetworkService {
         @Url url: String,
         @Body req: JsonObject
     ): BaseApiResponse<Any>
+
+    @GET
+    suspend fun getPersonaVoiceData(
+        @Url url: String
+    ): BaseApiResponse<List<ItemPersonaVoiceResponse>>
     /**
      * ---------------------------------------------------------------------------------
      *                                Oreo Services End
