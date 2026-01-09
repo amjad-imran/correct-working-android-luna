@@ -98,6 +98,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/ivFallback"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp" />
+
     <View
         android:id="@+id/rootClickView"
         android:layout_width="0dp"

@@ -10,6 +10,7 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentLifeOsInsightCardBinding
 import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepGraphViewOreo
+import com.noisefit_commans.ui.loadImage
 import com.oreo.data.dataConverter.GraphsKey
 import com.oreo.ui.custom.HRCombinedChart
 import com.oreo.ui.custom.ODayTimeInteractiveGraph
@@ -69,16 +70,24 @@ class LifeOsInsightListAdapter(
 
             binding.rootClickView.setOnClickListener { onClick(item) }
 
-            val view = provideChartView(item.chartKey, item.payload, item.styleRes)
-            binding.chartContainer.removeAllViews()
-            if (view != null) {
-                binding.chartContainer.addView(view)
-                currentChartView = view
-                currentChartKey = item.chartKey
-            } else {
-                currentChartView = null
-                currentChartKey = null
+            if(item.raw?.fallbackImage.isNullOrEmpty()){
+                val view = provideChartView(item.chartKey, item.payload, item.styleRes)
+                binding.chartContainer.removeAllViews()
+                if (view != null) {
+                    binding.chartContainer.addView(view)
+                    currentChartView = view
+                    currentChartKey = item.chartKey
+                } else {
+                    currentChartView = null
+                    currentChartKey = null
+                }
             }
+            else{
+                binding.ivFallback.apply {
+                    loadImage(this.context, item.raw.fallbackImage)
+                }
+            }
+
         }
 
         fun onAttach() {
