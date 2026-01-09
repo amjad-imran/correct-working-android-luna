@@ -148,7 +148,6 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            localDataStore.setLifeOsOnboardData(it)
                             onBoardResponseData = it
                             processData(it, isAllQuesDone)
                         }
@@ -192,6 +191,7 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
                 }
             }
         }
+        localDataStore.setLifeOsOnboardData(mainData)
 
         if(personalizeQues!=null){
             curQues.postValue(personalizeQues)
