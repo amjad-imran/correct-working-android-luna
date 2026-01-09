@@ -204,6 +204,7 @@ class SummaryDataFragment :
                 OSummaryHealthOverviewClickEnum.LifeOsCardClicked -> {}
                 is OSummaryHealthOverviewClickEnum.OnCheckHabitTimelineNewClicked -> {}
                 OSummaryHealthOverviewClickEnum.OnViewAllHabitTimelineNewClicked -> {}
+                OSummaryHealthOverviewClickEnum.OnSetupHabitsTimelineNewClicked -> {}
             }
         }
 

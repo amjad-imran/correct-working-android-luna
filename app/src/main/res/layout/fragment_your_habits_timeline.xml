@@ -19,11 +19,10 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="20dp"
         android:layout_height="20dp"
+        android:visibility="invisible"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:indeterminate="false"
-        android:max="5"
-        android:progress="2"
         android:progressDrawable="@drawable/circle_drawable"
         android:rotation="270"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,6 +33,7 @@
         style="@style/S12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="1dp"
         android:textStyle="bold"
@@ -65,5 +65,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/habitProgress" />
+
+    <include
+        android:id="@+id/progressBar"
+        layout="@layout/default_loader"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

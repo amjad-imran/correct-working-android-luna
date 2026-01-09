@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -125,6 +126,15 @@ class YourHabitsTimelineViewModel @Inject constructor(
                         }
                     }
             }
+        }
+    }
+
+    fun getIsButtonsDisabled(date: String?): Boolean{
+        return try {
+            val today = LocalDate.now()
+            today.toString() != date && today.minusDays(1L).toString() != date
+        }catch (_: Exception){
+            true
         }
     }
 
