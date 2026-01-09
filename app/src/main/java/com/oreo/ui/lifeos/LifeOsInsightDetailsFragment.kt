@@ -19,14 +19,23 @@ import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.custom.HRCombinedChart
 import com.oreo.ui.custom.ODayTimeInteractiveGraph
 import com.oreo.ui.custom.StressCombinedChart
+import com.oreo.ui.custom.sleep.internal.GraphDataModel
 import com.oreo.ui.custom.sleep.internal.SleepHourVsNeedChartInternal
 import com.oreo.ui.custom.sleep.internal.SleepRestorativeChartInternal
 import com.oreo.ui.custom.sleep.internal.SleepSingleGradientChartType
 import com.oreo.ui.custom.sleep.internal.SleepSingleGradientLineChartInternal
+import com.oreo.ui.custom.sleep.internal.SleepSingleLineChartInternal
 import com.oreo.ui.custom.sleep.internal.SleepTimingChartInternal
 import com.oreo.ui.lifeos.charts.BarChartSingleInsight1
 import com.oreo.ui.lifeos.charts.PayloadData
+import com.oreo.ui.lifeos.charts.TimeSeriesPayload
+import com.oreo.ui.sleep2.internal.InternalSelectedPeriod
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.YearMonth
+import java.time.temporal.WeekFields
+import java.util.ArrayList
 
 @AndroidEntryPoint
 class LifeOsInsightDetailsFragment :
@@ -321,6 +330,10 @@ class LifeOsInsightDetailsFragment :
 
             }
 
+            GraphsKey.BAR_PLOT_COLOR -> {
+                drawBarPlotColorChart(payload?.timeSeriesPayload)
+            }
+
             /*"respiratory_daily" -> dailyGradient(payload)
             "respiratory_day" -> dayBar(payload)
             "respiratory_week" -> weekMonthLine(payload)
@@ -346,6 +359,96 @@ class LifeOsInsightDetailsFragment :
             "blood_oxygen_week" -> weekMonthLine(payload)
             "blood_oxygen_month" -> weekMonthLine(payload)*/
             else -> null
+        }
+    }
+
+    private fun drawBarPlotColorChart(payload: Any?): View? {
+        val ctx = binding.chartContainer.context
+        val data = payload as? TimeSeriesPayload ?: return null
+        val v = (currentChartView as? SleepSingleLineChartInternal)
+            ?: SleepSingleLineChartInternal(ctx, null)
+        val yAxis = buildYAxis(data.list.map { it.value1 })
+        val avgValue = data.list.mapNotNull { it.value1 }.average().toFloat() to data.unitLabel
+        val nonNull = data.list.map { it.value1 }.count { it != null }
+        val list = data.list.map { it.value1 }.mapIndexed { idx, d -> GraphDataModel(value1 = data.list[idx].value1, date = data.list[idx].date) }
+        val showOverlay = true
+        v.setDataSet(
+            list,
+            yAxis,
+            getXAxisRange(data),
+            avgValue,
+            -1,
+            showOverlay,
+            null,
+            data.selectedPeriod,
+            nonNull,
+            false
+        )
+        return v
+    }
+    private fun buildYAxis(values: List<Float?>): List<Pair<Int, String>> {
+        val nonNull = values.filterNotNull()
+        if (nonNull.isEmpty()) return listOf(0 to "0", 25 to "25", 50 to "50", 75 to "75", 100 to "100")
+        val min = nonNull.minOrNull()!!.toInt()
+        val max = nonNull.maxOrNull()!!.toInt()
+        val steps = 4
+        val range = (max - min).coerceAtLeast(4)
+        val step = (range / steps).coerceAtLeast(1)
+        val out = ArrayList<Pair<Int, String>>()
+        var v = min
+        repeat(steps) {
+            out.add(v to v.toString())
+            v += step
+        }
+        out.add((min + range) to (min + range).toString())
+        return out
+    }
+    fun getXAxisRange(data: TimeSeriesPayload): List<LocalDate> {
+        return when (data.selectedPeriod) {
+            InternalSelectedPeriod.MONTH -> {
+                val monthListString = ArrayList<LocalDate>()
+                var lastYearMonth: YearMonth? = null
+                data.list.forEach {
+                    val currentYearMonth = YearMonth.from(it.date)
+                    if (lastYearMonth == null) {
+                        lastYearMonth = currentYearMonth
+                        monthListString.add(currentYearMonth.atDay(1))
+                    } else if (lastYearMonth != currentYearMonth) {
+                        lastYearMonth = currentYearMonth
+                        monthListString.add(currentYearMonth.atDay(1))
+                    }
+                }
+                return monthListString
+            }
+
+            InternalSelectedPeriod.WEEK -> {
+                val weekListReturn = ArrayList<LocalDate>()
+
+                var lastWeek: Int? = null
+                data.list.forEach {
+                    val date = it.date
+
+                    val weekFields = WeekFields.of(DayOfWeek.MONDAY, 7)
+                    val weekNumber = date.get(weekFields.weekOfWeekBasedYear())
+
+                    if (lastWeek == null) {
+                        lastWeek = weekNumber
+                        weekListReturn.add(date)
+                    } else if (lastWeek != weekNumber) {
+                        lastWeek = weekNumber
+                        weekListReturn.add(date)
+                    }
+                }
+                weekListReturn
+            }
+
+            else -> {
+                val dayList = ArrayList<LocalDate>()
+                data.list.forEach {
+                    dayList.add(it.date)
+                }
+                return dayList
+            }
         }
     }
 
