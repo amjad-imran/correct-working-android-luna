@@ -10,6 +10,7 @@ import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.model.lifeos.onboarding.OnBoardQuesGetResponse
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.GraphType
 import com.oreo.data.dataConverter.GraphDataConvertor
@@ -40,50 +41,80 @@ class LifeOsDashViewModel @Inject constructor(
     private val _whatsNew = MutableLiveData<LifeOsWhatsNewResponse>()
     val whatsNew: LiveData<LifeOsWhatsNewResponse> get() = _whatsNew
 
-    val destinationData = MutableLiveData<LifeOsDestinations?>()
-
     private val _insightsCardsData = MutableLiveData<List<InsightCardUiModel>>()
     val insightsCardsData: LiveData<List<InsightCardUiModel>> get() = _insightsCardsData
+    var totalQuesAnsResp: Pair<Int, Int> ?= null // <TotalQues., AnsMarked>
 
-    fun getLifeOsData(){
+    val uiStateData = MutableLiveData<LifeOsDashUiStates?>()
+
+    fun getOnboardingData(){
         viewModelScope.launch {
-            val onBoardData = localDataStore.getLifeOsOnboardData()
 
-            if(onBoardData==null){
-                destinationData.postValue(LifeOsDestinations.BEGIN_FRAG)
+            val cachedOnboardData = localDataStore.getLifeOsOnboardData()
+            if(cachedOnboardData!=null){
+                processOnboardData(cachedOnboardData)
                 return@launch
             }
 
-            val isAttempted = onBoardData.questions?.any { it.isSavedByUser } ?: false
-            if(!isAttempted){
-                destinationData.postValue(LifeOsDestinations.QUES_FRAG)
-                return@launch
-            }
+            userRepository.getLifeOsOnboardQuesAnsList().collect{ resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
 
-            destinationData.postValue(LifeOsDestinations.LIFE_OS_MAIN)
-            loadSuggestedQuestions()
-            loadWhatsNew()
-            loadInsightsData()
-            /*val curProgress = 10
-            val totalQues = 10
-            var destination = LifeOsDestinations.LIFE_OS_MAIN
-            if(curProgress==0){
-                destination = LifeOsDestinations.BEGIN_FRAG
-            }else if(curProgress in 1..totalQues-1){
-                destination = LifeOsDestinations.QUES_FRAG
-            }
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
 
-            destinationData.postValue(destination)*/
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getOnboardingData()
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            processOnboardData(it)
+                        }
+                    }
+                }
+            }
         }
     }
 
-    /*fun loadSuggestedQuestions() {
-        _questions.value = listOf(
-            "Teach me about my sleep score",
-            "Create a diet plan for me",
-            "Create a workout plan for me"
-        )
-    }*/
+    fun processOnboardData(mainData: OnBoardQuesGetResponse){
+        if ((mainData.answers?.size ?: 0) == 0){
+            if(!localDataStore.isLifeOsOnboardInitiated()){
+                uiStateData.postValue(LifeOsDashUiStates.BeginFrag)
+            }else{
+                uiStateData.postValue(LifeOsDashUiStates.QuesFrag)
+            }
+            return
+        }
+
+        val answersMarked = mainData.answers?.filter {
+            it.ans_id.isNotEmpty() || it.addOntext.isNotEmpty()
+        }?.size ?: 0
+
+        localDataStore.setLifeOsOnboardData(mainData)
+
+        totalQuesAnsResp = Pair(mainData.questions?.size ?: 0, answersMarked)
+        uiStateData.postValue(LifeOsDashUiStates.LifeOsMain(
+            mainData.questions?.size ?: 0,
+            answersMarked
+        ))
+
+        loadSuggestedQuestions()
+        loadWhatsNew()
+        loadInsightsData()
+    }
 
     fun loadSuggestedQuestions(aiTopic: AITopics = AITopics.GENERAL) {
         viewModelScope.launch {
@@ -528,7 +559,7 @@ class LifeOsDashViewModel @Inject constructor(
                     }
 
                     is Resource.Loading -> {
-                        setLoading(resource.loading)
+                        /*setLoading(resource.loading)*/
                     }
 
                     is Resource.NetworkError -> {
@@ -865,7 +896,9 @@ class LifeOsDashViewModel @Inject constructor(
         }
     }
 
-    enum class LifeOsDestinations{
-        BEGIN_FRAG, QUES_FRAG, LIFE_OS_MAIN
+    sealed class LifeOsDashUiStates{
+        object BeginFrag: LifeOsDashUiStates()
+        object QuesFrag: LifeOsDashUiStates()
+        data class LifeOsMain(val total: Int, val ansMarked: Int): LifeOsDashUiStates()
     }
 }

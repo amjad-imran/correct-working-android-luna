@@ -191,7 +191,6 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
                 }
             }
         }
-        localDataStore.setLifeOsOnboardData(mainData)
 
         if(personalizeQues!=null){
             curQues.postValue(personalizeQues)
@@ -292,7 +291,7 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            onBoardResponseData?.let { data -> localDataStore.setLifeOsOnboardData(data) }
+                            localDataStore.setLifeOsOnboardData(null)
                             navigateToFinishScreen()
                         }
                     }
