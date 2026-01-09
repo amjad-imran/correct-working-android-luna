@@ -43,30 +43,56 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:paddingVertical="@dimen/dimen_16dp"
-        app:layout_constraintBottom_toTopOf="@+id/lottieView"
+        app:layout_constraintBottom_toTopOf="@+id/lvListening"
         app:layout_constraintTop_toBottomOf="@+id/imageView62" />
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottieView"
-        android:layout_width="wrap_content"
+        android:id="@+id/lvListening"
+        android:layout_width="0dp"
         android:layout_height="136dp"
         android:scaleType="centerInside"
-        app:layout_constraintBottom_toTopOf="@+id/ivBtnAction"
+        android:layout_marginBottom="@dimen/dimen_20dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/lvThinking"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/voice_ai_listening" />
 
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lvThinking"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:scaleType="centerInside"
+        android:layout_marginBottom="@dimen/dimen_20dp"
+        app:layout_constraintBottom_toTopOf="@+id/ivBtnAction"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/voice_ai_thinking" />
+
     <ImageView
         android:id="@+id/ivBtnAction"
         android:layout_width="@dimen/dimen_48dp"
         android:layout_height="@dimen/dimen_48dp"
-        android:layout_marginBottom="76dp"
+        android:layout_marginBottom="12dp"
         android:src="@drawable/ic_voice_speak"
         app:contentPadding="18dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tvActionText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tvActionText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:gravity="center"
+        android:text="@string/starting_up"
+        android:textColor="#7B7B7B"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,25 +1,28 @@
 package com.oreo.ui.chatGpt.audio
 
 import VoiceChatMessage
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.base.ResourcesProvider
+import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.BuildConfig
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.data.BinaryActionCallback
+import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.Token
 import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.utils.LOGS
-import com.oreo.ui.chatGpt.ChatGptViewModel
+import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+import okio.BufferedSource
+import okio.IOException
 import java.util.Calendar
 import java.util.TimeZone
 import java.util.UUID
@@ -29,17 +32,18 @@ import javax.inject.Inject
 @HiltViewModel
 class LifeOSVoiceChatViewModel @Inject constructor(
     val resourceProvider: ResourcesProvider,
-    val localDataStore: DataStoredInterface
+    val localDataStore: DataStoredInterface,
+    val oreoDeviceRepository: OreoDeviceRepository
     ) : BaseViewModel() {
-
     val fetchInProgress = MutableLiveData<Boolean>()
     private val _chatMessages = MutableLiveData<MutableList<VoiceChatMessage>>(mutableListOf())
     val chatMessages: LiveData<MutableList<VoiceChatMessage>> = _chatMessages
+    val audioStream: MutableLiveData<String?> = MutableLiveData()
     private val sourcePattern = "【\\d+:\\d+†[^]]+】"
-
+    private var threadId: String? = null
     private val sseClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
-            .readTimeout(0, java.util.concurrent.TimeUnit.MILLISECONDS)
+            .readTimeout(0, TimeUnit.MILLISECONDS)
             .build()
     }
     fun addUserMessage(text: String) {
@@ -69,25 +73,17 @@ class LifeOSVoiceChatViewModel @Inject constructor(
     }
 
     fun askQuestionStream(prompt: String) {
-//        val attachment = pendingAttachment
-//        clearPendingAttachment()
+        if (!ApplicationUtils.isInternetConnected()) return
 
-        if (ApplicationUtils.isInternetConnected().not()){
-//            addErrorState(
-//                resourceProvider.getString(R.string.connection_issue)
-//            )
-            return
-        }
+        setLoading(true)
         fetchInProgress.value = true
-//        videoState.value = true
-//        lastApi = Pair(1, prompt)
 
+        val messageId = UUID.randomUUID()
         val responseBuilder = StringBuilder()
-        val uuid = UUID.randomUUID()
 
         addMessage(
             VoiceChatMessage(
-                id = uuid,
+                id = messageId,
                 message = "",
                 isUser = false,
                 isStreaming = true
@@ -95,101 +91,141 @@ class LifeOSVoiceChatViewModel @Inject constructor(
         )
 
         viewModelScope.launch(Dispatchers.IO) {
-            val userToken = localDataStore.getUserToken()
-
-            val baseUrl = "${BuildConfig.BASE_URL_NEW}/luna/ai/v1/stream"
-
-            val urlWithParams = "$baseUrl?message=$prompt&thread_id=$123456asdf"
-
-
-            val ctx = resourceProvider.context
-            val att:  ChatGptViewModel.AttachmentData? = null
-            val attachmentBody: RequestBody? = null
-
-            val requestBody: RequestBody = if (attachmentBody != null && att != null) {
-                MultipartBody.Builder()
-                    .setType(MultipartBody.FORM)
-                    .addFormDataPart("file", att.fileName, attachmentBody)
-                    .build()
-            } else {
-                ByteArray(0).toRequestBody(null, 0, 0)
-            }
-
-            val requestBuilder = Request.Builder()
-                .url(urlWithParams)
-                .post(requestBody)
-                .addHeader("Accept", "text/event-stream")
-                .addHeader("Cache-Control", "no-cache")
-
-            userToken?.let { addHeaders(requestBuilder, it) }
-
-            val request = requestBuilder.build()
-
             try {
-                val call = sseClient.newCall(request)
-//                currentCall = call
-                val response = call.execute()
-                if (!response.isSuccessful) throw java.io.IOException("Unexpected code ${response.code}")
+                val request = buildSseRequest(prompt)
+                val response = sseClient.newCall(request).execute()
 
-                response.body?.source()?.let { source ->
-                    val eventBuffer = StringBuilder()
-                    while (fetchInProgress.value == true) {
-                        val line = try {
-                            source.readUtf8Line()
-                        } catch (e: Exception) {
-                            null
-                        }
-                        if (line == null) break
-                        if (line.startsWith("data:")) {
-                            eventBuffer.append(line.removePrefix("data:").trimStart())
-                            LOGS.d("SSE response $line")
-                        } else if (line.isBlank()) {
-                            if (eventBuffer.isNotEmpty()) {
-                                val cleaned = cleanServerResponse(eventBuffer.toString())
-                                responseBuilder.append(cleaned)
-                                addReceivedMessage(responseBuilder.toString(), uuid,true)
-                                eventBuffer.setLength(0)
-                            }
-                        }
-                    }
+                if (!response.isSuccessful) {
+                    throw IOException("SSE failed: ${response.code}")
                 }
-                addReceivedMessage(responseBuilder.toString(), uuid,false)
 
-                fetchInProgress.postValue(false)
-//                videoState.postValue(false)
-//                checkForPlans(responseBuilder.toString())
-            } catch (t: Throwable) {
-                if (fetchInProgress.value == true) {
-                    fetchInProgress.postValue(false)
-//                    videoState.postValue(false)
-                    if (responseBuilder.isEmpty()) {
-//                        addErrorState(
-//                            resourceProvider.getString(R.string.text_couldn_t_generate_a_response)
-//                        )
-//                        GlobalScope.launch(Dispatchers.IO) {
-//                            syncRepository.logErrorServer(
-//                                ErrorServerCases.LUNA_AI_ERROR.name,
-//                                "Error log : ${t.message}"
-//                            ).collect()
-//                        }
-                    }
+                response.body.source().let { source ->
+                    parseSseStream(
+                        source = source,
+                        onText = { text ->
+                            responseBuilder.append(text)
+                            addReceivedMessage(
+                                responseBuilder.toString(),
+                                messageId
+                            )
+                        },
+                        onAudio = { audioBytes ->
+                            audioStream.postValue(audioBytes)
+                        }
+                    )
                 }
+
+                addReceivedMessage(
+                    responseBuilder.toString(),
+                    messageId
+                )
+
+            } catch (e: Exception) {
+                Log.e("SSE Error", e.toString())
             } finally {
-//                currentCall = null
+                fetchInProgress.postValue(false)
+                setLoading(false)
             }
         }
     }
 
-    fun addReceivedMessage(message: String, uuid: UUID = UUID.randomUUID(),isGenerating: Boolean) {
+    private fun buildSseRequest(prompt: String): Request {
+        val userToken = localDataStore.getUserToken()
+        val baseUrl = "${BuildConfig.BASE_URL_NEW}/luna/ai/v1/stream"
+        val url = "$baseUrl?message=$prompt&thread_id=$threadId&response_type=audio&persona=onyx"
+
+        val requestBuilder = Request.Builder()
+            .url(url)
+            .post(ByteArray(0).toRequestBody())
+            .addHeader("Accept", "text/event-stream")
+            .addHeader("Cache-Control", "no-cache")
+
+        userToken?.let { addHeaders(requestBuilder, it) }
+
+        return requestBuilder.build()
+    }
+    fun generateThreadId() {
+        viewModelScope.launch {
+            oreoDeviceRepository.generateThreadId().collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        generateThreadId()
+                                    }
+                                    override fun no() {
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            it.threadId?.let { id -> threadId = id }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    fun addReceivedMessage(message: String, uuid: UUID = UUID.randomUUID()) {
+        setLoading(false)
         viewModelScope.launch(Dispatchers.Main) {
-//            showRetry.postValue(false)
             updateMessage(uuid, message)
         }
     }
-
     private fun cleanServerResponse(msg: String): String {
         return msg.removeSuffix("\"").removePrefix("\"").replace("\\n", "\n")
             .replace(Regex(sourcePattern), "")
+    }
+
+    private fun parseSseStream(
+        source: BufferedSource,
+        onText: (String) -> Unit,
+        onAudio: (String) -> Unit
+    ) {
+        val eventBuffer = StringBuilder()
+        var currentEvent: String? = null
+
+        while (fetchInProgress.value == true) {
+            val line = source.readUtf8Line() ?: break
+
+            when {
+                line.startsWith("event:") -> {
+                    currentEvent = line.removePrefix("event:").trim()
+                }
+
+                line.startsWith("data:") -> {
+                    val data = line.removePrefix("data:").trim()
+
+                    if (currentEvent == "audio") {
+                        onAudio(data)
+                    } else {
+                        eventBuffer.append(data)
+                    }
+                }
+
+                line.isBlank() -> {
+                    if (eventBuffer.isNotEmpty()) {
+                        val cleaned = cleanServerResponse(eventBuffer.toString())
+                        onText(cleaned)
+                        eventBuffer.setLength(0)
+                    }
+                    currentEvent = null
+                }
+            }
+        }
     }
 
     private fun addHeaders(builder: Request.Builder, token: Token) {
@@ -202,5 +238,4 @@ class LifeOSVoiceChatViewModel @Inject constructor(
         ).toString()
         builder.addHeader("offset", offset)
     }
-
 }

@@ -1772,6 +1772,7 @@
     <string name="text_ai_header_2">Great, one more time</string>
     <string name="text_ai_header_3">Amazing, one last time</string>
     <string name="text_speak">Speak</string>
+    <string name="text_speaking">Speaking</string>
     <string name="text_hello_luna">\"Hello, Luna\"</string>
     <string name="text_tap_to_speak">Tap to speak</string>
     <string name="text_personalize_luna">Personalize Luna</string>
@@ -2370,6 +2371,8 @@ These insights help you understand how your heart rate changes during different 
     <string name="help_me_learn_your_voice">Help me learn your voice</string>
     <string name="hey_luna">Hey Luna</string>
     <string name="done">Done!</string>
+    <string name="starting_up">Starting up</string>
+    <string name="text_thinking">Thinking</string>
 
 
 </resources>
