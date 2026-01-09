@@ -67,7 +67,7 @@ class LifeOsInsightListAdapter(
                 }
             )
 
-            binding.root.setOnClickListener { onClick(item) }
+            binding.rootClickView.setOnClickListener { onClick(item) }
 
             val view = provideChartView(item.chartKey, item.payload, item.styleRes)
             binding.chartContainer.removeAllViews()

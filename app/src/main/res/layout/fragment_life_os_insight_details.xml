@@ -68,6 +68,7 @@
                 style="@style/S12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:includeFontPadding="true"
                 android:layout_marginTop="12dp"
                 android:drawablePadding="2dp"
                 android:textColor="#CCFFFFFF"
