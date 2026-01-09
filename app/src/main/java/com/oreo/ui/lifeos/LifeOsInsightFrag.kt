@@ -3,6 +3,7 @@ package com.oreo.ui.lifeos
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.ViewTreeObserver
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,6 +38,18 @@ class LifeOsInsightFrag :
 
         setBlur()
         setupRecycler()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        binding.llMainScrollView.post {
+            if (binding.llMainScrollView.scrollY == 0) {
+                binding.blurView.gone()
+            } else {
+                binding.blurView.visible()
+            }
+        }
     }
 
     private fun setBlur() {
@@ -84,13 +97,19 @@ class LifeOsInsightFrag :
             navigate(frag,bundle)
         }
 
-        binding.llMainScrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
-            if (scrollY == 0) {
-                binding.blurView.gone()
-            } else {
-                binding.blurView.visible()
+        binding.llMainScrollView.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+            override fun onPreDraw(): Boolean {
+                binding.llMainScrollView.viewTreeObserver.removeOnPreDrawListener(this)
+                binding.llMainScrollView.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+                    if (scrollY == 0) {
+                        binding.blurView.gone()
+                    } else {
+                        binding.blurView.visible()
+                    }
+                }
+                return true
             }
-        }
+        })
     }
 
     private fun setupRecycler() {
