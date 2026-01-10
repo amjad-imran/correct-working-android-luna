@@ -43,8 +43,17 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:paddingVertical="@dimen/dimen_16dp"
-        app:layout_constraintBottom_toTopOf="@+id/lvListening"
+        android:layout_marginBottom="68dp"
+        android:background="@color/transparent"
+        app:layout_constraintBottom_toBottomOf="@+id/ivMute"
         app:layout_constraintTop_toBottomOf="@+id/imageView62" />
+
+    <View
+        android:id="@+id/viewGradient"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        app:layout_constraintBottom_toBottomOf="@+id/chatRecycler"
+        android:background="@drawable/bg_voice_action"/>
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lvListening"
@@ -53,6 +62,7 @@
         android:scaleType="centerInside"
         android:layout_marginBottom="@dimen/dimen_20dp"
         android:visibility="gone"
+        android:background="@color/transparent"
         app:layout_constraintBottom_toTopOf="@+id/lvThinking"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,14 +73,30 @@
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lvThinking"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="136dp"
         android:scaleType="centerInside"
+        android:visibility="gone"
+        android:background="@color/transparent"
         android:layout_marginBottom="@dimen/dimen_20dp"
-        app:layout_constraintBottom_toTopOf="@+id/ivBtnAction"
+        app:layout_constraintBottom_toTopOf="@+id/ivMute"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
+        app:lottie_rawRes="@raw/voice_ai_thinking" />
+
+    <ImageView
+        android:id="@+id/ivMute"
+        android:layout_width="match_parent"
+        android:layout_height="136dp"
+        android:layout_marginBottom="@dimen/dimen_20dp"
+        android:visibility="gone"
+        android:background="@color/transparent"
+        android:layout_marginHorizontal="@dimen/dimen_56dp"
+        android:src="@drawable/ic_voice_mute_line"
+        app:layout_constraintBottom_toTopOf="@+id/ivBtnAction"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:lottie_rawRes="@raw/voice_ai_thinking" />
 
     <ImageView

@@ -2373,6 +2373,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="done">Done!</string>
     <string name="starting_up">Starting up</string>
     <string name="text_thinking">Thinking</string>
-
+    <string name="text_unable_to_speak">Unmute to speak</string>
 
 </resources>

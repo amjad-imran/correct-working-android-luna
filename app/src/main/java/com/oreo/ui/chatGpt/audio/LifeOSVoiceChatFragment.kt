@@ -56,9 +56,10 @@ class LifeOSVoiceChatFragment :
             when (currentState) {
                 ActionState.LISTENING -> {
                     speechRecognizer.stopListening()
+                    setActionState(ActionState.MUTE)
                 }
 
-                ActionState.SPEAKING, ActionState.THINKING -> {
+                ActionState.SPEAKING, ActionState.THINKING, ActionState.MUTE -> {
                     mp3Streamer.stop()
                     setActionState(ActionState.LISTENING)
                 }
@@ -138,47 +139,90 @@ class LifeOSVoiceChatFragment :
         currentState = state
         when (state) {
             ActionState.LISTENING -> {
-                binding.lvThinking.gone()
                 binding.lvListening.apply {
-                    this.visible()
                     clearValueCallback(KeyPath("**"), LottieProperty.COLOR)
                 }
-                binding.tvActionText.text = getString(R.string.text_listening)
-
-                binding.ivBtnAction.setImageDrawable(
-                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_voice_listening)
+                setActionUIAndVisibility(
+                    isThinking = false,
+                    isListening = true,
+                    isMute = false,
+                    R.drawable.ic_voice_listening,
+                    getString(R.string.text_listening)
                 )
                 checkMicrophonePermission()
             }
 
             ActionState.SPEAKING -> {
-                binding.lvThinking.gone()
                 binding.lvListening.apply {
-                    this.visible()
                     addValueCallback(
                         KeyPath("**"),
                         LottieProperty.COLOR
                     ) { "#FFFFFF".toColorInt() }
                 }
-                binding.tvActionText.text = getString(R.string.text_speaking)
-                binding.ivBtnAction.setImageDrawable(
-                    ContextCompat.getDrawable(requireContext(), R.drawable.ic_voice_speak)
+                setActionUIAndVisibility(
+                    isThinking = false,
+                    isListening = true,
+                    isMute = false,
+                    R.drawable.ic_voice_speak,
+                    getString(R.string.text_speaking)
                 )
             }
 
             ActionState.THINKING -> {
-                binding.lvListening.gone()
-                binding.lvThinking.visible()
-                binding.tvActionText.text = getString(R.string.text_thinking)
+                setActionUIAndVisibility(
+                    isThinking = true,
+                    isListening = false,
+                    isMute = false,
+                    R.drawable.ic_voice_speak,
+                    getString(R.string.text_thinking)
+                )
             }
 
             ActionState.STARTING_UP -> {
-                binding.lvListening.gone()
-                binding.lvThinking.visible()
-                binding.tvActionText.text = getString(R.string.starting_up)
+                setActionUIAndVisibility(
+                    isThinking = true,
+                    isListening = false,
+                    isMute = false,
+                    R.drawable.ic_voice_speak,
+                    getString(R.string.starting_up)
+                )
+            }
+
+            ActionState.MUTE -> {
+                setActionUIAndVisibility(
+                    isThinking = false,
+                    isListening = false,
+                    isMute = true,
+                    R.drawable.ic_voice_mute,
+                    getString(R.string.text_unable_to_speak)
+                )
             }
         }
     }
+
+    private fun setActionUIAndVisibility(
+        isThinking: Boolean,
+        isListening: Boolean,
+        isMute: Boolean,
+        drawable: Int,
+        text: String
+    ) {
+        binding.lvThinking.gone()
+        binding.lvListening.gone()
+        binding.ivMute.gone()
+        if (isThinking) {
+            binding.lvThinking.visible()
+        } else if (isListening) {
+            binding.lvListening.visible()
+        } else if (isMute) {
+            binding.ivMute.visible()
+        }
+        binding.ivBtnAction.setImageDrawable(
+            ContextCompat.getDrawable(requireContext(), drawable)
+        )
+        binding.tvActionText.text = text
+    }
+
     private fun setupSpeechRecognizer() {
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(requireContext())
 
@@ -190,6 +234,7 @@ class LifeOSVoiceChatFragment :
                     ?: return
 
                 viewModel.addUserMessage(text)
+                setActionState(ActionState.THINKING)
             }
 
             override fun onReadyForSpeech(p0: Bundle?) {}
@@ -197,13 +242,11 @@ class LifeOSVoiceChatFragment :
             override fun onRmsChanged(p0: Float) {}
             override fun onBufferReceived(p0: ByteArray?) {}
             override fun onEndOfSpeech() {}
-            override fun onError(p0: Int) {
-                startListening()
-            }
+            override fun onError(p0: Int) {}
             override fun onPartialResults(p0: Bundle?) {}
             override fun onEvent(p0: Int, p1: Bundle?) {}
         })
     }
 }
 
-enum class ActionState { LISTENING, SPEAKING, THINKING, STARTING_UP }
+enum class ActionState { LISTENING, SPEAKING, THINKING, STARTING_UP, MUTE }
