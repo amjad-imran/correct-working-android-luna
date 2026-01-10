@@ -1,6 +1,7 @@
 package com.oreo.ui.chatGpt.audio
 
 import ChatAdapter
+import VoiceChatMessage
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -23,15 +24,19 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.UUID
+import java.util.concurrent.atomic.AtomicBoolean
 
 @AndroidEntryPoint
 class LifeOSVoiceChatFragment :
     BaseFragment<FragmentLifeOsVoiceChatBinding>(FragmentLifeOsVoiceChatBinding::inflate) {
-    private lateinit var speechRecognizer: SpeechRecognizer
+    private var speechRecognizer: SpeechRecognizer? = null
     private lateinit var chatAdapter: ChatAdapter
     private val viewModel: LifeOSVoiceChatViewModel by viewModels()
+    private var isRecognizerActive = false
     private val mp3Streamer: Mp3Streamer by lazy {
         Mp3Streamer(requireContext())
     }
@@ -42,6 +47,16 @@ class LifeOSVoiceChatFragment :
         setupRecycler()
         setupSpeechRecognizer()
         viewModel.generateThreadId()
+    }
+
+    override fun onStop() {
+        releaseSpeechRecognizer()
+        super.onStop()
+    }
+
+    override fun onDestroyView() {
+        releaseSpeechRecognizer()
+        super.onDestroyView()
     }
 
     override fun onResume() {
@@ -61,7 +76,7 @@ class LifeOSVoiceChatFragment :
         binding.ivBtnAction.setOnClickListener {
             when (currentState) {
                 ActionState.LISTENING -> {
-                    speechRecognizer.stopListening()
+                    speechRecognizer?.stopListening()
                     setActionState(ActionState.MUTE)
                 }
 
@@ -125,13 +140,13 @@ class LifeOSVoiceChatFragment :
                 RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM,
             )
-            putExtra(
-                RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS,
-                30000L
-            )
+            putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en-US")
+            putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 2000)
+            putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 3000)
         }
-        speechRecognizer.startListening(intent)
+        isRecognizerActive = true
+        speechRecognizer?.startListening(intent)
     }
 
     private fun setupRecycler() {
@@ -232,27 +247,66 @@ class LifeOSVoiceChatFragment :
 
     private fun setupSpeechRecognizer() {
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(requireContext())
+        var responseBuilder = StringBuilder()
+        var messageId = UUID.randomUUID()
+        val isFirst = AtomicBoolean(true)
 
-        speechRecognizer.setRecognitionListener(object : RecognitionListener {
+        speechRecognizer?.setRecognitionListener(object : RecognitionListener {
             override fun onResults(results: Bundle?) {
-                val text = results
-                    ?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-                    ?.firstOrNull()
-                    ?: return
-
-                viewModel.addUserMessage(text)
+                if (!isRecognizerActive) return
+                viewModel.askQuestionStream(responseBuilder.toString())
+                isFirst.set(true)
+                responseBuilder = StringBuilder()
+                messageId = UUID.randomUUID()
                 setActionState(ActionState.THINKING)
             }
-
             override fun onReadyForSpeech(p0: Bundle?) {}
             override fun onBeginningOfSpeech() {}
             override fun onRmsChanged(p0: Float) {}
             override fun onBufferReceived(p0: ByteArray?) {}
             override fun onEndOfSpeech() {}
             override fun onError(p0: Int) {}
-            override fun onPartialResults(p0: Bundle?) {}
+            override fun onPartialResults(result: Bundle?) {
+                if (!isRecognizerActive) return
+                val text = result
+                    ?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                    ?.firstOrNull()
+                    ?: return
+
+                if(isFirst.getAndSet(false)){
+                    viewModel.addMessage(
+                        VoiceChatMessage(
+                            id = messageId,
+                            message = "",
+                            isUser = true,
+                            isStreaming = true
+                        )
+                    )
+                }
+                responseBuilder.clear()
+                responseBuilder.append(text)
+                viewModel.addReceivedMessage(
+                    responseBuilder.toString(),
+                    messageId
+                )
+
+            }
             override fun onEvent(p0: Int, p1: Bundle?) {}
         })
+    }
+    private fun releaseSpeechRecognizer() {
+        isRecognizerActive = false
+        try {
+            speechRecognizer?.apply {
+                setRecognitionListener(null)
+                stopListening()
+                cancel()
+                destroy()
+            }
+            speechRecognizer = null
+        } catch (e: Exception) {
+            LOGS.e(e.toString())
+        }
     }
 }
 

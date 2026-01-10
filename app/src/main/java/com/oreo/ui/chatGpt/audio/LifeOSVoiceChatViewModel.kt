@@ -52,18 +52,8 @@ class LifeOSVoiceChatViewModel @Inject constructor(
             .readTimeout(0, TimeUnit.MILLISECONDS)
             .build()
     }
-    fun addUserMessage(text: String) {
-        addMessage(
-            VoiceChatMessage(
-                id = UUID.randomUUID(),
-                message = text,
-                isUser = true
-            )
-        )
-        askQuestionStream(text)
-    }
 
-    private fun addMessage(message: VoiceChatMessage) {
+    fun addMessage(message: VoiceChatMessage) {
         val list = _chatMessages.value ?: mutableListOf()
         list.add(message)
         _chatMessages.postValue(list)
