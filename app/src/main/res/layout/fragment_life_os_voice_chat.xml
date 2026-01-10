@@ -42,16 +42,17 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:paddingVertical="@dimen/dimen_16dp"
-        android:layout_marginBottom="68dp"
+        android:paddingTop="@dimen/dimen_16dp"
+        android:paddingBottom="@dimen/dimen_30dp"
+        android:layout_marginBottom="100dp"
         android:background="@color/transparent"
-        app:layout_constraintBottom_toBottomOf="@+id/ivMute"
+        app:layout_constraintBottom_toBottomOf="@id/ivBtnAction"
         app:layout_constraintTop_toBottomOf="@+id/imageView62" />
 
     <View
         android:id="@+id/viewGradient"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="90dp"
         app:layout_constraintBottom_toBottomOf="@+id/chatRecycler"
         android:background="@drawable/bg_voice_action"/>
 

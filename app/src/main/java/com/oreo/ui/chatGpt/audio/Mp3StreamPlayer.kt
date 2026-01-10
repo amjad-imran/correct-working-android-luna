@@ -49,6 +49,9 @@ class Mp3Streamer(private val context: Context) {
         }
     }
 
+    fun resume() = mediaPlayer?.start()
+    fun pause() = mediaPlayer?.pause()
+
     fun stop() {
         mediaPlayer?.stop()
         mediaPlayer?.release()

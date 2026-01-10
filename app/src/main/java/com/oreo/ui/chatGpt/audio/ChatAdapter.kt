@@ -52,7 +52,7 @@ class ChatAdapter(
             params.gravity = Gravity.END
             params.setMargins(
                 60.dpToPx(context),
-                8.dpToPx(context),
+                0.dpToPx(context),
                 16.dpToPx(context),
                 8.dpToPx(context)
             )
@@ -67,7 +67,7 @@ class ChatAdapter(
                 16.dpToPx(context),
                 8.dpToPx(context),
                 20.dpToPx(context),
-                8.dpToPx(context)
+                18.dpToPx(context)
             )
             tv.apply {
                 setBackgroundColor(Color.TRANSPARENT)

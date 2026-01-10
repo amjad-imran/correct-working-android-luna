@@ -46,9 +46,15 @@ class LifeOSVoiceChatFragment :
 
     override fun onResume() {
         super.onResume()
-        if (currentState == ActionState.LISTENING) {
-            setActionState(ActionState.LISTENING)
+        setActionState(currentState)
+        if(currentState == ActionState.SPEAKING){
+            mp3Streamer.resume()
         }
+    }
+
+    override fun onPause() {
+        mp3Streamer.stop()
+        super.onPause()
     }
 
     override fun initListener() {
