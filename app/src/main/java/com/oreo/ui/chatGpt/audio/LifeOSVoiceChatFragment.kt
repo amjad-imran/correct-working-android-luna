@@ -67,6 +67,7 @@ class LifeOSVoiceChatFragment :
 
                 ActionState.SPEAKING, ActionState.THINKING, ActionState.MUTE -> {
                     mp3Streamer.stop()
+                    viewModel.disposeChatStream()
                     setActionState(ActionState.LISTENING)
                 }
 

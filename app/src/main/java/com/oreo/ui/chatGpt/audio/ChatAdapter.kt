@@ -1,11 +1,14 @@
 import android.content.Context
 import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.annotation.RequiresApi
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import java.util.UUID
@@ -39,6 +42,7 @@ class ChatAdapter(
         return ChatViewHolder(frameLayout)
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
         val msg = messages[position]
         val tv = holder.messageText
@@ -54,25 +58,33 @@ class ChatAdapter(
                 60.dpToPx(context),
                 0.dpToPx(context),
                 16.dpToPx(context),
-                8.dpToPx(context)
+                1.dpToPx(context)
             )
             tv.apply {
                 background = userBubble(context)
                 textSize = 16F
                 setTextColor(context.getColor(R.color.white_80))
+                setTypeface(Typeface.create(ResourcesCompat.getFont(
+                    context,
+                    com.noisefit_commans.R.font.google_sans_flex_variable
+                ), 400, false))
             }
         } else {
             params.gravity = Gravity.START
             params.setMargins(
                 16.dpToPx(context),
-                8.dpToPx(context),
+                22.dpToPx(context),
                 20.dpToPx(context),
-                18.dpToPx(context)
+                22.dpToPx(context)
             )
             tv.apply {
                 setBackgroundColor(Color.TRANSPARENT)
                 textSize = 20F
                 setTextColor("#CECECE".toColorInt())
+                setTypeface(Typeface.create(ResourcesCompat.getFont(
+                        context,
+                        com.noisefit_commans.R.font.google_sans_flex_variable
+                    ), 200, false))
             }
         }
 

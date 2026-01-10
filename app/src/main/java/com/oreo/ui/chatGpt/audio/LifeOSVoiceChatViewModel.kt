@@ -17,7 +17,9 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import okhttp3.Call
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -27,6 +29,7 @@ import java.util.Calendar
 import java.util.TimeZone
 import java.util.UUID
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 @HiltViewModel
@@ -41,6 +44,9 @@ class LifeOSVoiceChatViewModel @Inject constructor(
     val audioStream: MutableLiveData<String?> = MutableLiveData()
     private val sourcePattern = "【\\d+:\\d+†[^]]+】"
     private var threadId: String? = null
+    private var currentChatJob: Job? = null
+    private var currentSseCall: Call? = null
+
     private val sseClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
             .readTimeout(0, TimeUnit.MILLISECONDS)
@@ -81,28 +87,32 @@ class LifeOSVoiceChatViewModel @Inject constructor(
         val messageId = UUID.randomUUID()
         val responseBuilder = StringBuilder()
 
-        addMessage(
-            VoiceChatMessage(
-                id = messageId,
-                message = "",
-                isUser = false,
-                isStreaming = true
-            )
-        )
-
-        viewModelScope.launch(Dispatchers.IO) {
+        currentChatJob = viewModelScope.launch(Dispatchers.IO) {
             try {
                 val request = buildSseRequest(prompt)
-                val response = sseClient.newCall(request).execute()
+                val sseClient = sseClient.newCall(request)
+                currentSseCall = sseClient
+                val response = sseClient.execute()
 
                 if (!response.isSuccessful) {
                     throw IOException("SSE failed: ${response.code}")
                 }
 
                 response.body.source().let { source ->
+                    val isFirst = AtomicBoolean(true)
                     parseSseStream(
                         source = source,
                         onText = { text ->
+                            if(isFirst.getAndSet(false)){
+                                addMessage(
+                                    VoiceChatMessage(
+                                        id = messageId,
+                                        message = "",
+                                        isUser = false,
+                                        isStreaming = true
+                                    )
+                                )
+                            }
                             responseBuilder.append(text)
                             addReceivedMessage(
                                 responseBuilder.toString(),
@@ -144,6 +154,12 @@ class LifeOSVoiceChatViewModel @Inject constructor(
 
         return requestBuilder.build()
     }
+
+    fun disposeChatStream() {
+        currentChatJob?.cancel()
+        currentSseCall?.cancel()
+    }
+
     fun generateThreadId() {
         viewModelScope.launch {
             oreoDeviceRepository.generateThreadId().collect { resource ->
