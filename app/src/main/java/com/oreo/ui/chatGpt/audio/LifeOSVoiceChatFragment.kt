@@ -142,8 +142,8 @@ class LifeOSVoiceChatFragment :
             )
             putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en-US")
-            putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 2000)
-            putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 3000)
+            putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 4000)
+            putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 2000)
         }
         isRecognizerActive = true
         speechRecognizer?.startListening(intent)
@@ -247,33 +247,29 @@ class LifeOSVoiceChatFragment :
 
     private fun setupSpeechRecognizer() {
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(requireContext())
-        var responseBuilder = StringBuilder()
+        val finalText = StringBuilder()
+        var lastPartial = ""
         var messageId = UUID.randomUUID()
         val isFirst = AtomicBoolean(true)
 
         speechRecognizer?.setRecognitionListener(object : RecognitionListener {
-            override fun onResults(results: Bundle?) {
+
+            override fun onPartialResults(bundle: Bundle?) {
                 if (!isRecognizerActive) return
-                viewModel.askQuestionStream(responseBuilder.toString())
-                isFirst.set(true)
-                responseBuilder = StringBuilder()
-                messageId = UUID.randomUUID()
-                setActionState(ActionState.THINKING)
-            }
-            override fun onReadyForSpeech(p0: Bundle?) {}
-            override fun onBeginningOfSpeech() {}
-            override fun onRmsChanged(p0: Float) {}
-            override fun onBufferReceived(p0: ByteArray?) {}
-            override fun onEndOfSpeech() {}
-            override fun onError(p0: Int) {}
-            override fun onPartialResults(result: Bundle?) {
-                if (!isRecognizerActive) return
-                val text = result
+
+                val text = bundle
                     ?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                     ?.firstOrNull()
                     ?: return
 
-                if(isFirst.getAndSet(false)){
+                if (text.startsWith(lastPartial)) {
+                    val delta = text.substring(lastPartial.length)
+                    finalText.append(delta)
+                }
+
+                lastPartial = text
+
+                if (isFirst.getAndSet(false)) {
                     viewModel.addMessage(
                         VoiceChatMessage(
                             id = messageId,
@@ -283,17 +279,34 @@ class LifeOSVoiceChatFragment :
                         )
                     )
                 }
-                responseBuilder.clear()
-                responseBuilder.append(text)
-                viewModel.addReceivedMessage(
-                    responseBuilder.toString(),
-                    messageId
-                )
 
+                viewModel.addReceivedMessage(finalText.toString(), messageId)
             }
-            override fun onEvent(p0: Int, p1: Bundle?) {}
+
+            override fun onResults(results: Bundle?) {
+                if (!isRecognizerActive) return
+
+                viewModel.askQuestionStream(finalText.toString())
+
+                finalText.clear()
+                lastPartial = ""
+                messageId = UUID.randomUUID()
+                isFirst.set(true)
+
+                setActionState(ActionState.THINKING)
+            }
+
+            override fun onEndOfSpeech() {}
+            override fun onError(error: Int) {}
+
+            override fun onReadyForSpeech(params: Bundle?) {}
+            override fun onBeginningOfSpeech() {}
+            override fun onRmsChanged(rmsdB: Float) {}
+            override fun onBufferReceived(buffer: ByteArray?) {}
+            override fun onEvent(eventType: Int, params: Bundle?) {}
         })
     }
+
     private fun releaseSpeechRecognizer() {
         isRecognizerActive = false
         try {
