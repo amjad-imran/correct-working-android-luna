@@ -26,6 +26,8 @@ import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicBoolean
@@ -41,6 +43,7 @@ class LifeOSVoiceChatFragment :
         Mp3Streamer(requireContext())
     }
     private var currentState = ActionState.LISTENING
+    private var isRecognizerCommiting = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -81,6 +84,7 @@ class LifeOSVoiceChatFragment :
                 }
 
                 ActionState.SPEAKING, ActionState.THINKING, ActionState.MUTE -> {
+                    isRecognizerCommiting = false
                     mp3Streamer.stop()
                     viewModel.disposeChatStream()
                     setActionState(ActionState.LISTENING)
@@ -116,6 +120,7 @@ class LifeOSVoiceChatFragment :
 
     override fun subscribeObservers() {
         viewModel.chatMessages.observe(viewLifecycleOwner) {
+            isRecognizerCommiting = false
             chatAdapter.submitMessages(it)
             binding.chatRecycler.scrollToPosition(it.size - 1)
         }
@@ -142,8 +147,8 @@ class LifeOSVoiceChatFragment :
             )
             putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en-US")
-            putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 3000)
-            putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 3000)
+            putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 13000)
+            putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 13000)
         }
         isRecognizerActive = true
         speechRecognizer?.startListening(intent)
@@ -251,18 +256,21 @@ class LifeOSVoiceChatFragment :
         var lastPartial = ""
         var messageId = UUID.randomUUID()
         val isFirst = AtomicBoolean(true)
+        var commitJob: Job? = null
+        val COMMIT_DELAY = 2500L
 
         fun resetListener(){
             finalText.clear()
             lastPartial = ""
             messageId = UUID.randomUUID()
             isFirst.set(true)
+            commitJob = null
         }
 
         speechRecognizer?.setRecognitionListener(object : RecognitionListener {
 
             override fun onPartialResults(bundle: Bundle?) {
-                if (!isRecognizerActive) return
+                if (!isRecognizerActive || isRecognizerCommiting) return
 
                 val text = bundle
                     ?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
@@ -275,7 +283,6 @@ class LifeOSVoiceChatFragment :
                 }
 
                 lastPartial = text
-
                 if (isFirst.getAndSet(false)) {
                     viewModel.addMessage(
                         VoiceChatMessage(
@@ -286,24 +293,31 @@ class LifeOSVoiceChatFragment :
                         )
                     )
                 }
-
                 viewModel.addReceivedMessage(finalText.toString(), messageId)
+
+                commitJob?.cancel()
+                commitJob = viewLifecycleOwner.lifecycleScope.launch {
+                    delay(COMMIT_DELAY)
+                    if (!isRecognizerActive) return@launch
+                    if(finalText.isEmpty()) {
+                        resetListener()
+                        return@launch
+                    }
+                    isRecognizerCommiting = true
+                    speechRecognizer?.stopListening()
+                    viewModel.askQuestionStream(finalText.toString())
+                    setActionState(ActionState.THINKING)
+                    resetListener()
+                }
             }
 
-            override fun onResults(results: Bundle?) {
-                if (!isRecognizerActive) return
-
-                viewModel.askQuestionStream(finalText.toString())
-                resetListener()
-                setActionState(ActionState.THINKING)
-            }
-
+            override fun onResults(results: Bundle?) {}
             override fun onEndOfSpeech() {}
             override fun onError(error: Int) {
+                if(isRecognizerCommiting) return
                 startListening()
                 resetListener()
             }
-
             override fun onReadyForSpeech(params: Bundle?) {}
             override fun onBeginningOfSpeech() {}
             override fun onRmsChanged(rmsdB: Float) {}
