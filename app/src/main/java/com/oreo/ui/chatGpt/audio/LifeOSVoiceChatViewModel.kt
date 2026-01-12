@@ -128,7 +128,8 @@ class LifeOSVoiceChatViewModel @Inject constructor(
                 )
 
             } catch (e: Exception) {
-                streamError.postValue("Server error, please try again.")
+                if(currentSseCall?.isCanceled()?.not() == true)
+                    streamError.postValue("Server error, please try again.")
             } finally {
                 fetchInProgress.postValue(false)
                 setLoading(false)

@@ -80,6 +80,7 @@ class LifeOSVoiceChatFragment :
     }
 
     override fun initListener() {
+        binding.ivCross.setOnClickListener { navigateUpSafe() }
         binding.ivBtnAction.setOnClickListener {
             when (currentState) {
                 ActionState.LISTENING -> {
