@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import java.util.UUID
 import androidx.core.graphics.toColorInt
+import com.oreo.util.UtilClass.dpToPx
 
 class ChatAdapter(
     private val messages: MutableList<VoiceChatMessage>
@@ -49,7 +50,6 @@ class ChatAdapter(
         val context = tv.context
 
         tv.text = msg.message
-
         val params = tv.layoutParams as FrameLayout.LayoutParams
 
         if (msg.isUser) {
@@ -58,7 +58,7 @@ class ChatAdapter(
                 60.dpToPx(context),
                 0.dpToPx(context),
                 16.dpToPx(context),
-                1.dpToPx(context)
+                if(position == itemCount-1) 42.dpToPx(context) else 1.dpToPx(context)
             )
             tv.apply {
                 background = userBubble(context)
@@ -98,10 +98,6 @@ class ChatAdapter(
         messages.clear()
         messages.addAll(newMessages)
         notifyDataSetChanged()
-    }
-
-    fun Int.dpToPx(context: Context): Int {
-        return (this * context.resources.displayMetrics.density).toInt()
     }
 
     private fun userBubble(context: Context): GradientDrawable {

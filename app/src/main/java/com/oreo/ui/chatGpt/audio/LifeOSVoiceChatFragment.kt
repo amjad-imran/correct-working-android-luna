@@ -142,8 +142,8 @@ class LifeOSVoiceChatFragment :
             )
             putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true)
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, "en-US")
-            putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 4000)
-            putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 2000)
+            putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 3000)
+            putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, 3000)
         }
         isRecognizerActive = true
         speechRecognizer?.startListening(intent)
@@ -252,6 +252,13 @@ class LifeOSVoiceChatFragment :
         var messageId = UUID.randomUUID()
         val isFirst = AtomicBoolean(true)
 
+        fun resetListener(){
+            finalText.clear()
+            lastPartial = ""
+            messageId = UUID.randomUUID()
+            isFirst.set(true)
+        }
+
         speechRecognizer?.setRecognitionListener(object : RecognitionListener {
 
             override fun onPartialResults(bundle: Bundle?) {
@@ -287,17 +294,15 @@ class LifeOSVoiceChatFragment :
                 if (!isRecognizerActive) return
 
                 viewModel.askQuestionStream(finalText.toString())
-
-                finalText.clear()
-                lastPartial = ""
-                messageId = UUID.randomUUID()
-                isFirst.set(true)
-
+                resetListener()
                 setActionState(ActionState.THINKING)
             }
 
             override fun onEndOfSpeech() {}
-            override fun onError(error: Int) {}
+            override fun onError(error: Int) {
+                startListening()
+                resetListener()
+            }
 
             override fun onReadyForSpeech(params: Bundle?) {}
             override fun onBeginningOfSpeech() {}
