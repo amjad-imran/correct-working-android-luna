@@ -42,10 +42,12 @@ class LifeOSVoiceChatViewModel @Inject constructor(
     private val _chatMessages = MutableLiveData<MutableList<VoiceChatMessage>>(mutableListOf())
     val chatMessages: LiveData<MutableList<VoiceChatMessage>> = _chatMessages
     val audioStream: MutableLiveData<String?> = MutableLiveData()
+    val streamError: MutableLiveData<String> = MutableLiveData()
     private val sourcePattern = "【\\d+:\\d+†[^]]+】"
     private var threadId: String? = null
     private var currentChatJob: Job? = null
     private var currentSseCall: Call? = null
+    var lastPrompt = ""
 
     private val sseClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
@@ -67,9 +69,13 @@ class LifeOSVoiceChatViewModel @Inject constructor(
             _chatMessages.postValue(list)
         }
     }
-
     fun askQuestionStream(prompt: String) {
-        if (!ApplicationUtils.isInternetConnected()) return
+        lastPrompt = prompt
+        if (!ApplicationUtils.isInternetConnected()) {
+            streamError.postValue("Connection lost. \n" +
+                    "Check your internet and try again.")
+            return
+        }
 
         setLoading(true)
         fetchInProgress.value = true
@@ -85,11 +91,12 @@ class LifeOSVoiceChatViewModel @Inject constructor(
                 val response = sseClient.execute()
 
                 if (!response.isSuccessful) {
-                    throw IOException("SSE failed: ${response.code}")
+                    streamError.postValue("Server error, please try again.")
                 }
 
                 response.body.source().let { source ->
                     val isFirst = AtomicBoolean(true)
+                    lastPrompt = ""
                     parseSseStream(
                         source = source,
                         onText = { text ->
@@ -121,7 +128,7 @@ class LifeOSVoiceChatViewModel @Inject constructor(
                 )
 
             } catch (e: Exception) {
-                Log.e("SSE Error", e.toString())
+                streamError.postValue("Server error, please try again.")
             } finally {
                 fetchInProgress.postValue(false)
                 setLoading(false)

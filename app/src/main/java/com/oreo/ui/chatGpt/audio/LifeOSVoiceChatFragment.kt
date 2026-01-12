@@ -90,6 +90,14 @@ class LifeOSVoiceChatFragment :
                     setActionState(ActionState.LISTENING)
                 }
 
+                ActionState.ERROR -> {
+                    viewModel.lastPrompt
+                        .takeIf { it.isNotBlank() }
+                        ?.let{
+                            setActionState(ActionState.THINKING)
+                            viewModel.askQuestionStream(it)
+                        }
+                }
                 else -> {}
             }
         }
@@ -119,6 +127,16 @@ class LifeOSVoiceChatFragment :
     }
 
     override fun subscribeObservers() {
+        viewModel.streamError.observe(viewLifecycleOwner) { errorText ->
+            currentState = ActionState.ERROR
+            setActionUIAndVisibility(
+                isThinking = false,
+                isListening = false,
+                isMute = true,
+                R.drawable.ic_voice_retry,
+                errorText
+            )
+        }
         viewModel.chatMessages.observe(viewLifecycleOwner) {
             isRecognizerCommiting = false
             chatAdapter.submitMessages(it)
@@ -224,6 +242,8 @@ class LifeOSVoiceChatFragment :
                     getString(R.string.text_unable_to_speak)
                 )
             }
+
+            ActionState.ERROR -> {}
         }
     }
 
@@ -342,4 +362,4 @@ class LifeOSVoiceChatFragment :
     }
 }
 
-enum class ActionState { LISTENING, SPEAKING, THINKING, STARTING_UP, MUTE }
+enum class ActionState { LISTENING, SPEAKING, THINKING, STARTING_UP, MUTE, ERROR }
