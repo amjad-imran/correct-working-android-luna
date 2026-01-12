@@ -16,11 +16,10 @@
 
         <ImageView
             android:id="@+id/btnClose"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:src="@drawable/ic_cross_profile"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
