@@ -48,8 +48,12 @@ class LifeOSVoiceChatFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecycler()
-        setupSpeechRecognizer()
         viewModel.generateThreadId()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        setupSpeechRecognizer()
     }
 
     override fun onStop() {
