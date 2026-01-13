@@ -31,7 +31,7 @@ class NotificationViewModel @Inject constructor(
     var stepsToggle = false
     var sleepToggle = false
     var femaleHealthToggle = false
-    var caffeineWindowToggle = false
+    var circadianToggle = false
 
     fun getNotificationToggle() {
         viewModelScope.launch {
@@ -67,7 +67,7 @@ class NotificationViewModel @Inject constructor(
                                 stepsToggle = it.steps_notification?:false
                                 sleepToggle = it.sleep_notification?:false
                                 femaleHealthToggle = it.female_health?:false
-                                caffeineWindowToggle = it.caffeine?:false
+                                circadianToggle = it.circadian_notification?:false
                             }
                             valueUpdate.postValue(Event(true))
                         }
@@ -88,7 +88,7 @@ class NotificationViewModel @Inject constructor(
                 this.addProperty("steps_notification", stepsToggle)
                 this.addProperty("sleep_notification", sleepToggle)
                 this.addProperty("female_health_notification", femaleHealthToggle)
-                this.addProperty("caffeine", caffeineWindowToggle)
+                this.addProperty("circadian_notification", circadianToggle)
             }
             userRepository.updateNotificationToggle(request)
                 .collect { resource ->
