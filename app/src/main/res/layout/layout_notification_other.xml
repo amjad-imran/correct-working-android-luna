@@ -68,7 +68,7 @@
         app:layout_constraintTop_toBottomOf="@id/lytSleep" />
 
     <include
-        android:id="@+id/lytCaffeineWindow"
+        android:id="@+id/lytCircadian"
         layout="@layout/layout_settings_row_toggle_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
