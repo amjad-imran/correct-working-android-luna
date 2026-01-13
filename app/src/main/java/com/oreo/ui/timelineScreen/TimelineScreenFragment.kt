@@ -35,13 +35,15 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 @AndroidEntryPoint
-class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(FragmentTimelineScreenBinding::inflate),
+class TimelineScreenFragment :
+    BaseFragment<FragmentTimelineScreenBinding>(FragmentTimelineScreenBinding::inflate),
     ScrollListener {
 
     private val mainViewModel: OreoMainViewModel by activityViewModels()
     private val viewModel: TimelineScreenViewmodel by viewModels()
-    private var pagerAdapter: TimelinePagerAdapter? = null
-
+    val pagerAdapter: TimelinePagerAdapter by lazy {
+        TimelinePagerAdapter(this)
+    }
     private val habitsAdapter by lazy {
         ItemHabitsTimelineAdapter(
             onCross = { habit ->
@@ -413,18 +415,16 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
     override fun subscribeObservers() {
         mainViewModel.dashboard.observe(viewLifecycleOwner) {
             LOGS.w("Setting_data size ${it.size}")
-            if (pagerAdapter == null) {
-                pagerAdapter = TimelinePagerAdapter(this)
-                binding.viewPagerTimeline.adapter = pagerAdapter
-            }
-            pagerAdapter?.setDataSet(it)
+            binding.viewPagerTimeline.adapter = pagerAdapter
+            pagerAdapter.setDataSet(it)
 
-            val pos = pagerAdapter?.getPositionForDate(mainViewModel.selectedDate) ?: (it.size - 1)
+            val pos = pagerAdapter.getPositionForDate(mainViewModel.selectedDate) ?: (it.size - 1)
             LOGS.w("Setting_data pos ${pos} ${mainViewModel.selectedDate}")
 
             // Jump without smooth scroll to avoid visible page hopping
             if (binding.viewPagerTimeline.currentItem != pos) {
                 binding.viewPagerTimeline.setCurrentItem(pos, false)
+                pagerAdapter.notifyDataSetChanged()
             }
             binding.tabLayout.visible()
             //setTabDates(pos)
@@ -540,7 +540,7 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
             mainViewModel.selectedDate = returnDate
         }
 
-        val pos = pagerAdapter?.getPositionForDate(mainViewModel.selectedDate)
+        val pos = pagerAdapter.getPositionForDate(mainViewModel.selectedDate)
         if (pos != null && pos != -1) {
             binding.viewPagerTimeline.setCurrentItem(pos, false)
         }
@@ -559,7 +559,6 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
 
 
     private fun setViewPager() {
-        pagerAdapter = TimelinePagerAdapter(this)
         binding.viewPagerTimeline.adapter = pagerAdapter
         binding.viewPagerTimeline.offscreenPageLimit = 1
         binding.viewPagerTimeline.registerOnPageChangeCallback(object :
@@ -567,7 +566,7 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
 
-                mainViewModel.selectedDate = pagerAdapter?.getDate(position)
+                mainViewModel.selectedDate = pagerAdapter.getDate(position)
                 //setTabDates(position)
                 val todayDate = LocalDate.now()
                 binding.ivAddLogFab.setVisibilityByCondition(LocalDate.parse(mainViewModel.selectedDate)==todayDate)
