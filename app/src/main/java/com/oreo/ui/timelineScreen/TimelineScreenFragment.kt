@@ -31,6 +31,8 @@ import com.oreo.ui.timelineScreen.habits.AddHabitsBeginBottomSheet
 import com.oreo.util.setSafeOnClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -446,7 +448,8 @@ class TimelineScreenFragment :
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.allHabits.collectLatest { mList ->
+                viewModel.allHabits.onEach { mList ->
+                    if(viewModel.habitsResponseData==null) return@onEach
                     if(mList.isEmpty()){
                         checkUserHabits()
                         binding.lytSavedHabits.root.gone()
@@ -501,7 +504,7 @@ class TimelineScreenFragment :
                         }
 
                     }
-                }
+                }.launchIn(this)
             }
         }
     }
