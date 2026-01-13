@@ -43,9 +43,8 @@ class TimelineScreenFragment :
 
     private val mainViewModel: OreoMainViewModel by activityViewModels()
     private val viewModel: TimelineScreenViewmodel by viewModels()
-    val pagerAdapter: TimelinePagerAdapter by lazy {
-        TimelinePagerAdapter(this)
-    }
+    lateinit var pagerAdapter : TimelinePagerAdapter
+
     private val habitsAdapter by lazy {
         ItemHabitsTimelineAdapter(
             onCross = { habit ->
@@ -562,6 +561,7 @@ class TimelineScreenFragment :
 
 
     private fun setViewPager() {
+        pagerAdapter = TimelinePagerAdapter(this)
         binding.viewPagerTimeline.adapter = pagerAdapter
         binding.viewPagerTimeline.offscreenPageLimit = 1
         binding.viewPagerTimeline.registerOnPageChangeCallback(object :
