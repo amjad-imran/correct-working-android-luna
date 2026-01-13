@@ -325,6 +325,8 @@ class LifeOSVoiceChatFragment :
                     delay(COMMIT_DELAY)
                     if (!isRecognizerActive) return@launch
                     if(finalText.isEmpty()) {
+                        chatAdapter.removeLastItem()
+                        viewModel.chatMessages.value?.removeLastOrNull()
                         resetListener()
                         return@launch
                     }

@@ -108,6 +108,9 @@ class ChatAdapter(
         }
     }
 
+    fun removeLastItem() {
+        messages.removeLastOrNull()?.let { notifyItemRemoved(messages.lastIndex) }
+    }
 }
 
 data class VoiceChatMessage(
