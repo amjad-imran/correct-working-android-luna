@@ -25,6 +25,7 @@ import com.oreo.ui.sleep2.internal.DEFAULT_LONG_PRESS_TIMEOUT
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import java.time.LocalDate
 import java.util.Locale
+import kotlin.math.floor
 import kotlin.math.roundToInt
 
 class BarChartSingleInsight1 constructor(context: Context?, attrs: AttributeSet?) :
@@ -289,7 +290,7 @@ class BarChartSingleInsight1 constructor(context: Context?, attrs: AttributeSet?
                     ) {
                         "${it.value1.roundToInt()}%"
                     } else if (contributorType == SleepInternalLaunchState.SLEEP_DURATION ||contributorType == SleepInternalLaunchState.REM_SLEEP || contributorType == SleepInternalLaunchState.DEEP_SLEEP) {
-                        val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(it.value1.roundToInt())
+                        val (hour, minute) = ApplicationUtils.getFormattedSleepDuration(floor(it.value1).toInt())
                         String.format(locale = Locale.US, "%02d:%02d", hour, minute)
                     } else {
                         "${it.value1.roundToInt()}"

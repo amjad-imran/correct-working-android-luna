@@ -146,6 +146,7 @@ class LifeOsInsightDetailsFragment :
         binding.lytChatBox.btnAction.setImageResource(R.drawable.image_ai_message_send_3)
         binding.lytChatBox.btnAction.alpha = 0.5f
         binding.lytChatBox.btnAction.isClickable = false
+        binding.lytChatBox.chatEtx.hint = getString(R.string.reply_to_life_os)
     }
 
     override fun initListener() {
