@@ -15,6 +15,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
@@ -678,6 +679,12 @@ class OreoActivityFragment :
 
             mainViewModel.onCalendarDateSelected(selectedDate)
             mainViewModel.getUserHealthData(mainViewModel.mStartDate, mainViewModel.mEndDate)
+        }
+
+
+        val currentDestinationId = findNavController().currentDestination?.id
+        if (R.id.bottomSheetCalendar == currentDestinationId) {
+            return
         }
 
         navigate(R.id.bottomSheetCalendar, Bundle().apply {
