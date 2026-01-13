@@ -748,6 +748,11 @@ class OSummaryHealthOverviewAdapter(val isToday: Boolean) : RecyclerView.Adapter
             if (index == -1) return
             items[index] = heathOverViewData
             notifyItemChanged(index)
+        } else if (heathOverViewData is OHealthOverview.TimelineNewDash) {
+            val index = items.indexOfFirst { it is OHealthOverview.TimelineNewDash }
+            if (index == -1) return
+            items[index] = heathOverViewData
+            notifyItemChanged(index)
         }
     }
 
