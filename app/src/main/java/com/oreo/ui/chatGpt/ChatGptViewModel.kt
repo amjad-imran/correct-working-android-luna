@@ -9,13 +9,9 @@ import android.net.Uri
 import androidx.core.content.FileProvider
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.grapesnberries.curllogger.CurlLoggerInterceptor
-import com.here.oksse.OkSse
-import com.here.oksse.ServerSentEvent
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.model.AiHeaderInsight1
 import com.noisefit.data.model.AiMeals
@@ -31,7 +27,6 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.Token
 import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
@@ -44,7 +39,6 @@ import com.oreo.data.repository.abstraction.OreoSyncRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import okhttp3.Call
@@ -54,8 +48,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.Response
-import okhttp3.logging.HttpLoggingInterceptor
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -257,6 +249,7 @@ class ChatGptViewModel
     fun addReceivedMessage(message: String, uuid: UUID = UUID.randomUUID(),isGenerating: Boolean) {
         viewModelScope.launch(Dispatchers.Main) {
             showRetry.postValue(false)
+            cachedAttachment = null
             val messages = _chatGptOverview.value ?: ArrayList()
             messages.removeAll {
                 it is ChatGptOverview.ThinkingMessage || it is ChatGptOverview.RetryMessage
@@ -295,9 +288,9 @@ class ChatGptViewModel
     }
 
     fun retryApi() {
-        addThinkingMessage()
         lastApi?.let {
             askQuestionStream(it.second)
+            addThinkingMessage()
         }
     }
 
@@ -371,9 +364,10 @@ class ChatGptViewModel
 
     @Volatile
     private var currentCall: Call? = null
+    private var cachedAttachment: AttachmentData? = null
 
     fun askQuestionStream(prompt: String) {
-        val attachment = pendingAttachment
+        pendingAttachment?.let{ cachedAttachment = it }
         clearPendingAttachment()
 
         if (ApplicationUtils.isInternetConnected().not()){
@@ -411,7 +405,7 @@ class ChatGptViewModel
             }
 
             val ctx = resourceProvider.context
-            val att = attachment
+            val att = cachedAttachment
             val attachmentBody: RequestBody? = att?.let { a ->
                 try {
                     ctx.contentResolver.openInputStream(a.uri)?.use { input ->
@@ -476,6 +470,7 @@ class ChatGptViewModel
                 videoState.postValue(false)
                 checkForPlans(responseBuilder.toString())
             } catch (t: Throwable) {
+                if(currentCall?.isCanceled() == true) return@launch
                 if (fetchInProgress.value == true) {
                     fetchInProgress.postValue(false)
                     videoState.postValue(false)
@@ -723,7 +718,7 @@ class ChatGptViewModel
     }
 
     fun stopResponseGeneration() {
-
+        cachedAttachment = null
         viewModelScope.launch {
             removeThinkingState()
             fetchInProgress.postValue(false)
