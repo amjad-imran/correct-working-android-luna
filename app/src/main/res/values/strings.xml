@@ -2366,6 +2366,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_selected_habits">Selected Habits</string>
     <string name="text_val_habits_logged">%1$d/%2$d Habits Logged</string>
     <string name="text_customize">Customize</string>
+    <string name="reply_to_life_os">Reply to Life OS</string>
 
 
 </resources>
