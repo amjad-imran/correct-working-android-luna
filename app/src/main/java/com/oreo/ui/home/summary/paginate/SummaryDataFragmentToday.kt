@@ -466,14 +466,17 @@ class SummaryDataFragmentToday :
                 }
 
                 OSummaryHealthOverviewClickEnum.StressCardClicked -> {
+                    mainViewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.insight_clicked,
+                        HashMap<String, Any>().apply {
+                            this["insight"] = "stress"
+                        }
+                    )
                     if (viewModel.getStressWalkthroughShownStatus()) {
                         navigate(R.id.fragmentOStressDetails)
                     } else {
                         navigate(R.id.stressSplashFragment)
                     }
-                    mainViewModel.sessionManager.logMoEngageAppEvent(
-                        MoEngageLunaAppEvents.homepage_stress
-                    )
                 }
 
                 is OSummaryHealthOverviewClickEnum.OnNapClicked -> {
@@ -695,7 +698,10 @@ class SummaryDataFragmentToday :
 
                 OSummaryHealthOverviewClickEnum.OnHeartRateCardClicked -> {
                     viewModel.sessionManager.logMoEngageAppEvent(
-                        MoEngageLunaAppEvents.homepage_heart_rate
+                        MoEngageLunaAppEvents.insight_clicked,
+                        HashMap<String, Any>().apply {
+                            this["insight"] = "heart_rate"
+                        }
                     )
                     navigate(R.id.fragmentHeartRateDetails)
                 }
