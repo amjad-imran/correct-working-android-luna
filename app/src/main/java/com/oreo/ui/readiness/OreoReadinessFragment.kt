@@ -60,6 +60,7 @@ import java.util.Locale
 import javax.inject.Inject
 import androidx.core.graphics.toColorInt
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.moengage.core.internal.utils.showToast
 import com.oreo.data.model.IrregularEventsChipModel
 import com.oreo.ui.chatGpt.ChatGptFragment
@@ -622,6 +623,11 @@ class OreoReadinessFragment :
 
             mainViewModel.onCalendarDateSelected(selectedDate)
             mainViewModel.getUserHealthData(mainViewModel.mStartDate, mainViewModel.mEndDate)
+        }
+
+        val currentDestinationId = findNavController().currentDestination?.id
+        if (R.id.bottomSheetCalendar == currentDestinationId) {
+            return
         }
 
         navigate(R.id.bottomSheetCalendar, Bundle().apply {
