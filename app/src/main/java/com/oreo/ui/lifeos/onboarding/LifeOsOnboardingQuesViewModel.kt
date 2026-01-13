@@ -148,7 +148,6 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            localDataStore.setLifeOsOnboardData(it)
                             onBoardResponseData = it
                             processData(it, isAllQuesDone)
                         }
@@ -292,7 +291,7 @@ class LifeOsOnboardingQuesViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-                            onBoardResponseData?.let { data -> localDataStore.setLifeOsOnboardData(data) }
+                            localDataStore.setLifeOsOnboardData(null)
                             navigateToFinishScreen()
                         }
                     }

@@ -3,6 +3,7 @@ package com.noisefit.data.repository.implementation
 import android.net.Uri
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.googleFit.GoogleFitDataObservers
@@ -773,10 +774,123 @@ class UserRepositoryImpl(
     }
 
     override suspend fun getInsightLvl1List(): Flow<Resource<BaseApiResponse<List<List<InsightItemResponseModel>>>>> {
-        return safeApiCallFlow(dispatcher) {
-            remoteDataSource.getInsightLvl1List(
-                "${BuildConfig.OREO_BASE_URL}/ai/v2/insights/level1",
-            )
+        
+        return flow { 
+            emit(Resource.Loading(true))
+
+            val type = KeyValueDataType.INSIGHTS_LIFE_OS_DATA
+            var resultData: List<List<InsightItemResponseModel>>? = null
+
+            val cacheResult = safeCacheCall(Dispatchers.IO){
+                val localData = keyValueDataSource.getData("", type)
+                    ?: return@safeCacheCall null
+
+                val lastCallTime = localData.getSafeLastSyncValue()
+
+                val shouldCallApi =
+                    lastCallTime.checkTimeDifferenceMoreNMinutes(15)
+                LOGS.d("FORCE_REFRESH should call api $shouldCallApi")
+
+                if(shouldCallApi){
+                    keyValueDataSource.removeDataByKey("", type)
+                    return@safeCacheCall null
+                }
+
+                if(localData.value == null){
+                    return@safeCacheCall null
+                }
+
+                return@safeCacheCall localData.value?.let {
+                    val type = object : TypeToken<List<List<InsightItemResponseModel>>>() {}.type
+                    Gson().fromJson<List<List<InsightItemResponseModel>>>(it, type)
+                }
+            }
+
+            cacheResult.collect { resource ->
+                when(resource){
+                    is CacheResult.GenericError -> {
+
+                    }
+                    is CacheResult.Success -> {
+                        resource.value?.let {
+                            resultData = it
+                        }
+                    }
+                }
+            }
+
+            if(resultData != null){
+                emit(Resource.Loading(false))
+                emit(
+                    Resource.Success(
+                        BaseApiResponse(
+                            data = resultData,
+                            message = ""
+                        )
+                    )
+                )
+                return@flow
+            }
+
+            val serverResult = safeApiCallFlow(dispatcher){
+                remoteDataSource.getInsightLvl1List(
+                    "${BuildConfig.OREO_BASE_URL}/ai/v2/insights/level1",
+                )
+            }
+
+            serverResult.collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        emit(Resource.GenericError(resource.message, resource.errorCode))
+                    }
+
+                    is Resource.Loading -> {
+                        emit(Resource.Loading(resource.loading))
+                    }
+
+                    is Resource.NetworkError -> {
+                        emit(Resource.NetworkError(resource.response, resource.code))
+                    }
+
+                    is Resource.Success -> {
+
+                        resource.data?.data?.let { response ->
+                            resultData = response
+                        }
+                    }
+                }
+            }
+
+            if(resultData != null){
+                safeCacheCall(Dispatchers.IO){
+                    keyValueDataSource.insertData(
+                        KeyValue(
+                            key = "",
+                            value = gson.toJson(resultData),
+                            type = type.name
+                        )
+                    )
+                }.collect { resource ->
+                    when (resource) {
+                        is CacheResult.Success -> {
+                            emit(Resource.Loading(false))
+                            emit(
+                                Resource.Success(
+                                    BaseApiResponse(
+                                        data = resultData,
+                                        message = "",
+                                    )
+                                )
+                            )
+                        }
+
+                        is CacheResult.GenericError -> {
+                            emit(Resource.GenericError(message = "Something went wrong", 0))
+                        }
+                    }
+                }
+            }
+            
         }
     }
 

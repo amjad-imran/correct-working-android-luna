@@ -15,6 +15,8 @@ import com.noisefit.luna.databinding.FragmentYourHabitsTimelineBinding
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.timeline.habits.HabitsByDateResponse
@@ -49,16 +51,23 @@ class YourHabitsTimelineFragment : BaseFragment<FragmentYourHabitsTimelineBindin
 
         LOGS.d("scoakcla : ${viewModel.mDate}")
         viewModel.habitsResponseData = args.selectedOptions
+
         viewModel.getUserSavedHabits(viewModel.mDate)
+        habitsAdapter.isButtonsDisabled = viewModel.getIsButtonsDisabled(viewModel.mDate)
+
         setUi()
         setRecycler()
     }
 
     private fun setUi() {
         binding.lytToolbar.tvTitle.text = getString(R.string.text_your_habits)
+
+        binding.lytToolbar.ivAddFriend.invisible()
+        binding.lytToolbar.view1.setBackgroundResource(R.drawable.ic_customize_btn_your_habits)
         binding.lytToolbar.view1.visible()
-        binding.lytToolbar.ivAddFriend.visible()
-        binding.lytToolbar.ivAddFriend.setImageResource(R.drawable.ic_btn_customize)
+
+        binding.lytToolbar.backBtn.setImageResource(0)
+        binding.lytToolbar.backBtn.setBackgroundResource(R.drawable.ic_close_add_habits)
         binding.lytToolbar.backBtn.visible()
     }
 
@@ -86,12 +95,36 @@ class YourHabitsTimelineFragment : BaseFragment<FragmentYourHabitsTimelineBindin
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.allHabits.collect { list ->
+                    if(list.isEmpty()) return@collect
                     val logged = list.filter { it.isCancelled || it.isCompleted }.size
+                    binding.tvProgressVal.visible()
                     binding.tvProgressVal.text = "$logged/${list.size}"
+                    binding.habitProgress.visible()
                     binding.habitProgress.max = list.size
                     binding.habitProgress.progress = logged
                     habitsAdapter.submitList(list)
                 }
+            }
+        }
+
+        //
+        viewModel.getMessages().observe(this) {
+            it.getContent()?.let { message ->
+                context.showShortToast(message)
+            }
+        }
+
+        viewModel.getApiErrors().observe(viewLifecycleOwner) {
+            it?.getContent()?.let { response ->
+                uiController.onApiErrorReceived(response)
+            }
+        }
+
+        viewModel.getLoading().observe(viewLifecycleOwner) {
+            if (it) {
+                binding.progressBar.root.visible()
+            } else {
+                binding.progressBar.root.gone()
             }
         }
     }

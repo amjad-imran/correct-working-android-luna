@@ -3,9 +3,11 @@ package com.oreo.ui.timelineScreen.habits
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.noisefit.data.base.ResourcesProvider
 import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.oreo.data.model.timeline.habits.Options
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
@@ -29,6 +31,7 @@ import javax.inject.Inject
 class AddHabitsViewModel @Inject constructor(
     private val getAllHabitUC: GetAllHabitsUseCase,
     private val submitUserHabitsUC: dagger.Lazy<SubmitUserHabitsUseCase>,
+    private val resourcesProvider: dagger.Lazy<ResourcesProvider>,
 ): BaseViewModel() {
 
     private val _uiState = MutableStateFlow(HabitsUiState(loading = true))
@@ -84,15 +87,9 @@ class AddHabitsViewModel @Inject constructor(
         }
     }
 
-    private fun processData(sections: ArrayList<Options>) {
-        val categories: List<CategoryUi> = sections.map { section ->
-            CategoryUi(
-                id = section.type ?: "",
-                title = section.typeLabel ?: "",
-            )
-        }
+    private fun processData(sections: ArrayList<Options>, selectedHabits: Set<Int> ?= null) {
 
-        val habitToBeMapped = selectedHabitsFromBundle?.options?.let { list ->
+        val habitToBeMapped = selectedHabits ?: selectedHabitsFromBundle?.options?.let { list ->
             if (list.isEmpty()) {
                 emptySet()
             } else {
@@ -104,7 +101,24 @@ class AddHabitsViewModel @Inject constructor(
             }
         } ?: emptySet()
 
-        val habits: List<HabitUi> = sections.flatMap { section ->
+        val categories: List<CategoryUi> = sections.map { section ->
+            CategoryUi(
+                id = section.type ?: "",
+                title = section.typeLabel ?: "",
+            )
+        }
+
+        val finalCategories = ArrayList<CategoryUi>()
+        if(habitToBeMapped.isNotEmpty()){
+            val selectedCat = CategoryUi(
+                id= "selected_category",
+                title = resourcesProvider.get().getString(R.string.text_selected_habits)
+            )
+            finalCategories.add(selectedCat)
+        }
+        finalCategories.addAll(categories)
+
+        val habits = sections.flatMap { section ->
             section.items.map { item ->
 
                 HabitUi(
@@ -113,24 +127,34 @@ class AddHabitsViewModel @Inject constructor(
                     categoryId = section.type ?: ""
                 )
             }
+        }.toMutableList()
+
+        selectedHabitsFromBundle?.options?.forEach { sOpt ->
+            habits.find { it.id == sOpt.timeTrackerOptionId }?.let { item ->
+                habits.add(item.copy(categoryId = "selected_category"))
+            }
         }
 
         val filteredHabits = if (searchQuery.isNotEmpty()) {
-            habits.filter { it.name.contains(searchQuery, ignoreCase = true) }
+            habits.filterNot {
+                it.categoryId=="selected_category"
+            }.filter {
+                it.name.contains(searchQuery, ignoreCase = true)
+            }
         } else {
             habits
         }
 
-        val built = buildSectionedRows(categories, filteredHabits)
-        val finalList = built.rows.toMutableList().apply {
+        val built = buildSectionedRows(finalCategories, filteredHabits)
+        /*val finalList = built.rows.toMutableList().apply {
             if(searchQuery.isEmpty()) add(HabitListItem.EmptyBottom)
-        }
+        }*/
 
         _uiState.update {
             it.copy(
                 loading = false,
-                categories = categories,
-                items = finalList,
+                categories = finalCategories,
+                items = built.rows,
                 headerPositions = built.headerPositions,
                 isSearchActive = searchQuery.isNotEmpty(),
                 selectedHabits = habitToBeMapped
@@ -140,12 +164,12 @@ class AddHabitsViewModel @Inject constructor(
 
     fun onSearchQueryChanged(query: String) {
         searchQuery = query
-        processData(mainResponse)
+        processData(mainResponse, uiState.value.selectedHabits)
     }
 
     fun resetSearch() {
         searchQuery = ""
-        processData(mainResponse) // Revert to the full list of habits
+        processData(mainResponse, uiState.value.selectedHabits) // Revert to the full list of habits
     }
 
     fun toggleHabit(habitId: Int) {

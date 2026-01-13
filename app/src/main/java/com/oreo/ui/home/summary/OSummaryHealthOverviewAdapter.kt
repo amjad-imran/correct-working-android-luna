@@ -179,6 +179,7 @@ sealed class OSummaryHealthOverviewClickEnum {
 
     object OnTimelineCardClicked : OSummaryHealthOverviewClickEnum()
     object OnViewAllHabitTimelineNewClicked : OSummaryHealthOverviewClickEnum()
+    object OnSetupHabitsTimelineNewClicked : OSummaryHealthOverviewClickEnum()
     data class OnCheckHabitTimelineNewClicked(val item: HabitsByDateResponse.Options): OSummaryHealthOverviewClickEnum()
     class OnLogActivityClicked(val key: String?) : OSummaryHealthOverviewClickEnum()
     //
@@ -747,6 +748,11 @@ class OSummaryHealthOverviewAdapter(val isToday: Boolean) : RecyclerView.Adapter
             if (index == -1) return
             items[index] = heathOverViewData
             notifyItemChanged(index)
+        } else if (heathOverViewData is OHealthOverview.TimelineNewDash) {
+            val index = items.indexOfFirst { it is OHealthOverview.TimelineNewDash }
+            if (index == -1) return
+            items[index] = heathOverViewData
+            notifyItemChanged(index)
         }
     }
 
@@ -816,6 +822,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
                     binding.lytSavedHabits.root.gone()
                     binding.lytSetUpHabits.root.visible()
+                    binding.lytSetUpHabits.root.setOnClickListener {
+                        itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnSetupHabitsTimelineNewClicked)
+                    }
                 }
 
                 else -> {
@@ -827,7 +836,10 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     val totalCount = habitListData.size
                     val curLoggedCount = habitListData.filter { it.isCancelled || it.isCompleted }.size
                     binding.lytSavedHabits.apply {
-                        tvHabitsLogged.text = context.getString(R.string.text_val_logged, curLoggedCount, totalCount)
+                        tvHabitsLogged.text = context.getString(R.string.text_val_habits_logged, curLoggedCount, totalCount)
+
+                        habitProgress.max = totalCount
+                        habitProgress.progress = curLoggedCount
 
                         if(totalCount==curLoggedCount){
                             rvHabits.gone()

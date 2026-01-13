@@ -2354,7 +2354,7 @@
     <string name="text_tell_us_how_you_live_work_and_recover_luna_will_personalise_your_experience_to_help_you_live_better">Расскажите нам, как вы живёте, работаете и восстанавливаетесь — Луна персонализирует ваш опыт, чтобы помочь вам жить лучше.</string>
     <string name="text_app_support">Поддержка приложения</string>
 
-    <string name="text_add_habits">Добавить привычки</string>
+    <string name="text_add_habits">Новая</string>
     <string name="text_turn_habits_into_insights">Преобразовать привычки в инсайты</string>
     <string name="text_setup_habits">Настроить привычки</string>
     <string name="text_search_recents">Поиск недавних</string>
@@ -2392,7 +2392,7 @@
     <string name="text_lifeos_whats_new_content_2">Лента теперь поддерживает ведение журнала добавок, алкоголя и восстановления (медитация, холодные ванны и другое).</string>
     <string name="text_lifeos_whats_new_content_3">Теперь вы можете записывать добавки, алкоголь и восстановление (медитация, холодные ванны и другое) в своей ленте.</string>
     <string name="synced_with_lifeos">Синхронизировано с LifeOS</string>
-    <string name="text_edit_habits">Редактировать привычки</string>
+    <string name="text_edit_habits">Изменить</string>
     <string name="text_skipped">Пропущено</string>
     <string name="text_your_habits">Ваши привычки</string>
     <string name="text_logged">Зарегистрировано</string>
@@ -2410,5 +2410,8 @@
     <string name="connection_issue">Проблема с подключением</string>
     <string name="text_crafting_your_insights">Формируем ваши инсайты.</string>
     <string name="text_your_insights_will_be_ready_shortly">Ваши инсайты скоро будут готовы</string>
+    <string name="text_selected_habits">Выбранные привычки</string>
+    <string name="text_val_habits_logged">%1$d/%2$d Зарегистрированные привычки</string>
+    <string name="text_customize">Настроить</string>
 
 </resources>

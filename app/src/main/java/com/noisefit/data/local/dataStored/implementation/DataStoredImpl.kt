@@ -2524,7 +2524,7 @@ class DataStoredImpl
         mPrefs.edit().putBoolean(LIFEOS_ONBOARD_INITIATED, isInitiated).commit()
     }
 
-    override fun setLifeOsOnboardData(data: OnBoardQuesGetResponse) {
+    override fun setLifeOsOnboardData(data: OnBoardQuesGetResponse?) {
         mPrefs.edit()?.putString(LIFEOS_ONBOARD_QUES_DATA, gson.toJson(data))?.apply()
     }
 

@@ -30,17 +30,20 @@ import com.oreo.ui.timelineScreen.habits.ADD_HABITS_BEGIN_KEY
 import com.oreo.ui.timelineScreen.habits.AddHabitsBeginBottomSheet
 import com.oreo.util.setSafeOnClickListener
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 @AndroidEntryPoint
-class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(FragmentTimelineScreenBinding::inflate),
+class TimelineScreenFragment :
+    BaseFragment<FragmentTimelineScreenBinding>(FragmentTimelineScreenBinding::inflate),
     ScrollListener {
 
     private val mainViewModel: OreoMainViewModel by activityViewModels()
     private val viewModel: TimelineScreenViewmodel by viewModels()
-    private var pagerAdapter: TimelinePagerAdapter? = null
-
+    val pagerAdapter: TimelinePagerAdapter by lazy {
+        TimelinePagerAdapter(this)
+    }
     private val habitsAdapter by lazy {
         ItemHabitsTimelineAdapter(
             onCross = { habit ->
@@ -316,6 +319,15 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
             )
         }
 
+        binding.lytSavedHabits.tvHabitsLogged.setOnClickListener {
+            navigate(
+                R.id.yourHabitsTimelineFragment,
+                bundleOf(
+                    "date" to mainViewModel.selectedDate,
+                )
+            )
+        }
+
         binding.ivAddLogFab.setOnClickListener {
             mainViewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.insight_log,
@@ -403,18 +415,16 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
     override fun subscribeObservers() {
         mainViewModel.dashboard.observe(viewLifecycleOwner) {
             LOGS.w("Setting_data size ${it.size}")
-            if (pagerAdapter == null) {
-                pagerAdapter = TimelinePagerAdapter(this)
-                binding.viewPagerTimeline.adapter = pagerAdapter
-            }
-            pagerAdapter?.setDataSet(it)
+            binding.viewPagerTimeline.adapter = pagerAdapter
+            pagerAdapter.setDataSet(it)
 
-            val pos = pagerAdapter?.getPositionForDate(mainViewModel.selectedDate) ?: (it.size - 1)
+            val pos = pagerAdapter.getPositionForDate(mainViewModel.selectedDate) ?: (it.size - 1)
             LOGS.w("Setting_data pos ${pos} ${mainViewModel.selectedDate}")
 
             // Jump without smooth scroll to avoid visible page hopping
             if (binding.viewPagerTimeline.currentItem != pos) {
                 binding.viewPagerTimeline.setCurrentItem(pos, false)
+                pagerAdapter.notifyDataSetChanged()
             }
             binding.tabLayout.visible()
             //setTabDates(pos)
@@ -436,30 +446,40 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.allHabits.collect { mList ->
-                    if(viewModel.habitsResponseData?.options?.isEmpty() == true){
+                viewModel.allHabits.collectLatest { mList ->
+                    if(mList.isEmpty()){
                         checkUserHabits()
                         binding.lytSavedHabits.root.gone()
                         binding.lytSetupHabits.root.visible()
                     }else{
+                        val todayDate = LocalDate.now()
+                        val isPrevOrCurDay = todayDate.toString() == mainViewModel.selectedDate ||
+                                todayDate.minusDays(1).toString() == mainViewModel.selectedDate
+
                         binding.lytSetupHabits.root.gone()
                         binding.lytSavedHabits.root.visible()
                         val total = mList.size
                         val curProgress = mList.filter { it.isCompleted || it.isCancelled }.size
 
-                        if(total==curProgress) binding.lytSavedHabits.lytContentAndFooter.gone()
+                        if(total==curProgress || !isPrevOrCurDay) binding.lytSavedHabits.lytContentAndFooter.gone()
                         else binding.lytSavedHabits.lytContentAndFooter.visible()
 
                         binding.lytSavedHabits.habitProgress.apply {
                             this.max = total
                             this.progress = curProgress
                         }
-                        binding.lytSavedHabits.tvHabitsLogged.text =
-                            getString(R.string.text_val_logged, curProgress, total)
+
+                        if(total != 0) {
+                            binding.lytSavedHabits.tvHabitsLogged.text =
+                                getString(R.string.text_val_habits_logged, curProgress, total)
+                        }
 
                         launch {
                             viewModel.visibleHabits.collect { list ->
-                                habitsAdapter.submitList(list)
+                                habitsAdapter.submitList(
+                                    if (isPrevOrCurDay) list
+                                    else emptyList()
+                                )
                             }
                         }
 
@@ -520,7 +540,7 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
             mainViewModel.selectedDate = returnDate
         }
 
-        val pos = pagerAdapter?.getPositionForDate(mainViewModel.selectedDate)
+        val pos = pagerAdapter.getPositionForDate(mainViewModel.selectedDate)
         if (pos != null && pos != -1) {
             binding.viewPagerTimeline.setCurrentItem(pos, false)
         }
@@ -539,7 +559,6 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
 
 
     private fun setViewPager() {
-        pagerAdapter = TimelinePagerAdapter(this)
         binding.viewPagerTimeline.adapter = pagerAdapter
         binding.viewPagerTimeline.offscreenPageLimit = 1
         binding.viewPagerTimeline.registerOnPageChangeCallback(object :
@@ -547,7 +566,7 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
 
-                mainViewModel.selectedDate = pagerAdapter?.getDate(position)
+                mainViewModel.selectedDate = pagerAdapter.getDate(position)
                 //setTabDates(position)
                 val todayDate = LocalDate.now()
                 binding.ivAddLogFab.setVisibilityByCondition(LocalDate.parse(mainViewModel.selectedDate)==todayDate)

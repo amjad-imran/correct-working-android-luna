@@ -2330,7 +2330,7 @@
     <string name="text_tell_us_how_you_live_work_and_recover_luna_will_personalise_your_experience_to_help_you_live_better">Erzähl uns, wie du lebst, arbeitest und regenerierst — Luna personalisiert deine Erfahrung, um dir zu helfen, besser zu leben.</string>
     <string name="text_app_support">App-Support</string>
 
-    <string name="text_add_habits">Gewohnheiten hinzufügen</string>
+    <string name="text_add_habits">Hinzufügen</string>
     <string name="text_turn_habits_into_insights">Gewohnheiten in Erkenntnisse umwandeln</string>
     <string name="text_setup_habits">Gewohnheiten einrichten</string>
     <string name="text_search_recents">Letzte durchsuchen</string>
@@ -2368,7 +2368,7 @@
     <string name="text_lifeos_whats_new_content_2">Die Timeline unterstützt jetzt die Protokollierung von Nahrungsergänzungsmitteln, Alkohol und Erholung (Meditation, Kältebad und mehr).</string>
     <string name="text_lifeos_whats_new_content_3">Du kannst jetzt Nahrungsergänzungsmittel, Alkohol und Erholung (Meditation, Kältebad und mehr) in deiner Timeline protokollieren.</string>
     <string name="synced_with_lifeos">Mit LifeOS synchronisiert</string>
-    <string name="text_edit_habits">Gewohnheiten bearbeiten</string>
+    <string name="text_edit_habits">Bearbeiten</string>
     <string name="text_skipped">Übersprungen</string>
     <string name="text_your_habits">Ihre Gewohnheiten</string>
     <string name="text_logged">Protokolliert</string>
@@ -2386,5 +2386,8 @@
     <string name="connection_issue">Verbindungsproblem</string>
     <string name="text_crafting_your_insights">Wir erstellen Ihre Erkenntnisse.</string>
     <string name="text_your_insights_will_be_ready_shortly">Ihre Erkenntnisse sind in Kürze bereit</string>
+    <string name="text_selected_habits">Ausgewählte Gewohnheiten</string>
+    <string name="text_val_habits_logged">%1$d/%2$d Gewohnheiten protokolliert</string>
+    <string name="text_customize">Anpassen</string>
 
 </resources>

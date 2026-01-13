@@ -1746,7 +1746,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 LIGHT_EXPOSURE_KEY -> {
                     data.titleColor = "#FFE1CF".toColorInt()
                     data.value?.let {
-                        data.desc = "${it.toInt() / 60} minutes"
+                        data.desc = "${it.toInt() / 60} m"
                         /*data.unit?.let { data.desc += " $it" }*/
                     }
                 }

@@ -130,26 +130,11 @@ class LifeOsDashFragment :
 
     override fun onResume() {
         super.onResume()
-        viewModel.getLifeOsData()
-        setLytOnboardQuesProgress()
+        viewModel.getOnboardingData()
     }
 
-    private fun setLytOnboardQuesProgress() {
-        val onboardQuesData = viewModel.localDataStore.getLifeOsOnboardData()
-        if(onboardQuesData==null || onboardQuesData.questions.isNullOrEmpty() || onboardQuesData.answers.isNullOrEmpty()){
-            binding.lytHeader.lytOnboardQuesProgress.root.gone()
-            return
-        }
-        val quesSize = onboardQuesData.questions!!.size
-
-        var ansSize = 0
-        onboardQuesData.answers?.forEach {
-            if (it.ans_id.isNotEmpty() || it.addOntext.isNotEmpty()) {
-                ansSize++
-            }
-        }
-
-        if(ansSize >= quesSize){
+    private fun setLytOnboardQuesProgress(total: Int, ansMarked: Int) {
+        if(ansMarked >= total){
             binding.lytHeader.lytOnboardQuesProgress.root.gone()
 
             binding.lytHeader.imageView117.visible()
@@ -164,7 +149,7 @@ class LifeOsDashFragment :
 
         binding.lytHeader.lytOnboardQuesProgress.root.visible()
 
-        setProgress((ansSize.toFloat() / quesSize.toFloat() * 100).toInt())
+        setProgress((ansMarked.toFloat() / total.toFloat() * 100).toInt())
     }
 
     fun setProgress(progress: Int) {
@@ -437,6 +422,7 @@ class LifeOsDashFragment :
         }
 
         binding.lytHeader.lytOnboardQuesProgress.root.setOnClickListener {
+            viewModel.totalQuesAnsResp = null
             navigate(R.id.lifeOsOnboardingQuesFragment)
         }
 
@@ -450,9 +436,10 @@ class LifeOsDashFragment :
     }
 
     override fun subscribeObservers() {
-        viewModel.destinationData.observe(this){
+
+        viewModel.uiStateData.observe(this){
             if(it==null) return@observe
-            setDestination(it)
+            setUiState(it)
         }
 
         viewModel.questions.observe(viewLifecycleOwner) { list ->
@@ -491,17 +478,23 @@ class LifeOsDashFragment :
         }
 
         viewModel.getLoading().observe(this) {
-            /*if (it) {
-                binding.progressBar.root.visible()
+            if (it) {
+                binding.mainProgressBar.root.visible()
             } else {
-                binding.progressBar.root.gone()
-            }*/
+                binding.mainProgressBar.root.gone()
+            }
         }
     }
 
-    private fun setDestination(dest: LifeOsDashViewModel.LifeOsDestinations) {
-        when(dest){
-            LifeOsDashViewModel.LifeOsDestinations.BEGIN_FRAG -> {
+    private fun setUiState(states: LifeOsDashViewModel.LifeOsDashUiStates) {
+        when(states){
+            is LifeOsDashViewModel.LifeOsDashUiStates.LifeOsMain -> {
+                binding.svMain.visible()
+                binding.lytToolbar.root.visible()
+                setLytOnboardQuesProgress(states.total, states.ansMarked)
+            }
+
+            LifeOsDashViewModel.LifeOsDashUiStates.BeginFrag -> {
                 setFragmentResultListener(LifeOsOnboardBeginFragment.LIFE_OS_ONBOARD_BEGIN_KEY){ _, bundle ->
                     val isBackClicked = bundle.getBoolean("isBackClicked")
                     if(isBackClicked){
@@ -511,13 +504,13 @@ class LifeOsDashFragment :
                 }
                 navigate(R.id.lifeOsOnboardBeginFragment)
             }
-            LifeOsDashViewModel.LifeOsDestinations.QUES_FRAG -> {
+
+            LifeOsDashViewModel.LifeOsDashUiStates.QuesFrag -> {
                 navigate(R.id.lifeOsOnboardingQuesFragment)
             }
-            LifeOsDashViewModel.LifeOsDestinations.LIFE_OS_MAIN -> {
-            }
+
         }
-        viewModel.destinationData.value = null
+        viewModel.uiStateData.value = null
     }
 
 }

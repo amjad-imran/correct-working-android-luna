@@ -30,6 +30,9 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
             }
 
         viewModel.personalizeQuesId = arguments?.getInt(PersonalizeLifeOsFragment.PERSONALIZE_QUES_ID_KEY)
+        if(viewModel.personalizeQuesId == null)
+            binding.btnClose.setImageResource(R.drawable.ic_cross_profile)
+
         viewModel.getOnboardQues(){
             navigateUpSafe()
         }
