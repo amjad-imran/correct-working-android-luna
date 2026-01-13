@@ -76,6 +76,9 @@ class LanguageViewModel @Inject constructor(
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_HEALTH_CURRENT_DAY_V2)
             keyValueDataSource.removeDataByType(KeyValueDataType.FEMALE_SYMPTOMS_ICON)
 
+            // LifeOS Insights Lvl 1 Data
+            keyValueDataSource.removeDataByType(KeyValueDataType.INSIGHTS_LIFE_OS_DATA)
+
             // Clear Nudge Data
             localDataStore.setNudgeReadinessData(null)
             localDataStore.setNudgeActivityData(null)
