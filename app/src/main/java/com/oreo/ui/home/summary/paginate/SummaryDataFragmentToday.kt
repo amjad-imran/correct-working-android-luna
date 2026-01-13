@@ -755,6 +755,10 @@ class SummaryDataFragmentToday :
                     )
                 }
 
+                OSummaryHealthOverviewClickEnum.OnSetupHabitsTimelineNewClicked -> {
+                    navigate(R.id.addHabitsFragment)
+                }
+
                 is OSummaryHealthOverviewClickEnum.OnCheckHabitTimelineNewClicked -> {
                     val curHabit = type.item
                     handleOnCheckHabitTimelineClicked(

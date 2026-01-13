@@ -447,7 +447,7 @@ class TimelineScreenFragment : BaseFragment<FragmentTimelineScreenBinding>(Fragm
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.allHabits.collectLatest { mList ->
-                    if(viewModel.habitsResponseData?.options?.isEmpty() == true){
+                    if(mList.isEmpty()){
                         checkUserHabits()
                         binding.lytSavedHabits.root.gone()
                         binding.lytSetupHabits.root.visible()

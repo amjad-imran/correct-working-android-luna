@@ -13,6 +13,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.custom.NightTimeGraphViewOreo
 import com.noisefit_commans.ui.custom.SleepGraphViewOreo
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
 import com.oreo.data.dataConverter.GraphsKey
 import com.oreo.ui.chatGpt.AITopics
@@ -85,16 +86,25 @@ class LifeOsInsightDetailsFragment :
         val data = viewModel.insightData
         if(data==null) return
 
-        if(data.raw?.graph_type.isNullOrEmpty() || data.raw.graph == null){
-            binding.chartContainer.gone()
-        }else{
-            val view = provideChartView(data.chartKey, data.payload, data.styleRes)
-            if (view != null) {
-                binding.chartContainer.visible()
-                binding.chartContainer.removeAllViews()
-                binding.chartContainer.addView(view)
-            } else {
+        if(data.raw?.fallbackImage.isNullOrEmpty()) {
+            binding.fallbackImg.gone()
+            if (data.raw?.graph_type.isNullOrEmpty() || data.raw.graph == null) {
                 binding.chartContainer.gone()
+            } else {
+                val view = provideChartView(data.chartKey, data.payload, data.styleRes)
+                if (view != null) {
+                    binding.chartContainer.visible()
+                    binding.chartContainer.removeAllViews()
+                    binding.chartContainer.addView(view)
+                } else {
+                    binding.chartContainer.gone()
+                }
+            }
+        }
+        else{
+            binding.fallbackImg.apply {
+                visible()
+                loadImage(this.context, data.raw.fallbackImage)
             }
         }
     }

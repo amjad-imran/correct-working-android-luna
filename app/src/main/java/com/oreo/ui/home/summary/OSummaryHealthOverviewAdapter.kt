@@ -179,6 +179,7 @@ sealed class OSummaryHealthOverviewClickEnum {
 
     object OnTimelineCardClicked : OSummaryHealthOverviewClickEnum()
     object OnViewAllHabitTimelineNewClicked : OSummaryHealthOverviewClickEnum()
+    object OnSetupHabitsTimelineNewClicked : OSummaryHealthOverviewClickEnum()
     data class OnCheckHabitTimelineNewClicked(val item: HabitsByDateResponse.Options): OSummaryHealthOverviewClickEnum()
     class OnLogActivityClicked(val key: String?) : OSummaryHealthOverviewClickEnum()
     //
@@ -816,6 +817,9 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
                     binding.lytSavedHabits.root.gone()
                     binding.lytSetUpHabits.root.visible()
+                    binding.lytSetUpHabits.root.setOnClickListener {
+                        itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnSetupHabitsTimelineNewClicked)
+                    }
                 }
 
                 else -> {

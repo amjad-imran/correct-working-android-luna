@@ -94,12 +94,12 @@
 
     <TextView
         android:id="@+id/tvLifeOS"
+        style="@style/S12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/dimen_12dp"
         android:text="@string/synced_with_lifeos"
         android:textColor="@color/color_B3FFFFFF"
-        android:textSize="@dimen/text_12sp"
         app:layout_constraintBottom_toBottomOf="@+id/tvMoreHabits"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tvMoreHabits"

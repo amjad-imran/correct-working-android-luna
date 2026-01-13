@@ -14,6 +14,8 @@ class YourHabitsTimelineAdapter(
     private val onCheck: (Options) -> Unit,
 ) : ListAdapter<Options, YourHabitsTimelineAdapter.VH>(Diff) {
 
+    var isButtonsDisabled = false
+
     object Diff : DiffUtil.ItemCallback<Options>() {
         override fun areItemsTheSame(oldItem: Options, newItem: Options) = oldItem.timeTrackerOptionId == newItem.timeTrackerOptionId
         override fun areContentsTheSame(oldItem: Options, newItem: Options) = oldItem == newItem
@@ -35,6 +37,11 @@ class YourHabitsTimelineAdapter(
 
                         binding.igCross.setImageResource(R.drawable.ic_not_done_circadian)
                     }
+                }
+
+                isButtonsDisabled -> {
+                    binding.igTick.setImageResource(R.drawable.ic_check_disabled_you_habits)
+                    binding.igCross.setImageResource(R.drawable.ic_cross_disabled_you_habits)
                 }
 
                 else -> {
