@@ -150,7 +150,8 @@ class OStressDetailsFragment :
             mainViewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.info_clicked,
                 HashMap<String, Any>().apply {
-                    this["source"] = "stress"
+                    this["source"] = "homepage"
+                    this["section"] = "stress_learn_more"
                 }
             )
             navigate(R.id.stressUnderstandingFragment)

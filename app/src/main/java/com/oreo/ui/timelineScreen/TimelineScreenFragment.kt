@@ -31,6 +31,8 @@ import com.oreo.ui.timelineScreen.habits.AddHabitsBeginBottomSheet
 import com.oreo.util.setSafeOnClickListener
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -41,9 +43,8 @@ class TimelineScreenFragment :
 
     private val mainViewModel: OreoMainViewModel by activityViewModels()
     private val viewModel: TimelineScreenViewmodel by viewModels()
-    val pagerAdapter: TimelinePagerAdapter by lazy {
-        TimelinePagerAdapter(this)
-    }
+    lateinit var pagerAdapter : TimelinePagerAdapter
+
     private val habitsAdapter by lazy {
         ItemHabitsTimelineAdapter(
             onCross = { habit ->
@@ -446,7 +447,8 @@ class TimelineScreenFragment :
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.allHabits.collectLatest { mList ->
+                viewModel.allHabits.onEach { mList ->
+                    if(viewModel.habitsResponseData==null) return@onEach
                     if(mList.isEmpty()){
                         checkUserHabits()
                         binding.lytSavedHabits.root.gone()
@@ -501,7 +503,7 @@ class TimelineScreenFragment :
                         }
 
                     }
-                }
+                }.launchIn(this)
             }
         }
     }
@@ -559,6 +561,7 @@ class TimelineScreenFragment :
 
 
     private fun setViewPager() {
+        pagerAdapter = TimelinePagerAdapter(this)
         binding.viewPagerTimeline.adapter = pagerAdapter
         binding.viewPagerTimeline.offscreenPageLimit = 1
         binding.viewPagerTimeline.registerOnPageChangeCallback(object :

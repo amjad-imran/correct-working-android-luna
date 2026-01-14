@@ -62,7 +62,7 @@ class AddHabitsSuccessBottomSheet :
                 skipCollapsed = true
                 isHideable = true
                 isDraggable = true
-                isCancelable = true
+                isCancelable = false
             }
             bottomSheet.setBackgroundResource(android.R.color.transparent)
         }
