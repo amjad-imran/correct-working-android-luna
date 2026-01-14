@@ -2390,5 +2390,6 @@
     <string name="text_selected_habits">Abitudini selezionate</string>
     <string name="text_val_habits_logged">%1$d/%2$d Abitudini registrate</string>
     <string name="text_customize">Personalizza</string>
+    <string name="reply_to_life_os">Rispondi a Life OS</string>
 
 </resources>

@@ -2395,5 +2395,6 @@
     <string name="text_selected_habits">พฤติกรรมที่เลือก</string>
     <string name="text_val_habits_logged">%1$d/%2$d นิสัยที่บันทึก</string>
     <string name="text_customize">ปรับแต่ง</string>
+    <string name="reply_to_life_os">ตอบกลับ Life OS</string>
 
 </resources>

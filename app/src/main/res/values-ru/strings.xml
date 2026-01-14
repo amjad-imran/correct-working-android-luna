@@ -2413,5 +2413,6 @@
     <string name="text_selected_habits">Выбранные привычки</string>
     <string name="text_val_habits_logged">%1$d/%2$d Зарегистрированные привычки</string>
     <string name="text_customize">Настроить</string>
+    <string name="reply_to_life_os">Ответить на Life OS</string>
 
 </resources>

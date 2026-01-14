@@ -2389,5 +2389,6 @@
     <string name="text_selected_habits">Ausgewählte Gewohnheiten</string>
     <string name="text_val_habits_logged">%1$d/%2$d Gewohnheiten protokolliert</string>
     <string name="text_customize">Anpassen</string>
+    <string name="reply_to_life_os">Antworten an Life OS</string>
 
 </resources>

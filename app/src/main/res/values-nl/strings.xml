@@ -2389,5 +2389,6 @@
     <string name="text_selected_habits">Geselecteerde gewoonten</string>
     <string name="text_val_habits_logged">%1$d/%2$d Gewoonten geregistreerd</string>
     <string name="text_customize">Aanpassen</string>
+    <string name="reply_to_life_os">Antwoord aan Life OS</string>
 
 </resources>
