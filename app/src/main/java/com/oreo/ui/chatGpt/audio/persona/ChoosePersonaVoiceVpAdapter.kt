@@ -3,23 +3,22 @@ package com.oreo.ui.chatGpt.audio.persona
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.noisefit.luna.databinding.ItemPersonaVoiceBinding
 import com.noisefit.luna.databinding.LayoutPersonaFeatureChipBinding
 import com.noisefit_commans.data.model.chatGPT.voice.persona.ItemPersonaVoiceResponse
 
 class ChoosePersonaVoiceVpAdapter  :
     RecyclerView.Adapter<ChoosePersonaVoiceVpAdapter.CardViewHolder>() {
-
     private val mDataSet = ArrayList<ItemPersonaVoiceResponse>()
-
     inner class CardViewHolder(private val binding: ItemPersonaVoiceBinding) : RecyclerView.ViewHolder(binding.root) {
-
         private val context = binding.root.context
 
         fun bind(data: ItemPersonaVoiceResponse){
             binding.tvPersonaName.text = data.personaTitle
-            /*binding.ivBgImg.loadImage(context, data.imgUrl)*/
-
+            Glide.with(binding.ivBgImg)
+                .load(data.imgUrl)
+                .into(binding.ivBgImg)
             data.personaFeatures?.let { setPersonaItemChip(it) }
         }
 

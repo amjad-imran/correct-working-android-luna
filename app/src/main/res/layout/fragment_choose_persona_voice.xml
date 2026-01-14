@@ -1,22 +1,37 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.oreo.ui.chatGpt.audio.persona.ChoosePersonaVoiceFragment">
+    android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/layout_toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
+    <ImageView
+        android:id="@+id/ivCross"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_ai_close"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvChooseLanguage"
+        style="@style/S16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose a voice"
+        app:layout_constraintBottom_toBottomOf="@+id/ivCross"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ivCross" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:orientation="horizontal"
+        android:clipToPadding="false"
+        android:clipChildren="false"
+        android:overScrollMode="never"
         app:layout_constraintBottom_toTopOf="@+id/tabLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,5 +53,21 @@
         app:tabIndicatorHeight="0dp"
         app:tabPaddingEnd="8dp"
         app:tabPaddingStart="8dp" />
+
+    <TextView
+        android:id="@+id/tvSelect"
+        style="@style/S16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="70dp"
+        android:background="@drawable/bg_capsule_white"
+        android:paddingHorizontal="48dp"
+        android:paddingVertical="@dimen/dimen_16dp"
+        android:text="@string/text_select"
+        android:textColor="@color/black"
+        android:textFontWeight="700"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
