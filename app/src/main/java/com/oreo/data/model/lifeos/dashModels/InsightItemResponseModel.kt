@@ -20,7 +20,7 @@ data class InsightItemResponseModel(
     val dateTime: String? = null,
     @SerializedName("insight_type")
     val insightType: String? = null,
-    @SerializedName("fallback_img")
+    @SerializedName("fallback_image_url")
     val fallbackImage: String? = null,
 ) : Parcelable
 
