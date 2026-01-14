@@ -300,6 +300,7 @@ class LifeOSVoiceChatFragment :
                 val text = bundle
                     ?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                     ?.firstOrNull()
+                    ?.takeIf { it.isNotEmpty() }
                     ?: return
 
                 if (text.startsWith(lastPartial)) {
@@ -324,12 +325,6 @@ class LifeOSVoiceChatFragment :
                 commitJob = viewLifecycleOwner.lifecycleScope.launch {
                     delay(COMMIT_DELAY)
                     if (!isRecognizerActive) return@launch
-                    if(finalText.isEmpty()) {
-                        chatAdapter.removeLastItem()
-                        viewModel.chatMessages.value?.removeLastOrNull()
-                        resetListener()
-                        return@launch
-                    }
                     isRecognizerCommiting = true
                     speechRecognizer?.stopListening()
                     viewModel.askQuestionStream(finalText.toString())

@@ -107,12 +107,6 @@ class ChatAdapter(
             setColor(context.getColor(R.color.white_10))
         }
     }
-
-    fun removeLastItem() {
-        messages.lastOrNull()?.takeIf{it.isUser}?.let {
-            messages.removeLastOrNull()?.let { notifyItemRemoved(messages.lastIndex) }
-        }
-    }
 }
 
 data class VoiceChatMessage(
