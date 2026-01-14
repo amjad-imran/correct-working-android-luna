@@ -2384,5 +2384,6 @@
     <string name="text_val_habits_logged">%1$d/%2$d 记录的习惯</string>
     <string name="text_customize">自定义</string>
     <string name="reply_to_life_os">回复 Life OS</string>
+    <string name="text_customise">自定义</string>
 
 </resources>

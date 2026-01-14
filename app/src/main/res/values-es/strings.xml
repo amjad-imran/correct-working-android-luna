@@ -2360,5 +2360,6 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_customize">Personalizar</string>
     <string name="reply_to_life_os">Responder a Life OS</string>
     <string name="life_os_chat_hint">Pregunta, sube o escanea: aquí para guiarte.</string>
+    <string name="text_customise">Personalizar</string>
 
 </resources>
