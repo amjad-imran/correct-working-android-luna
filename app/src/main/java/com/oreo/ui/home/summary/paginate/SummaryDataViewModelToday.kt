@@ -4948,6 +4948,49 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
+    fun handleLifeOsCardClicked(isOnBoardDone:(isDone: Boolean) -> Unit) {
+        viewModelScope.launch {
+            val cachedOnboardData = localDataStore.isLifeOsOnboardCompleted(null)
+            if(cachedOnboardData!=0){
+                isOnBoardDone(cachedOnboardData==1)
+                return@launch
+            }
+
+            userRepositoryOld.getLifeOsOnboardQuesAnsList().collect{ resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            val isDone = it.answers?.isNotEmpty()==true
+                            localDataStore.isLifeOsOnboardCompleted(isDone)
+                            isOnBoardDone(isDone)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 enum class NotificationGoal {

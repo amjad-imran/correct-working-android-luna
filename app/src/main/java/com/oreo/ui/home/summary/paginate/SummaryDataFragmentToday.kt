@@ -83,7 +83,9 @@ import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.oreo.ui.chatGpt.AITopics
+import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.chatGpt.SummaryStates
+import com.oreo.ui.chatGpt.audio.AudioAiFragment
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 import com.oreo.ui.custom.CirclePagerIndicatorDecoration
 import com.oreo.ui.custom.SnapHelperOneByOne
@@ -748,8 +750,37 @@ class SummaryDataFragmentToday :
                     }
                 }
 
-                OSummaryHealthOverviewClickEnum.LifeOsCardClicked -> {
-                    mainViewModel.navigateTo(BottomNavOption.LUNA_AI)
+                OSummaryHealthOverviewClickEnum.LifeOsChatClicked -> {
+                    viewModel.handleLifeOsCardClicked{ isOnboardDone ->
+                        if(isOnboardDone) {
+                            val (frag, bundle) = LifeOsChatFragment.getStartData(
+                                threadId = null,
+                                userMessage = null,
+                                title = null,
+                                aiTopic = AITopics.GENERAL
+                            )
+                            navigate(
+                                frag, bundle
+                            )
+                        }
+                        else{
+                            mainViewModel.navigateTo(BottomNavOption.LUNA_AI)
+                        }
+                    }
+                }
+
+                OSummaryHealthOverviewClickEnum.LifeOsVoiceClicked -> {
+                    viewModel.handleLifeOsCardClicked{ isOnboardDone ->
+                        if(isOnboardDone) {
+                            val (frag, bundle) = AudioAiFragment.getStartData(
+                                PlanType.NONE
+                            )
+                            navigate(frag, bundle)
+                        }
+                        else{
+                            mainViewModel.navigateTo(BottomNavOption.LUNA_AI)
+                        }
+                    }
                 }
 
                 OSummaryHealthOverviewClickEnum.OnViewAllHabitTimelineNewClicked -> {

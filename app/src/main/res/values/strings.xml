@@ -2368,6 +2368,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_customize">Customize</string>
     <string name="reply_to_life_os">Reply to Life OS</string>
     <string name="text_customise">Customise</string>
+    <string name="text_talk_to_lifeos">Talk to LifeOS</string>
 
 
 </resources>

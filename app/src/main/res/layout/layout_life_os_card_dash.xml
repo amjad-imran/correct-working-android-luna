@@ -7,75 +7,61 @@
     android:layout_marginTop="24dp"
     android:background="@drawable/bg_lifeos_card_luna_dash">
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        style="@style/S20"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/text_find_out_what_your_body_s_trying_to_tell_you"
-        app:layout_constraintEnd_toStartOf="@+id/tvSuggestion1"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvSuggestion1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        style="@style/S14"
-        android:background="@drawable/bg_white_3_perc_rounded_10dp"
-        android:lineHeight="17sp"
-        android:layout_marginTop="12dp"
-        android:layout_marginHorizontal="12dp"
-        android:paddingHorizontal="12dp"
-        android:paddingVertical="10dp"
-        android:text="@string/text_what_habits_are_helping_me_recover"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/tvTitle"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvSuggestion2"
-        style="@style/S14"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/bg_white_3_perc_rounded_10dp"
-        android:lineHeight="17sp"
-        android:paddingHorizontal="12dp"
-        android:paddingVertical="10dp"
-        android:text="@string/text_how_do_i_improve_sleep_quality"
-        app:layout_constraintStart_toStartOf="@+id/tvSuggestion1"
-        app:layout_constraintEnd_toEndOf="@+id/tvSuggestion1"
-        app:layout_constraintTop_toBottomOf="@+id/tvSuggestion1" />
-
-    <TextView
-        android:id="@+id/tvSuggestion3"
-        style="@style/S14"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/bg_white_3_perc_rounded_10dp"
-        android:lineHeight="17sp"
-        android:paddingHorizontal="12dp"
-        android:paddingVertical="10dp"
-        android:text="@string/text_low_calorie_snacks_for_me"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/tvSuggestion2"
-        app:layout_constraintStart_toStartOf="@+id/tvSuggestion2"
-        app:layout_constraintTop_toBottomOf="@+id/tvSuggestion2" />
 
     <ImageView
         android:id="@+id/imageView128"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_lifeoslogo_luna_dash" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_lifeos_logo_dash" />
 
+    <View
+        android:id="@+id/view43"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="-2dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/textView232"
+        app:layout_constraintStart_toEndOf="@id/imageView128"
+        app:layout_constraintTop_toTopOf="@+id/textView232" />
+
+    <ImageView
+        android:id="@+id/ivVoice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="12dp"
+        android:layout_marginEnd="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_mic_lifeos_luna_dash" />
+
+    <ImageView
+        android:id="@+id/ivChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="12dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ivVoice"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_add_chat_lifeos_luna_dash" />
+
+    <TextView
+        android:id="@+id/textView232"
+        style="@style/S16"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="#787878"
+        android:text="@string/text_talk_to_lifeos"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ivChat"
+        app:layout_constraintStart_toEndOf="@+id/view43"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

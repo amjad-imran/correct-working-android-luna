@@ -192,7 +192,8 @@ sealed class OSummaryHealthOverviewClickEnum {
     data class UpdateOneTapVitalsCardState(val measureState: TapMeasureState?) :
         OSummaryHealthOverviewClickEnum()
 
-    object LifeOsCardClicked: OSummaryHealthOverviewClickEnum()
+    object LifeOsChatClicked: OSummaryHealthOverviewClickEnum()
+    object LifeOsVoiceClicked: OSummaryHealthOverviewClickEnum()
 
 }
 
@@ -797,9 +798,14 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         HomeRecyclerViewHolder(binding) {
 
         fun bind(data: OHealthOverview.LifeOsCard){
-            binding.root.setOnClickListener {
-                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.LifeOsCardClicked)
+            binding.ivChat.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.LifeOsChatClicked)
             }
+
+            binding.ivVoice.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.LifeOsVoiceClicked)
+            }
+
         }
 
     }

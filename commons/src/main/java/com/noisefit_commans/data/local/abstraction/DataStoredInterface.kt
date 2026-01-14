@@ -614,6 +614,8 @@ interface DataStoredInterface {
     fun isLifeOsOnboardInitiated(): Boolean
     fun setLifeOsOnboardInitiated(isInitiated: Boolean?)
 
+    fun isLifeOsOnboardCompleted(isCompleted: Boolean?): Int
+
     fun setLifeOsOnboardData(data: OnBoardQuesGetResponse?)
 
     fun getLifeOsOnboardData(): OnBoardQuesGetResponse?

@@ -287,6 +287,7 @@ private const val NUDGE_CYCLE_TRACKER_DATA = "NUDGE_CYCLE_TRACKER_DATA"
 private const val NUDGE_CYCLE_TRACKER_API_TIMESTAMP = "NUDGE_CYCLE_TRACKER_API_TIMESTAMP"
 
 private const val LIFEOS_ONBOARD_INITIATED = "LIFEOS_ONBOARD_INITIATED"
+private const val LIFEOS_ONBOARD_COMPLETED = "LIFEOS_ONBOARD_COMPLETED"
 private const val LIFEOS_ONBOARD_QUES_DATA = "LIFEOS_ONBOARD_QUES_DATA"
 
 private const val WHATS_NEW_DASH_CARD_INTERACTION_DONE = "WHATS_NEW_DASH_CARD_INTERACTION_DONE"
@@ -907,6 +908,7 @@ class DataStoredImpl
         mPrefs.edit()?.remove(NUDGE_CYCLE_TRACKER_DATA)?.apply()
         mPrefs.edit()?.remove(NUDGE_CYCLE_TRACKER_API_TIMESTAMP)?.apply()
         mPrefs.edit()?.remove(LIFEOS_ONBOARD_INITIATED)?.apply()
+        mPrefs.edit()?.remove(LIFEOS_ONBOARD_COMPLETED)?.apply()
         mPrefs.edit()?.remove(LIFEOS_ONBOARD_QUES_DATA)?.apply()
 
         mPrefs.edit()?.remove(WHATS_NEW_DASH_CARD_INTERACTION_DONE)?.apply()
@@ -2522,6 +2524,16 @@ class DataStoredImpl
             return
         }
         mPrefs.edit().putBoolean(LIFEOS_ONBOARD_INITIATED, isInitiated).commit()
+    }
+
+    override fun isLifeOsOnboardCompleted(isCompleted: Boolean?): Int {
+        isCompleted?.let {
+            mPrefs.edit().putInt(LIFEOS_ONBOARD_COMPLETED,
+                if(it) 1
+                else 2
+            ).commit()
+        }
+        return mPrefs.getInt(LIFEOS_ONBOARD_COMPLETED, 0)
     }
 
     override fun setLifeOsOnboardData(data: OnBoardQuesGetResponse?) {
