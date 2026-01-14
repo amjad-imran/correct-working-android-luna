@@ -75,6 +75,7 @@ class LifeOSVoiceChatFragment :
     }
 
     override fun onPause() {
+        speechRecognizer?.stopListening()
         mp3Streamer.stop()
         super.onPause()
     }
@@ -105,6 +106,9 @@ class LifeOSVoiceChatFragment :
                 }
                 else -> {}
             }
+        }
+        binding.ivPersonalization.setOnClickListener {
+            navigate(R.id.choosePersonaVoiceFragment)
         }
     }
 

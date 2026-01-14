@@ -9,6 +9,7 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentChoosePersonaVoiceBinding
 import com.noisefit_commans.ui.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,6 +19,7 @@ class ChoosePersonaVoiceFragment :
     BaseFragment<FragmentChoosePersonaVoiceBinding>(FragmentChoosePersonaVoiceBinding::inflate) {
     private val viewModel: ChoosePersonaVoiceViewModel by viewModels()
     private var mediaPlayer: MediaPlayer? = null
+    private lateinit var currentPersona: String
     private val mAdapter by lazy {
         ChoosePersonaVoiceVpAdapter()
     }
@@ -36,8 +38,9 @@ class ChoosePersonaVoiceFragment :
             registerOnPageChangeCallback(
                 object : ViewPager2.OnPageChangeCallback() {
                     override fun onPageSelected(position: Int) {
-                        viewModel.personaData.value?.getOrNull(position)?.voiceUrl?.let { persona ->
-                            playMusic(persona)
+                        viewModel.personaData.value?.getOrNull(position)?.let { persona ->
+                            persona.persona_ai?.let { currentPersona = it }
+                            persona.voiceUrl?.let { playMusic(it) }
                         }
                     }
                 }
@@ -67,6 +70,11 @@ class ChoosePersonaVoiceFragment :
     override fun initListener() {
         binding.ivCross.setOnClickListener {
             navigateUpSafe()
+        }
+        binding.tvSelect.setOnClickListener {
+            viewModel.saveUserPersona(currentPersona)
+            navigateUpSafe()
+            navigate(R.id.lifeOsVoiceChatFragment)
         }
     }
 

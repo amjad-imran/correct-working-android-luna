@@ -409,6 +409,14 @@ class LifeOsDashFragment :
             navigate(frag, bundle)
         }
 
+        binding.ivVoiceAI.setOnClickListener {
+            navigate(if (mainViewModel.getUserSelectedPersona().isNotEmpty()) {
+                R.id.lifeOsVoiceChatFragment
+            } else {
+                R.id.choosePersonaVoiceFragment
+            })
+        }
+
         binding.lytToolbar.ivHistory.setOnClickListener {
             navigate(R.id.chatHistoryFragment)
         }

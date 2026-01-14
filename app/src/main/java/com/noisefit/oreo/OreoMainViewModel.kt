@@ -1774,4 +1774,6 @@ constructor(
         }
     }
 
+    fun getUserSelectedPersona() = ringDataStore.getUserSelectedPersona()
+
 }

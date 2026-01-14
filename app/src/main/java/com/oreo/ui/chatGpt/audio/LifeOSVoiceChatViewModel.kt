@@ -12,6 +12,7 @@ import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.Token
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
@@ -36,7 +37,8 @@ import javax.inject.Inject
 class LifeOSVoiceChatViewModel @Inject constructor(
     val resourceProvider: ResourcesProvider,
     val localDataStore: DataStoredInterface,
-    val oreoDeviceRepository: OreoDeviceRepository
+    val oreoDeviceRepository: OreoDeviceRepository,
+    val ringDataStore: RingDataStore,
     ) : BaseViewModel() {
     val fetchInProgress = MutableLiveData<Boolean>()
     private val _chatMessages = MutableLiveData<MutableList<VoiceChatMessage>>(mutableListOf())
@@ -140,7 +142,8 @@ class LifeOSVoiceChatViewModel @Inject constructor(
     private fun buildSseRequest(prompt: String): Request {
         val userToken = localDataStore.getUserToken()
         val baseUrl = "${BuildConfig.BASE_URL_NEW}/luna/ai/v1/stream"
-        val url = "$baseUrl?message=$prompt&thread_id=$threadId&response_type=audio&persona=onyx"
+        val persona = ringDataStore.getUserSelectedPersona()
+        val url = "$baseUrl?message=$prompt&thread_id=$threadId&response_type=audio&persona=$persona"
 
         val requestBuilder = Request.Builder()
             .url(url)

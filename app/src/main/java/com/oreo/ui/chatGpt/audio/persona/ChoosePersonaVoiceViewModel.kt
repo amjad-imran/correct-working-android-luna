@@ -6,16 +6,19 @@ import androidx.lifecycle.viewModelScope
 import com.noisefit.data.remote.base.Resource
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
+import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.chatGPT.voice.persona.ItemPersonaVoiceResponse
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ChoosePersonaVoiceViewModel @Inject constructor(
     private val oreoDeviceRepository: OreoDeviceRepository,
+    private val ringDataStore: RingDataStore,
 ): BaseViewModel() {
 
     private val _personaData = MutableLiveData<List<ItemPersonaVoiceResponse>>()
@@ -27,8 +30,6 @@ class ChoosePersonaVoiceViewModel @Inject constructor(
 
     private fun loadPersonaData() {
         viewModelScope.launch {
-//            createDummyData()
-            // Uncomment this line if you want to fetch data from your repository
              oreoDeviceRepository.getPersonaVoiceData().collect { resource ->
                  when (resource) {
                      is Resource.GenericError -> {
@@ -107,5 +108,9 @@ class ChoosePersonaVoiceViewModel @Inject constructor(
         // Parse the JSON and update LiveData with the dummy data
         /*val personaVoiceResponse = Gson().fromJson(jsonString, PersonaVoiceResponse::class.java)
         _personaData.value = personaVoiceResponse*/
+    }
+
+    fun saveUserPersona(persona: String){
+        viewModelScope.launch(Dispatchers.IO) { ringDataStore.setUserSelectedPersona(persona) }
     }
 }

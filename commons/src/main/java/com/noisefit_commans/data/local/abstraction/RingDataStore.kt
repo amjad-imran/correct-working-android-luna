@@ -68,6 +68,7 @@ interface RingDataStore {
     fun isShowDeviceIntro(): Boolean
     fun setShowDeviceIntro(boolean: Boolean)
 
+    fun setUserSelectedPersona(persona: String)
 
     fun addToRecordDeleteList(sportStartTime: Long)
     fun removeRecordDeleteList()
@@ -116,5 +117,5 @@ interface RingDataStore {
     fun saveSleepException(state: Boolean)
     fun getSleepException(): Boolean
     //
-
+    fun getUserSelectedPersona(): String
 }

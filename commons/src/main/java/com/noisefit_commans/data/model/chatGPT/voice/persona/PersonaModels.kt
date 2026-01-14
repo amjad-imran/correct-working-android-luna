@@ -8,5 +8,6 @@ data class ItemPersonaVoiceResponse(
     @SerializedName("persona_title") val personaTitle: String? = null,
     @SerializedName("persona_features") val personaFeatures: List<String>? = null,
     @SerializedName("img_url") val imgUrl: String? = null,
-    @SerializedName("voice_url") val voiceUrl: String? = null
+    @SerializedName("voice_url") val voiceUrl: String? = null,
+    @SerializedName("persona_ai") val persona_ai: String? = null
 )
