@@ -12,6 +12,7 @@ import com.noisefit.luna.databinding.FragmentChatHistoryBinding
 import com.noisefit_commans.common.MarginTopItemDecoration
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.ScreenUtils
@@ -121,9 +122,15 @@ class ChatHistoryFragment :
             if (it.isEmpty()) {
                 binding.ivNoData.visible()
                 binding.textNoData.visible()
+                binding.textNoDataDesc.visible()
+                binding.searchBox.invisible()
+                binding.etSearch.invisible()
             } else {
                 binding.ivNoData.gone()
                 binding.textNoData.gone()
+                binding.textNoDataDesc.gone()
+                binding.searchBox.visible()
+                binding.etSearch.visible()
             }
         }
 
