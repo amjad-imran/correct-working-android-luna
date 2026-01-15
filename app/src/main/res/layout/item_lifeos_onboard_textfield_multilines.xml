@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/back_modal_new"
         android:gravity="top"
-        android:hint="@string/text_description"
+        android:hint="@string/text_type_your_answer_freely"
         android:inputType="textCapSentences|textMultiLine"
         android:lines="5"
         android:maxLength="1000"
