@@ -5,17 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
-import com.noisefit.luna.R
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.ai.ChatHistoryItem
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,6 +24,8 @@ class ChatHistoryViewModel @Inject constructor(
 
     private val _chatHistory = MutableLiveData<List<ChatHistoryItem>>()
     val chatHistory: LiveData<List<ChatHistoryItem>> = _chatHistory
+
+    var masterList: List<ChatHistoryItem> = emptyList()
 
     fun getChatHistory() {
         viewModelScope.launch {
@@ -68,7 +67,10 @@ class ChatHistoryViewModel @Inject constructor(
 
     private fun generateData(data: List<ChatHistoryItem>) {
 
-        val result = ArrayList<ChatHistoryItem>()
+        _chatHistory.postValue(data)
+
+
+        /*val result = ArrayList<ChatHistoryItem>()
         val datesSet = HashSet<String>()
         val todayDate = LocalDate.now().toString()
         val yesterdayDate = LocalDate.now().minusDays(1).toString()
@@ -99,7 +101,7 @@ class ChatHistoryViewModel @Inject constructor(
                 isHeader = false
             })
         }
-        _chatHistory.postValue(result)
+        _chatHistory.postValue(result)*/
     }
 
     fun deleteChatHistory(threadId: String) {
@@ -136,7 +138,7 @@ class ChatHistoryViewModel @Inject constructor(
         return data.count()
     }
 
-    fun deleteChatHistoryServer(threadId: String) {
+    fun deleteChatHistoryServer(threadId: String, onDeleteSuccess: () -> Unit) {
         viewModelScope.launch {
             oreoDeviceRepository.deleteChatHistory(threadId).collect { resource ->
                 when (resource) {
@@ -154,7 +156,7 @@ class ChatHistoryViewModel @Inject constructor(
                             (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                 object : BinaryActionCallback {
                                     override fun yes() {
-                                        deleteChatHistoryServer(threadId)
+                                        deleteChatHistoryServer(threadId, onDeleteSuccess)
                                     }
 
                                     override fun no() {
@@ -166,7 +168,8 @@ class ChatHistoryViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.let {
-                            deleteChatHistory(threadId)
+//                            deleteChatHistory(threadId)
+                            onDeleteSuccess()
                         }
                     }
                 }

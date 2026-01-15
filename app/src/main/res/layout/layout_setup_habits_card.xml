@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="12dp"
+    android:paddingHorizontal="16dp"
+    android:background="@drawable/bg_layout_lifeos_progress_onboard">
+
+    <ImageView
+        android:id="@+id/ivBack"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:background="@drawable/back_modal_new_round"
+        android:padding="10dp"
+        android:src="@drawable/ic_arrow_right_onboarding_circadian"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView215"
+        style="@style/S14"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="4dp"
+        android:fontFamily="@font/gilroy_medium"
+        android:textFontWeight="500"
+        android:text="@string/text_setup_habits"
+        android:textSize="14sp"
+        android:drawableLeft="@drawable/ic_setup_habits"
+        android:drawablePadding="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:includeFontPadding="true"
+        app:layout_constraintBottom_toBottomOf="@+id/ivBack"
+        app:layout_constraintEnd_toStartOf="@+id/ivBack"
+        app:layout_constraintTop_toTopOf="@+id/ivBack" />
+
+    <TextView
+        android:id="@+id/textView216"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/S12"
+        android:lineHeight="15sp"
+        android:textColor="#C3C3C3"
+        android:textFontWeight="500"
+        android:fontFamily="@font/gilroy_medium"
+        android:layout_marginTop="4dp"
+        android:text="Add your daily habits and let LifeOS understand what shapes your wellbeing."
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/textView215"
+        app:layout_constraintTop_toBottomOf="@+id/ivBack" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

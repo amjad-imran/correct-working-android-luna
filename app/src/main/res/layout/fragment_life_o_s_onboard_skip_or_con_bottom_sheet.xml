@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.oreo.ui.lifeos.onboarding.LifeOSOnboardSkipOrConBottomSheet">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/list"
+            style="@style/ModalStyleDialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_12dp"
+            android:layout_marginTop="@dimen/dimen_12dp"
+            android:layout_marginEnd="@dimen/dimen_12dp"
+            android:layout_marginBottom="@dimen/dimen_12dp"
+            tools:context=".ui.onboarding.PrivacyBottomDialogFragment"
+            tools:listitem="@layout/fragment_privacy_bottom_dialog_list_dialog_item">
+
+            <View
+                android:id="@+id/view40"
+                android:layout_width="40dp"
+                android:layout_height="2dp"
+                android:layout_marginTop="4dp"
+                android:alpha="0.2"
+                android:background="@drawable/back_bottom_sheet_drag"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvTitle"
+                style="@style/H4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/side_margin"
+                android:layout_marginTop="28dp"
+                android:text="@string/text_are_you_sure"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view40" />
+
+            <TextView
+                android:id="@+id/tvDesc"
+                style="@style/S14"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginHorizontal="32dp"
+                android:text="@string/text_these_answers_help_lifeos_understand_your_routines_goals_and_day_to_day_lifestyle"
+                android:textColor="#EAEAEA"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+
+
+            <Button
+                android:id="@+id/btnSaveAndExit"
+                style="@style/SecondaryButtonStyle"
+                android:layout_width="0dp"
+                android:layout_marginStart="@dimen/dimen_24dp"
+                android:layout_marginTop="36dp"
+                android:layout_marginEnd="@dimen/dimen_12dp"
+                android:layout_marginBottom="@dimen/dimen_24dp"
+                android:text="@string/text_save_amp_exit"
+                app:backgroundTint="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btnContinue"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDesc" />
+
+            <Button
+                android:id="@+id/btnContinue"
+                style="@style/PrimaryButtonStyle"
+                android:layout_width="0dp"
+                android:layout_marginStart="@dimen/dimen_12dp"
+                android:layout_marginTop="36dp"
+                android:layout_marginEnd="@dimen/dimen_24dp"
+                android:layout_marginBottom="@dimen/dimen_24dp"
+                android:text="@string/text_continue_setup"
+                app:backgroundTint="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btnSaveAndExit"
+                app:layout_constraintTop_toBottomOf="@+id/tvDesc" />=
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+</layout>

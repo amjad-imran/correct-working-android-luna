@@ -1,20 +1,26 @@
 package com.oreo.ui.custom;
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+
+@Parcelize
 data class StressCombineModel(
     val sections: List<Section>? = null,
     val items: List<Item>? = null,
     val high: Int = 0,
     val medium: Int = 0
-)
+) : Parcelable
 
+@Parcelize
 data class Item(
     val `value`: Int,
     val index: Int,
     val minValue: Int = 0,
     val maxValue: Int = 0
-)
+) : Parcelable
 
+@Parcelize
 data class Section(
     var type: String,
     var start: Int,
@@ -23,4 +29,4 @@ data class Section(
     val imageRes: Int,
     val imageUrl: String? = null,
     var count: Int? = null
-)
+) : Parcelable

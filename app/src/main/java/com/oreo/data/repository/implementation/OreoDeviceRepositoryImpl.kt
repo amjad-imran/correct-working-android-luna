@@ -204,4 +204,12 @@ class OreoDeviceRepositoryImpl(
             remoteDataSource.getCredentials(url)
         }
     }
+
+    override suspend fun markAiMessageState(jsonObject: JsonObject): Flow<Resource<BaseApiResponse<Any>?>> {
+        return safeApiCallFlow(dispatcher) {
+            val url =
+                "${com.noisefit.luna.BuildConfig.BASE_URL_NEW}/luna/ai/v1/chat-review"
+            remoteDataSource.markAiMessageState(url,jsonObject)
+        }
+    }
 }

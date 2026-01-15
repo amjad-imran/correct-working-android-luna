@@ -28,6 +28,7 @@ import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.OAddWorkout
 import com.oreo.data.model.ServerUserHealthData
+import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -86,6 +87,7 @@ class OAddWorkoutViewModel
     var workoutListResponse: ArrayList<OWorkoutListModal> ?= null
 
     var editData : ItemTimelineResponseModel ?= null
+    var habitData: HabitsByDateResponse.Options ?= null
 
     val onDeleteSuccess = MutableLiveData<Event<Boolean>>()
 
@@ -561,8 +563,13 @@ class OAddWorkoutViewModel
                     list.find { it.activityType.equals(editData?.metadata?.activityType, true) }?.let {
                         updateDefaultWorkout.postValue(Event(it))
                     }
-                }else {
-
+                }
+                else if(habitData!=null){
+                    list.find { it.activityType.equals(habitData?.workoutType, true) }?.let {
+                        updateDefaultWorkout.postValue(Event(it))
+                    }
+                }
+                else {
                     walkingWorkout?.let { walk ->
                         updateDefaultWorkout.postValue(Event(walk))
                     }

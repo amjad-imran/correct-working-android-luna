@@ -1,38 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <ImageView
+        android:id="@+id/imageView115"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/back_ai_chat_history"
-        android:padding="12dp">
+        android:src="@drawable/ic_history_ai"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
-        <TextView
-            android:id="@+id/tvHeadline"
-            style="@style/S16"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:textColor="#e6ffffff"
-            tools:text="Topic Headline" />
+    <TextView
+        android:id="@+id/tvTime"
+        style="@style/S12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginStart="3dp"
+        android:textColor="#CCFFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView115"
+        app:layout_constraintStart_toEndOf="@+id/imageView115"
+        app:layout_constraintTop_toTopOf="@+id/imageView115"
+        tools:text="Just now" />
 
-        <TextView
-            android:id="@+id/tvMessage"
-            style="@style/S12"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/tvHeadline"
-            android:layout_marginTop="6dp"
-            android:lineSpacingExtra="6sp"
-            android:textColor="#70ffffff"
-            tools:text="Lorem ipsum dolor sit amet, consecteturert adipiscing elit, sed do eiusmod." />
+    <TextView
+        android:id="@+id/tvTitle"
+        style="@style/S14"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:lineSpacingExtra="3sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView115"
+        tools:text="Lorem ipsum dolor sit amet, consecteturert adipiscing elit, sed do eiusmod." />
 
+    <TextView
+        android:id="@+id/tvMessage"
+        style="@style/S12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:lineSpacingExtra="1sp"
+        android:textColor="#99FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+        tools:text="Lorem ipsum dolor sit amet, consecteturert adipiscing elit, sed do eiusmod." />
 
-    </RelativeLayout>
+    <ImageView
+        android:id="@+id/ivOption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/tvTime"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvTime"
+        app:srcCompat="@drawable/ic_option_menu" />
 
+    <include
+        android:id="@+id/include36"
+        layout="@layout/layout_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvMessage" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

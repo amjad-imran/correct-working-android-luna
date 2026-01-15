@@ -30,6 +30,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
@@ -52,6 +53,7 @@ import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
@@ -79,8 +81,11 @@ import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.data.model.sleep.HealthTrend
+import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.oreo.ui.chatGpt.AITopics
+import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.chatGpt.SummaryStates
+import com.oreo.ui.chatGpt.audio.AudioAiFragment
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 import com.oreo.ui.custom.CirclePagerIndicatorDecoration
 import com.oreo.ui.custom.SnapHelperOneByOne
@@ -90,10 +95,12 @@ import com.oreo.ui.home.summary.HomeRecyclerViewHolder
 import com.oreo.ui.home.summary.OSummaryHealthOverviewAdapter
 import com.oreo.ui.home.summary.OSummaryHealthOverviewClickEnum
 import com.oreo.ui.home.summary.update.UpdateLaunchMode
+import com.oreo.ui.lifeos.LifeOsChatFragment
 import com.oreo.ui.sleep.nap.BOTTOM_NAP_RESULT
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
+import com.oreo.util.uiUtils.GenerateCustomDrawables
 import com.oreo.widget.water.WaterWidgetUpdater
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -244,6 +251,7 @@ class SummaryDataFragmentToday :
                 viewModel.circadianGraphData = mainViewModel.circadianGraphData
                 viewModel.timeTrackerActivities = mainViewModel.timeTrackerActivities
                 viewModel.nudgeCircadianData = mainViewModel.nudgeCircadianData
+                viewModel.habitTimelineData = mainViewModel.habitTimelineData
                 setUi(dash.first, dash.second, dash.third)
             }
         }
@@ -269,6 +277,25 @@ class SummaryDataFragmentToday :
         } else {
             binding.contentMain.lytCustomHomeScreen.root.gone()
         }
+
+        /*val whatsNewCardInteractDone = viewModel.localDataStore.isWhatsNewCardInteractionDone()
+        if(!whatsNewCardInteractDone && viewModel.registerDate > 6){
+            binding.contentMain.lytWhatsNewCard.lytActionBtn.background =
+                GenerateCustomDrawables.chatHistorySearchBar(
+                    borderWidth = 2f,
+                    backgroundColor = "#1F9FB1FF".toColorInt(),
+                    cornerRadius = 12f.dpToPixel(),
+                    borderStartColor = "#1EFFFFFF".toColorInt(),
+                    borderEndColor = "#00FFFFFF".toColorInt(),
+                )
+
+            val versionNo = "14.0.1"
+            binding.contentMain.lytWhatsNewCard.tvVersion.text =
+                getString(R.string.text_version_val, versionNo)
+            binding.contentMain.lytWhatsNewCard.root.visible()
+        } else {
+            binding.contentMain.lytWhatsNewCard.root.gone()
+        }*/
 
         val measurements = viewModel.localDataStore.getMeasurementsData()
 
@@ -441,14 +468,17 @@ class SummaryDataFragmentToday :
                 }
 
                 OSummaryHealthOverviewClickEnum.StressCardClicked -> {
+                    mainViewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.insight_clicked,
+                        HashMap<String, Any>().apply {
+                            this["insight"] = "stress"
+                        }
+                    )
                     if (viewModel.getStressWalkthroughShownStatus()) {
                         navigate(R.id.fragmentOStressDetails)
                     } else {
                         navigate(R.id.stressSplashFragment)
                     }
-                    mainViewModel.sessionManager.logMoEngageAppEvent(
-                        MoEngageLunaAppEvents.homepage_stress
-                    )
                 }
 
                 is OSummaryHealthOverviewClickEnum.OnNapClicked -> {
@@ -464,7 +494,18 @@ class SummaryDataFragmentToday :
                             MoEngageLunaAppEvents.homepage_luna_ai
                         )
 
-                        if (viewModel.isChatSplashShown()) {
+                        val (frag, bundle) = LifeOsChatFragment.getStartData(
+                            threadId = null,
+                            userMessage = null,
+                            title = null,
+                            aiTopic = AITopics.GENERAL,
+                            srcKey = "homepage",
+                        )
+                        navigate(
+                            frag, bundle
+                        )
+
+                        /*if (viewModel.isChatSplashShown()) {
                             navigate(
                                 R.id.aiTopQuestionsFragment,
                                 bundleOf("aiTopic" to AITopics.GENERAL)
@@ -473,7 +514,7 @@ class SummaryDataFragmentToday :
                         } else {
                             navigate(R.id.aiChatOnboardFragment)
                             //navigate(R.id.chatSplashFragment)
-                        }
+                        }*/
                     }
                 }
 
@@ -659,7 +700,10 @@ class SummaryDataFragmentToday :
 
                 OSummaryHealthOverviewClickEnum.OnHeartRateCardClicked -> {
                     viewModel.sessionManager.logMoEngageAppEvent(
-                        MoEngageLunaAppEvents.homepage_heart_rate
+                        MoEngageLunaAppEvents.insight_clicked,
+                        HashMap<String, Any>().apply {
+                            this["insight"] = "heart_rate"
+                        }
                     )
                     navigate(R.id.fragmentHeartRateDetails)
                 }
@@ -704,6 +748,67 @@ class SummaryDataFragmentToday :
                             )
                         }
                     }
+                }
+
+                OSummaryHealthOverviewClickEnum.LifeOsChatClicked -> {
+                    viewModel.handleLifeOsCardClicked{ isOnboardDone ->
+                        if(isOnboardDone) {
+                            val (frag, bundle) = LifeOsChatFragment.getStartData(
+                                threadId = null,
+                                userMessage = null,
+                                title = null,
+                                aiTopic = AITopics.GENERAL
+                            )
+                            navigate(
+                                frag, bundle
+                            )
+                        }
+                        else{
+                            mainViewModel.navigateTo(BottomNavOption.LUNA_AI)
+                        }
+                    }
+                }
+
+                OSummaryHealthOverviewClickEnum.LifeOsVoiceClicked -> {
+                    viewModel.handleLifeOsCardClicked{ isOnboardDone ->
+                        if(isOnboardDone) {
+                            val (frag, bundle) = AudioAiFragment.getStartData(
+                                PlanType.NONE
+                            )
+                            navigate(frag, bundle)
+                        }
+                        else{
+                            mainViewModel.navigateTo(BottomNavOption.LUNA_AI)
+                        }
+                    }
+                }
+
+                OSummaryHealthOverviewClickEnum.OnViewAllHabitTimelineNewClicked -> {
+                    navigate(
+                        R.id.yourHabitsTimelineFragment,
+                        bundleOf(
+                            "date" to mainViewModel.selectedDate,
+                        )
+                    )
+                }
+
+                OSummaryHealthOverviewClickEnum.OnSetupHabitsTimelineNewClicked -> {
+                    navigate(R.id.addHabitsFragment)
+                }
+
+                is OSummaryHealthOverviewClickEnum.OnCheckHabitTimelineNewClicked -> {
+                    val curHabit = type.item
+                    viewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.habits_tick_clicked,
+                        hashMapOf(
+                            "category" to "${curHabit.type}"
+                        )
+                    )
+
+                    handleOnCheckHabitTimelineClicked(
+                        curHabit,
+                        mainViewModel.selectedDate
+                    )
                 }
             }
         }
@@ -838,6 +943,213 @@ class SummaryDataFragmentToday :
         }
     }
 
+    private fun handleOnCheckHabitTimelineClicked(
+        habit: HabitsByDateResponse.Options,
+        selectedDate: String?
+    ) {
+        when(habit.type){
+            "workout" -> {
+                val activityType = when(habit.workoutType) {
+                    "freestyle_workout" -> "freestyle"
+                    "outdoor_running" -> "running"
+                    "indoor_running" -> "running"
+                    "outdoor_cycling" -> "bicycling"
+                    "indoor_cycling" -> "bicycling"
+                    else -> null
+                }
+                navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to habit.type,
+                        "srcKey" to "habits_timeline",
+                        "habitData" to if(activityType==null) habit else habit.copy(workoutType = activityType)
+                    )
+                )
+            }
+
+            "supplements" -> {
+                navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to habit.type,
+                        "srcKey" to "habits_timeline",
+                        "editData" to null,
+                        "lunaOption" to habit.options
+                    )
+                )
+            }
+
+            "alcohol" -> {
+                navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to "alcohol",
+                        "srcKey" to "habits_timeline",
+                        "editData" to null,
+                        "lunaOption" to null
+                    )
+                )
+            }
+
+            "caffeine" -> {
+                navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to CircadianAlignmentViewModel.caffeine_window_key,
+                        "srcKey" to "habits_timeline",
+                        "editData" to null,
+                        "lunaOption" to null
+                    )
+                )
+            }
+
+            "light_exposure" -> {
+                navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to CircadianAlignmentViewModel.light_exposure_key,
+                        "srcKey" to "habits_timeline",
+                        "editData" to null,
+                        "lunaOption" to null
+                    )
+                )
+            }
+
+            "recovery" -> {
+                navigate(
+                    R.id.addActivityTimelineFragment,
+                    bundleOf(
+                        "showTimeline" to false,
+                        "key" to habit.type,
+                        "srcKey" to "habits_timeline",
+                        "editData" to null,
+                        "lunaOption" to habit.options
+                    )
+                )
+            }
+
+            "sleep_env" -> {
+                val timelineData = mainViewModel.localDataStore.getTimelineActivitiesData()
+                val mostRecentSleep = timelineData?.find { it.event.equals("sleep") }
+                if (mostRecentSleep == null) {
+                    val mostRecentNap = timelineData?.find { it.event.equals("nap") }
+                    if (mostRecentNap == null) {
+                        navigate(
+                            R.id.addActivityTimelineFragment,
+                            bundleOf(
+                                "showTimeline" to false,
+                                "key" to CircadianAlignmentViewModel.sleep_key,
+                                "srcKey" to "habits_timeline",
+                                "editData" to null,
+                                "lunaOption" to null
+                            )
+                        )
+                    } else {
+                        mostRecentNap.canBeEditedOrDeleted = 1
+                        navigate(
+                            R.id.addActivityTimelineFragment,
+                            bundleOf(
+                                "showTimeline" to false,
+                                "key" to mostRecentNap.event,
+                                "srcKey" to null,
+                                "editData" to mostRecentNap
+                            )
+                        )
+                    }
+                } else {
+                    mostRecentSleep.canBeEditedOrDeleted = 1
+                    navigate(
+                        R.id.addActivityTimelineFragment,
+                        bundleOf(
+                            "showTimeline" to false,
+                            "key" to mostRecentSleep.event,
+                            "srcKey" to null,
+                            "editData" to mostRecentSleep
+                        )
+                    )
+                }
+            }
+
+            /*"sleep_env" -> {
+                val timelineData = mainViewModel.localDataStore.getTimelineActivitiesData()
+                val mostRecentSleep = timelineData?.find { it.event.equals("sleep") }
+                if (mostRecentSleep == null) {
+                    val mostRecentNap = timelineData?.find { it.event.equals("nap") }
+                    if (mostRecentNap == null) {
+                        navigate(
+                            R.id.addActivityTimelineFragment,
+                            bundleOf(
+                                "showTimeline" to false,
+                                "key" to CircadianAlignmentViewModel.sleep_key,
+                                "srcKey" to "habits_timeline",
+                                "editData" to null,
+                                "lunaOption" to null
+                            )
+                        )
+                    } else {
+                        val mRecentNap = mostRecentNap.copy().apply {
+                            val lunaTrackingOptionIds = this.metadata?.lunaTrackingOptionIds
+                            if(lunaTrackingOptionIds.isNullOrEmpty()){
+                                this.metadata?.copy(
+                                    lunaTrackingOptionIds = listOf(habit.timeTrackerOptionId!!)
+                                )
+                            }else{
+                                this.metadata?.copy(
+                                    lunaTrackingOptionIds = ArrayList(lunaTrackingOptionIds).apply {
+                                        add(habit.timeTrackerOptionId)
+                                    }
+                                )
+                            }
+                        }
+
+                        mRecentNap.canBeEditedOrDeleted = 1
+                        navigate(
+                            R.id.addActivityTimelineFragment,
+                            bundleOf(
+                                "showTimeline" to false,
+                                "key" to mRecentNap.event,
+                                "srcKey" to null,
+                                "editData" to mRecentNap
+                            )
+                        )
+                    }
+                } else {
+                    val mRecentSleep = mostRecentSleep.copy().apply {
+                        val lunaTrackingOptionIds = this.metadata?.lunaTrackingOptionIds
+                        if(lunaTrackingOptionIds.isNullOrEmpty()){
+                            this.metadata?.copy(
+                                lunaTrackingOptionIds = listOf(habit.timeTrackerOptionId!!)
+                            )
+                        }else{
+                            this.metadata?.copy(
+                                lunaTrackingOptionIds = ArrayList(lunaTrackingOptionIds).apply {
+                                    add(habit.timeTrackerOptionId)
+                                }
+                            )
+                        }
+                    }
+
+                    mRecentSleep.canBeEditedOrDeleted = 1
+                    navigate(
+                        R.id.addActivityTimelineFragment,
+                        bundleOf(
+                            "showTimeline" to false,
+                            "key" to mRecentSleep.event,
+                            "srcKey" to null,
+                            "editData" to mRecentSleep
+                        )
+                    )
+                }
+            }*/
+
+            else -> {}
+        }
+    }
 
     override fun initListener() {
 
@@ -851,6 +1163,19 @@ class SummaryDataFragmentToday :
             lytCustomHomeScreen.root.gone()
             viewModel.localDataStore.setDisplayEditHomeScreenCard(false)
         }
+
+        /*val whatsNewCard = binding.contentMain.lytWhatsNewCard
+        whatsNewCard.apply {
+            ivClose.setOnClickListener {
+                whatsNewCard.root.gone()
+                viewModel.localDataStore.setIsWhatsNewCardInteractionDone(true)
+            }
+
+            lytActionBtn.setOnClickListener {
+                ivClose.performClick()
+                mainViewModel.navigateTo(BottomNavOption.LUNA_AI)
+            }
+        }*/
 
         /*binding.contentMain.lytNotificationCard.ivNotificationSteps.setOnClickListener {
 
@@ -1116,6 +1441,18 @@ class SummaryDataFragmentToday :
                     viewModel.updateActivityDataCard(activityData)?.let { card ->
                         healthOverviewAdapter.updateData(card)
                     }
+                }
+            }
+        }
+
+        mainViewModel.habitsData.observe(this){
+            it.getContent()?.let { listData ->
+                viewModel.habitTimelineData = listData
+                healthOverviewAdapter.getTimelineNewCardData()?.let { cardData ->
+                    val newData = cardData.copy(
+                        habitListData = listData
+                    )
+                    healthOverviewAdapter.updateData(newData)
                 }
             }
         }

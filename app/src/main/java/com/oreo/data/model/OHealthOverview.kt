@@ -16,6 +16,7 @@ import com.oreo.data.model.health.ODashboardReadinessModel
 import com.oreo.data.model.health.ODashboardSleepModel
 import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.data.model.timeline.ItemTimelineModel
+import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.oreo.ui.chatGpt.SummaryStates
 import com.oreo.ui.custom.HRCombineModel
 import com.oreo.ui.custom.StressCombineModel
@@ -211,6 +212,11 @@ sealed class OHealthOverview {
         val listData: List<ItemTimelineResponseModel>?
     ) : OHealthOverview()
 
+    data class TimelineNewDash(
+        val listData: List<ItemTimelineResponseModel>?,
+        val habitListData: List<HabitsByDateResponse.Options> ?= null,
+    ) : OHealthOverview()
+
     class CardTrackFemaleHealth(
         val state: FemaleHealthCardState
     ) : OHealthOverview()
@@ -242,6 +248,8 @@ sealed class OHealthOverview {
     enum class VitalsType {
         HR, STRESS, SPO2, SKIN_TEMP
     }
+
+    object LifeOsCard: OHealthOverview()
 
 }
 

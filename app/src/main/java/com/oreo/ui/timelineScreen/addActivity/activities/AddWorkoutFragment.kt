@@ -60,6 +60,7 @@ class AddWorkoutFragment :
         //   viewModel.convertAutoSport(args.autoSport)
         //} else {
         viewModel.editData = arguments?.getParcelable("editData")
+        viewModel.habitData = arguments?.getParcelable("habitData")
         viewModel.userDayData =
             mainViewModel.userHealthData[DateFormats.getTodaysDateString(10)]
         //}

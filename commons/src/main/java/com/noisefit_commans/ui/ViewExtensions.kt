@@ -25,6 +25,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.annotation.StringRes
 import androidx.annotation.UiThread
@@ -914,5 +915,10 @@ fun View.fadeOut(duration: Long = 2000, onEnd: () -> Unit = {}) {
         override fun onAnimationRepeat(animation: Animator) {}
     })
     fadeOut.start()
+}
+
+fun EditText.hideKeyboard() {
+    val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+    imm?.hideSoftInputFromWindow(this.windowToken, 0)
 }
 

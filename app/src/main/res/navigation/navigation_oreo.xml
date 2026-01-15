@@ -935,6 +935,13 @@
             android:defaultValue="@null"
             app:argType="com.noisefit.data.model.AiWorkout"
             app:nullable="true" />
+
+        <argument
+            android:name="insightHeader1"
+            android:defaultValue="@null"
+            app:argType="com.noisefit.data.model.AiHeaderInsight1"
+            app:nullable="true" />
+
         <argument
             android:name="planType"
             app:argType="com.oreo.ui.chatGpt.PlanType" />
@@ -1269,10 +1276,79 @@
             app:popUpTo="@id/workoutPlansFragment"
             app:popUpToInclusive="true" />
     </fragment>
-    <fragment
+    <!--<fragment
         android:id="@+id/navigation_lunaZoneFragment"
         android:name="com.oreo.ui.chatGpt.LunaZoneFragment"
-        android:label="fragment_luna_zone" />
+        android:label="fragment_luna_zone" />-->
+
+    <fragment
+        android:id="@+id/navigation_lifeOsFragment"
+        android:name="com.oreo.ui.lifeos.LifeOsDashFragment">
+        <action
+            android:id="@+id/action_navigation_lifeOsFragment_to_lifeOsChatFragment"
+            app:destination="@id/lifeOsChatFragment"
+            app:popUpTo="@id/navigation_lifeOsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/lifeOsChatFragment"
+        android:name="com.oreo.ui.lifeos.LifeOsChatFragment"
+        android:label="fragment_life_os_chat"
+        tools:layout="@layout/fragment_life_os_chat" >
+        <action
+            android:id="@+id/action_lifeOsChatFragment_self"
+            app:destination="@id/lifeOsChatFragment"
+            app:popUpTo="@id/lifeOsChatFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="threadId"
+            app:argType="string" />
+
+        <argument
+            android:name="userMessage"
+            app:argType="string" />
+
+        <argument
+            android:name="aiTopic"
+            app:argType="com.oreo.ui.chatGpt.AITopics" />
+        <argument
+            android:name="meal"
+            android:defaultValue="@null"
+            app:argType="com.noisefit.data.model.AiMeals"
+            app:nullable="true" />
+        <argument
+            android:name="workout"
+            android:defaultValue="@null"
+            app:argType="com.noisefit.data.model.AiWorkout"
+            app:nullable="true" />
+        <argument
+            android:name="headerInsight1"
+            android:defaultValue="@null"
+            app:argType="com.noisefit.data.model.AiHeaderInsight1"
+            app:nullable="true" />
+        <argument
+            android:name="planType"
+            app:argType="com.oreo.ui.chatGpt.PlanType" />
+        <argument
+            android:name="sourceKey"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/lifeOsInsightFrag"
+        android:name="com.oreo.ui.lifeos.LifeOsInsightFrag"
+        android:label="fragment_life_os_insight"
+        tools:layout="@layout/fragment_life_os_insight">
+    </fragment>
+    <fragment
+        android:id="@+id/lifeOsInsightDetailsFragment"
+        android:name="com.oreo.ui.lifeos.LifeOsInsightDetailsFragment"
+        android:label="fragment_life_os_insight_details"
+        tools:layout="@layout/fragment_life_os_insight_details">
+        <argument
+            android:name="insightData"
+            app:argType="com.oreo.ui.lifeos.charts.InsightCardUiModel" />
+    </fragment>
     <fragment
         android:id="@+id/aiSummaryFragment"
         android:name="com.oreo.ui.chatGpt.summary.AiSummaryFragment"
@@ -1508,6 +1584,12 @@
             android:defaultValue="@null"
             app:argType="string"
             app:nullable="true" />
+
+        <argument
+            android:name="habitData"
+            android:defaultValue="@null"
+            app:argType="com.oreo.data.model.timeline.habits.HabitsByDateResponse$Options"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/circadianHowItWorksDetailFragment"
@@ -1571,5 +1653,99 @@
             app:argType="com.oreo.data.model.dataSharingVendorModels.DataSharingVendorListResponseItem" />
 
     </fragment>
+    <fragment
+        android:id="@+id/lifeOsOnboardingQuesFragment"
+        android:name="com.oreo.ui.lifeos.onboarding.LifeOsOnboardingQuesFragment"
+        android:label="fragment_life_os_onboarding_ques"
+        tools:layout="@layout/fragment_life_os_onboarding_ques" />
+    <fragment
+        android:id="@+id/lifeOsOnboardBeginFragment"
+        android:name="com.oreo.ui.lifeos.onboarding.LifeOsOnboardBeginFragment"
+        android:label="fragment_life_os_onboard_begin"
+        tools:layout="@layout/fragment_life_os_onboard_begin" />
+    <dialog
+        android:id="@+id/lifeOSOnboardSkipOrConBottomSheet"
+        android:name="com.oreo.ui.lifeos.onboarding.LifeOSOnboardSkipOrConBottomSheet"
+        android:label="fragment_life_o_s_onboard_skip_or_con_bottom_sheet"
+        tools:layout="@layout/fragment_life_o_s_onboard_skip_or_con_bottom_sheet" />
+    <fragment
+        android:id="@+id/lifeOsOnboardFinishFragment"
+        android:name="com.oreo.ui.lifeos.onboarding.LifeOsOnboardFinishFragment"
+        android:label="fragment_life_os_onboard_finish"
+        tools:layout="@layout/fragment_life_os_onboard_finish" />
+    <fragment
+        android:id="@+id/addHabitsFragment"
+        android:name="com.oreo.ui.timelineScreen.habits.AddHabitsFragment"
+        android:label="fragment_add_habits"
+        tools:layout="@layout/fragment_add_habits" >
+
+        <argument
+            android:name="selectedOptions"
+            app:argType="com.oreo.data.model.timeline.habits.HabitsByDateResponse"
+            app:nullable="true"
+            android:defaultValue="@null" />
+
+        <argument
+            android:name="srcKey"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+
+    </fragment>
+    <dialog
+        android:id="@+id/addHabitsBeginBottomSheet"
+        android:name="com.oreo.ui.timelineScreen.habits.AddHabitsBeginBottomSheet"
+        android:label="AddHabitsBeginBottomSheet" />
+    <dialog
+        android:id="@+id/addHabitsSuccessBottomSheet"
+        android:name="com.oreo.ui.timelineScreen.habits.AddHabitsSuccessBottomSheet"
+        android:label="AddHabitsSuccessBottomSheet" >
+
+        <argument
+            android:name="successTitle"
+            app:argType="string" />
+
+        <argument
+            android:name="ButtonText"
+            app:argType="string" />
+
+    </dialog>
+    <dialog
+        android:id="@+id/helpUsImproveBottomSheet"
+        android:name="com.oreo.ui.lifeos.insightsLvl1.HelpUsImproveBottomSheet"
+        android:label="fragment_help_us_improve_bottom_sheet"
+        tools:layout="@layout/fragment_help_us_improve_bottom_sheet" >
+
+    </dialog>
+
+    <fragment
+        android:id="@+id/personalizeLifeOsFragment"
+        android:name="com.oreo.ui.lifeos.onboarding.PersonalizeLifeOsFragment"
+        android:label="fragment_personalize_life_os"
+        tools:layout="@layout/fragment_personalize_life_os" />
+    <fragment
+        android:id="@+id/yourHabitsTimelineFragment"
+        android:name="com.oreo.ui.timelineScreen.habits.yourHabits.YourHabitsTimelineFragment"
+        android:label="fragment_your_habits_timeline"
+        tools:layout="@layout/fragment_your_habits_timeline" >
+
+        <argument
+            android:name="selectedOptions"
+            app:argType="com.oreo.data.model.timeline.habits.HabitsByDateResponse"
+            app:nullable="true"
+            android:defaultValue="@null" />
+
+        <argument
+            android:name="date"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+
+    </fragment>
+    <dialog
+        android:id="@+id/addHabitsDiscardChangesBS"
+        android:name="com.oreo.ui.timelineScreen.habits.AddHabitsDiscardChangesBS"
+        android:label="AddHabitsDiscardChangesBS" />
+
 
 </navigation>

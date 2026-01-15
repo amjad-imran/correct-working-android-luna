@@ -4,6 +4,8 @@ import com.google.gson.JsonObject
 import com.noisefit.data.model.AiMealResponse
 import com.noisefit.data.model.AiWorkoutResponse
 import com.noisefit.data.model.GoalModel
+import com.oreo.data.model.timeline.habits.HabitsByDateResponse
+import com.oreo.data.model.timeline.habits.HabitsResponse
 import com.noisefit.data.model.referral.ReferralCodeResponse
 import com.noisefit.data.model.referral.ReferralInfoResponse
 import com.noisefit_commans.data.model.timeline.MealAiResponse
@@ -78,6 +80,8 @@ import com.oreo.data.model.circadian.CircadianResponseModel
 import com.noisefit_commans.data.model.timeline.TimelineScreenResponse
 import com.oreo.data.model.dataSharingVendorModels.DataSharingVendorListResponseItem
 import com.oreo.data.model.downloadMyData.DownloadMyDataResponse
+import com.noisefit_commans.data.model.lifeos.onboarding.OnBoardQuesGetResponse
+import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -572,6 +576,12 @@ interface NetworkService {
         @Url url: String
     ): BaseApiResponse<AiCreds>
 
+    @POST
+    suspend fun markAiMessageState(
+        @Url url: String,
+        @Body requestObject: JsonObject
+    ): BaseApiResponse<Any>
+
 
     @GET
     suspend fun generateThreadTitle(
@@ -865,6 +875,38 @@ interface NetworkService {
         @Body req: JsonObject
     ): BaseApiResponse<Any>
 
+    @GET
+    suspend fun getLifeOsOnboardQuesAnsList(
+        @Url url: String,
+    ): BaseApiResponse<OnBoardQuesGetResponse>
+
+    @GET
+    suspend fun getInsightLvl1List(
+        @Url url: String,
+    ): BaseApiResponse< List<List<InsightItemResponseModel>> >
+
+    @POST
+    suspend fun submitLifeOsOnboardQuesAnsList(
+        @Url url: String,
+        @Body req: JsonObject
+    ): BaseApiResponse<Any>
+
+    @GET
+    suspend fun getAllUserHabits(
+        @Url url: String
+    ): BaseApiResponse<HabitsResponse>
+
+    @GET
+    suspend fun getUserHabitsByDate(
+        @Url url: String,
+        @Query("searched_date") date: String
+    ): BaseApiResponse<HabitsByDateResponse>
+
+    @POST
+    suspend fun submitUserHabits(
+        @Url url: String,
+        @Body req: JsonObject
+    ): BaseApiResponse<Any>
     /**
      * ---------------------------------------------------------------------------------
      *                                Oreo Services End

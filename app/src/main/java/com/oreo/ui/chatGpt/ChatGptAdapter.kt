@@ -34,11 +34,44 @@ import android.text.style.ForegroundColorSpan
 import android.text.style.TypefaceSpan
 import android.graphics.Color
 import com.bumptech.glide.Glide
+import android.app.Dialog
+import android.view.View
+import android.view.Window
+import android.view.WindowManager
+import android.widget.ImageView
+import android.graphics.drawable.ColorDrawable
+import android.content.Context
+import com.noisefit.luna.databinding.ItemAiHeaderInsight1Binding
+import java.util.UUID
+
 // Removed standalone attachment bindings; sent message now renders attachment inline
 
 
 class ChatGptAdapter :
     RecyclerView.Adapter<ChatGptViewItemsHolder>() {
+
+    var itemClickListener: ChatClickListener? = null
+
+    private val likedMessageIds = mutableSetOf<java.util.UUID>()
+    private val dislikedMessageIds = mutableSetOf<java.util.UUID>()
+
+    fun markLiked(id: java.util.UUID) {
+        likedMessageIds.add(id)
+        dislikedMessageIds.remove(id)
+        notifyItemChangedById(id)
+    }
+
+    fun markDisliked(id: java.util.UUID) {
+        dislikedMessageIds.add(id)
+        likedMessageIds.remove(id)
+        notifyItemChangedById(id)
+    }
+
+    private fun notifyItemChangedById(id: java.util.UUID) {
+        val list = asyncListDiffer.currentList
+        val index = list.indexOfFirst { it.id == id }
+        if (index != -1) notifyItemChanged(index)
+    }
 
     private val asyncListDiffer =
         AsyncListDiffer(this, object : DiffUtil.ItemCallback<ChatGptOverview>() {
@@ -88,8 +121,8 @@ class ChatGptAdapter :
 //            recyclerView.scrollToPosition(currentList.size - 1)
 //        }
 //    }
-    var itemClickListener: ((item: ChatGptOverview, position: Int) -> Unit)? =
-        null
+    /*var itemClickListener: ((item: ChatGptOverview, position: Int) -> Unit)? =
+        null*/
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -144,6 +177,14 @@ class ChatGptAdapter :
                 )
             )
 
+            R.layout.item_ai_header_insight_1 -> ChatGptViewItemsHolder.ChatInsight1HeaderViewHolder(
+                ItemAiHeaderInsight1Binding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
 
             else -> throw IllegalArgumentException("Invalid ViewType Provided")
         }
@@ -162,7 +203,9 @@ class ChatGptAdapter :
 
             is ChatGptViewItemsHolder.ChatMessageReceivedViewHolder -> holder.bind(
                 asyncListDiffer.currentList[position] as ChatGptOverview.ReceivedMessage,
-                position
+                position,
+                likedMessageIds.contains((asyncListDiffer.currentList[position] as ChatGptOverview.ReceivedMessage).id),
+                dislikedMessageIds.contains((asyncListDiffer.currentList[position] as ChatGptOverview.ReceivedMessage).id)
             )
 
             is ChatGptViewItemsHolder.ChatMessageRetryViewHolder -> holder.bind(
@@ -184,6 +227,11 @@ class ChatGptAdapter :
                 asyncListDiffer.currentList[position] as ChatGptOverview.HeaderMeal,
                 position
             )
+
+            is ChatGptViewItemsHolder.ChatInsight1HeaderViewHolder -> holder.bind(
+                asyncListDiffer.currentList[position] as ChatGptOverview.HeaderInsight1,
+                position
+            )
         }
     }
 
@@ -198,7 +246,18 @@ class ChatGptAdapter :
             is ChatGptOverview.ThinkingMessage -> R.layout.item_chat_message_thinking
             is ChatGptOverview.HeaderWorkout -> R.layout.item_ai_header_workout
             is ChatGptOverview.HeaderMeal -> R.layout.item_ai_header_meal
+            is ChatGptOverview.HeaderInsight1 -> R.layout.item_ai_header_insight_1
         }
+    }
+
+    fun checkRateState(id: java.util.UUID): Boolean {
+        if (likedMessageIds.contains(id)) {
+            return true
+        }
+        if (dislikedMessageIds.contains(id)) {
+            return true
+        }
+        return false
     }
 }
 
@@ -206,8 +265,7 @@ class ChatGptAdapter :
 sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    var itemClickListener: ((item: ChatGptOverview, position: Int) -> Unit)? =
-        null
+    var itemClickListener: ChatClickListener? = null
 
     class ChatMessageSentViewHolder(private val binding: ItemChatMessageSentListBinding) :
         ChatGptViewItemsHolder(binding) {
@@ -226,6 +284,13 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
                     Glide.with(binding.cardImage.context)
                         .load(src)
                         .into(binding.ivImage)
+
+                    // Show full-screen preview on tap
+                    binding.cardImage.setOnClickListener {
+                        if (src.isNotEmpty()) {
+                            showImagePreviewDialog(binding.cardImage.context, src)
+                        }
+                    }
                 } else {
                     binding.cardImage.gone()
                     binding.lytDoc.visible()
@@ -278,12 +343,12 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
             data: ChatGptOverview.RetryMessage,
             position: Int
         ) {
-            binding.logo.loadImage(binding.logo.context, R.drawable.ic_chat_error)
+            //binding.logo.loadImage(binding.logo.context, R.drawable.ic_chat_error)
             binding.tvMessage.text = data.message
 
-            binding.tvRetry.setOnClickListener {
+            /*binding.tvRetry.setOnClickListener {
                 itemClickListener?.invoke(data, bindingAdapterPosition)
-            }
+            }*/
         }
     }
 
@@ -292,7 +357,9 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
 
         fun bind(
             data: ChatGptOverview.ReceivedMessage,
-            position: Int
+            position: Int,
+            liked: Boolean,
+            disliked: Boolean
         ) {
             binding.apply {
                 tvMessage.visible()
@@ -308,7 +375,33 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
                     .build()*/
 
                 markwon.setMarkdown(tvMessage, data.message)
-                //logo.visible()
+
+                if(data.isGenerating){
+                    binding.ivLike.gone()
+                    binding.ivDislike.gone()
+                    binding.ivCopy.gone()
+                }else{
+                    binding.ivLike.visible()
+                    binding.ivDislike.visible()
+                    binding.ivCopy.visible()
+                }
+
+                binding.ivLike.setImageResource(
+                    if (liked) R.drawable.ic_thumbs_up_v2_filled else R.drawable.ic_thumbs_up_v2_lifeos_chat
+                )
+                binding.ivDislike.setImageResource(
+                    if (disliked) R.drawable.ic_thumbs_down_v2_filled else R.drawable.ic_thumbs_down_v2
+                )
+
+                binding.ivCopy.setOnClickListener {
+                    itemClickListener?.onCopyMessage(data)
+                }
+                binding.ivLike.setOnClickListener {
+                    itemClickListener?.onLikeMessage(data)
+                }
+                binding.ivDislike.setOnClickListener {
+                    itemClickListener?.onDislikeMessage(data)
+                }
             }
         }
 
@@ -323,15 +416,29 @@ sealed class ChatGptViewItemsHolder(binding: ViewBinding) :
         ) {
             binding.apply {
                 lottie.repeatCount = LottieDrawable.INFINITE
-                lottie.setAnimation(R.raw.anim_ai_thinking)
+                lottie.setAnimation(R.raw.anim_ai_thinking_2)
                 lottie.playAnimation()
             }
         }
 
     }
 
-    
+    class ChatInsight1HeaderViewHolder(private val binding: ItemAiHeaderInsight1Binding) :
+        ChatGptViewItemsHolder(binding) {
 
+        fun bind(
+            allData: ChatGptOverview.HeaderInsight1,
+            position: Int
+        ) {
+            val data = allData.data
+            binding.apply {
+                tvHeader.text = data.headerText
+                tvTextMain.text = data.mainText
+                tvFooter.text = data.footerText
+            }
+        }
+
+    }
 
 }
 
@@ -359,19 +466,27 @@ private object ChatMarkwonProvider {
                                 StyleSpan(Typeface.BOLD),
                                 AbsoluteSizeSpan(spToPx(ctx, 18), false)
                             )
+
                             2 -> arrayOf(
                                 StyleSpan(Typeface.BOLD),
                                 AbsoluteSizeSpan(spToPx(ctx, 16), false)
                             )
+
                             3 -> arrayOf(
+                                StyleSpan(Typeface.BOLD),
                                 AbsoluteSizeSpan(spToPx(ctx, 14), false)
                             )
-                            in 4..Int.MAX_VALUE -> arrayOf(
-                                AbsoluteSizeSpan(spToPx(ctx, 14), false),
+                            4 -> arrayOf(
+                                AbsoluteSizeSpan(spToPx(ctx, 14), false)
+                            )
+
+                            in 5..Int.MAX_VALUE -> arrayOf(
+                                AbsoluteSizeSpan(spToPx(ctx, 12), false),
                                 ForegroundColorSpan(
                                     Color.argb((0.7f * 255).toInt(), 255, 255, 255)
                                 )
                             )
+
                             else -> emptyArray()
                         }
                     }
@@ -380,7 +495,38 @@ private object ChatMarkwonProvider {
             .build()
     }
 }
+
 private fun spToPx(context: android.content.Context, sp: Int): Int {
     val scaledDensity = context.resources.displayMetrics.scaledDensity
     return (sp * scaledDensity).toInt()
+}
+
+private fun showImagePreviewDialog(context: Context, imageUrl: String) {
+    val dialog = Dialog(context)
+    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+    dialog.setContentView(com.noisefit.luna.R.layout.dialog_image_preview)
+    dialog.window?.apply {
+        setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
+        setBackgroundDrawable(ColorDrawable(android.graphics.Color.BLACK))
+        clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+    }
+
+    val imageView: ImageView = dialog.findViewById(com.noisefit.luna.R.id.ivPreview)
+    val close: View = dialog.findViewById(com.noisefit.luna.R.id.ivClose)
+
+    Glide.with(context)
+        .load(imageUrl)
+        .into(imageView)
+
+    close.setOnClickListener { dialog.dismiss() }
+    imageView.setOnClickListener { /* swallow to avoid dismiss */ }
+    dialog.setCancelable(true)
+    dialog.show()
+}
+
+
+interface ChatClickListener {
+    fun onCopyMessage(message: com.oreo.data.model.ChatGptOverview.ReceivedMessage)
+    fun onLikeMessage(message: com.oreo.data.model.ChatGptOverview.ReceivedMessage)
+    fun onDislikeMessage(message: com.oreo.data.model.ChatGptOverview.ReceivedMessage)
 }

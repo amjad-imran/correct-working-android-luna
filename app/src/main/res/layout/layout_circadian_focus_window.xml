@@ -107,14 +107,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="@string/text_know_more_with_luna_ai"
+            android:text="@string/text_know_more_with_lifeos"
             android:textColor="#B3FFFFFF" />
 
         <ImageView
             android:id="@+id/imageView82"
             android:layout_width="18dp"
             android:layout_height="18dp"
-            app:srcCompat="@drawable/image_ai_thinking" />
+            app:srcCompat="@drawable/ic_lifeos_star" />
     </LinearLayout>
 
 

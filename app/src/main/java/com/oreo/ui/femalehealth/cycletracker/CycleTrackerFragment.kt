@@ -14,6 +14,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.google.android.material.tabs.TabLayoutMediator
@@ -46,6 +47,7 @@ import com.oreo.ui.femalehealth.cycletracker.history.INFO_LOG
 import com.oreo.ui.femalehealth.cycletracker.insight.CycleInsightLaunchMode
 import com.oreo.ui.femalehealth.cycletracker.log.CycleLogFragment
 import com.oreo.ui.femalehealth.cycletracker.streak.CycleDetailsFragment
+import com.oreo.ui.lifeos.LifeOsChatFragment
 import com.oreo.ui.readiness.NudgeBannerListener
 import com.oreo.ui.sleep.banner.OreoSleepBannerAdapter
 import com.oreo.ui.workout.details.NudgeBgColor
@@ -408,12 +410,11 @@ class CycleTrackerFragment :
                     return
                 }
 
-                val (frag, bundle) = ChatGptFragment.getStartData(
-                    null,
-                    null,
-                    getString(R.string.text_build_me_a_workout_plan),
-                    null,
-                    AITopics.GENERAL,
+                val (frag, bundle) = LifeOsChatFragment.getStartData(
+                    threadId = null,
+                    userMessage = getString(R.string.text_build_me_a_workout_plan),
+                    title = null,
+                    aiTopic = AITopics.GENERAL,
                     planType = PlanType.WORKOUT
                 )
                 navigate(frag, bundle)
@@ -436,12 +437,11 @@ class CycleTrackerFragment :
                     context.showShortToast(getString(R.string.text_luna_ai_message))
                     return
                 }
-                val (frag, bundle) = ChatGptFragment.getStartData(
-                    null,
-                    null,
-                    getString(R.string.text_build_me_a_weekly_diet_plan),
-                    null,
-                    AITopics.GENERAL,
+                val (frag, bundle) = LifeOsChatFragment.getStartData(
+                    threadId = null,
+                   userMessage =  getString(R.string.text_build_me_a_weekly_diet_plan),
+                    title = null,
+                    aiTopic = AITopics.GENERAL,
                     planType = PlanType.DIET
                 )
                 navigate(frag, bundle)
@@ -958,9 +958,19 @@ class CycleTrackerFragment :
                                     this["source"] = "cycle"
                                 }
                             )
-                            navigate(
+                            /*navigate(
                                 R.id.aiTopQuestionsFragment,
                                 bundleOf("aiTopic" to AITopics.MENSTRUAL_HEALTH)
+                            )*/
+                            val (frag, bundle) = LifeOsChatFragment.getStartData(
+                                threadId = null,
+                                userMessage = null,
+                                title = null,
+                                aiTopic = AITopics.MENSTRUAL_HEALTH,
+                                srcKey = "cycle_tracker"
+                            )
+                            navigate(
+                                frag, bundle
                             )
                         }
                     }

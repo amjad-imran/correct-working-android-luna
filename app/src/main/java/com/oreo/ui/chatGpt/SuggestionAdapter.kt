@@ -4,16 +4,18 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.databinding.RowSuggestionChipBinding
+import com.oreo.data.model.ai.TopQuestions
 
-class SuggestionAdapter(val dataSet: List<String>, val onQuesClicked: (ques: String) -> Unit) :
+class SuggestionAdapter(val onQuesClicked: (ques: String) -> Unit) :
     RecyclerView.Adapter<SuggestionAdapter.ViewHolder>() {
+    private val mDataSet = ArrayList<TopQuestions>()
 
     inner class ViewHolder(val binding: RowSuggestionChipBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(data: String) {
-            binding.tvQues.text = data
+        fun bind(data: TopQuestions) {
+            binding.tvQues.text = data.question
             binding.root.setOnClickListener {
-                onQuesClicked(data)
+                onQuesClicked(data.question?:"")
             }
         }
     }
@@ -24,10 +26,17 @@ class SuggestionAdapter(val dataSet: List<String>, val onQuesClicked: (ques: Str
         return ViewHolder(view)
     }
 
-    override fun getItemCount(): Int = dataSet.size
+    override fun getItemCount(): Int = mDataSet.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(dataSet[position])
+        holder.bind(mDataSet[position])
+    }
+
+    fun setDataSet(it: List<TopQuestions>) {
+        mDataSet.clear()
+        mDataSet.addAll(it)
+        notifyDataSetChanged()
+
     }
 
 }

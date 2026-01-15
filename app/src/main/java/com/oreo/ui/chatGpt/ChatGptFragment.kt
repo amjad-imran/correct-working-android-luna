@@ -33,6 +33,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.noisefit.data.model.AiHeaderInsight1
 import com.noisefit.data.model.AiMeals
 import com.noisefit.data.model.AiWorkout
 import com.noisefit.luna.R
@@ -76,6 +77,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             aiTopic: AITopics,
             meal: AiMeals? = null,
             workout: AiWorkout? = null,
+            headerInsight1: AiHeaderInsight1? = null,
             planType: PlanType? = null,
             attachmentUri: String? = null,
             attachmentMime: String? = null,
@@ -91,6 +93,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                 putSerializable("planType", planType ?: PlanType.NONE)
                 putParcelable("meal", meal)
                 putParcelable("workout", workout)
+                putParcelable("headerInsight1", headerInsight1)
 
                 attachmentUri.let { putString("attachmentUri", it) }
                 attachmentMime.let { putString("attachmentMime", it) }
@@ -121,6 +124,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
         viewModel.userMessage = args.userMessage
         viewModel.meal = args.meal
         viewModel.workout = args.workout
+        viewModel.headerInsight1 = args.insightHeader1
         viewModel.planType = args.planType
 
         try {
@@ -168,9 +172,9 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                 this.rvSuggestions.context,
                 LinearLayoutManager.HORIZONTAL, false
             )
-            this.rvSuggestions.adapter = SuggestionAdapter(suggestions) {
+            /*this.rvSuggestions.adapter = SuggestionAdapter(suggestions) {
                 sendMessage(it)
-            }
+            }*/
         }
     }
 
@@ -199,7 +203,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
             adapter = mAdapter
         }
 
-        mAdapter.itemClickListener = { item, position ->
+       /* mAdapter.itemClickListener = { item, position ->
             when (item) {
                 is ChatGptOverview.SentMessage -> {
 
@@ -221,7 +225,7 @@ class ChatGptFragment : BaseFragment<FragmentChatGptBinding>(FragmentChatGptBind
                 is ChatGptOverview.HeaderMeal -> {}
                 is ChatGptOverview.HeaderWorkout -> {}
             }
-        }
+        }*/
     }
 
     override fun initListener() {

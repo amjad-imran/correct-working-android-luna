@@ -1,0 +1,128 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_life_os"
+    tools:context="com.oreo.ui.lifeos.onboarding.LifeOsOnboardBeginFragment">
+
+    <ImageView
+        android:id="@+id/ivBackBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/ic_back_lifeos_onbaord"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView120"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="88dp"
+        android:src="@drawable/ic_lifeos_icon_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView209"
+        style="@style/S16"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="4dp"
+        android:lineHeight="19sp"
+        android:text="@string/text_the_ultimate_operating_system_for_your_life"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView120" />
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnBegin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView209">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/lytCuratedInsights"
+                layout="@layout/layout_lifeos_onboard_curated_insights"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@+id/lytLogYourMeals"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <include
+                android:id="@+id/lytLogYourMeals"
+                layout="@layout/layout_lifeos_onboard_landing_img_text"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/lytBiomarkers"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/lytCuratedInsights"
+                app:layout_constraintTop_toTopOf="@+id/lytCuratedInsights"
+                app:layout_constraintVertical_chainStyle="spread_inside" />
+
+            <include
+                android:id="@+id/lytBiomarkers"
+                layout="@layout/layout_lifeos_onboard_landing_img_text"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/lytCuratedInsights"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/lytCuratedInsights"
+                app:layout_constraintTop_toBottomOf="@+id/lytLogYourMeals" />
+
+            <include
+                android:id="@+id/lytHealthAssistant"
+                layout="@layout/layout_lifeos_onboard_landing_img_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/lytBiomarkers"
+                app:layout_constraintStart_toStartOf="@id/lytBiomarkers"
+                app:layout_constraintTop_toBottomOf="@id/lytCuratedInsights" />
+
+            <include
+                android:id="@+id/lytEffectsMoodAndSleep"
+                layout="@layout/layout_lifeos_onboard_landing_img_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="@id/lytCuratedInsights"
+                app:layout_constraintStart_toStartOf="@id/lytCuratedInsights"
+                app:layout_constraintTop_toTopOf="@id/lytHealthAssistant" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <Button
+        android:id="@+id/btnBegin"
+        style="@style/PrimaryButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_marginBottom="56dp"
+        android:paddingHorizontal="44dp"
+        android:text="@string/text_begin"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

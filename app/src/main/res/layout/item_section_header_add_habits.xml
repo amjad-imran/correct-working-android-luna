@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tvSectionTitle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="@style/S14"
+    android:layout_marginTop="24dp"
+    android:layout_marginBottom="8dp"
+    tools:text="Your Recent Entries"
+    android:textColor="#A7A7A7" />

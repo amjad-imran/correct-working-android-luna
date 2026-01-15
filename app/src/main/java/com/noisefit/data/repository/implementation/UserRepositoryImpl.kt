@@ -3,6 +3,7 @@ package com.noisefit.data.repository.implementation
 import android.net.Uri
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
 import com.noisefit.data.dataConverter.DataUnitConverter
 import com.noisefit.data.dataConverter.OfflineDataMapper
 import com.noisefit.data.googleFit.GoogleFitDataObservers
@@ -11,6 +12,7 @@ import com.noisefit.data.local.db.abstraction.KeyValueDataSource
 import com.noisefit.data.local.db.abstraction.KeyValueDataType
 import com.noisefit.data.local.db.fromJson
 import com.noisefit.data.model.GoalModel
+import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.noisefit_commans.data.model.timeline.MealAiResponse
 import com.noisefit.data.model.timeline.SupplementsListResponse
 import com.noisefit.data.remote.CityData
@@ -54,6 +56,8 @@ import com.noisefit_commans.utils.DateFormats
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.dataSharingVendorModels.DataSharingVendorListResponseItem
 import com.oreo.data.model.downloadMyData.DownloadMyDataResponse
+import com.noisefit_commans.data.model.lifeos.onboarding.OnBoardQuesGetResponse
+import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -749,6 +753,159 @@ class UserRepositoryImpl(
                 "${BuildConfig.OREO_BASE_URL}/vendors/v2/customers/consent",
                 req
             )
+        }
+    }
+
+    override suspend fun getLifeOsOnboardQuesAnsList(): Flow<Resource<BaseApiResponse<OnBoardQuesGetResponse>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.getLifeOsOnboardQuesAnsList(
+                "${BuildConfig.OREO_BASE_URL}/ai/v1/onboarding/questions"
+            )
+        }
+    }
+
+    override suspend fun submitLifeOsOnboardQuesAnsList(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.submitLifeOsOnboardQuesAnsList(
+                "${BuildConfig.OREO_BASE_URL}/ai/v1/onboarding/submit",
+                req
+            )
+        }
+    }
+
+    override suspend fun getInsightLvl1List(): Flow<Resource<BaseApiResponse<List<List<InsightItemResponseModel>>>>> {
+        
+        return flow { 
+            emit(Resource.Loading(true))
+
+            val type = KeyValueDataType.INSIGHTS_LIFE_OS_DATA
+            var resultData: List<List<InsightItemResponseModel>>? = null
+
+            val cacheResult = safeCacheCall(Dispatchers.IO){
+                val localData = keyValueDataSource.getData("", type)
+                    ?: return@safeCacheCall null
+
+                val lastCallTime = localData.getSafeLastSyncValue()
+
+                val shouldCallApi =
+                    lastCallTime.checkTimeDifferenceMoreNMinutes(15)
+                LOGS.d("FORCE_REFRESH should call api $shouldCallApi")
+
+                if(shouldCallApi){
+                    keyValueDataSource.removeDataByKey("", type)
+                    return@safeCacheCall null
+                }
+
+                if(localData.value == null){
+                    return@safeCacheCall null
+                }
+
+                return@safeCacheCall localData.value?.let {
+                    val type = object : TypeToken<List<List<InsightItemResponseModel>>>() {}.type
+                    Gson().fromJson<List<List<InsightItemResponseModel>>>(it, type)
+                }
+            }
+
+            cacheResult.collect { resource ->
+                when(resource){
+                    is CacheResult.GenericError -> {
+
+                    }
+                    is CacheResult.Success -> {
+                        resource.value?.let {
+                            resultData = it
+                        }
+                    }
+                }
+            }
+
+            if(resultData != null){
+                emit(Resource.Loading(false))
+                emit(
+                    Resource.Success(
+                        BaseApiResponse(
+                            data = resultData,
+                            message = ""
+                        )
+                    )
+                )
+                return@flow
+            }
+
+            val serverResult = safeApiCallFlow(dispatcher){
+                remoteDataSource.getInsightLvl1List(
+                    "${BuildConfig.OREO_BASE_URL}/ai/v2/insights/level1",
+                )
+            }
+
+            serverResult.collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        emit(Resource.GenericError(resource.message, resource.errorCode))
+                    }
+
+                    is Resource.Loading -> {
+                        emit(Resource.Loading(resource.loading))
+                    }
+
+                    is Resource.NetworkError -> {
+                        emit(Resource.NetworkError(resource.response, resource.code))
+                    }
+
+                    is Resource.Success -> {
+
+                        resource.data?.data?.let { response ->
+                            resultData = response
+                        }
+                    }
+                }
+            }
+
+            if(resultData != null){
+                safeCacheCall(Dispatchers.IO){
+                    keyValueDataSource.insertData(
+                        KeyValue(
+                            key = "",
+                            value = gson.toJson(resultData),
+                            type = type.name
+                        )
+                    )
+                }.collect { resource ->
+                    when (resource) {
+                        is CacheResult.Success -> {
+                            emit(Resource.Loading(false))
+                            emit(
+                                Resource.Success(
+                                    BaseApiResponse(
+                                        data = resultData,
+                                        message = "",
+                                    )
+                                )
+                            )
+                        }
+
+                        is CacheResult.GenericError -> {
+                            emit(Resource.GenericError(message = "Something went wrong", 0))
+                        }
+                    }
+                }
+            }
+            
+        }
+    }
+
+    override suspend fun submitInsightDislikeFeedbackData(req: JsonObject): Flow<Resource<BaseApiResponse<Any>>> {
+        return safeApiCallFlow(dispatcher) {
+            remoteDataSource.submitLifeOsOnboardQuesAnsList(
+                "${BuildConfig.OREO_BASE_URL}/--", // TODO: Replace with correct
+                req
+            )
+        }
+    }
+
+    override suspend fun getUserHabitsByDate(date: String): Flow<Resource<BaseApiResponse<HabitsByDateResponse>>> {
+        return safeApiCallFlow(Dispatchers.IO) {
+            remoteDataSource.getUserHabitsByDate("${BuildConfig.OREO_BASE_URL}/protean/v3/time-tracker/user-habits", date)
         }
     }
 

@@ -252,13 +252,14 @@ data class OreoSleepData(
         }
     }
 
+    @Parcelize
     class OreoSleepMovementDataBreakup(
         @SerializedName("start_time") var startTime: String? = null,
         @SerializedName("end_time") var endTime: String? = null,
         @SerializedName("movement_type") var movementType: String,
         @SerializedName("duration") var duration: Int = 0
 
-    ) {
+    ) : Parcelable {
         override fun toString(): String {
             return "OreoSleepMovementDataBreakup(startTime=$startTime, endTime=$endTime, movementType='$movementType', duration=$duration)"
         }

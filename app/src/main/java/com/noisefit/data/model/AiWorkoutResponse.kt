@@ -1,6 +1,7 @@
 package com.noisefit.data.model
 
 import android.os.Parcelable
+import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
 import kotlinx.parcelize.Parcelize
 
 data class AiWorkoutResponse(
@@ -21,4 +22,11 @@ data class AiWorkout(
     val description: String? = null,
 ) : Parcelable
 
+@Parcelize
+data class AiHeaderInsight1(
+    val headerText: String? = null,
+    val mainText: String? = null,
+    val footerText: String? = null,
+    var insightData: InsightItemResponseModel? = null,
+) : Parcelable
 

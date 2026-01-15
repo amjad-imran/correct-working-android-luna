@@ -18,6 +18,7 @@ import com.noisefit_commans.models.LocationDataModel
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.models.WatchFace
 import com.noisefit_commans.data.model.customHomeScreen.CustomHomeScreenModel
+import com.noisefit_commans.data.model.lifeos.onboarding.OnBoardQuesGetResponse
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.data.model.timeline.Measurements
 
@@ -610,6 +611,19 @@ interface DataStoredInterface {
     fun setNudgeCycleTrackerLastApiTimestamp(timestamp: Long)
     fun getNudgeCycleTrackerLastApiTimestamp() : Long
 
+    fun isLifeOsOnboardInitiated(): Boolean
+    fun setLifeOsOnboardInitiated(isInitiated: Boolean?)
+
+    fun isLifeOsOnboardCompleted(isCompleted: Boolean?): Int
+
+    fun setLifeOsOnboardData(data: OnBoardQuesGetResponse?)
+
+    fun getLifeOsOnboardData(): OnBoardQuesGetResponse?
+
+    fun isWhatsNewCardInteractionDone(): Boolean
+    fun setIsWhatsNewCardInteractionDone(isDone: Boolean)
+    fun setUserFirstTimeForAddHabits(isFirstTime: Boolean)
+    fun getUserFirstTimeForAddHabits(): Boolean
 }
 
 enum class AppTrackEvent {

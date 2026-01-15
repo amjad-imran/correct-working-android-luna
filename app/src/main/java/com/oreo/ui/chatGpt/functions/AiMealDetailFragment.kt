@@ -19,6 +19,7 @@ import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.chatGpt.audio.AudioAiFragment
+import com.oreo.ui.lifeos.LifeOsChatFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -61,12 +62,11 @@ class AiMealDetailFragment :
             }
 
             val ques = getWorkoutAiString(currentPos)
-            val (frag, bundle) = ChatGptFragment.getStartData(
-                null,
-                null,
-                ques,
-                null,
-                AITopics.GENERAL
+            val (frag, bundle) = LifeOsChatFragment.getStartData(
+                threadId = null,
+                userMessage = ques,
+                title = null,
+                aiTopic = AITopics.GENERAL
             )
             navigate(frag, bundle)
         }

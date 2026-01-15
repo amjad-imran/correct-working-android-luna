@@ -1,0 +1,53 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.oreo.ui.lifeos.onboarding.quesChildFrags.LifeOsOnboardTextFldOrNoneFragment">
+
+
+    <TextView
+        android:id="@+id/tvQues"
+        style="@style/S20"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="What other health goals do you have?" />
+
+    <EditText
+        android:id="@+id/etAnswer"
+        style="@style/H6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/back_modal_new"
+        android:gravity="top"
+        android:hint="@string/text_type_your_answer_freely"
+        android:inputType="textCapSentences|textMultiLine"
+        android:lines="5"
+        android:maxLength="1000"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp"
+        android:scrollHorizontally="false"
+        android:textColorHint="@color/white_60"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvQues" />
+
+    <TextView
+        android:id="@+id/tvNoIssues"
+        style="@style/S14"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_mcq_lifeos_onboard"
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etAnswer"
+        tools:text="No, I have nothing to report" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

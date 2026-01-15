@@ -2,7 +2,6 @@ package com.noisefit.data.local.dataStored.implementation
 
 
 import android.content.SharedPreferences
-import androidx.compose.ui.unit.min
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.noisefit.data.remote.response.CatWiseWatchFacesItem
@@ -48,6 +47,7 @@ import com.noisefit_commans.data.model.circadian.NudgeCircadianGraph
 import com.noisefit_commans.data.model.comfortDietWorkout.ComfortDietWorkoutModel
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.data.model.timeline.Measurements
+import com.noisefit_commans.data.model.lifeos.onboarding.OnBoardQuesGetResponse
 import java.time.LocalDate
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -286,6 +286,13 @@ private const val NUDGE_ACTIVITY_API_TIMESTAMP = "NUDGE_ACTIVITY_API_TIMESTAMP"
 private const val NUDGE_CYCLE_TRACKER_DATA = "NUDGE_CYCLE_TRACKER_DATA"
 private const val NUDGE_CYCLE_TRACKER_API_TIMESTAMP = "NUDGE_CYCLE_TRACKER_API_TIMESTAMP"
 
+private const val LIFEOS_ONBOARD_INITIATED = "LIFEOS_ONBOARD_INITIATED"
+private const val LIFEOS_ONBOARD_COMPLETED = "LIFEOS_ONBOARD_COMPLETED"
+private const val LIFEOS_ONBOARD_QUES_DATA = "LIFEOS_ONBOARD_QUES_DATA"
+
+private const val WHATS_NEW_DASH_CARD_INTERACTION_DONE = "WHATS_NEW_DASH_CARD_INTERACTION_DONE"
+
+private const val USER_FIRST_TIME_TO_ADD_HABITS = "user_first_time_to_add_habits"
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -900,6 +907,11 @@ class DataStoredImpl
         mPrefs.edit()?.remove(NUDGE_ACTIVITY_API_TIMESTAMP)?.apply()
         mPrefs.edit()?.remove(NUDGE_CYCLE_TRACKER_DATA)?.apply()
         mPrefs.edit()?.remove(NUDGE_CYCLE_TRACKER_API_TIMESTAMP)?.apply()
+        mPrefs.edit()?.remove(LIFEOS_ONBOARD_INITIATED)?.apply()
+        mPrefs.edit()?.remove(LIFEOS_ONBOARD_COMPLETED)?.apply()
+        mPrefs.edit()?.remove(LIFEOS_ONBOARD_QUES_DATA)?.apply()
+
+        mPrefs.edit()?.remove(WHATS_NEW_DASH_CARD_INTERACTION_DONE)?.apply()
 
         mPrefs.edit()?.remove(GOOGLE_FIT_STATUS)?.apply()
         mPrefs.edit()?.remove(GOOGLE_FIT_CROSSED)?.apply()
@@ -2501,5 +2513,51 @@ class DataStoredImpl
     override fun getNudgeCycleTrackerLastApiTimestamp(): Long {
         return mPrefs.getLong(NUDGE_CYCLE_TRACKER_API_TIMESTAMP, 0)
     }
+
+    override fun isLifeOsOnboardInitiated(): Boolean {
+        return mPrefs.getBoolean(LIFEOS_ONBOARD_INITIATED, false)
+    }
+
+    override fun setLifeOsOnboardInitiated(isInitiated: Boolean?) {
+        if(isInitiated == null){
+            mPrefs.edit()?.remove(LIFEOS_ONBOARD_INITIATED)?.commit()
+            return
+        }
+        mPrefs.edit().putBoolean(LIFEOS_ONBOARD_INITIATED, isInitiated).commit()
+    }
+
+    override fun isLifeOsOnboardCompleted(isCompleted: Boolean?): Int {
+        isCompleted?.let {
+            mPrefs.edit().putInt(LIFEOS_ONBOARD_COMPLETED,
+                if(it) 1
+                else 2
+            ).commit()
+        }
+        return mPrefs.getInt(LIFEOS_ONBOARD_COMPLETED, 0)
+    }
+
+    override fun setLifeOsOnboardData(data: OnBoardQuesGetResponse?) {
+        mPrefs.edit()?.putString(LIFEOS_ONBOARD_QUES_DATA, gson.toJson(data))?.apply()
+    }
+
+    override fun getLifeOsOnboardData(): OnBoardQuesGetResponse? {
+        return mPrefs.getString(LIFEOS_ONBOARD_QUES_DATA, null)
+            ?.let { Gson().fromJson<OnBoardQuesGetResponse>(it) }
+    }
+
+    override fun isWhatsNewCardInteractionDone(): Boolean {
+        return mPrefs.getBoolean(WHATS_NEW_DASH_CARD_INTERACTION_DONE, false)
+    }
+
+    override fun setIsWhatsNewCardInteractionDone(isDone: Boolean) {
+        mPrefs.edit().putBoolean(WHATS_NEW_DASH_CARD_INTERACTION_DONE, isDone).commit()
+    }
+
+    override fun setUserFirstTimeForAddHabits(isFirstTime: Boolean){
+        mPrefs.edit().putBoolean(USER_FIRST_TIME_TO_ADD_HABITS, isFirstTime).apply()
+    }
+
+    override fun getUserFirstTimeForAddHabits(): Boolean =
+        mPrefs.getBoolean(USER_FIRST_TIME_TO_ADD_HABITS, true)
 
 }

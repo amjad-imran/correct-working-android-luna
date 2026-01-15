@@ -20,8 +20,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardImage"
-            android:layout_width="138dp"
-            android:layout_height="92dp"
+            android:layout_width="260dp"
+            android:layout_height="142dp"
             android:layout_marginBottom="6dp"
             android:visibility="gone"
             tools:visibility="visible"
@@ -29,8 +29,8 @@
 
             <ImageView
                 android:id="@+id/ivImage"
-                android:layout_width="138dp"
-                android:layout_height="92dp"
+                android:layout_width="260dp"
+                android:layout_height="142dp"
                 android:scaleType="centerCrop" />
         </androidx.cardview.widget.CardView>
 
@@ -84,14 +84,15 @@
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="14dp">
+            app:cardBackgroundColor="#1AFFFFFF"
+            app:cardCornerRadius="12dp">
 
             <TextView
                 android:id="@+id/tvMessage"
                 style="@style/S16"
+                android:background="@color/transparent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/back_chat_user_message_ai"
                 android:lineSpacingExtra="6sp"
                 android:padding="12dp"
                 tools:text="Build me a diet plan from this pdf" />

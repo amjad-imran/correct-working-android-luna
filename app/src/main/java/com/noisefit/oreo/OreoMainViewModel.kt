@@ -66,11 +66,13 @@ import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.OreoActivityModel
 import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.OreoSleepModel
+import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.oreo.data.repository.AlarmRepository
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.data.usecases.GetHabitsByDateUseCase
 import com.oreo.ui.custom.HighlightState
 import com.oreo.ui.home.summary.PushLocalNotification
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -116,13 +118,13 @@ constructor(
     val alarmRepository: AlarmRepository,
     val femaleHealthRepository: FemaleHealthRepository,
     private val deviceRepository: DeviceRepository,
+    private val habitsByDateUC: dagger.Lazy<GetHabitsByDateUseCase>,
 ) : BaseViewModel() {
 
 
     var showSyncLoader: Boolean = true
     val FAB_ANIM_TIME = 500L
 
-    var isBottomNavGifPlaying = false
 
     var registerDate: Int = -1
     var temperatureBaseLine: Float? = null
@@ -219,6 +221,9 @@ constructor(
     val nudgeActivityData = MutableLiveData<Event<Nudges>>()
     val nudgeReadinessData = MutableLiveData<Event<Nudges>>()
     val nudgeCycleTrackerData = MutableLiveData<Event<Nudges>>()
+
+    val habitsData = MutableLiveData<Event<List<HabitsByDateResponse.Options>>>()
+    var habitTimelineData: List<HabitsByDateResponse.Options>? = null
 
 
     init {
@@ -769,6 +774,7 @@ constructor(
         if (!shouldRefresh) {
             val todayDate = getTodayDate()
             getUserHealthData(todayDate, todayDate)
+            getUserSavedHabits()
 //            getNudgeData()
         }
     }
@@ -1728,6 +1734,43 @@ constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun getUserSavedHabits(date:String = LocalDate.now().toString()){
+        viewModelScope.launch {
+            habitsByDateUC.get()
+                .invoke(date).collect { resource ->
+                    when (resource) {
+                        is Resource.Loading -> {
+                            setLoading(resource.loading)
+                        }
+
+                        is Resource.GenericError -> {
+                            sendMessage(resource.message)
+                        }
+
+                        is Resource.NetworkError -> {
+                            setApiErrors(resource.response.apply {
+                                (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                    object : BinaryActionCallback {
+                                        override fun yes() {
+                                            getUserSavedHabits(date)
+                                        }
+
+                                        override fun no() {}
+                                    }
+                            })
+                        }
+
+                        is Resource.Success -> {
+                            resource.data?.data?.let { resp ->
+                                habitTimelineData = resp.options
+                                habitsData.postValue(Event(resp.options))
+                            }
+                        }
+                    }
+                }
         }
     }
 

@@ -97,19 +97,24 @@ import kotlin.math.abs
 import androidx.core.graphics.toColorInt
 import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieDrawable
+import com.noisefit.luna.databinding.ItemTimelineChipLunaDashBinding
 import com.noisefit.luna.databinding.ItemTimelineDashBinding
 import com.noisefit.luna.databinding.LayoutCaffeineCalibratingBinding
 import com.noisefit.luna.databinding.LayoutCircadianOnboardingDashBinding
 import com.noisefit.luna.databinding.LayoutDashCircadianBinding
 import com.noisefit.luna.databinding.LayoutDashNoSleepStatesCircadianBinding
+import com.noisefit.luna.databinding.LayoutLifeOsCardDashBinding
 import com.noisefit.luna.databinding.LayoutTimelineCardDashBinding
 import com.noisefit.luna.databinding.LayoutOneTapVitalsCardBinding
+import com.noisefit.luna.databinding.LayoutTimelineCardNewLunaDashBinding
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.ui.fadeIn
 import com.noisefit_commans.ui.playAnimation
 import com.oreo.data.model.OHealthOverview.VitalsType
+import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.oreo.ui.chatGpt.SummaryStates
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
+import com.oreo.ui.timelineScreen.ItemHabitsTimelineAdapter
 import com.oreo.ui.timelineScreen.TimelineScreenDataViewmodel.Companion.SYMPTOM_KEY
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -173,6 +178,9 @@ sealed class OSummaryHealthOverviewClickEnum {
     object OnGetStartedCircadianOnboardingClicked : OSummaryHealthOverviewClickEnum()
 
     object OnTimelineCardClicked : OSummaryHealthOverviewClickEnum()
+    object OnViewAllHabitTimelineNewClicked : OSummaryHealthOverviewClickEnum()
+    object OnSetupHabitsTimelineNewClicked : OSummaryHealthOverviewClickEnum()
+    data class OnCheckHabitTimelineNewClicked(val item: HabitsByDateResponse.Options): OSummaryHealthOverviewClickEnum()
     class OnLogActivityClicked(val key: String?) : OSummaryHealthOverviewClickEnum()
     //
 
@@ -183,6 +191,9 @@ sealed class OSummaryHealthOverviewClickEnum {
     object OnOneTapVitalsCollapsed : OSummaryHealthOverviewClickEnum()
     data class UpdateOneTapVitalsCardState(val measureState: TapMeasureState?) :
         OSummaryHealthOverviewClickEnum()
+
+    object LifeOsChatClicked: OSummaryHealthOverviewClickEnum()
+    object LifeOsVoiceClicked: OSummaryHealthOverviewClickEnum()
 
 }
 
@@ -363,8 +374,20 @@ class OSummaryHealthOverviewAdapter(val isToday: Boolean) : RecyclerView.Adapter
                 )
             )
 
+            R.layout.layout_timeline_card_new_luna_dash -> HomeRecyclerViewHolder.TimelineCardNewViewHolder(
+                LayoutTimelineCardNewLunaDashBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+
             R.layout.layout_one_tap_vitals_card -> HomeRecyclerViewHolder.OneTapVitalsViewHolder(
                 LayoutOneTapVitalsCardBinding.inflate(
+                    LayoutInflater.from(parent.context), parent, false
+                )
+            )
+
+            R.layout.layout_life_os_card_dash -> HomeRecyclerViewHolder.LifeOSCardViewHolder(
+                LayoutLifeOsCardDashBinding.inflate(
                     LayoutInflater.from(parent.context), parent, false
                 )
             )
@@ -480,7 +503,7 @@ class OSummaryHealthOverviewAdapter(val isToday: Boolean) : RecyclerView.Adapter
             )
 
             is HomeRecyclerViewHolder.ActivityViewHolder2 -> holder.bind(
-                items[position] as OHealthOverview.Activity, position, lastPosition, devicePaired
+                items[position] as OHealthOverview.Activity, position, lastPosition, devicePaired, isToday
             )
 
             is HomeRecyclerViewHolder.ActivityMinimalViewHolder -> holder.bind(
@@ -576,8 +599,16 @@ class OSummaryHealthOverviewAdapter(val isToday: Boolean) : RecyclerView.Adapter
                 holder.bind(items[position] as OHealthOverview.TimelineDash)
             }
 
+            is HomeRecyclerViewHolder.TimelineCardNewViewHolder -> {
+                holder.bind(items[position] as OHealthOverview.TimelineNewDash)
+            }
+
             is HomeRecyclerViewHolder.OneTapVitalsViewHolder -> {
                 holder.bind(items[position] as OHealthOverview.OneTapVitals)
+            }
+
+            is HomeRecyclerViewHolder.LifeOSCardViewHolder -> {
+                holder.bind(items[position] as OHealthOverview.LifeOsCard)
             }
         }
     }
@@ -631,7 +662,9 @@ class OSummaryHealthOverviewAdapter(val isToday: Boolean) : RecyclerView.Adapter
             is OHealthOverview.CircadianLockedOrNoSleepCard -> R.layout.layout_dash_no_sleep_states_circadian
 
             is OHealthOverview.TimelineDash -> R.layout.layout_timeline_card_dash
+            is OHealthOverview.TimelineNewDash -> R.layout.layout_timeline_card_new_luna_dash
             is OHealthOverview.OneTapVitals -> R.layout.layout_one_tap_vitals_card
+            OHealthOverview.LifeOsCard -> R.layout.layout_life_os_card_dash
         }
     }
 
@@ -716,6 +749,11 @@ class OSummaryHealthOverviewAdapter(val isToday: Boolean) : RecyclerView.Adapter
             if (index == -1) return
             items[index] = heathOverViewData
             notifyItemChanged(index)
+        } else if (heathOverViewData is OHealthOverview.TimelineNewDash) {
+            val index = items.indexOfFirst { it is OHealthOverview.TimelineNewDash }
+            if (index == -1) return
+            items[index] = heathOverViewData
+            notifyItemChanged(index)
         }
     }
 
@@ -744,6 +782,10 @@ class OSummaryHealthOverviewAdapter(val isToday: Boolean) : RecyclerView.Adapter
         notifyItemChanged(index)
     }
 
+    fun getTimelineNewCardData(): OHealthOverview.TimelineNewDash? {
+        return items.find { it is OHealthOverview.TimelineNewDash } as OHealthOverview.TimelineNewDash?
+    }
+
 }
 
 
@@ -752,6 +794,145 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
     var itemClickListener: ((type: OSummaryHealthOverviewClickEnum) -> Unit)? = null
 
     //
+    class LifeOSCardViewHolder(private val binding: LayoutLifeOsCardDashBinding) :
+        HomeRecyclerViewHolder(binding) {
+
+        fun bind(data: OHealthOverview.LifeOsCard){
+            binding.ivChat.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.LifeOsChatClicked)
+            }
+
+            binding.ivVoice.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.LifeOsVoiceClicked)
+            }
+
+        }
+
+    }
+
+    class TimelineCardNewViewHolder(private val binding: LayoutTimelineCardNewLunaDashBinding) :
+        HomeRecyclerViewHolder(binding) {
+
+        private val context = binding.root.context
+
+        fun bind(data: OHealthOverview.TimelineNewDash) {
+            // Set Habit UI
+            val habitListData = data.habitListData
+            when {
+                habitListData == null -> {
+                    binding.lytHabitContainer.gone()
+                }
+
+                habitListData.isEmpty() -> {
+                    binding.lytHabitContainer.visible()
+
+                    binding.lytSavedHabits.root.gone()
+                    binding.lytSetUpHabits.root.visible()
+                    binding.lytSetUpHabits.root.setOnClickListener {
+                        itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnSetupHabitsTimelineNewClicked)
+                    }
+                }
+
+                else -> {
+                    binding.lytHabitContainer.visible()
+
+                    binding.lytSetUpHabits.root.gone()
+                    binding.lytSavedHabits.root.visible()
+
+                    val totalCount = habitListData.size
+                    val curLoggedCount = habitListData.filter { it.isCancelled || it.isCompleted }.size
+                    binding.lytSavedHabits.apply {
+                        tvHabitsLogged.text = context.getString(R.string.text_val_habits_logged, curLoggedCount, totalCount)
+
+                        habitProgress.max = totalCount
+                        habitProgress.progress = curLoggedCount
+
+                        if(totalCount==curLoggedCount){
+                            rvHabits.gone()
+                        }else{
+                            rvHabits.visible()
+                            rvHabits.layoutManager = LinearLayoutManager(context)
+                            rvHabits.adapter = ItemHabitsTimelineAdapter(
+                                onCross = {},
+                                onCheck = { item ->
+                                    itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnCheckHabitTimelineNewClicked(item))
+                                },
+                                isFromLunaDash = true
+                            ).apply {
+                                this.submitList(habitListData.filterNot {
+                                    it.isCancelled || it.isCompleted
+                                }.take(3))
+                            }
+
+                        }
+
+                        tvViewAll.setOnClickListener {
+                            itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnViewAllHabitTimelineNewClicked)
+                        }
+                    }
+                }
+
+            }
+
+
+            // Timeline UI
+            if (data.listData.isNullOrEmpty()) {
+                binding.lytItemTimeline.gone()
+                binding.lytTimelineEmpty.visible()
+            } else {
+                binding.lytTimelineEmpty.gone()
+                binding.lytItemTimeline.visible()
+                setTimelineItemsChip(data.listData)
+            }
+
+            binding.lytTimelineEmpty.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnLogActivityClicked(null))
+            }
+
+            binding.tvAddToTimeline.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnLogActivityClicked(null))
+            }
+
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnTimelineCardClicked)
+            }
+        }
+
+        private fun setTimelineItemsChip(listData: List<ItemTimelineResponseModel>) {
+            val chipGrp = binding.chipsPrograms
+            chipGrp.removeAllViews()
+
+            val layoutInflater = LayoutInflater.from(context)
+            for (item in listData.take(3)) {
+                val mChipBinding =
+                    ItemTimelineChipLunaDashBinding
+                        .inflate(layoutInflater, chipGrp, false)
+
+                mChipBinding.tvTitle.apply {
+                    text = item.title
+                    item.titleColor?.let { setTextColor(it) }
+                }
+
+                mChipBinding.tvDesc.text = item.desc
+
+                chipGrp.addView(mChipBinding.root)
+            }
+
+            if(listData.size > 3){
+                val mChipBinding =
+                    ItemTimelineChipLunaDashBinding
+                        .inflate(layoutInflater, chipGrp, false)
+
+                mChipBinding.tvTitle.gone()
+                mChipBinding.tvDesc.text = context.getString(R.string.text_val_more, listData.size-3)
+                chipGrp.addView(
+                    mChipBinding.root
+                )
+            }
+        }
+
+    }
+
     class TimelineCardViewHolder(private val binding: LayoutTimelineCardDashBinding) :
         HomeRecyclerViewHolder(binding) {
 
@@ -3390,7 +3571,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
     class ActivityViewHolder2(private val binding: ListActivityBurnCardItem2Binding) :
         HomeRecyclerViewHolder(binding) {
         fun bind(
-            data: OHealthOverview.Activity, position: Int, lastPosition: Int, devicePaired: Boolean
+            data: OHealthOverview.Activity,
+            position: Int,
+            lastPosition: Int,
+            devicePaired: Boolean,
+            isToday: Boolean
         ) {
             val scoreValue = data.data.activityScore
 
@@ -3411,12 +3596,16 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                 binding.tvStatus.text = data.data.status
             }
 
-
-            if (data.data.nudges.isNullOrEmpty()) {
+            if(isToday) {
+                if (data.data.nudges.isNullOrEmpty()) {
+                    binding.tvNudge.gone()
+                } else {
+                    binding.tvNudge.visible()
+                    binding.tvNudge.text = data.data.nudges.firstOrNull()?.message ?: ""
+                }
+            }
+            else{
                 binding.tvNudge.gone()
-            } else {
-                binding.tvNudge.visible()
-                binding.tvNudge.text = data.data.nudges.firstOrNull()?.message ?: ""
             }
 
             //binding.tvTotalCalories.text = caloriesGoalText

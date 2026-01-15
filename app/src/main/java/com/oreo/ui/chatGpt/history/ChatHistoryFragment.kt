@@ -1,25 +1,25 @@
 package com.oreo.ui.chatGpt.history
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.toColorInt
+
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentChatHistoryBinding
-import com.noisefit_commans.common.MarginItemDecoration
 import com.noisefit_commans.common.MarginTopItemDecoration
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.ScreenUtils
 import com.oreo.ui.chatGpt.AITopics
-import com.oreo.ui.chatGpt.ChatGptFragment
 import com.oreo.ui.chatGpt.PlanType
-import com.oreo.ui.custom.SwipeHelper
+import com.oreo.ui.lifeos.LifeOsChatFragment
+import com.oreo.util.uiUtils.GenerateCustomDrawables
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -39,16 +39,20 @@ class ChatHistoryFragment :
                     return
                 }
 
-                navigate(
-                    ChatHistoryFragmentDirections.actionChatHistoryFragmentToChatGptFragment(
-                        threadId, "", "", title, AITopics.GENERAL,
-                        PlanType.NONE,
-                        null,
-                        null,
-                        null,
-                        -1
-                    )
+                val (frag, bundle) = LifeOsChatFragment.getStartData(
+                    threadId = threadId,
+                    userMessage = "",
+                    title = title,
+                    aiTopic = AITopics.GENERAL,
+                    planType = PlanType.NONE,
                 )
+                navigate(frag, bundle)
+            }
+
+            override fun onDeleteThreadClicked(threadId: String) {
+                viewModel.deleteChatHistoryServer(threadId){
+                    onDeleteSuccess(threadId)
+                }
             }
         })
     }
@@ -56,22 +60,55 @@ class ChatHistoryFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.toolbar.tvTitle.text = getString(R.string.text_chat_history)
+        setUi()
         setRecycler()
         viewModel.getChatHistory()
     }
 
+    private fun setUi() {
+        binding.tvTitle.text = getString(R.string.text_recents)
+
+        binding.searchBox.background = GenerateCustomDrawables.chatHistorySearchBar(
+            backgroundColor = "#11141C".toColorInt()
+        )
+    }
+
 
     override fun initListener() {
-        binding.toolbar.backBtn.setOnClickListener {
+
+        binding.etSearch.doAfterTextChanged { editable ->
+            viewModel.masterList.let { list ->
+                val query = editable?.toString()?.trim().orEmpty()
+
+                if (query.isEmpty()) {
+                    mAdapter.submitList(viewModel.masterList)
+                    return@doAfterTextChanged
+                }
+
+                val filteredThreads = viewModel.masterList
+                    .filter { !it.isHeader }
+                    .filter {
+                    it.title.orEmpty().lowercase().contains(query, true) ||
+                    it.message.orEmpty().lowercase().contains(query, true)
+                    }
+
+                mAdapter.submitList(filteredThreads)
+            }
+        }
+
+        binding.ivBack.setOnClickListener {
             navigateUpSafe()
         }
 
-        binding.ivNew.setOnClickListener {
+        binding.ivNewChat.setOnClickListener {
+            val (frag, bundle) = LifeOsChatFragment.getStartData(
+                threadId = null,
+                userMessage = null,
+                title = null,
+                aiTopic = AITopics.GENERAL
+            )
             navigate(
-                ChatHistoryFragmentDirections.actionChatHistoryFragmentToAiTopQuestionsFragment(
-                    AITopics.GENERAL
-                )
+                frag, bundle
             )
         }
 
@@ -80,13 +117,20 @@ class ChatHistoryFragment :
     override fun subscribeObservers() {
 
         viewModel.chatHistory.observe(this) {
-            mAdapter.setDataSet(it)
+            viewModel.masterList = it
+            mAdapter.submitList(it)
             if (it.isEmpty()) {
                 binding.ivNoData.visible()
                 binding.textNoData.visible()
+                binding.textNoDataDesc.visible()
+                binding.searchBox.invisible()
+                binding.etSearch.invisible()
             } else {
                 binding.ivNoData.gone()
                 binding.textNoData.gone()
+                binding.textNoDataDesc.gone()
+                binding.searchBox.visible()
+                binding.etSearch.visible()
             }
         }
 
@@ -115,37 +159,20 @@ class ChatHistoryFragment :
         with(binding.rv) {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = mAdapter
-            val marginItemDecoration = MarginTopItemDecoration(screenUtils.dpToPx2(8, this.context))
-            addItemDecoration(marginItemDecoration)
-        }
-        setSwipeHelper()
-    }
 
-    private fun setSwipeHelper() {
-        object : SwipeHelper(requireContext(), binding.rv) {
-            override fun instantiateUnderlayButton(
-                viewHolder: RecyclerView.ViewHolder?, underlayButtons: MutableList<UnderlayButton>?
-            ) {
-                if (viewHolder is ChatHistoryAdapter.ViewHolderThread) {
-                    underlayButtons?.add(
-                        UnderlayButton("",
-                            R.drawable.ic_delete_ai_chat,
-                            Color.parseColor("#ff3358"),
-                            ResourcesCompat.getFont(
-                                requireContext(),
-                                com.noisefit_commans.R.font.gilroy_medium
-                            ),
-                            object : UnderlayButtonClickListener {
-                                override fun onClick(pos: Int) {
-                                    val threadId = mAdapter.getThreadId(pos)
-                                    threadId?.let {
-                                        viewModel.deleteChatHistoryServer(it)
-                                    }
-                                }
-                            })
-                    )
-                }
+            // avoid adding decoration multiple times if setRecycler() called again
+            if (itemDecorationCount == 0) {
+                val marginItemDecoration =
+                    MarginTopItemDecoration(screenUtils.dpToPx2(8, this.context))
+                addItemDecoration(marginItemDecoration)
             }
         }
     }
+
+    fun onDeleteSuccess(deletedThreadId: String) {
+        viewModel.masterList = viewModel.masterList.filterNot { it.threadId == deletedThreadId }
+
+        mAdapter.submitList(viewModel.masterList)
+    }
+
 }

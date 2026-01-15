@@ -11,6 +11,7 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.gson.Gson
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentOHeartRateDataBinding
 import com.noisefit.oreo.OreoMainViewModel
@@ -275,6 +276,8 @@ class OHeartRateDataFragment :
     ) {
         binding.lytHeartRate.candleChart.enableInteractiveMode(true)
         binding.lytHeartRate.candleChart.setVibrationUtil(vibrationUtils)
+
+
         binding.lytHeartRate.candleChart.updateData(
             viewModel.hrDataConvertor.getHrCombinedData(
                 dayData, heartRate

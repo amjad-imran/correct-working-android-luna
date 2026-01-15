@@ -31,17 +31,14 @@
 
             <ImageView
                 android:id="@+id/ivCamera"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="34dp"
+                android:layout_width="match_parent"
+                android:layout_height="84dp"
+                android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginEnd="12dp"
                 android:layout_marginBottom="20dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/image_back_attachment"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/ivPhotos"
-                app:layout_constraintHorizontal_bias="0.5"
+                android:background="@drawable/back_attachment_ai"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view42" />
 
@@ -49,7 +46,7 @@
                 android:id="@+id/imageView110"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_photo_camera"
+                android:src="@drawable/ic_camera"
                 app:layout_constraintBottom_toTopOf="@+id/textView202"
                 app:layout_constraintEnd_toEndOf="@+id/ivCamera"
                 app:layout_constraintStart_toStartOf="@+id/ivCamera"
@@ -60,11 +57,11 @@
                 style="@style/S14"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:ellipsize="end"
                 android:gravity="center"
                 android:singleLine="true"
                 android:text="@string/text_camera"
-                android:layout_marginTop="4dp"
                 app:layout_constraintBottom_toTopOf="@+id/ivCamera"
                 app:layout_constraintEnd_toEndOf="@+id/ivCamera"
                 app:layout_constraintStart_toStartOf="@+id/ivCamera"
@@ -73,21 +70,20 @@
             <ImageView
                 android:id="@+id/ivPhotos"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="12dp"
+                android:layout_height="84dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/image_back_attachment"
-                app:layout_constraintBottom_toBottomOf="@+id/ivCamera"
-                app:layout_constraintEnd_toStartOf="@+id/ivFiles"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/ivCamera"
-                app:layout_constraintTop_toTopOf="@+id/ivCamera" />
+                android:src="@drawable/back_attachment_ai"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivCamera" />
 
             <ImageView
                 android:id="@+id/imageView111"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_a_photos"
+                android:src="@drawable/ic_photos"
                 app:layout_constraintBottom_toTopOf="@+id/textView203"
                 app:layout_constraintEnd_toEndOf="@+id/ivPhotos"
                 app:layout_constraintStart_toStartOf="@+id/ivPhotos"
@@ -99,10 +95,10 @@
                 style="@style/S14"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:ellipsize="end"
                 android:gravity="center"
                 android:singleLine="true"
-                android:layout_marginTop="4dp"
                 android:text="@string/text_photos"
                 app:layout_constraintBottom_toBottomOf="@+id/ivPhotos"
                 app:layout_constraintEnd_toEndOf="@+id/ivPhotos"
@@ -112,21 +108,20 @@
             <ImageView
                 android:id="@+id/ivFiles"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="34dp"
+                android:layout_height="84dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/image_back_attachment"
-                app:layout_constraintBottom_toBottomOf="@+id/ivCamera"
+                android:src="@drawable/back_attachment_ai"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/ivPhotos"
-                app:layout_constraintTop_toTopOf="@+id/ivCamera" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivPhotos" />
 
             <ImageView
                 android:id="@+id/imageView112"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_a_file"
+                android:src="@drawable/ic_file_upload"
                 app:layout_constraintBottom_toTopOf="@+id/textView204"
                 app:layout_constraintEnd_toEndOf="@+id/ivFiles"
                 app:layout_constraintStart_toStartOf="@+id/ivFiles"
@@ -138,15 +133,31 @@
                 style="@style/S14"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
                 android:ellipsize="end"
                 android:gravity="center"
                 android:singleLine="true"
-                android:layout_marginTop="4dp"
                 android:text="@string/text_files"
                 app:layout_constraintBottom_toBottomOf="@+id/ivFiles"
                 app:layout_constraintEnd_toEndOf="@+id/ivFiles"
                 app:layout_constraintStart_toStartOf="@+id/ivFiles"
                 app:layout_constraintTop_toBottomOf="@+id/imageView112" />
+
+
+            <TextView
+                android:id="@+id/tvDismiss"
+                style="@style/S14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="24dp"
+                android:layout_marginTop="24dp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                android:text="@string/text_dismiss"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivFiles" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

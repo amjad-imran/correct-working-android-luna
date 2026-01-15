@@ -41,9 +41,9 @@
             android:src="@drawable/ic_hm_forward"
             android:visibility="gone"
             tools:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvTitle"
+            app:layout_constraintBottom_toBottomOf="@+id/tvTitle"
             tools:ignore="ContentDescription" />
 
         <include
@@ -54,9 +54,12 @@
             tools:visibility="visible"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/side_margin"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginVertical="8dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

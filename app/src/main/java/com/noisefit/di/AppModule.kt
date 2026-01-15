@@ -17,6 +17,7 @@ import com.noisefit.data.remote.abstraction.NetworkService
 import com.noisefit.data.repository.LastSyncProvider
 import com.noisefit.data.repository.abstraction.*
 import com.noisefit.data.repository.implementation.*
+import com.noisefit.session.SessionManager
 import com.noisefit.util.TestModeUtils
 import com.noisefit.watch.*
 import com.noisefit_commans.data.db.abstraction.LocationDataSource
@@ -29,6 +30,7 @@ import com.noisefit_commans.interfaces.device_data.QueryDeviceDataActions
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataActions
 import com.noisefit_commans.utils.EncryptUtils
 import com.oreo.data.dataConverter.FemaleHealthDataConvertor
+import com.oreo.data.dataConverter.GraphDataConvertor
 import com.oreo.data.dataConverter.OreoDayTimeDataConvertor
 import com.oreo.data.dataConverter.OreoHRDataConvertor
 import com.oreo.data.dataConverter.OreoOfflineDataMapper
@@ -52,6 +54,7 @@ import com.oreo.data.db.implementation.OreoStepsDataImpl
 import com.oreo.data.db.implementation.OreoStressDataImpl
 import com.oreo.data.repository.AlarmRepository
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
+import com.oreo.data.repository.abstraction.IUserHabitRepository
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
@@ -59,6 +62,10 @@ import com.oreo.data.repository.implementation.FemaleHealthRepositoryImpl
 import com.oreo.data.repository.implementation.OreoDeviceRepositoryImpl
 import com.oreo.data.repository.implementation.OreoSyncRepositoryImpl
 import com.oreo.data.repository.implementation.OreoUserActivityRepositoryImpl
+import com.oreo.data.repository.implementation.UserHabitRepositoryImpl
+import com.oreo.data.usecases.GetAllHabitsUseCase
+import com.oreo.data.usecases.GetHabitsByDateUseCase
+import com.oreo.data.usecases.SyncUserHabitsUseCase
 import com.oreo.util.alarm.AlarmUtil
 import dagger.Module
 import dagger.Provides
@@ -491,6 +498,17 @@ object AppModule {
         return OreoHRDataConvertor()
     }
 
+
+    @Singleton
+    @Provides
+    fun provideGraphDataGenerator(
+        hrDataConverter: OreoHRDataConvertor,
+        sessionManager: SessionManager,
+        resourcesProvider: ResourcesProvider,
+    ): GraphDataConvertor {
+        return GraphDataConvertor(hrDataConverter,sessionManager, resourcesProvider)
+    }
+
     @Singleton
     @Provides
     fun provideAlarmRepository(
@@ -518,5 +536,25 @@ object AppModule {
         return appContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
 
+    @Singleton
+    @Provides
+    fun provideUserHabitRepository(networkService: NetworkService): IUserHabitRepository{
+        return UserHabitRepositoryImpl(networkService)
+    }
+
+    @Provides
+    fun provideAllHabitUseCase(repository: IUserHabitRepository): GetAllHabitsUseCase{
+        return GetAllHabitsUseCase(repository)
+    }
+
+    @Provides
+    fun provideHabitsByDateUseCase(repository: IUserHabitRepository): GetHabitsByDateUseCase{
+        return GetHabitsByDateUseCase(repository)
+    }
+
+    @Provides
+    fun provideSyncUserHabitsUseCase(repository: IUserHabitRepository): SyncUserHabitsUseCase{
+        return SyncUserHabitsUseCase(repository)
+    }
 
 }

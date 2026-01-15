@@ -141,6 +141,12 @@ class AddActivityTimelineFragment :
                                     putParcelable("editData", editData)
                                 }
                             }
+
+                            args.habitData?.let { habitData ->
+                                this.arguments = Bundle().apply {
+                                    putParcelable("habitData", habitData)
+                                }
+                            }
                         }
                     }
 

@@ -99,6 +99,7 @@ import com.oreo.data.model.health.OreoReadinessModel
 import com.oreo.data.model.health.OreoSleepModel
 import com.oreo.data.model.health.SleepHourlyBreakup
 import com.oreo.data.model.sleep.HealthTrend
+import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
@@ -260,6 +261,7 @@ class SummaryDataViewModelToday @Inject constructor(
     var timeTrackerActivitiesUpdated = MutableLiveData<Event<Boolean>>()
 
     var timeTrackerActivities: List<ItemTimelineResponseModel>? = null
+    var habitTimelineData: List<HabitsByDateResponse.Options>? = null
     var summaryAvailable: Boolean? = false
 
     var stateOneTapVitalsCard = MutableLiveData<OHealthOverview.OneTapVitals>()
@@ -1376,16 +1378,26 @@ class SummaryDataViewModelToday @Inject constructor(
                 getTimelineCard()?.let { userActivities.add(it) }
             }
 
+            //
+//            getLifeOsCard()?.let { userActivities.add(it) }
+            //
             /*getWorkoutHistoryCard(healthData.activity)?.let { userActivities.add(it) }*/
 
             if (lunaManaged) {
-                getLunaAiCard()?.let {
+                getLifeOsCard()?.let {
                     if (userActivities.size > 2) {
                         userActivities.add(2, it)
                     } else {
                         userActivities.add(it)
                     }
                 }
+                /*getLunaAiCard()?.let {
+                    if (userActivities.size > 2) {
+                        userActivities.add(2, it)
+                    } else {
+                        userActivities.add(it)
+                    }
+                }*/
             }
 
             // Add naps if any (this could also be moved to a separate function)
@@ -1619,6 +1631,10 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
+    fun getLifeOsCard() : OHealthOverview.LifeOsCard? {
+        return OHealthOverview.LifeOsCard
+    }
+
     private suspend fun getOneTapVitalsCard(
         healthData: ServerUserHealthData,
         measurements: Measurements?
@@ -1730,7 +1746,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 LIGHT_EXPOSURE_KEY -> {
                     data.titleColor = "#FFE1CF".toColorInt()
                     data.value?.let {
-                        data.desc = "${it.toInt() / 60} minutes"
+                        data.desc = "${it.toInt() / 60} m"
                         /*data.unit?.let { data.desc += " $it" }*/
                     }
                 }
@@ -1770,9 +1786,14 @@ class SummaryDataViewModelToday @Inject constructor(
             }
         }
 
-        return OHealthOverview.TimelineDash(
-            listData = data.take(3)
+        return OHealthOverview.TimelineNewDash(
+            listData = data,
+            habitListData = habitTimelineData
         )
+
+        /*return OHealthOverview.TimelineDash(
+            listData = data.take(3)
+        )*/
     }
 
     fun formatMlToLitersOrMl(ml: Int): String {
@@ -4924,6 +4945,49 @@ class SummaryDataViewModelToday @Inject constructor(
             return false
         } else {
             !alertDismissed
+        }
+    }
+
+    fun handleLifeOsCardClicked(isOnBoardDone:(isDone: Boolean) -> Unit) {
+        viewModelScope.launch {
+            val cachedOnboardData = localDataStore.isLifeOsOnboardCompleted(null)
+            if(cachedOnboardData!=0){
+                isOnBoardDone(cachedOnboardData==1)
+                return@launch
+            }
+
+            userRepositoryOld.getLifeOsOnboardQuesAnsList().collect{ resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+
+                                    }
+
+                                    override fun no() {}
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            val isDone = it.answers?.isNotEmpty()==true
+                            localDataStore.isLifeOsOnboardCompleted(isDone)
+                            isOnBoardDone(isDone)
+                        }
+                    }
+                }
+            }
         }
     }
 

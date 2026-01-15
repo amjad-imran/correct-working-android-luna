@@ -10,16 +10,17 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.grapesnberries.curllogger.CurlLoggerInterceptor
-import com.here.oksse.OkSse
-import com.here.oksse.ServerSentEvent
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.noisefit.data.base.ResourcesProvider
+import com.noisefit.data.model.AiHeaderInsight1
 import com.noisefit.data.model.AiMeals
 import com.noisefit.data.model.AiWorkout
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
+import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -29,8 +30,10 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChatGptOverview
 import com.oreo.data.model.ai.ChatMessage
+import com.oreo.data.model.ai.TopQuestions
 import com.oreo.data.repository.abstraction.ErrorServerCases
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
@@ -46,11 +49,12 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.Response
-import okhttp3.logging.HttpLoggingInterceptor
 import java.io.File
 import java.io.FileOutputStream
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 import java.util.TimeZone
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -68,6 +72,7 @@ class ChatGptViewModel
     val resourceProvider: ResourcesProvider,
 ) : BaseViewModel() {
 
+    var cameraUri: Uri? = null
 
     val IMAGE_MAX_BYTES = 5 * 1024 * 1024 // 5 MB
     val DEFAULT_IMAGE_QUALITY = 80 // JPEG quality (0-100)
@@ -86,6 +91,8 @@ class ChatGptViewModel
         get() = _scrollToBottom
 
     val threadTitle = MutableLiveData<String>()
+    val questions = MutableLiveData<List<TopQuestions>>(arrayListOf())
+
 
     val aiGeneratedPlanSaved = MutableLiveData<Event<Boolean>>()
     val showSavePlan = MutableLiveData<Event<AiPlanType>>()
@@ -96,9 +103,12 @@ class ChatGptViewModel
     var userMessage: String? = null
     var meal: AiMeals? = null
     var workout: AiWorkout? = null
+    var headerInsight1: AiHeaderInsight1? = null
     var planType: PlanType? = null
+    var srcKey: String? = null
 
     val fetchInProgress = MutableLiveData<Boolean>()
+    val showRetry = MutableLiveData<Boolean>()
     private val sourcePattern = "【\\d+:\\d+†[^]]+】"
 
 
@@ -109,6 +119,8 @@ class ChatGptViewModel
     @Volatile
     var pendingAttachment: AttachmentData? = null
     val attachmentPreview = MutableLiveData<AttachmentData?>(null)
+
+    val showSuggestedQuestions = MutableLiveData<Boolean>()
 
     fun setPendingAttachment(uri: Uri, mimeType: String, fileName: String, sizeBytes: Long) {
         val data = AttachmentData(uri, mimeType, fileName, sizeBytes)
@@ -130,7 +142,49 @@ class ChatGptViewModel
             "Hello $userName, my name is Luna. I am an AI coach that can guide you with personalized nutritional advice, workout questions and to understand how to improve your health parameters tracked by the Luna ring. What do you need help with?"
     }
 
-    fun addTopData() {
+    fun getAiTopQuestions(aiTopic: AITopics) {
+        viewModelScope.launch {
+            oreoDeviceRepository.getAiTopQuestions(aiTopic).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        //setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        getAiTopQuestions(aiTopic)
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+                            questions.value = it.questions ?: arrayListOf()
+                            //showHistoryIcon.value = it.hasHistory
+                        }
+                    }
+                }
+            }
+        }
+
+
+    }
+
+
+    fun addInitData() {
         if (workout != null || meal != null) {
             val messages = _chatGptOverview.value ?: ArrayList()
             if (workout != null) {
@@ -140,7 +194,13 @@ class ChatGptViewModel
                 messages.add(ChatGptOverview.HeaderMeal(meal!!))
             }
             _chatGptOverview.value = (messages)
-
+        } else {
+            if(userMessage.isNullOrEmpty().not()){
+                showSuggestedQuestions.postValue(false)
+                generateInitMessage()
+            }else {
+                showSuggestedQuestions.postValue(true)
+            }
         }
     }
 
@@ -163,11 +223,21 @@ class ChatGptViewModel
             )
         )
         _chatGptOverview.value = messages
-        // clear attachment preview state once committed
-        attachmentPreview.postValue(null)
+    }
+
+    fun addInsight1HeaderMsg(message: AiHeaderInsight1) {
+        val messages = _chatGptOverview.value ?: ArrayList()
+        messages.add(
+            ChatGptOverview.HeaderInsight1(
+                message
+            )
+        )
+        _chatGptOverview.value = messages
+        clearPendingAttachment()
     }
 
     fun addThinkingMessage() {
+        showRetry.postValue(false)
         val messages = _chatGptOverview.value ?: ArrayList()
         messages.removeAll {
             it is ChatGptOverview.ThinkingMessage || it is ChatGptOverview.RetryMessage
@@ -177,8 +247,10 @@ class ChatGptViewModel
         _scrollToBottom.postValue(Event(true))
     }
 
-    fun addReceivedMessage(message: String, uuid: UUID = UUID.randomUUID()) {
+    fun addReceivedMessage(message: String, uuid: UUID = UUID.randomUUID(),isGenerating: Boolean) {
         viewModelScope.launch(Dispatchers.Main) {
+            showRetry.postValue(false)
+            cachedAttachment = null
             val messages = _chatGptOverview.value ?: ArrayList()
             messages.removeAll {
                 it is ChatGptOverview.ThinkingMessage || it is ChatGptOverview.RetryMessage
@@ -186,7 +258,7 @@ class ChatGptViewModel
             if (messages.lastOrNull() is ChatGptOverview.ReceivedMessage) {
                 messages.removeAt(messages.lastIndex)
             }
-            messages.add(ChatGptOverview.ReceivedMessage(message).apply {
+            messages.add(ChatGptOverview.ReceivedMessage(message,isGenerating).apply {
                 id = uuid
             })
             _chatGptOverview.value = (messages)
@@ -200,6 +272,7 @@ class ChatGptViewModel
                 it is ChatGptOverview.ThinkingMessage || it is ChatGptOverview.RetryMessage
             }
             messages.add(ChatGptOverview.RetryMessage(message))
+            showRetry.postValue(true)
             _chatGptOverview.postValue(messages)
         }
     }
@@ -207,6 +280,7 @@ class ChatGptViewModel
     fun removeThinkingState() {
         viewModelScope.launch(Dispatchers.IO) {
             val messages = _chatGptOverview.value ?: ArrayList()
+            showRetry.postValue(false)
             messages.removeAll {
                 it is ChatGptOverview.ThinkingMessage || it is ChatGptOverview.RetryMessage
             }
@@ -215,13 +289,13 @@ class ChatGptViewModel
     }
 
     fun retryApi() {
-        addThinkingMessage()
         lastApi?.let {
             askQuestionStream(it.second)
+            addThinkingMessage()
         }
     }
 
-    fun generateThreadId() {
+    fun generateThreadId(sendInsightHeaderMsg: (() -> Unit) ?= null) {
         viewModelScope.launch {
             oreoDeviceRepository.generateThreadId().collect { resource ->
                 when (resource) {
@@ -254,16 +328,15 @@ class ChatGptViewModel
                             it.threadId?.let { id ->
                                 threadId = id
 
-                                addTopData()
-                                generateInitMessage()
+                                if(sendInsightHeaderMsg!=null) sendInsightHeaderMsg()
+                                else addInitData()
+                                //generateInitMessage()
                             }
                         }
                     }
                 }
             }
         }
-
-
     }
 
     fun generateInitMessage() {
@@ -292,8 +365,18 @@ class ChatGptViewModel
 
     @Volatile
     private var currentCall: Call? = null
+    private var cachedAttachment: AttachmentData? = null
 
     fun askQuestionStream(prompt: String) {
+        pendingAttachment?.let{ cachedAttachment = it }
+        clearPendingAttachment()
+
+        if (ApplicationUtils.isInternetConnected().not()){
+            addErrorState(
+                resourceProvider.getString(R.string.connection_issue)
+            )
+            return
+        }
         fetchInProgress.value = true
         videoState.value = true
         lastApi = Pair(1, prompt)
@@ -312,11 +395,18 @@ class ChatGptViewModel
             val urlWithParams = when (planType) {
                 PlanType.WORKOUT -> "$baseUrl?message=$prompt"
                 PlanType.DIET -> "$baseUrl?message=$prompt"
-                PlanType.NONE, null -> "$baseUrl?message=$prompt&thread_id=$threadId"
+                PlanType.NONE, null ->
+                    if(headerInsight1?.insightData==null)
+                        "$baseUrl?message=$prompt&thread_id=$threadId"
+                    else{
+                        val insightsDataString = Gson().toJson(headerInsight1!!.insightData)
+                        headerInsight1?.insightData = null
+                        "$baseUrl?message=$prompt&thread_id=$threadId&insight_data=$insightsDataString"
+                    }
             }
 
             val ctx = resourceProvider.context
-            val att = pendingAttachment
+            val att = cachedAttachment
             val attachmentBody: RequestBody? = att?.let { a ->
                 try {
                     ctx.contentResolver.openInputStream(a.uri)?.use { input ->
@@ -369,28 +459,28 @@ class ChatGptViewModel
                             if (eventBuffer.isNotEmpty()) {
                                 val cleaned = cleanServerResponse(eventBuffer.toString())
                                 responseBuilder.append(cleaned)
-                                addReceivedMessage(responseBuilder.toString(), uuid)
+                                addReceivedMessage(responseBuilder.toString(), uuid,true)
                                 eventBuffer.setLength(0)
                             }
                         }
                     }
                 }
+                addReceivedMessage(responseBuilder.toString(), uuid,false)
+                sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.lifeos_reply_sent
+                )
 
                 fetchInProgress.postValue(false)
                 videoState.postValue(false)
-                pendingAttachment = null
-                attachmentPreview.postValue(null)
                 checkForPlans(responseBuilder.toString())
             } catch (t: Throwable) {
+                if(currentCall?.isCanceled() == true) return@launch
                 if (fetchInProgress.value == true) {
                     fetchInProgress.postValue(false)
                     videoState.postValue(false)
                     if (responseBuilder.isEmpty()) {
                         addErrorState(
-                            String.format(
-                                resourceProvider.getString(R.string.text_ai_error_message),
-                                userName ?: ""
-                            )
+                            resourceProvider.getString(R.string.text_couldn_t_generate_a_response)
                         )
                         GlobalScope.launch(Dispatchers.IO) {
                             syncRepository.logErrorServer(
@@ -446,7 +536,7 @@ class ChatGptViewModel
             } else {
                 initMessage
             }
-            addReceivedMessage(message ?: "")
+            addReceivedMessage(message ?: "", UUID.randomUUID(),false)
         }
         return
     }
@@ -573,13 +663,14 @@ class ChatGptViewModel
         setLoading(true)
         viewModelScope.launch(Dispatchers.IO) {
             val tempMessage = ArrayList<ChatGptOverview>()
-            tempMessage.add(ChatGptOverview.ReceivedMessage(initMessage))
+            tempMessage.add(ChatGptOverview.ReceivedMessage(initMessage,false))
 
             messages?.forEach {
                 if (it.sender.equals("assistant", true)) {
-                    tempMessage.add(ChatGptOverview.ReceivedMessage(it.message ?: ""))
+                    tempMessage.add(ChatGptOverview.ReceivedMessage(it.message ?: "",false))
                 } else if (it.sender.equals("user", true)) {
-                    val metaUrl = it.metadata?.takeIf { url -> url.isNotBlank() } ?: it.attachmentUrl
+                    val metaUrl =
+                        it.metadata?.takeIf { url -> url.isNotBlank() } ?: it.attachmentUrl
                     val (attSrc, attMime, attName) = if (!metaUrl.isNullOrBlank()) {
                         val parsed = parseAttachmentFromUrl(metaUrl)
                         Triple(parsed.first, parsed.second, parsed.third)
@@ -631,7 +722,7 @@ class ChatGptViewModel
     }
 
     fun stopResponseGeneration() {
-
+        cachedAttachment = null
         viewModelScope.launch {
             removeThinkingState()
             fetchInProgress.postValue(false)
@@ -802,19 +893,45 @@ class ChatGptViewModel
                     ExifInterface.ORIENTATION_ROTATE_90 -> Matrix().apply { postRotate(90f) }
                     ExifInterface.ORIENTATION_ROTATE_180 -> Matrix().apply { postRotate(180f) }
                     ExifInterface.ORIENTATION_ROTATE_270 -> Matrix().apply { postRotate(270f) }
-                    ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> Matrix().apply { preScale(-1f, 1f) }
+                    ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> Matrix().apply {
+                        preScale(
+                            -1f,
+                            1f
+                        )
+                    }
+
                     ExifInterface.ORIENTATION_FLIP_VERTICAL -> Matrix().apply { preScale(1f, -1f) }
-                    ExifInterface.ORIENTATION_TRANSPOSE -> Matrix().apply { postRotate(90f); preScale(-1f, 1f) }
-                    ExifInterface.ORIENTATION_TRANSVERSE -> Matrix().apply { postRotate(270f); preScale(-1f, 1f) }
+                    ExifInterface.ORIENTATION_TRANSPOSE -> Matrix().apply {
+                        postRotate(90f); preScale(
+                        -1f,
+                        1f
+                    )
+                    }
+
+                    ExifInterface.ORIENTATION_TRANSVERSE -> Matrix().apply {
+                        postRotate(270f); preScale(
+                        -1f,
+                        1f
+                    )
+                    }
+
                     else -> null
                 }
 
                 if (matrix != null) {
                     Bitmap.createBitmap(
-                        originalBitmap, 0, 0, originalBitmap.width, originalBitmap.height, matrix, true
+                        originalBitmap,
+                        0,
+                        0,
+                        originalBitmap.width,
+                        originalBitmap.height,
+                        matrix,
+                        true
                     )
                 } else originalBitmap
-            } catch (_: Exception) { originalBitmap }
+            } catch (_: Exception) {
+                originalBitmap
+            }
 
             val outFile =
                 File(context.cacheDir, "compressed_${System.currentTimeMillis()}.jpg")
@@ -835,6 +952,68 @@ class ChatGptViewModel
             null
         }
     }
+
+    fun postChatReview(text: String, reviewFlag: Int, messageId: UUID) {
+        if (threadId == null) {
+            return
+        }
+        val date = try {
+            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+            sdf.timeZone = TimeZone.getDefault()
+            sdf.format(Date())
+        } catch (_: Exception) {
+            ""
+        }
+
+
+        viewModelScope.launch {
+
+            val request = JsonObject().apply {
+                this.addProperty("thread_id",threadId)
+                this.addProperty("text",text)
+                this.addProperty("date",date)
+                this.addProperty("review","$reviewFlag")
+            }
+
+
+            oreoDeviceRepository.markAiMessageState(request).collect { resource ->
+                when (resource) {
+                    is Resource.GenericError -> {
+                        sendMessage(resource.message)
+                    }
+
+                    is Resource.Loading -> {
+                        //setLoading(resource.loading)
+                    }
+
+                    is Resource.NetworkError -> {
+                        setApiErrors(resource.response.apply {
+                            this.uiComponentType as UIComponentType.RetryApiDialog
+                            (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
+                                object : BinaryActionCallback {
+                                    override fun yes() {
+                                        postChatReview(text, reviewFlag, messageId)
+                                    }
+
+                                    override fun no() {
+
+                                    }
+                                }
+                        })
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+
+                        }
+                    }
+                }
+            }
+        }
+
+
+    }
+
 
     fun getMimeType(context: Context, uri: Uri): String? =
         context.contentResolver.getType(uri)

@@ -43,6 +43,8 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
     private val topHeight = dip2px(20f)
     private var linearGradient: LinearGradient? = null
     private var mHeight = 0
+    private var xAxisRange: List<String>? = null
+    private val endPadding = dip2px(40f)
 
     var mMax = 0
 
@@ -50,9 +52,8 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
     private var vibrationUtils: VibrationUtils? = null
     private var listener: SleepSingleBarAction? = null
     private var touchX = 0f
-    private val endPadding = dip2px(30f)
     var dataStepWidth = 0F
-
+    var barSize = 7
 
     //HashMap<Position,Pair<StartX,EndX>>
     private val dataPosition = ArrayList<Pair<Int, Float>>()
@@ -142,11 +143,11 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
         drawContent(canvas)
     }
 
+    /** --- FUNCTION: drawContent --- */
     private fun drawContent(canvas: Canvas) {
-
-        val availableWidth = (width - endPadding).toFloat()
-        dataStepWidth = availableWidth / 7
-
+        dataPosition.clear()
+        val availableWidth = (width - getYAxisReservedWidth()).toFloat()
+        dataStepWidth = availableWidth / barSize
         val barWidth = dataStepWidth / 2
         var start = 0f
         val rectRadius = dip2px(1f).toFloat()
@@ -159,11 +160,9 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
             if (lastSentValuePos == null) {
                 performHapticFeedbackCustom()
                 lastSentValuePos = selectedPosition
-            } else {
-                if (lastSentValuePos != selectedPosition) {
-                    performHapticFeedbackCustom()
-                    lastSentValuePos = selectedPosition
-                }
+            } else if (lastSentValuePos != selectedPosition) {
+                performHapticFeedbackCustom()
+                lastSentValuePos = selectedPosition
             }
             listener?.onValueSelected(selectedPosition)
         }
@@ -172,7 +171,6 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
             val noDataText = context.getString(R.string.text_no_record_available)
             val textBounds = Rect()
             xAxisPaint.getTextBounds(noDataText, 0, noDataText.length, textBounds)
-
             canvas.drawText(
                 noDataText,
                 availableWidth / 2 - textBounds.width() / 2,
@@ -180,7 +178,6 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                 xAxisPaint
             )
         }
-
 
         dataSet.forEachIndexed { index, it ->
 
@@ -191,19 +188,13 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                     start + dataStepWidth - paddingHorizontal,
                     height.toFloat() - bottomHeight
                 )
-
-                canvas.drawRect(
-                    rectFSelected,
-                    selectedDayPaint
-                )
+                canvas.drawRect(rectFSelected, selectedDayPaint)
             }
 
             val sum = (it.value1 ?: 0.0f) + (it.value2 ?: 0.0f)
             if (sum != 0.0f) {
-
                 val top = getYAxisValue(sum)
                 val isSelectedPosition = selectedPosition == index
-
                 val remEnd = getYAxisValue(it.value2 ?: 0.0f)
                 dataPosition.add(Pair(index, start))
 
@@ -216,8 +207,6 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                         height.toFloat() - bottomHeight
                     )
                     topRectF = rectFRem
-
-
                     canvas.drawRoundRect(
                         rectFRem,
                         rectRadius,
@@ -234,7 +223,6 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                         remEnd - padding
                     )
                     topRectF = rectFDeep
-
                     canvas.drawRoundRect(
                         rectFDeep,
                         rectRadius,
@@ -244,28 +232,23 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
                 }
 
                 if (isSelectedPosition && isInteracting && topRectF != null) {
-
                     val center = topRectF.left + (topRectF.right - topRectF.left) / 2
-
                     canvas.drawRect(
                         RectF(center - 2f, topHeight.toFloat(), center + 2f, topRectF.top),
                         barPaintTop
                     )
-
                     val widthHalf = dip2px(6f)
-                    val rectFTopI = RectF().apply {
-                        this.left = center - widthHalf
-                        this.right = center + widthHalf
-                        this.top = topHeight.toFloat()
-                        this.bottom = topHeight.toFloat() + dip2px(2f)
-                    }
-
+                    val rectFTopI = RectF(
+                        center - widthHalf,
+                        topHeight.toFloat(),
+                        center + widthHalf,
+                        topHeight.toFloat() + dip2px(2f)
+                    )
                     canvas.drawRect(rectFTopI, barPaintTop)
                 }
 
                 if (isSelectedPosition.not()) {
                     val (hour, minute) = getFormattedSleepDuration(sum.roundToInt())
-
                     val text = String.format("%d:%02d", hour, minute)
                     val xTextBounds = Rect()
                     barTextPaint.getTextBounds(text, 0, text.length, xTextBounds)
@@ -275,9 +258,63 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
             }
 
             start += dataStepWidth
-
         }
+    }
 
+    /** --- FUNCTION: drawXAxis --- */
+    private fun drawXAxis(canvas: Canvas) {
+        xAxisRange?.let {
+            val stepWidth = (width - getYAxisReservedWidth()) / barSize  // use same width as bars
+            val days = it
+            var start = 0f
+            val xTextBounds = Rect()
+            days.forEach {
+                val textWidth = xAxisPaint.measureText(it)
+                xAxisPaint.getTextBounds(it, 0, it.length, xTextBounds)
+                val textStart = start + stepWidth / 2 - textWidth / 2  // center text over bar
+                canvas.drawText(it, textStart, height - xTextBounds.height().toFloat(), xAxisPaint)
+                start += stepWidth
+            }
+        } ?: run {
+            val availableWidth = width.toFloat() - getYAxisReservedWidth()
+            val stepWidth = availableWidth / barSize
+            val days = arrayListOf(
+                context.getString(R.string.text_mon),
+                context.getString(R.string.text_tue),
+                context.getString(R.string.text_wed),
+                context.getString(R.string.text_thu),
+                context.getString(R.string.text_fri),
+                context.getString(R.string.text_sat),
+                context.getString(R.string.text_sun)
+            )
+
+            var start = 0f
+            val xTextBounds = Rect()
+            days.forEach {
+                val textWidth = xAxisPaint.measureText(it)
+                xAxisPaint.getTextBounds(it, 0, it.length, xTextBounds)
+                val textStart = start + stepWidth / 2 - textWidth / 2
+                canvas.drawText(it, textStart, height - xTextBounds.height().toFloat(), xAxisPaint)
+                start += stepWidth
+            }
+        }
+    }
+
+    /** --- FUNCTION: drawBackGrid --- */
+    private fun drawBackGrid(canvas: Canvas) {
+        val availableWidth = width.toFloat() - getYAxisReservedWidth()
+        val stepWidth = availableWidth / barSize  // match dataStepWidth
+        var start = 0f
+        for (i in 0..7) {
+            canvas.drawLine(
+                start,
+                topHeight.toFloat(),
+                start,
+                height.toFloat() - bottomHeight,
+                gridLinePaint
+            )
+            start += stepWidth
+        }
     }
 
     private fun performHapticFeedbackCustom() {
@@ -296,30 +333,15 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
     }
 
     private fun getYAxisValue(value: Float): Float {
-        val percent = (value / mMax.toFloat()) * 100
+        if (mMax <= 0) return height - bottomHeight.toFloat()
+        val safeValue = value.coerceAtMost(mMax.toFloat())
+        val percent = safeValue / mMax.toFloat()
         val availableHeight = height - bottomHeight - topHeight
-        return topHeight + availableHeight - (availableHeight * percent / 100)
-    }
-
-    private fun drawBackGrid(canvas: Canvas) {
-        val availableWidth = width.toFloat() - endPadding
-
-        val stepWidth = availableWidth / 7
-        var start = 0f
-        for (i in 0..7) {
-            canvas.drawLine(
-                start,
-                topHeight.toFloat(),
-                start,
-                height.toFloat() - bottomHeight,
-                gridLinePaint
-            )
-            start += stepWidth
-        }
+        return topHeight + availableHeight * (1f - percent)
     }
 
     private fun drawYAxis(canvas: Canvas) {
-        val availableWidth = width.toFloat() - endPadding
+        val availableWidth = width.toFloat() - getYAxisReservedWidth()
 
         val textBounds = Rect()
         val offsetWidth = dip2px(2f)
@@ -437,37 +459,26 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
 
     }
 
-
-    private fun drawXAxis(canvas: Canvas) {
-        val availableWidth = width.toFloat() - endPadding
-
-        val stepWidth = availableWidth / 7
-
-        val days = arrayListOf(context.getString(R.string.text_mon),
-            context.getString(R.string.text_tue),
-            context.getString(R.string.text_wed),
-            context.getString(R.string.text_thu),
-            context.getString(R.string.text_fri),
-            context.getString(R.string.text_sat),
-            context.getString(R.string.text_sun))
-
-        var start = 0
-        val xTextBounds = Rect()
-        days.forEach {
-            val textWidth = xAxisPaint.measureText(it)
-
-            xAxisPaint.getTextBounds(it, 0, it.length, xTextBounds)
-
-            val textStart = start + (stepWidth / 2 - textWidth / 2)
-            canvas.drawText(it, textStart, height - xTextBounds.height().toFloat(), xAxisPaint)
-            start += stepWidth.toInt()
-        }
-    }
-
     private fun dip2px(dpValue: Float): Int {
         val scale = context.resources.displayMetrics.density
         return (dpValue * scale + 0.5f).toInt()
     }
+
+    private fun getYAxisReservedWidth(): Int {
+        if (yAxisRange.isEmpty()) return dip2px(24f)
+
+        val bounds = Rect()
+        var maxWidth = 0
+
+        yAxisRange.forEach {
+            xAxisPaint.getTextBounds(it.second, 0, it.second.length, bounds)
+            maxWidth = maxOf(maxWidth, bounds.width())
+        }
+
+        // text width + small gap
+        return maxWidth + dip2px(8f)
+    }
+
 
     /**
      * array list of values -> Pair(deep minutes, rem minutes)
@@ -477,7 +488,8 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
         list: List<GraphDataModel>,
         yAxisRange: List<Pair<Int, String>>,
         maxValue: Int,
-        selectedPosition: Int
+        selectedPosition: Int,
+        xAxisRange: List<String>?
     ) {
         dataPosition.clear()
         dataSet.clear()
@@ -486,6 +498,9 @@ class SleepRestorativeChartInternal constructor(context: Context?, attrs: Attrib
 
         this.yAxisRange.clear()
         this.yAxisRange.addAll(yAxisRange)
+
+        this.xAxisRange = xAxisRange
+        barSize = xAxisRange?.size ?: 7
 
         mMax = maxValue
 

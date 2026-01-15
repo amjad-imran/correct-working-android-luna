@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        style="@style/S14"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/gilroy_medium"
+        android:lineSpacingExtra="3sp"
+        android:layout_marginTop="16dp"
+        android:textColor="#B3FFFFFF"
+        tools:text="New in Timeline: Streamlined logging for Supplements, Alcohol, and Recovery (meditation, cold plunge, and more)." />
+
+    <include
+        android:id="@+id/lytDivider"
+        layout="@layout/layout_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>

@@ -16,6 +16,63 @@
         <!-- Customize your theme here. -->
         <!--<item name="android:background">@color/md_theme_light_background</item>-->
 
+</style>
+
+    <!-- Style to configure HRCombinedChart at runtime via applyStyle(...) -->
+    <style name="HrChartStyle">
+        <item name="bgColor">@android:color/transparent</item>
+        <item name="bottomWith">30dp</item>
+        <item name="chartLineWidth">2dp</item>
+        <item name="combineTextSize">16sp</item>
+        <item name="gridColor">#80FFFFFF</item>
+        <item name="highColor">#ff3371</item>
+        <item name="rightWith">30dp</item>
+        <item name="lowColor">#ff3371</item>
+        <item name="mediumColor">#ff3371</item>
+        <item name="restLineColor">#40FFFFFF</item>
+        <item name="topWith">30dp</item>
+        <item name="xTextColor">#FFFFFF</item>
+        <item name="xTextSize">11sp</item>
+        <item name="yTextSize">11sp</item>
+    </style>
+
+    <!-- StressCombinedChart style -->
+    <style name="StressChartStyle">
+        <item name="bgColor">@android:color/transparent</item>
+        <item name="bottomWith">30dp</item>
+        <item name="chartLineWidth">2dp</item>
+        <item name="combineTextSize">16sp</item>
+        <item name="gridColor">#80FFFFFF</item>
+        <item name="highColor">#ff922d</item>
+        <item name="mediumColor">#ffe561</item>
+        <item name="lowColor">#12cba9</item>
+        <item name="rightWith">26dp</item>
+        <item name="restLineColor">#40FFFFFF</item>
+        <item name="topWith">50dp</item>
+        <item name="xMax">100</item>
+        <item name="xMin">0</item>
+        <item name="xTextColor">#FFFFFF</item>
+        <item name="xTextSize">12sp</item>
+        <item name="yTextSize">12sp</item>
+    </style>
+
+    <!-- ODayTimeInteractiveGraph style -->
+    <style name="DayTimeGraphStyle">
+        <item name="bgColor">@android:color/transparent</item>
+        <item name="bottomWith">30dp</item>
+        <item name="chartLineWidth">2dp</item>
+        <item name="combineTextSize">16sp</item>
+        <item name="gridColor">#80FFFFFF</item>
+        <item name="highColor">#ff922d</item>
+        <item name="mediumColor">#ffe561</item>
+        <item name="lowColor">#12cba9</item>
+        <item name="restLineColor">#40FFFFFF</item>
+        <item name="topWith">42dp</item>
+        <item name="xMax">100</item>
+        <item name="xMin">0</item>
+        <item name="xTextColor">#FFFFFF</item>
+        <item name="xTextSize">12sp</item>
+        <item name="yTextSize">12sp</item>
     </style>
 
     <style name="ToolbarTextTheme" parent="@android:style/TextAppearance.Medium">
@@ -513,7 +570,12 @@
         <item name="android:windowBackground">#CC030F1D</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
 
+    <style name="BottomSheetBlur" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowBackground">#4D000000</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
 
     <style name="ModalStyleReadinessNew">
