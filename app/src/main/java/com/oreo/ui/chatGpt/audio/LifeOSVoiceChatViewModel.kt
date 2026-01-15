@@ -19,6 +19,7 @@ import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okhttp3.Call
 import okhttp3.OkHttpClient
@@ -90,6 +91,14 @@ class LifeOSVoiceChatViewModel @Inject constructor(
                 val request = buildSseRequest(prompt)
                 val sseClient = sseClient.newCall(request)
                 currentSseCall = sseClient
+
+                val firstEventTimeoutJob = launch {
+                    delay(20_000)
+                    disposeChatStream()
+                    streamError.postValue("Server error, please try again.")
+                    setLoading(false)
+                }
+
                 val response = sseClient.execute()
 
                 if (!response.isSuccessful) {
@@ -98,11 +107,11 @@ class LifeOSVoiceChatViewModel @Inject constructor(
 
                 response.body.source().let { source ->
                     val isFirst = AtomicBoolean(true)
-                    lastPrompt = ""
                     parseSseStream(
                         source = source,
                         onText = { text ->
                             if(isFirst.getAndSet(false)){
+                                lastPrompt = ""
                                 addMessage(
                                     VoiceChatMessage(
                                         id = messageId,
@@ -119,11 +128,11 @@ class LifeOSVoiceChatViewModel @Inject constructor(
                             )
                         },
                         onAudio = { audioBytes ->
+                            firstEventTimeoutJob.cancel()
                             audioStream.postValue(audioBytes)
                         }
                     )
                 }
-
                 addReceivedMessage(
                     responseBuilder.toString(),
                     messageId

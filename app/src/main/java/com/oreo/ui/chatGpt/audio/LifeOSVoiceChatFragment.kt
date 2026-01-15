@@ -61,7 +61,8 @@ class LifeOSVoiceChatFragment :
 
     override fun onStart() {
         super.onStart()
-        setActionState(ActionState.LISTENING)
+        if(currentState != ActionState.ERROR)
+            setActionState(ActionState.LISTENING)
     }
 
     override fun onDestroyView() {
