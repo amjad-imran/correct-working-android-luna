@@ -924,7 +924,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         .inflate(layoutInflater, chipGrp, false)
 
                 mChipBinding.tvTitle.gone()
-                mChipBinding.tvDesc.text = "+${listData.size-3} more"
+                mChipBinding.tvDesc.text = context.getString(R.string.text_val_more, listData.size-3)
                 chipGrp.addView(
                     mChipBinding.root
                 )
