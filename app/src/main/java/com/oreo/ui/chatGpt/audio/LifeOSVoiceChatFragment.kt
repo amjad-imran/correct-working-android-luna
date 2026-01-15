@@ -53,27 +53,21 @@ class LifeOSVoiceChatFragment :
     }
 
     override fun onStop() {
+        viewModel.disposeChatStream()
         releaseSpeechRecognizer()
+        mp3Streamer.stop()
         super.onStop()
     }
 
+    override fun onStart() {
+        super.onStart()
+        setActionState(ActionState.LISTENING)
+    }
+
     override fun onDestroyView() {
+        viewModel.disposeChatStream()
         releaseSpeechRecognizer()
         super.onDestroyView()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setActionState(currentState)
-        if(currentState == ActionState.SPEAKING){
-            mp3Streamer.resume()
-        }
-    }
-
-    override fun onPause() {
-        speechRecognizer?.stopListening()
-        mp3Streamer.stop()
-        super.onPause()
     }
 
     override fun initListener() {
@@ -103,6 +97,7 @@ class LifeOSVoiceChatFragment :
             }
         }
         binding.ivPersonalization.setOnClickListener {
+            viewModel.disposeChatStream()
             navigate(
                 R.id.choosePersonaVoiceFragment,
                 bundleOf(
@@ -330,7 +325,7 @@ class LifeOSVoiceChatFragment :
                     delay(COMMIT_DELAY)
                     if (!isRecognizerActive) return@launch
                     isRecognizerCommiting.set(true)
-                    speechRecognizer?.stopListening()
+                    releaseSpeechRecognizer()
                     viewModel.askQuestionStream(finalText.toString())
                     setActionState(ActionState.THINKING)
                     resetListener()

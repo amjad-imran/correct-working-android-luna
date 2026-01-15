@@ -157,6 +157,7 @@ class LifeOSVoiceChatViewModel @Inject constructor(
     }
 
     fun disposeChatStream() {
+        audioStream.postValue(null)
         currentChatJob?.cancel()
         currentSseCall?.cancel()
     }
