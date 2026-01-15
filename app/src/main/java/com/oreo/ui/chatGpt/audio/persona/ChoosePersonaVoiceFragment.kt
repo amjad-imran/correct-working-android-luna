@@ -74,7 +74,8 @@ class ChoosePersonaVoiceFragment :
         binding.tvSelect.setOnClickListener {
             viewModel.saveUserPersona(currentPersona)
             navigateUpSafe()
-            navigate(R.id.lifeOsVoiceChatFragment)
+            if(arguments?.getBoolean("isFromVoiceChat", false) == false)
+                navigate(R.id.lifeOsVoiceChatFragment)
         }
     }
 

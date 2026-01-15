@@ -13,6 +13,7 @@ import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.toColorInt
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,17 +44,12 @@ class LifeOSVoiceChatFragment :
         Mp3Streamer(requireContext())
     }
     private var currentState = ActionState.LISTENING
-    private var isRecognizerCommiting = false
+    private var isRecognizerCommiting = AtomicBoolean(false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecycler()
         viewModel.generateThreadId()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        setupSpeechRecognizer()
     }
 
     override fun onStop() {
@@ -85,12 +81,11 @@ class LifeOSVoiceChatFragment :
         binding.ivBtnAction.setOnClickListener {
             when (currentState) {
                 ActionState.LISTENING -> {
-                    speechRecognizer?.stopListening()
+                    releaseSpeechRecognizer()
                     setActionState(ActionState.MUTE)
                 }
 
                 ActionState.SPEAKING, ActionState.THINKING, ActionState.MUTE -> {
-                    isRecognizerCommiting = false
                     mp3Streamer.stop()
                     viewModel.disposeChatStream()
                     setActionState(ActionState.LISTENING)
@@ -108,7 +103,12 @@ class LifeOSVoiceChatFragment :
             }
         }
         binding.ivPersonalization.setOnClickListener {
-            navigate(R.id.choosePersonaVoiceFragment)
+            navigate(
+                R.id.choosePersonaVoiceFragment,
+                bundleOf(
+                    "isFromVoiceChat" to true,
+                )
+            )
         }
     }
 
@@ -147,7 +147,6 @@ class LifeOSVoiceChatFragment :
             )
         }
         viewModel.chatMessages.observe(viewLifecycleOwner) {
-            isRecognizerCommiting = false
             chatAdapter.submitMessages(it)
             binding.chatRecycler.scrollToPosition(it.size - 1)
         }
@@ -203,6 +202,7 @@ class LifeOSVoiceChatFragment :
                     R.drawable.ic_voice_listening,
                     getString(R.string.text_listening)
                 )
+                setupSpeechRecognizer()
                 checkMicrophonePermission()
             }
 
@@ -299,7 +299,7 @@ class LifeOSVoiceChatFragment :
         speechRecognizer?.setRecognitionListener(object : RecognitionListener {
 
             override fun onPartialResults(bundle: Bundle?) {
-                if (!isRecognizerActive || isRecognizerCommiting) return
+                if (!isRecognizerActive) return
 
                 val text = bundle
                     ?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
@@ -329,7 +329,7 @@ class LifeOSVoiceChatFragment :
                 commitJob = viewLifecycleOwner.lifecycleScope.launch {
                     delay(COMMIT_DELAY)
                     if (!isRecognizerActive) return@launch
-                    isRecognizerCommiting = true
+                    isRecognizerCommiting.set(true)
                     speechRecognizer?.stopListening()
                     viewModel.askQuestionStream(finalText.toString())
                     setActionState(ActionState.THINKING)
@@ -340,7 +340,7 @@ class LifeOSVoiceChatFragment :
             override fun onResults(results: Bundle?) {}
             override fun onEndOfSpeech() {}
             override fun onError(error: Int) {
-                if(isRecognizerCommiting) return
+                if(isRecognizerCommiting.getAndSet(false)) return
                 startListening()
                 resetListener()
             }
