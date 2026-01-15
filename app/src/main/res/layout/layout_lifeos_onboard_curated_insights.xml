@@ -36,7 +36,7 @@
         android:layout_marginHorizontal="12dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
-        android:text="@string/text_learn_tangible_ways_to_improve_with_curated_insights"
+        android:text="@string/text_get_weekly_highlights_and_improvements_curated_to_you"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

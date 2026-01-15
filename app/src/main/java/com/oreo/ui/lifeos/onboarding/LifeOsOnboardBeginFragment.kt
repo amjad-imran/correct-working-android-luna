@@ -37,28 +37,28 @@ class LifeOsOnboardBeginFragment : BaseFragment<FragmentLifeOsOnboardBeginBindin
         binding.lytLogYourMeals.apply {
             ivIcon.setImageResource(R.drawable.ic_lifeos_log_your_meals)
             tvText.text =
-                getString(R.string.text_log_your_meals_to_learn_what_helps_and_what_harms_recovery)
+                getString(R.string.text_log_your_meals_or_click_a_photo_to_learn_more)
         }
 
         // lytBiomarkers
         binding.lytBiomarkers.apply {
             ivIcon.setImageResource(R.drawable.ic_lifeos_dive_biomarkers)
             tvText.text =
-                getString(R.string.text_dive_deep_with_your_biomarkers)
+                getString(R.string.text_deep_dive_with_your_luna_data_and_learn_trends)
         }
 
         // lytEffectsMoodAndSleep
         binding.lytEffectsMoodAndSleep.apply {
-            ivIcon.setImageResource(R.drawable.ic_lifeos_affects_mood_sleep)
+            ivIcon.setImageResource(R.drawable.ic_lifeos_share_your_medications)
             tvText.text =
-                getString(R.string.text_learn_how_exercise_affects_your_mood_and_sleep)
+                getString(R.string.text_share_your_medical_reports_or_log_your_medications)
         }
 
         // lytHealthAssistant
         binding.lytHealthAssistant.apply {
             ivIcon.setImageResource(R.drawable.ic_lifeos_24x7_assistant)
             tvText.text =
-                getString(R.string.text_your_personal_health_assistant_with_you_24x7)
+                getString(R.string.text_ask_anything_about_your_health_privately_and_safely)
         }
     }
 
