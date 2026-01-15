@@ -13,6 +13,7 @@ import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.ui.chatGpt.AITopics
 import dagger.hilt.android.AndroidEntryPoint
 import eightbitlab.com.blurview.RenderEffectBlur
@@ -23,6 +24,9 @@ class LifeOsInsightFrag :
     BaseFragment<FragmentLifeOsInsightBinding>(FragmentLifeOsInsightBinding::inflate) {
 
     private val viewModel: LifeOsInsightsViewModel by viewModels()
+
+    private var startTime: Long = 0
+    private var spentTime: Long = 0
 
     private val insightAdapter by lazy {
         LifeOsInsightListAdapter { insightItem ->
@@ -73,6 +77,10 @@ class LifeOsInsightFrag :
 
     override fun initListener() {
         binding.lytInsightMore.btnTalkToLifeOs.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.lifeos_talk_with_ai_clicked,
+            )
+
             val (frag, bundle) = LifeOsChatFragment.getStartData(
                 threadId = null,
                 userMessage = null,
@@ -151,4 +159,23 @@ class LifeOsInsightFrag :
             }
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+
+        startTime = System.currentTimeMillis()
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        spentTime = (System.currentTimeMillis() - startTime) / 1000
+        viewModel.sessionManager.logMoEngageAppEvent(
+            MoEngageLunaAppEvents.lifeos_insights_screen,
+            hashMapOf(
+                "view_duration_ms" to "$spentTime seconds"
+            )
+        )
+    }
+
 }

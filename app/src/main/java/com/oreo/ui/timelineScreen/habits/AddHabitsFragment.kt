@@ -34,9 +34,11 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.hideKeyboard
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.timeline.habits.CategoryUi
 import com.oreo.data.model.timeline.habits.HabitListItem
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import kotlin.getValue
 
 @AndroidEntryPoint
@@ -62,6 +64,7 @@ class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabi
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.selectedHabitsFromBundle = args.selectedOptions
+        viewModel.srcKey = args.srcKey
 
         setUi(viewModel.selectedHabitsFromBundle?.options.isNullOrEmpty())
         setRecycler()
@@ -121,12 +124,39 @@ class AddHabitsFragment : BaseFragment<FragmentAddHabitsBinding>(FragmentAddHabi
         binding.rvHabits.adapter = adapter
     }
 
+    private fun triggerEventOnSaveClicked(){
+        lifecycleScope.launch {
+            when(viewModel.srcKey){
+                "setupHabits" -> {
+                    viewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.habits_setup,
+                    )
+                }
+
+                "customizeHabits" -> {
+                    viewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.habits_modified,
+                    )
+                }
+
+                "addHabitsBS" -> {
+                    viewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.habits_setup,
+                    )
+                }
+
+                else -> Unit
+            }
+        }
+    }
+
     override fun initListener() {
         binding.toolbar.backBtn.setOnClickListener {
             navigateUpSafe()
         }
 
         binding.tvSave.setOnClickListener {
+            triggerEventOnSaveClicked()
             val selected = viewModel.uiState.value.selectedHabits.toList()
             if(selected.isEmpty()){
                 showToast(requireContext(), "Please Select At least 1 Habit")

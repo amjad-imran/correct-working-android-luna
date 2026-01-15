@@ -6,7 +6,9 @@ import androidx.activity.addCallback
 import androidx.fragment.app.setFragmentResult
 import com.noisefit.data.local.dataStored.implementation.DataStoredImpl
 import com.noisefit.luna.databinding.FragmentLifeOsOnboardFinishBinding
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.ui.lifeos.onboarding.LifeOsOnboardBeginFragment.Companion.LIFE_OS_ONBOARD_BEGIN_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -16,6 +18,9 @@ class LifeOsOnboardFinishFragment : BaseFragment<FragmentLifeOsOnboardFinishBind
 
     @Inject
     lateinit var localDataStore: DataStoredImpl
+
+    @Inject
+    lateinit var sessionManager: SessionManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,6 +37,9 @@ class LifeOsOnboardFinishFragment : BaseFragment<FragmentLifeOsOnboardFinishBind
 
     override fun initListener() {
         binding.btnLetsGo.setOnClickListener {
+            sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.lifeos_onboarding_pickup
+            )
             navigateUpSafe()
         }
         binding.ivBackBtn.setOnClickListener {

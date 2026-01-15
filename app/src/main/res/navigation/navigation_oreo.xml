@@ -1685,6 +1685,12 @@
             app:nullable="true"
             android:defaultValue="@null" />
 
+        <argument
+            android:name="srcKey"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
+
     </fragment>
     <dialog
         android:id="@+id/addHabitsBeginBottomSheet"

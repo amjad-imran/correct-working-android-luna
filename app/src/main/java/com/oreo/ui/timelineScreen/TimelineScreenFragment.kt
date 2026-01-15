@@ -48,9 +48,21 @@ class TimelineScreenFragment :
     private val habitsAdapter by lazy {
         ItemHabitsTimelineAdapter(
             onCross = { habit ->
+                mainViewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.habits_not_done,
+                    hashMapOf(
+                        "category" to "${habit.type}"
+                    )
+                )
                 viewModel.onCrossClicked(habit.timeTrackerOptionId, mainViewModel.selectedDate)
             },
             onCheck = { habit ->
+                mainViewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.habits_tick_clicked,
+                    hashMapOf(
+                        "category" to "${habit.type}"
+                    )
+                )
                 handleOnCheckClicked(habit, mainViewModel.selectedDate)
             }
         )
@@ -284,6 +296,15 @@ class TimelineScreenFragment :
 
     private fun checkUserHabits(){
         if(viewModel.checkUserFirstTimeForAddHabits()){
+            setFragmentResultListener(ADD_HABITS_BEGIN_KEY) { _, bundle ->
+                val addHabit = bundle.getBoolean("addHabits")
+                if(addHabit==true){
+                    navigate(
+                        R.id.addHabitsFragment,
+                        bundleOf("srcKey" to "addHabitsBS")
+                    )
+                }
+            }
             AddHabitsBeginBottomSheet().show(parentFragmentManager, "AddHabitsBeginBottomSheet")
             viewModel.setAddHabitFirstTimeVisibility()
         }
@@ -301,13 +322,19 @@ class TimelineScreenFragment :
     override fun initListener() {
 
         binding.lytSetupHabits.root.setOnClickListener {
-            navigate(R.id.addHabitsFragment)
+            navigate(
+                R.id.addHabitsFragment,
+                bundleOf("srcKey" to "setupHabits")
+            )
         }
 
         binding.lytSavedHabits.tvCustomize.setOnClickListener {
             navigate(
                 R.id.addHabitsFragment,
-                bundleOf("selectedOptions" to viewModel.habitsResponseData)
+                bundleOf(
+                    "selectedOptions" to viewModel.habitsResponseData,
+                    "srcKey" to "customizeHabits"
+                )
             )
         }
 

@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -25,6 +26,7 @@ class YourHabitsTimelineViewModel @Inject constructor(
     val localDataStore: DataStoredInterface,
     private val habitsByDateUC: dagger.Lazy<GetHabitsByDateUseCase>,
     private val cancelHabitByIdAndDateUseCase: dagger.Lazy<CancelHabitByIdAndDateUseCase>,
+    val sessionManager: SessionManager,
 ): BaseViewModel() {
 
     var mDate: String ?= null

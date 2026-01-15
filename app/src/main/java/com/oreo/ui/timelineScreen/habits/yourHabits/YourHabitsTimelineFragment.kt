@@ -19,6 +19,7 @@ import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 import com.oreo.ui.timelineScreen.ItemHabitsTimelineAdapter
@@ -36,9 +37,21 @@ class YourHabitsTimelineFragment : BaseFragment<FragmentYourHabitsTimelineBindin
     private val habitsAdapter by lazy {
         YourHabitsTimelineAdapter(
             onCross = { habit ->
+                viewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.habits_not_done,
+                    hashMapOf(
+                        "category" to "${habit.type}"
+                    )
+                )
                 viewModel.onCrossClicked(habit.timeTrackerOptionId)
             },
             onCheck = { habit ->
+                viewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.habits_tick_clicked,
+                    hashMapOf(
+                        "category" to "${habit.type}"
+                    )
+                )
                 handleOnCheckClicked(habit, viewModel.mDate)
             }
         )

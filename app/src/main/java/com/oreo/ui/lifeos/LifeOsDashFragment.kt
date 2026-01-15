@@ -53,6 +53,7 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.chatGpt.audio.AudioAiFragment
@@ -70,13 +71,25 @@ class LifeOsDashFragment :
 
     private val mainViewModel: OreoMainViewModel by activityViewModels()
 
+    private var startTime: Long = 0
+    private var spentTime: Long = 0
+
     private val questionsAdapter by lazy {
         LifeOsQuestionAdapter { data ->
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.lifeos_suggested_q_clicked,
+                hashMapOf(
+                    "source" to "LifeOS tab [main]",
+                    "question" to data
+                )
+            )
+
             val (frag, bundle) = LifeOsChatFragment.getStartData(
                 threadId = null,
                 userMessage = data,
                 title = null,
                 aiTopic = AITopics.GENERAL,
+                srcKey = "lifeos",
             )
             navigate(
                 frag, bundle
@@ -86,6 +99,10 @@ class LifeOsDashFragment :
 
     private val insightAdapter by lazy {
         LifeOsInsightListAdapter(true){ insightItem ->
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.lifeos_insight_card_clicked
+            )
+
             navigate(
                 R.id.lifeOsInsightDetailsFragment,
                 Bundle().apply { putParcelable("insightData", insightItem) }
@@ -351,6 +368,9 @@ class LifeOsDashFragment :
     override fun initListener() {
 
         binding.lytHeader.ivPersonalize.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.lifeos_personalize_clicked
+            )
             navigate(R.id.personalizeLifeOsFragment)
         }
 
@@ -359,7 +379,8 @@ class LifeOsDashFragment :
                 threadId = null,
                 userMessage = null,
                 title = null,
-                aiTopic = AITopics.GENERAL
+                aiTopic = AITopics.GENERAL,
+                srcKey = "lifeos",
             )
             findNavController().navigate(
                 frag, bundle
@@ -377,7 +398,8 @@ class LifeOsDashFragment :
                 threadId = null,
                 userMessage = null,
                 title = null,
-                aiTopic = AITopics.GENERAL
+                aiTopic = AITopics.GENERAL,
+                srcKey = "lifeos",
             )
             findNavController().navigate(
                 frag, bundle
@@ -388,7 +410,8 @@ class LifeOsDashFragment :
                 threadId = null,
                 userMessage = null,
                 title = null,
-                aiTopic = AITopics.GENERAL
+                aiTopic = AITopics.GENERAL,
+                srcKey = "lifeos",
             )
             findNavController().navigate(
                 frag, bundle
@@ -403,6 +426,12 @@ class LifeOsDashFragment :
         }
 
         binding.lytToolbar.ivHistory.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.lifeos_history_view,
+                hashMapOf(
+                    "source" to "LifeOS tab [main]",
+                )
+            )
             navigate(R.id.chatHistoryFragment)
         }
 
@@ -415,6 +444,9 @@ class LifeOsDashFragment :
         }
 
         binding.lytHeader.lytOnboardQuesProgress.root.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.lifeos_onboarding_complete
+            )
             viewModel.totalQuesAnsResp = null
             navigate(R.id.lifeOsOnboardingQuesFragment)
         }
@@ -504,6 +536,25 @@ class LifeOsDashFragment :
 
         }
         viewModel.uiStateData.value = null
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        startTime = System.currentTimeMillis()
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        spentTime = (System.currentTimeMillis() - startTime) / 1000
+        viewModel.sessionManager.logMoEngageAppEvent(
+            MoEngageLunaAppEvents.lifeos_home_viewed,
+            hashMapOf(
+                "source" to "footer, homepage, $spentTime seconds",
+                "view_duration_ms" to "$spentTime seconds",
+            )
+        )
     }
 
 }

@@ -15,6 +15,7 @@ import com.noisefit_commans.ui.custom.SleepGraphViewOreo
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.loadImage
 import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.dataConverter.GraphsKey
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.custom.HRCombinedChart
@@ -116,6 +117,10 @@ class LifeOsInsightDetailsFragment :
                 adapter = RelatedSuggestedQuesAdapter(
                     list
                 ){
+                    viewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.dig_deeper_q_clicked
+                    )
+
                     handleRelatedQuesClick(it)
                 }
             }
@@ -133,7 +138,8 @@ class LifeOsInsightDetailsFragment :
                 footerText = data,
                 insightData = viewModel.insightData?.raw
             ),
-            aiTopic = AITopics.GENERAL
+            aiTopic = AITopics.GENERAL,
+            srcKey = "insightDetail"
         )
         navigate(
             frag, bundle
@@ -169,6 +175,9 @@ class LifeOsInsightDetailsFragment :
         }*/
 
         binding.lytChatBox.btnAction.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.lifeos_ai_followup_clicked,
+            )
             handleRelatedQuesClick(binding.lytChatBox.chatEtx.text.toString())
         }
     }

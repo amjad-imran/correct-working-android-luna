@@ -7,6 +7,7 @@ import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.luna.R
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -33,6 +34,7 @@ class LifeOsDashViewModel @Inject constructor(
     val oreoDeviceRepository: OreoDeviceRepository,
     private val userRepository: UserRepository,
     private val resourcesProvider: ResourcesProvider,
+    val sessionManager: SessionManager,
 ) : BaseViewModel() {
 
     private val _questions = MutableLiveData<List<String>>()

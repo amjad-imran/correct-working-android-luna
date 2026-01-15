@@ -30,6 +30,7 @@ import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.Event
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.ChatGptOverview
 import com.oreo.data.model.ai.ChatMessage
 import com.oreo.data.model.ai.TopQuestions
@@ -465,6 +466,9 @@ class ChatGptViewModel
                     }
                 }
                 addReceivedMessage(responseBuilder.toString(), uuid,false)
+                sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.lifeos_reply_sent
+                )
 
                 fetchInProgress.postValue(false)
                 videoState.postValue(false)

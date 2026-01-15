@@ -94,6 +94,13 @@ class LifeOsChatFragment :
 
     private val suggestionsAdapter: SuggestionAdapter by lazy {
         SuggestionAdapter() { ques ->
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.lifeos_suggested_q_clicked,
+                hashMapOf(
+                    "source" to getSrcEventNameFromSrcKey(),
+                    "question" to ques
+                )
+            )
             sendMessage(ques)
         }
     }
@@ -190,6 +197,12 @@ class LifeOsChatFragment :
 
         mAdapter.itemClickListener = object : ChatClickListener {
             override fun onCopyMessage(message: ChatGptOverview.ReceivedMessage) {
+                viewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.lifeos_copy_button,
+                    hashMapOf(
+                        "source" to getSrcEventNameFromSrcKey()
+                    )
+                )
                 val plain = markdownToPlainText(message.message)
                 try {
                     plain.copyToClipBoard()
@@ -201,6 +214,13 @@ class LifeOsChatFragment :
                 val isAlreadyLiked = mAdapter.checkRateState(message.id)
                 if (isAlreadyLiked) return
 
+                viewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.lifeos_response_feedback_clicked,
+                    hashMapOf(
+                        "feedback" to "positive"
+                    )
+                )
+
                 mAdapter.markLiked(message.id)
                 viewModel.postChatReview(message.message, 1, message.id)
             }
@@ -208,6 +228,13 @@ class LifeOsChatFragment :
             override fun onDislikeMessage(message: ChatGptOverview.ReceivedMessage) {
                 val isAlreadyLiked = mAdapter.checkRateState(message.id)
                 if (isAlreadyLiked) return
+
+                viewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.lifeos_response_feedback_clicked,
+                    hashMapOf(
+                        "feedback" to "negative"
+                    )
+                )
 
                 mAdapter.markDisliked(message.id)
                 viewModel.postChatReview(message.message, 0, message.id)
@@ -266,6 +293,12 @@ class LifeOsChatFragment :
         }
 
         binding.ivHistory.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.lifeos_history_view,
+                hashMapOf(
+                    "source" to getSrcEventNameFromSrcKey()
+                )
+            )
             navigateUpSafe()
             navigate(R.id.chatHistoryFragment)
         }
@@ -333,6 +366,20 @@ class LifeOsChatFragment :
 //                navigateUpSafe()
 //                navigate(frag, bundle)
 //            } else {
+            if(viewModel.pendingAttachment != null){
+                viewModel.sessionManager.logMoEngageAppEvent(
+                    MoEngageLunaAppEvents.lifeos_chat_media,
+                    hashMapOf(
+                        "source" to getSrcEventNameFromSrcKey()
+                    )
+                )
+            }
+            viewModel.sessionManager.logMoEngageAppEvent(
+                MoEngageLunaAppEvents.lifeos_message_sent,
+                hashMapOf(
+                    "source" to getSrcEventNameFromSrcKey()
+                )
+            )
             val message = text.ifEmpty { getString(R.string.text_analyse_this) }
             sendMessage(message)
         }
@@ -867,4 +914,29 @@ class LifeOsChatFragment :
             .replace("\r", "")
         return "\"$escaped\""
     }
+
+    private fun getSrcEventNameFromSrcKey(srcKey: String?=null): String{
+        val src = srcKey ?: viewModel.srcKey
+        return when(src){
+            "lifeos" -> "LifeOS tab [new chat]"
+            "sleep" -> "Sleep"
+            "cycle_tracker" -> "Cycle Tracker"
+            "readiness" -> "Readiness"
+            "activity" -> "Activity"
+            "circadian" -> "Circadian"
+            else -> "Unknown"
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        viewModel.sessionManager.logMoEngageAppEvent(
+            MoEngageLunaAppEvents.lifeos_chat_opened,
+            hashMapOf(
+                "source" to getSrcEventNameFromSrcKey(args.sourceKey)
+            )
+        )
+    }
+
 }

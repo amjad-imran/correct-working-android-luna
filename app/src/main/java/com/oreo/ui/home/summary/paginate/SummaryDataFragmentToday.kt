@@ -798,6 +798,13 @@ class SummaryDataFragmentToday :
 
                 is OSummaryHealthOverviewClickEnum.OnCheckHabitTimelineNewClicked -> {
                     val curHabit = type.item
+                    viewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.habits_tick_clicked,
+                        hashMapOf(
+                            "category" to "${curHabit.type}"
+                        )
+                    )
+
                     handleOnCheckHabitTimelineClicked(
                         curHabit,
                         mainViewModel.selectedDate

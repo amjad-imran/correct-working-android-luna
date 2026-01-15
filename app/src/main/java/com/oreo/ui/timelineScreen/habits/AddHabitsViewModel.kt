@@ -8,6 +8,7 @@ import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.oreo.data.model.timeline.habits.Options
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.ui.BaseViewModel
@@ -32,6 +33,7 @@ class AddHabitsViewModel @Inject constructor(
     private val getAllHabitUC: GetAllHabitsUseCase,
     private val submitUserHabitsUC: dagger.Lazy<SubmitUserHabitsUseCase>,
     private val resourcesProvider: dagger.Lazy<ResourcesProvider>,
+    val sessionManager: SessionManager,
 ): BaseViewModel() {
 
     private val _uiState = MutableStateFlow(HabitsUiState(loading = true))
@@ -40,6 +42,8 @@ class AddHabitsViewModel @Inject constructor(
     var selectedHabitsFromBundle: HabitsByDateResponse ?= null
 
     private var mainResponse = ArrayList<Options>()
+
+    var srcKey: String ?= null
     private var searchQuery: String = ""
 
     init {

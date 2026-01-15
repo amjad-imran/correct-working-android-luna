@@ -11,6 +11,7 @@ import com.noisefit_commans.ui.BaseViewModel
 import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.utils.GraphType
 import com.oreo.data.dataConverter.GraphDataConvertor
 import com.oreo.data.dataConverter.OreoHRDataConvertor
@@ -27,6 +28,7 @@ class LifeOsInsightsViewModel @Inject constructor(
     val hrDataConvertor: OreoHRDataConvertor,
     val graphDataConvertor: GraphDataConvertor,
     private val userRepository: UserRepository,
+    val sessionManager: SessionManager,
 ) : BaseViewModel() {
 
     private val _cards = MutableLiveData<List<InsightCardUiModel>>()
