@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize10dp" />
+        app:shapeAppearance="@style/ShapeAppearanceOverlay.App.CornerSize24dp" />
 
     <TextView
         android:id="@+id/tvPersonaName"
