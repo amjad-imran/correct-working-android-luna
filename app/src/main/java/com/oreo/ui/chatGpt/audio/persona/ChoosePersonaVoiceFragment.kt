@@ -9,10 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
 import com.google.android.material.tabs.TabLayoutMediator
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentChoosePersonaVoiceBinding
 import com.noisefit_commans.ui.BaseFragment
+import com.noisefit_commans.ui.gone
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,12 +24,14 @@ class ChoosePersonaVoiceFragment :
     private val viewModel: ChoosePersonaVoiceViewModel by viewModels()
     private var mediaPlayer: MediaPlayer? = null
     private lateinit var currentPersona: String
-    private val mAdapter by lazy {
-        ChoosePersonaVoiceVpAdapter()
-    }
+    private lateinit var mAdapter: ChoosePersonaVoiceVpAdapter
+    lateinit var exoPlayer : ExoPlayer
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.loadPersonaData()
+        exoPlayer =  ExoPlayer.Builder(requireContext()).build()
+        mAdapter = ChoosePersonaVoiceVpAdapter()
         mediaPlayer = MediaPlayer()
         setUpViewPager()
     }
@@ -82,6 +87,13 @@ class ChoosePersonaVoiceFragment :
 
     override fun subscribeObservers() {
         viewModel.personaData.observe(this){
+            it.firstOrNull()?.voiceUrl?.let { url ->
+                exoPlayer.apply {
+                    setMediaItem(MediaItem.fromUri(url))
+                    playWhenReady = true
+                    prepare()
+                }
+            }
             mAdapter.updateDataSet(it)
         }
     }
@@ -95,15 +107,12 @@ class ChoosePersonaVoiceFragment :
         mediaPlayer?.stop()
         super.onStop()
     }
-
-    private fun playMusic(songUrl: String) {
-        mediaPlayer?.stop()
-        mediaPlayer?.release()
-
-        mediaPlayer = MediaPlayer().apply {
-            setDataSource(songUrl)
-            setOnPreparedListener { start() }
-            prepareAsync()
+    fun playMusic(url: String) {
+        exoPlayer.apply {
+            stop()
+            setMediaItem(MediaItem.fromUri(url))
+            playWhenReady = true
+            prepare()
         }
     }
 }

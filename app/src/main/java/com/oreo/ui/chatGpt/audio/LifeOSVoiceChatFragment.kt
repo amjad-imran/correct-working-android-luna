@@ -45,6 +45,7 @@ class LifeOSVoiceChatFragment :
     }
     private var currentState = ActionState.LISTENING
     private var isRecognizerCommiting = AtomicBoolean(false)
+    private var isMuted = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -186,6 +187,7 @@ class LifeOSVoiceChatFragment :
     }
     private fun setActionState(state: ActionState) {
         currentState = state
+        isMuted = false
         when (state) {
             ActionState.LISTENING -> {
                 binding.lvListening.apply {
@@ -239,6 +241,7 @@ class LifeOSVoiceChatFragment :
             }
 
             ActionState.MUTE -> {
+                isMuted = true
                 setActionUIAndVisibility(
                     isThinking = false,
                     isListening = false,
@@ -324,7 +327,7 @@ class LifeOSVoiceChatFragment :
                 commitJob?.cancel()
                 commitJob = viewLifecycleOwner.lifecycleScope.launch {
                     delay(COMMIT_DELAY)
-                    if (!isRecognizerActive) return@launch
+                    if (!isMuted && !isRecognizerActive) return@launch
                     isRecognizerCommiting.set(true)
                     releaseSpeechRecognizer()
                     viewModel.askQuestionStream(finalText.toString())

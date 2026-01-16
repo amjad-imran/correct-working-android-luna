@@ -24,11 +24,7 @@ class ChoosePersonaVoiceViewModel @Inject constructor(
     private val _personaData = MutableLiveData<List<ItemPersonaVoiceResponse>>()
     val personaData: LiveData<List<ItemPersonaVoiceResponse>> get() = _personaData
 
-    init {
-        loadPersonaData()
-    }
-
-    private fun loadPersonaData() {
+    fun loadPersonaData() {
         viewModelScope.launch {
              oreoDeviceRepository.getPersonaVoiceData().collect { resource ->
                  when (resource) {

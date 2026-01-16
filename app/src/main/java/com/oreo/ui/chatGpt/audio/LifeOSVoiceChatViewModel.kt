@@ -17,6 +17,7 @@ import com.noisefit_commans.data.model.Token
 import com.noisefit_commans.ui.BaseViewModel
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -26,7 +27,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okio.BufferedSource
-import okio.IOException
 import java.util.Calendar
 import java.util.TimeZone
 import java.util.UUID
@@ -72,6 +72,13 @@ class LifeOSVoiceChatViewModel @Inject constructor(
             _chatMessages.postValue(list)
         }
     }
+
+    val firstEventTimeoutJob = viewModelScope.launch(start = CoroutineStart.LAZY) {
+        delay(20_000)
+        disposeChatStream()
+        streamError.postValue("Server error, please try again.")
+        setLoading(false)
+    }
     fun askQuestionStream(prompt: String) {
         lastPrompt = prompt
         if (!ApplicationUtils.isInternetConnected()) {
@@ -92,12 +99,8 @@ class LifeOSVoiceChatViewModel @Inject constructor(
                 val sseClient = sseClient.newCall(request)
                 currentSseCall = sseClient
 
-                val firstEventTimeoutJob = launch {
-                    delay(20_000)
-                    disposeChatStream()
-                    streamError.postValue("Server error, please try again.")
-                    setLoading(false)
-                }
+                firstEventTimeoutJob.cancel()
+                firstEventTimeoutJob.start()
 
                 val response = sseClient.execute()
 
