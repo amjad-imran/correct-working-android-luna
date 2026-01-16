@@ -2415,5 +2415,13 @@
     <string name="text_customize">Personalizar</string>
     <string name="reply_to_life_os">Responder ao Life OS</string>
     <string name="text_customise">Personalizar</string>
+    <string name="text_talk_to_lifeos">Fale com o LifeOS</string>
+    <string name="text_get_weekly_highlights_and_improvements_curated_to_you">Receba destaques semanais e melhorias, personalizados para você.</string>
+    <string name="text_log_your_meals_or_click_a_photo_to_learn_more">Registre suas refeições ou tire uma foto para saber mais.</string>
+    <string name="text_deep_dive_with_your_luna_data_and_learn_trends">Mergulhe nos seus dados do Luna e descubra tendências</string>
+    <string name="text_ask_anything_about_your_health_privately_and_safely">Pergunte qualquer coisa sobre sua saúde - de forma privada e segura</string>
+    <string name="text_share_your_medical_reports_or_log_your_medications">Compartilhe seus relatórios médicos ou registre seus medicamentos.</string>
+    <string name="text_no_conversations_yet">Ainda sem conversas</string>
+    <string name="text_start_chatting_with_lifeos_to_see_your_conversation_history_here">Comece a conversar com o LifeOS para ver seu histórico de conversas aqui.</string>
 
 </resources>

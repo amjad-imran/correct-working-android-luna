@@ -2361,5 +2361,13 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="reply_to_life_os">Responder a Life OS</string>
     <string name="life_os_chat_hint">Pregunta, sube o escanea: aquí para guiarte.</string>
     <string name="text_customise">Personalizar</string>
+    <string name="text_talk_to_lifeos">Habla con LifeOS</string>
+    <string name="text_get_weekly_highlights_and_improvements_curated_to_you">Obtén los aspectos más destacados y mejoras semanales, seleccionados para ti.</string>
+    <string name="text_log_your_meals_or_click_a_photo_to_learn_more">Registra tus comidas o toma una foto para aprender más.</string>
+    <string name="text_deep_dive_with_your_luna_data_and_learn_trends">Sumérgete en tus datos de Luna y aprende tendencias</string>
+    <string name="text_ask_anything_about_your_health_privately_and_safely">Pregunta cualquier cosa sobre tu salud, de forma privada y segura</string>
+    <string name="text_share_your_medical_reports_or_log_your_medications">Comparte tus informes médicos o registra tus medicamentos.</string>
+    <string name="text_no_conversations_yet">Aún no hay conversaciones</string>
+    <string name="text_start_chatting_with_lifeos_to_see_your_conversation_history_here">Comienza a chatear con LifeOS para ver tu historial de conversaciones aquí.</string>
 
 </resources>
