@@ -63,6 +63,9 @@ class LifeOSVoiceChatFragment :
         super.onStart()
         if(currentState != ActionState.ERROR)
             setActionState(ActionState.LISTENING)
+        if(viewModel.chatMessages.value.isNullOrEmpty().not()){
+            binding.tvStartTalking.gone()
+        }
     }
 
     override fun onDestroyView() {
@@ -160,7 +163,6 @@ class LifeOSVoiceChatFragment :
             }
         }
     }
-
     private fun startListening() {
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(
@@ -175,7 +177,6 @@ class LifeOSVoiceChatFragment :
         isRecognizerActive = true
         speechRecognizer?.startListening(intent)
     }
-
     private fun setupRecycler() {
         chatAdapter = ChatAdapter(mutableListOf())
         binding.chatRecycler.apply {
@@ -183,7 +184,6 @@ class LifeOSVoiceChatFragment :
             adapter = chatAdapter
         }
     }
-
     private fun setActionState(state: ActionState) {
         currentState = state
         when (state) {
@@ -251,7 +251,6 @@ class LifeOSVoiceChatFragment :
             ActionState.ERROR -> {}
         }
     }
-
     private fun setActionUIAndVisibility(
         isThinking: Boolean,
         isListening: Boolean,
@@ -303,6 +302,7 @@ class LifeOSVoiceChatFragment :
                     ?.takeIf { it.isNotEmpty() }
                     ?: return
 
+                binding.tvStartTalking.gone()
                 if (text.startsWith(lastPartial)) {
                     val delta = text.substring(lastPartial.length)
                     finalText.append(delta)

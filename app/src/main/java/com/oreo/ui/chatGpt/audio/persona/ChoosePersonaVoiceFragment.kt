@@ -1,5 +1,6 @@
 package com.oreo.ui.chatGpt.audio.persona
 
+import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
@@ -49,7 +50,7 @@ class ChoosePersonaVoiceFragment :
             clipChildren = false
             offscreenPageLimit = 3
 
-            setPadding(255, 0, 255, 0)
+            setPadding(255, 40, 255, 40)
             setPageTransformer(
                 CompositePageTransformer().apply {
                     addTransformer(MarginPageTransformer(24))
@@ -62,7 +63,7 @@ class ChoosePersonaVoiceFragment :
                     }
                 }
             )
-
+            enablePaddingSwipe()
             TabLayoutMediator(binding.tabLayout, binding.viewPager) { _, _ -> }.attach()
         }
     }
@@ -90,6 +91,11 @@ class ChoosePersonaVoiceFragment :
         super.onPause()
     }
 
+    override fun onStop() {
+        mediaPlayer?.stop()
+        super.onStop()
+    }
+
     private fun playMusic(songUrl: String) {
         mediaPlayer?.stop()
         mediaPlayer?.release()
@@ -99,5 +105,14 @@ class ChoosePersonaVoiceFragment :
             setOnPreparedListener { start() }
             prepareAsync()
         }
+    }
+}
+
+@SuppressLint("ClickableViewAccessibility")
+fun ViewPager2.enablePaddingSwipe() {
+    val recyclerView = getChildAt(0) as RecyclerView
+    setOnTouchListener { _, event ->
+        recyclerView.dispatchTouchEvent(event)
+        true
     }
 }

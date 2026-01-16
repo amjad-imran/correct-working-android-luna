@@ -4,9 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.noisefit.luna.R
 import com.noisefit.luna.databinding.ItemPersonaVoiceBinding
 import com.noisefit.luna.databinding.LayoutPersonaFeatureChipBinding
 import com.noisefit_commans.data.model.chatGPT.voice.persona.ItemPersonaVoiceResponse
+import java.util.Locale.getDefault
 
 class ChoosePersonaVoiceVpAdapter  :
     RecyclerView.Adapter<ChoosePersonaVoiceVpAdapter.CardViewHolder>() {
@@ -16,10 +18,24 @@ class ChoosePersonaVoiceVpAdapter  :
 
         fun bind(data: ItemPersonaVoiceResponse){
             binding.tvPersonaName.text = data.personaTitle
+            val defaultImage = getDefaultImage(data.personaTitle)
             Glide.with(binding.ivBgImg)
                 .load(data.imgUrl)
+                .error(defaultImage)
+                .placeholder(defaultImage)
                 .into(binding.ivBgImg)
             data.personaFeatures?.let { setPersonaItemChip(it) }
+        }
+
+        private fun getDefaultImage(personaTitle: String?): Int {
+            return when (personaTitle?.uppercase(getDefault())) {
+                Persona.HALO.name -> { R.drawable.ic_default_halo }
+                Persona.BLOOM.name -> { R.drawable.ic_default_bloom }
+                Persona.FLUX.name -> { R.drawable.ic_default_flux }
+                Persona.CLEAR.name -> { R.drawable.ic_default_clear }
+                Persona.FORGE.name -> { R.drawable.ic_default_forge }
+                else -> { R.drawable.ic_default_halo }
+            }
         }
 
         private fun setPersonaItemChip(listData: List<String>) {
@@ -57,4 +73,8 @@ class ChoosePersonaVoiceVpAdapter  :
         mDataSet.addAll(data)
         notifyDataSetChanged()
     }
+}
+
+enum class Persona {
+    HALO, FORGE, CLEAR, FLUX, BLOOM,
 }
