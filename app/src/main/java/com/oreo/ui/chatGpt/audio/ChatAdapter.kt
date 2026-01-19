@@ -58,7 +58,7 @@ class ChatAdapter(
                 60.dpToPx(context),
                 0.dpToPx(context),
                 16.dpToPx(context),
-                if(position == itemCount-1) 42.dpToPx(context) else 1.dpToPx(context)
+                if(position == itemCount-1) 42.dpToPx(context) else 12.dpToPx(context)
             )
             tv.apply {
                 background = userBubble(context)
@@ -73,9 +73,9 @@ class ChatAdapter(
             params.gravity = Gravity.START
             params.setMargins(
                 16.dpToPx(context),
-                22.dpToPx(context),
+                8.dpToPx(context),
                 20.dpToPx(context),
-                22.dpToPx(context)
+                20.dpToPx(context)
             )
             tv.apply {
                 setBackgroundColor(Color.TRANSPARENT)
