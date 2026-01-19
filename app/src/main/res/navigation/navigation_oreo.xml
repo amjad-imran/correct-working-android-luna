@@ -1760,6 +1760,21 @@
             android:name="description"
             app:argType="string" />
     </dialog>
+    <dialog
+        android:id="@+id/removeEntryTimelineBottomSheet"
+        android:name="com.oreo.ui.timelineScreen.addActivity.RemoveEntryTimelineBottomSheet"
+        android:label="fragment_remove_entry_timeline_bottom_sheet"
+        tools:layout="@layout/fragment_remove_entry_timeline_bottom_sheet" >
+
+        <argument
+            android:name="title"
+            app:argType="string" />
+
+        <argument
+            android:name="description"
+            app:argType="string" />
+
+    </dialog>
 
 
 </navigation>

@@ -18,7 +18,7 @@ xmlns:tools="http://schemas.android.com/tools">
         android:layout_marginTop="@dimen/dimen_12dp"
         android:layout_marginEnd="@dimen/dimen_12dp"
         android:layout_marginBottom="@dimen/dimen_12dp"
-        tools:context="com.oreo.ui.timelineScreen.habits.ModifyingEntriesBottomSheet"
+        tools:context="com.oreo.ui.timelineScreen.addActivity.RemoveEntryTimelineBottomSheet"
         tools:listitem="@layout/fragment_privacy_bottom_dialog_list_dialog_item">
 
         <View
@@ -43,7 +43,7 @@ xmlns:tools="http://schemas.android.com/tools">
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Modifying Entries" />
+            tools:text="@string/text_remove_entry" />
 
 
         <TextView
@@ -61,21 +61,42 @@ xmlns:tools="http://schemas.android.com/tools">
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvTitle"
-            tools:text="Are you sure you want to unpair your ColorFit Ultra from NoiseFit?" />
+            tools:text="@string/text_this_will_permanently_remove_this_entry_from_your_timeline" />
 
         <Button
-            android:id="@+id/btnGotIt"
+            android:id="@+id/btnDelete"
+            style="@style/SecondaryButtonStyle"
+            android:layout_width="0dp"
+            android:layout_marginStart="@dimen/dimen_32dp"
+            android:layout_marginTop="@dimen/dimen_40dp"
+            android:layout_marginEnd="@dimen/dimen_12dp"
+            android:layout_marginBottom="@dimen/dimen_24dp"
+            android:text="@string/text_delete"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+
+            app:layout_constraintEnd_toStartOf="@+id/btnCancel"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvDesc"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/btnCancel"
             style="@style/PrimaryButtonStyle"
             android:layout_width="0dp"
+            android:layout_marginStart="@dimen/dimen_12dp"
             android:layout_marginTop="@dimen/dimen_40dp"
-            android:layout_marginHorizontal="@dimen/dimen_24dp"
+            android:layout_marginEnd="@dimen/dimen_32dp"
             android:layout_marginBottom="@dimen/dimen_24dp"
-            android:text="@string/text_got_it"
+            android:text="@string/text_cancel"
             app:backgroundTint="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btnDelete"
             app:layout_constraintTop_toBottomOf="@+id/tvDesc" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>
 </layout>
