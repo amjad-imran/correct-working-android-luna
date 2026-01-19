@@ -10,8 +10,8 @@ import com.noisefit.luna.databinding.ItemHabitTimelineScreenBinding
 import com.oreo.data.model.timeline.habits.HabitsByDateResponse.*
 
 class YourHabitsTimelineAdapter(
-    private val onCross: (Options) -> Unit,
-    private val onCheck: (Options) -> Unit,
+    private val onCross: (Options, Boolean) -> Unit,
+    private val onCheck: (Options, Boolean) -> Unit,
 ) : ListAdapter<Options, YourHabitsTimelineAdapter.VH>(Diff) {
 
     var isButtonsDisabled = false
@@ -47,16 +47,21 @@ class YourHabitsTimelineAdapter(
                 else -> {
                     binding.igTick.apply {
                         setImageResource(R.drawable.ic_check_your_habits)
-
-                        setOnClickListener { onCheck(item) }
                     }
                     binding.igCross.apply {
                         setImageResource(R.drawable.ic_close_your_habits)
-
-                        setOnClickListener { onCross(item) }
                     }
                 }
             }
+
+            binding.igTick.setOnClickListener {
+                onCheck(item, item.isCompleted || item.isCancelled || isButtonsDisabled)
+            }
+
+            binding.igCross.setOnClickListener {
+                onCross(item, item.isCompleted || item.isCancelled || isButtonsDisabled)
+            }
+
         }
     }
 

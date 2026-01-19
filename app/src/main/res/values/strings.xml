@@ -2376,6 +2376,8 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_share_your_medical_reports_or_log_your_medications">Share your medical reports or log your medications.</string>
     <string name="text_no_conversations_yet">No conversations yet</string>
     <string name="text_start_chatting_with_lifeos_to_see_your_conversation_history_here">Start chatting with LifeOS to see your conversation history here.</string>
+    <string name="text_modifying_entries">Modifying Entries</string>
+    <string name="text_edit_entries_by_adding_or_removing_them_from_your_timeline">Edit entries by adding or removing them from your Timeline.</string>
 
 
 </resources>
