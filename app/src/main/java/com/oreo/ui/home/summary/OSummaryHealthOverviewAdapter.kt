@@ -193,6 +193,7 @@ sealed class OSummaryHealthOverviewClickEnum {
         OSummaryHealthOverviewClickEnum()
 
     object LifeOsChatClicked: OSummaryHealthOverviewClickEnum()
+    object LifeOsAddAttachmentClicked: OSummaryHealthOverviewClickEnum()
     object LifeOsVoiceClicked: OSummaryHealthOverviewClickEnum()
 
 }
@@ -799,11 +800,15 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
 
         fun bind(data: OHealthOverview.LifeOsCard){
             binding.ivChat.setOnClickListener {
-                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.LifeOsChatClicked)
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.LifeOsAddAttachmentClicked)
             }
 
             binding.ivVoice.setOnClickListener {
                 itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.LifeOsVoiceClicked)
+            }
+
+            binding.root.setOnClickListener {
+                itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.LifeOsChatClicked)
             }
 
         }

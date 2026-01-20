@@ -117,6 +117,7 @@ class LifeOsChatFragment :
             headerInsight1: AiHeaderInsight1? = null,
             planType: PlanType? = null,
             srcKey: String? = null,
+            displayAddAttachmentBS: Boolean? = false,
         ): Pair<Int, Bundle?> {
             return Pair(R.id.lifeOsChatFragment, Bundle().apply {
                 putString("threadId", threadId ?: "")
@@ -128,6 +129,7 @@ class LifeOsChatFragment :
                 putParcelable("workout", workout)
                 putParcelable("headerInsight1", headerInsight1)
                 putString("sourceKey", srcKey)
+                putBoolean("displayAddAttachmentBS", displayAddAttachmentBS == true)
             })
         }
     }
@@ -144,7 +146,12 @@ class LifeOsChatFragment :
         super.onViewCreated(view, savedInstanceState)
 
         val editText = binding.lytChatBox.chatEtx
-        editText.requestFocus()
+        if(args.displayAddAttachmentBS){
+            binding.lytChatBox.ivAddAttachment.performClick()
+        }else{
+            editText.requestFocus()
+        }
+
         editText.setHint(getString(R.string.text_ask_anything))
 
         viewModel.threadId = args.threadId
