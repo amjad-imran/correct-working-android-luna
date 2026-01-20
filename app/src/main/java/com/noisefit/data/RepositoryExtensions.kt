@@ -40,11 +40,9 @@ suspend fun <T> safeApiCallFlow(
             // throws TimeoutCancellationException
             withTimeout(CALL_TIMEOUT) {
                 emit(Resource.Success(apiCall.invoke()))
-                emit(Resource.Loading(false))
             }
         } catch (throwable: Throwable) {
             throwable.printStackTrace()
-            emit(Resource.Loading(false))
             when (throwable) {
                 is TimeoutCancellationException -> {
                     val code = 408 // timeout error code
@@ -81,6 +79,8 @@ suspend fun <T> safeApiCallFlow(
                     emit(networkError(NETWORK_ERROR_UNKNOWN, null))
                 }
             }
+        } finally {
+            emit(Resource.Loading(false))
         }
 
     }.flowOn(dispatcher).catch {
