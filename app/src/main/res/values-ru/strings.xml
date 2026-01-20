@@ -2423,5 +2423,9 @@
     <string name="text_share_your_medical_reports_or_log_your_medications">Поделитесь медицинскими отчетами или запишите ваши лекарства.</string>
     <string name="text_no_conversations_yet">Пока нет разговоров</string>
     <string name="text_start_chatting_with_lifeos_to_see_your_conversation_history_here">Начните общение с LifeOS, чтобы увидеть историю бесед здесь.</string>
+    <string name="text_modifying_entries">Редактирование записей</string>
+    <string name="text_edit_entries_by_adding_or_removing_them_from_your_timeline">Редактируйте записи, добавляя их или удаляя из своей временной шкалы.</string>
+    <string name="text_remove_entry">Удалить запись?</string>
+    <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">Это навсегда удалит эту запись из вашей временной шкалы.</string>
 
 </resources>

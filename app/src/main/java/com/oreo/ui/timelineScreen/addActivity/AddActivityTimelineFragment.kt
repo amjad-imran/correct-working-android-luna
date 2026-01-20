@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.navArgs
 import com.moengage.core.internal.utils.showToast
 import com.noisefit.luna.R
@@ -83,6 +84,22 @@ class AddActivityTimelineFragment :
         }
     }
 
+    private fun displayDeleteConfirmationBottomSheet() {
+        setFragmentResultListener(RemoveEntryTimelineBottomSheet.REMOVE_ENTRY_BOTTOM_SHEET_KEY) { _, bundle ->
+            val isDeleteClicked = bundle.getBoolean("deleteClicked")
+            if(isDeleteClicked==true){
+                sharedViewModel.deleteBtnClickedEvent.postValue(Event(true))
+                sharedViewModel.deleteBtnClickedEvent.value = Event(null)
+            }
+        }
+        navigate(
+            R.id.removeEntryTimelineBottomSheet,
+            bundleOf(
+                "title" to getString(R.string.text_remove_entry),
+                "description" to getString(R.string.text_this_will_permanently_remove_this_entry_from_your_timeline),
+            )
+        )
+    }
 
     override fun initListener() {
         binding.ivClose.setOnClickListener {
@@ -95,8 +112,7 @@ class AddActivityTimelineFragment :
                     getString(R.string.text_something_went_wrong_please_try_again))
                 return@setOnClickListener
             }
-            sharedViewModel.deleteBtnClickedEvent.postValue(Event(true))
-            sharedViewModel.deleteBtnClickedEvent.value = Event(null)
+            displayDeleteConfirmationBottomSheet()
         }
     }
 
