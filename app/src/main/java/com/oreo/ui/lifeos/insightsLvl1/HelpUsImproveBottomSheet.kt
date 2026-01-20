@@ -22,11 +22,14 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentHelpUsImproveBottomSheetBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 
-const val HELP_US_IMPROVE_BS_INSIGHTS = "HELP_US_IMPROVE_BS_INSIGHTS"
 class HelpUsImproveBottomSheet :
     BaseBottomSheetWithTransparent<FragmentHelpUsImproveBottomSheetBinding>(
         FragmentHelpUsImproveBottomSheetBinding::inflate
     ) {
+
+    companion object{
+        const val HELP_US_IMPROVE_BS_INSIGHTS = "HELP_US_IMPROVE_BS_INSIGHTS"
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -102,7 +105,7 @@ class HelpUsImproveBottomSheet :
                 Bundle().apply {
                     putString("feedbackText", binding.etFeedback.text.toString())
                     if(selected.isNotEmpty()){
-                        putStringArrayList("reasons", ArrayList(reasons))
+                        putString("reasons", selected.toString())
                     }
                 }
             )

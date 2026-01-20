@@ -72,7 +72,7 @@ import com.noisefit.luna.BuildConfig
 import com.noisefit_commans.common.copyToClipBoard
 import com.noisefit_commans.ui.scrollToBottom
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
-import com.oreo.ui.chatGpt.audio.AudioAiFragment
+import com.oreo.ui.lifeos.insightsLvl1.HelpUsImproveBottomSheet
 
 @AndroidEntryPoint
 class LifeOsChatFragment :
@@ -243,8 +243,8 @@ class LifeOsChatFragment :
                     )
                 )
 
-                mAdapter.markDisliked(message.id)
-                viewModel.postChatReview(message.message, 0, message.id)
+                displayHelpUsImproveBS(message)
+
             }
 
         }
@@ -263,6 +263,39 @@ class LifeOsChatFragment :
             showIme()
             //kickstartImeTranslation()
         }
+    }
+
+    private fun displayHelpUsImproveBS(message: ChatGptOverview.ReceivedMessage) {
+        setFragmentResultListener(HelpUsImproveBottomSheet.HELP_US_IMPROVE_BS_INSIGHTS){ _, bundle ->
+            val feedbackText = bundle.getString("feedbackText")
+            val reasons = bundle.getString("reasons")
+            if(feedbackText.isNullOrEmpty()){
+                return@setFragmentResultListener
+            }
+
+            mAdapter.markDisliked(message.id)
+            viewModel.postChatReview(
+                message.message,
+                0,
+                message.id,
+                feedbackText,
+                reasons
+            )
+        }
+        navigate(
+            R.id.helpUsImproveBottomSheet,
+            Bundle().apply {
+                putStringArrayList(
+                    "reasons",
+                    ArrayList<String>().apply {
+                        this.add(getString(R.string.text_inaccurate))
+                        this.add(getString(R.string.text_out_of_date))
+                        this.add(getString(R.string.text_too_short))
+                        this.add(getString(R.string.text_this_isn_t_helpful))
+                    }
+                )
+            }
+        )
     }
 
 
