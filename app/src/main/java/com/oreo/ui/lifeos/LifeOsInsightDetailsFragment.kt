@@ -179,6 +179,7 @@ class LifeOsInsightDetailsFragment :
                 MoEngageLunaAppEvents.lifeos_ai_followup_clicked,
             )
             handleRelatedQuesClick(binding.lytChatBox.chatEtx.text.toString())
+            binding.lytChatBox.chatEtx.setText("")
         }
     }
 

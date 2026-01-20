@@ -405,6 +405,21 @@ class LifeOsDashFragment :
                 frag, bundle
             )
         }
+
+        binding.lytHeader.lytChatBox.ivAddAttachment.setOnClickListener {
+            val (frag, bundle) = LifeOsChatFragment.getStartData(
+                threadId = null,
+                userMessage = null,
+                title = null,
+                aiTopic = AITopics.GENERAL,
+                srcKey = "lifeos",
+                displayAddAttachmentBS = true,
+            )
+            findNavController().navigate(
+                frag, bundle
+            )
+        }
+
         binding.lytHeader.lytChatBox.chatEtx.setOnClickListener {
             val (frag, bundle) = LifeOsChatFragment.getStartData(
                 threadId = null,

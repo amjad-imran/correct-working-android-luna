@@ -3,7 +3,6 @@ package com.oreo.ui.timelineScreen.habits.yourHabits
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -12,17 +11,14 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentYourHabitsTimelineBinding
-import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
-import com.oreo.ui.timelineScreen.ItemHabitsTimelineAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.getValue
@@ -36,24 +32,44 @@ class YourHabitsTimelineFragment : BaseFragment<FragmentYourHabitsTimelineBindin
 
     private val habitsAdapter by lazy {
         YourHabitsTimelineAdapter(
-            onCross = { habit ->
-                viewModel.sessionManager.logMoEngageAppEvent(
-                    MoEngageLunaAppEvents.habits_not_done,
-                    hashMapOf(
-                        "category" to "${habit.type}"
+            onCross = { habit, isAlreadyMarked ->
+                if(isAlreadyMarked){
+                    displayModifyingEntriesNotiBS()
+                }
+                else {
+                    viewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.habits_not_done,
+                        hashMapOf(
+                            "category" to "${habit.type}"
+                        )
                     )
-                )
-                viewModel.onCrossClicked(habit.timeTrackerOptionId)
+                    viewModel.onCrossClicked(habit.timeTrackerOptionId)
+                }
             },
-            onCheck = { habit ->
-                viewModel.sessionManager.logMoEngageAppEvent(
-                    MoEngageLunaAppEvents.habits_tick_clicked,
-                    hashMapOf(
-                        "category" to "${habit.type}"
+            onCheck = { habit, isAlreadyMarked ->
+                if(isAlreadyMarked){
+                    displayModifyingEntriesNotiBS()
+                }
+                else {
+                    viewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.habits_tick_clicked,
+                        hashMapOf(
+                            "category" to "${habit.type}"
+                        )
                     )
-                )
-                handleOnCheckClicked(habit, viewModel.mDate)
+                    handleOnCheckClicked(habit, viewModel.mDate)
+                }
             }
+        )
+    }
+
+    private fun displayModifyingEntriesNotiBS() {
+        navigate(
+            R.id.modifyingEntriesBottomSheet,
+            bundleOf(
+                "title" to getString(R.string.text_modifying_entries),
+                "description" to getString(R.string.text_edit_entries_by_adding_or_removing_them_from_your_timeline),
+            )
         )
     }
 
@@ -62,7 +78,6 @@ class YourHabitsTimelineFragment : BaseFragment<FragmentYourHabitsTimelineBindin
 
         viewModel.mDate = args.date
 
-        LOGS.d("scoakcla : ${viewModel.mDate}")
         viewModel.habitsResponseData = args.selectedOptions
 
         viewModel.getUserSavedHabits(viewModel.mDate)

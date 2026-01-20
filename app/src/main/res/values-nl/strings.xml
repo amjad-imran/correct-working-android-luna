@@ -2399,5 +2399,9 @@
     <string name="text_share_your_medical_reports_or_log_your_medications">Deel je medische rapporten of log je medicatie.</string>
     <string name="text_no_conversations_yet">Nog geen gesprekken</string>
     <string name="text_start_chatting_with_lifeos_to_see_your_conversation_history_here">Begin met chatten met LifeOS om hier je gesprekshistorie te zien.</string>
+    <string name="text_modifying_entries">Bewerkingen aanpassen</string>
+    <string name="text_edit_entries_by_adding_or_removing_them_from_your_timeline">Bewerk de items door ze toe te voegen of te verwijderen van je tijdlijn.</string>
+    <string name="text_remove_entry">Item verwijderen?</string>
+    <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">Dit zal dit item permanent van je tijdlijn verwijderen.</string>
 
 </resources>

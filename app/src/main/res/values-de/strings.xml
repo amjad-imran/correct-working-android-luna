@@ -2399,6 +2399,10 @@
     <string name="text_share_your_medical_reports_or_log_your_medications">Teile deine medizinischen Berichte oder protokolliere deine Medikamente.</string>
     <string name="text_no_conversations_yet">Noch keine Gespräche</string>
     <string name="text_start_chatting_with_lifeos_to_see_your_conversation_history_here">Beginne mit LifeOS zu chatten, um deinen Gesprächsverlauf hier zu sehen.</string>
+    <string name="text_modifying_entries">Einträge bearbeiten</string>
+    <string name="text_edit_entries_by_adding_or_removing_them_from_your_timeline">Bearbeiten Sie Einträge, indem Sie sie zu Ihrer Timeline hinzufügen oder entfernen.</string>
+    <string name="text_remove_entry">Eintrag entfernen?</string>
+    <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">Dies wird den Eintrag dauerhaft von Ihrer Timeline entfernen.</string>
 
 
 </resources>

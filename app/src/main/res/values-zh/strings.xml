@@ -2393,5 +2393,9 @@
     <string name="text_share_your_medical_reports_or_log_your_medications">分享您的医疗报告或记录您的药物。</string>
     <string name="text_no_conversations_yet">尚无对话</string>
     <string name="text_start_chatting_with_lifeos_to_see_your_conversation_history_here">开始与 LifeOS 聊天，以查看您的对话历史。</string>
+    <string name="text_modifying_entries">修改条目</string>
+    <string name="text_edit_entries_by_adding_or_removing_them_from_your_timeline">通过将条目添加或移除到您的时间轴来编辑条目。</string>
+    <string name="text_remove_entry">删除条目？</string>
+    <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">此操作将永久删除此条目。</string>
 
 </resources>

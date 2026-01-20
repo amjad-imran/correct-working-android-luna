@@ -197,7 +197,7 @@ class LifeOsOnboardingQuesFragment : BaseFragment<FragmentLifeOsOnboardingQuesBi
         binding.viewSkip.invisible()
         binding.tvSkip.invisible()
 
-        binding.btnClose.setImageResource(R.drawable.image_back_btn)
+        binding.btnClose.setImageResource(R.drawable.ic_cross_profile)
         binding.btnSaveChanges.visible()
 
         binding.tvTitle.apply {

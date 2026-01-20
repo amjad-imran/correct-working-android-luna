@@ -1333,6 +1333,11 @@
             android:defaultValue="@null"
             app:argType="string"
             app:nullable="true" />
+
+        <argument
+            android:name="displayAddAttachmentBS"
+            android:defaultValue="false"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/lifeOsInsightFrag"
@@ -1746,6 +1751,35 @@
         android:id="@+id/addHabitsDiscardChangesBS"
         android:name="com.oreo.ui.timelineScreen.habits.AddHabitsDiscardChangesBS"
         android:label="AddHabitsDiscardChangesBS" />
+    <dialog
+        android:id="@+id/modifyingEntriesBottomSheet"
+        android:name="com.oreo.ui.timelineScreen.habits.ModifyingEntriesBottomSheet"
+        android:label="fragment_modifying_entries_bottom_sheet"
+        tools:layout="@layout/fragment_modifying_entries_bottom_sheet" >
+
+        <argument
+            android:name="title"
+            app:argType="string" />
+
+        <argument
+            android:name="description"
+            app:argType="string" />
+    </dialog>
+    <dialog
+        android:id="@+id/removeEntryTimelineBottomSheet"
+        android:name="com.oreo.ui.timelineScreen.addActivity.RemoveEntryTimelineBottomSheet"
+        android:label="fragment_remove_entry_timeline_bottom_sheet"
+        tools:layout="@layout/fragment_remove_entry_timeline_bottom_sheet" >
+
+        <argument
+            android:name="title"
+            app:argType="string" />
+
+        <argument
+            android:name="description"
+            app:argType="string" />
+
+    </dialog>
 
 
 </navigation>
