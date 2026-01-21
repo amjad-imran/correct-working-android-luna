@@ -855,7 +855,7 @@ class LifeOsChatFragment :
         viewModel.addThinkingMessage()
         binding.lytChatBox.chatEtx.setText("")
 
-        val formattedMsg = "${message.mainText}"
+        val formattedMsg = "${message.footerText}"
         viewModel.askQuestionStream(formattedMsg.replace("\n", ""))
     }
 
