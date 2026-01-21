@@ -624,6 +624,8 @@ interface DataStoredInterface {
     fun setIsWhatsNewCardInteractionDone(isDone: Boolean)
     fun setUserFirstTimeForAddHabits(isFirstTime: Boolean)
     fun getUserFirstTimeForAddHabits(): Boolean
+
+    fun setAndGetLastAppReviewRequestTime(time: Long?) : Long
 }
 
 enum class AppTrackEvent {

@@ -7,6 +7,7 @@ import com.noisefit.data.model.AlarmSoundDataModel
 import com.noisefit.data.model.SAActiveDayDataModel
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.R
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.model.AlarmTimingsData
@@ -35,7 +36,8 @@ class SetAlarmViewModel @Inject constructor(
     private val userActivityRepository: OreoUserActivityRepository,
     private val alarmRepository: AlarmRepository,
     private val resourcesProvider: ResourcesProvider,
-    private var vibrationUtils: VibrationUtils
+    private var vibrationUtils: VibrationUtils,
+    val sessionManager: SessionManager,
 ) : BaseViewModel() {
 
     var deleteMode = MutableLiveData(false)

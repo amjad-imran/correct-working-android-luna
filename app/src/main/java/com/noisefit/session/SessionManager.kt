@@ -1,11 +1,16 @@
 package com.noisefit.session
 
+import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothManager
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
+import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.freshchat.consumer.sdk.Freshchat
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.ktx.Firebase
@@ -54,8 +59,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Date
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -802,6 +809,67 @@ class SessionManager
         val bluetoothAdapter = bluetoothManager.adapter
 
         return bluetoothAdapter?.isEnabled == true
+    }
+
+    private fun shouldRequestReview(): Boolean {
+        val reviewRequestIntervalDays = 7L
+        val lastReviewRequestTime = localDataStore.setAndGetLastAppReviewRequestTime(null)
+        if(lastReviewRequestTime == 0L) return true
+
+        val currentTime = System.currentTimeMillis()
+        val hasPassedInterval = (currentTime - lastReviewRequestTime) > TimeUnit.DAYS.toMillis(reviewRequestIntervalDays)
+
+        return hasPassedInterval
+    }
+
+    fun requestReviewIfAppropriate(
+        activity: Activity,
+        packageName: String = activity.packageName,
+        delayMs: Long = 500,
+        fallbackToStore: Boolean = true
+    ) {
+        if (!shouldRequestReview()) return  // Skip if review is not due yet
+
+        GlobalScope.launch(Main) {
+            // small delay to mirror iOS and avoid clashing with UI transitions
+            if (delayMs > 0) delay(delayMs)
+
+            val reviewManager = ReviewManagerFactory.create(activity)
+
+            // Step 1: Ask Play for the "review flow"
+            val requestTask = reviewManager.requestReviewFlow()
+            requestTask.addOnCompleteListener { request ->
+                if (!request.isSuccessful) {
+                    if (fallbackToStore) openPlayStore(activity, packageName)
+                    return@addOnCompleteListener
+                }
+
+                // Step 2: Launch the review dialog
+                val reviewInfo = request.result
+                val flowTask = reviewManager.launchReviewFlow(activity, reviewInfo)
+
+                // You can't know whether user reviewed; you only know flow finished.
+                flowTask.addOnCompleteListener {
+                    // Optional: If you want to fallback if dialog didn't show,
+                    // Google doesn't expose that reliably, so usually do nothing here.
+                    // If you *really* want fallback always, you could open store here,
+                    // but that can be annoying UX.
+                    localDataStore.setAndGetLastAppReviewRequestTime(System.currentTimeMillis())
+                }
+            }
+        }
+    }
+
+    fun openPlayStore(activity: Activity, packageName: String = activity.packageName) {
+        val marketUri = "market://details?id=$packageName".toUri()
+        val webUri = "https://play.google.com/store/apps/details?id=$packageName".toUri()
+
+        try {
+            activity.startActivity(Intent(Intent.ACTION_VIEW, marketUri))
+        } catch (e: ActivityNotFoundException) {
+            LOGS.d("OPEN_APP_REVIEW_POPUP_EXCEPTION: $e")
+            activity.startActivity(Intent(Intent.ACTION_VIEW, webUri))
+        }
     }
 
 }
