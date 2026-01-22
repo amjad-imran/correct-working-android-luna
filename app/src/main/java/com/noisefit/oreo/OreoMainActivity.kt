@@ -1631,17 +1631,12 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
     }
 
     private fun handleIntent(intent: Intent?) {
+        val appLink = intent?.getSerializableExtra(APP_LINK) as? AppLinks
+        if (appLink != null) {
+            handleAppLinkNavigation(appLink)
+            return
+        }
         intent?.extras?.let { intentExtra ->
-
-            val appLink = intent.getSerializableExtra(APP_LINK) as? AppLinks
-            if (appLink != null) {
-
-
-                handleAppLinkNavigation(appLink)
-                return
-            }
-
-
             if (intentExtra.containsKey(NOTIFICATION_TYPE)) {
                 LOGS.d("NEW_NOTIFICATION_TYPE  ${intentExtra.getString(NOTIFICATION_TYPE)}")
                 handleNotificationType(
@@ -1940,6 +1935,9 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 )
             }
 
+            AppLinks.LOG_HABITS -> {
+                navController?.navigate(R.id.timelineScreenFragment)
+            }
         }
     }
 

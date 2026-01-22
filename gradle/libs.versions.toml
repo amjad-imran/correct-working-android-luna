@@ -4,6 +4,7 @@ androidJoda = "2.13.1"
 appcompat = "1.7.1"
 blurview = "version-2.0.3"
 carouselView = "1.1.1"
+coilComposeVersion = "2.5.0"
 constraintlayoutCompose = "1.1.1"
 core = "4.6.2"
 curlloggerinterceptor = "0.1"
@@ -97,11 +98,13 @@ anrwatchdog = { group = "com.github.anrwatchdog", name = "anrwatchdog", version.
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 blurview = { module = "com.github.Dimezis:BlurView", version.ref = "blurview" }
 carousel-view = { module = "com.github.alirezat775:carousel-view", version.ref = "carouselView" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilComposeVersion" }
 core = { module = "io.noties.markwon:core", version.ref = "core" }
 curlloggerinterceptor = { module = "com.github.grapesnberries:curlloggerinterceptor", version.ref = "curlloggerinterceptor" }
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 flexbox = { module = "com.google.android.flexbox:flexbox", version.ref = "flexbox" }
 freshchat-android = { module = "com.github.freshworks:freshchat-android", version.ref = "freshchatAndroid" }
+google-firebase-config-ktx = { module = "com.google.firebase:firebase-config-ktx" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 jjwt = { module = "io.jsonwebtoken:jjwt", version.ref = "jjwtVersion" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

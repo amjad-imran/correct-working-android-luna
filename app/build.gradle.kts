@@ -357,5 +357,6 @@ dependencies {
     implementation(libs.jjwt)
 
     implementation(libs.shimmer)
-
+    implementation (libs.google.firebase.config.ktx)
+    implementation(libs.coil.compose)
 }

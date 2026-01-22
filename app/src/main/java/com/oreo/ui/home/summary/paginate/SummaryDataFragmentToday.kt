@@ -23,6 +23,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material3.MaterialTheme
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
@@ -111,6 +112,8 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.abs
+import androidx.core.net.toUri
+import com.noisefit.oreo.OreoMainActivity
 
 
 @AndroidEntryPoint
@@ -180,8 +183,26 @@ class SummaryDataFragmentToday :
             navigate(R.id.timelineScreenFragment)
         },3000)*/
 
-
-
+        viewModel.getWhatsNewCardList()?.let { it ->
+            binding.contentMain.viewWhatsNew.setContent {
+                MaterialTheme {
+                    WhatsNewCardsList(
+                        banners = it,
+                        { banner ->
+                            val uri = "https://link.lunazone.com/applinks/habits".toUri()
+                            val path = uri.path?.removePrefix("https://link.lunazone.com/")
+                            val intent = OreoMainActivity.getStartIntent(
+                                requireContext(),
+                                appLink = ApplicationUtils.parseAppLink(path)
+                            )
+                            startActivity(intent)
+                        },
+                        {}
+                    )
+                }
+            }
+            binding.contentMain.viewWhatsNew.visible()
+        }
     }
 
     private fun setNapsPager() {

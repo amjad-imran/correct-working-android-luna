@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.noisefit.data.RemoteConfigManager
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.googleFit.GoogleFitDataObservers
@@ -66,6 +67,7 @@ import com.oreo.data.db.abstaction.OreoBodyTemperatureDataSource
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.AppUpdateModel
+import com.oreo.data.model.BannerItem
 import com.oreo.data.model.CaffeineWindowData
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
@@ -85,6 +87,7 @@ import com.oreo.data.model.SlideUpNapScoreDataModel
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TimeWindow
 import com.oreo.data.model.TrendsData
+import com.oreo.data.model.WhatsNewCardsList
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.TempPeriodData
 import com.oreo.data.model.health.Nudges
@@ -309,6 +312,22 @@ class SummaryDataViewModelToday @Inject constructor(
         updateAlerts()
 
 
+    }
+
+    fun getWhatsNewCardList() :  List<BannerItem>? {
+        return runCatching {
+            val version = BuildConfig.VERSION_NAME.trim()
+            val config = Gson().fromJson(
+                RemoteConfigManager.getString(RemoteConfigManager.WHATS_NEW_HOME),
+                WhatsNewCardsList::class.java
+            )
+            val androidMap = config?.android
+                ?: return emptyList()
+
+            return androidMap["1.7.1"]
+                ?: androidMap["default"]
+                ?: emptyList()
+        }.getOrNull()
     }
 
     private fun handleSleepAlert(healthData: OreoSleepModel?) {
