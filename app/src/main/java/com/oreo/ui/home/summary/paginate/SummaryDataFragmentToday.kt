@@ -24,6 +24,8 @@ import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
@@ -183,25 +185,28 @@ class SummaryDataFragmentToday :
             navigate(R.id.timelineScreenFragment)
         },3000)*/
 
-        viewModel.getWhatsNewCardList()?.let { it ->
-            binding.contentMain.viewWhatsNew.setContent {
-                MaterialTheme {
-                    WhatsNewCardsList(
-                        banners = it,
-                        { banner ->
-                            val uri = "https://link.lunazone.com/applinks/habits".toUri()
-                            val path = uri.path?.removePrefix("https://link.lunazone.com/")
-                            val intent = OreoMainActivity.getStartIntent(
-                                requireContext(),
-                                appLink = ApplicationUtils.parseAppLink(path)
-                            )
-                            startActivity(intent)
-                        },
-                        {}
-                    )
-                }
+
+        binding.contentMain.viewWhatsNew.setContent {
+            MaterialTheme {
+                val banners by viewModel.whatsNewBanners.collectAsState()
+                WhatsNewCardsList(
+                    banners = banners,
+                    userSelectedLanguage = viewModel.getUserSelectedLanguage(),
+                    { banner ->
+                        val uri = banner.deeplinkAction.toUri()
+                        val path = uri.path?.removePrefix("https://link.lunazone.com/")
+                        val intent = OreoMainActivity.getStartIntent(
+                            requireContext(),
+                            appLink = ApplicationUtils.parseAppLink(path)
+                        )
+                        startActivity(intent)
+                    },
+                    { banner ->
+                        viewModel.dismissWhatsNewCard(banner.id)
+                    }
+                )
+                if(banners.isNotEmpty()) binding.contentMain.viewWhatsNew.visible()
             }
-            binding.contentMain.viewWhatsNew.visible()
         }
     }
 

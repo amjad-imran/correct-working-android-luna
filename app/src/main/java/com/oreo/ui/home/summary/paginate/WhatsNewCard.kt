@@ -29,6 +29,7 @@ import com.oreo.data.model.BannerItem
 @Composable
 fun WhatsNewCardsList(
     banners: List<BannerItem>,
+    userSelectedLanguage: String,
     onBannerClick: (BannerItem) -> Unit,
     onCloseClick: (BannerItem) -> Unit
 ) {
@@ -37,10 +38,12 @@ fun WhatsNewCardsList(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(
-            items = banners
+            items = banners,
+            key = { it.id }
         ) { banner ->
             BannerCard(
                 banner = banner,
+                userSelectedLanguage = userSelectedLanguage,
                 onClick = { onBannerClick(banner) },
                 onCloseClick = { onCloseClick(banner) }
             )
@@ -51,6 +54,7 @@ fun WhatsNewCardsList(
 @Composable
 fun BannerCard(
     banner: BannerItem,
+    userSelectedLanguage: String,
     onClick: () -> Unit,
     onCloseClick: () -> Unit
 ) {
@@ -69,7 +73,7 @@ fun BannerCard(
     ) {
         Box {
             AsyncImage(
-                model = banner.imageUrl["en"],
+                model = banner.imageUrl[userSelectedLanguage],
                 contentDescription = null,
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier.fillMaxSize()

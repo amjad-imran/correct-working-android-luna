@@ -130,6 +130,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.oreo.util.DateTimeUtil
 import com.oreo.widget.water.WaterWidgetUpdater
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.Instant
@@ -270,9 +271,12 @@ class SummaryDataViewModelToday @Inject constructor(
     var stateOneTapVitalsCard = MutableLiveData<OHealthOverview.OneTapVitals>()
 
 
-    var activityCardData: ODashboardActivityModel ?= null
-    var readinessCardData: ODashboardReadinessModel ?= null
-    //
+    var activityCardData: ODashboardActivityModel? = null
+    var readinessCardData: ODashboardReadinessModel? = null
+
+    val whatsNewBanners: MutableStateFlow<List<BannerItem>> = MutableStateFlow<List<BannerItem>>(emptyList())
+
+    fun getUserSelectedLanguage() = localDataStore.getSelectedAppLanguage() ?: "en"
 
     fun getStressWalkthroughShownStatus(): Boolean {
         return localDataStore.getStressWalkthroughShownStatus()
@@ -310,24 +314,22 @@ class SummaryDataViewModelToday @Inject constructor(
         }
 
         updateAlerts()
-
-
-    }
-
-    fun getWhatsNewCardList() :  List<BannerItem>? {
-        return runCatching {
-            val version = BuildConfig.VERSION_NAME.trim()
+        try {
+            val version = BuildConfig.VERSION_CODE.toString()
             val config = Gson().fromJson(
                 RemoteConfigManager.getString(RemoteConfigManager.WHATS_NEW_HOME),
                 WhatsNewCardsList::class.java
             )
-            val androidMap = config?.android
-                ?: return emptyList()
+            val androidMap = config?.android ?: emptyMap()
+            val dismissedIds = ringDataStore.getCancelledCardsList().toSet()
 
-            return androidMap["1.7.1"]
+            whatsNewBanners.value = (androidMap[version]
                 ?: androidMap["default"]
                 ?: emptyList()
-        }.getOrNull()
+                    ).filterNot { it.id in dismissedIds }
+        } catch (e: Exception){
+            whatsNewBanners.value = emptyList()
+        }
     }
 
     private fun handleSleepAlert(healthData: OreoSleepModel?) {
@@ -5010,6 +5012,14 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
+    fun dismissWhatsNewCard(id: String) {
+        val updatedList = ringDataStore
+            .getCancelledCardsList()
+            .toMutableSet()
+            .apply { add(id) }.toList()
+        whatsNewBanners.value = whatsNewBanners.value.filterNot { it.id == id }
+        ringDataStore.setCancelledCardsList(updatedList)
+    }
 }
 
 enum class NotificationGoal {
