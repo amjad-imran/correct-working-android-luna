@@ -2,10 +2,7 @@ package com.oreo.data.model
 
 import android.os.Parcelable
 import com.noisefit.data.base.ResourcesProvider
-import com.noisefit_commans.data.model.SleepPlannerData
 import com.noisefit_commans.data.model.SleepPlannerDisplayModel
-import com.noisefit_commans.data.model.circadian.CircadianGraphData
-import com.noisefit_commans.data.model.circadian.EnergyGraph
 import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.models.SleepData
 import com.oreo.data.model.health.InfoTextData
@@ -15,7 +12,6 @@ import com.oreo.data.model.health.ODashboardActivityModel
 import com.oreo.data.model.health.ODashboardReadinessModel
 import com.oreo.data.model.health.ODashboardSleepModel
 import com.oreo.data.model.sleep.HealthTrend
-import com.oreo.data.model.timeline.ItemTimelineModel
 import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.oreo.ui.chatGpt.SummaryStates
 import com.oreo.ui.custom.HRCombineModel
@@ -174,7 +170,7 @@ sealed class OHealthOverview {
     ) : OHealthOverview()
 
     class CycleTrackerCardSmall(
-        val data: PeriodCard1
+        val data: PeriodCard1?
     ) : OHealthOverview()
 
     class CycleTrackerCardBig(

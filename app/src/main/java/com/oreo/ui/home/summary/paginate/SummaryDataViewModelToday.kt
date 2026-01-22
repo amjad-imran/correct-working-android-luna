@@ -3470,45 +3470,46 @@ class SummaryDataViewModelToday @Inject constructor(
         return list.getOrNull(0)?.temperature ?: null
     }
 
-    private fun convertToPeriodSmallCardModel(data: FemaleHealthUserInfoModel): PeriodCard1 {
+    private fun convertToPeriodSmallCardModel(data: FemaleHealthUserInfoModel): PeriodCard1? {
 
         val daysUntilOvulation = if (data.ovulationDate != null) {
             calculateDaysLeft(data.ovulationDate)
         } else {
             null
         }
-        val daysUntilNextPeriod = calculateDaysLeft(data.nextPeriodDate!!)
 
-        if (daysUntilOvulation != null && (daysUntilOvulation < daysUntilNextPeriod && daysUntilOvulation > 0)) {
-            val predictedOvulation = LocalDate.parse(data.nextPeriodDate).minusDays(13)
-            return PeriodCard1(
-                title = resourceProvider.getString(R.string.text_ovulation_in),
-                days = daysUntilOvulation.toInt(),
-                nudge = data.nudges?.firstOrNull()?.message ?: "",
-                currentCycleDay = data.currentDay ?: 0,
-                totalCycleDay = data.cycleLength ?: 0,
-                bottomText = resourceProvider.getString(R.string.text_ovulation_date),
-                predictionDate = data.ovulationDate
-                    ?: "",/*predictedOvulation.format(DateTimeFormatter.ofPattern("dd MMM")),*/
-                background = R.drawable.back_card_ovulation_small
-            )
-        } else {
-            val isPeriodLate = data.confirmPeriodDate != null
-
-            return PeriodCard1(
-                title = if (isPeriodLate) resourceProvider.getString(R.string.text_period_late_for)
-                else resourceProvider.getString(R.string.text_period_in),
-                days = if (isPeriodLate) data.confirmPeriodDate?.day
-                    ?: 0 else daysUntilNextPeriod.toInt(),
-                nudge = data.nudges?.firstOrNull()?.message ?: "",
-                currentCycleDay = data.currentDay ?: 0,
-                totalCycleDay = data.cycleLength ?: 0,
-                bottomText = resourceProvider.getString(R.string.text_period_date),
-                predictionDate = data.nextPeriodDate ?: "",
-                background = R.drawable.back_card_period_small
-            )
+        return data.nextPeriodDate?.let {
+            calculateDaysLeft(it)
+        }?.let { daysUntilNextPeriod ->
+            if (daysUntilOvulation != null && (daysUntilOvulation < daysUntilNextPeriod && daysUntilOvulation > 0)) {
+                val predictedOvulation = LocalDate.parse(data.nextPeriodDate).minusDays(13)
+                PeriodCard1(
+                    title = resourceProvider.getString(R.string.text_ovulation_in),
+                    days = daysUntilOvulation.toInt(),
+                    nudge = data.nudges?.firstOrNull()?.message ?: "",
+                    currentCycleDay = data.currentDay ?: 0,
+                    totalCycleDay = data.cycleLength ?: 0,
+                    bottomText = resourceProvider.getString(R.string.text_ovulation_date),
+                    predictionDate = data.ovulationDate
+                        ?: "",/*predictedOvulation.format(DateTimeFormatter.ofPattern("dd MMM")),*/
+                    background = R.drawable.back_card_ovulation_small
+                )
+            } else {
+                val isPeriodLate = data.confirmPeriodDate != null
+                PeriodCard1(
+                    title = if (isPeriodLate) resourceProvider.getString(R.string.text_period_late_for)
+                    else resourceProvider.getString(R.string.text_period_in),
+                    days = if (isPeriodLate) data.confirmPeriodDate?.day
+                        ?: 0 else daysUntilNextPeriod.toInt(),
+                    nudge = data.nudges?.firstOrNull()?.message ?: "",
+                    currentCycleDay = data.currentDay ?: 0,
+                    totalCycleDay = data.cycleLength ?: 0,
+                    bottomText = resourceProvider.getString(R.string.text_period_date),
+                    predictionDate = data.nextPeriodDate ?: "",
+                    background = R.drawable.back_card_period_small
+                )
+            }
         }
-
     }
 
     /**
