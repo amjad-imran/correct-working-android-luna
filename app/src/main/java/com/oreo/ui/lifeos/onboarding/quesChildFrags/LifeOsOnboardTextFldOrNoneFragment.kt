@@ -182,7 +182,17 @@ class LifeOsOnboardTextFldOrNoneFragment : BaseFragment<FragmentLifeOsOnboardTex
                 list = allAns,
                 isSaveAndExit = isExit
             )
+            return
         }
+
+        if(isExit){
+            parentViewModel.saveCurrentQues(
+                quesId = Int.MIN_VALUE,
+                list = null,
+                isSaveAndExit = true
+            )
+        }
+
     }
 
 }
