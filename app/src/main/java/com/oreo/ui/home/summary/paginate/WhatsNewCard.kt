@@ -1,9 +1,9 @@
 package com.oreo.ui.home.summary.paginate
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -11,10 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -23,10 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.noisefit.luna.R
 import com.oreo.data.model.BannerItem
-
 @Composable
 fun WhatsNewCardsList(
     banners: List<BannerItem>,
@@ -34,7 +33,7 @@ fun WhatsNewCardsList(
     onCloseClick: (BannerItem) -> Unit
 ) {
     LazyRow(
-        Modifier.padding(start = 16.dp),
+        contentPadding = PaddingValues(start = 16.dp, end = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(
@@ -55,13 +54,18 @@ fun BannerCard(
     onClick: () -> Unit,
     onCloseClick: () -> Unit
 ) {
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val cardWidth = screenWidth - 32.dp
+
     Card(
         modifier = Modifier
-            .width(343.dp)
-            .height(172.dp)
+            .width(cardWidth)
+            .height(cardWidth / 2)
             .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.cardElevation(6.dp)
+        colors = CardDefaults.cardColors(
+            containerColor = Color.Transparent
+        )
     ) {
         Box {
             AsyncImage(
@@ -73,19 +77,14 @@ fun BannerCard(
 
             if (banner.showCrossButton) {
                 Icon(
-                    imageVector = Icons.Default.Close,
+                    painter = painterResource(id = R.drawable.ic_whats_new_cross),
                     contentDescription = "Close",
+                    tint = Color.White,
                     modifier = Modifier
-                        .padding(8.dp)
-                        .size(20.dp)
                         .align(Alignment.TopEnd)
-                        .background(
-                            Color.Black.copy(alpha = 0.5f),
-                            CircleShape
-                        )
+                        .padding(8.dp)
+                        .size(24.dp)
                         .clickable { onCloseClick() }
-                        .padding(4.dp),
-                    tint = Color.White
                 )
             }
         }
