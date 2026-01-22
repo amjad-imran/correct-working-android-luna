@@ -979,7 +979,7 @@ class ChatGptViewModel
                 this.addProperty("text",text)
                 this.addProperty("date",date)
                 this.addProperty("review","$reviewFlag")
-                negFeedbackText?.let {
+                if(reviewFlag==0){
                     this.addProperty(
                         "reason",
                         "feedback:- $negFeedbackText, reasons:- ${reasons ?: "[]"}"
