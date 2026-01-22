@@ -70,6 +70,7 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import com.noisefit.luna.BuildConfig
 import com.noisefit_commans.common.copyToClipBoard
+import com.noisefit_commans.ui.hideKeyboard
 import com.noisefit_commans.ui.scrollToBottom
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.ui.lifeos.insightsLvl1.HelpUsImproveBottomSheet
@@ -266,12 +267,11 @@ class LifeOsChatFragment :
     }
 
     private fun displayHelpUsImproveBS(message: ChatGptOverview.ReceivedMessage) {
+        binding.lytChatBox.chatEtx.clearFocus()
+        binding.lytChatBox.chatEtx.hideKeyboard()
         setFragmentResultListener(HelpUsImproveBottomSheet.HELP_US_IMPROVE_BS_INSIGHTS){ _, bundle ->
             val feedbackText = bundle.getString("feedbackText")
             val reasons = bundle.getString("reasons")
-            if(feedbackText.isNullOrEmpty()){
-                return@setFragmentResultListener
-            }
 
             mAdapter.markDisliked(message.id)
             viewModel.postChatReview(
@@ -855,7 +855,7 @@ class LifeOsChatFragment :
         viewModel.addThinkingMessage()
         binding.lytChatBox.chatEtx.setText("")
 
-        val formattedMsg = "${message.mainText}"
+        val formattedMsg = "${message.footerText}"
         viewModel.askQuestionStream(formattedMsg.replace("\n", ""))
     }
 
