@@ -69,6 +69,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import com.noisefit.luna.BuildConfig
+import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.copyToClipBoard
 import com.noisefit_commans.ui.hideKeyboard
 import com.noisefit_commans.ui.scrollToBottom
@@ -319,6 +320,10 @@ class LifeOsChatFragment :
         }
 
         binding.btnRetry.setOnClickListener {
+            if(!ApplicationUtils.isInternetConnected()){
+                context.showShortToast(getString(R.string.text_check_your_internet_connection))
+                return@setOnClickListener
+            }
             viewModel.retryApi()
         }
         binding.ivNewChat.setOnClickListener {
