@@ -119,6 +119,14 @@ class AddSleepFragment :
         // Start Time
         binding.lytCard.lytStartAndEndTime.lytDate.lytLlInput.setOnClickListener {
 
+            val navController =
+                NavHostFragment.Companion.findNavController(this@AddSleepFragment)
+
+            val currentDestinationId = navController.currentDestination?.id
+            if (R.id.sleepTimeBottomSheet == currentDestinationId) {
+                return@setOnClickListener
+            }
+
             parentFragment?.setFragmentResultListener(SLEEP_TIME_REQUEST_KEY) { _, bundle ->
                 val addSleep = bundle.getParcelable<OAddSleep>("sleepTime")
 
@@ -193,10 +201,6 @@ class AddSleepFragment :
             }
             viewModel.startTimeSleep.title = getString(R.string.text_start_time)
 
-
-            val navController =
-                NavHostFragment.Companion.findNavController(this@AddSleepFragment)
-
             navController.navigate(R.id.sleepTimeBottomSheet, bundleOf(
                 "addSleep" to viewModel.startTimeSleep.copy(),
                 "isStartDateToday" to false))
@@ -204,6 +208,15 @@ class AddSleepFragment :
 
         // End Time
         binding.lytCard.lytStartAndEndTime.lytTime.lytLlInput.setOnClickListener {
+
+            val navController =
+                NavHostFragment.Companion.findNavController(this@AddSleepFragment)
+
+            val currentDestinationId = navController.currentDestination?.id
+            if (R.id.sleepTimeBottomSheet == currentDestinationId) {
+                return@setOnClickListener
+            }
+
             if (binding.lytCard.lytStartAndEndTime.lytDate.tvTimeValue.text == getString(R.string.text_enter)) {
                 context.showShortToast(getString(R.string.text_select_start_time_first))
                 return@setOnClickListener
@@ -268,10 +281,6 @@ class AddSleepFragment :
             }
 
             viewModel.endTimeSleep.title = getString(R.string.text_end_time)
-
-
-            val navController =
-                NavHostFragment.Companion.findNavController(this@AddSleepFragment)
 
             navController.navigate(R.id.sleepTimeBottomSheet, bundleOf(
                 "addSleep" to viewModel.endTimeSleep.copy(),
