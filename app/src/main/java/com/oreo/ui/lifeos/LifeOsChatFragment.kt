@@ -95,7 +95,7 @@ class LifeOsChatFragment :
 
 
     private val suggestionsAdapter: SuggestionAdapter by lazy {
-        SuggestionAdapter() { ques ->
+        SuggestionAdapter(binding.rvChats) { ques ->
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.lifeos_suggested_q_clicked,
                 hashMapOf(

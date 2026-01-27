@@ -23,6 +23,9 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
@@ -111,6 +114,8 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.abs
+import androidx.core.net.toUri
+import com.noisefit.oreo.OreoMainActivity
 
 
 @AndroidEntryPoint
@@ -181,7 +186,28 @@ class SummaryDataFragmentToday :
         },3000)*/
 
 
-
+        binding.contentMain.viewWhatsNew.setContent {
+            MaterialTheme {
+                val banners by viewModel.whatsNewBanners.collectAsState()
+                WhatsNewCardsList(
+                    banners = banners,
+                    userSelectedLanguage = viewModel.getUserSelectedLanguage(),
+                    { banner ->
+                        val uri = banner.deeplinkAction.toUri()
+                        val path = uri.path?.removePrefix("https://link.lunazone.com/")
+                        val intent = OreoMainActivity.getStartIntent(
+                            requireContext(),
+                            appLink = ApplicationUtils.parseAppLink(path)
+                        )
+                        startActivity(intent)
+                    },
+                    { banner ->
+                        viewModel.dismissWhatsNewCard(banner.id)
+                    }
+                )
+                if(banners.isNotEmpty()) binding.contentMain.viewWhatsNew.visible()
+            }
+        }
     }
 
     private fun setNapsPager() {
@@ -2517,6 +2543,7 @@ class SummaryDataFragmentToday :
     }
 
     private fun setSmallCardUi(data: OHealthOverview.CycleTrackerCardSmall) {
+        data.data ?: return
         binding.contentMain.lytFemaleHealthCardSmall.apply {
             this.root.visible()
             this.textView3.text = data.data.title

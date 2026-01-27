@@ -25,6 +25,7 @@ import com.moengage.core.ktx.MoEngageBuilderKtx
 import com.moengage.firebase.MoEFireBaseHelper
 import com.moengage.inapp.MoEInAppHelper
 import com.moengage.pushbase.MoEPushHelper
+import com.noisefit.data.RemoteConfigManager
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.model.language.AppLanguage
 import com.noisefit.luna.BuildConfig
@@ -109,6 +110,10 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
                     error?.let { FirebaseCrashlytics.getInstance().recordException(it) }
                 }.start();
         }
+        RemoteConfigManager.init(
+            isDebug = BuildConfig.DEBUG
+        )
+        RemoteConfigManager.fetchAndActivate()
     }
 
     private fun initialiseFreshChat() {

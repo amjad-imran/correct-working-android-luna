@@ -42,379 +42,1501 @@ class LifeOsInsightsViewModel @Inject constructor(
 
         /*val jsonRes = """
             [
-  [
-    {
-      "relevancy": 0.95,
-      "title": "Total Sleep Time Increased by 2% This Week",
-      "description": "Your average nightly total sleep duration improved from 7h 0m to 7h 11m. Even these small gains can make a real difference for your energy, mood, and recovery throughout the day.",
-      "suggestions": "Aim to protect this sleep window by keeping your bedtime routine consistent.",
-      "related_suggested_questions": [
-        "Did you change your bedtime or wake-up habits this week?",
-        "Did you notice changes in how refreshed you felt in the mornings?",
-        "Were there any late caffeine or screen use evenings that affected your sleep?"
-      ],
-      "graph_type": "total_duration_day",
-      "graph": [
-        {
-          "date": "2025-11-27",
-          "value1": 26370
-        },
-        {
-          "date": "2025-11-28",
-          "value1": 20640
-        },
-        {
-          "date": "2025-11-29",
-          "value1": null
-        },
-        {
-          "date": "2025-11-30",
-          "value1": null
-        },
-        {
-          "date": "2025-12-01",
-          "value1": 28020
-        },
-        {
-          "date": "2025-12-02",
-          "value1": 32400
-        },
-        {
-          "date": "2025-12-03",
-          "value1": 28230
-        },
-        {
-          "date": "2025-12-04",
-          "value1": 19350
-        }
-      ]
-    },
-    {
-      "relevancy": 0.92,
-      "title": "More Deep Sleep: Averaging 1h 30m Per Night",
-      "description": "You’re averaging 1h 30m of deep sleep each night. This stage is crucial for body repair, immunity, and next-day resilience. Great job supporting your recovery!",
-      "suggestions": "Keep alcohol and heavy meals away from late evenings to continue maximizing deep sleep.",
-      "related_suggested_questions": [
-        "Have you adjusted your wind-down activities in the evenings?",
-        "Does your deep sleep correlate with your exercise or alcohol intake?",
-        "How do you feel after nights with more or less deep sleep?"
-      ],
-      "graph_type": "deep_sleep_day",
-      "graph": [
-        {
-          "date": "2025-11-27",
-          "value1": 6360
-        },
-        {
-          "date": "2025-11-28",
-          "value1": 5070
-        },
-        {
-          "date": "2025-11-29",
-          "value1": null
-        },
-        {
-          "date": "2025-11-30",
-          "value1": null
-        },
-        {
-          "date": "2025-12-01",
-          "value1": 5760
-        },
-        {
-          "date": "2025-12-02",
-          "value1": null
-        },
-        {
-          "date": "2025-12-03",
-          "value1": 4830
-        },
-        {
-          "date": "2025-12-04",
-          "value1": 5100
-        }
-      ]
-    },
-    {
-      "relevancy": 0.91,
-      "title": "Circadian Rhythm Shifted Earlier This Week",
-      "description": "Your sleep midpoint has been trending earlier, with your latest midpoint at 3:30 AM versus 4:24 AM one week ago. Shifting your circadian rhythm earlier can help with feeling more refreshed in the mornings.",
-      "suggestions": "Try to get morning sunlight exposure to reinforce this earlier rhythm.",
-      "related_suggested_questions": [
-        "Did you make changes to your evening or morning light exposure?",
-        "How does this earlier pattern affect your alertness during the day?",
-        "Do late nights or changing routines lead to later mid-sleep points?"
-      ],
-      "graph_type": "circadian_mid_point_day",
-      "graph": [
-        {
-          "date": "2025-11-27",
-          "value1": 17460
-        },
-        {
-          "date": "2025-11-28",
-          "value1": 18000
-        },
-        {
-          "date": "2025-11-29",
-          "value1": null
-        },
-        {
-          "date": "2025-11-30",
-          "value1": null
-        },
-        {
-          "date": "2025-12-01",
-          "value1": 17120
-        },
-        {
-          "date": "2025-12-02",
-          "value1": 16500
-        },
-        {
-          "date": "2025-12-03",
-          "value1": 17977
-        },
-        {
-          "date": "2025-12-04",
-          "value1": 15450
-        }
-      ]
-    }
-  ],
-  [
-    {
-      "relevancy": 0.96,
-      "title": "Total Sleep Duration Decreased 14% This Week Compared to Last Week",
-      "description": "You averaged 6h 44m of sleep per night this week, down from 7h 49m last week. This drop may have left you feeling a little less rested and could impact your focus and recovery. Fluctuations like this are normal now and then, but restoring a consistent sleep schedule can quickly help you feel your best again.",
-      "suggestions": "Try setting a relaxing wind-down routine and stick to a regular bedtime, even on weekends, to maximize sleep time.",
-      "related_suggested_questions": [
-        "Did you notice a change in energy, mood, or focus during days with less sleep?",
-        "Did anything disrupt your bedtime routine this week?",
-        "How does your sleep duration trend relate to your stress or recovery scores?"
-      ],
-      "graph_type": "total_duration_week",
-      "graph": [
-        {
-          "date": "2025-11-24",
-          "value1": 24150
-        },
-        {
-          "date": "2025-11-17",
-          "value1": 30525
-        },
-        {
-          "date": "2025-11-10",
-          "value1": 27334
-        },
-        {
-          "date": "2025-11-03",
-          "value1": 24471
-        },
-        {
-          "date": "2025-10-27",
-          "value1": 25800
-        },
-        {
-          "date": "2025-10-20",
-          "value1": 28945
-        }
-      ]
-    },
-    {
-      "relevancy": 0.9,
-      "title": "Deep Sleep Increased 10% This Week Compared to Last Week",
-      "description": "You spent more time in deep sleep stages this week (average: 1h 24m), up from 1h 17m last week. Deep sleep is when your body repairs and restores itself, which can lead to better muscle recovery, mood, and immune strength. Nice work!",
-      "suggestions": "Maintain your deep sleep gains by keeping your bedroom cool, dark, and quiet, and avoiding screens at least 30 minutes before bed.",
-      "related_suggested_questions": [
-        "Did your daytime activity or stress levels shift on days with more deep sleep?",
-        "Have you noticed a difference in how you feel after nights with higher deep sleep?",
-        "Has your supplement, caffeine, or alcohol intake changed recently?"
-      ],
-      "graph_type": "deep_sleep_week",
-      "graph": [
-        {
-          "date": "2025-11-24",
-          "value1": 5280
-        },
-        {
-          "date": "2025-11-17",
-          "value1": 5568
-        },
-        {
-          "date": "2025-11-10",
-          "value1": 4398
-        },
-        {
-          "date": "2025-11-03",
-          "value1": 3885
-        },
-        {
-          "date": "2025-10-27",
-          "value1": 6098
-        },
-        {
-          "date": "2025-10-20",
-          "value1": 6070
-        }
-      ]
-    },
-    {
-      "relevancy": 0.92,
-      "title": "HRV Rose 24% Compared to Your Previous 30-Day Average",
-      "description": "Your average HRV this week was 36ms, up from your previous 30-day average of 29ms. Higher HRV signals better resilience and recovery from stress—your body is adapting well, possibly thanks to better sleep or balanced activity.",
-      "suggestions": "Support your HRV gains by scheduling regular recovery days and focusing on mindful habits.",
-      "related_suggested_questions": [
-        "Are you feeling more balanced or energized throughout the week?",
-        "Did your bedtime routines, recovery practices, or stress management habits change?",
-        "How does HRV relate to your sleep quality or readiness scores this week?"
-      ],
-      "graph_type": "hrv_week",
-      "graph": [
-        {
-          "date": "2025-11-24",
-          "value1": 36
-        },
-        {
-          "date": "2025-11-17",
-          "value1": 30
-        },
-        {
-          "date": "2025-11-10",
-          "value1": 31
-        },
-        {
-          "date": "2025-11-03",
-          "value1": 30
-        },
-        {
-          "date": "2025-10-27",
-          "value1": 43
-        },
-        {
-          "date": "2025-10-20",
-          "value1": 57
-        }
-      ]
-    }
-  ],
-  [
-    {
-      "relevancy": 0.95,
-      "title": "Deep Sleep Decreased by 13% This Month Compared to Last Month",
-      "description": "Your average deep sleep time dropped from 1h 26m last month to 1h 15m this month, a 13% decrease. Deep sleep is vital for physical restoration and feeling fully refreshed. This dip often happens with inconsistent sleep timing or when stress or high activity isn't balanced with enough recovery. It's worth noting a few late bedtimes and periods of higher sleep debt during the month, which may have contributed.",
-      "suggestions": "Aim to anchor your bedtime and wake time to a regular window—even on weekends—to help your body access more restorative deep sleep.",
-      "related_suggested_questions": [
-        "Did your stress or workload increase during weeks with less deep sleep?",
-        "Were there more days of late or disrupted sleep than last month?",
-        "Have you noticed any changes in caffeine or alcohol intake before bed?"
-      ],
-      "graph_type": "deep_sleep_month",
-      "graph": [
-        {
-          "date": "2025-11-01",
-          "value1": 4691
-        },
-        {
-          "date": "2025-10-01",
-          "value1": 5367
-        },
-        {
-          "date": "2025-09-01",
-          "value1": 4902
-        },
-        {
-          "date": "2025-08-01",
-          "value1": 4951
-        },
-        {
-          "date": "2025-07-01",
-          "value1": 5190
-        },
-        {
-          "date": "2025-06-01",
-          "value1": null
-        }
-      ]
-    },
-    {
-      "relevancy": 0.92,
-      "title": "HRV Dropped Significantly This Month",
-      "description": "Your average nightly heart rate variability (HRV) fell from 41 ms last month to 30 ms this month—a notable decrease. Lower HRV can signal that your body is dealing with ongoing stress or not getting enough high-quality recovery. This may line up with more sleep debt, higher resting heart rates, or possible lifestyle stressors. Increasing stress scores seen this month also suggest your system was under more pressure.",
-      "suggestions": "Prioritize at least one night each week for extra rest, and add a wind-down routine (like stretching or breathwork) before bed to help your body shift out of stress mode.",
-      "related_suggested_questions": [
-        "Did you have more days of mental or emotional stress this month?",
-        "Did nights with better sleep or more deep sleep lead to higher HRV the next day?",
-        "Has your training, caffeine, or screen time increased recently?"
-      ],
-      "graph_type": "hrv_month",
-      "graph": [
-        {
-          "date": "2025-11-01",
-          "value1": 31
-        },
-        {
-          "date": "2025-10-01",
-          "value1": 44
-        },
-        {
-          "date": "2025-09-01",
-          "value1": 39
-        },
-        {
-          "date": "2025-08-01",
-          "value1": 34
-        },
-        {
-          "date": "2025-07-01",
-          "value1": 34
-        },
-        {
-          "date": "2025-06-01",
-          "value1": null
-        }
-      ]
-    },
-    {
-      "relevancy": 0.87,
-      "title": "Sleep Schedule Became More Irregular This Month",
-      "description": "Your average bedtime and wake times fluctuated more this month, with a wider gap between earlier and later nights and mornings. Irregular sleep timing can confuse your natural circadian rhythm, making it harder to get deep, restorative rest and potentially leading to increased sleep debt and a drop in recovery signals like HRV.",
-      "suggestions": "Try using a consistent pre-bed ritual to gently cue your body for sleep at a set time, even if life gets busy.",
-      "related_suggested_questions": [
-        "Do late bedtimes or inconsistent routines leave you feeling groggier?",
-        "Did nights with earlier, steady bedtimes lead to higher scores or more deep sleep?",
-        "Is your evening environment helping you unwind, or does it keep you wired?"
-      ],
-      "graph_type": "circadian_mid_point_month",
-      "graph": [
-        {
-          "date": "2025-11-01",
-          "value1": null
-        },
-        {
-          "date": "2025-10-01",
-          "value1": null
-        },
-        {
-          "date": "2025-09-01",
-          "value1": null
-        },
-        {
-          "date": "2025-08-01",
-          "value1": null
-        },
-        {
-          "date": "2025-07-01",
-          "value1": null
-        },
-        {
-          "date": "2025-06-01",
-          "value1": null
-        }
-      ]
-    }
+    [
+      {
+        "relevancy": 0.9,
+        "insight_type": "sleep",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Improvement in REM Sleep Duration",
+        "description": "Your REM sleep increased to 1h 15m yesterday. REM sleep is crucial for emotional processing and memory consolidation. This increase might help improve cognitive functions and emotional resilience.",
+        "suggestions": "Consider sticking to this schedule and ensuring a relaxing bedtime routine to maintain these benefits.",
+        "related_suggested_questions": [
+          "What activities can enhance my REM sleep?",
+          "How does REM sleep affect my mood and memory?",
+          "Did my REM sleep increase last week as well?"
+        ],
+        "graph_type": "rem_sleep_day",
+        "graph": [
+          {
+            "date": "2025-12-05",
+            "value1": null
+          },
+          {
+            "date": "2025-12-06",
+            "value1": 4140
+          },
+          {
+            "date": "2025-12-07",
+            "value1": 4500
+          },
+          {
+            "date": "2025-12-08",
+            "value1": null
+          },
+          {
+            "date": "2025-12-09",
+            "value1": 6660
+          },
+          {
+            "date": "2025-12-10",
+            "value1": null
+          },
+          {
+            "date": "2025-12-11",
+            "value1": 4470
+          }
+        ]
+      },
+      {
+        "relevancy": 0.88,
+        "insight_type": "sleep",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Deep Sleep Levels Enhanced",
+        "description": "Yesterday, you experienced 1h 28m of deep sleep, which is an increase from your recent averages. Deep sleep is key to physical recovery and muscle repair.",
+        "suggestions": "To promote deep sleep, maintain a regular sleep schedule and reduce caffeine intake in the afternoon.",
+        "related_suggested_questions": [
+          "What role does deep sleep play in recovery?",
+          "How consistent are my deep sleep patterns?",
+          "Should I adjust my evening activities for better deep sleep?"
+        ],
+        "graph_type": "deep_sleep_day",
+        "graph": [
+          {
+            "date": "2025-12-05",
+            "value1": null
+          },
+          {
+            "date": "2025-12-06",
+            "value1": 7260
+          },
+          {
+            "date": "2025-12-07",
+            "value1": 6090
+          },
+          {
+            "date": "2025-12-08",
+            "value1": null
+          },
+          {
+            "date": "2025-12-09",
+            "value1": 5370
+          },
+          {
+            "date": "2025-12-10",
+            "value1": null
+          },
+          {
+            "date": "2025-12-11",
+            "value1": 5280
+          }
+        ]
+      },
+      {
+        "relevancy": 0.86,
+        "insight_type": "sleep",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "High Sleep Efficiency Observed",
+        "description": "Your sleep efficiency was 97%, indicating highly restorative sleep. Efficient sleep helps you wake up feeling refreshed and ready for the day.",
+        "suggestions": "Try maintaining this level by avoiding large meals or intense exercise right before bedtime.",
+        "related_suggested_questions": [
+          "How does sleep efficiency relate to quality rest?",
+          "What factors influence changes in sleep efficiency?",
+          "Is my sleep efficiency affected by my daily activities?"
+        ],
+        "graph_type": "sleep_efficiency_day",
+        "graph": [
+          {
+            "date": "2025-12-05",
+            "value1": null
+          },
+          {
+            "date": "2025-12-06",
+            "value1": 95
+          },
+          {
+            "date": "2025-12-07",
+            "value1": 97
+          },
+          {
+            "date": "2025-12-08",
+            "value1": null
+          },
+          {
+            "date": "2025-12-09",
+            "value1": 97
+          },
+          {
+            "date": "2025-12-10",
+            "value1": null
+          },
+          {
+            "date": "2025-12-11",
+            "value1": 97
+          }
+        ]
+      },
+      {
+        "relevancy": 0.89,
+        "insight_type": "sleep",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Total Sleep Duration Increased",
+        "description": "You slept for 7h 48m yesterday, which is a significant improvement. Longer sleep durations contribute to overall health and well-being.",
+        "suggestions": "Aim for a consistent sleep schedule by going to bed and waking up at the same times daily.",
+        "related_suggested_questions": [
+          "How does total sleep duration affect recovery?",
+          "What is the ideal amount of sleep for adults?",
+          "Does my sleep duration affect my daily energy levels?"
+        ],
+        "graph_type": "total_duration_day",
+        "graph": [
+          {
+            "date": "2025-12-05",
+            "value1": 25200
+          },
+          {
+            "date": "2025-12-06",
+            "value1": 30270
+          },
+          {
+            "date": "2025-12-07",
+            "value1": 28080
+          },
+          {
+            "date": "2025-12-08",
+            "value1": 25200
+          },
+          {
+            "date": "2025-12-09",
+            "value1": 30960
+          },
+          {
+            "date": "2025-12-10",
+            "value1": 14400
+          },
+          {
+            "date": "2025-12-11",
+            "value1": 28080
+          }
+        ]
+      },
+      {
+        "relevancy": 0.7,
+        "insight_type": "sleep",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Shorter Sleep Latency Noted",
+        "description": "Falling asleep took less time yesterday. Faster sleep onset can promote better rest and recovery.",
+        "suggestions": "Stick to a calming bedtime routine to help maintain quick sleep onset.",
+        "related_suggested_questions": [
+          "What are ways to fall asleep faster?",
+          "Does screen time impact sleep latency?",
+          "Why is it important to reduce sleep latency?"
+        ],
+        "graph_type": "latency_day",
+        "graph": [
+          {
+            "date": "2025-12-05",
+            "value1": null
+          },
+          {
+            "date": "2025-12-06",
+            "value1": 10
+          },
+          {
+            "date": "2025-12-07",
+            "value1": 6
+          },
+          {
+            "date": "2025-12-08",
+            "value1": null
+          },
+          {
+            "date": "2025-12-09",
+            "value1": 5
+          },
+          {
+            "date": "2025-12-10",
+            "value1": null
+          },
+          {
+            "date": "2025-12-11",
+            "value1": 6
+          }
+        ]
+      },
+      {
+        "relevancy": 0.75,
+        "insight_type": "sleep",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Increased Restfulness During Sleep",
+        "description": "Your restfulness showed improvement, indicating fewer disturbances during sleep. This can contribute to feeling more rejuvenated in the morning.",
+        "suggestions": "Try using blackout curtains or a white noise machine to maintain this level of restfulness.",
+        "related_suggested_questions": [
+          "What causes disturbances during sleep?",
+          "How does restfulness during sleep impact my day?",
+          "Should I consider changing my sleep environment?"
+        ],
+        "graph_type": "restfullness_day",
+        "graph": [
+          {
+            "date": "2025-12-05",
+            "value1": null
+          },
+          {
+            "date": "2025-12-06",
+            "value1": 8
+          },
+          {
+            "date": "2025-12-07",
+            "value1": 3
+          },
+          {
+            "date": "2025-12-08",
+            "value1": null
+          },
+          {
+            "date": "2025-12-09",
+            "value1": 5
+          },
+          {
+            "date": "2025-12-10",
+            "value1": null
+          },
+          {
+            "date": "2025-12-11",
+            "value1": 5
+          }
+        ]
+      },
+      {
+        "relevancy": 0.83,
+        "insight_type": "readiness",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Balanced Heart Rate Variability (HRV)",
+        "description": "Your HRV was at 21ms, indicating a steady balance. Consistent HRV can signify good autonomic nervous system health and stress management.",
+        "suggestions": "Continue stress-reducing practices like mindfulness or moderate exercise to maintain this balance.",
+        "related_suggested_questions": [
+          "What does HRV tell me about my health?",
+          "How does stress impact my HRV?",
+          "Are there ways to improve my HRV readings?"
+        ],
+        "graph_type": "hrv_day",
+        "graph": [
+          {
+            "date": "2025-12-05",
+            "value1": null
+          },
+          {
+            "date": "2025-12-06",
+            "value1": 50
+          },
+          {
+            "date": "2025-12-07",
+            "value1": 40
+          },
+          {
+            "date": "2025-12-08",
+            "value1": null
+          },
+          {
+            "date": "2025-12-09",
+            "value1": 40
+          },
+          {
+            "date": "2025-12-10",
+            "value1": null
+          },
+          {
+            "date": "2025-12-11",
+            "value1": 21
+          }
+        ]
+      },
+      {
+        "relevancy": 0.76,
+        "insight_type": "readiness",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Resting Heart Rate (RHR) Remains Steady",
+        "description": "Your RHR remained at 81 bpm, indicating a stable cardiovascular baseline. A normal RHR is crucial for cardiovascular health.",
+        "suggestions": "To keep your heart healthy, engage in regular physical activity and monitor your nutrition intake.",
+        "related_suggested_questions": [
+          "What are the health implications of my resting heart rate?",
+          "How does exercise affect my resting heart rate?",
+          "What can I do to improve my cardiovascular health?"
+        ],
+        "graph_type": "rhr_day",
+        "graph": [
+          {
+            "date": "2025-12-05",
+            "value1": null
+          },
+          {
+            "date": "2025-12-06",
+            "value1": 76
+          },
+          {
+            "date": "2025-12-07",
+            "value1": 78
+          },
+          {
+            "date": "2025-12-08",
+            "value1": null
+          },
+          {
+            "date": "2025-12-09",
+            "value1": 77
+          },
+          {
+            "date": "2025-12-10",
+            "value1": null
+          },
+          {
+            "date": "2025-12-11",
+            "value1": 81
+          }
+        ]
+      },
+      {
+        "relevancy": 0.7,
+        "insight_type": "readiness",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Normal Average Skin Temperature",
+        "description": "Your average skin temperature remained stable at 96°F. Consistent skin temperature can be a sign of balanced body regulation.",
+        "suggestions": "Stay hydrated and avoid extreme temperatures to keep your internal balance intact.",
+        "related_suggested_questions": [
+          "How is skin temperature linked to sleep quality?",
+          "What factors can cause fluctuations in skin temperature?",
+          "Should I be concerned if my skin temperature changes?"
+        ],
+        "graph_type": "avg_skin_temp_day",
+        "graph": [
+          {
+            "date": "2025-12-05",
+            "value1": null
+          },
+          {
+            "date": "2025-12-06",
+            "value1": 97.4
+          },
+          {
+            "date": "2025-12-07",
+            "value1": 97.1
+          },
+          {
+            "date": "2025-12-08",
+            "value1": null
+          },
+          {
+            "date": "2025-12-09",
+            "value1": 97
+          },
+          {
+            "date": "2025-12-10",
+            "value1": null
+          },
+          {
+            "date": "2025-12-11",
+            "value1": 95.5
+          }
+        ]
+      },
+      {
+        "relevancy": 0.85,
+        "insight_type": "readiness",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Optimal Oxygen Saturation Maintained",
+        "description": "Your average oxygen saturation was 97%, indicating good respiratory function. This is essential for efficient oxygen transport in your body.",
+        "suggestions": "Maintain this level by engaging in regular physical activity and avoiding smoking or polluted areas.",
+        "related_suggested_questions": [
+          "What is a normal range for oxygen saturation?",
+          "How can exercise improve my oxygen levels?",
+          "What can a drop in oxygen saturation indicate?"
+        ],
+        "graph_type": "avg_oxy_day",
+        "graph": [
+          {
+            "date": "2025-12-05",
+            "value1": null
+          },
+          {
+            "date": "2025-12-06",
+            "value1": 96
+          },
+          {
+            "date": "2025-12-07",
+            "value1": 96
+          },
+          {
+            "date": "2025-12-08",
+            "value1": null
+          },
+          {
+            "date": "2025-12-09",
+            "value1": 96
+          },
+          {
+            "date": "2025-12-10",
+            "value1": null
+          },
+          {
+            "date": "2025-12-11",
+            "value1": 97
+          }
+        ]
+      },
+      {
+        "relevancy": 0.78,
+        "insight_type": "readiness",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Consistent Respiratory Rate Observed",
+        "description": "Your average respiratory rate of 17 breaths per minute remains consistent. This stability supports effective breathing and oxygen delivery.",
+        "suggestions": "Practice deep-breathing exercises to continue supporting your respiratory health.",
+        "related_suggested_questions": [
+          "What affects my respiratory rate changes?",
+          "Is my current respiratory rate normal?",
+          "How can respiratory exercises benefit me?"
+        ],
+        "graph_type": "avg_respiration_day",
+        "graph": [
+          {
+            "date": "2025-12-05",
+            "value1": null
+          },
+          {
+            "date": "2025-12-06",
+            "value1": 16
+          },
+          {
+            "date": "2025-12-07",
+            "value1": 16
+          },
+          {
+            "date": "2025-12-08",
+            "value1": null
+          },
+          {
+            "date": "2025-12-09",
+            "value1": 16
+          },
+          {
+            "date": "2025-12-10",
+            "value1": null
+          },
+          {
+            "date": "2025-12-11",
+            "value1": 17
+          }
+        ]
+      },
+      {
+        "relevancy": 0.72,
+        "insight_type": "readiness",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Circadian Midpoint Aligned",
+        "description": "Your circadian midpoint was at 4:28 AM, showing alignment with your natural rhythm. Staying synced with your circadian rhythm helps with restorative sleep cycles.",
+        "suggestions": "Keep a stable sleep schedule, even on weekends, to preserve your circadian alignment.",
+        "related_suggested_questions": [
+          "What is a circadian midpoint, and why is it important?",
+          "How can I adjust my sleep schedule to improve my circadian rhythm?",
+          "What happens if my circadian rhythm is disrupted?"
+        ],
+        "graph_type": "circadian_mid_point_day",
+        "graph": [
+          {
+            "date": "2025-12-05",
+            "value1": 12600
+          },
+          {
+            "date": "2025-12-06",
+            "value1": 19830
+          },
+          {
+            "date": "2025-12-07",
+            "value1": 17490
+          },
+          {
+            "date": "2025-12-08",
+            "value1": 16200
+          },
+          {
+            "date": "2025-12-09",
+            "value1": 13980
+          },
+          {
+            "date": "2025-12-10",
+            "value1": 10800
+          },
+          {
+            "date": "2025-12-11",
+            "value1": 16080
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "relevancy": 0.8,
+        "insight_type": "sleep",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "REM Sleep Decreased by 5%",
+        "description": "Your REM sleep averaged 1h 22m this week, which is a slight decrease compared to the previous week's 1h 26m. REM sleep is crucial for emotional regulation and memory consolidation, so this dip might impact mood stability and cognitive functions.",
+        "suggestions": "Prioritize a consistent sleep schedule and limit screen exposure before bed to boost REM sleep.",
+        "related_suggested_questions": [
+          "What factors affect REM sleep?",
+          "How does stress impact REM sleep?",
+          "What activities promote REM sleep?"
+        ],
+        "graph_type": "rem_sleep_week",
+        "graph": [
+          {
+            "date": "2025-10-27",
+            "value1": 5055
+          },
+          {
+            "date": "2025-11-03",
+            "value1": 4335
+          },
+          {
+            "date": "2025-11-10",
+            "value1": 5076
+          },
+          {
+            "date": "2025-11-17",
+            "value1": 5832
+          },
+          {
+            "date": "2025-11-24",
+            "value1": 3594
+          },
+          {
+            "date": "2025-12-01",
+            "value1": 4860
+          }
+        ]
+      },
+      {
+        "relevancy": 0.85,
+        "insight_type": "sleep",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Deep Sleep Boosted by 12%",
+        "description": "This week, your deep sleep increased to an average of 1h 47m from last week's 1h 35m. Deep sleep is critical for physical recovery and growth, suggesting your body is benefiting from enhanced muscle repair and immune function.",
+        "suggestions": "Maintain a cool and dark bedroom environment to continue supporting deep sleep increases.",
+        "related_suggested_questions": [
+          "How does deep sleep affect muscle recovery?",
+          "What can hinder deep sleep?",
+          "How does diet influence deep sleep?"
+        ],
+        "graph_type": "deep_sleep_week",
+        "graph": [
+          {
+            "date": "2025-10-27",
+            "value1": 6098
+          },
+          {
+            "date": "2025-11-03",
+            "value1": 3885
+          },
+          {
+            "date": "2025-11-10",
+            "value1": 4398
+          },
+          {
+            "date": "2025-11-17",
+            "value1": 5568
+          },
+          {
+            "date": "2025-11-24",
+            "value1": 5280
+          },
+          {
+            "date": "2025-12-01",
+            "value1": 5808
+          }
+        ]
+      },
+      {
+        "relevancy": 0.9,
+        "insight_type": "sleep",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Sleep Efficiency Increased by 3%",
+        "description": "Your sleep efficiency improved to 95% this week from 92% last week, meaning you're spending more of your bedtime in restful sleep. Better sleep efficiency leads to more restorative rest and higher daily energy levels.",
+        "suggestions": "Focus on relaxing activities before bed, such as reading or meditation, to keep up this trend.",
+        "related_suggested_questions": [
+          "What is considered good sleep efficiency?",
+          "How can stress affect sleep efficiency?",
+          "Why is sleep efficiency important?"
+        ],
+        "graph_type": "sleep_efficiency_week",
+        "graph": [
+          {
+            "date": "2025-10-27",
+            "value1": 94
+          },
+          {
+            "date": "2025-11-03",
+            "value1": 97
+          },
+          {
+            "date": "2025-11-10",
+            "value1": 94
+          },
+          {
+            "date": "2025-11-17",
+            "value1": 95
+          },
+          {
+            "date": "2025-11-24",
+            "value1": 96
+          },
+          {
+            "date": "2025-12-01",
+            "value1": 96
+          }
+        ]
+      },
+      {
+        "relevancy": 0.7,
+        "insight_type": "sleep",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Total Sleep Duration Slightly Increased",
+        "description": "Your weekly average for sleep duration rose to 7h 40m from 7h 35m last week. Consistent sleep duration supports overall well-being and improves cognitive function.",
+        "suggestions": "Continue keeping a regular bedtime to maintain or increase your total sleep duration.",
+        "related_suggested_questions": [
+          "How much sleep is optimal for adults?",
+          "How does sleep duration impact productivity?",
+          "Can short-term sleep increase affect health?"
+        ],
+        "graph_type": "total_duration_week",
+        "graph": [
+          {
+            "date": "2025-10-27",
+            "value1": 25800
+          },
+          {
+            "date": "2025-11-03",
+            "value1": 24471
+          },
+          {
+            "date": "2025-11-10",
+            "value1": 27334
+          },
+          {
+            "date": "2025-11-17",
+            "value1": 30525
+          },
+          {
+            "date": "2025-11-24",
+            "value1": 24150
+          },
+          {
+            "date": "2025-12-01",
+            "value1": 27364
+          }
+        ]
+      },
+      {
+        "relevancy": 0.75,
+        "insight_type": "sleep",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Improvement in Sleep Latency",
+        "description": "Sleep latency improved to 6 minutes from 8 minutes last week, meaning you’re falling asleep faster. Faster sleep onset can be indicative of good sleep hygiene and reduced anxiety before bed.",
+        "suggestions": "Keep up with pre-bedtime relaxation techniques, such as breathing exercises.",
+        "related_suggested_questions": [
+          "What affects sleep latency?",
+          "How can I reduce sleep latency?",
+          "What role does caffeine play in sleep latency?"
+        ],
+        "graph_type": "latency_week",
+        "graph": [
+          {
+            "date": "2025-10-27",
+            "value1": 7
+          },
+          {
+            "date": "2025-11-03",
+            "value1": 7
+          },
+          {
+            "date": "2025-11-10",
+            "value1": 5
+          },
+          {
+            "date": "2025-11-17",
+            "value1": 8
+          },
+          {
+            "date": "2025-11-24",
+            "value1": 5
+          },
+          {
+            "date": "2025-12-01",
+            "value1": 7
+          }
+        ]
+      },
+      {
+        "relevancy": 0.6,
+        "insight_type": "sleep",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Consistent Restfulness Levels",
+        "description": "Your perceived restfulness showed no significant change this week, remaining steady at 3 out of 5. Steady restfulness indicates a stable sleep pattern but exploring other sleep quality metrics could be beneficial.",
+        "suggestions": "Track the activities preceding sleep on days you feel most rested to identify beneficial habits.",
+        "related_suggested_questions": [
+          "How does restfulness affect daily performance?",
+          "Can diet impact restfulness during sleep?",
+          "What is the relationship between restfulness and REM sleep?"
+        ],
+        "graph_type": "restfullness_week",
+        "graph": [
+          {
+            "date": "2025-10-27",
+            "value1": 5
+          },
+          {
+            "date": "2025-11-03",
+            "value1": 3
+          },
+          {
+            "date": "2025-11-10",
+            "value1": 4
+          },
+          {
+            "date": "2025-11-17",
+            "value1": 3
+          },
+          {
+            "date": "2025-11-24",
+            "value1": 5
+          },
+          {
+            "date": "2025-12-01",
+            "value1": 4
+          }
+        ]
+      },
+      {
+        "relevancy": 0.92,
+        "insight_type": "readiness",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "HRV Increased by 14%",
+        "description": "Your average HRV went up to 43ms from last week's 37ms. This boost suggests better cardiovascular health and improved stress management.",
+        "suggestions": "Continue any stress-reducing practices you've been implementing, like yoga or mindful breathing.",
+        "related_suggested_questions": [
+          "How does HRV reflect stress and recovery?",
+          "Can HRV predict changes in health?",
+          "What lifestyle changes can improve HRV?"
+        ],
+        "graph_type": "hrv_week",
+        "graph": [
+          {
+            "date": "2025-10-27",
+            "value1": 43
+          },
+          {
+            "date": "2025-11-03",
+            "value1": 30
+          },
+          {
+            "date": "2025-11-10",
+            "value1": 31
+          },
+          {
+            "date": "2025-11-17",
+            "value1": 30
+          },
+          {
+            "date": "2025-11-24",
+            "value1": 36
+          },
+          {
+            "date": "2025-12-01",
+            "value1": 38
+          }
+        ]
+      },
+      {
+        "relevancy": 0.65,
+        "insight_type": "readiness",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Resting Heart Rate Remained Steady",
+        "description": "Your resting heart rate held steady at 78 bpm this week. A stable resting heart rate is an indicator of consistent cardiovascular fitness levels.",
+        "suggestions": "Maintain regular physical activity to support heart health.",
+        "related_suggested_questions": [
+          "What is an optimal resting heart rate for adults?",
+          "How does sleep affect resting heart rate?",
+          "What can cause fluctuations in resting heart rate?"
+        ],
+        "graph_type": "rhr_week",
+        "graph": [
+          {
+            "date": "2025-10-27",
+            "value1": 77
+          },
+          {
+            "date": "2025-11-03",
+            "value1": 81
+          },
+          {
+            "date": "2025-11-10",
+            "value1": 80
+          },
+          {
+            "date": "2025-11-17",
+            "value1": 80
+          },
+          {
+            "date": "2025-11-24",
+            "value1": 76
+          },
+          {
+            "date": "2025-12-01",
+            "value1": 78
+          }
+        ]
+      },
+      {
+        "relevancy": 0.68,
+        "insight_type": "readiness",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Slight Increase in Average Skin Temperature",
+        "description": "Your average skin temperature rose to 97.2°F from last week's 97°F. Small fluctuations in skin temperature can be normal, but consistent rises could indicate stress or inflammation.",
+        "suggestions": "Monitor hydration levels and ensure a balanced diet to manage skin temperature changes.",
+        "related_suggested_questions": [
+          "What factors affect skin temperature?",
+          "How does sleep environment impact skin temperature?",
+          "Can stress influence skin temperature?"
+        ],
+        "graph_type": "avg_skin_temp_week",
+        "graph": [
+          {
+            "date": "2025-10-27",
+            "value1": 96
+          },
+          {
+            "date": "2025-11-03",
+            "value1": 97
+          },
+          {
+            "date": "2025-11-10",
+            "value1": 97
+          },
+          {
+            "date": "2025-11-17",
+            "value1": 96
+          },
+          {
+            "date": "2025-11-24",
+            "value1": 96
+          },
+          {
+            "date": "2025-12-01",
+            "value1": 97
+          }
+        ]
+      },
+      {
+        "relevancy": 0.77,
+        "insight_type": "readiness",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Steady Oxygen Levels",
+        "description": "Your average SpO₂ remained stable at 96%. Consistent oxygen saturation supports adequate breathing and cardiovascular health during sleep.",
+        "suggestions": "Maintain a clean sleep environment and consider air quality if anything changes.",
+        "related_suggested_questions": [
+          "What are normal SpO₂ levels during sleep?",
+          "How can sleep apnea affect oxygen saturation?",
+          "Why is monitoring SpO₂ important for health?"
+        ],
+        "graph_type": "avg_oxy_week",
+        "graph": [
+          {
+            "date": "2025-10-27",
+            "value1": 94
+          },
+          {
+            "date": "2025-11-03",
+            "value1": 95
+          },
+          {
+            "date": "2025-11-10",
+            "value1": 95
+          },
+          {
+            "date": "2025-11-17",
+            "value1": 95
+          },
+          {
+            "date": "2025-11-24",
+            "value1": 94
+          },
+          {
+            "date": "2025-12-01",
+            "value1": 96
+          }
+        ]
+      },
+      {
+        "relevancy": 0.63,
+        "insight_type": "readiness",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Respiratory Rate Decreased Slightly",
+        "description": "Your average respiratory rate decreased to 16 breaths per minute from last week's 17. This slight reduction can indicate improved respiratory efficiency or relaxation.",
+        "suggestions": "Continue practicing relaxation techniques, especially during wind-down routines.",
+        "related_suggested_questions": [
+          "What influences respiratory rate during sleep?",
+          "How can exercise impact respiratory rate?",
+          "What is the relationship between stress and respiratory rate?"
+        ],
+        "graph_type": "avg_respiration_week",
+        "graph": [
+          {
+            "date": "2025-10-27",
+            "value1": 17
+          },
+          {
+            "date": "2025-11-03",
+            "value1": 17
+          },
+          {
+            "date": "2025-11-10",
+            "value1": 17
+          },
+          {
+            "date": "2025-11-17",
+            "value1": 17
+          },
+          {
+            "date": "2025-11-24",
+            "value1": 16
+          },
+          {
+            "date": "2025-12-01",
+            "value1": 17
+          }
+        ]
+      },
+      {
+        "relevancy": 0.8,
+        "insight_type": "misc",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Earlier Circadian Midpoint Achieved",
+        "description": "The midpoint of your sleep cycles shifted to 4:32am from 5:00am last week. Moving towards an earlier midpoint can enhance sleep consistency and quality.",
+        "suggestions": "Try to maintain this earlier rhythm by avoiding late-night electronics and sticking to a regular bedtime.",
+        "related_suggested_questions": [
+          "What is the optimal circadian midpoint for adults?",
+          "How does circadian rhythm impact energy levels?",
+          "What lifestyle factors can shift circadian rhythms?"
+        ],
+        "graph_type": "circadian_mid_point_week",
+        "graph": [
+          {
+            "date": "2025-10-27",
+            "value1": 23334
+          },
+          {
+            "date": "2025-11-03",
+            "value1": 20571
+          },
+          {
+            "date": "2025-11-10",
+            "value1": 15999
+          },
+          {
+            "date": "2025-11-17",
+            "value1": 16305
+          },
+          {
+            "date": "2025-11-24",
+            "value1": 15666
+          },
+          {
+            "date": "2025-12-01",
+            "value1": 15291
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "relevancy": 0.9,
+        "insight_type": "sleep",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "REM Sleep Increased by 10% Compared to Last Month",
+        "description": "Your average REM sleep increased significantly, which is essential for emotional regulation and memory consolidation. This improvement can enhance cognitive function and mood throughout the day.",
+        "suggestions": "Maintain a regular sleep schedule and reduce distractions before bedtime to further enhance REM sleep.",
+        "related_suggested_questions": [
+          "How can improving REM sleep benefit my daytime performance?",
+          "What lifestyle changes can boost my REM sleep?",
+          "Does the time I go to bed affect my REM sleep duration?"
+        ],
+        "graph_type": "rem_sleep_month",
+        "graph": [
+          {
+            "date": "2025-06-01",
+            "value1": null
+          },
+          {
+            "date": "2025-07-01",
+            "value1": 3240
+          },
+          {
+            "date": "2025-08-01",
+            "value1": 3928
+          },
+          {
+            "date": "2025-09-01",
+            "value1": 4447
+          },
+          {
+            "date": "2025-10-01",
+            "value1": 4667
+          },
+          {
+            "date": "2025-11-01",
+            "value1": 4646
+          }
+        ]
+      },
+      {
+        "relevancy": 0.85,
+        "insight_type": "sleep",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Deep Sleep Decreased by 5% Compared to Last Month",
+        "description": "Deep sleep has decreased slightly, which might impact your physical recovery and immune function. Deep sleep is crucial for muscle repair and overall health maintenance.",
+        "suggestions": "Try incorporating a wind-down routine with relaxation techniques before bed to increase deep sleep duration.",
+        "related_suggested_questions": [
+          "What activities can help improve my deep sleep?",
+          "Does diet impact deep sleep duration?",
+          "Is there a correlation between stress and reduced deep sleep?"
+        ],
+        "graph_type": "deep_sleep_month",
+        "graph": [
+          {
+            "date": "2025-06-01",
+            "value1": null
+          },
+          {
+            "date": "2025-07-01",
+            "value1": 5190
+          },
+          {
+            "date": "2025-08-01",
+            "value1": 4951
+          },
+          {
+            "date": "2025-09-01",
+            "value1": 4902
+          },
+          {
+            "date": "2025-10-01",
+            "value1": 5367
+          },
+          {
+            "date": "2025-11-01",
+            "value1": 4691
+          }
+        ]
+      },
+      {
+        "relevancy": 0.88,
+        "insight_type": "sleep",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Sleep Efficiency Improved by 8% Compared to Last Month",
+        "description": "Your sleep efficiency has improved, meaning you're making better use of your time in bed for actual sleep. This change can enhance your overall restfulness and energy levels.",
+        "suggestions": "Continue to limit screen time before bed and maintain a calm sleep environment to keep up this positive trend.",
+        "related_suggested_questions": [
+          "How does sleep efficiency affect my overall health?",
+          "What habits could further improve my sleep efficiency?",
+          "Can diet play a role in boosting sleep efficiency?"
+        ],
+        "graph_type": "sleep_efficiency_month",
+        "graph": [
+          {
+            "date": "2025-06-01",
+            "value1": null
+          },
+          {
+            "date": "2025-07-01",
+            "value1": 95
+          },
+          {
+            "date": "2025-08-01",
+            "value1": 96
+          },
+          {
+            "date": "2025-09-01",
+            "value1": 95
+          },
+          {
+            "date": "2025-10-01",
+            "value1": 95
+          },
+          {
+            "date": "2025-11-01",
+            "value1": 95
+          }
+        ]
+      },
+      {
+        "relevancy": 0.92,
+        "insight_type": "sleep",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Total Sleep Duration Increased by 12% This Month",
+        "description": "Your total sleep duration has increased, supporting overall health and reducing fatigue levels. Adequate sleep duration is key for your recovery and mood.",
+        "suggestions": "Keep prioritizing sleep by setting consistent bedtime and wake-up times to maintain this positive trend.",
+        "related_suggested_questions": [
+          "How does longer sleep enhance my daily energy levels?",
+          "What are the health benefits of increased total sleep duration?",
+          "How can my sleep environment support longer sleep?"
+        ],
+        "graph_type": "total_duration_month",
+        "graph": [
+          {
+            "date": "2025-06-01",
+            "value1": null
+          },
+          {
+            "date": "2025-07-01",
+            "value1": 25026
+          },
+          {
+            "date": "2025-08-01",
+            "value1": 26678
+          },
+          {
+            "date": "2025-09-01",
+            "value1": 25261
+          },
+          {
+            "date": "2025-10-01",
+            "value1": 26492
+          },
+          {
+            "date": "2025-11-01",
+            "value1": 26440
+          }
+        ]
+      },
+      {
+        "relevancy": 0.75,
+        "insight_type": "sleep",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Sleep Latency Decreased by 5 Minutes Compared to Last Month",
+        "description": "You're falling asleep faster, which indicates reduced stress or better relaxation techniques. Quick sleep onset often leads to a more restful night.",
+        "suggestions": "Maintain relaxation habits and avoid caffeine in the evenings to continue benefiting from quicker sleep onset.",
+        "related_suggested_questions": [
+          "What could cause me to fall asleep faster?",
+          "How does sleep latency affect sleep quality?",
+          "What evening habits could improve my sleep latency?"
+        ],
+        "graph_type": "latency_month",
+        "graph": [
+          {
+            "date": "2025-06-01",
+            "value1": null
+          },
+          {
+            "date": "2025-07-01",
+            "value1": 7
+          },
+          {
+            "date": "2025-08-01",
+            "value1": 6
+          },
+          {
+            "date": "2025-09-01",
+            "value1": 9
+          },
+          {
+            "date": "2025-10-01",
+            "value1": 6
+          },
+          {
+            "date": "2025-11-01",
+            "value1": 6
+          }
+        ]
+      },
+      {
+        "relevancy": 0.87,
+        "insight_type": "sleep",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Restfulness Improved by 10% Compared to Last Month",
+        "description": "You're experiencing more restful nights, likely due to improvements in sleep quality and duration. This positively impacts your daily cognitive and physical performance.",
+        "suggestions": "Continue with your current pre-sleep routine and keep stress-minimizing practices in order.",
+        "related_suggested_questions": [
+          "How does restfulness affect my daytime energy?",
+          "What factors contribute to a restful sleep?",
+          "Can meditation improve my restfulness?"
+        ],
+        "graph_type": "restfullness_month",
+        "graph": [
+          {
+            "date": "2025-06-01",
+            "value1": null
+          },
+          {
+            "date": "2025-07-01",
+            "value1": 3
+          },
+          {
+            "date": "2025-08-01",
+            "value1": 3
+          },
+          {
+            "date": "2025-09-01",
+            "value1": 4
+          },
+          {
+            "date": "2025-10-01",
+            "value1": 4
+          },
+          {
+            "date": "2025-11-01",
+            "value1": 4
+          }
+        ]
+      },
+      {
+        "relevancy": 0.84,
+        "insight_type": "readiness",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "HRV Decreased by 15% This Month",
+        "description": "A decrease in HRV may suggest increased stress or insufficient recovery. Lower HRV can indicate that your body is under more strain than usual.",
+        "suggestions": "Incorporate mindfulness practices and ensure adequate rest days to improve your HRV.",
+        "related_suggested_questions": [
+          "How does HRV reflect my stress levels?",
+          "What strategies can I use to raise my HRV?",
+          "Does exercise frequency affect HRV?"
+        ],
+        "graph_type": "hrv_month",
+        "graph": [
+          {
+            "date": "2025-06-01",
+            "value1": null
+          },
+          {
+            "date": "2025-07-01",
+            "value1": 34
+          },
+          {
+            "date": "2025-08-01",
+            "value1": 34
+          },
+          {
+            "date": "2025-09-01",
+            "value1": 39
+          },
+          {
+            "date": "2025-10-01",
+            "value1": 44
+          },
+          {
+            "date": "2025-11-01",
+            "value1": 31
+          }
+        ]
+      },
+      {
+        "relevancy": 0.86,
+        "insight_type": "readiness",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Resting Heart Rate Increased by 8% This Month",
+        "description": "An increase in resting heart rate can signal stress, overwork, or lack of recovery. Monitoring this can help you identify potential health or fitness issues.",
+        "suggestions": "Prioritize stress management techniques and ensure sufficient recovery in your exercise regimen.",
+        "related_suggested_questions": [
+          "How can reducing stress lower my resting heart rate?",
+          "What lifestyle changes can I make to improve my resting heart rate?",
+          "Does better diet affect my resting heart rate?"
+        ],
+        "graph_type": "rhr_month",
+        "graph": [
+          {
+            "date": "2025-06-01",
+            "value1": null
+          },
+          {
+            "date": "2025-07-01",
+            "value1": 79
+          },
+          {
+            "date": "2025-08-01",
+            "value1": 78
+          },
+          {
+            "date": "2025-09-01",
+            "value1": 79
+          },
+          {
+            "date": "2025-10-01",
+            "value1": 74
+          },
+          {
+            "date": "2025-11-01",
+            "value1": 80
+          }
+        ]
+      },
+      {
+        "relevancy": 0.75,
+        "insight_type": "readiness",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Average Skin Temperature Decreased by 0.5% This Month",
+        "description": "A decrease in skin temperature might indicate effective thermoregulation, especially during sleep, enhancing rest and recovery.",
+        "suggestions": "Maintain a cool, comfortable sleeping environment to continue supporting healthy sleep patterns.",
+        "related_suggested_questions": [
+          "How does skin temperature affect my sleep quality?",
+          "What can I do to regulate my skin temperature during sleep?",
+          "Can my diet influence skin temperature?"
+        ],
+        "graph_type": "avg_skin_temp_month",
+        "graph": [
+          {
+            "date": "2025-06-01",
+            "value1": null
+          },
+          {
+            "date": "2025-07-01",
+            "value1": 97
+          },
+          {
+            "date": "2025-08-01",
+            "value1": 96
+          },
+          {
+            "date": "2025-09-01",
+            "value1": 96
+          },
+          {
+            "date": "2025-10-01",
+            "value1": 96
+          },
+          {
+            "date": "2025-11-01",
+            "value1": 96
+          }
+        ]
+      },
+      {
+        "relevancy": 0.7,
+        "insight_type": "readiness",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Average SpO₂ Increased by 2% Compared to Last Month",
+        "description": "An increase in oxygen saturation levels suggests improved respiratory health and possibly better sleep quality, as your body is receiving adequate oxygen.",
+        "suggestions": "Continue with regular exercise and lung-strengthening activities to maintain optimal SpO₂ levels.",
+        "related_suggested_questions": [
+          "What activities can help boost my SpO₂ levels?",
+          "Does my breathing technique during the day affect SpO₂?",
+          "Can sleep position impact my SpO₂ readings?"
+        ],
+        "graph_type": "avg_oxy_month",
+        "graph": [
+          {
+            "date": "2025-06-01",
+            "value1": null
+          },
+          {
+            "date": "2025-07-01",
+            "value1": 95
+          },
+          {
+            "date": "2025-08-01",
+            "value1": 95
+          },
+          {
+            "date": "2025-09-01",
+            "value1": 95
+          },
+          {
+            "date": "2025-10-01",
+            "value1": 95
+          },
+          {
+            "date": "2025-11-01",
+            "value1": 95
+          }
+        ]
+      },
+      {
+        "relevancy": 0.79,
+        "insight_type": "readiness",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Average Respiratory Rate Decreased by 1 BPM This Month",
+        "description": "A lower respiratory rate can indicate improved cardiovascular fitness and more efficient breathing during sleep, enhancing overall rest.",
+        "suggestions": "Maintain regular aerobic exercise to continue supporting efficient respiration rates.",
+        "related_suggested_questions": [
+          "How does cardiovascular fitness impact my respiratory rate?",
+          "What breathing exercises can improve my sleep?",
+          "Can changes in my diet affect respiratory rate?"
+        ],
+        "graph_type": "avg_respiration_month",
+        "graph": [
+          {
+            "date": "2025-06-01",
+            "value1": null
+          },
+          {
+            "date": "2025-07-01",
+            "value1": 17
+          },
+          {
+            "date": "2025-08-01",
+            "value1": 17
+          },
+          {
+            "date": "2025-09-01",
+            "value1": 17
+          },
+          {
+            "date": "2025-10-01",
+            "value1": 17
+          },
+          {
+            "date": "2025-11-01",
+            "value1": 17
+          }
+        ]
+      },
+      {
+        "relevancy": 0.83,
+        "insight_type": "readiness",
+        "date_time": "2025-12-12 11:29:58",
+        "title": "Circadian Midpoint Shifted Earlier by 20 Minutes",
+        "description": "Your circadian rhythm is adjusting, potentially leading to better alignment with natural sleep-wake cycles. This can enhance sleep quality and daytime alertness.",
+        "suggestions": "Try to wake up and see natural light soon after to reinforce this healthier sleep pattern.",
+        "related_suggested_questions": [
+          "What benefits come from an earlier circadian midpoint?",
+          "How does my evening routine affect my circadian rhythm?",
+          "What are the signs of a healthy circadian rhythm?"
+        ],
+        "graph_type": "circadian_mid_point_month",
+        "graph": [
+          {
+            "date": "2025-06-01",
+            "value1": null
+          },
+          {
+            "date": "2025-07-01",
+            "value1": 12894
+          },
+          {
+            "date": "2025-08-01",
+            "value1": 18415
+          },
+          {
+            "date": "2025-09-01",
+            "value1": 14380
+          },
+          {
+            "date": "2025-10-01",
+            "value1": 18409
+          },
+          {
+            "date": "2025-11-01",
+            "value1": 17157
+          }
+        ]
+      }
+    ]
   ]
-]
         """.trimIndent()
 
         val type = object : TypeToken<List<List<InsightItemResponseModel>>>() {}.type
@@ -759,7 +1881,7 @@ class LifeOsInsightsViewModel @Inject constructor(
     private fun getContributor(data: InsightItemResponseModel): SleepInternalLaunchState {
         return when {
             data.graph_type == null -> SleepInternalLaunchState.DEEP_SLEEP
-            data.graph_type.startsWith("circadian_mid_point_day") -> SleepInternalLaunchState.TIMING
+            data.graph_type.startsWith("circadian_mid_point_day") -> SleepInternalLaunchState.DEEP_SLEEP
             data.graph_type.startsWith("hour_vs_need_day") -> SleepInternalLaunchState.HOUR_VS_NEED
             data.graph_type.startsWith("restorative_sleep") -> SleepInternalLaunchState.RESTORATIVE_SLEEP
             data.graph_type.startsWith("rem_sleep") -> SleepInternalLaunchState.REM_SLEEP

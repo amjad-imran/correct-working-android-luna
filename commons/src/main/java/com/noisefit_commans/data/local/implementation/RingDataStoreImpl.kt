@@ -56,6 +56,7 @@ private const val UPDATE_USER_DEVICE_STATUS = "UPDATE_USER_DEVICE_STATUS"
 private const val CUSTOMIZE_HOME_SCREEN = "CUSTOMIZE_HOME_SCREEN"
 private const val CANNY_STATE = "CANNY_STATE"
 private const val SLEEP_EXCEPTION = "SLEEP_EXCEPTION"
+private const val CANCELLED_CARDS = "CANCELLED_CARDS"
 //
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -73,6 +74,16 @@ class RingDataStoreImpl
 
     override fun getSleepException(): Boolean {
         return mPrefs.getBoolean(SLEEP_EXCEPTION, false)
+    }
+
+    override fun getCancelledCardsList(): List<String> {
+        return mPrefs.getString(CANCELLED_CARDS, null)?.let {
+            gson.fromJson(it)
+        } ?: listOf()
+    }
+
+    override fun setCancelledCardsList(list: List<String>) {
+        mPrefs.edit().putString(CANCELLED_CARDS, gson.toJson(list)).commit()
     }
 
     override fun setCannyState(enableCanny: Boolean) {
