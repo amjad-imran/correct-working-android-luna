@@ -609,7 +609,10 @@ class TimelineScreenFragment :
                     LOGS.w("Loading more data")
                 }
 
-                viewModel.getUserSavedHabits(mainViewModel.selectedDate)
+                viewModel.getUserSavedHabits(
+                    mainViewModel.selectedDate,
+                    mainViewModel.selectedDate.equals(todayDate.minusDays(1).toString())
+                )
             }
         })
 
