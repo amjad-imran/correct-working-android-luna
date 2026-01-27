@@ -10,6 +10,7 @@ import com.noisefit_commans.data.model.CountCardData
 import com.noisefit_commans.data.model.OreoSleepData
 import com.noisefit_commans.models.SleepMovementType
 import com.noisefit_commans.utils.AppConversionUtils
+import com.noisefit_commans.utils.GraphType
 import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
 import com.oreo.ui.custom.Item
 import com.oreo.data.model.Item as DTItem
@@ -442,6 +443,14 @@ class GraphDataConvertor @Inject constructor(
         val showOverlay =
             if (period == InternalSelectedPeriod.DAY) false else true
 
+        val type = if (rawData.graph_type?.equals(GraphType.Day.CIRCADIAN_MID_POINT) == true ||
+            rawData.graph_type?.equals(GraphType.Week.CIRCADIAN_MID_POINT) == true ||
+            rawData.graph_type?.equals(GraphType.Month.CIRCADIAN_MID_POINT) == true) {
+            SleepSingleGradientChartType.TIME
+        } else {
+            null
+        }
+
         return InsightCardUiModel(
             id = 6L,
             title = "generateSleepSingleLineChartData() demo",
@@ -459,7 +468,8 @@ class GraphDataConvertor @Inject constructor(
                     nonNullDataCount,
                     selectedPeriod = period,
                     showOverlay = showOverlay,
-                    xAxisRangeInsights = xAxisRange
+                    xAxisRangeInsights = xAxisRange,
+                    chartType = type
                 )
             ),
             raw = rawData
