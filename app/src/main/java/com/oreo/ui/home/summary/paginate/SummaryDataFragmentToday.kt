@@ -2523,6 +2523,7 @@ class SummaryDataFragmentToday :
     }
 
     private fun setSmallCardUi(data: OHealthOverview.CycleTrackerCardSmall) {
+        data.data ?: return
         binding.contentMain.lytFemaleHealthCardSmall.apply {
             this.root.visible()
             this.textView3.text = data.data.title
