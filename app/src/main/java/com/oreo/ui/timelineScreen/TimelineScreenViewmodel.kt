@@ -47,12 +47,12 @@ class TimelineScreenViewmodel @Inject constructor(
 
     // expose ONLY 3 visible items
     val visibleHabits: StateFlow<List<Options>> =
-        allHabits.map { it.filterNot { it.isCompleted || it.isCancelled || !it.canBeLogged }.take(3) }
+        allHabits.map { it.filterNot { it.isCompleted || it.isCancelled }.take(3) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
     // for "+N more"
     val moreCount: StateFlow<Int> =
-        allHabits.map { (it.filterNot { it.isCompleted || it.isCancelled || !it.canBeLogged }.size - 3).coerceAtLeast(0) }
+        allHabits.map { (it.filterNot { it.isCompleted || it.isCancelled }.size - 3).coerceAtLeast(0) }
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0)
 
     fun getPrefixAndSuffixList(dataList: List<String>): Triple<ArrayList<ChartModel>, ArrayList<ChartModel>, ArrayList<ChartModel>> {
@@ -125,18 +125,9 @@ class TimelineScreenViewmodel @Inject constructor(
     fun checkUserFirstTimeForAddHabits() = dataStore.getUserFirstTimeForAddHabits()
     fun setAddHabitFirstTimeVisibility() = dataStore.setUserFirstTimeForAddHabits(false)
 
-    fun getUserSavedHabits(date:String?, processData: Boolean){
+    fun getUserSavedHabits(date:String?){
         viewModelScope.launch {
             date?.let {
-                fun processHabitsData(dataList: List<Options>) {
-                    dataList.forEach { data ->
-                        when (data.type) {
-                            "caffeine" -> data.canBeLogged = false
-                            "light_exposure" -> data.canBeLogged = false
-                        }
-                    }
-                }
-
                 habitsByDateUC.get()
                     .invoke(it).collect { resource ->
                         when (resource) {
@@ -153,7 +144,7 @@ class TimelineScreenViewmodel @Inject constructor(
                                     (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                         object : BinaryActionCallback {
                                             override fun yes() {
-                                                getUserSavedHabits(date, processData)
+                                                getUserSavedHabits(date)
                                             }
 
                                             override fun no() {}
@@ -163,9 +154,6 @@ class TimelineScreenViewmodel @Inject constructor(
 
                             is Resource.Success -> {
                                 resource.data?.data?.let { resp ->
-                                    if(processData){
-                                        processHabitsData(resp.options)
-                                    }
                                     habitsResponseData = resp
                                     _allHabits.value = (resp.options)
                                 }
