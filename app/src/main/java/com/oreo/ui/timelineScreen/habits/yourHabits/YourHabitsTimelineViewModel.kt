@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -120,6 +121,8 @@ class YourHabitsTimelineViewModel @Inject constructor(
 
                             is Resource.Success -> {
                                 resource.data?.data?.let { resp ->
+                                    processData(resp.options)
+
                                     habitsResponseData = resp
                                     _allHabits.value =
                                         resp.options
@@ -129,6 +132,74 @@ class YourHabitsTimelineViewModel @Inject constructor(
                     }
             }
         }
+    }
+
+    private fun processData(dataList: List<Options>) {
+
+        fun getDate(prevDayNum: Long): String {
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+            return LocalDate.now().minusDays(prevDayNum).format(formatter)
+        }
+
+        dataList.forEach { data ->
+
+            when (data.type) {
+
+                "workout" -> {
+                    if (
+                        (getDate(0).equals(mDate) ||
+                        getDate(1).equals(mDate)).not()
+                    ){
+                        data.canBeLogged = false
+                    }
+                }
+
+                "caffeine" -> {
+                    if (
+                        getDate(0).equals(mDate).not()
+                    ) {
+                        data.canBeLogged = false
+                    }
+                }
+
+                "light_exposure" -> {
+                    if (
+                        getDate(0).equals(mDate).not()
+                    ) {
+                        data.canBeLogged = false
+                    }
+                }
+
+                "supplements" -> {
+                    if (
+                        (getDate(0).equals(mDate) ||
+                        getDate(1).equals(mDate)).not()
+                    ) {
+                        data.canBeLogged = false
+                    }
+                }
+
+                "alcohol" -> {
+                    if (
+                        (getDate(0).equals(mDate) ||
+                        getDate(1).equals(mDate)).not()
+                    ) {
+                        data.canBeLogged = false
+                    }
+                }
+
+
+                "recovery" -> {
+                    if (
+                        (getDate(0).equals(mDate) ||
+                        getDate(1).equals(mDate)).not()
+                    ) {
+                        data.canBeLogged = false
+                    }
+                }
+            }
+        }
+
     }
 
     fun getIsButtonsDisabled(date: String?): Boolean{

@@ -39,7 +39,7 @@ class YourHabitsTimelineAdapter(
                     }
                 }
 
-                isButtonsDisabled -> {
+                isButtonsDisabled || !item.canBeLogged -> {
                     binding.igTick.setImageResource(R.drawable.ic_check_disabled_you_habits)
                     binding.igCross.setImageResource(R.drawable.ic_cross_disabled_you_habits)
                 }
@@ -59,7 +59,7 @@ class YourHabitsTimelineAdapter(
             }
 
             binding.igCross.setOnClickListener {
-                onCross(item, item.isCompleted || item.isCancelled || isButtonsDisabled)
+                onCross(item, item.isCompleted || item.isCancelled || isButtonsDisabled || !item.canBeLogged)
             }
 
         }

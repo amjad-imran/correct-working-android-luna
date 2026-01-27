@@ -22,6 +22,7 @@ data class HabitsByDateResponse(
 
         // for app
         val state: State = State.Normal,
+        var canBeLogged: Boolean = true,
     ) : Parcelable{
         enum class State { Normal, Skipping }
     }
