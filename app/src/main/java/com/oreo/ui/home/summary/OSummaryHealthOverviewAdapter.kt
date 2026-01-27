@@ -3888,6 +3888,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
             data: OHealthOverview.CycleTrackerCardSmall,
             position: Int,
         ) {
+            data.data ?: return
             binding.textView3.text = data.data.title
             binding.tvOvlInDays.text = data.data.days.toString()
             binding.textView1.text = data.data.bottomText

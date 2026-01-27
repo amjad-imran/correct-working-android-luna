@@ -2380,6 +2380,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_edit_entries_by_adding_or_removing_them_from_your_timeline">Edit entries by adding or removing them from your Timeline.</string>
     <string name="text_remove_entry">Remove Entry?</string>
     <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">This will permanently remove this entry from your timeline.</string>
+    <string name="whats_new">What’s New!</string>
 
 
 </resources>
