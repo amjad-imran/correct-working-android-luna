@@ -22,11 +22,16 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentHelpUsImproveBottomSheetBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 
-const val HELP_US_IMPROVE_BS_INSIGHTS = "HELP_US_IMPROVE_BS_INSIGHTS"
 class HelpUsImproveBottomSheet :
     BaseBottomSheetWithTransparent<FragmentHelpUsImproveBottomSheetBinding>(
         FragmentHelpUsImproveBottomSheetBinding::inflate
     ) {
+
+    companion object{
+        const val HELP_US_IMPROVE_BS_INSIGHTS = "HELP_US_IMPROVE_BS_INSIGHTS"
+    }
+
+    private val selectedPositions = mutableSetOf<Int>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,15 +61,13 @@ class HelpUsImproveBottomSheet :
         )
     }
 
-    private val selectedPositions = mutableSetOf<Int>()
-
     private fun setChips(items: List<String>, selectedBg: Drawable, unSelectedBg: Drawable) {
         val chipGrp = binding.chipGroupReasons
         chipGrp.removeAllViews()
 
         items.forEachIndexed { index, item ->
             val mChip =
-                layoutInflater.inflate(R.layout.layout_add_event_readiness_chip, chipGrp, false)
+                layoutInflater.inflate(R.layout.layout_help_us_improve_bs_chip, chipGrp, false)
 
             mChip.background =
                 if(mChip.isSelected) selectedBg
@@ -81,12 +84,17 @@ class HelpUsImproveBottomSheet :
 
                 if (nowSelected) selectedPositions.add(index)
                 else selectedPositions.remove(index)
+                updateSubmitState(binding.etFeedback.text)
             }
             chipGrp.addView(mChip)
         }
     }
 
     override fun initListener() {
+        binding.btnClose.setOnClickListener {
+            navigateUpSafe()
+        }
+
         binding.etFeedback.doOnTextChanged { text, _, _, _ ->
             updateSubmitState(text)
         }
@@ -102,7 +110,7 @@ class HelpUsImproveBottomSheet :
                 Bundle().apply {
                     putString("feedbackText", binding.etFeedback.text.toString())
                     if(selected.isNotEmpty()){
-                        putStringArrayList("reasons", ArrayList(reasons))
+                        putString("reasons", selected.toString())
                     }
                 }
             )
@@ -137,7 +145,7 @@ class HelpUsImproveBottomSheet :
     }
 
     private fun updateSubmitState(text: CharSequence?) {
-        val enabled = !text.isNullOrBlank()
+        val enabled = !text.isNullOrBlank() || selectedPositions.isNotEmpty()
         binding.btnSubmit.apply {
             isEnabled = enabled
             alpha = if (enabled) 1f else 0.5f

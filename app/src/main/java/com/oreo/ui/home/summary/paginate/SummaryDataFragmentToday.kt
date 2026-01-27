@@ -795,6 +795,26 @@ class SummaryDataFragmentToday :
                     }
                 }
 
+                OSummaryHealthOverviewClickEnum.LifeOsAddAttachmentClicked -> {
+                    viewModel.handleLifeOsCardClicked{ isOnboardDone ->
+                        if(isOnboardDone) {
+                            val (frag, bundle) = LifeOsChatFragment.getStartData(
+                                threadId = null,
+                                userMessage = null,
+                                title = null,
+                                aiTopic = AITopics.GENERAL,
+                                displayAddAttachmentBS = true,
+                            )
+                            navigate(
+                                frag, bundle
+                            )
+                        }
+                        else{
+                            mainViewModel.navigateTo(BottomNavOption.LUNA_AI)
+                        }
+                    }
+                }
+
                 OSummaryHealthOverviewClickEnum.LifeOsVoiceClicked -> {
                     viewModel.handleLifeOsCardClicked{ isOnboardDone ->
                         if(isOnboardDone) {

@@ -953,7 +953,13 @@ class ChatGptViewModel
         }
     }
 
-    fun postChatReview(text: String, reviewFlag: Int, messageId: UUID) {
+    fun postChatReview(
+        text: String,
+        reviewFlag: Int,
+        messageId: UUID,
+        negFeedbackText: String ?= null,
+        reasons: String ?= null,
+    ) {
         if (threadId == null) {
             return
         }
@@ -973,6 +979,12 @@ class ChatGptViewModel
                 this.addProperty("text",text)
                 this.addProperty("date",date)
                 this.addProperty("review","$reviewFlag")
+                if(reviewFlag==0){
+                    this.addProperty(
+                        "reason",
+                        "feedback:- $negFeedbackText, reasons:- ${reasons ?: "[]"}"
+                    )
+                }
             }
 
 
