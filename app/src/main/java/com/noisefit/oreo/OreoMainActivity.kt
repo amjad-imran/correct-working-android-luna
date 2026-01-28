@@ -1699,6 +1699,10 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 navController?.navigate(R.id.settingsFragment)
             }
 
+            AppLinks.LIFE_OS -> {
+                viewModel.navigateTo(BottomNavOption.LUNA_AI)
+            }
+
             AppLinks.LUNA_AI -> {
 
                 if (viewModel.ringDataStore.getRingDevice() == null) {

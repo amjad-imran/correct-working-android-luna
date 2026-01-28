@@ -2427,5 +2427,6 @@
     <string name="text_edit_entries_by_adding_or_removing_them_from_your_timeline">Редактируйте записи, добавляя их или удаляя из своей временной шкалы.</string>
     <string name="text_remove_entry">Удалить запись?</string>
     <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">Это навсегда удалит эту запись из вашей временной шкалы.</string>
+    <string name="whats_new">Что нового!</string>
 
 </resources>
