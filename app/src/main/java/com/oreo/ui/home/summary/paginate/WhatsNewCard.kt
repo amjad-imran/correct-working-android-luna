@@ -1,5 +1,7 @@
 package com.oreo.ui.home.summary.paginate
 
+import android.view.MotionEvent
+import android.view.View
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -43,6 +45,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.pager.PageSize
+import androidx.compose.material3.IconButton
+import androidx.compose.ui.input.pointer.pointerInteropFilter
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.unit.dp
+import androidx.viewpager2.widget.ViewPager2
+import com.noisefit_commans.utils.LOGS
+
 @Composable
 fun WhatsNewCardsList(
     banners: List<BannerItem>,
@@ -50,74 +63,83 @@ fun WhatsNewCardsList(
     onBannerClick: (BannerItem) -> Unit,
     onCloseClick: (BannerItem) -> Unit
 ) {
-    val listState = rememberLazyListState()
+    if (banners.isEmpty()) return
+
     val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-    val cardWidthPx = with(LocalDensity.current) {
-        (screenWidth - 32.dp).toPx()
-    }
+    val cardWidth = screenWidth - 32.dp
+
+    val composeView = LocalView.current
+
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        pageCount = { banners.size }
+    )
 
     val gilroy = FontFamily(
         Font(com.noisefit_commans.R.font.gilroy_medium)
     )
 
-    val currentIndex by remember {
-        derivedStateOf {
-            val index = listState.firstVisibleItemIndex
-            val offset = listState.firstVisibleItemScrollOffset
-
-            if (offset > cardWidthPx / 2) {
-                index + 1
-            } else {
-                index
-            }
-        }
-    }
-
     Column {
-        val safeSelectedIndex =
-            if (banners.isNotEmpty()) {
-                currentIndex.coerceIn(0, banners.size - 1)
-            } else {
-                0
-            }
-        Box(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            if(banners.isEmpty()) return
+        Box(modifier = Modifier.fillMaxWidth()) {
             Text(
                 text = stringResource(R.string.whats_new),
                 color = Color.White,
                 fontSize = 16.sp,
                 fontFamily = gilroy,
                 fontWeight = FontWeight.Medium,
-                modifier = Modifier.align(Alignment.CenterStart)
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
                     .padding(start = 16.dp)
             )
 
             DotsIndicator(
                 totalDots = banners.size,
-                selectedIndex = currentIndex.coerceIn(0, safeSelectedIndex),
+                selectedIndex = pagerState.currentPage,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(end = 16.dp, top = 16.dp, bottom = 16.dp)
             )
         }
-        LazyRow(
-            state = listState,
-            contentPadding = PaddingValues(start = 16.dp, end = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            items(
-                items = banners,
-                key = { it.id }
-            ) { banner ->
-                BannerCard(
-                    banner = banner,
-                    userSelectedLanguage = userSelectedLanguage,
-                    onClick = { onBannerClick(banner) },
-                    onCloseClick = { onCloseClick(banner) }
-                )
+
+        HorizontalPager(
+            state = pagerState,
+            pageSpacing = 12.dp,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .pointerInteropFilter { event ->
+                when (event.actionMasked) {
+
+                    MotionEvent.ACTION_DOWN,
+                    MotionEvent.ACTION_MOVE -> {
+                        var p = composeView.parent
+                        while (p != null) {
+                            p.requestDisallowInterceptTouchEvent(true)
+                            if(p is ViewPager2) break
+                            p = p.parent
+                        }
+                    }
+
+                    MotionEvent.ACTION_UP,
+                    MotionEvent.ACTION_CANCEL -> {
+                        var p = composeView.parent
+                        while (p != null) {
+                            p.requestDisallowInterceptTouchEvent(false)
+                            if(p is ViewPager2) break
+                            p = p.parent
+                        }
+                    }
+                }
+                false // let Compose pager handle the event
             }
+        ) { page ->
+            val banner = banners[page]
+            BannerCard(
+                banner = banner,
+                userSelectedLanguage = userSelectedLanguage,
+                onClick = { onBannerClick(banner) },
+                onCloseClick = { onCloseClick(banner) }
+            )
         }
     }
 }
@@ -151,16 +173,19 @@ fun BannerCard(
             )
 
             if (banner.showCrossButton) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_whats_new_cross),
-                    contentDescription = "Close",
-                    tint = Color.White,
+                IconButton(
+                    onClick = onCloseClick,
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .padding(8.dp)
-                        .size(24.dp)
-                        .clickable { onCloseClick() }
-                )
+                        .padding(4.dp)
+                        .size(32.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_whats_new_cross),
+                        contentDescription = "Close",
+                        tint = Color.White
+                    )
+                }
             }
         }
     }
