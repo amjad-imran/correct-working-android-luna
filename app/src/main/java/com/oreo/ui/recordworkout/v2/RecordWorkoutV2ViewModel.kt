@@ -29,6 +29,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import android.os.SystemClock
+import java.io.IOException
 import java.time.LocalDate
 import java.time.Period
 import java.util.Locale
@@ -494,20 +495,24 @@ class RecordWorkoutV2ViewModel @Inject constructor(
     }
 
     fun getAddress(lat: Double, long: Double) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            geoCoder.getFromLocation(
-                lat, long, 1
-            ) { addresses ->
-                val address = addresses.getOrNull(0)
-                viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    geoCoder.getFromLocation(lat, long, 1) { addresses ->
+                        val address = addresses.getOrNull(0)
+                        viewModelScope.launch(Dispatchers.IO) {
+                            updateCity(address?.locality, lat, long)
+                        }
+                    }
+                } else {
+                    val addresses = geoCoder.getFromLocation(lat, long, 1)
+                    val address = addresses?.getOrNull(0)
                     updateCity(address?.locality, lat, long)
                 }
-            }
-        } else {
-            val addresses = geoCoder.getFromLocation(lat, long, 1)
-            val address = addresses?.getOrNull(0)
-            viewModelScope.launch(Dispatchers.IO) {
-                updateCity(address?.locality, lat, long)
+            } catch (e: IOException) {
+                updateCity(null, lat, long)
+            } catch (e: IllegalArgumentException) {
+                updateCity(null, lat, long)
             }
         }
     }
