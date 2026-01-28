@@ -55,7 +55,7 @@ class YourHabitsTimelineAdapter(
             }
 
             binding.igTick.setOnClickListener {
-                onCheck(item, item.isCompleted || item.isCancelled || isButtonsDisabled)
+                onCheck(item, item.isCompleted || item.isCancelled || isButtonsDisabled || !item.canBeLogged)
             }
 
             binding.igCross.setOnClickListener {
