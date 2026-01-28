@@ -65,9 +65,6 @@ fun WhatsNewCardsList(
 ) {
     if (banners.isEmpty()) return
 
-    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-    val cardWidth = screenWidth - 32.dp
-
     val composeView = LocalView.current
 
     val pagerState = rememberPagerState(
