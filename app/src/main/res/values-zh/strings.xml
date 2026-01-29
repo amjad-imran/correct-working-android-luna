@@ -2397,5 +2397,6 @@
     <string name="text_edit_entries_by_adding_or_removing_them_from_your_timeline">通过将条目添加或移除到您的时间轴来编辑条目。</string>
     <string name="text_remove_entry">删除条目？</string>
     <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">此操作将永久删除此条目。</string>
+    <string name="whats_new">有什么新内容！</string>
 
 </resources>

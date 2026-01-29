@@ -1887,6 +1887,7 @@ class LifeOsInsightsViewModel @Inject constructor(
             data.graph_type.startsWith("rem_sleep") -> SleepInternalLaunchState.REM_SLEEP
             data.graph_type.startsWith("deep_sleep") -> SleepInternalLaunchState.DEEP_SLEEP
             data.graph_type.startsWith("sleep_perf") -> SleepInternalLaunchState.SLEEP_PERFORMANCE
+            data.graph_type.startsWith("avg_respiration") -> SleepInternalLaunchState.RESPIRATORY_RATE
             else -> SleepInternalLaunchState.DEEP_SLEEP
         }
     }

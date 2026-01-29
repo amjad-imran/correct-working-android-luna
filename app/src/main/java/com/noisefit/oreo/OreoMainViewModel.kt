@@ -1738,16 +1738,16 @@ constructor(
     }
 
     fun getUserSavedHabits(date:String = LocalDate.now().toString()){
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             habitsByDateUC.get()
                 .invoke(date).collect { resource ->
                     when (resource) {
                         is Resource.Loading -> {
-                            setLoading(resource.loading)
+
                         }
 
                         is Resource.GenericError -> {
-                            sendMessage(resource.message)
+
                         }
 
                         is Resource.NetworkError -> {
