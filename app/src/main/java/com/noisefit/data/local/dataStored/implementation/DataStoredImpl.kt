@@ -910,6 +910,7 @@ class DataStoredImpl
         mPrefs.edit()?.remove(LIFEOS_ONBOARD_INITIATED)?.apply()
         mPrefs.edit()?.remove(LIFEOS_ONBOARD_COMPLETED)?.apply()
         mPrefs.edit()?.remove(LIFEOS_ONBOARD_QUES_DATA)?.apply()
+        mPrefs.edit()?.remove(USER_FIRST_TIME_TO_ADD_HABITS)?.apply()
 
         mPrefs.edit()?.remove(WHATS_NEW_DASH_CARD_INTERACTION_DONE)?.apply()
 

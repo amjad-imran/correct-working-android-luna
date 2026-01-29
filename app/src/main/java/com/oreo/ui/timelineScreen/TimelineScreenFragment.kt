@@ -483,65 +483,54 @@ class TimelineScreenFragment :
             }
         }*/
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.allHabits.onEach { mList ->
-                    if(viewModel.habitsResponseData==null) return@onEach
-                    if(mList.isEmpty()){
-                        checkUserHabits()
-                        binding.lytSavedHabits.root.gone()
-                        binding.lytSetupHabits.root.visible()
-                    }else{
-                        val todayDate = LocalDate.now()
-                        val isPrevOrCurDay = todayDate.toString() == mainViewModel.selectedDate ||
-                                todayDate.minusDays(1).toString() == mainViewModel.selectedDate
+        viewModel.allHabits.observe(viewLifecycleOwner) { mList ->
+            if (mList.isEmpty()) {
+                checkUserHabits()
+                binding.lytSavedHabits.root.gone()
+                binding.lytSetupHabits.root.visible()
+            } else {
+                val todayDate = LocalDate.now()
+                val isPrevOrCurDay = todayDate.toString() == mainViewModel.selectedDate ||
+                        todayDate.minusDays(1).toString() == mainViewModel.selectedDate
 
-                        binding.lytSetupHabits.root.gone()
-                        binding.lytSavedHabits.root.visible()
-                        val total = mList.size
-                        val curProgress = mList.filter { it.isCompleted || it.isCancelled }.size
+                binding.lytSetupHabits.root.gone()
+                binding.lytSavedHabits.root.visible()
+                val total = mList.size
+                val curProgress = mList.filter { it.isCompleted || it.isCancelled }.size
 
-                        if(total==curProgress || !isPrevOrCurDay) binding.lytSavedHabits.lytContentAndFooter.gone()
-                        else binding.lytSavedHabits.lytContentAndFooter.visible()
+                if (total == curProgress || !isPrevOrCurDay) binding.lytSavedHabits.lytContentAndFooter.gone()
+                else binding.lytSavedHabits.lytContentAndFooter.visible()
 
-                        binding.lytSavedHabits.habitProgress.apply {
-                            this.max = total
-                            this.progress = curProgress
+                binding.lytSavedHabits.habitProgress.apply {
+                    this.max = total
+                    this.progress = curProgress
+                }
+
+                if (total != 0) {
+                    binding.lytSavedHabits.tvHabitsLogged.text =
+                        getString(R.string.text_val_habits_logged, curProgress, total)
+                }
+
+                viewModel.visibleHabits.observe(viewLifecycleOwner) { list ->
+                    habitsAdapter.submitList(
+                        if (isPrevOrCurDay) list
+                        else emptyList()
+                    )
+                }
+
+                viewModel.moreCount.observe(viewLifecycleOwner) { count ->
+                    if (count > 0) {
+                        binding.lytSavedHabits.tvMoreHabits.apply {
+                            text = getString(R.string.text_val_more, count)
+                            isClickable = true
                         }
-
-                        if(total != 0) {
-                            binding.lytSavedHabits.tvHabitsLogged.text =
-                                getString(R.string.text_val_habits_logged, curProgress, total)
+                    } else {
+                        binding.lytSavedHabits.tvMoreHabits.apply {
+                            text = ""
+                            isClickable = false
                         }
-
-                        launch {
-                            viewModel.visibleHabits.collect { list ->
-                                habitsAdapter.submitList(
-                                    if (isPrevOrCurDay) list
-                                    else emptyList()
-                                )
-                            }
-                        }
-
-                        launch {
-                            viewModel.moreCount.collect { count ->
-                                if (count > 0){
-                                    binding.lytSavedHabits.tvMoreHabits.apply {
-                                        text = getString(R.string.text_val_more, count)
-                                        isClickable = true
-                                    }
-                                }
-                                else{
-                                    binding.lytSavedHabits.tvMoreHabits.apply {
-                                        text = ""
-                                        isClickable = false
-                                    }
-                                }
-                            }
-                        }
-
                     }
-                }.launchIn(this)
+                }
             }
         }
     }
