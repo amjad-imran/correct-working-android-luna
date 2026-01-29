@@ -12,9 +12,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
+import com.moengage.core.internal.utils.showToast
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentTimelineScreenBinding
 import com.noisefit.oreo.OreoMainViewModel
+import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.setVisibilityByCondition
@@ -74,6 +76,10 @@ class TimelineScreenFragment :
     ) {
         when(habit.type){
             "workout" -> {
+                if(mainViewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess){
+                    showToast(requireContext(), getString(R.string.text_please_connect_your_ring_to_add_sleep))
+                    return
+                }
                 val activityType = when(habit.workoutType) {
                     "freestyle_workout" -> "freestyle"
                     "outdoor_running" -> "running"
@@ -164,6 +170,11 @@ class TimelineScreenFragment :
                 if (mostRecentSleep == null) {
                     val mostRecentNap = timelineData?.find { it.event.equals("nap") }
                     if (mostRecentNap == null) {
+                        if(mainViewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess){
+                            showToast(requireContext(), getString(R.string.text_please_connect_your_ring_to_add_sleep))
+                            return
+                        }
+
                         navigate(
                             R.id.addActivityTimelineFragment,
                             bundleOf(

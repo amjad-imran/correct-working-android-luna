@@ -995,6 +995,10 @@ class SummaryDataFragmentToday :
     ) {
         when(habit.type){
             "workout" -> {
+                if(mainViewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess){
+                    showToast(requireContext(), getString(R.string.text_please_connect_your_ring_to_add_sleep))
+                    return
+                }
                 val activityType = when(habit.workoutType) {
                     "freestyle_workout" -> "freestyle"
                     "outdoor_running" -> "running"
@@ -1085,6 +1089,11 @@ class SummaryDataFragmentToday :
                 if (mostRecentSleep == null) {
                     val mostRecentNap = timelineData?.find { it.event.equals("nap") }
                     if (mostRecentNap == null) {
+                        if(mainViewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess){
+                            showToast(requireContext(), getString(R.string.text_please_connect_your_ring_to_add_sleep))
+                            return
+                        }
+
                         navigate(
                             R.id.addActivityTimelineFragment,
                             bundleOf(
