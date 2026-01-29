@@ -1704,15 +1704,11 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
             }
 
             AppLinks.LUNA_AI -> {
-
-                if (viewModel.ringDataStore.getRingDevice() == null) {
+                viewModel.navigateTo(BottomNavOption.LUNA_AI)
+                /*if (viewModel.ringDataStore.getRingDevice() == null) {
                     showShortToast(getString(R.string.text_luna_ai_message))
                     return
                 }
-
-                /*navController?.navigate(R.id.aiTopQuestionsFragment,
-                    bundleOf("aiTopic" to AITopics.GENERAL))*/
-
 
                 val (frag, bundle) = LifeOsChatFragment.getStartData(
                     threadId = null,
@@ -1722,18 +1718,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 )
                 navController?.navigate(
                     frag, bundle
-                )
-
-                /*val (frag, bundle) = ChatGptFragment.getStartData(
-                    null,
-                    null,
-                    null,
-                    null,
-                    AITopics.GENERAL
-                )
-                navController?.navigate(frag, bundle)*/
-
-                //viewModel.navigateTo(BottomNavOption.LUNA_AI)
+                )*/
             }
 
             AppLinks.FEATURE_REQUEST -> {
