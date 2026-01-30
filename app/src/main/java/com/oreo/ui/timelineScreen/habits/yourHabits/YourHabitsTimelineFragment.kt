@@ -9,8 +9,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.moengage.core.internal.utils.showToast
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentYourHabitsTimelineBinding
+import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
@@ -163,6 +165,10 @@ class YourHabitsTimelineFragment : BaseFragment<FragmentYourHabitsTimelineBindin
     ) {
         when(habit.type){
             "workout" -> {
+                if(viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess){
+                    showToast(requireContext(), getString(R.string.text_please_connect_your_ring_to_add_a_workout))
+                    return
+                }
                 val activityType = when(habit.workoutType) {
                     "freestyle_workout" -> "freestyle"
                     "outdoor_running" -> "running"
@@ -253,6 +259,10 @@ class YourHabitsTimelineFragment : BaseFragment<FragmentYourHabitsTimelineBindin
                 if (mostRecentSleep == null) {
                     val mostRecentNap = timelineData?.find { it.event.equals("nap") }
                     if (mostRecentNap == null) {
+                        if(viewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess){
+                            showToast(requireContext(), getString(R.string.text_please_connect_your_ring))
+                            return
+                        }
                         navigate(
                             R.id.addActivityTimelineFragment,
                             bundleOf(
