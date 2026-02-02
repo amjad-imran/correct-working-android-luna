@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
 import com.noisefit.data.RemoteConfigManager
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.dataConverter.DataConverter
@@ -3212,64 +3213,44 @@ class SummaryDataViewModelToday @Inject constructor(
 
     private fun getLunaManagedPriority(hasSleep: Boolean): List<CustomHomeScreenItem> {
         val priorityList = mutableListOf<CustomHomeScreenItem>()
+        val rawJson = RemoteConfigManager
+            .getString(RemoteConfigManager.HOME_CARDS_SEQUENCE)
+
+        val type = object : TypeToken<Map<String, List<String>>>() {}.type
+
+        val config: Map<String, List<String>> =
+            runCatching {
+                Gson().fromJson<Map<String, List<String>>>(rawJson, type)
+            }.getOrElse {
+                emptyMap()
+            } ?: emptyMap()
+
 
         val itemsMap = getItemsMap()
-        val daySlot = getDaySlot()
+
         priorityList.apply {
-            when (daySlot) {
-                0 -> {
-                    add(itemsMap["readiness"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["timeline"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["activity"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["one_tap_vitals"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["heart_rate"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["stress"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["daily_goals"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["cycle_tracker"]!!.copy(priority = priorityList.size))
-                    /*add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))*/
-                    add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
+            (config[getDaySlot(config)] ?: defaultCardOrder)
+                .forEach { key ->
+                    itemsMap[key]?.let { add(it.copy(priority = size)) }
                 }
-
-                1 -> {
-                    add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["timeline"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["activity"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["one_tap_vitals"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["heart_rate"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["stress"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["daily_goals"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["readiness"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["cycle_tracker"]!!.copy(priority = priorityList.size))
-                    /*add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))*/
-                    add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
-                }
-
-                else -> {
-                    add(itemsMap["timeline"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["circadian_alignment"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["sleep_planner"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["activity"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["one_tap_vitals"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["heart_rate"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["stress"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["daily_goals"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["readiness"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["sleep"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["health_monitor"]!!.copy(priority = priorityList.size))
-                    add(itemsMap["cycle_tracker"]!!.copy(priority = priorityList.size))
-                    /*add(itemsMap["caffeine_intake"]!!.copy(priority = priorityList.size))*/
-                }
-            }
-
-//            add(itemsMap["workout_history"]!!.copy(priority = priorityList.size))
         }
         return priorityList
     }
+
+    private val defaultCardOrder = listOf(
+        "readiness",
+        "sleep",
+        "health_monitor",
+        "circadian_alignment",
+        "timeline",
+        "activity",
+        "one_tap_vitals",
+        "heart_rate",
+        "stress",
+        "daily_goals",
+        "cycle_tracker",
+        "sleep_planner"
+    )
 
     private fun getItemsMap(): Map<String, CustomHomeScreenItem> =
         HashMap<String, CustomHomeScreenItem>().apply {
@@ -3624,6 +3605,26 @@ class SummaryDataViewModelToday @Inject constructor(
         } else {
             2
         }
+    }
+
+    private fun getDaySlot( config: Map<String, List<String>>
+    ): String? {
+        if (config.isEmpty()) return null
+
+        val formatter = DateTimeFormatter.ofPattern("HH:mm")
+        val now = LocalTime.now()
+
+        val sortedKeys = config.keys
+            .sortedBy { LocalTime.parse(it, formatter) }
+
+        for (i in sortedKeys.indices.reversed()) {
+            val keyTime = LocalTime.parse(sortedKeys[i], formatter)
+            if (!now.isBefore(keyTime)) {
+                return sortedKeys[i]
+            }
+        }
+
+        return sortedKeys.first()
     }
 
     private fun makeSleepArray(data: List<SleepHourlyBreakup>?): ArrayList<SleepData.SleepDataBreakup> {
