@@ -47,6 +47,7 @@
 #Luna
 -keep class com.oreo.data.model.** { *; }
 -keep public enum com.oreo.** { *; }
+-keep class com.oreo.ui.lifeos.charts.InsightCardUiModel { *; }
 
 -keep class com.noisefit.data.model.** { *; }
 
