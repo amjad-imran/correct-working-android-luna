@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        style="@style/S14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white_20_perc_rounded_12dp"
+        android:fontFamily="@font/google_sans_flex_variable"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:includeFontPadding="true"
+        android:textFontWeight="300"
+        tools:text="Late night Caffeine Intake" />
+
+</LinearLayout>

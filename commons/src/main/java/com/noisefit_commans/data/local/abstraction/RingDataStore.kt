@@ -68,6 +68,7 @@ interface RingDataStore {
     fun isShowDeviceIntro(): Boolean
     fun setShowDeviceIntro(boolean: Boolean)
 
+    fun setUserSelectedPersona(persona: String)
 
     fun addToRecordDeleteList(sportStartTime: Long)
     fun removeRecordDeleteList()
@@ -118,4 +119,5 @@ interface RingDataStore {
     //
     fun getCancelledCardsList(): List<String>
     fun setCancelledCardsList(list: List<String>)
+    fun getUserSelectedPersona(): String
 }

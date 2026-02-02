@@ -57,6 +57,7 @@ private const val CUSTOMIZE_HOME_SCREEN = "CUSTOMIZE_HOME_SCREEN"
 private const val CANNY_STATE = "CANNY_STATE"
 private const val SLEEP_EXCEPTION = "SLEEP_EXCEPTION"
 private const val CANCELLED_CARDS = "CANCELLED_CARDS"
+private const val USER_SELECTED_PERSONA = "USER_SELECTED_PERSONA"
 //
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -84,6 +85,10 @@ class RingDataStoreImpl
 
     override fun setCancelledCardsList(list: List<String>) {
         mPrefs.edit().putString(CANCELLED_CARDS, gson.toJson(list)).commit()
+    }
+
+    override fun getUserSelectedPersona(): String {
+        return mPrefs.getString(USER_SELECTED_PERSONA, "") ?: ""
     }
 
     override fun setCannyState(enableCanny: Boolean) {
@@ -458,6 +463,10 @@ class RingDataStoreImpl
 
     override fun setShowDeviceIntro(boolean: Boolean) {
         mPrefs.edit()?.putBoolean(DEVICE_INTRO, boolean)?.apply()
+    }
+
+    override fun setUserSelectedPersona(persona: String) {
+        mPrefs.edit()?.putString(USER_SELECTED_PERSONA, persona)?.apply()
     }
 
     override fun isNewOtaAvailable(): Boolean {

@@ -2,10 +2,7 @@ package com.oreo.ui.chatGpt.audio
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -27,113 +24,51 @@ class AudioAiCalibrationFragment :
     private val viewModel: AudioCalibrationViewModel by viewModels()
     val args: AudioAiCalibrationFragmentArgs by navArgs()
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        setVideo()
-    }
-
-    private fun setVideo() {
-       /* val fileName = ("android.resource://" + requireContext().packageName) + "/raw/video_chat_ai"
-        val uri = Uri.parse(fileName)
-        val videoView = binding.videoView
-        videoView.setVideoURI(uri)
-        videoView.stopPlayback()
-        videoView.setOnPreparedListener { it.isLooping = true }
-        videoView.start()*/
+        viewModel.initSpeechRecognizer(requireContext())
     }
 
     override fun initListener() {
-        binding.ivAllSet.setOnClickListener {
-            navigate(AudioAiCalibrationFragmentDirections.actionAudioAiCalibrationFragmentToAudioAiFragment(
-                args.text
-            ).apply {
-                planType = args.planType
-            })
-        }
-
-        binding.ivCross.setOnClickListener {
+        binding.ivBack.setOnClickListener {
             navigateUpSafe()
         }
 
-        binding.ivStart.setOnClickListener {
+        binding.tvRecord.setOnClickListener {
             if (viewModel.isRecording) return@setOnClickListener
 
-            checkMicrophonePermission {
-                showStep3(viewModel.maxAmpList.size, true)
-                viewModel.startNewRecording()
-            }
-        }
-    }
-
-    private fun showStep3(pos: Int, listening: Boolean) {
-        binding.tvHeader.text = when (pos) {
-            1 -> getString(R.string.text_ai_header_2)
-            2 -> getString(R.string.text_ai_header_3)
-            else -> getString(R.string.text_speak)
-        }
-        binding.tvMessage.text = getString(R.string.text_hello_luna)
-        binding.ivStart.imageAlpha = if (listening) 128 else 255
-        binding.tvListening.apply {
-            visible()
-            text = if (listening) {
-                getString(R.string.text_listening_dot)
-            } else {
-                getString(R.string.text_tap_to_speak)
+            if(binding.tvRecord.text.equals(getString(R.string.text_next))){
+                navigate(AudioAiCalibrationFragmentDirections.actionAudioAiCalibrationFragmentToAudioAiFragment(
+                    args.text
+                ).apply {
+                    planType = args.planType
+                })
+            }else{
+                binding.tvRecord.text = getString(R.string.record)
+                checkMicrophonePermission {
+                    binding.tvRecord.gone()
+                    viewModel.startListening()
+                    binding.groupListening.visible()
+                }
             }
         }
     }
 
     override fun subscribeObservers() {
-
-        viewModel.uiStates.observe(this) {
-            it.getContent()?.let {
-                when (it) {
-                    AudioCalibUiStates.STEP_1 -> {
-                        binding.tvHeader.text = getString(R.string.text_personalize_luna)
-                        binding.tvMessage.text =
-                            getString(R.string.text_help_luna_understand_your_voice)
-                        binding.ivStart.gone()
-                    }
-
-                    AudioCalibUiStates.STEP_2 -> {
-                        binding.tvHeader.text = getString(R.string.text_personalize_luna)
-                        binding.tvMessage.text = getString(R.string.text_press_the_button_below)
-                        binding.ivStart.visible()
-                    }
-                }
-            }
-        }
-
-        viewModel.videoPlayState.observe(this) {
-            if (it) {
-                if (binding.videoView.isPlaying.not()) {
-                    binding.videoView.start()
-                }
-            } else {
-                binding.videoView.pause()
-            }
-        }
-
-        viewModel.currentTimer.observe(this) {
-            it.getContent()?.let { percent ->
-                if (percent == 100) {
-                    binding.progressBarRecording.gone()
-                    val dataSize = viewModel.maxAmpList.size
-                    viewModel.completionState.postValue(dataSize)
-                    if (dataSize < 3) {
-                        showStep3(dataSize, false)
-                    } else {
-                        viewModel.sameMaxAmp()
+        viewModel.speechText.observe(this) {
+            it?.getContent()?.let { data ->
+                if (viewModel.isHeyLunaSpoken(data)) {
+                    binding.groupListening.gone()
+                    viewModel.stopListening()
+                    viewModel.userAttemptsCount++
+                    viewModel.completionState.postValue(viewModel.userAttemptsCount)
+                    if (viewModel.userAttemptsCount >= 3) {
                         stateAllSet()
                     }
-                } else {
-                    binding.progressBarRecording.visible()
-                    binding.progressBarRecording.progress = percent
+                }else{
+                    showSpeechError()
                 }
-
-            }
+            } ?: showSpeechError()
         }
 
         viewModel.completionState.observe(this) {
@@ -144,20 +79,41 @@ class AudioAiCalibrationFragment :
             showProgressState(it)
         }
 
-        viewModel.getLoading().observe(this) {
-            if (it) {
-                binding.progressBar.root.visible()
-            } else {
-                binding.progressBar.root.gone()
-            }
-        }
-
         viewModel.getMessages().observe(this) {
             it.getContent()?.let { message ->
                 context.showShortToast(message)
             }
         }
+    }
 
+    private fun showSpeechError(){
+        binding.groupListening.gone()
+        viewModel.stopListening()
+        binding.tvRecord.apply {
+            text = getString(R.string.text_try_again)
+            visible()
+        }
+        binding.lytBottomChecks.root.visible()
+        when(viewModel.userAttemptsCount){
+            0 -> {
+                binding.lytBottomChecks.ivCheck1.apply {
+                    setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_failed))
+                    visible()
+                }
+            }
+            1 -> {
+                binding.lytBottomChecks.ivCheck2.apply {
+                    setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_failed))
+                    visible()
+                }
+            }
+            2 -> {
+                binding.lytBottomChecks.ivCheck3.apply {
+                    setImageDrawable(ContextCompat.getDrawable(requireContext(), R.drawable.ic_failed))
+                    visible()
+                }
+            }
+        }
     }
 
     /**
@@ -165,40 +121,52 @@ class AudioAiCalibrationFragment :
      */
     private fun showProgressState(position: Int) {
         binding.lytBottomChecks.root.visible()
+        binding.tvRecord.visible()
         when (position) {
             1 -> {
-                binding.lytBottomChecks.apply {
-                    bg1.invisible()
-                    bg2.visible()
-                    bg3.visible()
-
-                    ivCheck1.visible()
-                    ivCheck2.gone()
-                    ivCheck3.gone()
+                binding.apply {
+                    lytBottomChecks.apply {
+                        ivCheck1.setImageDrawable(
+                            ContextCompat.getDrawable(
+                                requireContext(),
+                                R.drawable.ic_check_ai
+                            )
+                        )
+                        ivCheck1.visible()
+                        ivCheck2.invisible()
+                        ivCheck3.invisible()
+                    }
+                    tvHeyLuna1.alpha = 1f
+                    tvSayHiLuna.text = getString(R.string.say_hey_luna_again)
                 }
             }
 
             2 -> {
-                binding.lytBottomChecks.apply {
-                    bg1.invisible()
-                    bg2.invisible()
-                    bg3.visible()
-
-                    ivCheck1.visible()
-                    ivCheck2.visible()
-                    ivCheck3.gone()
+                binding.apply {
+                    lytBottomChecks.apply {
+                        ivCheck2.setImageDrawable(
+                            ContextCompat.getDrawable(
+                                requireContext(),
+                                R.drawable.ic_check_ai
+                            )
+                        )
+                        ivCheck1.visible()
+                        ivCheck2.visible()
+                        ivCheck3.invisible()
+                    }
+                    tvHeyLuna2.alpha = 1f
+                    tvSayHiLuna.text = getString(R.string.great_one_last_time)
                 }
             }
 
             3 -> {
-                binding.lytBottomChecks.apply {
-                    bg1.invisible()
-                    bg2.invisible()
-                    bg3.invisible()
-
-                    ivCheck1.visible()
-                    ivCheck2.visible()
-                    ivCheck3.visible()
+                binding.apply {
+                    lytBottomChecks.apply {
+                        ivCheck1.visible()
+                        ivCheck2.visible()
+                        ivCheck3.visible()
+                    }
+                    tvHeyLuna3.alpha = 1f
                 }
             }
         }
@@ -206,15 +174,16 @@ class AudioAiCalibrationFragment :
 
     private fun stateAllSet() {
         viewModel.completionState.postValue(null)
-        binding.tvHeader.text = ""
-        binding.tvMessage.text = getString(R.string.text_you_re_all_set)
-        binding.ivStart.invisible()
-        binding.tvListening.gone()
-        binding.progressBarRecording.gone()
-        Handler(Looper.getMainLooper()).postDelayed({
-            binding.tvMessage.text = getString(R.string.text_you_re_all_set)
-            binding.ivAllSet.visible()
-        }, 800)
+        binding.apply {
+            tvSayHiLuna.gone()
+            groupListening.gone()
+            tvHeyLuna1.gone()
+            tvHeyLuna2.gone()
+            tvHeyLuna3.gone()
+            tvDone.visible()
+            tvRecord.text = getString(R.string.text_next)
+            tvRecord.visible()
+        }
     }
 
     private fun checkMicrophonePermission(callback: () -> Unit) {
@@ -225,6 +194,7 @@ class AudioAiCalibrationFragment :
         ) {
             callback.invoke()
         } else {
+            binding.tvRecord.gone()
             micPermissionResult.launch(Manifest.permission.RECORD_AUDIO)
         }
     }
@@ -233,17 +203,11 @@ class AudioAiCalibrationFragment :
         ActivityResultContracts.RequestPermission()
     ) {
         if (it) {
-            showStep3(viewModel.maxAmpList.size, true)
-            viewModel.startNewRecording()
+            viewModel.startListening()
+            binding.groupListening.visible()
         } else {
             context.showShortToast("Permission Required")
             navigateUpSafe()
         }
     }
-
-    override fun onResume() {
-        super.onResume()
-        setVideo()
-    }
-
 }
