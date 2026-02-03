@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
 import java.util.UUID
 import androidx.core.graphics.toColorInt
+import com.noisefit_commans.utils.imagepicker.Util.getMarkdownString
 import com.oreo.util.UtilClass.dpToPx
 
 class ChatAdapter(
@@ -49,7 +50,7 @@ class ChatAdapter(
         val tv = holder.messageText
         val context = tv.context
 
-        tv.text = msg.message
+        tv.text = getMarkdownString(msg.message)
         val params = tv.layoutParams as FrameLayout.LayoutParams
 
         if (msg.isUser) {
