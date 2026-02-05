@@ -97,13 +97,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
     private fun checkPermissionAndStartService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             checkBluetoothPermission {
-
-                val alarmManager: AlarmManager =
-                    getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                if (!alarmManager.canScheduleExactAlarms()) {
-                    showAllowAlarmPermission()
-                    return@checkBluetoothPermission
-                }
                 ApplicationUtils.setRescueWorkManager(this)
                 startOnBoardFlow()
             }
