@@ -49,11 +49,12 @@ class ChatAdapter(
         val msg = messages[position]
         val tv = holder.messageText
         val context = tv.context
-
-        tv.text = getMarkdownString(msg.message)
         val params = tv.layoutParams as FrameLayout.LayoutParams
 
         if (msg.isUser) {
+            tv.text = msg.message.trimStart().replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase() else it.toString()
+            }
             params.gravity = Gravity.END
             params.setMargins(
                 60.dpToPx(context),
@@ -71,6 +72,7 @@ class ChatAdapter(
                 ), 400, false))
             }
         } else {
+            tv.text = getMarkdownString(msg.message)
             params.gravity = Gravity.START
             params.setMargins(
                 16.dpToPx(context),
