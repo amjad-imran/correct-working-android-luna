@@ -111,7 +111,7 @@ import com.noisefit_commans.data.model.timeline.ItemTimelineResponseModel
 import com.noisefit_commans.ui.fadeIn
 import com.noisefit_commans.ui.playAnimation
 import com.oreo.data.model.OHealthOverview.VitalsType
-import com.oreo.data.model.timeline.habits.HabitsByDateResponse
+import com.oreo.data.model.timeline.habits.HabitsByDateResponse.Options
 import com.oreo.ui.chatGpt.SummaryStates
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 import com.oreo.ui.timelineScreen.ItemHabitsTimelineAdapter
@@ -180,7 +180,12 @@ sealed class OSummaryHealthOverviewClickEnum {
     object OnTimelineCardClicked : OSummaryHealthOverviewClickEnum()
     object OnViewAllHabitTimelineNewClicked : OSummaryHealthOverviewClickEnum()
     object OnSetupHabitsTimelineNewClicked : OSummaryHealthOverviewClickEnum()
-    data class OnCheckHabitTimelineNewClicked(val item: HabitsByDateResponse.Options): OSummaryHealthOverviewClickEnum()
+    data class OnCheckHabitTimelineNewClicked(val item: Options): OSummaryHealthOverviewClickEnum()
+    data class OnCrossHabitTimelineNewClicked(
+        val dataList: List<Options>,
+        val item: Options,
+        val updateListFun: (List<Options>, Boolean) -> Unit
+    ): OSummaryHealthOverviewClickEnum()
     class OnLogActivityClicked(val key: String?) : OSummaryHealthOverviewClickEnum()
     //
 
@@ -819,6 +824,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
         HomeRecyclerViewHolder(binding) {
 
         private val context = binding.root.context
+        private var mAdapter: ItemHabitsTimelineAdapter ?= null
 
         fun bind(data: OHealthOverview.TimelineNewDash) {
             // Set Habit UI
@@ -857,8 +863,31 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                         }else{
                             rvHabits.visible()
                             rvHabits.layoutManager = LinearLayoutManager(context)
-                            rvHabits.adapter = ItemHabitsTimelineAdapter(
-                                onCross = {},
+                            mAdapter = ItemHabitsTimelineAdapter(
+                                onCross = { item ->
+                                    itemClickListener?.invoke(
+                                        OSummaryHealthOverviewClickEnum.OnCrossHabitTimelineNewClicked(
+                                            dataList = data.habitListData,
+                                            item = item,
+                                            updateListFun = { updatedList, updateProgress ->
+                                                val final = updatedList.filterNot {
+                                                    it.isCancelled || it.isCompleted
+                                                }.take(3)
+
+                                                if(updateProgress){
+                                                    val finalLogged = totalCount-final.size
+                                                    binding.lytSavedHabits.tvHabitsLogged.text = context.getString(R.string.text_val_habits_logged, finalLogged, totalCount)
+                                                    binding.lytSavedHabits.habitProgress.max = totalCount
+                                                    binding.lytSavedHabits.habitProgress.progress = finalLogged
+                                                }
+
+                                                mAdapter?.submitList(
+                                                    final
+                                                )
+                                            }
+                                        )
+                                    )
+                                },
                                 onCheck = { item ->
                                     itemClickListener?.invoke(OSummaryHealthOverviewClickEnum.OnCheckHabitTimelineNewClicked(item))
                                 },
@@ -868,6 +897,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                                     it.isCancelled || it.isCompleted
                                 }.take(3))
                             }
+                            rvHabits.adapter = mAdapter
 
                         }
 

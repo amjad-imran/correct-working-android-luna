@@ -115,7 +115,10 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.abs
 import androidx.core.net.toUri
+import androidx.lifecycle.lifecycleScope
 import com.noisefit.oreo.OreoMainActivity
+import com.oreo.data.model.timeline.habits.HabitsByDateResponse.Options
+import kotlin.collections.map
 
 
 @AndroidEntryPoint
@@ -128,7 +131,7 @@ class SummaryDataFragmentToday :
 
     private val TAG = "SummaryDataFragment"
     val circleObj = CirclePagerIndicatorDecoration()
-
+    var needToSyncHabit = false
 
     companion object {
 
@@ -842,6 +845,30 @@ class SummaryDataFragmentToday :
                     navigate(R.id.addHabitsFragment)
                 }
 
+                is OSummaryHealthOverviewClickEnum.OnCrossHabitTimelineNewClicked -> {
+                    needToSyncHabit = true
+                    lifecycleScope.launch {
+                        val curHabit = type.item
+                        viewModel.onHabitCrossClicked(curHabit.timeTrackerOptionId ?: -1)
+                        val initialList = type.dataList
+                        type.updateListFun.invoke(
+                            initialList.map {
+                                if (it.timeTrackerOptionId == curHabit.timeTrackerOptionId) it.copy(state = Options.State.Skipping) else it
+                            },
+                            false
+                        )
+                        delay(1000)
+                        type.updateListFun.invoke(
+                            initialList.map {
+                                if (it.timeTrackerOptionId == curHabit.timeTrackerOptionId) it.copy(isCancelled = true) else it
+                            },
+                            true
+                        )
+                        delay(300)
+                        mainViewModel.getUserSavedHabits().also { needToSyncHabit = false }
+                    }
+                }
+
                 is OSummaryHealthOverviewClickEnum.OnCheckHabitTimelineNewClicked -> {
                     val curHabit = type.item
                     viewModel.sessionManager.logMoEngageAppEvent(
@@ -987,6 +1014,13 @@ class SummaryDataFragmentToday :
                 viewModel.measureStress(true)
             }
         }
+    }
+
+    override fun onStop() {
+        if(needToSyncHabit){
+            mainViewModel.getUserSavedHabits()
+        }
+        super.onStop()
     }
 
     private fun handleOnCheckHabitTimelineClicked(

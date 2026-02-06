@@ -5,6 +5,7 @@ import androidx.core.graphics.toColorInt
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.noisefit.data.RemoteConfigManager
 import com.noisefit.data.base.ResourcesProvider
@@ -106,6 +107,7 @@ import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.data.usecases.CancelHabitByIdAndDateUseCase
 import com.oreo.ui.chatGpt.SummaryStates
 import com.oreo.ui.custom.HighlightState
 import com.oreo.ui.customHomeScreen.CustomHomeScreenItem
@@ -174,6 +176,7 @@ class SummaryDataViewModelToday @Inject constructor(
     // Local Room data sources
     private val bloodOxygenDataSource: OreoBloodOxygenDataSource,
     private val bodyTemperatureDataSource: OreoBodyTemperatureDataSource,
+    private val cancelHabitByIdAndDateUseCase: dagger.Lazy<CancelHabitByIdAndDateUseCase>,
 ) : BaseViewModel() {
 
     var date: String? = null
@@ -5020,6 +5023,43 @@ class SummaryDataViewModelToday @Inject constructor(
             .apply { add(id) }.toList()
         whatsNewBanners.value = whatsNewBanners.value.filterNot { it.id == id }
         ringDataStore.setCancelledCardsList(updatedList)
+    }
+
+    fun onHabitCrossClicked(id: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            val reqArray = JsonArray()
+            reqArray.add(
+                JsonObject().apply {
+                    addProperty("habit_option_id", id)
+                    addProperty("date", LocalDate.now().toString())
+                }
+            )
+
+            val reqObj = JsonObject().apply {
+                add("cancelled_habits", reqArray)
+            }
+            cancelHabitByIdAndDateUseCase.get().invoke(reqObj).collect { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
+
+                    }
+
+                    is Resource.GenericError -> {
+
+                    }
+
+                    is Resource.NetworkError -> {
+
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
