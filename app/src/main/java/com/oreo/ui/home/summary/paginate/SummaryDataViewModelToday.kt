@@ -1391,7 +1391,11 @@ class SummaryDataViewModelToday @Inject constructor(
                             isTapVitalAdded = true
                         }
                     }
-
+                    "life_os_card" -> {
+                        getLifeOsCard()?.let {
+                            userActivities.add(it)
+                        }
+                    }
                 }
             }
 
@@ -1399,33 +1403,6 @@ class SummaryDataViewModelToday @Inject constructor(
             if (hasTimelineKey == null) {
                 getTimelineCard()?.let { userActivities.add(it) }
             }
-
-            //
-//            getLifeOsCard()?.let { userActivities.add(it) }
-            //
-            /*getWorkoutHistoryCard(healthData.activity)?.let { userActivities.add(it) }*/
-
-            if (lunaManaged) {
-                getLifeOsCard()?.let {
-                    if (userActivities.size > 2) {
-                        userActivities.add(2, it)
-                    } else {
-                        userActivities.add(it)
-                    }
-                }
-                /*getLunaAiCard()?.let {
-                    if (userActivities.size > 2) {
-                        userActivities.add(2, it)
-                    } else {
-                        userActivities.add(it)
-                    }
-                }*/
-            }
-
-            // Add naps if any (this could also be moved to a separate function)
-//            healthData.sleep?.naps?.takeIf { it.isNotEmpty() }?.let { naps ->
-//                userActivities.add(OHealthOverview.NapDashCard(naps, healthData.date))
-//            }
 
             // Post the final data
             healthOverviewData.postValue(userActivities)
@@ -3243,6 +3220,7 @@ class SummaryDataViewModelToday @Inject constructor(
         "health_monitor",
         "circadian_alignment",
         "timeline",
+        "life_os_card",
         "activity",
         "one_tap_vitals",
         "heart_rate",
@@ -3371,7 +3349,13 @@ class SummaryDataViewModelToday @Inject constructor(
                 true,
                 14
             )
-
+            this["life_os_card"] = CustomHomeScreenItem(
+                R.drawable.ic_lifeos_star,
+                "life_os_card",
+                resourceProvider.getString(R.string.text_life_os),
+                true,
+                15
+            )
         }
 
     private fun checkIfIsAfter12(): Boolean {
