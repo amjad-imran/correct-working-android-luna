@@ -2405,5 +2405,15 @@
     <string name="text_remove_entry">Rimuovere voci?</string>
     <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">Questo rimuoverà definitivamente questa voce dalla tua timeline.</string>
     <string name="whats_new">Novità!</string>
-
+    <string name="turn_up_the_volume_to_hear_me_speak">Alza il volume per sentirmi parlare.</string>
+    <string name="say_hey_luna">Di « Hey Luna »</string>
+    <string name="say_hey_luna_again">Di di nuovo « Hey Luna »</string>
+    <string name="great_one_last_time">Ottimo! Un\'ultima volta</string>
+    <string name="record">Registra</string>
+    <string name="help_me_learn_your_voice">Aiutami a imparare la tua voce</string>
+    <string name="hey_luna">Hey Luna</string>
+    <string name="done">Fatto!</string>
+    <string name="starting_up">Avvio in corso</string>
+    <string name="text_thinking">Sto pensando</string>
+    <string name="text_unable_to_speak">Riattiva l\'audio per parlare</string>
 </resources>

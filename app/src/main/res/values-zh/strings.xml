@@ -2398,5 +2398,15 @@
     <string name="text_remove_entry">删除条目？</string>
     <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">此操作将永久删除此条目。</string>
     <string name="whats_new">有什么新内容！</string>
-
+    <string name="turn_up_the_volume_to_hear_me_speak">请调高音量以听到我说话。</string>
+    <string name="say_hey_luna">说“Hey Luna”</string>
+    <string name="say_hey_luna_again">再说一次“Hey Luna”</string>
+    <string name="great_one_last_time">很好！最后一次</string>
+    <string name="record">录音</string>
+    <string name="help_me_learn_your_voice">帮助我学习你的声音</string>
+    <string name="hey_luna">Hey Luna</string>
+    <string name="done">完成！</string>
+    <string name="starting_up">正在启动</string>
+    <string name="text_thinking">思考中</string>
+    <string name="text_unable_to_speak">取消静音以说话</string>
 </resources>

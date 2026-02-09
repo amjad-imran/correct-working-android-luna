@@ -2410,5 +2410,15 @@
     <string name="text_remove_entry">ลบรายการ?</string>
     <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">การกระทำนี้จะลบรายการนี้ออกจากไทม์ไลน์ของคุณอย่างถาวร</string>
     <string name="whats_new">มีอะไรใหม่!</string>
-
+    <string name="turn_up_the_volume_to_hear_me_speak">เพิ่มระดับเสียงเพื่อให้ได้ยินฉันพูด</string>
+    <string name="say_hey_luna">พูดว่า “Hey Luna”</string>
+    <string name="say_hey_luna_again">พูด “Hey Luna” อีกครั้ง</string>
+    <string name="great_one_last_time">เยี่ยม! อีกครั้งสุดท้าย</string>
+    <string name="record">บันทึก</string>
+    <string name="help_me_learn_your_voice">ช่วยให้ฉันเรียนรู้เสียงของคุณ</string>
+    <string name="hey_luna">Hey Luna</string>
+    <string name="done">เสร็จสิ้น!</string>
+    <string name="starting_up">กำลังเริ่มต้น</string>
+    <string name="text_thinking">กำลังคิด</string>
+    <string name="text_unable_to_speak">ยกเลิกปิดเสียงเพื่อพูด</string>
 </resources>

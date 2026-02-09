@@ -2392,6 +2392,6 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_remove_entry">Remove Entry?</string>
     <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">This will permanently remove this entry from your timeline.</string>
     <string name="whats_new">What’s New!</string>
-
+    <string name="turn_up_the_volume_to_hear_me_speak">Turn up the volume to hear me speak.</string>
 
 </resources>

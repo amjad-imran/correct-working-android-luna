@@ -2428,5 +2428,15 @@
     <string name="text_remove_entry">Remover entrada?</string>
     <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">Isto removerá permanentemente esta entrada da sua linha do tempo.</string>
     <string name="whats_new">O que há de novo!</string>
-
+    <string name="turn_up_the_volume_to_hear_me_speak">Aumente o volume para me ouvir falar.</string>
+    <string name="say_hey_luna">Diga “Hey Luna”</string>
+    <string name="say_hey_luna_again">Diga “Hey Luna” novamente</string>
+    <string name="great_one_last_time">Ótimo! Mais uma vez</string>
+    <string name="record">Gravar</string>
+    <string name="help_me_learn_your_voice">Ajude-me a aprender sua voz</string>
+    <string name="hey_luna">Hey Luna</string>
+    <string name="done">Concluído!</string>
+    <string name="starting_up">Iniciando</string>
+    <string name="text_thinking">Pensando</string>
+    <string name="text_unable_to_speak">Ative o som para falar</string>
 </resources>

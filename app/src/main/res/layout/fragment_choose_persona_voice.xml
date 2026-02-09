@@ -24,6 +24,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/ivCross" />
 
+    <TextView
+        android:id="@+id/tvTurnVolumeUp"
+        style="@style/S14"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dimen_0dp"
+        android:layout_marginBottom="@dimen/dimen_4dp"
+        android:background="@drawable/bg_capsule_grey"
+        android:drawableLeft="@drawable/ic_speaker"
+        android:drawablePadding="@dimen/dimen_2dp"
+        android:gravity="center"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="10dp"
+        android:visibility="gone"
+        android:layout_marginTop="36dp"
+        android:text="@string/turn_up_the_volume_to_hear_me_speak"
+        app:layout_constraintTop_toBottomOf="@id/tvChooseLanguage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"

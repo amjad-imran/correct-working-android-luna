@@ -68,6 +68,24 @@
         app:layout_constraintBottom_toBottomOf="@+id/chatRecycler"
         android:background="@drawable/bg_voice_action"/>
 
+    <TextView
+        android:id="@+id/tvTurnVolumeUp"
+        style="@style/S14"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dimen_0dp"
+        android:layout_marginBottom="@dimen/dimen_4dp"
+        android:background="@drawable/bg_capsule_grey"
+        android:drawableLeft="@drawable/ic_speaker"
+        android:drawablePadding="@dimen/dimen_2dp"
+        android:gravity="center"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="10dp"
+        android:visibility="gone"
+        android:text="@string/turn_up_the_volume_to_hear_me_speak"
+        app:layout_constraintBottom_toTopOf="@id/lvListening"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lvListening"
         android:layout_width="0dp"

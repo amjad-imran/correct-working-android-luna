@@ -3,6 +3,9 @@ package com.oreo.ui.chatGpt.audio.persona
 import android.annotation.SuppressLint
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.provider.Settings
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +19,8 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentChoosePersonaVoiceBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
+import com.noisefit_commans.ui.visible
+import com.noisefit_commans.utils.VolumeObserver
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,6 +31,7 @@ class ChoosePersonaVoiceFragment :
     private lateinit var currentPersona: String
     private lateinit var mAdapter: ChoosePersonaVoiceVpAdapter
     lateinit var exoPlayer : ExoPlayer
+    private var volumeObserver: VolumeObserver? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,6 +40,27 @@ class ChoosePersonaVoiceFragment :
         mAdapter = ChoosePersonaVoiceVpAdapter()
         mediaPlayer = MediaPlayer()
         setUpViewPager()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        volumeObserver = VolumeObserver(
+            requireContext(),
+            Handler(Looper.getMainLooper())
+        ) { isLow ->
+            if (isLow) {
+                binding.tvTurnVolumeUp.visible()
+            } else {
+                binding.tvTurnVolumeUp.gone()
+            }
+        }.apply {
+            requireContext().contentResolver.registerContentObserver(
+                Settings.System.CONTENT_URI,
+                true,
+                this
+            )
+            notifyIfChanged()
+        }
     }
     private fun setUpViewPager() {
         binding.viewPager.apply {
@@ -105,6 +132,9 @@ class ChoosePersonaVoiceFragment :
 
     override fun onStop() {
         mediaPlayer?.stop()
+        volumeObserver?.let {
+            requireContext().contentResolver.unregisterContentObserver(it)
+        }
         super.onStop()
     }
     fun playMusic(url: String) {

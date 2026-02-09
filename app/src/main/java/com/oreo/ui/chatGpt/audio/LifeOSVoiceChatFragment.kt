@@ -6,6 +6,8 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
@@ -26,13 +28,14 @@ import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.showShortToast
 import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.VolumeObserver
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicBoolean
-
+import android.provider.Settings
 @AndroidEntryPoint
 class LifeOSVoiceChatFragment :
     BaseFragment<FragmentLifeOsVoiceChatBinding>(FragmentLifeOsVoiceChatBinding::inflate) {
@@ -46,6 +49,7 @@ class LifeOSVoiceChatFragment :
     private var currentState = ActionState.LISTENING
     private var isRecognizerCommiting = AtomicBoolean(false)
     private var isMuted = false
+    private var volumeObserver: VolumeObserver? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,6 +61,9 @@ class LifeOSVoiceChatFragment :
         viewModel.disposeChatStream()
         releaseSpeechRecognizer()
         mp3Streamer.stop()
+        volumeObserver?.let {
+            requireContext().contentResolver.unregisterContentObserver(it)
+        }
         super.onStop()
     }
 
@@ -66,6 +73,23 @@ class LifeOSVoiceChatFragment :
             setActionState(ActionState.LISTENING)
         if(viewModel.chatMessages.value.isNullOrEmpty().not()){
             binding.tvStartTalking.gone()
+        }
+        volumeObserver = VolumeObserver(
+            requireContext(),
+            Handler(Looper.getMainLooper())
+        ) { isLow ->
+            if (isLow) {
+                binding.tvTurnVolumeUp.visible()
+            } else {
+                binding.tvTurnVolumeUp.gone()
+            }
+        }.apply {
+            requireContext().contentResolver.registerContentObserver(
+                Settings.System.CONTENT_URI,
+                true,
+                this
+            )
+            notifyIfChanged()
         }
     }
 
