@@ -60,7 +60,7 @@ class ChatAdapter(
                 60.dpToPx(context),
                 0.dpToPx(context),
                 16.dpToPx(context),
-                if(position == itemCount-1) 42.dpToPx(context) else 12.dpToPx(context)
+                if(position == itemCount-1) 82.dpToPx(context) else 12.dpToPx(context)
             )
             tv.apply {
                 background = userBubble(context)
@@ -78,7 +78,7 @@ class ChatAdapter(
                 16.dpToPx(context),
                 8.dpToPx(context),
                 20.dpToPx(context),
-                20.dpToPx(context)
+                if(position == itemCount-1) 82.dpToPx(context) else 20.dpToPx(context)
             )
             tv.apply {
                 setBackgroundColor(Color.TRANSPARENT)
