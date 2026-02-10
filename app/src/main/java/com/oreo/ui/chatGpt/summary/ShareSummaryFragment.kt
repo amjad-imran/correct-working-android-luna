@@ -14,7 +14,6 @@ import androidx.core.content.FileProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.NoiseFitApplicationMain
-import com.noisefit.luna.databinding.AiShareTemplate1Binding
 import com.noisefit.luna.databinding.FragmentShareSummaryBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseFragment

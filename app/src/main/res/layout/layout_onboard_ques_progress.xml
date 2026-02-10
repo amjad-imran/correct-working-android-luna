@@ -6,7 +6,6 @@
 
     <!-- Border container -->
     <FrameLayout
-        android:id="@+id/cardContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_lifeos_gradient_border"

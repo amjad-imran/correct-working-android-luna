@@ -56,7 +56,6 @@
         app:layout_constraintTop_toBottomOf="@id/ivBackStress" />
 
     <TextView
-        android:id="@+id/tvMaxStress"
         style="@style/H6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

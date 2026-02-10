@@ -82,7 +82,6 @@
         app:layout_constraintTop_toBottomOf="@+id/rvFlow" />
 
     <View
-        android:id="@+id/divider2st"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:layout_marginStart="8dp"

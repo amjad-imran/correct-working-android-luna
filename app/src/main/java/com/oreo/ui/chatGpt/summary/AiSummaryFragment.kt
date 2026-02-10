@@ -23,7 +23,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.noisefit.luna.R
-import com.noisefit.luna.databinding.AiShareTemplate1Binding
 import com.noisefit.luna.databinding.FragmentAiSummaryBinding
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.dpToPixel

@@ -2,7 +2,6 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/navigation_oreo"
     app:startDestination="@id/navigation_oreo_home">
 
 
@@ -498,7 +497,7 @@
         android:name="com.oreo.ui.GoogleFitTestFragment"
         android:label="fragment_googl_fit_test" />
     <dialog
-        android:id="@+id/myDeviceIntroBottomSheet"
+        android:id="@+id/bottomSheetMyDeviceIntro"
         android:name="com.oreo.ui.info.BottomSheetMyDeviceIntro"
         android:label="MyDeviceBottomSheetIntro" />
     <fragment
@@ -1556,7 +1555,7 @@
         android:label="fragment_add_log_circadian_bottom_sheet"
         tools:layout="@layout/fragment_add_log_circadian_bottom_sheet" />
     <dialog
-        android:id="@+id/mealIntakeCircadianBottomSheetFragment"
+        android:id="@+id/mealIntakeCircadianBottomSheet"
         android:name="com.oreo.ui.circadianAlignment.logBottomSheets.MealIntakeCircadianBottomSheetFragment"
         android:label="MealIntakeCircadianBottomSheetFragment"
         tools:layout="@layout/fragment_meal_intake_circadian_bottom_sheet" />
@@ -1605,23 +1604,6 @@
         <argument
             android:name="position"
             app:argType="integer" />
-
-    </fragment>
-    <fragment
-        android:id="@+id/surgeCaseOnboardingFragment"
-        android:name="com.oreo.ui.device.surgeCase.SurgeCaseOnboardingFragment"
-        android:label="fragment_surge_case_onboarding"
-        tools:layout="@layout/fragment_surge_case_onboarding">
-
-        <action
-            android:id="@+id/action_surgeCaseOnboardingFragment_to_oreo_my_device"
-            app:destination="@id/oreo_my_device"
-            app:popUpTo="@id/surgeCaseOnboardingFragment"
-            app:popUpToInclusive="true" />
-        <argument
-            android:name="srcKey"
-            app:argType="string"
-            app:nullable="true" />
 
     </fragment>
     <fragment

@@ -71,7 +71,6 @@
         app:layout_constraintTop_toBottomOf="@+id/rvFoods">
 
         <TextView
-            android:id="@+id/tvAddFood"
             style="@style/S12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -231,7 +230,6 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
-            android:id="@+id/tvMacrosTitle"
             style="@style/S12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

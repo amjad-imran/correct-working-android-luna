@@ -63,7 +63,6 @@
         app:srcCompat="@drawable/ic_option_menu" />
 
     <include
-        android:id="@+id/include36"
         layout="@layout/layout_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"

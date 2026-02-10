@@ -11,7 +11,6 @@
     android:paddingVertical="14dp"-->
 
     <ImageView
-        android:id="@+id/imageView60"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"

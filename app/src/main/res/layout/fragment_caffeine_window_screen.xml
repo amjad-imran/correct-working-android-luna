@@ -6,7 +6,6 @@
     tools:context="com.oreo.ui.caffeineWindowScreen.CaffeineWindowScreenFragment">
 
     <View
-        android:id="@+id/bg_view"
         android:layout_width="0dp"
         android:layout_height="330dp"
         android:background="@drawable/bg_caffeine_window_screen"
@@ -176,7 +175,6 @@
                 app:layout_constraintTop_toBottomOf="@id/rvAllItems" />
 
             <TextView
-                android:id="@+id/tvNoteDesc"
                 style="@style/S14"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

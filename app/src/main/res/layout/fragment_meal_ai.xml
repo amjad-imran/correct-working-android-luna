@@ -190,7 +190,6 @@
                     android:src="@drawable/ic_refresh_meal" />
 
                 <TextView
-                    android:id="@+id/tvRetryPrompt"
                     style="@style/S12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

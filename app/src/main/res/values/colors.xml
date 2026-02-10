@@ -2,19 +2,10 @@
 <resources>
 
     <color name="app_background">#EEEEEE</color>
-    <color name="app_background_new">@android:color/black</color>
-    <color name="scan_frame_color">#FFFFFF</color>
-    <color name="primary_btn_color">#3daa5bff</color>
-    <color name="teal_200">#FF03DAC5</color>
     <color name="primary_btn_selected_color">#aa5bff</color>
     <color name="accent_color_purple">#ca99ff</color>
-    <color name="text_color_purple">#ca99ff</color>
 
-    <color name="progress_bar_back">#1AFFFFFF</color>
-
-    <color name="input_hint_color">#eeeeee</color>
     <color name="divider_color">#F9F9F9</color>
-    <color name="divider_color_update">#F9F9F9</color>
     <color name="modal_color">#1AFFFFFF</color>
     <color name="errorRed">#ff4242</color>
     <color name="white_4">#0AFFFFFF</color>
@@ -25,7 +16,6 @@
     <color name="white_12_72">#b8ffffff</color>
     <color name="white_12_70">#b3ffffff</color>
     <color name="white_12_50">#80ffffff</color>
-    <color name="white_75">#c0ffffff</color>
     <color name="white_80">#ccffffff</color>
     <color name="white_50">#80ffffff</color>
     <color name="white_55">#8cffffff</color>
@@ -35,7 +25,6 @@
     <color name="white_70">#B3ffffff</color>
     <color name="white_64">#a3ffffff</color>
     <color name="color_error">#ff3358</color>
-    <color name="o_heart_bg">#80ff3358</color>
     <color name="edit_hint_color">#1AFFFFFF</color>
     <color name="edit_text_color">#FFFFFF</color>
 
@@ -44,9 +33,6 @@
 
 
     <color name="text_accent_color">#6AC5FF</color>
-    <color name="accent_color">#ffb237</color>
-
-    <color name="colorRed2">#FF2A44</color>
 
     <color name="calendar_header">#CCFFFFFF</color>
 
@@ -55,7 +41,6 @@
     <color name="new_dark_lime">#98ff47</color>
     <color name="sleep_gray">#3C4045</color>
     <color name="sleep_color">#6AC5FF</color>
-    <color name="body_temp">#ff8b16</color>
     <color name="blood_oxygen_color">#6cd0c6</color>
 
     <color name="white">#FFFFFF</color>
@@ -85,7 +70,6 @@
 
     <color name="text_color_h8">#ffffff</color>
     <color name="text_color_update">#99ffffff</color>
-    <color name="text_color_workout_item_label">#89c000</color>
 
 
     <color name="tab_text_unselected_color">#99FFFFFF</color>
@@ -102,13 +86,6 @@
     <color name="rem_start">#afb3ff</color>
     <color name="rem_start_oreo">#c6a7e5</color>
     <color name="awake_start">#ff6624</color>
-
-    <color name="stress_high">#e95050</color>
-    <color name="stress_medium">#f4c232</color>
-    <color name="stress_normal">#51bf76</color>
-    <color name="stress_relax">#6cd0c6</color>
-
-    <color name="upcoming_challenge">#FF9300</color>
 
 
     <color name="md_theme_dark_primary">#262B2F</color>
@@ -130,28 +107,12 @@
     <color name="progress_track_color">#1AFFFFFF</color>
 
     <color name="transparent">#00FFFFFF</color>
-    <color name="warm_up_start">#22E8D4</color>
-    <color name="warm_up_end">#22E8D4</color>
-
-    <color name="aerobic_start">#FFD600</color>
-    <color name="aerobic_end">#FFD600</color>
-    <color name="anaerobic_start">#FF6624</color>
-    <color name="anaerobic_end">#FF6624</color>
-    <color name="fat_burn_start">#3CFE8A</color>
-    <color name="fat_burn_end">#3CFE8A</color>
 
 
     <color name="sleep_graph_line">#262b2f</color>
-    <color name="darker_gray">#8a8c8e</color>
 
     <color name="color_bottom_sheet_drag">@android:color/white</color>
-    <color name="color_emoji_back_solid">#464646</color>
     <color name="black">#000000</color>
-    <color name="sbi_x_pulse">#16283b</color>
-    <color name="friends_calories_color">#ff4668</color>
-    <color name="friends_steps_color">#40e281</color>
-    <color name="friends_distance_color">#ffed65</color>
-    <color name="friends_request_status_color">#ffba00</color>
 
     <color name="calories_arc">#ff3358</color>
     <color name="nap_down">#ff7c94</color>
@@ -161,10 +122,7 @@
     <color name="sleep_optimal">#00c750</color>
     <color name="color_fair">#e2cb78</color>
 
-    <color name="distance_arc">#ffd230</color>
-    <color name="round_up_step_color">#3bff7c</color>
     <color name="white_48">#7affffff</color>
-    <color name="edit_profile_text_color">#ca99ff</color>
     <color name="medium_movement">#8ed3f1</color>
     <color name="low_movement">#2d525b</color>
     <color name="inactive_movement">#3dffffff</color>
@@ -196,8 +154,6 @@
     <color name="activity_un_selected_bar_color">#4c7689</color>
     <color name="text_color_luna">#88b0ff</color>
     <color name="carolina_blue">#88b0ff</color>
-    <color name="activity_track_back">#0fffffff</color>
-    <color name="activity_arc">#8ed3f1</color>
     <color name="color_workout">#88d6eb</color>
     <color name="steel_grey">#8a8c8e</color>
     <color name="medium_movement_color">#86d4f5</color>
@@ -214,14 +170,9 @@
     <color name="stress_nap_calm">#3fe8b5</color>
     <color name="stress_nap_focussed">#ffed91</color>
     <color name="stress_nap_stressed">#ffad60</color>
-    <color name="daytime_high_un_selected_color">#ffffff</color>
     <color name="daytime_medium_selected_color">#6bc5eb</color>
-    <color name="daytime_medium_un_selected_color">#6bc5eb</color>
-    <color name="daytime_low_un_selected_color">#387c8e</color>
     <color name="daytime_low_selected_color">#387c8e</color>
-    <color name="daytime_inactive_un_selected_color">#8a9fb3</color>
     <color name="daytime_inactive_selected_color">#a2bad1</color>
-    <color name="daytime_zero_data_un_selected_color">#44515f</color>
     <color name="daytime_zero_data_selected_color">#737d87</color>
     <color name="daytime_analysis_inactive_label_color">#a2bad1</color>
     <color name="daytime_low_movement_label_color">#33adcd</color>
@@ -238,12 +189,7 @@
     <color name="color_future_dates">#26ffffff</color>
     <color name="color_bubble_gum_pink">#ff5bc7</color>
     <color name="color_dd_separator">#424C56</color>
-    <color name="color_trends_warning">#d79d58</color>
 
-
-    <color name="freshchat_message_list_reply_view_divider">#00000000</color>
-    <color name="freshchat_voting_view_divider">#00000000</color>
-    <color name="freshchat_article_list_divider">#19ffffff</color>
 
     <color name="shimmer_color">#C2C2C2</color>
     <color name="color_B3FFFFFF">#B3FFFFFF</color>

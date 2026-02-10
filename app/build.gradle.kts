@@ -40,6 +40,11 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    bundle {
+        density {
+            enableSplit = true
+        }
+    }
     buildFeatures {
         dataBinding = true
         viewBinding = true

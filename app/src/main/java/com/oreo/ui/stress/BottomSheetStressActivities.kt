@@ -9,7 +9,6 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.BottomSheetDaytimeActivitiesBinding
-import com.noisefit.luna.databinding.BottomSheetStressActivitiesBinding
 import com.noisefit.oreo.BottomNavOption
 import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent

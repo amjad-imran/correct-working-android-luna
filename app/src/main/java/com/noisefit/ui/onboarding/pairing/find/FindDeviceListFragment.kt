@@ -9,7 +9,6 @@ import android.bluetooth.le.ScanResult
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -18,16 +17,12 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.airbnb.lottie.LottieDrawable
-import com.freshchat.consumer.sdk.Freshchat
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.OnCompleteListener
@@ -40,7 +35,6 @@ import com.noisefit.luna.databinding.DialogUnsupportedDeviceBinding
 import com.noisefit.luna.databinding.FragmentFindDeviceListBinding
 import com.noisefit.oreo.OreoMainActivity
 import com.noisefit.ui.onboarding.onboardProfile.ProfileSetupActivity
-import com.noisefit.ui.onboarding.pairing.PairDeviceActivity
 import com.noisefit.ui.onboarding.pairing.pair.NearbyDevicesAdapter
 import com.noisefit.ui.onboarding.pairing.pair.NearbyDevicesClickListener
 import com.noisefit.util.ApplicationUtils
@@ -58,12 +52,8 @@ import com.noisefit_commans.utils.*
 import com.noisefit_commans.utils.bleUtils.CRPScanRecordParser
 import com.noisefit_commans.utils.bleUtils.DeviceEntity
 import com.noisefit_commans.utils.share.ShareUtil
-import com.oreo.ui.recordworkout.LOCATION_PERM_REQUEST
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
-
-//private const val SELECT_DEVICE_REQUEST_CODE = 1230
-
+import androidx.core.net.toUri
 
 @AndroidEntryPoint
 class FindDeviceListFragment :
@@ -130,14 +120,15 @@ class FindDeviceListFragment :
     }
 
     private fun setVideo(uriString: String) {
+        binding.progressBarDefault.visible()
         binding.videoOnboard.apply {
-            setVideoURI(
-                Uri.parse(
-                    uriString
-                )
-            )
-            setOnPreparedListener { mp -> mp.isLooping = true }
-            start()
+            stopPlayback()
+            setVideoURI(uriString.toUri())
+            setOnPreparedListener { mp ->
+                binding.progressBarDefault.gone()
+                mp.isLooping = true
+                start()
+            }
         }
     }
 
@@ -483,10 +474,13 @@ class FindDeviceListFragment :
                 binding.imgOnBoard.gone()
                 binding.videoOnboard.visible()
 
-                setVideo(
-                    "android.resource://" + requireContext().packageName + "/" +
-                            R.raw.troubleshoot_video_2
-                )
+//                setVideo(
+//                    "android.resource://" + requireContext().packageName + "/" +
+//                            R.raw.troubleshoot_video_2
+//                )
+
+                setVideo("https://firebasestorage.googleapis.com/v0/b/lunaring.firebasestorage.app/o/Troubleshoot_Videos%2Ftroubleshoot_video_2.mp4?alt=media&token=b2690f7b-b7f5-41a6-b2c7-8c181721bdb0")
+
                 binding.tvTroubleShoot.text = getString(R.string.text_still_not_connecting)
             }
 
@@ -514,10 +508,12 @@ class FindDeviceListFragment :
             5 -> {
                 binding.textView.text = getString(R.string.text_here_is_a_final_step)
                 binding.textView2.text = getString(R.string.troubleshoot_desc_5)
-                setVideo(
-                    "android.resource://" + requireContext().packageName + "/" +
-                            R.raw.troubleshoot_video_5
-                )
+//                setVideo(
+//                    "android.resource://" + requireContext().packageName + "/" +
+//                            R.raw.troubleshoot_video_5
+//                )
+                setVideo("https://firebasestorage.googleapis.com/v0/b/lunaring.firebasestorage.app/o/Troubleshoot_Videos%2Ftroubleshoot_video_5.mp4?alt=media&token=432b2685-4888-4a00-8ed3-f3e0f359445d")
+
                 binding.videoOnboard.visible()
                 binding.imgOnBoard.gone()
                 binding.tvTroubleShoot.text = getString(R.string.text_email_support)
@@ -533,21 +529,6 @@ class FindDeviceListFragment :
             }
         }
     }
-
-    fun showLocationTurnOnDialogCamera() {
-        val locationRequest: LocationRequest = LocationRequest.create()
-        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        locationRequest.interval = 10000
-        locationRequest.fastestInterval = 5000
-        val builder: LocationSettingsRequest.Builder =
-            LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
-        builder.setAlwaysShow(true)
-        val task: Task<LocationSettingsResponse> =
-            LocationServices.getSettingsClient(requireActivity())
-                .checkLocationSettings(builder.build())
-        task.addOnCompleteListener(this)
-    }
-
     private fun pairLater() {
         viewModel.setPairLaterClicked(true)
         viewModel.sessionManager.logInsiderAppEvent(InsiderAppEvents.PairingEvents.wn_pair_later)
@@ -563,12 +544,6 @@ class FindDeviceListFragment :
         } else {
             startActivity(ProfileSetupActivity.getStartIntent(requireContext()))
             activity?.finish()
-        }
-    }
-
-    private fun startRingService() {
-        context?.let {
-            ApplicationUtils.setRescueWorkManager(it)
         }
     }
 

@@ -6,7 +6,6 @@
     android:background="@drawable/back_chat_message_send_generating">
 
     <TextView
-        android:id="@+id/textView142"
         style="@style/S16"
         android:layout_width="0dp"
         android:layout_height="54dp"

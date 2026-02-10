@@ -151,7 +151,6 @@
                     app:srcCompat="@drawable/ic_dig_deeper" />
 
                 <TextView
-                    android:id="@+id/textView217"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="4dp"
