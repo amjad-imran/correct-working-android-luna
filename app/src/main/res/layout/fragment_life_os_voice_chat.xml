@@ -55,7 +55,7 @@
         android:layout_width="@dimen/dimen_0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Start talking"
+        android:text="@string/start_talking"
         app:layout_constraintBottom_toBottomOf="@+id/chatRecycler"
         app:layout_constraintEnd_toEndOf="@+id/chatRecycler"
         app:layout_constraintStart_toStartOf="@+id/chatRecycler"
