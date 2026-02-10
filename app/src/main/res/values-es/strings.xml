@@ -2373,5 +2373,6 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_edit_entries_by_adding_or_removing_them_from_your_timeline">Edita las entradas agregándolas o quitándolas de tu línea de tiempo.</string>
     <string name="text_remove_entry">¿Eliminar entrada?</string>
     <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">Esto eliminará permanentemente esta entrada de tu línea de tiempo.</string>
+    <string name="whats_new">¿Qué hay de nuevo!</string>
 
 </resources>

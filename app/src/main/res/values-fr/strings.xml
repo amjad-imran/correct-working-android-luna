@@ -2522,5 +2522,6 @@ onjour, Luna"</string>
     <string name="text_edit_entries_by_adding_or_removing_them_from_your_timeline">Modifiez les entrées en les ajoutant ou en les supprimant de votre chronologie.</string>
     <string name="text_remove_entry">Supprimer l\'entrée ?</string>
     <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">Cela supprimera définitivement cette entrée de votre chronologie.</string>
+    <string name="whats_new">Quoi de neuf !</string>
 
 </resources>

@@ -43,6 +43,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import okhttp3.Call
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
@@ -390,19 +391,13 @@ class ChatGptViewModel
             val baseUrl = when (planType) {
                 PlanType.WORKOUT -> "${BuildConfig.BASE_URL_NEW}/luna/ai/v1/workout/stream"
                 PlanType.DIET -> "${BuildConfig.BASE_URL_NEW}/luna/ai/v1/diet/stream"
-                PlanType.NONE, null -> "${BuildConfig.BASE_URL_NEW}/luna/ai/v1/stream"
+                PlanType.NONE, null -> "https://alias-cheap-wow-specialized.trycloudflare.com/luna/ai/v1/stream"
             }
             val urlWithParams = when (planType) {
                 PlanType.WORKOUT -> "$baseUrl?message=$prompt"
                 PlanType.DIET -> "$baseUrl?message=$prompt"
                 PlanType.NONE, null ->
-                    if(headerInsight1?.insightData==null)
-                        "$baseUrl?message=$prompt&thread_id=$threadId"
-                    else{
-                        val insightsDataString = Gson().toJson(headerInsight1!!.insightData)
-                        headerInsight1?.insightData = null
-                        "$baseUrl?message=$prompt&thread_id=$threadId&insight_data=$insightsDataString"
-                    }
+                    "$baseUrl?message=$prompt&thread_id=$threadId"
             }
 
             val ctx = resourceProvider.context
@@ -418,14 +413,31 @@ class ChatGptViewModel
                 }
             }
 
-            val requestBody: RequestBody = if (attachmentBody != null && att != null) {
-                MultipartBody.Builder()
-                    .setType(MultipartBody.FORM)
-                    .addFormDataPart("file", att.fileName, attachmentBody)
-                    .build()
-            } else {
-                ByteArray(0).toRequestBody(null, 0, 0)
+            //
+            val multipartBuilder = MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+
+            var hasParts = false
+
+            headerInsight1?.insightData?.let { insightData ->
+                val insightJson = Gson().toJson(insightData)
+
+                val insightBody = insightJson.toRequestBody("application/json; charset=utf-8".toMediaType())
+                multipartBuilder.addFormDataPart("insight_data", null, insightBody)
+
+                hasParts = true
+                headerInsight1?.insightData = null
             }
+
+            if (attachmentBody != null && att != null) {
+                multipartBuilder.addFormDataPart("file", att.fileName, attachmentBody)
+                hasParts = true
+            }
+
+            val requestBody: RequestBody =
+                if (hasParts) multipartBuilder.build()
+                else ByteArray(0).toRequestBody(null)
+            //
 
             val requestBuilder = Request.Builder()
                 .url(urlWithParams)
@@ -440,18 +452,25 @@ class ChatGptViewModel
             try {
                 val call = sseClient.newCall(request)
                 currentCall = call
-                val response = call.execute()
-                if (!response.isSuccessful) throw java.io.IOException("Unexpected code ${response.code}")
 
-                response.body?.source()?.let { source ->
+                call.execute().use { response ->   // ✅ always closes body/response
+                    if (!response.isSuccessful) {
+                        val err = response.body?.string() // safe inside use{}
+                        throw java.io.IOException("Unexpected HTTP ${response.code}. Body=$err")
+                    }
+
+                    val source = response.body?.source()
+                        ?: throw java.io.IOException("Empty response body")
+
                     val eventBuffer = StringBuilder()
-                    while (fetchInProgress.value == true) {
+
+                    while (fetchInProgress.value == true && !source.exhausted()) {
                         val line = try {
                             source.readUtf8Line()
                         } catch (e: Exception) {
                             null
-                        }
-                        if (line == null) break
+                        } ?: break
+
                         if (line.startsWith("data:")) {
                             eventBuffer.append(line.removePrefix("data:").trimStart())
                             LOGS.d("SSE response $line")
@@ -465,10 +484,8 @@ class ChatGptViewModel
                         }
                     }
                 }
-                addReceivedMessage(responseBuilder.toString(), uuid,false)
-                sessionManager.logMoEngageAppEvent(
-                    MoEngageLunaAppEvents.lifeos_reply_sent
-                )
+                addReceivedMessage(responseBuilder.toString(), uuid, false)
+                sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.lifeos_reply_sent)
 
                 fetchInProgress.postValue(false)
                 videoState.postValue(false)
@@ -979,7 +996,7 @@ class ChatGptViewModel
                 this.addProperty("text",text)
                 this.addProperty("date",date)
                 this.addProperty("review","$reviewFlag")
-                negFeedbackText?.let {
+                if(reviewFlag==0){
                     this.addProperty(
                         "reason",
                         "feedback:- $negFeedbackText, reasons:- ${reasons ?: "[]"}"

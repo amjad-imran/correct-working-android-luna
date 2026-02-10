@@ -299,7 +299,7 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
                 ) {
                     String.format(locale = Locale.US, "%.1f", roundedAvg)
                 } else {
-                    "${String.format(locale = Locale.US, "%.1f", roundedAvg)}%"
+                    String.format(locale = Locale.US, "%.1f", roundedAvg)
                 }
 
 

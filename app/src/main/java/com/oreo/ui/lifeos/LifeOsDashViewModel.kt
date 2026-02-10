@@ -888,12 +888,13 @@ class LifeOsDashViewModel @Inject constructor(
     private fun getContributor(data: InsightItemResponseModel): SleepInternalLaunchState {
         return when {
             data.graph_type == null -> SleepInternalLaunchState.DEEP_SLEEP
-            data.graph_type.startsWith("circadian_mid_point_day") -> SleepInternalLaunchState.TIMING
+            data.graph_type.startsWith("circadian_mid_point_day") -> SleepInternalLaunchState.DEEP_SLEEP
             data.graph_type.startsWith("hour_vs_need_day") -> SleepInternalLaunchState.HOUR_VS_NEED
             data.graph_type.startsWith("restorative_sleep") -> SleepInternalLaunchState.RESTORATIVE_SLEEP
             data.graph_type.startsWith("rem_sleep") -> SleepInternalLaunchState.REM_SLEEP
             data.graph_type.startsWith("deep_sleep") -> SleepInternalLaunchState.DEEP_SLEEP
             data.graph_type.startsWith("sleep_perf") -> SleepInternalLaunchState.SLEEP_PERFORMANCE
+            data.graph_type.startsWith("avg_respiration") -> SleepInternalLaunchState.RESPIRATORY_RATE
             else -> SleepInternalLaunchState.DEEP_SLEEP
         }
     }

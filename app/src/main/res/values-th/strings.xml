@@ -2409,5 +2409,6 @@
     <string name="text_edit_entries_by_adding_or_removing_them_from_your_timeline">แก้ไขรายการโดยการเพิ่มหรือลบออกจากไทม์ไลน์ของคุณ</string>
     <string name="text_remove_entry">ลบรายการ?</string>
     <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">การกระทำนี้จะลบรายการนี้ออกจากไทม์ไลน์ของคุณอย่างถาวร</string>
+    <string name="whats_new">มีอะไรใหม่!</string>
 
 </resources>

@@ -21,6 +21,7 @@ import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.models.Units
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.AppConversionUtils
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.DistanceUtil
 import com.noisefit_commans.utils.Event
@@ -658,4 +659,13 @@ class OWorkoutDetailsViewModelV2 @Inject constructor(
             }
         }
     }
+
+    fun getTempVal(tempVal: Int): String{
+        if (sessionManager.isMetric()) {
+            return "$tempVal°C"
+        }
+        val valueF = AppConversionUtils.celsiusToFahrenheit(tempVal.toFloat())
+        return "$valueF°F"
+    }
+
 }

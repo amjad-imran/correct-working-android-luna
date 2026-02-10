@@ -23,6 +23,9 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.toColorInt
 import androidx.core.os.bundleOf
@@ -111,6 +114,11 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.abs
+import androidx.core.net.toUri
+import androidx.lifecycle.lifecycleScope
+import com.noisefit.oreo.OreoMainActivity
+import com.oreo.data.model.timeline.habits.HabitsByDateResponse.Options
+import kotlin.collections.map
 
 
 @AndroidEntryPoint
@@ -123,7 +131,7 @@ class SummaryDataFragmentToday :
 
     private val TAG = "SummaryDataFragment"
     val circleObj = CirclePagerIndicatorDecoration()
-
+    var needToSyncHabit = false
 
     companion object {
 
@@ -181,7 +189,28 @@ class SummaryDataFragmentToday :
         },3000)*/
 
 
-
+        binding.contentMain.viewWhatsNew.setContent {
+            MaterialTheme {
+                val banners by viewModel.whatsNewBanners.collectAsState()
+                WhatsNewCardsList(
+                    banners = banners,
+                    userSelectedLanguage = viewModel.getUserSelectedLanguage(),
+                    { banner ->
+                        val uri = banner.deeplinkAction.toUri()
+                        val path = uri.path?.removePrefix("https://link.lunazone.com/")
+                        val intent = OreoMainActivity.getStartIntent(
+                            requireContext(),
+                            appLink = ApplicationUtils.parseAppLink(path)
+                        )
+                        startActivity(intent)
+                    },
+                    { banner ->
+                        viewModel.dismissWhatsNewCard(banner.id)
+                    }
+                )
+                if(banners.isNotEmpty()) binding.contentMain.viewWhatsNew.visible()
+            }
+        }
     }
 
     private fun setNapsPager() {
@@ -816,6 +845,30 @@ class SummaryDataFragmentToday :
                     navigate(R.id.addHabitsFragment)
                 }
 
+                is OSummaryHealthOverviewClickEnum.OnCrossHabitTimelineNewClicked -> {
+                    needToSyncHabit = true
+                    lifecycleScope.launch {
+                        val curHabit = type.item
+                        viewModel.onHabitCrossClicked(curHabit.timeTrackerOptionId ?: -1)
+                        val initialList = type.dataList
+                        type.updateListFun.invoke(
+                            initialList.map {
+                                if (it.timeTrackerOptionId == curHabit.timeTrackerOptionId) it.copy(state = Options.State.Skipping) else it
+                            },
+                            false
+                        )
+                        delay(1000)
+                        type.updateListFun.invoke(
+                            initialList.map {
+                                if (it.timeTrackerOptionId == curHabit.timeTrackerOptionId) it.copy(isCancelled = true) else it
+                            },
+                            true
+                        )
+                        delay(300)
+                        mainViewModel.getUserSavedHabits().also { needToSyncHabit = false }
+                    }
+                }
+
                 is OSummaryHealthOverviewClickEnum.OnCheckHabitTimelineNewClicked -> {
                     val curHabit = type.item
                     viewModel.sessionManager.logMoEngageAppEvent(
@@ -963,12 +1016,23 @@ class SummaryDataFragmentToday :
         }
     }
 
+    override fun onStop() {
+        if(needToSyncHabit){
+            mainViewModel.getUserSavedHabits()
+        }
+        super.onStop()
+    }
+
     private fun handleOnCheckHabitTimelineClicked(
         habit: HabitsByDateResponse.Options,
         selectedDate: String?
     ) {
         when(habit.type){
             "workout" -> {
+                if(mainViewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess){
+                    showToast(requireContext(), getString(R.string.text_please_connect_your_ring_to_add_a_workout))
+                    return
+                }
                 val activityType = when(habit.workoutType) {
                     "freestyle_workout" -> "freestyle"
                     "outdoor_running" -> "running"
@@ -1059,6 +1123,11 @@ class SummaryDataFragmentToday :
                 if (mostRecentSleep == null) {
                     val mostRecentNap = timelineData?.find { it.event.equals("nap") }
                     if (mostRecentNap == null) {
+                        if(mainViewModel.sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess){
+                            showToast(requireContext(), getString(R.string.text_please_connect_your_ring))
+                            return
+                        }
+
                         navigate(
                             R.id.addActivityTimelineFragment,
                             bundleOf(
@@ -2517,6 +2586,7 @@ class SummaryDataFragmentToday :
     }
 
     private fun setSmallCardUi(data: OHealthOverview.CycleTrackerCardSmall) {
+        data.data ?: return
         binding.contentMain.lytFemaleHealthCardSmall.apply {
             this.root.visible()
             this.textView3.text = data.data.title

@@ -1,5 +1,8 @@
 package com.oreo.ui.timelineScreen
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -20,14 +23,6 @@ import com.oreo.data.usecases.GetAllHabitsUseCase
 import com.oreo.data.usecases.GetHabitsByDateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.filterNot
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.collections.map
@@ -42,18 +37,18 @@ class TimelineScreenViewmodel @Inject constructor(
 ) : BaseViewModel() {
 
     var habitsResponseData: HabitsByDateResponse ?= null
-    private val _allHabits = MutableStateFlow<List<Options>>(emptyList())
-    val allHabits: StateFlow<List<Options>> = _allHabits.asStateFlow()
+    private val _allHabits = MutableLiveData<List<Options>>()
+    val allHabits: LiveData<List<Options>> = _allHabits
 
-    // expose ONLY 3 visible items
-    val visibleHabits: StateFlow<List<Options>> =
-        allHabits.map { it.filterNot { it.isCompleted || it.isCancelled }.take(3) }
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    // For the 3 visible habits
+    val visibleHabits: LiveData<List<Options>> = allHabits.map { habits ->
+        habits.filterNot { it.isCompleted || it.isCancelled || !it.canBeLogged }.take(3)
+    }
 
-    // for "+N more"
-    val moreCount: StateFlow<Int> =
-        allHabits.map { (it.filterNot { it.isCompleted || it.isCancelled }.size - 3).coerceAtLeast(0) }
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0)
+    // For "+N more"
+    val moreCount: LiveData<Int> = allHabits.map { habits ->
+        (habits.filterNot { it.isCompleted || it.isCancelled || !it.canBeLogged }.size - 3).coerceAtLeast(0)
+    }
 
     fun getPrefixAndSuffixList(dataList: List<String>): Triple<ArrayList<ChartModel>, ArrayList<ChartModel>, ArrayList<ChartModel>> {
         val list = java.util.ArrayList<ChartModel>()
@@ -125,9 +120,18 @@ class TimelineScreenViewmodel @Inject constructor(
     fun checkUserFirstTimeForAddHabits() = dataStore.getUserFirstTimeForAddHabits()
     fun setAddHabitFirstTimeVisibility() = dataStore.setUserFirstTimeForAddHabits(false)
 
-    fun getUserSavedHabits(date:String?){
+    fun getUserSavedHabits(date:String?, processData: Boolean){
         viewModelScope.launch {
             date?.let {
+                fun processHabitsData(dataList: List<Options>) {
+                    dataList.forEach { data ->
+                        when (data.type) {
+                            "caffeine" -> data.canBeLogged = false
+                            "light_exposure" -> data.canBeLogged = false
+                        }
+                    }
+                }
+
                 habitsByDateUC.get()
                     .invoke(it).collect { resource ->
                         when (resource) {
@@ -144,7 +148,7 @@ class TimelineScreenViewmodel @Inject constructor(
                                     (this.uiComponentType as UIComponentType.RetryApiDialog).callback =
                                         object : BinaryActionCallback {
                                             override fun yes() {
-                                                getUserSavedHabits(date)
+                                                getUserSavedHabits(date, processData)
                                             }
 
                                             override fun no() {}
@@ -154,8 +158,11 @@ class TimelineScreenViewmodel @Inject constructor(
 
                             is Resource.Success -> {
                                 resource.data?.data?.let { resp ->
+                                    if(processData){
+                                        processHabitsData(resp.options)
+                                    }
                                     habitsResponseData = resp
-                                    _allHabits.value = (resp.options)
+                                    _allHabits.value = resp.options
                                 }
                             }
                         }
@@ -170,13 +177,13 @@ class TimelineScreenViewmodel @Inject constructor(
         viewModelScope.launch {
 
             // 1) mark as skipping (UI turns red + shows "Skipped")
-            _allHabits.value = _allHabits.value.map {
+            _allHabits.value = _allHabits.value?.map {
                 if (it.timeTrackerOptionId == id) it.copy(state = Options.State.Skipping) else it
             }
 
             // 2) after 1 sec remove it (DiffUtil animates removal & next item appears)
             delay(1000)
-            _allHabits.value = _allHabits.value.map {
+            _allHabits.value = _allHabits.value?.map {
                 if (it.timeTrackerOptionId == id) it.copy(isCancelled = true) else it
             }
 

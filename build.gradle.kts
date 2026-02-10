@@ -8,6 +8,7 @@ buildscript {
         classpath(libs.googleFirebaseCrashlyticsGradle)
         classpath(libs.google.service)
         classpath(libs.gradle)
+        classpath ("com.google.gms:google-services:4.4.0")
     }
 
 }

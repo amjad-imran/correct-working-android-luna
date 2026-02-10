@@ -69,7 +69,9 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import com.noisefit.luna.BuildConfig
+import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.copyToClipBoard
+import com.noisefit_commans.ui.hideKeyboard
 import com.noisefit_commans.ui.scrollToBottom
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import com.oreo.ui.lifeos.insightsLvl1.HelpUsImproveBottomSheet
@@ -93,7 +95,7 @@ class LifeOsChatFragment :
 
 
     private val suggestionsAdapter: SuggestionAdapter by lazy {
-        SuggestionAdapter() { ques ->
+        SuggestionAdapter(binding.rvChats) { ques ->
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.lifeos_suggested_q_clicked,
                 hashMapOf(
@@ -266,12 +268,11 @@ class LifeOsChatFragment :
     }
 
     private fun displayHelpUsImproveBS(message: ChatGptOverview.ReceivedMessage) {
+        binding.lytChatBox.chatEtx.clearFocus()
+        binding.lytChatBox.chatEtx.hideKeyboard()
         setFragmentResultListener(HelpUsImproveBottomSheet.HELP_US_IMPROVE_BS_INSIGHTS){ _, bundle ->
             val feedbackText = bundle.getString("feedbackText")
             val reasons = bundle.getString("reasons")
-            if(feedbackText.isNullOrEmpty()){
-                return@setFragmentResultListener
-            }
 
             mAdapter.markDisliked(message.id)
             viewModel.postChatReview(
@@ -319,6 +320,10 @@ class LifeOsChatFragment :
         }
 
         binding.btnRetry.setOnClickListener {
+            if(!ApplicationUtils.isInternetConnected()){
+                context.showShortToast(getString(R.string.text_check_your_internet_connection))
+                return@setOnClickListener
+            }
             viewModel.retryApi()
         }
         binding.ivNewChat.setOnClickListener {
@@ -855,7 +860,7 @@ class LifeOsChatFragment :
         viewModel.addThinkingMessage()
         binding.lytChatBox.chatEtx.setText("")
 
-        val formattedMsg = "${message.mainText}"
+        val formattedMsg = "${message.footerText}"
         viewModel.askQuestionStream(formattedMsg.replace("\n", ""))
     }
 

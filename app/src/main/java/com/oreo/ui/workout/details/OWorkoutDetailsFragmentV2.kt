@@ -402,7 +402,7 @@ class OWorkoutDetailsFragmentV2 :
 
             if (it.weather?.temp != null) {
                 binding.lytTop.apply {
-                    tvTemp.text = "${it.weather.temp}°C"
+                    tvTemp.text = viewModel.getTempVal(it.weather.temp)
                     groupTemp.visible()
                 }
                 binding.lytTop.ivWeatherImage.setImageResource(

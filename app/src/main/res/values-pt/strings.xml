@@ -2427,5 +2427,6 @@
     <string name="text_edit_entries_by_adding_or_removing_them_from_your_timeline">Edite as entradas, adicionando ou removendo-as da sua linha do tempo.</string>
     <string name="text_remove_entry">Remover entrada?</string>
     <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">Isto removerá permanentemente esta entrada da sua linha do tempo.</string>
+    <string name="whats_new">O que há de novo!</string>
 
 </resources>

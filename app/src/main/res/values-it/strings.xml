@@ -2404,5 +2404,6 @@
     <string name="text_edit_entries_by_adding_or_removing_them_from_your_timeline">Modifica le voci aggiungendole o rimuovendole dalla tua timeline.</string>
     <string name="text_remove_entry">Rimuovere voci?</string>
     <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">Questo rimuoverà definitivamente questa voce dalla tua timeline.</string>
+    <string name="whats_new">Novità!</string>
 
 </resources>

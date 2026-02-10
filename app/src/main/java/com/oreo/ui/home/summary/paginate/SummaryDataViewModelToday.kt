@@ -5,7 +5,9 @@ import androidx.core.graphics.toColorInt
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.noisefit.data.RemoteConfigManager
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.dataConverter.DataConverter
 import com.noisefit.data.googleFit.GoogleFitDataObservers
@@ -66,6 +68,7 @@ import com.oreo.data.db.abstaction.OreoBodyTemperatureDataSource
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.model.AlertType
 import com.oreo.data.model.AppUpdateModel
+import com.oreo.data.model.BannerItem
 import com.oreo.data.model.CaffeineWindowData
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.DashAlert
@@ -85,6 +88,7 @@ import com.oreo.data.model.SlideUpNapScoreDataModel
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TimeWindow
 import com.oreo.data.model.TrendsData
+import com.oreo.data.model.WhatsNewCardsList
 import com.oreo.data.model.femaleh.FemaleHealthUserInfoModel
 import com.oreo.data.model.femaleh.TempPeriodData
 import com.oreo.data.model.health.Nudges
@@ -103,6 +107,7 @@ import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.oreo.data.repository.abstraction.FemaleHealthRepository
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.data.usecases.CancelHabitByIdAndDateUseCase
 import com.oreo.ui.chatGpt.SummaryStates
 import com.oreo.ui.custom.HighlightState
 import com.oreo.ui.customHomeScreen.CustomHomeScreenItem
@@ -127,6 +132,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.oreo.util.DateTimeUtil
 import com.oreo.widget.water.WaterWidgetUpdater
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.Instant
@@ -170,6 +176,7 @@ class SummaryDataViewModelToday @Inject constructor(
     // Local Room data sources
     private val bloodOxygenDataSource: OreoBloodOxygenDataSource,
     private val bodyTemperatureDataSource: OreoBodyTemperatureDataSource,
+    private val cancelHabitByIdAndDateUseCase: dagger.Lazy<CancelHabitByIdAndDateUseCase>,
 ) : BaseViewModel() {
 
     var date: String? = null
@@ -267,9 +274,12 @@ class SummaryDataViewModelToday @Inject constructor(
     var stateOneTapVitalsCard = MutableLiveData<OHealthOverview.OneTapVitals>()
 
 
-    var activityCardData: ODashboardActivityModel ?= null
-    var readinessCardData: ODashboardReadinessModel ?= null
-    //
+    var activityCardData: ODashboardActivityModel? = null
+    var readinessCardData: ODashboardReadinessModel? = null
+
+    val whatsNewBanners: MutableStateFlow<List<BannerItem>> = MutableStateFlow<List<BannerItem>>(emptyList())
+
+    fun getUserSelectedLanguage() = localDataStore.getSelectedAppLanguage() ?: "en"
 
     fun getStressWalkthroughShownStatus(): Boolean {
         return localDataStore.getStressWalkthroughShownStatus()
@@ -307,8 +317,22 @@ class SummaryDataViewModelToday @Inject constructor(
         }
 
         updateAlerts()
+        try {
+            val version = BuildConfig.VERSION_CODE.toString()
+            val config = Gson().fromJson(
+                RemoteConfigManager.getString(RemoteConfigManager.WHATS_NEW_HOME),
+                WhatsNewCardsList::class.java
+            )
+            val androidMap = config?.android ?: emptyMap()
+            val dismissedIds = ringDataStore.getCancelledCardsList().toSet()
 
-
+            whatsNewBanners.value = (androidMap[version]
+                ?: androidMap["default"]
+                ?: emptyList()
+                    ).filterNot { it.id in dismissedIds }
+        } catch (e: Exception){
+            whatsNewBanners.value = emptyList()
+        }
     }
 
     private fun handleSleepAlert(healthData: OreoSleepModel?) {
@@ -3449,45 +3473,46 @@ class SummaryDataViewModelToday @Inject constructor(
         return list.getOrNull(0)?.temperature ?: null
     }
 
-    private fun convertToPeriodSmallCardModel(data: FemaleHealthUserInfoModel): PeriodCard1 {
+    private fun convertToPeriodSmallCardModel(data: FemaleHealthUserInfoModel): PeriodCard1? {
 
         val daysUntilOvulation = if (data.ovulationDate != null) {
             calculateDaysLeft(data.ovulationDate)
         } else {
             null
         }
-        val daysUntilNextPeriod = calculateDaysLeft(data.nextPeriodDate!!)
 
-        if (daysUntilOvulation != null && (daysUntilOvulation < daysUntilNextPeriod && daysUntilOvulation > 0)) {
-            val predictedOvulation = LocalDate.parse(data.nextPeriodDate).minusDays(13)
-            return PeriodCard1(
-                title = resourceProvider.getString(R.string.text_ovulation_in),
-                days = daysUntilOvulation.toInt(),
-                nudge = data.nudges?.firstOrNull()?.message ?: "",
-                currentCycleDay = data.currentDay ?: 0,
-                totalCycleDay = data.cycleLength ?: 0,
-                bottomText = resourceProvider.getString(R.string.text_ovulation_date),
-                predictionDate = data.ovulationDate
-                    ?: "",/*predictedOvulation.format(DateTimeFormatter.ofPattern("dd MMM")),*/
-                background = R.drawable.back_card_ovulation_small
-            )
-        } else {
-            val isPeriodLate = data.confirmPeriodDate != null
-
-            return PeriodCard1(
-                title = if (isPeriodLate) resourceProvider.getString(R.string.text_period_late_for)
-                else resourceProvider.getString(R.string.text_period_in),
-                days = if (isPeriodLate) data.confirmPeriodDate?.day
-                    ?: 0 else daysUntilNextPeriod.toInt(),
-                nudge = data.nudges?.firstOrNull()?.message ?: "",
-                currentCycleDay = data.currentDay ?: 0,
-                totalCycleDay = data.cycleLength ?: 0,
-                bottomText = resourceProvider.getString(R.string.text_period_date),
-                predictionDate = data.nextPeriodDate ?: "",
-                background = R.drawable.back_card_period_small
-            )
+        return data.nextPeriodDate?.let {
+            calculateDaysLeft(it)
+        }?.let { daysUntilNextPeriod ->
+            if (daysUntilOvulation != null && (daysUntilOvulation < daysUntilNextPeriod && daysUntilOvulation > 0)) {
+                val predictedOvulation = LocalDate.parse(data.nextPeriodDate).minusDays(13)
+                PeriodCard1(
+                    title = resourceProvider.getString(R.string.text_ovulation_in),
+                    days = daysUntilOvulation.toInt(),
+                    nudge = data.nudges?.firstOrNull()?.message ?: "",
+                    currentCycleDay = data.currentDay ?: 0,
+                    totalCycleDay = data.cycleLength ?: 0,
+                    bottomText = resourceProvider.getString(R.string.text_ovulation_date),
+                    predictionDate = data.ovulationDate
+                        ?: "",/*predictedOvulation.format(DateTimeFormatter.ofPattern("dd MMM")),*/
+                    background = R.drawable.back_card_ovulation_small
+                )
+            } else {
+                val isPeriodLate = data.confirmPeriodDate != null
+                PeriodCard1(
+                    title = if (isPeriodLate) resourceProvider.getString(R.string.text_period_late_for)
+                    else resourceProvider.getString(R.string.text_period_in),
+                    days = if (isPeriodLate) data.confirmPeriodDate?.day
+                        ?: 0 else daysUntilNextPeriod.toInt(),
+                    nudge = data.nudges?.firstOrNull()?.message ?: "",
+                    currentCycleDay = data.currentDay ?: 0,
+                    totalCycleDay = data.cycleLength ?: 0,
+                    bottomText = resourceProvider.getString(R.string.text_period_date),
+                    predictionDate = data.nextPeriodDate ?: "",
+                    background = R.drawable.back_card_period_small
+                )
+            }
         }
-
     }
 
     /**
@@ -4991,6 +5016,51 @@ class SummaryDataViewModelToday @Inject constructor(
         }
     }
 
+    fun dismissWhatsNewCard(id: String) {
+        val updatedList = ringDataStore
+            .getCancelledCardsList()
+            .toMutableSet()
+            .apply { add(id) }.toList()
+        whatsNewBanners.value = whatsNewBanners.value.filterNot { it.id == id }
+        ringDataStore.setCancelledCardsList(updatedList)
+    }
+
+    fun onHabitCrossClicked(id: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            val reqArray = JsonArray()
+            reqArray.add(
+                JsonObject().apply {
+                    addProperty("habit_option_id", id)
+                    addProperty("date", LocalDate.now().toString())
+                }
+            )
+
+            val reqObj = JsonObject().apply {
+                add("cancelled_habits", reqArray)
+            }
+            cancelHabitByIdAndDateUseCase.get().invoke(reqObj).collect { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
+
+                    }
+
+                    is Resource.GenericError -> {
+
+                    }
+
+                    is Resource.NetworkError -> {
+
+                    }
+
+                    is Resource.Success -> {
+                        resource.data?.data?.let {
+
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 enum class NotificationGoal {

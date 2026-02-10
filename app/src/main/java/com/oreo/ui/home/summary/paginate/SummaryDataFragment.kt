@@ -207,6 +207,7 @@ class SummaryDataFragment :
                 OSummaryHealthOverviewClickEnum.LifeOsChatClicked -> {}
                 OSummaryHealthOverviewClickEnum.LifeOsAddAttachmentClicked -> {}
                 OSummaryHealthOverviewClickEnum.LifeOsVoiceClicked -> {}
+                is OSummaryHealthOverviewClickEnum.OnCrossHabitTimelineNewClicked -> {}
             }
         }
 

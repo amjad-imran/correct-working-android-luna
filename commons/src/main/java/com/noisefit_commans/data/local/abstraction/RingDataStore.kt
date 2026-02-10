@@ -116,5 +116,6 @@ interface RingDataStore {
     fun saveSleepException(state: Boolean)
     fun getSleepException(): Boolean
     //
-
+    fun getCancelledCardsList(): List<String>
+    fun setCancelledCardsList(list: List<String>)
 }

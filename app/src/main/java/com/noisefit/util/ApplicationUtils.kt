@@ -117,6 +117,10 @@ object ApplicationUtils {
             AppLinks.HR_DETAIL
         } else if (string.equals("/applinks/timeline-list", true)) {
             AppLinks.TIMELINE_LIST
+        }else if (string.equals("/applinks/habits", true)) {
+            AppLinks.LOG_HABITS
+        } else if (string.equals("/applinks/life-os", true)) {
+            AppLinks.LIFE_OS
         } else {
             null
         }
