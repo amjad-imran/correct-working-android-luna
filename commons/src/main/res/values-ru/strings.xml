@@ -24,6 +24,6 @@
     <string name="text_none">Никто</string>
     <string name="text_tracking_location">Отслеживание местоположения...</string>
     <string name="text_updating_location">Обновление местоположения...</string>
-
+    <string name="text_speaking">Говорю</string>
 
 </resources>

@@ -24,6 +24,6 @@
     <string name="text_none">ไม่มี</string>
     <string name="text_tracking_location">กำลังติดตามตำแหน่ง...</string>
     <string name="text_updating_location">กำลังอัปเดตตำแหน่ง...</string>
-
+    <string name="text_speaking">กำลังพูด</string>
 
 </resources>
