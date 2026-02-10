@@ -2415,4 +2415,5 @@
     <string name="starting_up">Opstarten</string>
     <string name="text_thinking">Denken</string>
     <string name="text_unable_to_speak">Schakel dempen uit om te spreken</string>
+    <string name="start_talking">Begin met praten</string>
 </resources>

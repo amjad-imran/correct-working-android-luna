@@ -2416,4 +2416,5 @@
     <string name="starting_up">Avvio in corso</string>
     <string name="text_thinking">Sto pensando</string>
     <string name="text_unable_to_speak">Riattiva l\'audio per parlare</string>
+    <string name="start_talking">Inizia a parlare</string>
 </resources>

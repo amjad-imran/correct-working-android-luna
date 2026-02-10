@@ -2534,4 +2534,5 @@ onjour, Luna"</string>
     <string name="starting_up">Démarrage</string>
     <string name="text_thinking">Réflexion</string>
     <string name="text_unable_to_speak">Réactivez le son pour parler</string>
+    <string name="start_talking">Commencer à parler</string>
 </resources>

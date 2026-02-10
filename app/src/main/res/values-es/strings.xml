@@ -2385,4 +2385,5 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="starting_up">Iniciando</string>
     <string name="text_thinking">Pensando</string>
     <string name="text_unable_to_speak">Activa el sonido para hablar</string>
+    <string name="start_talking">Empezar a hablar</string>
 </resources>

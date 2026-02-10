@@ -2409,4 +2409,5 @@
     <string name="starting_up">正在启动</string>
     <string name="text_thinking">思考中</string>
     <string name="text_unable_to_speak">取消静音以说话</string>
+    <string name="start_talking">开始说话</string>
 </resources>

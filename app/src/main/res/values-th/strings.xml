@@ -2421,4 +2421,5 @@
     <string name="starting_up">กำลังเริ่มต้น</string>
     <string name="text_thinking">กำลังคิด</string>
     <string name="text_unable_to_speak">ยกเลิกปิดเสียงเพื่อพูด</string>
+    <string name="start_talking">เริ่มพูด</string>
 </resources>
