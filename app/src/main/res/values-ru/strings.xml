@@ -2428,5 +2428,12 @@
     <string name="text_remove_entry">Удалить запись?</string>
     <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">Это навсегда удалит эту запись из вашей временной шкалы.</string>
     <string name="whats_new">Что нового!</string>
+    <string name="text_the_app_felt_slow_or_buggy">Приложение казалось медленным или с ошибками</string>
+    <string name="text_it_was_hard_to_find_what_i_needed">Мне было трудно найти то, что мне нужно</string>
+    <string name="text_something_else">Что-то другое</string>
+    <string name="text_the_accuracy_felt_off">Точность была неправильной</string>
+    <string name="text_what_didn_t_feel_right">Что не казалось правильным?</string>
+    <string name="text_how_was_your_experience_with_luna">Как прошло ваше знакомство с Luna?</string>
+    <string name="text_tell_us_a_bit_more">Расскажите нам подробнее?</string>
 
 </resources>

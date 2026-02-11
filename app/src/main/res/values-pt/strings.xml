@@ -2428,5 +2428,12 @@
     <string name="text_remove_entry">Remover entrada?</string>
     <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">Isto removerá permanentemente esta entrada da sua linha do tempo.</string>
     <string name="whats_new">O que há de novo!</string>
+    <string name="text_the_app_felt_slow_or_buggy">O aplicativo parecia lento ou com erros</string>
+    <string name="text_it_was_hard_to_find_what_i_needed">Foi difícil encontrar o que eu precisava</string>
+    <string name="text_something_else">Algo mais</string>
+    <string name="text_the_accuracy_felt_off">A precisão parecia errada</string>
+    <string name="text_what_didn_t_feel_right">O que não parecia certo?</string>
+    <string name="text_how_was_your_experience_with_luna">Como foi sua experiência com a Luna?</string>
+    <string name="text_tell_us_a_bit_more">Conte-nos um pouco mais?</string>
 
 </resources>

@@ -2410,5 +2410,12 @@
     <string name="text_remove_entry">ลบรายการ?</string>
     <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">การกระทำนี้จะลบรายการนี้ออกจากไทม์ไลน์ของคุณอย่างถาวร</string>
     <string name="whats_new">มีอะไรใหม่!</string>
+    <string name="text_the_app_felt_slow_or_buggy">แอปดูช้า หรือมีปัญหา</string>
+    <string name="text_it_was_hard_to_find_what_i_needed">มันยากที่จะหาสิ่งที่ฉันต้องการ</string>
+    <string name="text_something_else">สิ่งอื่น</string>
+    <string name="text_the_accuracy_felt_off">ความแม่นยำดูไม่ถูกต้อง</string>
+    <string name="text_what_didn_t_feel_right">อะไรที่รู้สึกไม่ถูกต้อง?</string>
+    <string name="text_how_was_your_experience_with_luna">ประสบการณ์ของคุณกับ Luna เป็นอย่างไร?</string>
+    <string name="text_tell_us_a_bit_more">บอกเราเพิ่มเติมหน่อยได้ไหม?</string>
 
 </resources>

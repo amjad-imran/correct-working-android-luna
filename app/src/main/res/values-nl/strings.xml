@@ -2404,5 +2404,12 @@
     <string name="text_remove_entry">Item verwijderen?</string>
     <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">Dit zal dit item permanent van je tijdlijn verwijderen.</string>
     <string name="whats_new">Wat is er nieuw!</string>
+    <string name="text_the_app_felt_slow_or_buggy">De app voelde traag of buggy</string>
+    <string name="text_it_was_hard_to_find_what_i_needed">Het was moeilijk om te vinden wat ik nodig had</string>
+    <string name="text_something_else">Iets anders</string>
+    <string name="text_the_accuracy_felt_off">De nauwkeurigheid voelde niet goed</string>
+    <string name="text_what_didn_t_feel_right">Wat voelde niet goed?</string>
+    <string name="text_how_was_your_experience_with_luna">Hoe was je ervaring met Luna?</string>
+    <string name="text_tell_us_a_bit_more">Vertel ons wat meer?</string>
 
 </resources>
