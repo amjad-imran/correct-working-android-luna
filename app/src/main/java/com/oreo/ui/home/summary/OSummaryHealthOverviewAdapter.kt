@@ -875,7 +875,7 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                                                 }.take(3)
 
                                                 if(updateProgress){
-                                                    val finalLogged = totalCount-final.size
+                                                    val finalLogged = updatedList.filter { it.isCancelled || it.isCompleted }.size
                                                     binding.lytSavedHabits.tvHabitsLogged.text = context.getString(R.string.text_val_habits_logged, finalLogged, totalCount)
                                                     binding.lytSavedHabits.habitProgress.max = totalCount
                                                     binding.lytSavedHabits.habitProgress.progress = finalLogged

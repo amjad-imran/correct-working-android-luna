@@ -392,7 +392,7 @@ class ChatGptViewModel
             val baseUrl = when (planType) {
                 PlanType.WORKOUT -> "${BuildConfig.BASE_URL_NEW}/luna/ai/v1/workout/stream"
                 PlanType.DIET -> "${BuildConfig.BASE_URL_NEW}/luna/ai/v1/diet/stream"
-                PlanType.NONE, null -> "https://alias-cheap-wow-specialized.trycloudflare.com/luna/ai/v1/stream"
+                PlanType.NONE, null -> "${BuildConfig.BASE_URL_NEW}/luna/ai/v1/stream"
             }
             val urlWithParams = when (planType) {
                 PlanType.WORKOUT -> "$baseUrl?message=$prompt"
