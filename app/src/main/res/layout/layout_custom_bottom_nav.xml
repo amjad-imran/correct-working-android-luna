@@ -200,32 +200,31 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:visibility="visible" />
 
+        <ImageView
+            android:id="@+id/ivLunaAiImg"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:visibility="invisible"
+            android:scaleType="fitXY"
+            android:paddingHorizontal="9dp"
+            android:paddingVertical="11dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-
-       <!-- <com.airbnb.lottie.LottieAnimationView
+        <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/ivLunaAi"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:scaleType="fitXY"
-            android:padding="10dp"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/anim_luna_bottom_menu_2" />-->
-
-        <ImageView
-            android:id="@+id/ivLunaAi"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_default_lifeos_logo"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:lottie_rawRes="@raw/lifeos_bottom_nav" />
 
         <TextView
             style="@style/Tinny"
