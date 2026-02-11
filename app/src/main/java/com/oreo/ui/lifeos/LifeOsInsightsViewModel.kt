@@ -1606,7 +1606,7 @@ class LifeOsInsightsViewModel @Inject constructor(
                     GraphType.Week.REM_SLEEP,
                     GraphType.Month.REM_SLEEP -> {
                         graphDataConvertor.generateSleepMultiBarChartData(
-                            it, SleepInternalLaunchState.REM_SLEEP
+                            it, SleepInternalLaunchState.REM_SLEEP, list.size+1
                         )?.let { data ->
                             list.add(data)
                         }
@@ -1617,7 +1617,7 @@ class LifeOsInsightsViewModel @Inject constructor(
                     GraphType.Week.DEEP_SLEEP,
                     GraphType.Month.DEEP_SLEEP -> {
                         graphDataConvertor.generateSleepMultiBarChartData(
-                            it, SleepInternalLaunchState.DEEP_SLEEP
+                            it, SleepInternalLaunchState.DEEP_SLEEP, list.size+1
                         )?.let { data ->
                             list.add(data)
                         }
@@ -1627,7 +1627,10 @@ class LifeOsInsightsViewModel @Inject constructor(
                     GraphType.Day.SLEEP_EFFICIENCY,
                     GraphType.Week.SLEEP_EFFICIENCY,
                     GraphType.Month.SLEEP_EFFICIENCY -> {
-                        graphDataConvertor.generateTrendsGraphInsightsData(it)?.let { data ->
+                        graphDataConvertor.generateTrendsGraphInsightsData(
+                            it,
+                            list.size+1
+                        )?.let { data ->
                             list.add(data)
                         }
                         // (standard_bar_plot)
@@ -1636,7 +1639,10 @@ class LifeOsInsightsViewModel @Inject constructor(
                     GraphType.Day.TOTAL_DURATION,
                     GraphType.Week.TOTAL_DURATION,
                     GraphType.Month.TOTAL_DURATION -> {
-                        graphDataConvertor.generateTrendsGraphInsightsData(it)?.let { data ->
+                        graphDataConvertor.generateTrendsGraphInsightsData(
+                            it,
+                            list.size+1
+                        )?.let { data ->
                             list.add(data)
                         }
                         // (standard_bar_plot)
@@ -1645,7 +1651,10 @@ class LifeOsInsightsViewModel @Inject constructor(
                     GraphType.Day.LATENCY,
                     GraphType.Week.LATENCY,
                     GraphType.Month.LATENCY -> {
-                        graphDataConvertor.generateTrendsGraphInsightsData(it)?.let { data ->
+                        graphDataConvertor.generateTrendsGraphInsightsData(
+                            it,
+                            list.size+1
+                        )?.let { data ->
                             list.add(data)
                         }
                         // (standard_bar_plot)
@@ -1657,7 +1666,8 @@ class LifeOsInsightsViewModel @Inject constructor(
                         graphDataConvertor.getBarPlotColorData(
                             it,
                             SleepInternalLaunchState.RESTFULNESS,
-                            "%"
+                            "%",
+                            list.size+1
                         )?.let { plotData ->
                             list.add(plotData)
                         }
@@ -1670,7 +1680,8 @@ class LifeOsInsightsViewModel @Inject constructor(
                         graphDataConvertor.getBarPlotColorData(
                             it,
                             SleepInternalLaunchState.HRV,
-                            "ms"
+                            "ms",
+                            list.size+1
                         )?.let { plotData ->
                             list.add(plotData)
                         }
@@ -1683,7 +1694,8 @@ class LifeOsInsightsViewModel @Inject constructor(
                         graphDataConvertor.getBarPlotColorData(
                             it,
                             SleepInternalLaunchState.RESTING_HEART_RATE,
-                            "bpm"
+                            "bpm",
+                            list.size+1
                         )?.let { plotData ->
                             list.add(plotData)
                         }
@@ -1696,7 +1708,8 @@ class LifeOsInsightsViewModel @Inject constructor(
                         graphDataConvertor.getBarPlotColorData(
                             it,
                             SleepInternalLaunchState.SKIN_TEMPERATURE,
-                            "°C"
+                            "°C",
+                            list.size+1
                         )?.let { plotData ->
                             list.add(plotData)
                         }
@@ -1710,7 +1723,8 @@ class LifeOsInsightsViewModel @Inject constructor(
                             graphDataConvertor.generateSleepSingleLineChartData(
                                 it,
                                 getPeriod(it),
-                                SleepInternalLaunchState.SKIN_TEMPERATURE
+                                SleepInternalLaunchState.SKIN_TEMPERATURE,
+                                list.size+1
                             )
                         )
                         // SPO2 (line_plot)
@@ -1723,7 +1737,8 @@ class LifeOsInsightsViewModel @Inject constructor(
                             graphDataConvertor.generateSleepSingleLineChartData(
                                 it,
                                 getPeriod(it),
-                                getContributor(it)
+                                getContributor(it),
+                                list.size+1
                             )
                         )
                         // RESPIRATION (line_plot)
@@ -1736,7 +1751,8 @@ class LifeOsInsightsViewModel @Inject constructor(
                             graphDataConvertor.generateSleepSingleLineChartData(
                                 it,
                                 getPeriod(it),
-                                getContributor(it)
+                                getContributor(it),
+                                list.size+1
                             )
                         )
                         // Week -> line_plot
@@ -1762,7 +1778,10 @@ class LifeOsInsightsViewModel @Inject constructor(
 //                        list.add(graphDataConvertor.generateSleepMovementData(it))
 //                    }
                     else -> {
-                        val data = graphDataConvertor.generateTrendsGraphInsightsData(it)
+                        val data = graphDataConvertor.generateTrendsGraphInsightsData(
+                            it,
+                            list.size+1
+                        )
                         data?.let {
                             list.add(data)
                         }

@@ -192,127 +192,130 @@ class GraphDataConvertor @Inject constructor(
     }
 
 
-    fun handleTrendsData(data: InsightItemResponseModel): InsightCardUiModel? {
+//    fun handleTrendsData(data: InsightItemResponseModel): InsightCardUiModel? {
+//
+//        "rem_sleep_day"
+//        val period = when {
+//            data.graph_type?.endsWith("week") == true -> InternalSelectedPeriod.WEEK
+//            data.graph_type?.endsWith("month") == true -> InternalSelectedPeriod.MONTH
+//            else -> InternalSelectedPeriod.DAY
+//        }
+//
+//        val contributor = when {
+//            data.graph_type == null -> SleepInternalLaunchState.DEEP_SLEEP
+//            data.graph_type.startsWith("circadian_mid_point_day") -> SleepInternalLaunchState.TIMING
+//            data.graph_type.startsWith("hour_vs_need_day") -> SleepInternalLaunchState.HOUR_VS_NEED
+//            data.graph_type.startsWith("restorative_sleep") -> SleepInternalLaunchState.RESTORATIVE_SLEEP
+//            data.graph_type.startsWith("rem_sleep") -> SleepInternalLaunchState.REM_SLEEP
+//            data.graph_type.startsWith("deep_sleep") -> SleepInternalLaunchState.DEEP_SLEEP
+//            data.graph_type.startsWith("sleep_perf") -> SleepInternalLaunchState.SLEEP_PERFORMANCE
+//            else -> SleepInternalLaunchState.DEEP_SLEEP
+//        }
+//
+//        when (period) {
+//            InternalSelectedPeriod.DAY, null -> {
+//                return when (contributor) {
+//                    SleepInternalLaunchState.REM_SLEEP,
+//                    SleepInternalLaunchState.DEEP_SLEEP,
+//                    SleepInternalLaunchState.RESPIRATORY_RATE,
+//                    SleepInternalLaunchState.BLOOD_OXYGEN,
+//                    SleepInternalLaunchState.LATENCY,
+//                    SleepInternalLaunchState.RESTFULNESS,
+//                    SleepInternalLaunchState.SLEEP_PERFORMANCE -> {
+//                        generateSleepSingleBarChartData(data)
+//                    }
+//
+//                    SleepInternalLaunchState.SLEEP_DURATION,
+//                    SleepInternalLaunchState.HRV,
+//                    SleepInternalLaunchState.RESTING_HEART_RATE,
+//                    SleepInternalLaunchState.SKIN_TEMPERATURE,
+//                    SleepInternalLaunchState.EFFICIENCY -> {
+//                        generateSleepSingleLineGradientChartData(data, period, contributor)
+//                    }
+//
+//                    SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
+//                        generateSleepMultiBarChartData(data, contributor)
+//                    }
+//
+//                    SleepInternalLaunchState.HOUR_VS_NEED -> {
+//                        generateSleepHourVsNeedChartInternalData(data,period, contributor)
+//                    }
+//
+//                    SleepInternalLaunchState.SLEEP_TIME -> {
+//                        generateSleepSingleBarChartData(data)
+//                    }
+//
+//                    SleepInternalLaunchState.TIMING -> {
+//                        generateSleepTimingChartInternalData(data, period, contributor)
+//                    }
+//
+//                    else -> null
+//                }
+//            }
+//
+//            InternalSelectedPeriod.WEEK -> {
+//                return when (contributor) {
+//                    SleepInternalLaunchState.HOUR_VS_NEED,
+//                    SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
+//                        generateSleepSingleBarChartData(data)
+//                    }
+//
+//                    SleepInternalLaunchState.SLEEP_TIME,
+//                    SleepInternalLaunchState.TIMING -> {
+//                        generateSleepSingleBarChartData(data)
+//                    }
+//
+//                    SleepInternalLaunchState.RESPIRATORY_RATE,
+//                    SleepInternalLaunchState.RESTING_HEART_RATE,
+//                    SleepInternalLaunchState.BLOOD_OXYGEN,
+//                    SleepInternalLaunchState.SKIN_TEMPERATURE,
+//                    SleepInternalLaunchState.HRV -> {
+//                        generateSleepSingleBarChartData(data)
+//                    }
+//
+//                    else -> {
+//                        generateSleepSingleBarChartData(data)
+//                    }
+//                }
+//            }
+//
+//            InternalSelectedPeriod.MONTH -> {
+//                return when (contributor) {
+//                    SleepInternalLaunchState.HOUR_VS_NEED,
+//                    SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
+//                        generateSleepSingleBarChartData(data)
+//                    }
+//
+//                    SleepInternalLaunchState.SLEEP_TIME,
+//                    SleepInternalLaunchState.TIMING -> {
+//                        generateSleepSingleBarChartData(data)
+//                    }
+//
+//                    SleepInternalLaunchState.RESPIRATORY_RATE,
+//                    SleepInternalLaunchState.RESTING_HEART_RATE,
+//                    SleepInternalLaunchState.BLOOD_OXYGEN,
+//                    SleepInternalLaunchState.SKIN_TEMPERATURE,
+//                    SleepInternalLaunchState.HRV -> {
+//                        generateSleepSingleBarChartData(data)
+//                    }
+//
+//                    else -> {
+//                        generateSleepSingleBarChartData(data)
+//                    }
+//                }
+//            }
+//
+//            InternalSelectedPeriod.DAILY -> {
+//                return generateSleepSingleBarChartData(data)
+//            }
+//        }
+//    }
 
-        "rem_sleep_day"
-        val period = when {
-            data.graph_type?.endsWith("week") == true -> InternalSelectedPeriod.WEEK
-            data.graph_type?.endsWith("month") == true -> InternalSelectedPeriod.MONTH
-            else -> InternalSelectedPeriod.DAY
-        }
-
-        val contributor = when {
-            data.graph_type == null -> SleepInternalLaunchState.DEEP_SLEEP
-            data.graph_type.startsWith("circadian_mid_point_day") -> SleepInternalLaunchState.TIMING
-            data.graph_type.startsWith("hour_vs_need_day") -> SleepInternalLaunchState.HOUR_VS_NEED
-            data.graph_type.startsWith("restorative_sleep") -> SleepInternalLaunchState.RESTORATIVE_SLEEP
-            data.graph_type.startsWith("rem_sleep") -> SleepInternalLaunchState.REM_SLEEP
-            data.graph_type.startsWith("deep_sleep") -> SleepInternalLaunchState.DEEP_SLEEP
-            data.graph_type.startsWith("sleep_perf") -> SleepInternalLaunchState.SLEEP_PERFORMANCE
-            else -> SleepInternalLaunchState.DEEP_SLEEP
-        }
-
-        when (period) {
-            InternalSelectedPeriod.DAY, null -> {
-                return when (contributor) {
-                    SleepInternalLaunchState.REM_SLEEP,
-                    SleepInternalLaunchState.DEEP_SLEEP,
-                    SleepInternalLaunchState.RESPIRATORY_RATE,
-                    SleepInternalLaunchState.BLOOD_OXYGEN,
-                    SleepInternalLaunchState.LATENCY,
-                    SleepInternalLaunchState.RESTFULNESS,
-                    SleepInternalLaunchState.SLEEP_PERFORMANCE -> {
-                        generateSleepSingleBarChartData(data)
-                    }
-
-                    SleepInternalLaunchState.SLEEP_DURATION,
-                    SleepInternalLaunchState.HRV,
-                    SleepInternalLaunchState.RESTING_HEART_RATE,
-                    SleepInternalLaunchState.SKIN_TEMPERATURE,
-                    SleepInternalLaunchState.EFFICIENCY -> {
-                        generateSleepSingleLineGradientChartData(data, period, contributor)
-                    }
-
-                    SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
-                        generateSleepMultiBarChartData(data, contributor)
-                    }
-
-                    SleepInternalLaunchState.HOUR_VS_NEED -> {
-                        generateSleepHourVsNeedChartInternalData(data,period, contributor)
-                    }
-
-                    SleepInternalLaunchState.SLEEP_TIME -> {
-                        generateSleepSingleBarChartData(data)
-                    }
-
-                    SleepInternalLaunchState.TIMING -> {
-                        generateSleepTimingChartInternalData(data, period, contributor)
-                    }
-
-                    else -> null
-                }
-            }
-
-            InternalSelectedPeriod.WEEK -> {
-                return when (contributor) {
-                    SleepInternalLaunchState.HOUR_VS_NEED,
-                    SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
-                        generateSleepSingleBarChartData(data)
-                    }
-
-                    SleepInternalLaunchState.SLEEP_TIME,
-                    SleepInternalLaunchState.TIMING -> {
-                        generateSleepSingleBarChartData(data)
-                    }
-
-                    SleepInternalLaunchState.RESPIRATORY_RATE,
-                    SleepInternalLaunchState.RESTING_HEART_RATE,
-                    SleepInternalLaunchState.BLOOD_OXYGEN,
-                    SleepInternalLaunchState.SKIN_TEMPERATURE,
-                    SleepInternalLaunchState.HRV -> {
-                        generateSleepSingleBarChartData(data)
-                    }
-
-                    else -> {
-                        generateSleepSingleBarChartData(data)
-                    }
-                }
-            }
-
-            InternalSelectedPeriod.MONTH -> {
-                return when (contributor) {
-                    SleepInternalLaunchState.HOUR_VS_NEED,
-                    SleepInternalLaunchState.RESTORATIVE_SLEEP -> {
-                        generateSleepSingleBarChartData(data)
-                    }
-
-                    SleepInternalLaunchState.SLEEP_TIME,
-                    SleepInternalLaunchState.TIMING -> {
-                        generateSleepSingleBarChartData(data)
-                    }
-
-                    SleepInternalLaunchState.RESPIRATORY_RATE,
-                    SleepInternalLaunchState.RESTING_HEART_RATE,
-                    SleepInternalLaunchState.BLOOD_OXYGEN,
-                    SleepInternalLaunchState.SKIN_TEMPERATURE,
-                    SleepInternalLaunchState.HRV -> {
-                        generateSleepSingleBarChartData(data)
-                    }
-
-                    else -> {
-                        generateSleepSingleBarChartData(data)
-                    }
-                }
-            }
-
-            InternalSelectedPeriod.DAILY -> {
-                return generateSleepSingleBarChartData(data)
-            }
-        }
-    }
-
-     fun generateSleepMultiBarChartData(rawData: InsightItemResponseModel,
-                                               contributor: SleepInternalLaunchState): InsightCardUiModel? {
+     fun generateSleepMultiBarChartData(
+         rawData: InsightItemResponseModel,
+         contributor: SleepInternalLaunchState,
+         id: Int
+     ): InsightCardUiModel? {
 
         /*val mainObjString =
             "{\"trends_breakup\":[ { \"date\": \"2025-12-01\" }, { \"date\": \"2025-12-02\", \"value1\": 4230, \"value2\": 4380 }, { \"date\": \"2025-12-03\" } ]}"
@@ -359,7 +362,7 @@ class GraphDataConvertor @Inject constructor(
         val xAxisRange = getXAxisRangeInsights(rawData.graph, period)
 
         return InsightCardUiModel(
-            id = 6L,
+            id = id.toLong(),
             title = "generateSleepMultiBarChartData() demo",
             timeText = getInsightRelevantGeneratedTime(rawData.dateTime).second,
             chartKey = GraphsKey.TREND_SLEEP_MULTI_BAR,
@@ -378,7 +381,8 @@ class GraphDataConvertor @Inject constructor(
     fun generateSleepSingleLineChartData(
         rawData: InsightItemResponseModel,
         period: InternalSelectedPeriod,
-        contributor: SleepInternalLaunchState
+        contributor: SleepInternalLaunchState,
+        id: Int
     ): InsightCardUiModel {
 
         /*val mainObjString =
@@ -452,7 +456,7 @@ class GraphDataConvertor @Inject constructor(
         }
 
         return InsightCardUiModel(
-            id = 6L,
+            id = id.toLong(),
             title = "generateSleepSingleLineChartData() demo",
             timeText = getInsightRelevantGeneratedTime(rawData.dateTime).second,
             chartKey = GraphsKey.TREND_SLEEP_SINGLE_LINE_GRADIENT,
@@ -777,7 +781,7 @@ class GraphDataConvertor @Inject constructor(
         )
     }
 
-    fun generateTrendsGraphInsightsData(data: InsightItemResponseModel): InsightCardUiModel? {
+    fun generateTrendsGraphInsightsData(data: InsightItemResponseModel, id: Int): InsightCardUiModel? {
         if(data.graph_type==null) return null
 
         val period = when {
@@ -844,7 +848,7 @@ class GraphDataConvertor @Inject constructor(
         val optimalRange = getOptimalRangeMinMax(contributor)
 
         return InsightCardUiModel(
-            id = 6L,
+            id = id.toLong(),
             title = "Rem Day demo",
             timeText = getInsightRelevantGeneratedTime(data.dateTime).second,
             chartKey = GraphsKey.TREND_SLEEP_SINGLE,
@@ -1595,7 +1599,8 @@ class GraphDataConvertor @Inject constructor(
     fun getBarPlotColorData(
         pageData: InsightItemResponseModel,
         contributor: SleepInternalLaunchState,
-        unitLabel: String
+        unitLabel: String,
+        id: Int
     ): InsightCardUiModel? {
         if (pageData.graph_type == null) return null
 
@@ -1840,7 +1845,7 @@ class GraphDataConvertor @Inject constructor(
         val showOverlay = period != InternalSelectedPeriod.DAY
 
         return InsightCardUiModel(
-            id = 6L,
+            id = id.toLong(),
             title = "Rem Day demo",
             timeText = getInsightRelevantGeneratedTime(pageData.dateTime).second,
             chartKey = GraphsKey.BAR_PLOT_COLOR,
