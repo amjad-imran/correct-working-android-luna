@@ -97,13 +97,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
     private fun checkPermissionAndStartService() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             checkBluetoothPermission {
-
-                val alarmManager: AlarmManager =
-                    getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                if (!alarmManager.canScheduleExactAlarms()) {
-                    showAllowAlarmPermission()
-                    return@checkBluetoothPermission
-                }
                 ApplicationUtils.setRescueWorkManager(this)
                 startOnBoardFlow()
             }
@@ -173,32 +166,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
             )
 
         }
-    }
-
-    private fun showAllowAlarmPermission() {
-        onApiErrorReceived(
-            ErrorResponse(
-                UIComponentType.AreYouSureDialog(
-                    getString(R.string.text_permission_required),
-                    getString(R.string.text_permission_denial_alarm),
-                    false,
-                    getString(R.string.text_allow),
-                    object : BinaryActionCallback {
-                        override fun yes() {
-                            val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
-                            intent.setData(Uri.parse("package:" + packageName))
-                            startActivity(intent)
-                            finish()
-                        }
-
-                        override fun no() {
-                            finish()
-                        }
-                    }
-                )
-            )
-        )
-
     }
 
     private fun handleBackgroundNotifications(intent: Intent?) {
