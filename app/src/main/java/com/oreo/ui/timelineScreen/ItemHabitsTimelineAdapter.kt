@@ -31,11 +31,10 @@ class ItemHabitsTimelineAdapter(
 
             val isSkipping = item.state == Options.State.Skipping
 
-            if(isFromLunaDash) {
-                binding.igCross.invisible()
-                if(isLastItem) binding.viewDivider.gone()
-            }
-            else binding.igCross.visible()
+            if(isFromLunaDash && isLastItem) {
+                binding.viewDivider.gone()
+            }else
+                binding.viewDivider.visible()
 
             if(isSkipping){
                 binding.lytContent.invisible()
@@ -44,6 +43,13 @@ class ItemHabitsTimelineAdapter(
                     root.setBackgroundColor("#1A7E0707".toColorInt())
                     ivCheckStatus.setImageResource(R.drawable.ic_cross_habit_timeline)
                     tvDoneSkipped.text = context.getString(R.string.text_skipped)
+
+                    if(isFromLunaDash && isLastItem) {
+                        viewDivider.gone()
+                    }else{
+                        viewDivider.visible()
+                    }
+
                     root.visible()
                 }
             }else{
