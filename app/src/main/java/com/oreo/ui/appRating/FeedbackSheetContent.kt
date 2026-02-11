@@ -13,7 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
@@ -23,7 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.noisefit_commans.R.font.gilroy_medium
+import com.noisefit.luna.R
+import com.noisefit_commans.R.font.google_sans_flex_variable
 
 @Composable
 fun FeedbackSheetContent(
@@ -64,10 +68,39 @@ fun FeedbackSheetContent(
                         )
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    placeholder = { Text("Tell us a bit more?") },
+                    placeholder = { Text(
+                        text = stringResource(R.string.text_tell_us_a_bit_more),
+                        style = TextStyle(
+                            fontFamily = FontFamily(Font(google_sans_flex_variable, weight = FontWeight.Medium)),
+                            platformStyle = PlatformTextStyle(includeFontPadding = false),
+                            fontSize = 14.sp,
+                        ),
+                        color = Color.White.copy(alpha = 0.5f)
+                    ) },
                     minLines = 4,
                     maxLines = 4,
                     singleLine = false,
+                    textStyle = TextStyle(
+                        fontFamily = FontFamily(Font(google_sans_flex_variable, weight = FontWeight.Medium)),
+                        platformStyle = PlatformTextStyle(includeFontPadding = false),
+                        fontSize = 14.sp,
+                    ),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        // Outline color when focused or unfocused
+                        focusedBorderColor = Color.White.copy(alpha = 0.10f),
+                        unfocusedBorderColor = Color.White.copy(alpha = 0.10f),
+                        // Placeholder color if you want to customize it
+                        focusedPlaceholderColor = Color.White.copy(alpha = 0.5f),
+                        unfocusedPlaceholderColor = Color.White.copy(alpha = 0.5f),
+                        // Text color
+                        focusedTextColor = Color.White, // Ensure text is white or any other color you need
+                        unfocusedTextColor = Color.White, // Ensure text is white or any other color you need
+                        // Disabled state colors
+                        disabledTextColor = Color.Gray.copy(alpha = 0.6f),
+                        disabledBorderColor = Color.Gray.copy(alpha = 0.3f),
+                        disabledPlaceholderColor = Color.Gray.copy(alpha = 0.5f),
+                        cursorColor = Color.White,
+                    )
                 )
             }
 
@@ -84,7 +117,12 @@ fun FeedbackSheetContent(
             enabled = uiState.isSubmitEnabled && !uiState.isSubmitting,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(44.dp),
+                .graphicsLayer(
+                shadowElevation = 10f, // Control the size of the shadow
+                shape = RoundedCornerShape(30.dp), // Rounded corners
+                ambientShadowColor = Color.White.copy(alpha = 0.6f) // Set the shadow color with alpha
+            )
+                /*.height(44.dp)*/,
             shape = RoundedCornerShape(28.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.White,          // selected/enabled look
@@ -109,11 +147,9 @@ fun FeedbackSheetContent(
 
             Text(
                 text = submitBtnText,
-                style = TextStyle(
-                    fontFamily = FontFamily(Font(gilroy_medium, weight = FontWeight.Medium)),
-                    platformStyle = PlatformTextStyle(includeFontPadding = false),
-                    fontSize = 14.sp,
-                ),
+                fontWeight = FontWeight.Bold,
+                fontFamily = FontFamily(Font(google_sans_flex_variable)),
+                fontSize = 14.sp
             )
         }
 
@@ -152,7 +188,7 @@ private fun ReasonRow(
             Text(
                 text = text,
                 style = TextStyle(
-                    fontFamily = FontFamily(Font(gilroy_medium, weight = FontWeight.Medium)),
+                    fontFamily = FontFamily(Font(google_sans_flex_variable, weight = FontWeight.Medium)),
                     platformStyle = PlatformTextStyle(includeFontPadding = false),
                     fontSize = 14.sp,
                 ),

@@ -2386,6 +2386,8 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_something_else">Something else</string>
     <string name="text_the_accuracy_felt_off">The accuracy felt off</string>
     <string name="text_what_didn_t_feel_right">What didn’t feel right?</string>
+    <string name="text_how_was_your_experience_with_luna">How was your experience with Luna?</string>
+    <string name="text_tell_us_a_bit_more">Tell us a bit more?</string>
 
 
 </resources>
