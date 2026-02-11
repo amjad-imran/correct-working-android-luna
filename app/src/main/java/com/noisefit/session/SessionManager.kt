@@ -822,40 +822,43 @@ class SessionManager
         return hasPassedInterval
     }
 
+    private val _requestAppReviewPopUp = MutableLiveData<Boolean>()
+    val requestAppReviewPopUp : LiveData<Boolean> = _requestAppReviewPopUp
+
+    fun reqAppRatingPop(req: Boolean){
+        if(req && !shouldRequestReview()){
+            return
+        }
+        _requestAppReviewPopUp.postValue(req)
+    }
+
     fun requestReviewIfAppropriate(
         activity: Activity,
         packageName: String = activity.packageName,
         delayMs: Long = 500,
         fallbackToStore: Boolean = true
     ) {
-        if (!shouldRequestReview()) return  // Skip if review is not due yet
+        val reviewManager = ReviewManagerFactory.create(activity)
 
-        GlobalScope.launch(Main) {
-            // small delay to mirror iOS and avoid clashing with UI transitions
-            if (delayMs > 0) delay(delayMs)
+        // Step 1: Ask Play for the "review flow"
+        val requestTask = reviewManager.requestReviewFlow()
+        requestTask.addOnCompleteListener { request ->
+            if (!request.isSuccessful) {
+                if (fallbackToStore) openPlayStore(activity, packageName)
+                return@addOnCompleteListener
+            }
 
-            val reviewManager = ReviewManagerFactory.create(activity)
+            // Step 2: Launch the review dialog
+            val reviewInfo = request.result
+            val flowTask = reviewManager.launchReviewFlow(activity, reviewInfo)
 
-            // Step 1: Ask Play for the "review flow"
-            val requestTask = reviewManager.requestReviewFlow()
-            requestTask.addOnCompleteListener { request ->
-                if (!request.isSuccessful) {
-                    if (fallbackToStore) openPlayStore(activity, packageName)
-                    return@addOnCompleteListener
-                }
-
-                // Step 2: Launch the review dialog
-                val reviewInfo = request.result
-                val flowTask = reviewManager.launchReviewFlow(activity, reviewInfo)
-
-                // You can't know whether user reviewed; you only know flow finished.
-                flowTask.addOnCompleteListener {
-                    // Optional: If you want to fallback if dialog didn't show,
-                    // Google doesn't expose that reliably, so usually do nothing here.
-                    // If you *really* want fallback always, you could open store here,
-                    // but that can be annoying UX.
-                    localDataStore.setAndGetLastAppReviewRequestTime(System.currentTimeMillis())
-                }
+            // You can't know whether user reviewed; you only know flow finished.
+            flowTask.addOnCompleteListener {
+                // Optional: If you want to fallback if dialog didn't show,
+                // Google doesn't expose that reliably, so usually do nothing here.
+                // If you *really* want fallback always, you could open store here,
+                // but that can be annoying UX.
+                localDataStore.setAndGetLastAppReviewRequestTime(System.currentTimeMillis()) // TODO: on top of function
             }
         }
     }

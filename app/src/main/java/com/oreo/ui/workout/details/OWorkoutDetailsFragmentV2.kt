@@ -635,6 +635,6 @@ class OWorkoutDetailsFragmentV2 :
     override fun onDestroyView() {
         super.onDestroyView()
 
-        viewModel.sessionManager.requestReviewIfAppropriate(activity = requireActivity())
+        viewModel.sessionManager.reqAppRatingPop(true)
     }
 }

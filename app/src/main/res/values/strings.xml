@@ -2381,6 +2381,11 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_remove_entry">Remove Entry?</string>
     <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">This will permanently remove this entry from your timeline.</string>
     <string name="whats_new">What’s New!</string>
+    <string name="text_the_app_felt_slow_or_buggy">The app felt slow or buggy</string>
+    <string name="text_it_was_hard_to_find_what_i_needed">It was hard to find what I needed</string>
+    <string name="text_something_else">Something else</string>
+    <string name="text_the_accuracy_felt_off">The accuracy felt off</string>
+    <string name="text_what_didn_t_feel_right">What didn’t feel right?</string>
 
 
 </resources>

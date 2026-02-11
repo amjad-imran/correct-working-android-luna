@@ -1781,5 +1781,17 @@
 
     </dialog>
 
+    <dialog
+        android:id="@+id/appRatingLikeDislikeBottomSheet"
+        android:name="com.oreo.ui.appRating.AppRatingLikeDislikeBottomSheet"
+        android:label="AppRatingLikeDislikeBottomSheet" >
+
+    </dialog>
+    <dialog
+        android:id="@+id/appRatingDislikeFeedbackBottomSheet"
+        android:name="com.oreo.ui.appRating.AppRatingDislikeFeedbackBottomSheet"
+        android:label="fragment_app_rating_dislike_feedback_bottom_sheet"
+        tools:layout="@layout/fragment_app_rating_dislike_feedback_bottom_sheet" />
+
 
 </navigation>
