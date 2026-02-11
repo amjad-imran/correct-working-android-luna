@@ -67,7 +67,7 @@ class NotificationViewModel @Inject constructor(
                                 stepsToggle = it.steps_notification?:false
                                 sleepToggle = it.sleep_notification?:false
                                 femaleHealthToggle = it.female_health?:false
-                                circadianToggle = it.circadian_notification?:false
+                                circadianToggle = it.caffeine?:false
                             }
                             valueUpdate.postValue(Event(true))
                         }
@@ -89,6 +89,7 @@ class NotificationViewModel @Inject constructor(
                 this.addProperty("sleep_notification", sleepToggle)
                 this.addProperty("female_health_notification", femaleHealthToggle)
                 this.addProperty("circadian_notification", circadianToggle)
+                this.addProperty("caffeine", circadianToggle)
             }
             userRepository.updateNotificationToggle(request)
                 .collect { resource ->
