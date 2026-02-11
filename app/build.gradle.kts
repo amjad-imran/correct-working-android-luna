@@ -87,6 +87,11 @@ android {
                 "GOOGLE_CLIENT_ID",
                 "\"159998142649-h616h07i88lilgc45cv1rbengmv07ias.apps.googleusercontent.com\""
             )
+
+            buildConfigField("String",
+                "MIXPANEL_TOKEN",
+                "\"0cca280e302f84eb266acec0e0b8da9a\"")
+
 //            manifestPlaceholders["cleverTapToken"] = "322-4c6"
 //            manifestPlaceholders["cleverTapId"] = "694-RRK-595Z"
             manifestPlaceholders["google_client_id"] = "AIzaSyD-zRQCQPly-EA4jawx6YZRLMprV4bwf9w"
@@ -112,6 +117,9 @@ android {
                 "GOOGLE_CLIENT_ID",
                 "\"159998142649-h616h07i88lilgc45cv1rbengmv07ias.apps.googleusercontent.com\""
             )
+            buildConfigField("String",
+                "MIXPANEL_TOKEN",
+                "\"0cca280e302f84eb266acec0e0b8da9a\"")
 //            manifestPlaceholders["cleverTapToken"] = "322-4c690"
 //            manifestPlaceholders["cleverTapId"] = "694-RRK-595Z07087"
             manifestPlaceholders["google_client_id"] = "AIzaSyD-zRQCQPly-EA4jawx6YZRLMprV4bwf9w"

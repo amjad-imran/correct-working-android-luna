@@ -17,6 +17,7 @@ import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.ui.AppLinks
 import com.noisefit.ui.friends.location.search.SearchStateType
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.analytics.MixPanelAnalytics
 import com.noisefit_commans.constants.SyncEvents
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
@@ -152,6 +153,7 @@ class SessionManager
 
     var unit: Units = Units.METRIC
     var gender: String? = null
+    var userId: String? = null
     var canLogPeriod = false
     var notificationSettings = 1
 
@@ -161,7 +163,7 @@ class SessionManager
             unit = user?.userGoals?.getUnit() ?: Units.METRIC
             gender = user?.userInfo?.gender
             notificationSettings = user?.notificationsEnabledLuna ?: 1
-
+            userId = user?.id.toString()
         }
     }
 
@@ -442,12 +444,18 @@ class SessionManager
     fun logFirebaseEvent(eventName: String) {
         val newEventName = eventName.lowercase().replace(" ", "_")
         Firebase.analytics.logEvent(newEventName, null)
+        MixPanelAnalytics.trackEvent(newEventName, mutableMapOf<String, String>().apply {
+            this.put("user_id", userId.toString())
+        })
         LOGS.d("LOGS_FIREBASE_EVENT $newEventName ")
     }
 
     fun logFirebaseEvent(eventName: String, data: HashMap<String, Any>) {
         val newEventName = eventName.lowercase().replace(" ", "_")
         Firebase.analytics.logEvent(newEventName, ApplicationUtils.convertMapToBundle(data))
+        MixPanelAnalytics.trackEvent(newEventName, data.apply {
+            this.put("user_id", userId.toString())
+        })
         LOGS.d("LOGS_FIREBASE_EVENT $newEventName ")
     }
 
@@ -493,6 +501,9 @@ class SessionManager
 
                     } else if (key.equals("home_page_visit", true)) {
                         firebaseInstance.logEvent(key, null)
+                        MixPanelAnalytics.trackEvent(key, mutableMapOf<String, String>().apply {
+                            this.put("user_id", userId.toString())
+                        })
                         MoEAnalyticsHelper.trackEvent(context, key, Properties())
                     } else {
                         MoEAnalyticsHelper.setUserAttribute(context, key, value)
@@ -547,6 +558,9 @@ class SessionManager
         MoEAnalyticsHelper.trackEvent(context, newEventName, Properties())
         LOGS.d("APP_EVENT $newEventName")
         Firebase.analytics.logEvent(newEventName, null)
+        MixPanelAnalytics.trackEvent(newEventName, mutableMapOf<String, String>().apply {
+            this.put("user_id", userId.toString())
+        })
         // LOGS.d("LOGS_FIREBASE_EVENT $newEventName ")
     }
 
@@ -581,6 +595,9 @@ class SessionManager
         }
         MoEAnalyticsHelper.trackEvent(context, newEventName, properties)
         Firebase.analytics.logEvent(newEventName, ApplicationUtils.convertMapToBundle(data))
+        MixPanelAnalytics.trackEvent(newEventName, data.apply {
+            this.put("user_id", userId.toString())
+        })
         LOGS.d("APP_EVENT $newEventName ${Gson().toJson(properties)}")
     }
 
