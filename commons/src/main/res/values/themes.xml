@@ -112,6 +112,22 @@
         <item name="android:includeFontPadding">false</item>
     </style>
 
+    <style name="S14_GoogleSansFlex">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="fontFamily">@font/google_sans_flex_variable</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="S16_GoogleSansFlex">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="fontFamily">@font/google_sans_flex_variable</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
 
     <style name="S12" parent="BaseTextRegular">
         <item name="android:textColor">@color/white</item>

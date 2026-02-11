@@ -2405,5 +2405,12 @@
     <string name="text_remove_entry">Rimuovere voci?</string>
     <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">Questo rimuoverà definitivamente questa voce dalla tua timeline.</string>
     <string name="whats_new">Novità!</string>
+    <string name="text_the_app_felt_slow_or_buggy">L\'app sembrava lenta o con bug</string>
+    <string name="text_it_was_hard_to_find_what_i_needed">Era difficile trovare quello che mi serviva</string>
+    <string name="text_something_else">Qualcos\'altro</string>
+    <string name="text_the_accuracy_felt_off">La precisione sembrava imprecisa</string>
+    <string name="text_what_didn_t_feel_right">Cosa non ti sembrava giusto?</string>
+    <string name="text_how_was_your_experience_with_luna">Com\'è stata la tua esperienza con Luna?</string>
+    <string name="text_tell_us_a_bit_more">Raccontaci di più?</string>
 
 </resources>

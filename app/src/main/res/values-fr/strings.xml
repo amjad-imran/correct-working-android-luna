@@ -2523,5 +2523,12 @@ onjour, Luna"</string>
     <string name="text_remove_entry">Supprimer l\'entrée ?</string>
     <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">Cela supprimera définitivement cette entrée de votre chronologie.</string>
     <string name="whats_new">Quoi de neuf !</string>
+    <string name="text_the_app_felt_slow_or_buggy">L\'application était lente ou buggy</string>
+    <string name="text_it_was_hard_to_find_what_i_needed">J\'avais du mal à trouver ce dont j\'avais besoin</string>
+    <string name="text_something_else">Autre chose</string>
+    <string name="text_the_accuracy_felt_off">La précision semblait incorrecte</string>
+    <string name="text_what_didn_t_feel_right">Qu\'est-ce qui ne semblait pas correct ?</string>
+    <string name="text_how_was_your_experience_with_luna">Comment était votre expérience avec Luna ?</string>
+    <string name="text_tell_us_a_bit_more">Dites-nous en plus ?</string>
 
 </resources>

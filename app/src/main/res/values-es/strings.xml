@@ -2374,5 +2374,12 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_remove_entry">¿Eliminar entrada?</string>
     <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">Esto eliminará permanentemente esta entrada de tu línea de tiempo.</string>
     <string name="whats_new">¿Qué hay de nuevo!</string>
+    <string name="text_the_app_felt_slow_or_buggy">La aplicación se sintió lenta o con errores</string>
+    <string name="text_it_was_hard_to_find_what_i_needed">Me costó encontrar lo que necesitaba</string>
+    <string name="text_something_else">Algo más</string>
+    <string name="text_the_accuracy_felt_off">La precisión parecía incorrecta</string>
+    <string name="text_what_didn_t_feel_right">¿Qué no se sintió bien?</string>
+    <string name="text_how_was_your_experience_with_luna">¿Cómo fue tu experiencia con Luna?</string>
+    <string name="text_tell_us_a_bit_more">¿Puedes contarnos un poco más?</string>
 
 </resources>

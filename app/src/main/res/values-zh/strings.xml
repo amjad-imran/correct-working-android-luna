@@ -2398,5 +2398,12 @@
     <string name="text_remove_entry">删除条目？</string>
     <string name="text_this_will_permanently_remove_this_entry_from_your_timeline">此操作将永久删除此条目。</string>
     <string name="whats_new">有什么新内容！</string>
+    <string name="text_the_app_felt_slow_or_buggy">应用程序感觉很慢或有错误</string>
+    <string name="text_it_was_hard_to_find_what_i_needed">很难找到我需要的东西</string>
+    <string name="text_something_else">其他</string>
+    <string name="text_the_accuracy_felt_off">准确性感觉不对</string>
+    <string name="text_what_didn_t_feel_right">什么感觉不对？</string>
+    <string name="text_how_was_your_experience_with_luna">你和Luna的体验如何？</string>
+    <string name="text_tell_us_a_bit_more">能告诉我们更多吗？</string>
 
 </resources>

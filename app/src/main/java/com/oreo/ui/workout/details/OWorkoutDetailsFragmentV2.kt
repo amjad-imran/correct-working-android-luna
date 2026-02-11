@@ -631,4 +631,10 @@ class OWorkoutDetailsFragmentV2 :
     private fun dimBehind(popupWindow: PopupWindow) {
 
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        viewModel.sessionManager.reqAppRatingPop(true)
+    }
 }

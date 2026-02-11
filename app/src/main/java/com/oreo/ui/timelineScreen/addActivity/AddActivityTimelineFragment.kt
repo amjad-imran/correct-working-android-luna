@@ -286,6 +286,7 @@ class AddActivityTimelineFragment :
         }
         sharedViewModel.navigateUp.observe(this) {
             it.getContent()?.let {
+                sharedViewModel.sessionManager.reqAppRatingPop(true)
                 if (sharedViewModel.showTimeline) {
                     navigateUpSafe()
                     navigate(R.id.timelineScreenFragment)

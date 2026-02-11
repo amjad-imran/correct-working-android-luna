@@ -344,6 +344,7 @@ class SetAlarmFragment : BaseFragment<FragmentSetAlarmBinding>(FragmentSetAlarmB
 
         viewModel.alarmUpdated.observe(this) {
             it.getContent()?.let {
+                viewModel.sessionManager.reqAppRatingPop(true)
                 navigateUpSafe()
             }
         }

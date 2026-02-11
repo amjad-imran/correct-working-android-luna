@@ -293,6 +293,7 @@ private const val LIFEOS_ONBOARD_QUES_DATA = "LIFEOS_ONBOARD_QUES_DATA"
 private const val WHATS_NEW_DASH_CARD_INTERACTION_DONE = "WHATS_NEW_DASH_CARD_INTERACTION_DONE"
 
 private const val USER_FIRST_TIME_TO_ADD_HABITS = "user_first_time_to_add_habits"
+private const val LAST_APP_REVIEW_REQUEST_TIME = "LAST_APP_REVIEW_REQUEST_TIME"
 private inline fun <reified T> Gson.fromJson(json: String) =
     fromJson<T>(json, object : TypeToken<T>() {}.type)
 
@@ -2560,5 +2561,12 @@ class DataStoredImpl
 
     override fun getUserFirstTimeForAddHabits(): Boolean =
         mPrefs.getBoolean(USER_FIRST_TIME_TO_ADD_HABITS, true)
+
+    override fun setAndGetLastAppReviewRequestTime(time: Long?): Long {
+        time?.let {
+            mPrefs.edit()?.putLong(LAST_APP_REVIEW_REQUEST_TIME, time)?.commit()
+        }
+        return  mPrefs.getLong(LAST_APP_REVIEW_REQUEST_TIME, 0L)
+    }
 
 }

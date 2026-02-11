@@ -72,11 +72,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.oreo.data.model.FabItems
 import com.oreo.data.model.FabModel
+import com.oreo.ui.appRating.AppRatingDislikeFeedbackBottomSheet.Companion.APP_RATING_DISLIKE_FEEDBACK_KEY
+import com.oreo.ui.appRating.AppRatingLikeDislikeBottomSheet.Companion.APP_RATING_LIKE_DISLIKE_KEY
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 import com.oreo.ui.lifeos.LifeOsChatFragment
+import kotlinx.coroutines.delay
 
 @AndroidEntryPoint
 class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
@@ -1156,6 +1161,47 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                     if (viewModel.checkExceptionCancelState()) {
                         navController?.navigate(R.id.ringExceptionDialogFragment)
                     }
+                }
+            }
+        }
+
+        viewModel.sessionManager.requestAppReviewPopUp.observe(this){
+            if(it){
+                val navHost =
+                    supportFragmentManager.findFragmentById(R.id.o_nav_host_fragment) as NavHostFragment
+
+                val navFm = navHost.childFragmentManager
+                navFm.setFragmentResultListener(APP_RATING_LIKE_DISLIKE_KEY, this) { _, bundle ->
+                    val isLikedClicked = bundle.getBoolean("isLikedClicked")
+                    LOGS.d("asclkasca: $isLikedClicked")
+                    if(isLikedClicked){
+                        viewModel.sessionManager.requestReviewIfAppropriate(this)
+                    }else{
+                        navFm.setFragmentResultListener(APP_RATING_DISLIKE_FEEDBACK_KEY, this) { _, bundle ->
+                            // Get reasons
+                            val selectedReasons: ArrayList<String> =
+                                bundle.getStringArrayList("selectedReasons") ?: arrayListOf()
+
+                            // Get feedback text
+                            val feedbackField: String =
+                                bundle.getString("feedbackField").orEmpty()
+
+                            LOGS.d("asclkasca, : selectedReasons: $selectedReasons\nfeedbackField: $feedbackField")
+
+                            if(selectedReasons.isNotEmpty() || feedbackField.isNotEmpty()){
+
+                            }
+                        }
+
+                        navController?.navigate(R.id.appRatingDislikeFeedbackBottomSheet)
+                    }
+                }
+
+                lifecycleScope.launch {
+                    delay(500L)
+//                    navController?.navigate(R.id.appRatingDislikeFeedbackBottomSheet)
+                    navController?.navigate(R.id.appRatingLikeDislikeBottomSheet)
+                    viewModel.sessionManager.reqAppRatingPop(false)
                 }
             }
         }
