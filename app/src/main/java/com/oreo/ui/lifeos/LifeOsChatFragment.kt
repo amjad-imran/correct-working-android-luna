@@ -374,10 +374,12 @@ class LifeOsChatFragment :
                     "camera" -> {
                         logChatPlusActionEvent(0)
                         launchCameraPicker()
+                        viewModel.mediaTypeName = "camera"
                     }
                     "photo" -> {
                         logChatPlusActionEvent(2)
                         pickImageLauncher.launch("image/*")
+                        viewModel.mediaTypeName = "image upload"
                     }
                     "file" -> {
                         logChatPlusActionEvent(1)
@@ -388,6 +390,7 @@ class LifeOsChatFragment :
                                 "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                             )
                         )
+                        viewModel.mediaTypeName = "file upload"
                     }
                 }
             }
@@ -415,9 +418,11 @@ class LifeOsChatFragment :
                 viewModel.sessionManager.logMoEngageAppEvent(
                     MoEngageLunaAppEvents.lifeos_chat_media,
                     hashMapOf(
-                        "source" to getSrcEventNameFromSrcKey()
+                        "source" to getSrcEventNameFromSrcKey(),
+                        "media_type" to (viewModel.mediaTypeName ?: "Unknown")
                     )
                 )
+                viewModel.mediaTypeName = null
             }
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.lifeos_message_sent,

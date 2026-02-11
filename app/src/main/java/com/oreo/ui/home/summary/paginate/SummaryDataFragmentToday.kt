@@ -796,6 +796,9 @@ class SummaryDataFragmentToday :
                             mainViewModel.navigateTo(BottomNavOption.LUNA_AI)
                         }
                     }
+                    viewModel.sessionManager.logMoEngageAppEvent(
+                        MoEngageLunaAppEvents.lifeos_discovery
+                    )
                 }
 
                 OSummaryHealthOverviewClickEnum.LifeOsAddAttachmentClicked -> {

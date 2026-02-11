@@ -119,6 +119,7 @@ class ChatGptViewModel
 
     @Volatile
     var pendingAttachment: AttachmentData? = null
+    var mediaTypeName: String ?= null
     val attachmentPreview = MutableLiveData<AttachmentData?>(null)
 
     val showSuggestedQuestions = MutableLiveData<Boolean>()

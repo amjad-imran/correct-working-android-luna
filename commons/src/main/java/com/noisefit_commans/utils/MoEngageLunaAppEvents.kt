@@ -337,6 +337,7 @@ object MoEngageLunaAppEvents {
     const val luna_file_upload_image = "luna_file_upload_image"
     const val luna_file_upload_file = "luna_file_upload_file"
     const val luna_file_upload_camera = "luna_file_upload_camera"
+    const val lifeos_discovery = "lifeos_discovery"
 
 
 }
