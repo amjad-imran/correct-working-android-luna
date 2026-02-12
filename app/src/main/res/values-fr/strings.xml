@@ -2530,5 +2530,8 @@ onjour, Luna"</string>
     <string name="text_what_didn_t_feel_right">Qu\'est-ce qui ne semblait pas correct ?</string>
     <string name="text_how_was_your_experience_with_luna">Comment était votre expérience avec Luna ?</string>
     <string name="text_tell_us_a_bit_more">Dites-nous en plus ?</string>
+    <string name="text_the_information_or_data_felt_inaccurate">Les informations ou les données semblaient inexactes</string>
+    <string name="text_the_app_is_clunky_and_difficult_to_use">L’application est maladroite et difficile à utiliser</string>
+    <string name="text_there_was_a_bug">Il y avait un bug</string>
 
 </resources>

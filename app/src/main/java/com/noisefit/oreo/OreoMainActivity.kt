@@ -1173,23 +1173,13 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                 val navFm = navHost.childFragmentManager
                 navFm.setFragmentResultListener(APP_RATING_LIKE_DISLIKE_KEY, this) { _, bundle ->
                     val isLikedClicked = bundle.getBoolean("isLikedClicked")
-                    LOGS.d("asclkasca: $isLikedClicked")
                     if(isLikedClicked){
                         viewModel.sessionManager.requestReviewIfAppropriate(this)
                     }else{
                         navFm.setFragmentResultListener(APP_RATING_DISLIKE_FEEDBACK_KEY, this) { _, bundle ->
-                            // Get reasons
-                            val selectedReasons: ArrayList<String> =
-                                bundle.getStringArrayList("selectedReasons") ?: arrayListOf()
-
-                            // Get feedback text
-                            val feedbackField: String =
-                                bundle.getString("feedbackField").orEmpty()
-
-                            LOGS.d("asclkasca, : selectedReasons: $selectedReasons\nfeedbackField: $feedbackField")
-
-                            if(selectedReasons.isNotEmpty() || feedbackField.isNotEmpty()){
-
+                            val submitSuccess = bundle.getBoolean("submitSuccess")
+                            if(submitSuccess==true){
+                                showShortToast(getString(R.string.text_thank_you_for_your_feedback))
                             }
                         }
 

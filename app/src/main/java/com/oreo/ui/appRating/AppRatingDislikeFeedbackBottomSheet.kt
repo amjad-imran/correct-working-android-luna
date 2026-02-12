@@ -15,6 +15,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAppRatingDislikeFeedbackBottomSheetBinding
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
+import com.oreo.ui.appRating.AppRatingDislikeFeedbackBSViewModel.FeedbackReason
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,8 +26,12 @@ class AppRatingDislikeFeedbackBottomSheet :
     ) {
 
     private val viewModel: AppRatingDislikeFeedbackBSViewModel by viewModels()
-    override fun initListener() {
 
+    override fun initListener() {
+        binding.ivClose.setOnClickListener {
+            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.app_rating_modal_dismissed)
+            navigateUpSafe()
+        }
     }
 
     override fun subscribeObservers() {
@@ -63,14 +69,30 @@ class AppRatingDislikeFeedbackBottomSheet :
         val state = viewModel.uiState.value
         if (!state.isSubmitEnabled || state.isSubmitting) return
 
-        val selected = state.selectedReasons.map { viewModel.getReasonString(it.labelRes) }
+        val selected = state.selectedReasons.map {
+            when(it){
+                FeedbackReason.ACCURACY -> "The information or data felt inaccurate"
+                FeedbackReason.SLOW_BUGGY -> "The app is clunky and difficult to use"
+                FeedbackReason.HARD_TO_FIND -> "There was a bug"
+                FeedbackReason.SOMETHING_ELSE -> "Something else"
+            }
+        }
         val feedbackField = state.details.trim()
 
+        viewModel.sessionManager.logMoEngageAppEvent(
+            MoEngageLunaAppEvents.app_rating_modal_negative_reason,
+            hashMapOf<String, Any>().apply {
+                this.put("reason", selected.toString())
+                if(feedbackField.isNotEmpty()){
+                    this.put("something_else", feedbackField)
+                }
+            }
+        )
+
         setFragmentResult(
-            APP_RATING_DISLIKE_FEEDBACK_KEY, // use your key (you had mismatched key in sample)
+            APP_RATING_DISLIKE_FEEDBACK_KEY,
             bundleOf(
-                "selectedReasons" to ArrayList(selected),
-                "feedbackField" to feedbackField,
+                "submitSuccess" to true
             )
         )
         navigateUpSafe()

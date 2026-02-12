@@ -2405,5 +2405,8 @@
     <string name="text_what_didn_t_feel_right">什么感觉不对？</string>
     <string name="text_how_was_your_experience_with_luna">你和Luna的体验如何？</string>
     <string name="text_tell_us_a_bit_more">能告诉我们更多吗？</string>
+    <string name="text_the_information_or_data_felt_inaccurate">信息或数据感觉不准确</string>
+    <string name="text_the_app_is_clunky_and_difficult_to_use">应用程序笨重且难以使用</string>
+    <string name="text_there_was_a_bug">出现了一个错误</string>
 
 </resources>

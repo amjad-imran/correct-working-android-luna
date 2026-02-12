@@ -2417,5 +2417,8 @@
     <string name="text_what_didn_t_feel_right">อะไรที่รู้สึกไม่ถูกต้อง?</string>
     <string name="text_how_was_your_experience_with_luna">ประสบการณ์ของคุณกับ Luna เป็นอย่างไร?</string>
     <string name="text_tell_us_a_bit_more">บอกเราเพิ่มเติมหน่อยได้ไหม?</string>
+    <string name="text_the_information_or_data_felt_inaccurate">ข้อมูลดูเหมือนไม่ถูกต้อง</string>
+    <string name="text_the_app_is_clunky_and_difficult_to_use">แอปใช้งานยากและไม่ลื่นไหล</string>
+    <string name="text_there_was_a_bug">พบข้อผิดพลาด</string>
 
 </resources>

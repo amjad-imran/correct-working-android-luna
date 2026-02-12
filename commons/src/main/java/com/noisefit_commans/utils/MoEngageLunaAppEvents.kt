@@ -338,5 +338,12 @@ object MoEngageLunaAppEvents {
     const val luna_file_upload_file = "luna_file_upload_file"
     const val luna_file_upload_camera = "luna_file_upload_camera"
 
+    // App Rating Popup
+
+    const val app_rating_modal_positive = "app_rating_modal_positive"
+    const val app_rating_modal_negative = "app_rating_modal_negative"
+    const val app_rating_modal_dismissed = "app_rating_modal_dismissed"
+    const val app_rating_modal_negative_reason = "app_rating_modal_negative_reason"
+
 
 }

@@ -838,6 +838,8 @@ class SessionManager
         delayMs: Long = 500,
         fallbackToStore: Boolean = true
     ) {
+        localDataStore.setAndGetLastAppReviewRequestTime(System.currentTimeMillis())
+
         val reviewManager = ReviewManagerFactory.create(activity)
 
         // Step 1: Ask Play for the "review flow"
@@ -858,7 +860,6 @@ class SessionManager
                 // Google doesn't expose that reliably, so usually do nothing here.
                 // If you *really* want fallback always, you could open store here,
                 // but that can be annoying UX.
-                localDataStore.setAndGetLastAppReviewRequestTime(System.currentTimeMillis()) // TODO: on top of function
             }
         }
     }

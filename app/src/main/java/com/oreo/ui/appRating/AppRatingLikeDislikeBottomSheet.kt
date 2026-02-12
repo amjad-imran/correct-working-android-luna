@@ -10,11 +10,15 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAppRatingLikeDislikeBottomSheetBinding
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
-import com.noisefit_commans.utils.LOGS
+import com.noisefit_commans.utils.MoEngageLunaAppEvents
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AppRatingLikeDislikeBottomSheet :
     BaseBottomSheetWithTransparent<FragmentAppRatingLikeDislikeBottomSheetBinding>(
         FragmentAppRatingLikeDislikeBottomSheetBinding::inflate
@@ -24,13 +28,18 @@ class AppRatingLikeDislikeBottomSheet :
             const val APP_RATING_LIKE_DISLIKE_KEY = "APP_RATING_LIKE_DISLIKE_KEY"
         }
 
+    @Inject
+    lateinit var sessionManager: SessionManager
+
     override fun initListener() {
         binding.ivThumbsUp.setOnClickListener {
+            sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.app_rating_modal_positive)
             binding.ivThumbsUp.setImageResource(R.drawable.ic_thumbs_up_pressed_app_rating)
             handleLikeDislikeClicked(true)
         }
 
         binding.ivThumbsDown.setOnClickListener {
+            sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.app_rating_modal_negative)
             binding.ivThumbsDown.setImageResource(R.drawable.ic_thumbs_down_pressed_app_rating)
             handleLikeDislikeClicked(false)
         }
@@ -40,7 +49,7 @@ class AppRatingLikeDislikeBottomSheet :
         binding.ivThumbsDown.isClickable = false
         binding.ivThumbsUp.isClickable = false
         lifecycleScope.launch {
-            delay(1000L)
+            delay(500L)
             navigateUpSafe()
             setFragmentResult(
                 APP_RATING_LIKE_DISLIKE_KEY,
@@ -48,7 +57,6 @@ class AppRatingLikeDislikeBottomSheet :
                     this.putBoolean("isLikedClicked", isLiked)
                 }
             )
-            LOGS.d("asclkasca vioasklvn: $isLiked")
         }
     }
 

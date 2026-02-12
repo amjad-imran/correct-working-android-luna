@@ -2435,5 +2435,8 @@
     <string name="text_what_didn_t_feel_right">Что не казалось правильным?</string>
     <string name="text_how_was_your_experience_with_luna">Как прошло ваше знакомство с Luna?</string>
     <string name="text_tell_us_a_bit_more">Расскажите нам подробнее?</string>
+    <string name="text_the_information_or_data_felt_inaccurate">Информация или данные казались неточными</string>
+    <string name="text_the_app_is_clunky_and_difficult_to_use">Приложение неудобное и сложное в использовании</string>
+    <string name="text_there_was_a_bug">Произошла ошибка</string>
 
 </resources>

@@ -2381,5 +2381,8 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_what_didn_t_feel_right">¿Qué no se sintió bien?</string>
     <string name="text_how_was_your_experience_with_luna">¿Cómo fue tu experiencia con Luna?</string>
     <string name="text_tell_us_a_bit_more">¿Puedes contarnos un poco más?</string>
+    <string name="text_the_information_or_data_felt_inaccurate">La información o los datos parecían inexactos</string>
+    <string name="text_the_app_is_clunky_and_difficult_to_use">La aplicación es torpe y difícil de usar</string>
+    <string name="text_there_was_a_bug">Hubo un error</string>
 
 </resources>
