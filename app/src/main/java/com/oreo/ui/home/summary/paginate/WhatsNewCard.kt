@@ -51,9 +51,11 @@ import androidx.compose.foundation.pager.PageSize
 import androidx.compose.material3.IconButton
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.viewpager2.widget.ViewPager2
+import coil.request.ImageRequest
 import com.noisefit_commans.utils.LOGS
 
 @Composable
@@ -163,7 +165,10 @@ fun BannerCard(
     ) {
         Box {
             AsyncImage(
-                model = banner.imageUrl[userSelectedLanguage],
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(banner.imageUrl[userSelectedLanguage])
+                    .allowHardware(false)
+                    .build(),
                 contentDescription = null,
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier.fillMaxSize()
