@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -49,6 +50,9 @@ import com.oreo.ui.stress.help.StressInfoCardAction
 import com.oreo.ui.stress.help.StressUnderstandingImageAdapter
 import com.oreo.util.DateTimeUtil
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -64,8 +68,6 @@ class OStressDataMovementFragment :
 
     @Inject
     lateinit var vibrationUtils: VibrationUtils
-
-    private val setBackHandler = Handler(Looper.getMainLooper())
     private val howItWorksAdapter: StressUnderstandingImageAdapter by lazy {
         StressUnderstandingImageAdapter(object : StressInfoCardAction {
             override fun onStressInfoCardClicked() {
@@ -76,10 +78,7 @@ class OStressDataMovementFragment :
         })
     }
 
-    private var setBackRunnable = Runnable {
-        sharedViewModel.setSelectedType(viewModel.getStressType(viewModel.lastStressValue))
-    }
-
+    private var setBackJob: Job? = null
 
     companion object {
 
@@ -191,8 +190,15 @@ class OStressDataMovementFragment :
         binding.lytTopStressGraph.tvStressStatus.setTextColor(resources.getColor(stressColor, null))
 
         viewModel.lastStressValue = value
-        setBackHandler.removeCallbacks(setBackRunnable)
-        setBackHandler.postDelayed(setBackRunnable, 200)
+
+        setBackJob?.cancel()
+        setBackJob = viewLifecycleOwner.lifecycleScope.launch {
+            delay(200)
+            if (!isAdded) return@launch
+            sharedViewModel.setSelectedType(
+                viewModel.getStressType(viewModel.lastStressValue)
+            )
+        }
 
         val newDegree = viewModel.getRotationDegree(value)
 
@@ -829,6 +835,11 @@ class OStressDataMovementFragment :
                 dayData
             )
         )
+    }
+
+    override fun onDestroyView() {
+        setBackJob?.cancel()
+        super.onDestroyView()
     }
 
 }
