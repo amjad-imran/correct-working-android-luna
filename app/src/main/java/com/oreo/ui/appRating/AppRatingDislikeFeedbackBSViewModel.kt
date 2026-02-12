@@ -1,8 +1,8 @@
 package com.oreo.ui.appRating
 
-import androidx.annotation.StringRes
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.luna.R
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AppRatingDislikeFeedbackBSViewModel @Inject constructor(
-    val resourcesProvider: ResourcesProvider
+    val resourcesProvider: ResourcesProvider,
+    val sessionManager: SessionManager,
 ): BaseViewModel() {
 
     private val _uiState = MutableStateFlow(FeedbackSheetUiState(
@@ -61,9 +62,9 @@ class AppRatingDislikeFeedbackBSViewModel @Inject constructor(
     fun getReasonString(stringId: Int) = resourcesProvider.getString(stringId)
 
     enum class FeedbackReason(val labelRes: Int) {
-        ACCURACY(R.string.text_the_accuracy_felt_off),
-        SLOW_BUGGY(R.string.text_the_app_felt_slow_or_buggy),
-        HARD_TO_FIND(R.string.text_it_was_hard_to_find_what_i_needed),
+        ACCURACY(R.string.text_the_information_or_data_felt_inaccurate),
+        SLOW_BUGGY(R.string.text_the_app_is_clunky_and_difficult_to_use),
+        HARD_TO_FIND(R.string.text_there_was_a_bug),
         SOMETHING_ELSE(R.string.text_something_else)
     }
 

@@ -2435,5 +2435,8 @@
     <string name="text_what_didn_t_feel_right">O que não parecia certo?</string>
     <string name="text_how_was_your_experience_with_luna">Como foi sua experiência com a Luna?</string>
     <string name="text_tell_us_a_bit_more">Conte-nos um pouco mais?</string>
+    <string name="text_the_information_or_data_felt_inaccurate">As informações ou os dados pareciam imprecisos</string>
+    <string name="text_the_app_is_clunky_and_difficult_to_use">O aplicativo é desajeitado e difícil de usar</string>
+    <string name="text_there_was_a_bug">Houve um erro</string>
 
 </resources>
