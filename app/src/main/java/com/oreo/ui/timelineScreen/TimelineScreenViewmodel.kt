@@ -171,7 +171,7 @@ class TimelineScreenViewmodel @Inject constructor(
         }
     }
 
-    fun onCrossClicked(id: Int?, selectedDate: String?) {
+    fun onCrossClicked(id: Int?, selectedDate: String?, onSuccess: () -> Unit) {
         if(id == null) return
 
         viewModelScope.launch {
@@ -224,7 +224,7 @@ class TimelineScreenViewmodel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-
+                            onSuccess()
                         }
                     }
                 }

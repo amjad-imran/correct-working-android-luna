@@ -56,7 +56,9 @@ class TimelineScreenFragment :
                         "category" to "${habit.type}"
                     )
                 )
-                viewModel.onCrossClicked(habit.timeTrackerOptionId, mainViewModel.selectedDate)
+                viewModel.onCrossClicked(habit.timeTrackerOptionId, mainViewModel.selectedDate){
+                    mainViewModel.getUserSavedHabits()
+                }
             },
             onCheck = { habit ->
                 mainViewModel.sessionManager.logMoEngageAppEvent(

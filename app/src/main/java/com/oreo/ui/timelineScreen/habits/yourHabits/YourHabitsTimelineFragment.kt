@@ -3,6 +3,7 @@ package com.oreo.ui.timelineScreen.habits.yourHabits
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.moengage.core.internal.utils.showToast
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentYourHabitsTimelineBinding
+import com.noisefit.oreo.OreoMainViewModel
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.ui.BaseFragment
 import com.noisefit_commans.ui.gone
@@ -29,6 +31,7 @@ import kotlin.getValue
 class YourHabitsTimelineFragment : BaseFragment<FragmentYourHabitsTimelineBinding>(FragmentYourHabitsTimelineBinding::inflate) {
 
     private val viewModel: YourHabitsTimelineViewModel by viewModels()
+    private val mainViewModel: OreoMainViewModel by activityViewModels()
 
     private val args: YourHabitsTimelineFragmentArgs by navArgs()
 
@@ -45,7 +48,9 @@ class YourHabitsTimelineFragment : BaseFragment<FragmentYourHabitsTimelineBindin
                             "category" to "${habit.type}"
                         )
                     )
-                    viewModel.onCrossClicked(habit.timeTrackerOptionId)
+                    viewModel.onCrossClicked(habit.timeTrackerOptionId){
+                        mainViewModel.getUserSavedHabits()
+                    }
                 }
             },
             onCheck = { habit, isAlreadyMarked ->

@@ -36,7 +36,7 @@ class YourHabitsTimelineViewModel @Inject constructor(
     private val _allHabits = MutableStateFlow<List<Options>>(emptyList())
     val allHabits: StateFlow<List<Options>> = _allHabits.asStateFlow()
 
-    fun onCrossClicked(id: Int?) {
+    fun onCrossClicked(id: Int?, onSuccess: () -> Unit) {
         if(id == null) return
 
         viewModelScope.launch {
@@ -82,7 +82,7 @@ class YourHabitsTimelineViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         resource.data?.data?.let {
-
+                            onSuccess()
                         }
                     }
                 }
