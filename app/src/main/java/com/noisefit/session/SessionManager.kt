@@ -812,7 +812,7 @@ class SessionManager
     }
 
     private fun shouldRequestReview(): Boolean {
-        val reviewRequestIntervalDays = 7L
+        val reviewRequestIntervalDays = 30L
         val lastReviewRequestTime = localDataStore.setAndGetLastAppReviewRequestTime(null)
         if(lastReviewRequestTime == 0L) return true
 

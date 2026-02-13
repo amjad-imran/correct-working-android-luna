@@ -29,7 +29,6 @@ class AppRatingDislikeFeedbackBottomSheet :
 
     override fun initListener() {
         binding.ivClose.setOnClickListener {
-            viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.app_rating_modal_dismissed)
             navigateUpSafe()
         }
     }
@@ -116,6 +115,11 @@ class AppRatingDislikeFeedbackBottomSheet :
             bottomSheet.setBackgroundResource(android.R.color.transparent)
         }
         return bottomSheetDialog
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.app_rating_modal_dismissed)
     }
 
 }

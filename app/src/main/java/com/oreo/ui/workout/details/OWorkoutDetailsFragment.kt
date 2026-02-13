@@ -447,4 +447,10 @@ class OWorkoutDetailsFragment :
         mAdapter.setDataSet(activityList)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        mainViewModel.sessionManager.reqAppRatingPop(true)
+    }
+
 }
