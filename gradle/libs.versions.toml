@@ -22,6 +22,7 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 kotlinBom = "2.0.21"
 lifecycleRuntimeKtx = "2.9.1"
+mixpanelAndroidVersion = "8.2.7"
 navigationFragmentKtx = "2.9.1"
 navigationUiKtx = "2.9.1"
 anrwatchdog = "1.4.0"
@@ -114,6 +115,7 @@ elvishew-xlog = { group = "com.elvishew", name = "xlog", version.ref = "elvishew
 junit = { module = "junit:junit", version.ref = "junit" }
 kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlinBom" }
 mindinventory-shimmertextview = { module = "com.github.Mindinventory:ShimmerTextView", version.ref = "shimmertextviewVersion" }
+mixpanel-android = { module = "com.mixpanel.android:mixpanel-android", version.ref = "mixpanelAndroidVersion" }
 oksse = { module = "com.github.heremaps:oksse", version.ref = "oksse" }
 sdp-android = { module = "com.intuit.sdp:sdp-android", version.ref = "sdpAndroid" }
 shimmer = { module = "com.facebook.shimmer:shimmer", version.ref = "shimmerVersion" }

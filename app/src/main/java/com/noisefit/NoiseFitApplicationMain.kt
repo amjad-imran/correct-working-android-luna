@@ -34,6 +34,7 @@ import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
 import com.noisefit.watch.ApplicationHandler
 import com.noisefit_commans.NoisefitApplication
+import com.noisefit_commans.analytics.MixPanelAnalytics
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.utils.AppLogs
 import com.noisefit_commans.utils.FileLogsUtils
@@ -114,6 +115,7 @@ class NoiseFitApplicationMain : NoisefitApplication(), Configuration.Provider {
             isDebug = BuildConfig.DEBUG
         )
         RemoteConfigManager.fetchAndActivate()
+        MixPanelAnalytics.initialize(this,  BuildConfig.MIXPANEL_TOKEN)
     }
 
     private fun initialiseFreshChat() {

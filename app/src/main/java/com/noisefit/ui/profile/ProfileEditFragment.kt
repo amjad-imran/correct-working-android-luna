@@ -354,12 +354,8 @@ class ProfileEditFragment :
         viewModel.sessionManager.addUserAttributeToMoEngage(true,
             HashMap<String, Any>().apply
             {
-                this[MoEngageAppEventAttributes.name] = user.firstName.toString()
                 this[MoEngageAppEventAttributes.gender] = gender
                 this[MoEngageAppEventAttributes.age] = user.userInfo?.age ?: 0
-                this[MoEngageAppEventAttributes.dob] = user.userInfo?.dob.toString()
-                this[MoEngageAppEventAttributes.height] = user.userInfo?.height ?: 0
-                this[MoEngageAppEventAttributes.weight] = user.userInfo?.weight ?: 0
             })
     }
 

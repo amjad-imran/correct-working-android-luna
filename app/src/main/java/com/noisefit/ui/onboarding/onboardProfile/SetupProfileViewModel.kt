@@ -803,12 +803,8 @@ class SetupProfileViewModel
         sessionManager.addUserAttributeToMoEngage(true,
             HashMap<String, Any>().apply
             {
-                this[MoEngageAppEventAttributes.name] = user.firstName ?: ""
                 this[MoEngageAppEventAttributes.gender] = gender
                 this[MoEngageAppEventAttributes.age] = userInfo?.age ?: 0
-                this[MoEngageAppEventAttributes.dob] = userInfo?.dob.toString()
-                this[MoEngageAppEventAttributes.height] = userInfo?.height ?: 0
-                this[MoEngageAppEventAttributes.weight] = userInfo?.weight ?: 0
                 val connectedDeviceData = ringDataStore.getRingDevice()
                 try {
                     if (connectedDeviceData != null) {

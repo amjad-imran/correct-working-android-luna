@@ -69,7 +69,7 @@ dependencies {
     implementation(libs.konfetti.xml)
     implementation(libs.konfetti.core)
 
-
+    implementation(libs.mixpanel.android)
 
 
 }
