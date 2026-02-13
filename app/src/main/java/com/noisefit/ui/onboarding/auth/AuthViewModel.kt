@@ -13,6 +13,7 @@ import com.noisefit.data.repository.abstraction.UserRepository
 import com.noisefit.luna.R
 import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
+import com.noisefit_commans.analytics.MixPanelAnalytics
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
@@ -215,6 +216,9 @@ class AuthViewModel @Inject constructor(
                             localDataStore.updateUserToken(it.token)
                             localDataStore.setIsInDemoMode(it.token?.multiLogin?:false)
                             authSuccess.postValue(Event(true))
+                            it.user?.let{ user ->
+                                MixPanelAnalytics.identifyUser(user.id.toString())
+                            }
                             loginSuccessEvent()
 
                             /* if (isOutSideIndia) {
@@ -262,12 +266,8 @@ class AuthViewModel @Inject constructor(
             "Other"
         }
         sessionManager.addUserAttributeToMoEngage(true, HashMap<String, Any>().apply {
-            this[MoEngageAppEventAttributes.name] = user?.firstName ?: ""
             this[MoEngageAppEventAttributes.gender] = gender
             this[MoEngageAppEventAttributes.age] = userInfo?.age ?: 0
-            this[MoEngageAppEventAttributes.dob] = userInfo?.dob.toString()
-            this[MoEngageAppEventAttributes.height] = userInfo?.height ?: 0
-            this[MoEngageAppEventAttributes.weight] = userInfo?.weight ?: 0
             val connectedDeviceData = ringDataStore.getRingDevice()
             try {
                 if (connectedDeviceData != null) {
@@ -453,12 +453,8 @@ class AuthViewModel @Inject constructor(
         }
 
         sessionManager.addUserAttributeToMoEngage(true, HashMap<String, Any>().apply {
-            this[MoEngageAppEventAttributes.name] = user?.firstName ?: ""
             this[MoEngageAppEventAttributes.gender] = gender
             this[MoEngageAppEventAttributes.age] = userInfo?.age ?: 0
-            this[MoEngageAppEventAttributes.dob] = userInfo?.dob.toString()
-            this[MoEngageAppEventAttributes.height] = userInfo?.height ?: 0
-            this[MoEngageAppEventAttributes.weight] = userInfo?.weight ?: 0
             val connectedDeviceData = ringDataStore.getRingDevice()
             try {
                 if (connectedDeviceData != null) {
@@ -683,12 +679,8 @@ class AuthViewModel @Inject constructor(
         }
 
         sessionManager.addUserAttributeToMoEngage(true, HashMap<String, Any>().apply {
-            this[MoEngageAppEventAttributes.name] = user?.firstName ?: ""
             this[MoEngageAppEventAttributes.gender] = gender
             this[MoEngageAppEventAttributes.age] = userInfo?.age ?: 0
-            this[MoEngageAppEventAttributes.dob] = userInfo?.dob.toString()
-            this[MoEngageAppEventAttributes.height] = userInfo?.height ?: 0
-            this[MoEngageAppEventAttributes.weight] = userInfo?.weight ?: 0
             val connectedDeviceData = ringDataStore.getRingDevice()
             try {
                 if (connectedDeviceData != null) {

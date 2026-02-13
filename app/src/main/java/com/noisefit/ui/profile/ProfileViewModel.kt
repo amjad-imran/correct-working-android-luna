@@ -107,6 +107,43 @@ constructor(
         return "Not Set"
     }
 
+    fun getMaskedPhone(): String {
+        val phone = _user.value?.getMobileNumber() ?: ""
+        val countryCode = phone.takeWhile { !it.isDigit() || it == '+' }
+        val digits = phone.filter { it.isDigit() }
+
+        if (digits.length <= 4) return phone
+
+        val firstTwo = digits.take(2)
+        val lastTwo = digits.takeLast(2)
+        val maskedSection = "*".repeat(digits.length - 4)
+
+        return "$countryCode$firstTwo$maskedSection$lastTwo"
+    }
+
+    fun getMaskedEmail(): String {
+        val email = _user.value?.email ?: ""
+        val parts = email.split("@")
+        if (parts.size != 2) return email
+
+        val name = parts[0]
+        val domain = parts[1]
+
+        val maskedName = when {
+            name.length <= 2 -> name.first() + "***"
+            else -> name.take(2) + "*".repeat(name.length - 2)
+        }
+
+        val domainParts = domain.split(".")
+        val domainName = domainParts[0]
+        val extension = domainParts.getOrElse(1) { "" }
+
+        val maskedDomain = domainName.take(2) + "***"
+
+        return "$maskedName@$maskedDomain.$extension"
+    }
+
+
     fun getUnitValue(): String {
         val unitName = localDataStore.getUnit().name
         return if (unitName.lowercase() == HeightUnitSystem.METRIC.name.lowercase())
