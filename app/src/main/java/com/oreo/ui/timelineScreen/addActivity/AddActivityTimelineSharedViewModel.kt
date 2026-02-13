@@ -41,6 +41,8 @@ class AddActivityTimelineSharedViewModel @Inject constructor(
 
     val deleteBtnClickedEvent = MutableLiveData<Event<Boolean>>()
 
+    var isDeleteClicked = false
+
     fun loadFragmentByType(type: AddActivityItemsEnum, editData: ItemTimelineResponseModel?=null, lunaOption: String ?= null) {
         loadFragment.postValue(Event(Triple(type, editData, lunaOption)))
     }

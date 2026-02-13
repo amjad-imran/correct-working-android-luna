@@ -2,8 +2,8 @@ package com.oreo.ui.appRating
 
 import android.app.Dialog
 import android.os.Bundle
+import android.view.View
 import android.widget.FrameLayout
-import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -12,6 +12,8 @@ import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAppRatingLikeDislikeBottomSheetBinding
 import com.noisefit.session.SessionManager
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
+import com.noisefit_commans.ui.invisible
+import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.MoEngageLunaAppEvents
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -31,6 +33,27 @@ class AppRatingLikeDislikeBottomSheet :
     @Inject
     lateinit var sessionManager: SessionManager
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setUi()
+    }
+
+    private fun setUi() {
+        val isLikeFlow = arguments?.getBoolean("isLikeFlow") ?: true
+        if(isLikeFlow){
+            binding.llSuccessContainer.invisible()
+            binding.groupRating.visible()
+        }else{
+            binding.groupRating.invisible()
+            binding.llSuccessContainer.visible()
+            lifecycleScope.launch {
+                delay(1500L)
+                navigateUpSafe()
+            }
+        }
+    }
+
     override fun initListener() {
         binding.ivThumbsUp.setOnClickListener {
             sessionManager.logMoEngageAppEvent(MoEngageLunaAppEvents.app_rating_modal_positive)
@@ -49,7 +72,11 @@ class AppRatingLikeDislikeBottomSheet :
         binding.ivThumbsDown.isClickable = false
         binding.ivThumbsUp.isClickable = false
         lifecycleScope.launch {
-            delay(500L)
+            if(isLiked){
+                showSuccessState()
+            }else{
+                delay(500L)
+            }
             navigateUpSafe()
             setFragmentResult(
                 APP_RATING_LIKE_DISLIKE_KEY,
@@ -58,6 +85,34 @@ class AppRatingLikeDislikeBottomSheet :
                 }
             )
         }
+    }
+
+    suspend fun showSuccessState() {
+        val ratingViews = listOf(binding.tvTitle, binding.ivThumbsUp, binding.ivThumbsDown)
+
+        ratingViews.forEach { view ->
+            view.animate()
+                .alpha(0f)
+                .setDuration(1000)
+                .withEndAction {
+                    view.invisible()
+                }
+                .start()
+        }
+
+        delay(1000L)
+
+        binding.llSuccessContainer.apply {
+            alpha = 0f
+            visible()
+
+            animate()
+                .alpha(1f)
+                .setDuration(1000)
+                .start()
+        }
+
+        delay(1500L)
     }
 
     override fun subscribeObservers() {
