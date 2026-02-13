@@ -1,9 +1,9 @@
 package com.noisefit_commans.analytics
 
 import android.content.Context
-import android.util.Log
 import org.json.JSONObject
 import com.mixpanel.android.mpmetrics.MixpanelAPI
+import com.noisefit_commans.BuildConfig
 
 object MixPanelAnalytics {
     private const val TAG = "MixPanelAnalytics"
@@ -12,6 +12,7 @@ object MixPanelAnalytics {
     private var isInitialized = false
 
     fun initialize(context: Context, token: String) {
+        if(BuildConfig.DEBUG) return
         if (isInitialized) return
         synchronized(this) {
             if (!isInitialized) {
@@ -32,7 +33,6 @@ object MixPanelAnalytics {
         properties: Map<String, Any>? = null
     ) {
         if (!isInitialized) {
-            log("Mixpanel not initialized")
             return
         }
         val json = properties.toJson()
@@ -51,32 +51,6 @@ object MixPanelAnalytics {
         }
     }
 
-    fun registerSuperProperties(properties: Map<String, Any>) {
-        if (!isInitialized) return
-        mixpanel?.registerSuperProperties(properties.toJson())
-    }
-
-    fun flush() {
-        mixpanel?.flush()
-    }
-
-    fun reset() {
-        mixpanel?.reset()
-    }
-
-    fun optOutTracking() {
-        mixpanel?.optOutTracking()
-    }
-
-    fun optInTracking() {
-        mixpanel?.optInTracking()
-    }
-
-    fun destroy() {
-        mixpanel = null
-        isInitialized = false
-    }
-
     private fun Map<String, Any>?.toJson(): JSONObject? {
         if (this.isNullOrEmpty()) return null
         val json = JSONObject()
@@ -84,9 +58,5 @@ object MixPanelAnalytics {
             json.put(k, v)
         }
         return json
-    }
-
-    private fun log(msg: String) {
-        Log.d(TAG, msg)
     }
 }
