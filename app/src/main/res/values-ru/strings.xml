@@ -2438,5 +2438,6 @@
     <string name="text_the_information_or_data_felt_inaccurate">Информация или данные казались неточными</string>
     <string name="text_the_app_is_clunky_and_difficult_to_use">Приложение неудобное и сложное в использовании</string>
     <string name="text_there_was_a_bug">Произошла ошибка</string>
+    <string name="text_thanks_for_sharing_nwe_are_working_to_make_this_better">Спасибо за ваш отзыв.\nМы работаем над тем, чтобы улучшить это.</string>
 
 </resources>

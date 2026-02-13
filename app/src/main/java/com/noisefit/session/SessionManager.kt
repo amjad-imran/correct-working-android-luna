@@ -820,6 +820,12 @@ class SessionManager
     }
 
     private fun shouldRequestReview(): Boolean {
+        val minRegisterDayCount = 30
+        val currentRegisterDayCount = ringDataStore.getRegisterDay() ?: -1
+        if(currentRegisterDayCount <= minRegisterDayCount){
+            return false
+        }
+
         val reviewRequestIntervalDays = 30L
         val lastReviewRequestTime = localDataStore.setAndGetLastAppReviewRequestTime(null)
         if(lastReviewRequestTime == 0L) return true

@@ -2414,5 +2414,6 @@
     <string name="text_the_information_or_data_felt_inaccurate">Die Informationen oder Daten wirkten ungenau</string>
     <string name="text_the_app_is_clunky_and_difficult_to_use">Die App ist umständlich und schwer zu bedienen</string>
     <string name="text_there_was_a_bug">Es gab einen Fehler</string>
+    <string name="text_thanks_for_sharing_nwe_are_working_to_make_this_better">Vielen Dank für dein Feedback.\nWir arbeiten daran, dies zu verbessern.</string>
 
 </resources>

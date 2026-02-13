@@ -57,6 +57,47 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:constraint_referenced_ids="tvTitle,ivThumbsUp,ivThumbsDown" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/llSuccessContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="40dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/view2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view1" >
+
+        <ImageView
+            android:id="@+id/imageView130"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_check_success_app_rating"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            style="@style/S16_GoogleSansFlex"
+            android:textAlignment="center"
+            android:layout_marginTop="16dp"
+            android:text="@string/text_thanks_for_sharing_nwe_are_working_to_make_this_better"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView130" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <View
         android:id="@+id/view2"
         android:layout_width="0dp"
