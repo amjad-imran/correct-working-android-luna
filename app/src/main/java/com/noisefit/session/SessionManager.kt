@@ -536,15 +536,6 @@ class SessionManager
             //identifiers
             val user = localDataStore.getUser()
             MoEAnalyticsHelper.setUniqueId(context, user?.id.toString())
-            MoEAnalyticsHelper.setEmailId(context, user?.email.toString())
-            fUser.email = user?.email
-            if (!user?.mobile.isNullOrEmpty()) {
-                val phoneNumber: String = "+91" + user?.mobile.toString()
-                MoEAnalyticsHelper.setMobileNumber(context, phoneNumber.trim())
-                fUser.setPhone("+91", user?.mobile)
-            }
-
-
         }
 
     }

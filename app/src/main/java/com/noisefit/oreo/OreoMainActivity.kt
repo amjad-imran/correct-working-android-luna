@@ -1622,7 +1622,7 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
         //viewModel.shouldResetMasterDates()
 
 
-        viewModel.loginFreshChatUser()
+//        viewModel.loginFreshChatUser()
 
         viewModel.incrementOpenCount()
 

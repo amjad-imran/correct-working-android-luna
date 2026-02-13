@@ -1,12 +1,8 @@
 package com.noisefit_commans.utils
 
 object MoEngageAppEventAttributes {
-    const val name = "name"
     const val gender = "gender"
     const val age = "age"
-    const val dob = "dob"
-    const val height = "height"
-    const val weight = "weight"
     const val notification_state = "notification_state"
     const val personality_type = "personality_type"
     const val pair_device_name = "pair_device_name"

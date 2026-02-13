@@ -16,15 +16,6 @@ constructor(var localDataStore: DataStoredInterface, var ringDataStore: RingData
             user.id?.let { userId ->
                 FirebaseCrashlytics.getInstance().setUserId(userId.toString())
             }
-            user.email?.let { email ->
-                FirebaseCrashlytics.getInstance().setCustomKey("email", email)
-            }
-            user.firstName?.let { name ->
-                FirebaseCrashlytics.getInstance().setCustomKey("name", name)
-            }
-            user.mobile?.let { mobile ->
-                FirebaseCrashlytics.getInstance().setCustomKey("mobile", mobile)
-            }
         }
 
         ringDataStore.getRingDevice()?.let { colorFitDevice ->
