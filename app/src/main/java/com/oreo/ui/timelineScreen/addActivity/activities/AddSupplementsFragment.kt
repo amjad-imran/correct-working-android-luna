@@ -205,10 +205,6 @@ class AddSupplementsFragment : BaseFragment<FragmentAddSupplementsBinding>(Fragm
                 }
                 viewModel.isListLoadedFirstTime = false
             }
-
-            binding.rvOptions.doOnNextLayout {
-                capRvHeightToPercent(binding.rvOptions, binding.root, 0.70f)
-            }
         }
 
         viewModel.onAddSuccess.observe(this){
