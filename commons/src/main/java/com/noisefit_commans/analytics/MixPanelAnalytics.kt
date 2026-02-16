@@ -6,7 +6,6 @@ import com.mixpanel.android.mpmetrics.MixpanelAPI
 import com.noisefit_commans.BuildConfig
 
 object MixPanelAnalytics {
-    private const val TAG = "MixPanelAnalytics"
     @Volatile
     private var mixpanel: MixpanelAPI? = null
     private var isInitialized = false
