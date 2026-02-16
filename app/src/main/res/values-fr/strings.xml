@@ -2534,5 +2534,6 @@ onjour, Luna"</string>
     <string name="text_the_app_is_clunky_and_difficult_to_use">L’application est maladroite et difficile à utiliser</string>
     <string name="text_there_was_a_bug">Il y avait un bug</string>
     <string name="text_thanks_for_sharing_nwe_are_working_to_make_this_better">Merci pour votre retour.\nNous travaillons à améliorer cela.</string>
+    <string name="text_glad_you_like">Content que ça vous ait plu !</string>
 
 </resources>

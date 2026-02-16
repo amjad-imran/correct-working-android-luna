@@ -35,16 +35,17 @@ class AppRatingLikeDislikeBottomSheet :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setUi()
     }
 
     private fun setUi() {
         val isLikeFlow = arguments?.getBoolean("isLikeFlow") ?: true
         if(isLikeFlow){
+            binding.tvStatusText.text = getString(R.string.text_glad_you_like)
             binding.llSuccessContainer.invisible()
             binding.groupRating.visible()
         }else{
+            binding.tvStatusText.text = getString(R.string.text_thanks_for_sharing_nwe_are_working_to_make_this_better)
             binding.groupRating.invisible()
             binding.llSuccessContainer.visible()
             lifecycleScope.launch {

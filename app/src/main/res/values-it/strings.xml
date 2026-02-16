@@ -2416,5 +2416,6 @@
     <string name="text_the_app_is_clunky_and_difficult_to_use">L’app è macchinosa e difficile da usare</string>
     <string name="text_there_was_a_bug">C’era un bug</string>
     <string name="text_thanks_for_sharing_nwe_are_working_to_make_this_better">Grazie per il tuo feedback.\nStiamo lavorando per migliorarlo.</string>
+    <string name="text_glad_you_like">Sono felice che ti sia piaciuto!</string>
 
 </resources>
