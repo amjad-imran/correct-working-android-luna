@@ -14,7 +14,6 @@ import android.os.Looper
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
 import com.noisefit.luna.R
 import com.noisefit.util.ApplicationUtils
@@ -23,7 +22,6 @@ import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.sleep2.internal.DEFAULT_LONG_PRESS_TIMEOUT
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
-import java.time.LocalDate
 import java.util.Locale
 import kotlin.math.roundToInt
 
@@ -81,12 +79,12 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
 
     private fun init(attrs: AttributeSet?) {
 
-        val fontGilroy =
-            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
+        val font =
+            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.google_sans_flex_medium)
 
         xAxisPaint = Paint().apply {
             this.color = Color.parseColor("#40ffffff")
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(12f).toFloat()
         }
 
@@ -96,7 +94,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
 
         barTextPaint = Paint().apply {
             this.color = Color.parseColor("#96ffffff")
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(12f).toFloat()
         }
         avgBackPaint = Paint().apply {
@@ -104,7 +102,7 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
         }
         barTextPaintI = Paint().apply {
             this.color = Color.parseColor("#40ffffff")
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(12f).toFloat()
         }
 
@@ -114,12 +112,12 @@ class SleepSingleBarChart constructor(context: Context?, attrs: AttributeSet?) :
         }
         xTextPaint = Paint().apply {
             this.color = Color.parseColor("#20FFFFFF")
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(12f).toFloat()
         }
         avgTextPaint = Paint().apply {
             this.color = Color.parseColor("#ffffff")
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(9f).toFloat()
         }
 

@@ -51,8 +51,8 @@ class CircadianGraph @JvmOverloads constructor(
 
     private val textPaint = Paint().apply {
         color = "#555A5E".toColorInt()
-        val fontGilroy = ResourcesCompat.getFont(context, com.noisefit_commans.R.font.gilroy_medium)
-        typeface = fontGilroy
+        val fontGoogleSans = ResourcesCompat.getFont(context, com.noisefit_commans.R.font.google_sans_flex_medium)
+        typeface = fontGoogleSans
         textSize = 24f
         textAlign = Paint.Align.CENTER
         isAntiAlias = true

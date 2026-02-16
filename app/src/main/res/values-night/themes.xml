@@ -34,85 +34,12 @@
         <item name="android:foreground">?android:attr/selectableItemBackgroundBorderless</item>
     </style>
 
-    <!--<style name="BaseText">
-        <item name="android:background">@android:color/transparent</item>
-        <item name="fontFamily">@font/gilroy_medium</item>
-    </style>
-
-    <style name="BaseTextRegular">
-        <item name="android:background">@android:color/transparent</item>
-        <item name="fontFamily">@font/gilroy_regular</item>
-    </style>
-
-
-    <style name="H1" parent="BaseText">
-        <item name="android:lineSpacingExtra">8sp</item>
-        <item name="android:textColor">@color/md_theme_dark_text_color_h1</item>
-        <item name="android:textSize">@dimen/text_36sp</item>
-    </style>
-
-    <style name="H2" parent="BaseText">
-        <item name="android:lineSpacingExtra">8sp</item>
-        <item name="android:textSize">@dimen/text_24sp</item>
-        <item name="android:textColor">@color/md_theme_dark_text_color_h2</item>
-    </style>
-
-    <style name="H3" parent="BaseText">
-        <item name="android:lineSpacingExtra">12sp</item>
-        <item name="android:textColor">@color/md_theme_dark_text_color_h3</item>
-        <item name="android:textSize">@dimen/text_20sp</item>
-    </style>
-
-
-    <style name="H4" parent="BaseText">
-        <item name="android:lineSpacingExtra">14sp</item>
-        <item name="android:textColor">@color/md_theme_dark_text_color_h4</item>
-        <item name="android:textSize">@dimen/text_18sp</item>
-    </style>
-
-    <style name="h4_Regular" parent="BaseTextRegular">
-        <item name="android:textColor">@color/white_80</item>
-        <item name="android:textSize">@dimen/text_18sp</item>
-    </style>
-
-
-    <style name="H5" parent="BaseText">
-        <item name="android:lineSpacingExtra">12sp</item>
-        <item name="android:textColor">@color/md_theme_dark_text_color_h5</item>
-        <item name="android:textSize">@dimen/text_16sp</item>
-    </style>
-
-    <style name="H6" parent="BaseText">
-        <item name="android:lineSpacingExtra">6sp</item>
-        <item name="android:textColor">@color/md_theme_light_text_color_h6</item>
-        <item name="android:textSize">@dimen/text_14sp</item>
-    </style>
-
-    <style name="Body" parent="BaseTextRegular">
-        <item name="android:lineSpacingExtra">6sp</item>
-        <item name="android:textColor">@color/md_theme_dark_text_color_h6</item>
-        <item name="android:textSize">@dimen/text_14sp</item>
-    </style>
-
-    <style name="Small" parent="BaseTextRegular">
-        <item name="android:lineSpacingExtra">8sp</item>
-        <item name="android:textColor">@color/md_theme_dark_text_color_h6</item>
-        <item name="android:textSize">@dimen/text_12sp</item>
-    </style>
-
-    <style name="Tinny" parent="BaseTextRegular">
-        <item name="android:lineSpacingExtra">6sp</item>
-        <item name="android:textColor">@color/text_color_h8</item>
-        <item name="android:textSize">@dimen/text_10sp</item>
-    </style>-->
-
-
     <style name="TextButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/text_14sp</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:fontFamily">@font/gilroy_medium</item>
+        <item name="android:fontFamily">@font/google_sans_flex_medium</item>
         <item name="android:textColor">@color/md_theme_light_text_button</item>
     </style>
 
@@ -220,7 +147,7 @@
 
     <style name="CustomChipStyle" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="chipBackgroundColor">@color/chip_background_color_state</item>
-        <item name="fontFamily">@font/gilroy_regular</item>
+        <item name="fontFamily">@font/google_sans_flex_medium</item>
         <item name="textSize">@dimen/text_14sp</item>
         <item name="chipSurfaceColor">@android:color/transparent</item>
         <!-- Border color -->
@@ -233,7 +160,7 @@
     <style name="CustomChipStyleRegular" parent="Widget.MaterialComponents.Chip.Choice">
         <!-- Chip background color selector -->
         <item name="chipBackgroundColor">@color/chip_background_color_state</item>
-        <item name="fontFamily">@font/gilroy_regular</item>
+        <item name="fontFamily">@font/google_sans_flex_medium</item>
         <item name="textSize">@dimen/text_12sp</item>
         <item name="chipSurfaceColor">@android:color/transparent</item>
         <item name="android:padding">@dimen/dimen_4dp</item>
@@ -271,13 +198,13 @@
 
     <style name="AppTabTextAppearance" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">16sp</item>
-        <item name="fontFamily">@font/gilroy_medium</item>
+        <item name="fontFamily">@font/google_sans_flex_medium</item>
         <item name="textAllCaps">false</item>
     </style>
 
     <style name="AddHabitsTabTextAppearance" parent="TextAppearance.MaterialComponents.Button">
         <item name="android:textSize">14sp</item>
-        <item name="fontFamily">@font/gilroy_medium</item>
+        <item name="fontFamily">@font/google_sans_flex_medium</item>
         <item name="android:textAllCaps">false</item>
         <item name="textAllCaps">false</item>
         <item name="android:letterSpacing">0</item>

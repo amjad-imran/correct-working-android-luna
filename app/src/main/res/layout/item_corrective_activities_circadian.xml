@@ -39,7 +39,7 @@
 
         <TextView
             style="@style/S12"
-            android:fontFamily="@font/gilroy_medium"
+            android:fontFamily="@font/google_sans_flex_medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
@@ -51,7 +51,7 @@
         android:id="@+id/guideline8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/gilroy_medium"
+        android:fontFamily="@font/google_sans_flex_medium"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.25" />
 
@@ -78,7 +78,7 @@
         <TextView
             android:id="@+id/tvDesc"
             style="@style/S10"
-            android:fontFamily="@font/gilroy_medium"
+            android:fontFamily="@font/google_sans_flex_medium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -115,7 +115,7 @@
                     android:layout_marginTop="3dp"
                     android:layout_marginEnd="6dp"
                     android:layout_marginBottom="3dp"
-                    android:fontFamily="@font/gilroy_medium"
+                    android:fontFamily="@font/google_sans_flex_medium"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -149,7 +149,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="2dp"
-                    android:fontFamily="@font/gilroy_medium"
+                    android:fontFamily="@font/google_sans_flex_medium"
                     android:textColor="#E6E6E6"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView86"
                     app:layout_constraintEnd_toEndOf="parent"

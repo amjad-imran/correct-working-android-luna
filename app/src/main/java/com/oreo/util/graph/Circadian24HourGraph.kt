@@ -32,10 +32,10 @@ class Circadian24HourGraph @JvmOverloads constructor(
 
     private val horizontalPadding = 16f.dpToPixel()
 
-    private val fontGilroy =
+    private val fontGoogleSans =
         androidx.core.content.res.ResourcesCompat.getFont(
             context,
-            com.noisefit_commans.R.font.gilroy_medium
+            com.noisefit_commans.R.font.google_sans_flex_medium
         )
 
     var graphStartTime: LocalTime = LocalTime.of(6, 0)
@@ -62,7 +62,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
     private val labelTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.WHITE
         textSize = 10f.dpToPixel()
-        typeface = fontGilroy
+        typeface = fontGoogleSans
         textAlign = Paint.Align.CENTER
     }
     private val hourLinePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -83,7 +83,7 @@ class Circadian24HourGraph @JvmOverloads constructor(
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.WHITE
         textSize = 28f
-        typeface = fontGilroy
+        typeface = fontGoogleSans
         textAlign = Paint.Align.LEFT
     }
     private val bottomXPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {

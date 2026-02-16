@@ -18,7 +18,6 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.noisefit.luna.R
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.LOGS.w
 import com.oreo.data.model.PeriodChartModel
 import com.oreo.ui.custom.ScrollListenerPeriod
@@ -225,16 +224,16 @@ class PeriodLineChart : View {
         bgBottomPaint!!.color = bgBottomColor
 
 
-        val fontGilroy =
-            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
+        val font =
+            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.google_sans_flex_medium)
         xTextPaint = Paint()
         xTextPaint!!.textSize = xTextSize
-        xTextPaint!!.setTypeface(fontGilroy)
+        xTextPaint!!.setTypeface(font)
         xTextPaint!!.isAntiAlias = true
 
         xTextPaint2 = Paint()
         xTextPaint2!!.textSize = xTextSize2
-        xTextPaint2!!.setTypeface(fontGilroy)
+        xTextPaint2!!.setTypeface(font)
         xTextPaint2!!.isAntiAlias = true
 
         xLinePaint = Paint()

@@ -30,7 +30,7 @@
     <TextView
         android:id="@+id/tvPercent"
         style="@style/S10"
-        android:fontFamily="@font/gilroy_medium"
+        android:fontFamily="@font/google_sans_flex_medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
@@ -42,7 +42,7 @@
     <TextView
         android:id="@+id/textView154"
         style="@style/S10"
-        android:fontFamily="@font/gilroy_medium"
+        android:fontFamily="@font/google_sans_flex_medium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"

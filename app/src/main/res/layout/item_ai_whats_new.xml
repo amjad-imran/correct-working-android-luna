@@ -10,7 +10,7 @@
         style="@style/S14"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/gilroy_medium"
+        android:fontFamily="@font/google_sans_flex_medium"
         android:lineSpacingExtra="3sp"
         android:layout_marginTop="16dp"
         android:textColor="#B3FFFFFF"

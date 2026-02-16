@@ -142,7 +142,7 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="24dp"
-                android:fontFamily="@font/gilroy_medium"
+                android:fontFamily="@font/google_sans_flex_medium"
                 android:gravity="center_horizontal"
                 android:layout_marginBottom="24dp"
                 android:lineSpacingExtra="8sp"

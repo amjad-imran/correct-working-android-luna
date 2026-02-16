@@ -5,10 +5,8 @@ import android.content.Context
 import android.graphics.*
 import android.os.Handler
 import android.os.Looper
-import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewConfiguration
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.noisefit_commans.R
@@ -81,7 +79,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
 //        toolTipTextPaint.color = ContextCompat.getColor(mContext, R.color.blood_oxygen_color)
 //        toolTipTextPaint.textSize = pxFromDp( 10f)
 //        toolTipTextPaint.textAlign = Paint.Align.CENTER
-        val fontGilroy = ResourcesCompat.getFont(this.context, R.font.gilroy_medium)
+        val font = ResourcesCompat.getFont(this.context, R.font.google_sans_flex_medium)
 
         mPaint = Paint()
         mPaint.isAntiAlias = true
@@ -97,7 +95,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
         mTextPaint = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
         mTextPaint.color = ContextCompat.getColor(mContext, R.color.white_64)
         mTextPaint.textSize = pxFromDp(10f)
-        mTextPaint.setTypeface(fontGilroy)
+        mTextPaint.setTypeface(font)
 
         outerPaint = Paint()
         outerPaint.style = Paint.Style.FILL
@@ -106,7 +104,7 @@ class SleepGraphViewOreo(var mContext: Context) : View(
 
         mTextPaintEdge = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
         mTextPaintEdge.color = ContextCompat.getColor(mContext, R.color.white)
-        mTextPaintEdge.setTypeface(fontGilroy)
+        mTextPaintEdge.setTypeface(font)
         mTextPaintEdge.textSize = pxFromDp(10f)
 
         overlayLinePaint = Paint()

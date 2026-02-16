@@ -166,15 +166,15 @@ class TempPeriodCombinedChart : View {
         workoutPaint = Paint()
         workoutPaint.setColorFilter(PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN))
 
-        val fontGilroy =
-            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
+        val fontGoogleSans =
+            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.google_sans_flex_medium)
         bgPaint = Paint()
         bgPaint.color = bgColor
 
         topCombinedPaint = Paint().apply {
             color = Color.WHITE
             textSize = combineTextSize
-            typeface = fontGilroy
+            typeface = fontGoogleSans
         }
         bgLine = Paint().apply {
             this.color = Color.parseColor("#19ffffff")
@@ -212,15 +212,15 @@ class TempPeriodCombinedChart : View {
 
         paintCalm = Paint()
         paintCalm.textSize = yTextSize
-        paintCalm.setTypeface(fontGilroy)
+        paintCalm.setTypeface(fontGoogleSans)
         paintCalm.color = Color.parseColor("#3fe8b5")
         paintFocussed = Paint()
         paintFocussed.textSize = yTextSize
-        paintFocussed.setTypeface(fontGilroy)
+        paintFocussed.setTypeface(fontGoogleSans)
         paintFocussed.color = Color.parseColor("#ffed91")
         paintStressed = Paint()
         paintStressed.textSize = yTextSize
-        paintStressed.setTypeface(fontGilroy)
+        paintStressed.setTypeface(fontGoogleSans)
         paintStressed.color = Color.parseColor("#ffad60")
         gridPaint = Paint()
         gridPaint.color = gridColor

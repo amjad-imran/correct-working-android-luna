@@ -47,7 +47,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         style="@style/S14"
-        android:fontFamily="@font/gilroy_regular"
+        android:fontFamily="@font/google_sans_flex_medium"
         android:lineHeight="17sp"
         android:layout_marginHorizontal="16dp"
         android:text="Talk it out with Life OS"

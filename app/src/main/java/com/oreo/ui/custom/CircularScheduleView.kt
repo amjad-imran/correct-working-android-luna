@@ -10,7 +10,6 @@ import androidx.core.graphics.toColorInt
 import com.noisefit.luna.R
 import com.noisefit.timepickerslider.utils.dpToPx
 import com.noisefit_commans.ui.dpToPixel
-import com.noisefit_commans.utils.LOGS
 import kotlinx.coroutines.*
 import java.time.Duration
 import java.time.LocalDateTime
@@ -23,26 +22,26 @@ class CircularScheduleView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
-    private val fontGilroy =
-        ResourcesCompat.getFont(context, com.noisefit_commans.R.font.gilroy_medium)
+    private val fontGoogleSans =
+        ResourcesCompat.getFont(context, com.noisefit_commans.R.font.google_sans_flex_medium)
 
     private val textPaintTick = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.parseColor("#99FFFFFF")
-        typeface = fontGilroy
+        typeface = fontGoogleSans
         textSize = 16f.dpToPixel()
         textAlign = Paint.Align.CENTER
     }
     private val textPaintWindowMessage = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = "#99FFFFFF".toColorInt()
         textAlign = Paint.Align.CENTER
-        typeface = fontGilroy
+        typeface = fontGoogleSans
         textSize = 10f.dpToPixel()
     }
     private val textPaintWindowTimer = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = "#FFFFFF".toColorInt()
         textAlign = Paint.Align.CENTER
         textSize = 24f.dpToPixel()
-        typeface = fontGilroy
+        typeface = fontGoogleSans
     }
     private val tickPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         strokeWidth = 2f.dpToPixel()
@@ -349,7 +348,7 @@ class CircularScheduleView @JvmOverloads constructor(
             context.getString(R.string.text_energy),
             Paint(Paint.ANTI_ALIAS_FLAG).apply {
                 style = Paint.Style.FILL_AND_STROKE
-                typeface = fontGilroy
+                typeface = fontGoogleSans
                 textSize = dpToPx(10f)
                 color = "#B2B2B2".toColorInt()
             }
@@ -401,7 +400,7 @@ class CircularScheduleView @JvmOverloads constructor(
             context.getString(R.string.text_energy),
             Paint(Paint.ANTI_ALIAS_FLAG).apply {
                 style = Paint.Style.FILL_AND_STROKE
-                typeface = fontGilroy
+                typeface = fontGoogleSans
                 textSize = dpToPx(10f)
                 color = "#B2B2B2".toColorInt()
             }
@@ -475,7 +474,7 @@ class CircularScheduleView @JvmOverloads constructor(
                             event.label,
                             Paint(Paint.ANTI_ALIAS_FLAG).apply {
                                 style = Paint.Style.FILL_AND_STROKE
-                                typeface = fontGilroy
+                                typeface = fontGoogleSans
                                 textSize = dpToPx(10f)
                                 color = event.textColor
                             }

@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:fontFamily="@font/gilroy_medium"
+        android:fontFamily="@font/google_sans_flex_medium"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/profileImvLike"
         app:layout_constraintEnd_toStartOf="@+id/btnActionLike"

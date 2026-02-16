@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.DashPathEffect
 import android.graphics.LinearGradient
 import android.graphics.Paint
-import android.graphics.Path
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
@@ -15,11 +14,9 @@ import android.os.Looper
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
-import com.noisefit.util.ApplicationUtils.getFormattedSleepDuration
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.sleep2.internal.DEFAULT_LONG_PRESS_TIMEOUT
@@ -28,7 +25,6 @@ import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.abs
-import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 
 
@@ -92,8 +88,8 @@ class SleepTimingChartInternal constructor(context: Context?, attrs: AttributeSe
 
     private fun init(attrs: AttributeSet?) {
 
-        val fontGilroy =
-            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
+        val font =
+            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.google_sans_flex_medium)
 
         avgLineFillPaint = Paint().apply {
             style = Paint.Style.FILL
@@ -114,13 +110,13 @@ class SleepTimingChartInternal constructor(context: Context?, attrs: AttributeSe
         xOverlayLinePaint = Paint().apply {
             this.color = Color.parseColor("#29cc74")
             strokeWidth = dip2px(2f).toFloat()
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(12f).toFloat()
         }
 
         avgTextPaint = Paint().apply {
             this.color = Color.parseColor("#ffffff")
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(9f).toFloat()
         }
 
@@ -132,28 +128,28 @@ class SleepTimingChartInternal constructor(context: Context?, attrs: AttributeSe
 
         xAxisPaint = Paint().apply {
             this.color = Color.parseColor("#40ffffff")
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(12f).toFloat()
         }
 
         textPaintHour = Paint().apply {
             this.color = Color.parseColor("#66ffffff")
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(12f).toFloat()
         }
         textPaintHourI = Paint().apply {
             this.color = Color.parseColor("#22ffffff")
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(12f).toFloat()
         }
         textPaintNeed = Paint().apply {
             this.color = Color.parseColor("#66ffffff")
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(12f).toFloat()
         }
         textPaintNeedI = Paint().apply {
             this.color = Color.parseColor("#20FFFFFF")
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(12f).toFloat()
         }
 

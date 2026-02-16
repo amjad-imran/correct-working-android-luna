@@ -22,7 +22,7 @@
         android:id="@+id/textView29"
         style="@style/H6"
         android:layout_width="0dp"
-        android:fontFamily="@font/gilroy_regular"
+        android:fontFamily="@font/google_sans_flex_medium"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dimen_16dp"
         android:layout_marginEnd="@dimen/dimen_16dp"

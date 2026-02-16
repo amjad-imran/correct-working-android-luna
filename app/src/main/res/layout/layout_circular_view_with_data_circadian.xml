@@ -61,7 +61,7 @@
 
             <TextView
                 style="@style/S12"
-                android:fontFamily="@font/gilroy_medium"
+                android:fontFamily="@font/google_sans_flex_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"

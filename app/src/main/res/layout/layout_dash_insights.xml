@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:fontFamily="@font/gilroy_bold"
+        android:fontFamily="@font/google_sans_flex_bold"
         android:text="@string/text_insights"
         app:layout_constraintBottom_toBottomOf="@+id/imageView113"
         app:layout_constraintStart_toEndOf="@+id/imageView113"

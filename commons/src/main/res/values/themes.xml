@@ -44,12 +44,12 @@
 
     <style name="BaseText">
         <item name="android:background">@android:color/transparent</item>
-        <item name="fontFamily">@font/gilroy_medium</item>
+        <item name="fontFamily">@font/google_sans_flex_medium</item>
     </style>
 
     <style name="BaseTextRegular">
         <item name="android:background">@android:color/transparent</item>
-        <item name="fontFamily">@font/gilroy_regular</item>
+        <item name="fontFamily">@font/google_sans_flex_medium</item>
     </style>
 
 
@@ -165,7 +165,7 @@
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
         <item name="android:letterSpacing">0</item>
-        <item name="android:fontFamily">@font/gilroy_medium</item>
+        <item name="android:fontFamily">@font/google_sans_flex_medium</item>
         <item name="android:paddingTop">0dp</item>
         <item name="android:paddingBottom">0dp</item>
         <item name="android:background">@drawable/btn_secondary_bg_selector</item>
@@ -183,7 +183,7 @@
         <item name="android:paddingTop">0dp</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:paddingBottom">0dp</item>
-        <item name="android:fontFamily">@font/gilroy_medium</item>
+        <item name="android:fontFamily">@font/google_sans_flex_medium</item>
         <item name="android:background">@drawable/btn_primary_bg_selector</item>
         <item name="android:textColor">@drawable/btn_primary_color_selector</item>
     </style>

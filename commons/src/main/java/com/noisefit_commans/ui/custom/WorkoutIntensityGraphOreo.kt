@@ -8,11 +8,6 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.noisefit_commans.R
-import com.noisefit_commans.ui.tryCatch
-import com.noisefit_commans.utils.DateFormats
-import com.noisefit_commans.utils.LOGS
-import java.util.Calendar
-import java.util.Date
 
 class WorkoutIntensityGraphOreo(var mContext: Context) : View(
     mContext
@@ -304,7 +299,7 @@ class WorkoutIntensityGraphOreo(var mContext: Context) : View(
 //        toolTipTextPaint.color = ContextCompat.getColor(mContext, R.color.blood_oxygen_color)
 //        toolTipTextPaint.textSize = pxFromDp(mContext, 10f)
 //        toolTipTextPaint.textAlign = Paint.Align.CENTER
-        val fontGilroy = ResourcesCompat.getFont(this.context, R.font.gilroy_medium)
+        val font = ResourcesCompat.getFont(this.context, R.font.google_sans_flex_medium)
 
         mPaint = Paint()
         mPaint.isAntiAlias = true
@@ -320,12 +315,12 @@ class WorkoutIntensityGraphOreo(var mContext: Context) : View(
         mTextPaint = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
         mTextPaint.color = ContextCompat.getColor(mContext, R.color.white_64)
         mTextPaint.textSize = pxFromDp(mContext, 10f)
-        mTextPaint.typeface = fontGilroy
+        mTextPaint.typeface = font
 
         mTextPaintCenter = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
         mTextPaintCenter.color = ContextCompat.getColor(mContext, R.color.white_48)
         mTextPaintCenter.textSize = pxFromDp(mContext, 9f)
-        mTextPaintCenter.typeface = fontGilroy
+        mTextPaintCenter.typeface = font
 
         outerPaint = Paint()
         outerPaint.style = Paint.Style.FILL
@@ -334,7 +329,7 @@ class WorkoutIntensityGraphOreo(var mContext: Context) : View(
 
         mTextPaintEdge = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
         mTextPaintEdge.color = ContextCompat.getColor(mContext, R.color.white)
-        mTextPaintEdge.typeface = fontGilroy
+        mTextPaintEdge.typeface = font
         mTextPaintEdge.textSize = pxFromDp(mContext, 9f)
 
     }

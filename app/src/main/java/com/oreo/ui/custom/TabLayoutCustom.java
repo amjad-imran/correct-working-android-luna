@@ -21,7 +21,6 @@ import android.view.View;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.noisefit.luna.R;
-import com.noisefit_commans.utils.DistanceUtil;
 import com.noisefit_commans.utils.LOGS;
 import com.oreo.data.model.ChartModel;
 
@@ -216,10 +215,10 @@ public class TabLayoutCustom extends View {
         bgBottomPaint.setColor(bgBottomColor);
 
 
-        Typeface fontGilroy = ResourcesCompat.getFont(this.getContext(), com.noisefit_commans.R.font.gilroy_medium);
+        Typeface fontGoogleSans = ResourcesCompat.getFont(this.getContext(), com.noisefit_commans.R.font.google_sans_flex_medium);
         xTextPaint = new Paint();
         xTextPaint.setTextSize(xTextSize);
-        xTextPaint.setTypeface(fontGilroy);
+        xTextPaint.setTypeface(fontGoogleSans);
         xTextPaint.setAntiAlias(true);
 
         xLinePaint = new Paint();

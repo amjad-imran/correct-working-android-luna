@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="@font/gilroy_medium"
+                android:fontFamily="@font/google_sans_flex_medium"
                 android:gravity="center"
                 tools:text="REM" />
 
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="8dp"
-                android:fontFamily="@font/gilroy_medium"
+                android:fontFamily="@font/google_sans_flex_medium"
                 android:gravity="center"
                 android:textColor="#a3ffffff"
                 tools:text="14 h 34 min" />

@@ -66,7 +66,7 @@
         style="@style/Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/gilroy_medium"
+        android:fontFamily="@font/google_sans_flex_medium"
         android:textColor="#a3ffffff"
         app:layout_constraintStart_toStartOf="@+id/tvSleepScore"
         app:layout_constraintTop_toBottomOf="@+id/tvSleepScore"
@@ -91,7 +91,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:fontFamily="@font/gilroy_medium"
+        android:fontFamily="@font/google_sans_flex_medium"
         app:layout_constraintBaseline_toBaselineOf="@+id/tvSleepScore"
         app:layout_constraintStart_toEndOf="@+id/tvSleepScore"
         tools:text="Good" />

@@ -90,7 +90,7 @@
                 android:layout_height="32dp"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/side_margin"
-                android:fontFamily="@font/gilroy_regular"
+                android:fontFamily="@font/google_sans_flex_medium"
                 android:gravity="center"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"

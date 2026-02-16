@@ -11,11 +11,9 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
-import androidx.compose.ui.unit.dp
 import androidx.core.content.res.ResourcesCompat
 import com.noisefit.luna.R
 import com.noisefit_commans.ui.dpToPixel
-import com.noisefit_commans.utils.LOGS
 import com.oreo.data.model.CaffeineWindowData
 import java.time.Duration
 import java.time.LocalDate
@@ -101,12 +99,12 @@ class CaffeineGraphView : View {
             dip2px(12f), true
         )
 
-        val fontGilroy =
-            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
+        val fontGoogleSans =
+            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.google_sans_flex_medium)
 
         textPaint = Paint().apply {
             this.color = Color.parseColor("#CDA390")
-            this.typeface = fontGilroy
+            this.typeface = fontGoogleSans
             this.textSize = dip2px(10f).toFloat()
         }
     }
