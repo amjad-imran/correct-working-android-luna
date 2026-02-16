@@ -112,6 +112,7 @@ class AddActivityTimelineFragment :
                     getString(R.string.text_something_went_wrong_please_try_again))
                 return@setOnClickListener
             }
+            sharedViewModel.isDeleteClicked = true
             displayDeleteConfirmationBottomSheet()
         }
     }
@@ -286,7 +287,12 @@ class AddActivityTimelineFragment :
         }
         sharedViewModel.navigateUp.observe(this) {
             it.getContent()?.let {
-                sharedViewModel.sessionManager.reqAppRatingPop(true)
+                if(!sharedViewModel.isDeleteClicked){
+                    sharedViewModel.sessionManager.reqAppRatingPop(true)
+                }else{
+                    sharedViewModel.isDeleteClicked = false
+                }
+
                 if (sharedViewModel.showTimeline) {
                     navigateUpSafe()
                     navigate(R.id.timelineScreenFragment)

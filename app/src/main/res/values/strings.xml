@@ -2391,6 +2391,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_the_information_or_data_felt_inaccurate">The information or data felt inaccurate</string>
     <string name="text_the_app_is_clunky_and_difficult_to_use">The app is clunky and difficult to use</string>
     <string name="text_there_was_a_bug">There was a bug</string>
+    <string name="text_thanks_for_sharing_nwe_are_working_to_make_this_better">Thanks for sharing.\nWe are working to make this better.</string>
 
 
 </resources>

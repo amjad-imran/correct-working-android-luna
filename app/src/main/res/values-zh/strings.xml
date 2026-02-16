@@ -2408,5 +2408,5 @@
     <string name="text_the_information_or_data_felt_inaccurate">信息或数据感觉不准确</string>
     <string name="text_the_app_is_clunky_and_difficult_to_use">应用程序笨重且难以使用</string>
     <string name="text_there_was_a_bug">出现了一个错误</string>
-
+    <string name="text_thanks_for_sharing_nwe_are_working_to_make_this_better">感谢您的反馈。\n我们正在努力改进。</string>
 </resources>

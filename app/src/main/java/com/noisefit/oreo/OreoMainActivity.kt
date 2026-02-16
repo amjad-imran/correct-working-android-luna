@@ -1180,7 +1180,13 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
                         navFm.setFragmentResultListener(APP_RATING_DISLIKE_FEEDBACK_KEY, this) { _, bundle ->
                             val submitSuccess = bundle.getBoolean("submitSuccess")
                             if(submitSuccess==true){
-                                showShortToast(getString(R.string.text_thank_you_for_your_feedback))
+                                lifecycleScope.launch {
+                                    delay(300L)
+                                    navController?.navigate(
+                                        R.id.appRatingLikeDislikeBottomSheet,
+                                        bundleOf("isLikeFlow" to false)
+                                    )
+                                }
                             }
                         }
 
@@ -1190,7 +1196,6 @@ class OreoMainActivity : BaseActivity<ActivityOreoMainBinding>() {
 
                 lifecycleScope.launch {
                     delay(500L)
-//                    navController?.navigate(R.id.appRatingDislikeFeedbackBottomSheet)
                     navController?.navigate(R.id.appRatingLikeDislikeBottomSheet)
                     viewModel.sessionManager.reqAppRatingPop(false)
                 }
