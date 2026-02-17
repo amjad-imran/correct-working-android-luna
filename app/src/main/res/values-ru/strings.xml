@@ -2440,4 +2440,6 @@
     <string name="text_thinking">Думаю</string>
     <string name="text_unable_to_speak">Включите звук, чтобы говорить</string>
     <string name="start_talking">Начать говорить</string>
+    <string name="error_connection_lost">Соединение потеряно. \nПроверьте подключение к интернету и попробуйте снова.</string>
+    <string name="error_server">Ошибка сервера, попробуйте снова.</string>
 </resources>

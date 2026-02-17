@@ -305,7 +305,7 @@ class TimelineScreenDataViewmodel @Inject constructor(
     private val DATE_FMT = DateTimeFormatter.ISO_LOCAL_DATE
     private val TIME_FMT = DateTimeFormatter.ISO_LOCAL_TIME
     private fun startDateTime(startDate: String?, startTime: String?): LocalDateTime =
-        LocalDate.parse(startDate, DATE_FMT).atTime(LocalTime.parse(startTime, TIME_FMT))
+        LocalDate.parse(startDate ?: "", DATE_FMT).atTime(LocalTime.parse(startTime ?: "", TIME_FMT))
 
 
     fun mergeHydrationEvents(

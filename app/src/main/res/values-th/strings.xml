@@ -2422,4 +2422,6 @@
     <string name="text_thinking">กำลังคิด</string>
     <string name="text_unable_to_speak">ยกเลิกปิดเสียงเพื่อพูด</string>
     <string name="start_talking">เริ่มพูด</string>
+    <string name="error_connection_lost">การเชื่อมต่อขาดหายไป \nโปรดตรวจสอบอินเทอร์เน็ตแล้วลองอีกครั้ง</string>
+    <string name="error_server">เกิดข้อผิดพลาดของเซิร์ฟเวอร์ โปรดลองอีกครั้ง</string>
 </resources>

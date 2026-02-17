@@ -2386,4 +2386,6 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_thinking">Pensando</string>
     <string name="text_unable_to_speak">Activa el sonido para hablar</string>
     <string name="start_talking">Empezar a hablar</string>
+    <string name="error_connection_lost">Conexión perdida. \nComprueba tu conexión a Internet y vuelve a intentarlo.</string>
+    <string name="error_server">Error del servidor, inténtalo de nuevo.</string>
 </resources>

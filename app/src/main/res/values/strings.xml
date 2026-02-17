@@ -2394,5 +2394,7 @@ These insights help you understand how your heart rate changes during different 
     <string name="whats_new">What’s New!</string>
     <string name="turn_up_the_volume_to_hear_me_speak">Turn up the volume to hear me speak.</string>
     <string name="start_talking">Start talking</string>
+    <string name="error_connection_lost">Connection lost. \nCheck your internet and try again.</string>
+    <string name="error_server">Server error, please try again.</string>
 
 </resources>

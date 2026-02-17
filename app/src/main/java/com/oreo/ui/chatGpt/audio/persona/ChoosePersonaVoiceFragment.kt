@@ -105,6 +105,7 @@ class ChoosePersonaVoiceFragment :
             navigateUpSafe()
         }
         binding.tvSelect.setOnClickListener {
+            if(::currentPersona.isInitialized.not()) return@setOnClickListener
             viewModel.saveUserPersona(currentPersona)
             navigateUpSafe()
             if(arguments?.getBoolean("isFromVoiceChat", false) == false)

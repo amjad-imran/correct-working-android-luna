@@ -1,6 +1,7 @@
 package com.oreo.ui.chatGpt.audio
 
 import android.content.Context
+import android.content.res.AssetFileDescriptor
 import android.media.MediaPlayer
 import android.util.Base64
 import androidx.lifecycle.MutableLiveData
@@ -46,6 +47,25 @@ class Mp3Streamer(private val context: Context) {
             }
             prepare()
             start()
+        }
+    }
+
+    fun playMusicFromAsset(afd: AssetFileDescriptor) {
+        try {
+            mediaPlayer?.release()
+            mediaPlayer = MediaPlayer().apply {
+                setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
+                prepareAsync()
+                setOnPreparedListener {
+                    start()
+                }
+                setOnCompletionListener {
+                    isSpeaking.postValue(false)
+                    afd.close()
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 

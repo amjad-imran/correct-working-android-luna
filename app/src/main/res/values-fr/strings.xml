@@ -2535,4 +2535,6 @@ onjour, Luna"</string>
     <string name="text_thinking">Réflexion</string>
     <string name="text_unable_to_speak">Réactivez le son pour parler</string>
     <string name="start_talking">Commencer à parler</string>
+    <string name="error_connection_lost">Connexion perdue. \nVérifiez votre connexion Internet et réessayez.</string>
+    <string name="error_server">Erreur du serveur, veuillez réessayer.</string>
 </resources>

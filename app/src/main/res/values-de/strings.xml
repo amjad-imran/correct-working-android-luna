@@ -2416,4 +2416,6 @@
     <string name="text_thinking">Denke nach</string>
     <string name="text_unable_to_speak">Zum Sprechen Stummschaltung aufheben</string>
     <string name="start_talking">Sprechen beginnen</string>
+    <string name="error_connection_lost">Verbindung verloren. \nÜberprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.</string>
+    <string name="error_server">Serverfehler, bitte versuchen Sie es erneut.</string>
 </resources>

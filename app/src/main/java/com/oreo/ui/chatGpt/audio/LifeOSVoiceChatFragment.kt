@@ -48,6 +48,7 @@ class LifeOSVoiceChatFragment :
     }
     private var currentState = ActionState.LISTENING
     private var isRecognizerCommiting = AtomicBoolean(false)
+    private var initialState =  ActionState.SPEAKING
     private var isMuted = false
     private var volumeObserver: VolumeObserver? = null
 
@@ -69,8 +70,14 @@ class LifeOSVoiceChatFragment :
 
     override fun onStart() {
         super.onStart()
-        if(currentState != ActionState.ERROR)
-            setActionState(ActionState.LISTENING)
+        if(currentState != ActionState.ERROR) {
+            if(initialState == ActionState.SPEAKING){
+                playWelcomeMsg()
+            }
+            setActionState(initialState).also {
+                initialState = ActionState.LISTENING
+            }
+        }
         if(viewModel.chatMessages.value.isNullOrEmpty().not()){
             binding.tvStartTalking.gone()
         }
@@ -90,6 +97,17 @@ class LifeOSVoiceChatFragment :
                 this
             )
             notifyIfChanged()
+        }
+    }
+    private fun playWelcomeMsg() {
+        val fileName = viewModel.getWelcomeTextFile()
+        try {
+            val afd = context?.assets?.openFd("$fileName.mp3")
+            afd?.let {
+                mp3Streamer.playMusicFromAsset(it)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -302,6 +320,7 @@ class LifeOSVoiceChatFragment :
     }
 
     private fun setupSpeechRecognizer() {
+        speechRecognizer?.let { return }
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(requireContext())
         val finalText = StringBuilder()
         var lastPartial = ""

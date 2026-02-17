@@ -1,13 +1,13 @@
 package com.oreo.ui.chatGpt.audio
 
 import VoiceChatMessage
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.BuildConfig
+import com.noisefit.luna.R
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -68,22 +68,41 @@ class LifeOSVoiceChatViewModel @Inject constructor(
         val list = _chatMessages.value ?: return
         val index = list.indexOfFirst { it.id == id }
         if (index != -1) {
-            list[index].message = text
-            _chatMessages.postValue(list)
+            val updatedList = list.toMutableList()
+            updatedList[index] = list[index].copy(message = text)
+            _chatMessages.postValue(updatedList)
         }
+    }
+
+    fun getWelcomeTextFile(): String{
+        val persona = ringDataStore.getUserSelectedPersona()
+        return localDataStore.getSelectedAppLanguage()?.let { languageCode ->
+            when (languageCode) {
+                "en" -> "english_$persona"
+                "fr" -> "french_$persona"
+                "de" -> "german_$persona"
+                "es" -> "spanish_$persona"
+                "it" -> "italian_$persona"
+                "nl" -> "dutch_$persona"
+                "zh" -> "chinese_$persona"
+                "pt" -> "portuguese_$persona"
+                "th" -> "thai_$persona"
+                "ru" -> "russian_$persona"
+                else -> "english_$persona"
+            }
+        } ?: "english_$persona"
     }
 
     val firstEventTimeoutJob = viewModelScope.launch(start = CoroutineStart.LAZY) {
         delay(20_000)
         disposeChatStream()
-        streamError.postValue("Server error, please try again.")
+        streamError.postValue(resourceProvider.getString(R.string.error_server))
         setLoading(false)
     }
     fun askQuestionStream(prompt: String) {
         lastPrompt = prompt
         if (!ApplicationUtils.isInternetConnected()) {
-            streamError.postValue("Connection lost. \n" +
-                    "Check your internet and try again.")
+            streamError.postValue(resourceProvider.getString(R.string.error_connection_lost))
             return
         }
 
@@ -105,7 +124,7 @@ class LifeOSVoiceChatViewModel @Inject constructor(
                 val response = sseClient.execute()
 
                 if (!response.isSuccessful) {
-                    streamError.postValue("Server error, please try again.")
+                    streamError.postValue(resourceProvider.getString(R.string.error_server))
                 }
 
                 response.body.source().let { source ->
@@ -143,7 +162,7 @@ class LifeOSVoiceChatViewModel @Inject constructor(
 
             } catch (e: Exception) {
                 if(currentSseCall?.isCanceled()?.not() == true)
-                    streamError.postValue("Server error, please try again.")
+                    streamError.postValue(resourceProvider.getString(R.string.error_server))
             } finally {
                 fetchInProgress.postValue(false)
                 setLoading(false)
