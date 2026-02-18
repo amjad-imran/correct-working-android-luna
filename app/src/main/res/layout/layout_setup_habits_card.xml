@@ -36,7 +36,6 @@
         app:layout_constraintTop_toTopOf="@+id/ivBack" />
 
     <TextView
-        android:id="@+id/textView216"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         style="@style/S12"

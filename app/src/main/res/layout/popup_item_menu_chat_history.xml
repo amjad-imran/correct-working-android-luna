@@ -18,7 +18,6 @@
         android:src="@drawable/ic_delete_chat_history" />
 
     <TextView
-        android:id="@+id/tvDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"

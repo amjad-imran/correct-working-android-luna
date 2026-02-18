@@ -22,23 +22,17 @@
     <dimen name="dimen_1dp">1dp</dimen>
     <dimen name="dimen_0dp">0dp</dimen>
     <dimen name="dimen_14dp">14dp</dimen>
-    <dimen name="dimen_10dp">10dp</dimen>
-    <dimen name="dimen_15dp">15dp</dimen>
     <!-- SP values -->
     <dimen name="dimen_12sp">12sp</dimen>
     <dimen name="dimen_14sp">14sp</dimen>
-    <dimen name="dimen_15sp">15sp</dimen>
 
     <dimen name="button_h_padding">24dp</dimen>
 
 
     <dimen name="side_margin">16dp</dimen>
-    <dimen name="side_margin_neg">-16dp</dimen>
     <dimen name="bottom_margin">36dp</dimen>
     <dimen name="top_margin_below_heading">40dp</dimen>
 
-    <dimen name="dimen_260dp">260dp</dimen>
-    <dimen name="dimen_240dp">240dp</dimen>
     <dimen name="list_item_spacing">16dp</dimen>
     <dimen name="list_item_spacing_half">8dp</dimen>
     <dimen name="dimen_80dp">80dp</dimen>
@@ -49,14 +43,4 @@
     <dimen name="dimen_28dp">28dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="dimen_30dp">30dp</dimen>
-    <dimen name="dimen_160dp">160dp</dimen>
-    <dimen name="dimen_200dp">200dp</dimen>
-    <dimen name="pageMargin">16dp</dimen>
-    <dimen name="offset">40dp</dimen>
-    <dimen name="horizontal_margin">20dp</dimen>
-    <dimen name="indicator_width_active">46dp</dimen>
-    <dimen name="indicator_width_inactive">16dp</dimen>
-    <dimen name="indicator_height">2dp</dimen>
-    <dimen name="freshchat_message_send_icon_size">40dp</dimen>
-    <dimen name="freshchat_message_attach_icon_size">40dp</dimen>
 </resources>

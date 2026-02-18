@@ -52,14 +52,12 @@
         app:layout_constraintTop_toBottomOf="@+id/tvDesc">
 
         <TextView
-            android:id="@+id/textView176"
             style="@style/S12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/text_get_started" />
 
         <ImageView
-            android:id="@+id/imageView85"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"

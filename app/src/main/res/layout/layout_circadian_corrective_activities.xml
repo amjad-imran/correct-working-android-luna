@@ -17,7 +17,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView84"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -74,7 +73,6 @@
         app:layout_constraintVertical_bias="0.5">
 
         <TextView
-            android:id="@+id/textView185"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"

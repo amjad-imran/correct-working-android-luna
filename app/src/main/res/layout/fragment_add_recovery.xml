@@ -104,7 +104,6 @@
             app:layout_constraintTop_toTopOf="@+id/textView188" />
 
         <View
-            android:id="@+id/divider1st"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginStart="8dp"
@@ -184,7 +183,6 @@
             app:layout_constraintTop_toTopOf="@+id/textView1888" />
 
         <View
-            android:id="@+id/divider2nd"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginStart="8dp"

@@ -2,21 +2,14 @@
 <resources>
 
     <color name="app_background">#EEEEEE</color>
-    <color name="app_background_new">@android:color/black</color>
-    <color name="scan_frame_color">#FFFFFF</color>
-    <color name="primary_btn_color">#3daa5bff</color>
-    <color name="teal_200">#FF03DAC5</color>
     <color name="primary_btn_selected_color">#aa5bff</color>
     <color name="accent_color_purple">#aa5bff</color>
     <color name="progress_track_color">#1AFFFFFF</color>
     <color name="lightest_gray">#8a8c8e</color>
-    <color name="progress_bar_back">#1AFFFFFF</color>
     <color name="md_theme_dark_text_button">#6AC5FF</color>
     <color name="text_accent_color">#6AC5FF</color>
 
-    <color name="input_hint_color">#eeeeee</color>
     <color name="divider_color">#F9F9F9</color>
-    <color name="divider_color_update">#F9F9F9</color>
     <color name="errorRed">#ff4242</color>
 
     <color name="color_error">#ff3358</color>
@@ -30,17 +23,12 @@
     <color name="purple_">#ca99ff</color>
     <color name="link_color">#82a8f3</color>
 
-    <color name="accent_color">#ffb237</color>
-
-    <color name="colorRed2">#FF2A44</color>
-
     <color name="calendar_header">#CCFFFFFF</color>
 
     <color name="bright_lime">#b5fd00</color>
 
     <color name="sleep_gray">#3C4045</color>
     <color name="sleep_color">#6AC5FF</color>
-    <color name="body_temp">#ff8b16</color>
     <color name="blood_oxygen_color">#6cd0c6</color>
 
     <color name="white">#FFFFFF</color>
@@ -49,7 +37,6 @@
 
     <color name="text_color_h8">#ffffff</color>
     <color name="text_color_update">#99ffffff</color>
-    <color name="text_color_workout_item_label">#89c000</color>
 
 
     <color name="tab_text_unselected_color">#99FFFFFF</color>
@@ -70,26 +57,15 @@
     <color name="awake_start_oreo">#ede5ff</color>
     <color name="awake_start_oreo_i">#80ede5ff</color>
 
-    <color name="stress_high">#e95050</color>
-    <color name="stress_medium">#f4c232</color>
-    <color name="stress_normal">#51bf76</color>
-    <color name="stress_relax">#6cd0c6</color>
-
-    <color name="upcoming_challenge">#FF9300</color>
-
 
     <color name="md_theme_dark_primary">#262B2F</color>
     <color name="md_theme_dark_accent">#FFFFFFFF</color>
     <color name="md_theme_dark_text_color">#FFFFFFFF</color>
-    <color name="md_theme_dark_text_color_h3">#eeeeee</color>
 
     <color name="md_theme_light_primary">#262B2F</color>
     <color name="md_theme_light_accent">#FF000000</color>
     <color name="md_theme_light_background">#EEEEEE</color>
     <color name="md_theme_light_text_color">#FF000000</color>
-    <color name="md_theme_light_text_color_update">#FFeeeeee</color>
-    <color name="md_theme_light_text_color_h2">#ffffff</color>
-    <color name="md_theme_light_text_color_h3">#ffffff</color>
 
     <color name="white_10">#20FFFFFF</color>
     <color name="white_80">#ccffffff</color>
@@ -101,28 +77,12 @@
     <color name="md_theme_light_text_button">#6AC5FF</color>
     <color name="very_light_pink">#7D7D7D</color>
     <color name="transparent">#00FFFFFF</color>
-    <color name="warm_up_start">#22E8D4</color>
-    <color name="warm_up_end">#22E8D4</color>
-
-    <color name="aerobic_start">#FFD600</color>
-    <color name="aerobic_end">#FFD600</color>
-    <color name="anaerobic_start">#FF6624</color>
-    <color name="anaerobic_end">#FF6624</color>
-    <color name="fat_burn_start">#3CFE8A</color>
-    <color name="fat_burn_end">#3CFE8A</color>
 
 
     <color name="sleep_graph_line">#262b2f</color>
-    <color name="darker_gray">#8a8c8e</color>
 
     <color name="color_bottom_sheet_drag">@android:color/white</color>
-    <color name="color_emoji_back_solid">#464646</color>
     <color name="black">#000000</color>
-    <color name="sbi_x_pulse">#16283b</color>
-    <color name="friends_calories_color">#ff4668</color>
-    <color name="friends_steps_color">#40e281</color>
-    <color name="friends_distance_color">#ffed65</color>
-    <color name="friends_request_status_color">#ffba00</color>
 
     <color name="calories_arc">#ff3358</color>
 
@@ -132,8 +92,6 @@
 
     <color name="sleep_chart">#c5a8ed</color>
     <color name="sleep_chart_end">#c5a8ed</color>
-    <color name="distance_arc">#ffd230</color>
-    <color name="round_up_step_color">#3bff7c</color>
     <color name="white_48">#7affffff</color>
 
 </resources>

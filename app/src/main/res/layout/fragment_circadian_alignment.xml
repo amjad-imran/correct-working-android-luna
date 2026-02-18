@@ -73,7 +73,6 @@
                 android:layout_height="wrap_content" />
 
             <include
-                android:id="@+id/dividerSleepMidPoint"
                 layout="@layout/layout_divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -94,7 +93,6 @@
                 android:visibility="gone" />
 
             <include
-                android:id="@+id/dividerActivityMonitor"
                 layout="@layout/layout_divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -107,7 +105,6 @@
                 android:layout_height="wrap_content" />
 
             <include
-                android:id="@+id/dividerCorrectiveActivities"
                 layout="@layout/layout_divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -120,7 +117,6 @@
                 android:layout_height="wrap_content" />
 
             <include
-                android:id="@+id/dividerYourChronotype"
                 layout="@layout/layout_divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"

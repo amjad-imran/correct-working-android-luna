@@ -100,16 +100,16 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
-                <!--                <ImageView-->
-                <!--                    android:id="@+id/ivRefresh"-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginEnd="16dp"-->
-                <!--                    android:src="@drawable/ic_refresh_ring"-->
-                <!--                    android:visibility="gone"-->
-                <!--                    app:layout_constraintBottom_toBottomOf="@+id/tvDevicesFound"-->
-                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
-                <!--                    app:layout_constraintTop_toTopOf="@+id/tvDevicesFound" />-->
+                <ProgressBar
+                    android:id="@+id/progressBarDefault"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@+id/cvVideo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/cvVideo"
+                    app:layout_constraintVertical_chainStyle="packed" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/ivRefresh"

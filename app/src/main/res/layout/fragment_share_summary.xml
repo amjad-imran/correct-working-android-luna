@@ -76,7 +76,6 @@
                 app:layout_constraintTop_toTopOf="@+id/bgPrivateSelector" />
 
             <TextView
-                android:id="@+id/textView141"
                 style="@style/S14"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

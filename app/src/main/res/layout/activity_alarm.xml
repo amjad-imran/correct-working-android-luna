@@ -51,7 +51,6 @@
         app:layout_constraintTop_toBottomOf="@+id/tvAlarmTime" />
 
     <ImageView
-        android:id="@+id/imageView68"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:adjustViewBounds="true"

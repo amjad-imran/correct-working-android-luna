@@ -86,6 +86,7 @@ firebase-crashlytics-gradle = "3.0.4"
 reviewKtx = "2.0.2"
 activityComposeVersion = "1.10.1"
 composeBomVersion = "2025.06.01"
+firebaseStorageKtxVersion = "22.0.1"
 
 
 [libraries]
@@ -196,6 +197,7 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebaseStorageKtxVersion" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

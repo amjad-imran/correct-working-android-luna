@@ -28,7 +28,6 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView119" />
 
     <TextView
-        android:id="@+id/textView211"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         style="@style/S12"

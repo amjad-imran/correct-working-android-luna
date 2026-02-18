@@ -24,12 +24,9 @@
 
 
     <dimen name="side_margin">16dp</dimen>
-    <dimen name="side_margin_neg">-16dp</dimen>
     <dimen name="bottom_margin">36dp</dimen>
     <dimen name="top_margin_below_heading">40dp</dimen>
 
-    <dimen name="dimen_260dp">260dp</dimen>
-    <dimen name="dimen_240dp">240dp</dimen>
     <dimen name="list_item_spacing">16dp</dimen>
     <dimen name="list_item_spacing_half">8dp</dimen>
     <dimen name="dimen_80dp">80dp</dimen>

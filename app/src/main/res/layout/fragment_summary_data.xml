@@ -44,7 +44,6 @@
             android:layout_marginTop="@dimen/dimen_24dp" />
 
         <include
-            android:id="@+id/lytDummy"
             layout="@layout/oreo_dummy_view"
             android:layout_width="match_parent"
             android:layout_height="64dp" />

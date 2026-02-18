@@ -94,7 +94,6 @@
         tools:visibility="gone" />
 
     <View
-        android:id="@+id/view38"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="32dp"
