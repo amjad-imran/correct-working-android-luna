@@ -45,7 +45,7 @@
                     style="@style/Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/gilroy_medium"
+                    android:fontFamily="@font/google_sans_flex_medium"
                     android:text="@string/text_syncing_your_data"
                     android:textColor="@android:color/white"
                     android:visibility="gone"

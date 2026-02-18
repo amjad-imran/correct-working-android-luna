@@ -82,7 +82,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:fontFamily="@font/gilroy_bold"
+                android:fontFamily="@font/google_sans_flex_bold"
                 android:lineSpacingExtra="4sp"
                 android:lineHeight="28sp"
                 tools:text="Your circadian rhythm shifted by 45 minutes later this week." />

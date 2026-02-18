@@ -74,7 +74,7 @@
             android:layout_marginStart="18dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="18dp"
-            android:fontFamily="@font/gilroy_medium"
+            android:fontFamily="@font/google_sans_flex_medium"
             android:textAlignment="center"
             android:textColor="#CC9B9B9B"
             app:layout_constraintEnd_toEndOf="parent"

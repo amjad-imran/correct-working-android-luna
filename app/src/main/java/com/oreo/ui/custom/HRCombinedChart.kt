@@ -21,18 +21,14 @@ import android.util.AttributeSet
 import androidx.annotation.StyleRes
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewConfiguration
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.google.gson.Gson
 import com.noisefit.luna.R
-import com.noisefit_commans.common.fromJson
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.ui.heartrate.OnHRClickAction
 import com.oreo.ui.sleep2.internal.DEFAULT_LONG_PRESS_TIMEOUT
@@ -227,15 +223,15 @@ class HRCombinedChart : View {
         workoutPaint = Paint()
         workoutPaint.setColorFilter(PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN))
 
-        val fontGilroy =
-            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
+        val fontGoogleSans =
+            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.google_sans_flex_medium)
         bgPaint = Paint()
         bgPaint.color = bgColor
 
         topCombinedPaint = Paint().apply {
             color = Color.WHITE
             textSize = combineTextSize
-            typeface = fontGilroy
+            typeface = fontGoogleSans
         }
         bgLine = Paint().apply {
             this.color = Color.parseColor("#19ffffff")
@@ -262,15 +258,15 @@ class HRCombinedChart : View {
 
         paintCalm = Paint()
         paintCalm.textSize = yTextSize
-        paintCalm.setTypeface(fontGilroy)
+        paintCalm.setTypeface(fontGoogleSans)
         paintCalm.color = Color.parseColor("#3fe8b5")
         paintFocussed = Paint()
         paintFocussed.textSize = yTextSize
-        paintFocussed.setTypeface(fontGilroy)
+        paintFocussed.setTypeface(fontGoogleSans)
         paintFocussed.color = Color.parseColor("#ffed91")
         paintStressed = Paint()
         paintStressed.textSize = yTextSize
-        paintStressed.setTypeface(fontGilroy)
+        paintStressed.setTypeface(fontGoogleSans)
         paintStressed.color = Color.parseColor("#ffad60")
         gridPaint = Paint()
         gridPaint.color = gridColor

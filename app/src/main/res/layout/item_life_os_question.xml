@@ -15,7 +15,7 @@
         style="@style/S12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/gilroy_medium"
+        android:fontFamily="@font/google_sans_flex_medium"
         android:padding="12dp"
         android:lineSpacingExtra="1sp"
         android:lineHeight="16sp"

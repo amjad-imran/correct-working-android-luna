@@ -13,7 +13,7 @@
         style="@style/S12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/gilroy_medium"
+        android:fontFamily="@font/google_sans_flex_medium"
         android:text="@string/text_duration"
         android:textColor="#A3FFFFFF"
         app:layout_constraintStart_toStartOf="parent"

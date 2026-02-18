@@ -12,19 +12,13 @@ import android.graphics.Path
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.noisefit.luna.R
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.LOGS.w
 import com.oreo.data.model.ChartModelStress
-import com.oreo.data.model.Section
 import com.oreo.data.model.StressDNDataModel
 import kotlin.math.min
 
@@ -253,15 +247,15 @@ class StressAreaChart : View {
 //        bgTopSelectedPaint.setStrokeWidth(dip2px(2));
         bgBottomPaint = Paint()
         bgBottomPaint!!.setColor(bgBottomColor)
-        val fontGilroy =
-            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
+        val fontGoogleSans =
+            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.google_sans_flex_medium)
         xTextPaint = Paint()
         xTextPaint!!.textSize = xTextSize
-        xTextPaint!!.setTypeface(fontGilroy)
+        xTextPaint!!.setTypeface(fontGoogleSans)
         xTextPaint!!.isAntiAlias = true
         xTextPaint2 = Paint()
         xTextPaint2!!.textSize = xTextSize2
-        xTextPaint2!!.setTypeface(fontGilroy)
+        xTextPaint2!!.setTypeface(fontGoogleSans)
         xTextPaint2!!.isAntiAlias = true
         xLinePaint = Paint()
         xLinePaint!!.setColor(xLineColor)

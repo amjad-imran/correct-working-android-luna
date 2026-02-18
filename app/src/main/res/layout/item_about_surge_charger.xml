@@ -60,7 +60,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         style="@style/S12"
-        android:fontFamily="@font/gilroy_medium"
+        android:fontFamily="@font/google_sans_flex_medium"
         android:textColor="#CC9B9B9B"
         android:textAlignment="center"
         android:layout_marginStart="18dp"

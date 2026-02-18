@@ -21,7 +21,6 @@ import androidx.annotation.StyleRes
 import android.util.Pair
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewConfiguration
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
@@ -196,8 +195,8 @@ class ODayTimeInteractiveGraph : View {
     }
 
     private fun initPaint() {
-        val fontGilroy =
-            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
+        val fontGoogleSans =
+            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.google_sans_flex_medium)
 
         workoutPaint = Paint()
         workoutPaint?.setColorFilter(PorterDuffColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN))
@@ -208,7 +207,7 @@ class ODayTimeInteractiveGraph : View {
         overlayLineOnTopPaint = Paint()
 
         xTextPaint = Paint()
-        xTextPaint.typeface = fontGilroy
+        xTextPaint.typeface = fontGoogleSans
         xTextPaint.textSize = xTextSize
         xTextPaint.isAntiAlias = true
 
@@ -276,7 +275,7 @@ class ODayTimeInteractiveGraph : View {
         topCombinedPaint = Paint().apply {
             color = Color.WHITE
             textSize = combineTextSize
-            typeface = fontGilroy
+            typeface = fontGoogleSans
         }
 
         val dimen = dip2px(30f)

@@ -95,7 +95,7 @@
             android:layout_width="wrap_content"
             android:layout_marginEnd="@dimen/side_margin"
             android:layout_marginBottom="@dimen/bottom_margin"
-            android:fontFamily="@font/gilroy_regular"
+            android:fontFamily="@font/google_sans_flex_medium"
             android:paddingStart="24dp"
             android:paddingEnd="24dp"
             android:text="@string/text_continue"

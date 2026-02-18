@@ -225,7 +225,7 @@ class LifeOsDashFragment :
                         style = TextStyle(
                             color = Color.White,
                             fontSize = 14.sp,
-                            fontFamily = FontFamily(Font(com.noisefit_commans.R.font.gilroy_medium)),
+                            fontFamily = FontFamily(Font(com.noisefit_commans.R.font.google_sans_flex_medium)),
                             platformStyle = PlatformTextStyle(includeFontPadding = false)
                         )
                     )
@@ -261,7 +261,7 @@ class LifeOsDashFragment :
                     style = TextStyle(
                         color = Color.White,
                         fontSize = 12.sp,
-                        fontFamily = FontFamily(Font(com.noisefit_commans.R.font.gilroy_regular)),
+                        fontFamily = FontFamily(Font(com.noisefit_commans.R.font.google_sans_flex_medium)),
                         fontWeight = FontWeight(400),
                         platformStyle = PlatformTextStyle(includeFontPadding = false)
                     ),

@@ -38,17 +38,17 @@ class MovementChartAuto(context: Context, attrs: AttributeSet?) : View(context, 
         viewHeight = dpToPx(130).toInt()
 
 
-        val fontGilroy = ResourcesCompat.getFont(context, com.noisefit_commans.R.font.gilroy_medium)
+        val fontGoogleSans = ResourcesCompat.getFont(context, com.noisefit_commans.R.font.google_sans_flex_medium)
         xTextPaint.textSize = dpToPx(10)
         xTextPaint.color = Color.parseColor("#ffffff")
         xTextPaint.alpha = 160
-        xTextPaint.typeface = fontGilroy
+        xTextPaint.typeface = fontGoogleSans
         xTextPaint.isAntiAlias = true
 
         pointsPaint.apply {
             textSize = dpToPx(12)
             color = Color.WHITE
-            xTextPaint.typeface = fontGilroy
+            xTextPaint.typeface = fontGoogleSans
         }
         pointCirclePaint.apply {
             color = Color.WHITE

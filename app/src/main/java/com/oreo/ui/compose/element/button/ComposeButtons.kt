@@ -22,7 +22,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.noisefit_commans.utils.LOGS
 import com.oreo.ui.compose.styles.FontStyle
 
 
@@ -164,7 +163,7 @@ fun ButtonBlue(text: String, onClick: () -> Unit) {
                 color = Color.White,
                 fontFamily = FontFamily(
                     Font(
-                        com.noisefit_commans.R.font.gilroy_medium,
+                        com.noisefit_commans.R.font.google_sans_flex_medium,
                         FontWeight.Normal
                     )
                 ),

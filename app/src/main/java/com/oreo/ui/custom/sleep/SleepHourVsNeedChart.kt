@@ -13,7 +13,6 @@ import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import com.noisefit.luna.R
 import com.noisefit.util.ApplicationUtils.getFormattedSleepDuration
-import com.noisefit_commans.utils.LOGS
 
 
 class SleepHourVsNeedChart constructor(context: Context?, attrs: AttributeSet?) :
@@ -51,23 +50,23 @@ class SleepHourVsNeedChart constructor(context: Context?, attrs: AttributeSet?) 
 
     private fun init(attrs: AttributeSet?) {
 
-        val fontGilroy =
-            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
+        val font =
+            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.google_sans_flex_medium)
 
         xAxisPaint = Paint().apply {
             this.color = Color.parseColor("#40ffffff")
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(12f).toFloat()
         }
 
         textPaintHour = Paint().apply {
             this.color = Color.parseColor("#96ffffff")
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(12f).toFloat()
         }
         textPaintNeed = Paint().apply {
             this.color = Color.parseColor("#ffffff")
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(12f).toFloat()
         }
 

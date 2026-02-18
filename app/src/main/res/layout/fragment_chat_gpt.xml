@@ -82,7 +82,7 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="26dp"
         android:ellipsize="end"
-        android:fontFamily="@font/gilroy_regular"
+        android:fontFamily="@font/google_sans_flex_medium"
         android:lineSpacingExtra="4sp"
         android:maxLines="2"
         android:textColor="#e8e8e8"

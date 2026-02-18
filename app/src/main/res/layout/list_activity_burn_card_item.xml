@@ -108,7 +108,7 @@
             android:id="@+id/tvTodayDesc"
             style="@style/Small"
             android:layout_width="match_parent"
-            android:fontFamily="@font/gilroy_medium"
+            android:fontFamily="@font/google_sans_flex_medium"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="8sp"

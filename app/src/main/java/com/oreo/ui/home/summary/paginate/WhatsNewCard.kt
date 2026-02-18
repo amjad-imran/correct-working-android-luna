@@ -1,13 +1,11 @@
 package com.oreo.ui.home.summary.paginate
 
 import android.view.MotionEvent
-import android.view.View
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,8 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -24,13 +20,9 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -47,16 +39,12 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.pager.PageSize
 import androidx.compose.material3.IconButton
 import androidx.compose.ui.input.pointer.pointerInteropFilter
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.unit.dp
 import androidx.viewpager2.widget.ViewPager2
 import coil.request.ImageRequest
-import com.noisefit_commans.utils.LOGS
 
 @Composable
 fun WhatsNewCardsList(
@@ -74,8 +62,8 @@ fun WhatsNewCardsList(
         pageCount = { banners.size }
     )
 
-    val gilroy = FontFamily(
-        Font(com.noisefit_commans.R.font.gilroy_medium)
+    val font = FontFamily(
+        Font(com.noisefit_commans.R.font.google_sans_flex_medium)
     )
 
     Column {
@@ -84,7 +72,7 @@ fun WhatsNewCardsList(
                 text = stringResource(R.string.whats_new),
                 color = Color.White,
                 fontSize = 16.sp,
-                fontFamily = gilroy,
+                fontFamily = font,
                 fontWeight = FontWeight.Medium,
                 modifier = Modifier
                     .align(Alignment.CenterStart)

@@ -9,9 +9,6 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
-import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.invisible
-import com.noisefit_commans.ui.visible
 import com.noisefit_commans.utils.LOGS
 
 class MovementChart(context: Context, attrs: AttributeSet?) : View(context, attrs) {
@@ -37,11 +34,11 @@ class MovementChart(context: Context, attrs: AttributeSet?) : View(context, attr
         viewHeight = dpToPx(130).toInt()
 
 
-        val fontGilroy = ResourcesCompat.getFont(context, com.noisefit_commans.R.font.gilroy_medium)
+        val fontGoogleSans = ResourcesCompat.getFont(context, com.noisefit_commans.R.font.google_sans_flex_medium)
         xTextPaint.textSize = dpToPx(10)
         xTextPaint.color = Color.parseColor("#ffffff")
         xTextPaint.alpha = 160
-        xTextPaint.typeface = fontGilroy
+        xTextPaint.typeface = fontGoogleSans
         xTextPaint.isAntiAlias = true
 
 

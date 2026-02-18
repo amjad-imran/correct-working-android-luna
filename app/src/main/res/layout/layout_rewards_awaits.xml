@@ -36,7 +36,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:fontFamily="@font/gilroy_regular"
+        android:fontFamily="@font/google_sans_flex_medium"
         android:text="@string/text_complete_tasks_earn_coins"
         app:layout_constraintBottom_toBottomOf="@+id/imageView33"
         app:layout_constraintEnd_toStartOf="@+id/imageView34"

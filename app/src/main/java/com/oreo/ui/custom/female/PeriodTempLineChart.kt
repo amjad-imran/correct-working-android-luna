@@ -24,11 +24,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.noisefit.luna.R
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.LOGS.w
 import com.oreo.data.model.PeriodTempChartModel
 import com.oreo.ui.custom.Section
-import com.oreo.ui.custom.TempPeriodCombineModel
 import com.oreo.ui.femalehealth.cycletracker.CyclePhase
 import kotlin.math.abs
 import kotlin.math.min
@@ -265,16 +263,16 @@ class PeriodTempLineChart : View {
         bgBottomPaint!!.color = bgBottomColor
 
 
-        val fontGilroy =
-            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
+        val font =
+            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.google_sans_flex_medium)
         xTextPaint = Paint()
         xTextPaint.textSize = xTextSize
-        xTextPaint.setTypeface(fontGilroy)
+        xTextPaint.setTypeface(font)
         xTextPaint.isAntiAlias = true
 
         xTextPaint2 = Paint()
         xTextPaint2.textSize = xTextSize2
-        xTextPaint2.setTypeface(fontGilroy)
+        xTextPaint2.setTypeface(font)
         xTextPaint2.isAntiAlias = true
 
         xLinePaint = Paint()

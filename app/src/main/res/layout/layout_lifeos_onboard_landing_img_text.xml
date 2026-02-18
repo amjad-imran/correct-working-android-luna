@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         style="@style/S12"
         android:lineHeight="16sp"
-        android:fontFamily="@font/gilroy_medium"
+        android:fontFamily="@font/google_sans_flex_medium"
         android:layout_marginTop="16dp"
         tools:text="Log your meals to learn what helps and what harms recovery"
         app:layout_constraintBottom_toBottomOf="parent"

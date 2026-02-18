@@ -30,7 +30,7 @@
     <TextView
         android:id="@+id/tvDesc"
         style="@style/S10"
-        android:fontFamily="@font/gilroy_medium"
+        android:fontFamily="@font/google_sans_flex_medium"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

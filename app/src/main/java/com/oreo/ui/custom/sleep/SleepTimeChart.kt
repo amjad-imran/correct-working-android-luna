@@ -12,12 +12,6 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import com.noisefit.luna.R
-import com.noisefit.util.ApplicationUtils.getFormattedSleepDuration
-import com.noisefit_commans.utils.LOGS
-import org.joda.time.format.DateTimeFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 
 class SleepTimeChart constructor(context: Context?, attrs: AttributeSet?) :
@@ -51,18 +45,18 @@ class SleepTimeChart constructor(context: Context?, attrs: AttributeSet?) :
 
     private fun init(attrs: AttributeSet?) {
 
-        val fontGilroy =
-            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
+        val font =
+            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.google_sans_flex_medium)
 
         xAxisPaint = Paint().apply {
             this.color = Color.parseColor("#40ffffff")
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(12f).toFloat()
         }
 
         barTextPaint = Paint().apply {
             this.color = Color.parseColor("#96ffffff")
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(12f).toFloat()
         }
 

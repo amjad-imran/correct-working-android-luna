@@ -42,7 +42,7 @@
                     android:text="@string/text_get_more_from_life_os"
                     android:textColor="@android:color/white"
                     android:textSize="14sp"
-                    android:fontFamily="@font/gilroy_medium"/>
+                    android:fontFamily="@font/google_sans_flex_medium"/>
 
                 <FrameLayout
                     android:layout_width="28dp"
@@ -68,7 +68,7 @@
                 android:textSize="12sp"
                 android:lineSpacingExtra="5dp"
                 android:paddingHorizontal="@dimen/dimen_16dp"
-                android:fontFamily="@font/gilroy_regular"/>
+                android:fontFamily="@font/google_sans_flex_medium"/>
 
             <ProgressBar
                 android:id="@+id/progressBar"

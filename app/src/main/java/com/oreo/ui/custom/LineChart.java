@@ -219,15 +219,15 @@ public class LineChart extends View {
         bgBottomPaint.setColor(bgBottomColor);
 
 
-        Typeface fontGilroy = ResourcesCompat.getFont(this.getContext(), com.noisefit_commans.R.font.gilroy_medium);
+        Typeface fontGoogleSans = ResourcesCompat.getFont(this.getContext(), com.noisefit_commans.R.font.google_sans_flex_medium);
         xTextPaint = new Paint();
         xTextPaint.setTextSize(xTextSize);
-        xTextPaint.setTypeface(fontGilroy);
+        xTextPaint.setTypeface(fontGoogleSans);
         xTextPaint.setAntiAlias(true);
 
         xTextPaint2 = new Paint();
         xTextPaint2.setTextSize(xTextSize2);
-        xTextPaint2.setTypeface(fontGilroy);
+        xTextPaint2.setTypeface(fontGoogleSans);
         xTextPaint2.setAntiAlias(true);
 
         xLinePaint = new Paint();

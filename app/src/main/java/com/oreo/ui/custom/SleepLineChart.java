@@ -187,16 +187,16 @@ public class SleepLineChart extends View {
         bgBottomPaint.setColor(bgBottomColor);
 
 
-        Typeface fontGilroy = ResourcesCompat.getFont(this.getContext(), com.noisefit_commans.R.font.gilroy_medium);
+        Typeface font = ResourcesCompat.getFont(this.getContext(), com.noisefit_commans.R.font.google_sans_flex_medium);
         xTextPaint = new Paint();
         xTextPaint.setTextSize(xTextSize);
-        xTextPaint.setTypeface(fontGilroy);
+        xTextPaint.setTypeface(font);
         xTextPaint.setAntiAlias(true);
 
         noDataPaint = new Paint();
         noDataPaint.setTextSize(noDataSize);
         noDataPaint.setColor(getResources().getColor(R.color.white));
-        noDataPaint.setTypeface(fontGilroy);
+        noDataPaint.setTypeface(font);
         noDataPaint.setAntiAlias(true);
 
         gridPaint = new Paint();

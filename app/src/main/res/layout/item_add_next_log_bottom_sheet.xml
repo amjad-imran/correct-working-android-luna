@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         style="@style/S12"
         android:textColor="#B3FFFFFF"
-        android:fontFamily="@font/gilroy_bold"
+        android:fontFamily="@font/google_sans_flex_bold"
         android:layout_marginVertical="13dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="16dp"

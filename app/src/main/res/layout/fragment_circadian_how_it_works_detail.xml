@@ -44,7 +44,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 style="@style/S12"
-                android:fontFamily="@font/gilroy_medium"
+                android:fontFamily="@font/google_sans_flex_medium"
                 android:lineHeight="19sp"
                 android:textColor="#ABFFFFFF"
                 android:layout_marginHorizontal="16dp"

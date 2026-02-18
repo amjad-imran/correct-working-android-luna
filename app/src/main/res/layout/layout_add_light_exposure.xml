@@ -12,7 +12,7 @@
         style="@style/S12"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/gilroy_bold"
+        android:fontFamily="@font/google_sans_flex_bold"
         android:text="@string/text_intake_1"
         android:textColor="#B3FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"

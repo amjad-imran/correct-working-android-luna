@@ -12,7 +12,7 @@ object FontStyle {
     val SIZE_16 = TextStyle(
         fontFamily = FontFamily(
             Font(
-                com.noisefit_commans.R.font.gilroy_medium,
+                com.noisefit_commans.R.font.google_sans_flex_medium,
                 FontWeight.Normal
             )
         ),
@@ -22,7 +22,7 @@ object FontStyle {
     val SIZE_18 = TextStyle(
         fontFamily = FontFamily(
             Font(
-                com.noisefit_commans.R.font.gilroy_medium,
+                com.noisefit_commans.R.font.google_sans_flex_medium,
                 FontWeight.Normal
             )
         ),
@@ -32,7 +32,7 @@ object FontStyle {
     val SIZE_14 = TextStyle(
         fontFamily = FontFamily(
             Font(
-                com.noisefit_commans.R.font.gilroy_medium,
+                com.noisefit_commans.R.font.google_sans_flex_medium,
                 FontWeight.Normal
             )
         ),
@@ -43,7 +43,7 @@ object FontStyle {
     val SIZE_12 = TextStyle(
         fontFamily = FontFamily(
             Font(
-                com.noisefit_commans.R.font.gilroy_medium,
+                com.noisefit_commans.R.font.google_sans_flex_medium,
                 FontWeight.Normal
             )
         ),
@@ -54,7 +54,7 @@ object FontStyle {
     val SIZE_20 = TextStyle(
         fontFamily = FontFamily(
             Font(
-                com.noisefit_commans.R.font.gilroy_medium,
+                com.noisefit_commans.R.font.google_sans_flex_medium,
                 FontWeight.Normal
             )
         ),
@@ -64,7 +64,7 @@ object FontStyle {
     val SIZE_24 = TextStyle(
         fontFamily = FontFamily(
             Font(
-                com.noisefit_commans.R.font.gilroy_medium,
+                com.noisefit_commans.R.font.google_sans_flex_medium,
                 FontWeight.Normal
             )
         ),
@@ -75,7 +75,7 @@ object FontStyle {
     val SIZE_36 = TextStyle(
         fontFamily = FontFamily(
             Font(
-                com.noisefit_commans.R.font.gilroy_medium,
+                com.noisefit_commans.R.font.google_sans_flex_medium,
                 FontWeight.Normal
             )
         ),

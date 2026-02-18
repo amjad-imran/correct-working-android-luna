@@ -29,7 +29,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
-                android:fontFamily="@font/gilroy_medium"
+                android:fontFamily="@font/google_sans_flex_medium"
                 tools:text="@string/text_daily_nhealth_digest"
                 android:letterSpacing="-0.01"
                 android:lineHeight="17sp"

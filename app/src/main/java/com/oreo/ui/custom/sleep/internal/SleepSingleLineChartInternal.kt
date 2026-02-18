@@ -15,16 +15,12 @@ import android.os.Looper
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewConfiguration
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.ColorUtils
-import com.google.gson.Gson
 import com.noisefit.NoiseFitApplicationMain
 import com.noisefit.luna.R
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.common.averageWithZeroGenericFloat
-import com.noisefit_commans.common.averageWithoutZero
-import com.noisefit_commans.common.averageWithoutZeroGeneric
 import com.noisefit_commans.common.averageWithoutZeroGenericFloat
 import com.noisefit_commans.common.yearMonth
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
@@ -106,8 +102,8 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
     private fun init(attrs: AttributeSet?) {
 
-        val fontGilroy =
-            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
+        val font =
+            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.google_sans_flex_medium)
 
         avgLineFillPaint = Paint()
 
@@ -117,13 +113,13 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
         xOverlayLinePaint = Paint().apply {
             this.color = Color.parseColor("#29cc74")
             strokeWidth = dip2px(2f).toFloat()
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(12f).toFloat()
         }
 
         avgTextPaint = Paint().apply {
             this.color = Color.parseColor("#ffffff")
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(9f).toFloat()
         }
 
@@ -135,28 +131,28 @@ class SleepSingleLineChartInternal constructor(context: Context?, attrs: Attribu
 
         xAxisPaint = Paint().apply {
             this.color = Color.parseColor("#40ffffff")
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(12f).toFloat()
         }
 
         textPaintHour = Paint().apply {
             this.color = Color.parseColor("#96ffffff")
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(12f).toFloat()
         }
         textPaintHourI = Paint().apply {
             this.color = Color.parseColor("#20FFFFFF")
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(12f).toFloat()
         }
         textPaintNeed = Paint().apply {
             this.color = Color.parseColor("#ffffff")
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(12f).toFloat()
         }
         textPaintNeedI = Paint().apply {
             this.color = Color.parseColor("#20FFFFFF")
-            this.typeface = fontGilroy
+            this.typeface = font
             this.textSize = dip2px(12f).toFloat()
         }
 

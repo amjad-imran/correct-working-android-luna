@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="56dp"
             android:alpha="0.6"
-            android:fontFamily="@font/gilroy_medium"
+            android:fontFamily="@font/google_sans_flex_medium"
             android:text="@string/text_no_activities"
             android:textColor="@color/md_theme_light_text_color_h2"
             android:textSize="14sp"

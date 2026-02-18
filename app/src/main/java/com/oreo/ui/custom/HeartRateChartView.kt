@@ -18,14 +18,12 @@ import android.os.Handler
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewConfiguration
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.noisefit.luna.R
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.HAPTIC_VIBRATION
-import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.VibrationUtils
 import com.oreo.data.model.ChartModel
 import com.oreo.data.model.GraphDummyModel
@@ -221,8 +219,8 @@ class HeartRateChartView : View {
     }
 
     private fun initPaint() {
-        val fontGilroy =
-            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.gilroy_medium)
+        val fontGoogleSans =
+            ResourcesCompat.getFont(this.context, com.noisefit_commans.R.font.google_sans_flex_medium)
 
         restLineColor = Paint().apply {
             color = Color.parseColor("#ff0000")
@@ -231,12 +229,12 @@ class HeartRateChartView : View {
         mTextPaint = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
         mTextPaint.color = ContextCompat.getColor(context, com.noisefit_commans.R.color.white_64)
         mTextPaint.textSize = dip2px(12f).toFloat()
-        mTextPaint.setTypeface(fontGilroy)
+        mTextPaint.setTypeface(fontGoogleSans)
 
 
         mTextPaintEdge = Paint(Paint.LINEAR_TEXT_FLAG or Paint.ANTI_ALIAS_FLAG)
         mTextPaintEdge.color = ContextCompat.getColor(context, com.noisefit_commans.R.color.white)
-        mTextPaintEdge.setTypeface(fontGilroy)
+        mTextPaintEdge.setTypeface(fontGoogleSans)
         mTextPaintEdge.textSize = dip2px(12f).toFloat()
 
         edgeTextBackPaint = Paint()
@@ -256,12 +254,12 @@ class HeartRateChartView : View {
 
         xTextPaint = Paint()
         xTextPaint!!.textSize = xTextSize
-        xTextPaint!!.setTypeface(fontGilroy)
+        xTextPaint!!.setTypeface(fontGoogleSans)
         xTextPaint!!.isAntiAlias = true
         noDataPaint = Paint()
         noDataPaint!!.textSize = noDataSize
         noDataPaint!!.color = resources.getColor(R.color.white)
-        noDataPaint!!.setTypeface(fontGilroy)
+        noDataPaint!!.setTypeface(fontGoogleSans)
         noDataPaint!!.isAntiAlias = true
         gridPaint = Paint()
         gridPaint!!.color = gridColor
@@ -292,7 +290,7 @@ class HeartRateChartView : View {
         scaleNodePaint!!.isAntiAlias = true
         paintCalm = Paint()
         paintCalm.textSize = xTextSize
-        paintCalm.setTypeface(fontGilroy)
+        paintCalm.setTypeface(fontGoogleSans)
         paintCalm.color = Color.parseColor("#3fe8b5")
 
         lowTopPaint = Paint().apply {
@@ -301,7 +299,7 @@ class HeartRateChartView : View {
 
         avgTextPaint = Paint().apply {
             this.color = Color.parseColor("#ffffff")
-            this.typeface = fontGilroy
+            this.typeface = fontGoogleSans
             this.textSize = dip2px(14f).toFloat()
         }
 

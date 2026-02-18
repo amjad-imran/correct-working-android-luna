@@ -104,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="24dp"
-            android:fontFamily="@font/gilroy_medium"
+            android:fontFamily="@font/google_sans_flex_medium"
             android:textColor="@color/white_80"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
