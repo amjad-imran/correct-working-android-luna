@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#0B0A11"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ivCross"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_ai_close"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivPersonalization"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_ai_personalization"
+        app:layout_constraintTop_toTopOf="@+id/imageView62"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView62"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView62"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_lifeos_logo_new"
+        app:layout_constraintBottom_toBottomOf="@+id/ivCross"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ivCross" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/chatRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingTop="@dimen/dimen_18dp"
+        android:paddingBottom="50dp"
+        android:layout_marginBottom="100dp"
+        android:background="@color/transparent"
+        app:layout_constraintBottom_toBottomOf="@id/ivBtnAction"
+        app:layout_constraintTop_toBottomOf="@+id/imageView62" />
+
+    <TextView
+        android:id="@+id/tvStartTalking"
+        style="@style/S20"
+        android:layout_width="@dimen/dimen_0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/start_talking"
+        app:layout_constraintBottom_toBottomOf="@+id/chatRecycler"
+        app:layout_constraintEnd_toEndOf="@+id/chatRecycler"
+        app:layout_constraintStart_toStartOf="@+id/chatRecycler"
+        app:layout_constraintTop_toBottomOf="@+id/imageView62" />
+
+    <View
+        android:id="@+id/viewGradient"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        app:layout_constraintBottom_toBottomOf="@+id/chatRecycler"
+        android:background="@drawable/bg_voice_action"/>
+
+    <TextView
+        android:id="@+id/tvTurnVolumeUp"
+        style="@style/S14"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dimen_0dp"
+        android:layout_marginBottom="@dimen/dimen_4dp"
+        android:background="@drawable/bg_capsule_grey"
+        android:drawableLeft="@drawable/ic_speaker"
+        android:drawablePadding="@dimen/dimen_2dp"
+        android:gravity="center"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="10dp"
+        android:visibility="gone"
+        android:text="@string/turn_up_the_volume_to_hear_me_speak"
+        app:layout_constraintBottom_toTopOf="@id/lvListening"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lvListening"
+        android:layout_width="0dp"
+        android:layout_height="136dp"
+        android:scaleType="centerInside"
+        android:layout_marginBottom="@dimen/dimen_20dp"
+        android:visibility="gone"
+        android:background="@color/transparent"
+        app:layout_constraintBottom_toTopOf="@+id/lvThinking"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/voice_ai_listening" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lvThinking"
+        android:layout_width="0dp"
+        android:layout_height="136dp"
+        android:scaleType="centerInside"
+        android:visibility="gone"
+        android:background="@color/transparent"
+        android:layout_marginBottom="@dimen/dimen_20dp"
+        app:layout_constraintBottom_toTopOf="@+id/ivMute"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/voice_ai_thinking" />
+
+    <ImageView
+        android:id="@+id/ivMute"
+        android:layout_width="match_parent"
+        android:layout_height="136dp"
+        android:layout_marginBottom="@dimen/dimen_20dp"
+        android:visibility="gone"
+        android:background="@color/transparent"
+        android:layout_marginHorizontal="@dimen/dimen_56dp"
+        android:src="@drawable/ic_voice_mute_line"
+        app:layout_constraintBottom_toTopOf="@+id/ivBtnAction"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:lottie_rawRes="@raw/voice_ai_thinking" />
+
+    <ImageView
+        android:id="@+id/ivBtnAction"
+        android:layout_width="@dimen/dimen_48dp"
+        android:layout_height="@dimen/dimen_48dp"
+        android:layout_marginBottom="12dp"
+        android:src="@drawable/ic_voice_speak"
+        app:contentPadding="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/tvActionText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tvActionText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:gravity="center"
+        android:paddingHorizontal="@dimen/dimen_8dp"
+        android:text="@string/starting_up"
+        android:textColor="#7B7B7B"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

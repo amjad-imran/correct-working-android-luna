@@ -2536,4 +2536,18 @@ onjour, Luna"</string>
     <string name="text_thanks_for_sharing_nwe_are_working_to_make_this_better">Merci pour votre retour.\nNous travaillons à améliorer cela.</string>
     <string name="text_glad_you_like">Content que ça vous ait plu !</string>
 
+    <string name="turn_up_the_volume_to_hear_me_speak">Augmentez le volume pour m\'entendre parler.</string>
+    <string name="say_hey_luna">Dites « Hey Luna »</string>
+    <string name="say_hey_luna_again">Dites encore « Hey Luna »</string>
+    <string name="great_one_last_time">Super ! Une dernière fois</string>
+    <string name="record">Enregistrer</string>
+    <string name="help_me_learn_your_voice">Aidez-moi à apprendre votre voix</string>
+    <string name="hey_luna">Hey Luna</string>
+    <string name="done">Terminé !</string>
+    <string name="starting_up">Démarrage</string>
+    <string name="text_thinking">Réflexion</string>
+    <string name="text_unable_to_speak">Réactivez le son pour parler</string>
+    <string name="start_talking">Commencer à parler</string>
+    <string name="error_connection_lost">Connexion perdue. \nVérifiez votre connexion Internet et réessayez.</string>
+    <string name="error_server">Erreur du serveur, veuillez réessayer.</string>
 </resources>

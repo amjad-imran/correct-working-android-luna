@@ -7,6 +7,7 @@ import com.google.firebase.remoteconfig.remoteConfig
 object RemoteConfigManager {
 
     const val WHATS_NEW_HOME = "whats_new_home"
+    const val HOME_CARDS_SEQUENCE = "home_cards_sequence"
     private val remoteConfig by lazy {
         Firebase.remoteConfig
     }

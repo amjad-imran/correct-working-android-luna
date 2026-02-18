@@ -24,6 +24,6 @@
     <string name="text_none">Geen</string>
     <string name="text_tracking_location">Locatie volgen...</string>
     <string name="text_updating_location">Locatie bijwerken...</string>
-
+    <string name="text_speaking">Spreken</string>
 
 </resources>

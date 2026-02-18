@@ -434,10 +434,19 @@ class LifeOsDashFragment :
         }
 
         binding.lytHeader.lytChatBox.btnAction.setOnClickListener {
-            val (frag, bundle) = AudioAiFragment.getStartData(
-                PlanType.NONE
-            )
-            navigate(frag, bundle)
+            navigate(if (mainViewModel.getUserSelectedPersona().isNotEmpty()) {
+                R.id.lifeOsVoiceChatFragment
+            } else {
+                R.id.choosePersonaVoiceFragment
+            })
+        }
+
+        binding.ivVoiceAI.setOnClickListener {
+            navigate(if (mainViewModel.getUserSelectedPersona().isNotEmpty()) {
+                R.id.lifeOsVoiceChatFragment
+            } else {
+                R.id.choosePersonaVoiceFragment
+            })
         }
 
         binding.lytToolbar.ivHistory.setOnClickListener {

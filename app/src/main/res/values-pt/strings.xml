@@ -2441,4 +2441,18 @@
     <string name="text_thanks_for_sharing_nwe_are_working_to_make_this_better">Obrigado por compartilhar sua opinião.\nEstamos trabalhando para melhorar isso.</string>
     <string name="text_glad_you_like">Fico feliz que você tenha gostado!</string>
 
+    <string name="turn_up_the_volume_to_hear_me_speak">Aumente o volume para me ouvir falar.</string>
+    <string name="say_hey_luna">Diga “Hey Luna”</string>
+    <string name="say_hey_luna_again">Diga “Hey Luna” novamente</string>
+    <string name="great_one_last_time">Ótimo! Mais uma vez</string>
+    <string name="record">Gravar</string>
+    <string name="help_me_learn_your_voice">Ajude-me a aprender sua voz</string>
+    <string name="hey_luna">Hey Luna</string>
+    <string name="done">Concluído!</string>
+    <string name="starting_up">Iniciando</string>
+    <string name="text_thinking">Pensando</string>
+    <string name="text_unable_to_speak">Ative o som para falar</string>
+    <string name="start_talking">Começar a falar</string>
+    <string name="error_connection_lost">Conexão perdida. \nVerifique sua internet e tente novamente.</string>
+    <string name="error_server">Erro no servidor, tente novamente.</string>
 </resources>

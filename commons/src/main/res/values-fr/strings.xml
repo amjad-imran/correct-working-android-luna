@@ -25,5 +25,5 @@
     <string name="text_none">Aucun</string>
     <string name="text_tracking_location">Emplacement de suivi...</string>
     <string name="text_updating_location">Mise à jour de l\'emplacement...</string>
-
+    <string name="text_speaking">Parler</string>
 </resources>

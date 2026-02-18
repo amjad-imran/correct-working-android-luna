@@ -1772,6 +1772,7 @@
     <string name="text_ai_header_2">Great, one more time</string>
     <string name="text_ai_header_3">Amazing, one last time</string>
     <string name="text_speak">Speak</string>
+    <string name="text_speaking">Speaking</string>
     <string name="text_hello_luna">\"Hello, Luna\"</string>
     <string name="text_tap_to_speak">Tap to speak</string>
     <string name="text_personalize_luna">Personalize Luna</string>
@@ -2363,6 +2364,16 @@ These insights help you understand how your heart rate changes during different 
     <string name="connection_issue">Connection Issue</string>
     <string name="text_crafting_your_insights">Crafting your insights.</string>
     <string name="text_your_insights_will_be_ready_shortly">Your insights will be ready shortly</string>
+    <string name="say_hey_luna">Say “Hey Luna”</string>
+    <string name="say_hey_luna_again">Say “Hey Luna” again</string>
+    <string name="great_one_last_time">Great! One last time</string>
+    <string name="record">Record</string>
+    <string name="help_me_learn_your_voice">Help me learn your voice</string>
+    <string name="hey_luna">Hey Luna</string>
+    <string name="done">Done!</string>
+    <string name="starting_up">Starting up</string>
+    <string name="text_thinking">Thinking</string>
+    <string name="text_unable_to_speak">Unmute to speak</string>
     <string name="text_selected_habits">Selected Habits</string>
     <string name="text_val_habits_logged">%1$d/%2$d Habits Logged</string>
     <string name="text_customize">Customize</string>
@@ -2393,5 +2404,9 @@ These insights help you understand how your heart rate changes during different 
     <string name="text_there_was_a_bug">There was a bug</string>
     <string name="text_thanks_for_sharing_nwe_are_working_to_make_this_better">Thanks for sharing.\nWe are working to make this better.</string>
     <string name="text_glad_you_like">Glad you liked it!</string>
+    <string name="turn_up_the_volume_to_hear_me_speak">Turn up the volume to hear me speak.</string>
+    <string name="start_talking">Start talking</string>
+    <string name="error_connection_lost">Connection lost. \nCheck your internet and try again.</string>
+    <string name="error_server">Server error, please try again.</string>
 
 </resources>

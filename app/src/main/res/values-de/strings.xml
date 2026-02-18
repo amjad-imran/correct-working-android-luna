@@ -2417,4 +2417,18 @@
     <string name="text_thanks_for_sharing_nwe_are_working_to_make_this_better">Vielen Dank für dein Feedback.\nWir arbeiten daran, dies zu verbessern.</string>
     <string name="text_glad_you_like">Freut mich, dass es dir gefallen hat!</string>
 
+    <string name="turn_up_the_volume_to_hear_me_speak">Erhöhen Sie die Lautstärke, um mich sprechen zu hören.</string>
+    <string name="say_hey_luna">Sagen Sie „Hey Luna“</string>
+    <string name="say_hey_luna_again">Sagen Sie noch einmal „Hey Luna“</string>
+    <string name="great_one_last_time">Super! Ein letztes Mal</string>
+    <string name="record">Aufnehmen</string>
+    <string name="help_me_learn_your_voice">Hilf mir, deine Stimme zu lernen</string>
+    <string name="hey_luna">Hey Luna</string>
+    <string name="done">Fertig!</string>
+    <string name="starting_up">Wird gestartet</string>
+    <string name="text_thinking">Denke nach</string>
+    <string name="text_unable_to_speak">Zum Sprechen Stummschaltung aufheben</string>
+    <string name="start_talking">Sprechen beginnen</string>
+    <string name="error_connection_lost">Verbindung verloren. \nÜberprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.</string>
+    <string name="error_server">Serverfehler, bitte versuchen Sie es erneut.</string>
 </resources>

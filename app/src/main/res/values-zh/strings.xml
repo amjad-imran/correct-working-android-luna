@@ -2410,4 +2410,18 @@
     <string name="text_there_was_a_bug">出现了一个错误</string>
     <string name="text_thanks_for_sharing_nwe_are_working_to_make_this_better">感谢您的反馈。\n我们正在努力改进。</string>
     <string name="text_glad_you_like">很高兴你喜欢！</string>
+    <string name="turn_up_the_volume_to_hear_me_speak">请调高音量以听到我说话。</string>
+    <string name="say_hey_luna">说“Hey Luna”</string>
+    <string name="say_hey_luna_again">再说一次“Hey Luna”</string>
+    <string name="great_one_last_time">很好！最后一次</string>
+    <string name="record">录音</string>
+    <string name="help_me_learn_your_voice">帮助我学习你的声音</string>
+    <string name="hey_luna">Hey Luna</string>
+    <string name="done">完成！</string>
+    <string name="starting_up">正在启动</string>
+    <string name="text_thinking">思考中</string>
+    <string name="text_unable_to_speak">取消静音以说话</string>
+    <string name="start_talking">开始说话</string>
+    <string name="error_connection_lost">连接已断开。\n请检查您的网络连接并重试。</string>
+    <string name="error_server">服务器错误，请重试。</string>
 </resources>

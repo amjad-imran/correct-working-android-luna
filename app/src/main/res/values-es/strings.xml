@@ -2387,4 +2387,18 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="text_thanks_for_sharing_nwe_are_working_to_make_this_better">Gracias por compartir tu opinión.\nEstamos trabajando para mejorar esto.</string>
     <string name="text_glad_you_like">¡Me alegra que te haya gustado!</string>
 
+    <string name="turn_up_the_volume_to_hear_me_speak">Sube el volumen para escucharme hablar.</string>
+    <string name="say_hey_luna">Di « Hey Luna »</string>
+    <string name="say_hey_luna_again">Di « Hey Luna » otra vez</string>
+    <string name="great_one_last_time">¡Genial! Una última vez</string>
+    <string name="record">Grabar</string>
+    <string name="help_me_learn_your_voice">Ayúdame a aprender tu voz</string>
+    <string name="hey_luna">Hey Luna</string>
+    <string name="done">¡Listo!</string>
+    <string name="starting_up">Iniciando</string>
+    <string name="text_thinking">Pensando</string>
+    <string name="text_unable_to_speak">Activa el sonido para hablar</string>
+    <string name="start_talking">Empezar a hablar</string>
+    <string name="error_connection_lost">Conexión perdida. \nComprueba tu conexión a Internet y vuelve a intentarlo.</string>
+    <string name="error_server">Error del servidor, inténtalo de nuevo.</string>
 </resources>

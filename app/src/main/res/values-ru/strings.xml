@@ -2441,4 +2441,18 @@
     <string name="text_thanks_for_sharing_nwe_are_working_to_make_this_better">Спасибо за ваш отзыв.\nМы работаем над тем, чтобы улучшить это.</string>
     <string name="text_glad_you_like">Рады, что вам понравилось!</string>
 
+    <string name="turn_up_the_volume_to_hear_me_speak">Увеличьте громкость, чтобы услышать мою речь.</string>
+    <string name="say_hey_luna">Скажите «Хей, Луна»</string>
+    <string name="say_hey_luna_again">Скажите «Хей, Луна» ещё раз</string>
+    <string name="great_one_last_time">Отлично! Ещё один раз</string>
+    <string name="record">Запись</string>
+    <string name="help_me_learn_your_voice">Помогите мне изучить ваш голос</string>
+    <string name="hey_luna">Хей, Луна</string>
+    <string name="done">Готово!</string>
+    <string name="starting_up">Запуск</string>
+    <string name="text_thinking">Думаю</string>
+    <string name="text_unable_to_speak">Включите звук, чтобы говорить</string>
+    <string name="start_talking">Начать говорить</string>
+    <string name="error_connection_lost">Соединение потеряно. \nПроверьте подключение к интернету и попробуйте снова.</string>
+    <string name="error_server">Ошибка сервера, попробуйте снова.</string>
 </resources>

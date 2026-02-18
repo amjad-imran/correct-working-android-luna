@@ -24,6 +24,6 @@
     <string name="text_none">Nessuno</string>
     <string name="text_tracking_location">Monitoraggio della posizione...</string>
     <string name="text_updating_location">Aggiornamento della posizione...</string>
-
+    <string name="text_speaking">Parlando</string>
 
 </resources>

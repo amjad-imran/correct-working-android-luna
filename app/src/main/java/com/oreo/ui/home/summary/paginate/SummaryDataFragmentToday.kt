@@ -88,7 +88,6 @@ import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.chatGpt.SummaryStates
-import com.oreo.ui.chatGpt.audio.AudioAiFragment
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 import com.oreo.ui.custom.CirclePagerIndicatorDecoration
 import com.oreo.ui.custom.SnapHelperOneByOne
@@ -824,12 +823,8 @@ class SummaryDataFragmentToday :
                 OSummaryHealthOverviewClickEnum.LifeOsVoiceClicked -> {
                     viewModel.handleLifeOsCardClicked{ isOnboardDone ->
                         if(isOnboardDone) {
-                            val (frag, bundle) = AudioAiFragment.getStartData(
-                                PlanType.NONE
-                            )
-                            navigate(frag, bundle)
-                        }
-                        else{
+                            navigate(R.id.lifeOsVoiceChatFragment)
+                        } else{
                             mainViewModel.navigateTo(BottomNavOption.LUNA_AI)
                         }
                     }

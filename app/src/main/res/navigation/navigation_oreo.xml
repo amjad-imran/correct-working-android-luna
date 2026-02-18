@@ -1793,5 +1793,21 @@
         android:label="fragment_app_rating_dislike_feedback_bottom_sheet"
         tools:layout="@layout/fragment_app_rating_dislike_feedback_bottom_sheet" />
 
+    <fragment
+        android:id="@+id/choosePersonaVoiceFragment"
+        android:name="com.oreo.ui.chatGpt.audio.persona.ChoosePersonaVoiceFragment"
+        android:label="fragment_choose_persona_voice"
+        tools:layout="@layout/fragment_choose_persona_voice">
+
+        <argument
+            android:name="isFromVoiceChat"
+            android:defaultValue="false"
+            app:argType="boolean" />
+    </fragment>
+    <fragment
+        android:id="@+id/lifeOsVoiceChatFragment"
+        android:name="com.oreo.ui.chatGpt.audio.LifeOSVoiceChatFragment"
+        android:label="fragment_life_o_s_voice_chat_fragment"
+        tools:layout="@layout/fragment_life_os_voice_chat" />
 
 </navigation>
