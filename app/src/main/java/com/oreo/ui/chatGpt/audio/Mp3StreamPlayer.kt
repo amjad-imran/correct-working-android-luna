@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.res.AssetFileDescriptor
 import android.media.MediaPlayer
 import android.util.Base64
-import androidx.lifecycle.MutableLiveData
 import java.io.File
 import java.io.FileOutputStream
 import java.util.concurrent.CopyOnWriteArrayList
@@ -13,9 +12,7 @@ class Mp3Streamer(private val context: Context) {
     private val audioFiles = CopyOnWriteArrayList<File>()
     private var mediaPlayer: MediaPlayer? = null
     private var currentIndex = 0
-    val isSpeaking: MutableLiveData<Boolean?> = MutableLiveData(null)
-    fun addChunk(base64Chunk: String) {
-        isSpeaking.postValue(true)
+    fun addChunk(base64Chunk: String, isCompleted: () -> Unit) {
         try {
             val bytes = Base64.decode(base64Chunk, Base64.DEFAULT)
             val tempFile = File.createTempFile("chunk_", ".mp3", context.cacheDir)
@@ -24,7 +21,7 @@ class Mp3Streamer(private val context: Context) {
             audioFiles.add(tempFile)
 
             if (mediaPlayer == null || mediaPlayer?.isPlaying == false) {
-                playNext()
+                playNext(isCompleted)
             }
 
         } catch (e: Exception) {
@@ -32,9 +29,9 @@ class Mp3Streamer(private val context: Context) {
         }
     }
 
-    private fun playNext() {
+    private fun playNext(isCompleted: () -> Unit) {
         if (currentIndex >= audioFiles.size) {
-            isSpeaking.postValue(false)
+            isCompleted.invoke()
             return
         }
 
@@ -43,14 +40,14 @@ class Mp3Streamer(private val context: Context) {
             setDataSource(file.absolutePath)
             setOnCompletionListener {
                 currentIndex++
-                playNext()
+                playNext(isCompleted)
             }
             prepare()
             start()
         }
     }
 
-    fun playMusicFromAsset(afd: AssetFileDescriptor) {
+    fun playMusicFromAsset(afd: AssetFileDescriptor, isCompleted: () -> Unit) {
         try {
             mediaPlayer?.release()
             mediaPlayer = MediaPlayer().apply {
@@ -60,7 +57,7 @@ class Mp3Streamer(private val context: Context) {
                     start()
                 }
                 setOnCompletionListener {
-                    isSpeaking.postValue(false)
+                    isCompleted.invoke()
                     afd.close()
                 }
             }

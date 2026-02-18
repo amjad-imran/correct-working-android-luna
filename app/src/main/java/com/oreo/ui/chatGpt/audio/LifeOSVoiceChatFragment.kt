@@ -1,7 +1,6 @@
 package com.oreo.ui.chatGpt.audio
 
 import ChatAdapter
-import VoiceChatMessage
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -47,7 +46,6 @@ class LifeOSVoiceChatFragment :
         Mp3Streamer(requireContext())
     }
     private var currentState = ActionState.LISTENING
-    private var isRecognizerCommiting = AtomicBoolean(false)
     private var initialState =  ActionState.SPEAKING
     private var isMuted = false
     private var volumeObserver: VolumeObserver? = null
@@ -104,7 +102,9 @@ class LifeOSVoiceChatFragment :
         try {
             val afd = context?.assets?.openFd("$fileName.mp3")
             afd?.let {
-                mp3Streamer.playMusicFromAsset(it)
+                mp3Streamer.playMusicFromAsset(it){
+                    setActionState(ActionState.LISTENING)
+                }
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -172,7 +172,7 @@ class LifeOSVoiceChatFragment :
         if (it) {
             startListening()
         } else {
-            context.showShortToast("Permission Required")
+            context.showShortToast(getString(R.string.text_permission_required))
             navigateUpSafe()
         }
     }
@@ -195,14 +195,11 @@ class LifeOSVoiceChatFragment :
         viewModel.audioStream.observe(viewLifecycleOwner) { audioStream ->
             audioStream?.let {
                 lifecycleScope.launch {
-                    mp3Streamer.addChunk(it)
+                    mp3Streamer.addChunk(it){
+                        setActionState(ActionState.LISTENING)
+                    }
                 }
                 setActionState(ActionState.SPEAKING)
-            }
-        }
-        mp3Streamer.isSpeaking.observe(viewLifecycleOwner) {
-            if (it == false) {
-                setActionState(ActionState.LISTENING)
             }
         }
     }
@@ -322,18 +319,16 @@ class LifeOSVoiceChatFragment :
     private fun setupSpeechRecognizer() {
         speechRecognizer?.let { return }
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(requireContext())
-        val finalText = StringBuilder()
-        var lastPartial = ""
         var messageId = UUID.randomUUID()
-        val isFirst = AtomicBoolean(true)
+        var committedText = ""
+        var lastPartial = ""
         var commitJob: Job? = null
         val COMMIT_DELAY = 2500L
 
-        fun resetListener(){
-            finalText.clear()
-            lastPartial = ""
+        fun resetListener() {
             messageId = UUID.randomUUID()
-            isFirst.set(true)
+            committedText = ""
+            lastPartial = ""
             commitJob = null
         }
 
@@ -349,43 +344,56 @@ class LifeOSVoiceChatFragment :
                     ?: return
 
                 binding.tvStartTalking.gone()
-                if (text.startsWith(lastPartial)) {
-                    val delta = text.substring(lastPartial.length)
-                    finalText.append(delta)
+                if (lastPartial.isNotEmpty() && text.length < lastPartial.length * 0.5) {
+                    committedText = if (committedText.isNotEmpty()) {
+                        "$committedText $lastPartial"
+                    } else {
+                        lastPartial
+                    }
                 }
 
                 lastPartial = text
-                if (isFirst.getAndSet(false)) {
-                    viewModel.addMessage(
-                        VoiceChatMessage(
-                            id = messageId,
-                            message = "",
-                            isUser = true,
-                            isStreaming = true
-                        )
-                    )
+
+                val fullText = if (committedText.isNotEmpty()) {
+                    "$committedText $text"
+                } else {
+                    text
                 }
-                viewModel.addReceivedMessage(finalText.toString(), messageId)
+
+                viewModel.addOrUpdateMessage(messageId, fullText)
 
                 commitJob?.cancel()
                 commitJob = viewLifecycleOwner.lifecycleScope.launch {
                     delay(COMMIT_DELAY)
                     if (!isMuted && !isRecognizerActive) return@launch
-                    isRecognizerCommiting.set(true)
                     releaseSpeechRecognizer()
-                    viewModel.askQuestionStream(finalText.toString())
+                    viewModel.askQuestionStream(fullText)
                     setActionState(ActionState.THINKING)
                     resetListener()
                 }
             }
 
-            override fun onResults(results: Bundle?) {}
-            override fun onEndOfSpeech() {}
-            override fun onError(error: Int) {
-                if(isRecognizerCommiting.getAndSet(false)) return
-                startListening()
-                resetListener()
+            override fun onResults(results: Bundle?) {
+                val text = results
+                    ?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+                    ?.firstOrNull()
+                    ?.takeIf { it.isNotEmpty() }
+                    ?: lastPartial.takeIf { it.isNotEmpty() }
+                    ?: return
+
+                committedText = if (committedText.isNotEmpty()) {
+                    "$committedText $text"
+                } else {
+                    text
+                }
+                lastPartial = ""
             }
+
+            override fun onError(error: Int) {
+                startListening()
+            }
+
+            override fun onEndOfSpeech() {}
             override fun onReadyForSpeech(params: Bundle?) {}
             override fun onBeginningOfSpeech() {}
             override fun onRmsChanged(rmsdB: Float) {}

@@ -116,6 +116,10 @@ class ChoosePersonaVoiceFragment :
     override fun subscribeObservers() {
         viewModel.personaData.observe(this){
             it.firstOrNull()?.voiceUrl?.let { url ->
+                binding.tvSelect.visible()
+                binding.viewPager.visible()
+                binding.progressBar.gone()
+                binding.tvPleaseWait.gone()
                 exoPlayer.apply {
                     setMediaItem(MediaItem.fromUri(url))
                     playWhenReady = true

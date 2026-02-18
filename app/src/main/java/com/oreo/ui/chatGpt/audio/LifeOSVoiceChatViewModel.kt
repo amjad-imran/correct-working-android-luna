@@ -1,6 +1,7 @@
 package com.oreo.ui.chatGpt.audio
 
 import VoiceChatMessage
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -58,8 +59,18 @@ class LifeOSVoiceChatViewModel @Inject constructor(
             .build()
     }
 
+    fun addOrUpdateMessage(id: UUID, text: String, isUser: Boolean = true) {
+        val list = _chatMessages.value?.toMutableList() ?: mutableListOf()
+        val index = list.indexOfFirst { it.id == id }
+        if (index != -1) {
+            list[index] = list[index].copy(message = text)
+        } else {
+            list.add(VoiceChatMessage(id = id, message = text, isUser = isUser, isStreaming = true))
+        }
+        _chatMessages.postValue(list)
+    }
     fun addMessage(message: VoiceChatMessage) {
-        val list = _chatMessages.value ?: mutableListOf()
+        val list = _chatMessages.value?.toMutableList() ?: mutableListOf()
         list.add(message)
         _chatMessages.postValue(list)
     }
