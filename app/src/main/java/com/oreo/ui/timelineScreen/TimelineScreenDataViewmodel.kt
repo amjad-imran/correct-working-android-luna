@@ -81,10 +81,32 @@ class TimelineScreenDataViewmodel @Inject constructor(
                             if (it.timeTracker.isNullOrEmpty()) {
                                 activityListData.postValue(ArrayList())
                             } else {
+                                val inputFormatters = listOf(
+                                    DateTimeFormatter.ofPattern("H:mm"),
+                                    DateTimeFormatter.ofPattern("HH:mm"),
+                                    DateTimeFormatter.ofPattern("HH:mm:ss")
+                                )
+
+                                val outputFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+
                                 it.timeTracker?.let { dataList ->
-                                    dataList.filter { it.event.equals("meal") }.map {
-                                        it.startTime+=":00"
-                                        LOGS.d("scjkkasasascs : ${it.startTime}")
+                                    dataList.filter {
+                                        it.event.equals("meal")
+                                    }
+                                    .forEach { item ->
+                                        val formattedTime = inputFormatters.firstNotNullOfOrNull { formatter ->
+                                            try {
+                                                LocalTime.parse(item.startTime, formatter)
+                                            } catch (e: Exception) {
+                                                LOGS.e("TIMELINE_EXCEPTION: TimelineScreenDataViewmodel: ->\ndata: $item\nerror: $e")
+                                                null
+                                            }
+                                        }
+
+                                        formattedTime?.let {
+                                            item.startTime = formattedTime.format(outputFormatter)
+                                        }
+                                        LOGS.d("scjkkasasascs : ${item.startTime}")
                                     }
                                     val data = mergeHydrationEvents(dataList)
 
