@@ -1792,4 +1792,16 @@
         android:label="fragment_life_o_s_voice_chat_fragment"
         tools:layout="@layout/fragment_life_os_voice_chat" />
 
+    <fragment
+        android:id="@+id/whatsNewInLifeOsFragment"
+        android:name="com.oreo.ui.lifeos.WhatsNewInLifeOsFragment"
+        android:label="fragment_WhatsNewInLifeOsFragment"
+        tools:layout="@layout/fragment_whats_new_in_life_os" >
+
+        <argument
+            android:name="blogPosition"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </fragment>
+
 </navigation>

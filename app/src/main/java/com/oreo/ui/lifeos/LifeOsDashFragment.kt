@@ -110,7 +110,13 @@ class LifeOsDashFragment :
         }
     }
 
-    private val whatsNewAdapter by lazy { LifeOsWhatsNewAdapter() }
+    private val whatsNewAdapter by lazy {
+        LifeOsWhatsNewAdapter { position ->
+            navigate(R.id.whatsNewInLifeOsFragment, Bundle().apply {
+                putInt("blogPosition", position)
+            })
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -360,7 +366,7 @@ class LifeOsDashFragment :
 
 
         binding.lytDashWhatsNew.rvNewFeatureList.apply {
-            layoutManager = LinearLayoutManager(requireContext())
+            layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             adapter = whatsNewAdapter
         }
     }
@@ -497,9 +503,7 @@ class LifeOsDashFragment :
 
         viewModel.whatsNew.observe(viewLifecycleOwner) { data ->
             binding.lytDashWhatsNew.tvTitle.text = getString(R.string.text_what_s_new_with_life_os)
-            binding.lytDashWhatsNew.tvVersion.text =
-                getString(R.string.text_version_val, data.version.toString())
-            data.whatsNewList?.let { whatsNewAdapter.submit(it) }
+            whatsNewAdapter.submit(data)
         }
 
         viewModel.insightsCardsData.observe(viewLifecycleOwner){ list ->

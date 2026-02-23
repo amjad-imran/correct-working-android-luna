@@ -3,6 +3,10 @@ package com.oreo.ui.lifeos
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.noisefit.data.RemoteConfigManager
+import com.noisefit.data.RemoteConfigManager.LIFE_OS_WHATS_NEW_BLOG
 import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.data.repository.abstraction.UserRepository
@@ -14,9 +18,10 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.model.lifeos.onboarding.OnBoardQuesGetResponse
 import com.noisefit_commans.ui.BaseViewModel
 import com.noisefit_commans.utils.GraphType
+import com.noisefit_commans.utils.LOGS
 import com.oreo.data.dataConverter.GraphDataConvertor
+import com.oreo.data.model.WhatsNewSection
 import com.oreo.data.model.lifeos.dashModels.InsightItemResponseModel
-import com.oreo.data.model.lifeos.dashModels.LifeOsWhatsNewResponse
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import com.oreo.ui.chatGpt.AITopics
 import com.oreo.ui.lifeos.charts.InsightCardUiModel
@@ -24,6 +29,7 @@ import com.oreo.ui.sleep2.internal.InternalSelectedPeriod
 import com.oreo.ui.sleep2.internal.SleepInternalLaunchState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -40,8 +46,8 @@ class LifeOsDashViewModel @Inject constructor(
     private val _questions = MutableLiveData<List<String>>()
     val questions: LiveData<List<String>> get() = _questions
 
-    private val _whatsNew = MutableLiveData<LifeOsWhatsNewResponse>()
-    val whatsNew: LiveData<LifeOsWhatsNewResponse> get() = _whatsNew
+    private val _whatsNew = MutableLiveData<List<WhatsNewSection>>()
+    val whatsNew: LiveData<List<WhatsNewSection>> get() = _whatsNew
 
     private val _insightsCardsData = MutableLiveData<List<InsightCardUiModel>>()
     val insightsCardsData: LiveData<List<InsightCardUiModel>> get() = _insightsCardsData
@@ -872,14 +878,28 @@ class LifeOsDashViewModel @Inject constructor(
     }
 
     fun loadWhatsNew() {
-        _whatsNew.value = LifeOsWhatsNewResponse(
-            version = 1.2f,
-            whatsNewList = listOf(
-                resourcesProvider.getString(R.string.text_lifeos_whats_new_content_1),
-                resourcesProvider.getString(R.string.text_lifeos_whats_new_content_2),
-                resourcesProvider.getString(R.string.text_lifeos_whats_new_content_3),
+        try {
+            val rawJson = JSONObject(RemoteConfigManager.getString(LIFE_OS_WHATS_NEW_BLOG))
+            val lang = localDataStore.getSelectedAppLanguage() ?: "en"
+
+            val langArray = when {
+                rawJson.has(lang) -> rawJson.getJSONArray(lang)
+                rawJson.has("en") -> rawJson.getJSONArray("en")
+                else -> return
+            }
+
+            if (langArray.length() == 0) return
+
+            val items: List<WhatsNewSection> = Gson().fromJson(
+                langArray.toString(),
+                object : TypeToken<List<WhatsNewSection>>() {}.type
             )
-        )
+
+            _whatsNew.value = items
+
+        } catch (e: Exception) {
+            LOGS.e(e)
+        }
     }
 
     fun getGreetText(): String {

@@ -1,26 +1,66 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="234dp"
+    android:layout_height="240dp"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    app:cardCornerRadius="10dp"
+    app:cardElevation="4dp"
+    android:layout_marginRight="@dimen/dimen_12dp"
+    app:cardBackgroundColor="#1E1B2E">
 
-    <TextView
-        android:id="@+id/tvTitle"
-        style="@style/S14"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/google_sans_flex_medium"
-        android:lineSpacingExtra="3sp"
-        android:layout_marginTop="16dp"
-        android:textColor="#B3FFFFFF"
-        tools:text="New in Timeline: Streamlined logging for Supplements, Alcohol, and Recovery (meditation, cold plunge, and more)." />
+        android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/lytDivider"
-        layout="@layout/layout_divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="16dp" />
+        <ImageView
+            android:id="@+id/ivCardBackground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="@null"
+            tools:src="@drawable/image_whatsnew_lifeos"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-</LinearLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/gradient_black_bottom_to_top"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvCardTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="@string/meet_lifeos_voice_ai"
+            android:maxLines="2"
+            style="@style/S16"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tvCardSubtitle" />
+
+        <TextView
+            android:id="@+id/tvCardSubtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            tools:text="@string/lifeos_voice_ai_lets_you_interact_with_your_health_completely_by_voice"
+            android:textColor="#CCE0D7F5"
+            style="@style/S12"
+            android:maxLines="3"
+            android:lineSpacingExtra="2dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginBottom="14dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

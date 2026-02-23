@@ -1,30 +1,24 @@
 package com.oreo.ui.lifeos
 
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.noisefit.luna.databinding.ItemAiWhatsNewBinding
-import com.noisefit_commans.ui.gone
-import com.noisefit_commans.ui.invisible
-import com.noisefit_commans.ui.visible
-import io.noties.markwon.Markwon
+import com.oreo.data.model.WhatsNewSection
 
-class LifeOsWhatsNewAdapter : RecyclerView.Adapter<LifeOsWhatsNewAdapter.ViewHolder>() {
-
-    private val items = ArrayList<String>()
+class LifeOsWhatsNewAdapter(val onClick: (Int) -> Unit) : RecyclerView.Adapter<LifeOsWhatsNewAdapter.ViewHolder>() {
+    private val items = ArrayList<WhatsNewSection>()
 
     inner class ViewHolder(val binding: ItemAiWhatsNewBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(text: String) {
-
-            val markwon = Markwon.create(this.binding.tvTitle.context)
-            markwon.setMarkdown(binding.tvTitle, text)
-
-            if (bindingAdapterPosition == items.size - 1) {
-                binding.lytDivider.root.invisible()
-            } else {
-                binding.lytDivider.root.visible()
+        fun bind(item: WhatsNewSection) {
+            binding.apply {
+                tvCardTitle.text = item.title
+                tvCardSubtitle.text = item.description
+                Glide.with(root.context)
+                    .load(item.imageUrl)
+                    .into(ivCardBackground)
             }
         }
     }
@@ -39,11 +33,14 @@ class LifeOsWhatsNewAdapter : RecyclerView.Adapter<LifeOsWhatsNewAdapter.ViewHol
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(items[position])
+        holder.itemView.setOnClickListener {
+            onClick.invoke(position)
+        }
     }
 
     override fun getItemCount(): Int = items.size
 
-    fun submit(list: List<String>) {
+    fun submit(list: List<WhatsNewSection>) {
         items.clear()
         items.addAll(list)
         notifyDataSetChanged()
