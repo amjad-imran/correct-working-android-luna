@@ -502,6 +502,7 @@ class LifeOsDashFragment :
         }
 
         viewModel.whatsNew.observe(viewLifecycleOwner) { data ->
+            binding.lytDashWhatsNew.tvTitle.visible()
             binding.lytDashWhatsNew.tvTitle.text = getString(R.string.text_what_s_new_with_life_os)
             whatsNewAdapter.submit(data)
         }
