@@ -823,7 +823,11 @@ class SummaryDataFragmentToday :
                 OSummaryHealthOverviewClickEnum.LifeOsVoiceClicked -> {
                     viewModel.handleLifeOsCardClicked{ isOnboardDone ->
                         if(isOnboardDone) {
-                            navigate(R.id.lifeOsVoiceChatFragment)
+                            navigate(if (mainViewModel.getUserSelectedPersona().isNotEmpty()) {
+                                R.id.lifeOsVoiceChatFragment
+                            } else {
+                                R.id.choosePersonaVoiceFragment
+                            }, bundleOf("source" to "lifeos_home"))
                         } else{
                             mainViewModel.navigateTo(BottomNavOption.LUNA_AI)
                         }

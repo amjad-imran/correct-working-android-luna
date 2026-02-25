@@ -35,6 +35,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -444,7 +445,7 @@ class LifeOsDashFragment :
                 R.id.lifeOsVoiceChatFragment
             } else {
                 R.id.choosePersonaVoiceFragment
-            })
+            }, bundleOf("source" to "lifeos_tab_chat"))
         }
 
         binding.ivVoiceAI.setOnClickListener {
@@ -452,7 +453,7 @@ class LifeOsDashFragment :
                 R.id.lifeOsVoiceChatFragment
             } else {
                 R.id.choosePersonaVoiceFragment
-            })
+            }, bundleOf("source" to "lifeos_tab_bottom"))
         }
 
         binding.lytToolbar.ivHistory.setOnClickListener {

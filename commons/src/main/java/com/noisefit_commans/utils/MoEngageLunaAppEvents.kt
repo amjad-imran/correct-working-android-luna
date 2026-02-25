@@ -346,5 +346,7 @@ object MoEngageLunaAppEvents {
     const val app_rating_modal_dismissed = "app_rating_modal_dismissed"
     const val app_rating_modal_negative_reason = "app_rating_modal_negative_reason"
 
+    const val SCREEN_VISIBLE = "screen_visible"
+    const val VOICE_SESSION = "voice_session"
 
 }

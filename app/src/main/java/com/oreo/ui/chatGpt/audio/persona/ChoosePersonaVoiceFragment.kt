@@ -7,6 +7,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -109,7 +110,8 @@ class ChoosePersonaVoiceFragment :
             viewModel.saveUserPersona(currentPersona)
             navigateUpSafe()
             if(arguments?.getBoolean("isFromVoiceChat", false) == false)
-                navigate(R.id.lifeOsVoiceChatFragment)
+                navigate(R.id.lifeOsVoiceChatFragment,
+                    bundleOf("source" to arguments?.getString("source", "")))
         }
     }
 

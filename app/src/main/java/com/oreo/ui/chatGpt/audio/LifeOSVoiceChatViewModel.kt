@@ -9,6 +9,7 @@ import com.noisefit.data.base.ResourcesProvider
 import com.noisefit.data.remote.base.Resource
 import com.noisefit.luna.BuildConfig
 import com.noisefit.luna.R
+import com.noisefit.session.SessionManager
 import com.noisefit.util.ApplicationUtils
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
@@ -16,6 +17,8 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.Token
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.MoEngageLunaAppEvents.SCREEN_VISIBLE
+import com.noisefit_commans.utils.MoEngageLunaAppEvents.VOICE_SESSION
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineStart
@@ -41,6 +44,7 @@ class LifeOSVoiceChatViewModel @Inject constructor(
     val localDataStore: DataStoredInterface,
     val oreoDeviceRepository: OreoDeviceRepository,
     val ringDataStore: RingDataStore,
+    val sessionManager: SessionManager
     ) : BaseViewModel() {
     val fetchInProgress = MutableLiveData<Boolean>()
     private val _chatMessages = MutableLiveData<MutableList<VoiceChatMessage>>(mutableListOf())
@@ -314,5 +318,15 @@ class LifeOSVoiceChatViewModel @Inject constructor(
             "ru" -> "ru-RU"
             else -> "en-US"
         }
+    }
+
+    fun logScreenVisible(source: String) {
+        sessionManager.logAppEvents(SCREEN_VISIBLE,
+            hashMapOf("screen" to "lifeos_voice", "source" to source))
+    }
+
+    fun logVoiceSession(duration: String) {
+        sessionManager.logAppEvents(VOICE_SESSION,
+            hashMapOf("duration" to duration))
     }
 }

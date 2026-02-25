@@ -49,14 +49,17 @@ class LifeOSVoiceChatFragment :
     private var initialState =  ActionState.SPEAKING
     private var isMuted = false
     private var volumeObserver: VolumeObserver? = null
+    private var sessionTime = 0L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecycler()
         viewModel.generateThreadId()
+        viewModel.logScreenVisible(arguments?.getString("source", "") ?: "")
     }
 
     override fun onStop() {
+        viewModel.logVoiceSession((System.currentTimeMillis() - sessionTime).toString())
         viewModel.disposeChatStream()
         releaseSpeechRecognizer()
         mp3Streamer.stop()
@@ -68,6 +71,7 @@ class LifeOSVoiceChatFragment :
 
     override fun onStart() {
         super.onStart()
+        sessionTime = System.currentTimeMillis()
         if(currentState != ActionState.ERROR) {
             if(initialState == ActionState.SPEAKING){
                 playWelcomeMsg()
