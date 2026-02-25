@@ -298,4 +298,21 @@ class LifeOSVoiceChatViewModel @Inject constructor(
         ).toString()
         builder.addHeader("offset", offset)
     }
+
+    fun getSpeechLocale():String {
+        val languageCode = localDataStore.getSelectedAppLanguage()
+        return when (languageCode) {
+            "en" -> "en-US"
+            "fr" -> "fr-FR"
+            "de" -> "de-DE"
+            "es" -> "es-ES"
+            "it" -> "it-IT"
+            "nl" -> "nl-NL"
+            "zh" -> "zh-CN"
+            "pt" -> "pt-PT"
+            "th" -> "th-TH"
+            "ru" -> "ru-RU"
+            else -> "en-US"
+        }
+    }
 }
