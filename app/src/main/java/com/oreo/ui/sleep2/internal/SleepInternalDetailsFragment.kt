@@ -370,12 +370,12 @@ class SleepInternalDetailsFragment :
                 binding.lytCalibrating.root.gone()
                 binding.lytTopView.root.visible()
                 binding.graphPager.visible()
-                pagerAdapter = InternalSleepVPAdapter(childFragmentManager, lifecycle)
-                binding.graphPager.adapter = pagerAdapter
-                pagerAdapter?.setDataSet(arrayListOf(it))
+                pagerAdapter?.setDataSet(arrayListOf(it)) ?: run {
+                    pagerAdapter = InternalSleepVPAdapter(childFragmentManager, lifecycle)
+                    binding.graphPager.adapter = pagerAdapter
+                    pagerAdapter?.setDataSet(arrayListOf(it))
+                }
             }
-
-
         }
 
         viewModel.reloadFragment.observe(this) {
