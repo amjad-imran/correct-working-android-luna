@@ -31,9 +31,12 @@ object LocationUtils2 {
 
         if (isMyServiceRunning(LocationService2::class.java, context).not()) {
             Intent(context, LocationService2::class.java).apply {
-                action =
-                    if (postOnMain) LocationService2.ACTION_START else LocationService2.ACTION_START_2
-                context.startService(this)
+                action = if (postOnMain) LocationService2.ACTION_START else LocationService2.ACTION_START_2
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    context.startForegroundService(this)
+                } else {
+                    context.startService(this)
+                }
             }
             AppLogs.sendAppLogs("Start Location tracking")
         } else {
@@ -42,24 +45,15 @@ object LocationUtils2 {
     }
 
     private fun hasGpsPermission(context: Application): Boolean {
-        val permissionAccessFineLocationApproved =
-            (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-                    == PackageManager.PERMISSION_GRANTED)
+        val hasFine = ActivityCompat.checkSelfPermission(
+            context, Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
 
-        val backgroundLocationPermissionApproved =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                (ActivityCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED)
-            } else {
-                true
-            }
+        val hasCoarse = ActivityCompat.checkSelfPermission(
+            context, Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
 
-        return permissionAccessFineLocationApproved && backgroundLocationPermissionApproved
+        return hasFine || hasCoarse
     }
 
     fun stopLocationService() {
@@ -70,7 +64,11 @@ object LocationUtils2 {
             AppLogs.sendAppLogs("Stop Location tracking")
             Intent(context, LocationService2::class.java).apply {
                 action = LocationService2.ACTION_STOP
-                context.startService(this)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    context.startForegroundService(this)
+                } else {
+                    context.startService(this)
+                }
             }
         } else {
             AppLogs.sendAppLogs("Stop Location tracking - not running")
