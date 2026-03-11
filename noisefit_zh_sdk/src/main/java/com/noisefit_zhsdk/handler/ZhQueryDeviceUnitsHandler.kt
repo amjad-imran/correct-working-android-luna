@@ -1268,7 +1268,7 @@ constructor(
 
         ZhBleLogUtils.initLogger(
             NoisefitApplication.context!!.applicationContext,
-            isWriteLog = true,  //Whether to write a log file
+            isWriteLog = BuildConfig.DEBUG,
             isRelease = false   //Is the log storage path (true inside the system) or (false inside the app)?
         )
 
