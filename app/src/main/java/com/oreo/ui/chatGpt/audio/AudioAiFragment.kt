@@ -67,15 +67,15 @@ class AudioAiFragment : BaseFragment<FragmentAudioAiBinding>(FragmentAudioAiBind
 
         //binding.tvMessage.text = getString(R.string.text_setting_up)
 
-        if (viewModel.isCalibrated().not()) {
-            navigate(
-                AudioAiFragmentDirections.actionAudioAiFragmentToAudioAiCalibrationFragment(
-                    args.text
-                ).apply {
-                    planType = args.planType
-                })
-            return
-        }
+//        if (viewModel.isCalibrated().not()) {
+//            navigate(
+//                AudioAiFragmentDirections.actionAudioAiFragmentToAudioAiCalibrationFragment(
+//                    args.text
+//                ).apply {
+//                    planType = args.planType
+//                })
+//            return
+//        }
 
         binding.tvMessage.apply {
             setTextColor(Color.parseColor("#80E4FF"))

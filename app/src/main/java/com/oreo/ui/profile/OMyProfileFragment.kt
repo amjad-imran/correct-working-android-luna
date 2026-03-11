@@ -94,19 +94,6 @@ class OMyProfileFragment :
             viewModel.getCannyFeedbackUrl()
         }
 
-        binding.llLunaAiCalibration.setOnClickListener {
-            viewModel.sessionManager.logMoEngageAppEvent(
-                MoEngageLunaAppEvents.user_menu_option_clicked,
-                HashMap<String, Any>().apply {
-                    this["target"] = "Voice_calibration"
-                }
-            )
-            navigate(
-                R.id.audioAiCalibrationFragment,
-                bundleOf("planType" to PlanType.NONE, "text" to null)
-            )
-        }
-
         binding.lytUpdateToViewReferral.tvUpdateNow.setOnClickListener {
             ShareUtil.openPlayStore(requireContext(), "com.noisefit.luna")
         }
@@ -219,29 +206,6 @@ class OMyProfileFragment :
         binding.backBtn.setOnClickListener {
             navigateUpSafe()
         }
-
-//        binding.tvCustomerSupport.setOnClickListener {
-//            startActivity(
-//                WebViewActivity.getStartIntent(
-//                    requireActivity(),
-//                    getString(com.noisefit_commans.R.string.text_customer_support),
-//                    AppConstants.URL_CONTACT_SUPPORT
-//                )
-//            )
-//        }
-        binding.rowFeedBack.setOnClickListener {
-            viewModel.sessionManager.logMoEngageAppEvent(
-                MoEngageLunaAppEvents.user_menu_option_clicked,
-                HashMap<String, Any>().apply {
-                    this["target"] = "Rate us"
-                })
-            navigate(R.id.rateUsOreo)
-        }
-
-//        binding.imvProfile.setOnClickListener {
-//
-//            goToProfile()
-//        }
 
         binding.llMyProfile.setOnClickListener {
 

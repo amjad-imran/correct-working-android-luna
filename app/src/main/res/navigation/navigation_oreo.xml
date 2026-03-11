@@ -1407,29 +1407,6 @@
             app:destination="@id/aiTopQuestionsFragment"
             app:popUpTo="@id/audioAiFragment"
             app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_audioAiFragment_to_audioAiCalibrationFragment"
-            app:destination="@id/audioAiCalibrationFragment"
-            app:popUpTo="@id/audioAiFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
-    <fragment
-        android:id="@+id/audioAiCalibrationFragment"
-        android:name="com.oreo.ui.chatGpt.audio.AudioAiCalibrationFragment"
-        android:label="fragment_audio_ai_calibration">
-        <argument
-            android:name="planType"
-            android:defaultValue="NONE"
-            app:argType="com.oreo.ui.chatGpt.PlanType" />
-        <argument
-            android:name="text"
-            app:argType="string"
-            app:nullable="true" />
-        <action
-            android:id="@+id/action_audioAiCalibrationFragment_to_audioAiFragment"
-            app:destination="@id/audioAiFragment"
-            app:popUpTo="@id/audioAiCalibrationFragment"
-            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/googleFitDataFragment"
