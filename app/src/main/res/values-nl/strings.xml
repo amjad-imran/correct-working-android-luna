@@ -2431,4 +2431,5 @@
     <string name="start_talking">Begin met praten</string>
     <string name="error_connection_lost">Verbinding verbroken. \nControleer je internetverbinding en probeer het opnieuw.</string>
     <string name="error_server">Serverfout, probeer het opnieuw.</string>
+    <string name="text_measuring_may_take_60_sec">Blijf 60 seconden stil</string>
 </resources>

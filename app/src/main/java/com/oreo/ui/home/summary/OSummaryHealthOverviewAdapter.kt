@@ -1278,7 +1278,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     btnCancel.gone()
                     titleTextViewExp.text = getMeasuringTextByType(data.expandedType, context)
                     hintTextViewExp.text =
-                        context.getString(R.string.text_measuring_may_take_30_sec)
+                        if(data.expandedType == VitalsType.SPO2){
+                            context.getString(R.string.text_measuring_may_take_60_sec)
+                        } else {
+                            context.getString(R.string.text_measuring_may_take_30_sec)
+                        }
                     when (data.expandedType) {
                         OHealthOverview.VitalsType.HR -> {
                             tvSuccessVal.text = data.hrValue
@@ -1364,7 +1368,11 @@ sealed class HomeRecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHol
                     progressBar.visible()
                     titleTextViewExp.text = getMeasuringTextByType(data.expandedType, context)
                     hintTextViewExp.text =
-                        context.getString(R.string.text_measuring_may_take_30_sec)
+                        if(data.expandedType == VitalsType.SPO2){
+                            context.getString(R.string.text_measuring_may_take_60_sec)
+                        } else {
+                            context.getString(R.string.text_measuring_may_take_30_sec)
+                        }
                 }
             }
 

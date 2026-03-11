@@ -2550,4 +2550,5 @@ onjour, Luna"</string>
     <string name="start_talking">Commencer à parler</string>
     <string name="error_connection_lost">Connexion perdue. \nVérifiez votre connexion Internet et réessayez.</string>
     <string name="error_server">Erreur du serveur, veuillez réessayer.</string>
+    <string name="text_measuring_may_take_60_sec">Restez immobile pendant 60 secondes</string>
 </resources>

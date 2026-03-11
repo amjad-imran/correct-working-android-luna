@@ -2431,4 +2431,5 @@
     <string name="start_talking">Sprechen beginnen</string>
     <string name="error_connection_lost">Verbindung verloren. \nÜberprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.</string>
     <string name="error_server">Serverfehler, bitte versuchen Sie es erneut.</string>
+    <string name="text_measuring_may_take_60_sec">Halten Sie 60 Sekunden still</string>
 </resources>

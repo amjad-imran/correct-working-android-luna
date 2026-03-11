@@ -2408,5 +2408,5 @@ These insights help you understand how your heart rate changes during different 
     <string name="start_talking">Start talking</string>
     <string name="error_connection_lost">Connection lost. \nCheck your internet and try again.</string>
     <string name="error_server">Server error, please try again.</string>
-
+    <string name="text_measuring_may_take_60_sec">Hold still for 60 seconds</string>
 </resources>

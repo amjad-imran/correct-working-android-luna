@@ -2455,4 +2455,5 @@
     <string name="start_talking">Начать говорить</string>
     <string name="error_connection_lost">Соединение потеряно. \nПроверьте подключение к интернету и попробуйте снова.</string>
     <string name="error_server">Ошибка сервера, попробуйте снова.</string>
+    <string name="text_measuring_may_take_60_sec">Не двигайтесь в течение 60 секунд</string>
 </resources>

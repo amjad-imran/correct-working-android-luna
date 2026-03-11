@@ -2455,4 +2455,5 @@
     <string name="start_talking">Começar a falar</string>
     <string name="error_connection_lost">Conexão perdida. \nVerifique sua internet e tente novamente.</string>
     <string name="error_server">Erro no servidor, tente novamente.</string>
+    <string name="text_measuring_may_take_60_sec">Fique imóvel por 60 segundos</string>
 </resources>

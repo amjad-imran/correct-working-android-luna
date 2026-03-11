@@ -2401,4 +2401,5 @@ Estos datos te ayudan a entender cómo cambia tu frecuencia cardíaca durante di
     <string name="start_talking">Empezar a hablar</string>
     <string name="error_connection_lost">Conexión perdida. \nComprueba tu conexión a Internet y vuelve a intentarlo.</string>
     <string name="error_server">Error del servidor, inténtalo de nuevo.</string>
+    <string name="text_measuring_may_take_60_sec">Mantente quieto durante 60 segundos</string>
 </resources>

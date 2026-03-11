@@ -2437,4 +2437,5 @@
     <string name="start_talking">เริ่มพูด</string>
     <string name="error_connection_lost">การเชื่อมต่อขาดหายไป \nโปรดตรวจสอบอินเทอร์เน็ตแล้วลองอีกครั้ง</string>
     <string name="error_server">เกิดข้อผิดพลาดของเซิร์ฟเวอร์ โปรดลองอีกครั้ง</string>
+    <string name="text_measuring_may_take_60_sec">อยู่นิ่งๆ เป็นเวลา 60 วินาที</string>
 </resources>
