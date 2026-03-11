@@ -266,6 +266,8 @@ class OSCDViewModel @Inject constructor(
                 )
             else if (dayType?.lowercase() == "month")
                 chartModel.index = DateTimeUtil.getMonth(it.date.toInt() - 1, resourcesProvider)
+            else if (dayType?.lowercase() == "week")
+                chartModel.index = "W${it.date}"
             else
                 chartModel.index = it.date
 
