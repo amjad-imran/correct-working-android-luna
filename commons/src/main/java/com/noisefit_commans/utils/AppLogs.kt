@@ -125,27 +125,24 @@ object AppLogs {
     }
 
     private fun clearNLines(logFile: File, lines: Int) {
-
         tryCatch {
+            val tempFile = File(logFile.parent, "${logFile.name}.tmp")
 
-            val reader = BufferedReader(FileReader(logFile))
-            val stringBuilder = StringBuilder()
-            var line: String?
-
-            for (i in 0 until lines) {
-                reader.readLine()
+            logFile.bufferedReader().use { reader ->
+                tempFile.bufferedWriter().use { writer ->
+                    var currentLine = 0
+                    reader.forEachLine { line ->
+                        if (currentLine >= lines) {
+                            writer.write(line)
+                            writer.newLine()
+                        }
+                        currentLine++
+                    }
+                }
             }
 
-            while (reader.readLine().also { line = it } != null) {
-                stringBuilder.append(line).append("\n")
-            }
-            reader.close()
-
-            val writer = FileWriter(logFile)
-            writer.write(stringBuilder.toString())
-            writer.flush()
-            writer.close()
-
+            logFile.delete()
+            tempFile.renameTo(logFile)
         }
     }
 
