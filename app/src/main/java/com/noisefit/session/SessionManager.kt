@@ -855,8 +855,6 @@ class SessionManager
         delayMs: Long = 500,
         fallbackToStore: Boolean = true
     ) {
-        localDataStore.setAndGetLastAppReviewRequestTime(System.currentTimeMillis())
-
         val reviewManager = ReviewManagerFactory.create(activity)
 
         // Step 1: Ask Play for the "review flow"

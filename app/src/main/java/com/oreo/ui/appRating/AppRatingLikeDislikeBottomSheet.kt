@@ -11,6 +11,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.noisefit.luna.R
 import com.noisefit.luna.databinding.FragmentAppRatingLikeDislikeBottomSheetBinding
 import com.noisefit.session.SessionManager
+import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.ui.BaseBottomSheetWithTransparent
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.visible
@@ -26,12 +27,20 @@ class AppRatingLikeDislikeBottomSheet :
         FragmentAppRatingLikeDislikeBottomSheetBinding::inflate
     ) {
 
-        companion object{
-            const val APP_RATING_LIKE_DISLIKE_KEY = "APP_RATING_LIKE_DISLIKE_KEY"
-        }
+    companion object {
+        const val APP_RATING_LIKE_DISLIKE_KEY = "APP_RATING_LIKE_DISLIKE_KEY"
+    }
 
     @Inject
     lateinit var sessionManager: SessionManager
+
+    @Inject
+    lateinit var localDataStore: DataStoredInterface
+
+    override fun onStart() {
+        super.onStart()
+        localDataStore.setAndGetLastAppReviewRequestTime(System.currentTimeMillis())
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,12 +49,13 @@ class AppRatingLikeDislikeBottomSheet :
 
     private fun setUi() {
         val isLikeFlow = arguments?.getBoolean("isLikeFlow") ?: true
-        if(isLikeFlow){
+        if (isLikeFlow) {
             binding.tvStatusText.text = getString(R.string.text_glad_you_like)
             binding.llSuccessContainer.invisible()
             binding.groupRating.visible()
-        }else{
-            binding.tvStatusText.text = getString(R.string.text_thanks_for_sharing_nwe_are_working_to_make_this_better)
+        } else {
+            binding.tvStatusText.text =
+                getString(R.string.text_thanks_for_sharing_nwe_are_working_to_make_this_better)
             binding.groupRating.invisible()
             binding.llSuccessContainer.visible()
             lifecycleScope.launch {
@@ -69,13 +79,13 @@ class AppRatingLikeDislikeBottomSheet :
         }
     }
 
-    private fun handleLikeDislikeClicked(isLiked: Boolean){
+    private fun handleLikeDislikeClicked(isLiked: Boolean) {
         binding.ivThumbsDown.isClickable = false
         binding.ivThumbsUp.isClickable = false
         lifecycleScope.launch {
-            if(isLiked){
+            if (isLiked) {
                 showSuccessState()
-            }else{
+            } else {
                 delay(500L)
             }
             navigateUpSafe()
