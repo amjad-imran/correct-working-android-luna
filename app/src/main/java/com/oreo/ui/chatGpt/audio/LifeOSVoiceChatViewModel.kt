@@ -1,7 +1,6 @@
 package com.oreo.ui.chatGpt.audio
 
 import VoiceChatMessage
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -17,7 +16,7 @@ import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.Token
 import com.noisefit_commans.ui.BaseViewModel
-import com.noisefit_commans.utils.MoEngageLunaAppEvents.SCREEN_VISIBLE
+import com.noisefit_commans.utils.MoEngageLunaAppEvents.LIFEOS_VOICE_ENTRY
 import com.noisefit_commans.utils.MoEngageLunaAppEvents.VOICE_SESSION
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -321,12 +320,16 @@ class LifeOSVoiceChatViewModel @Inject constructor(
     }
 
     fun logScreenVisible(source: String) {
-        sessionManager.logAppEvents(SCREEN_VISIBLE,
+        sessionManager.logAppEvents(LIFEOS_VOICE_ENTRY,
             hashMapOf("screen" to "lifeos_voice", "source" to source))
     }
 
     fun logVoiceSession(duration: String) {
         sessionManager.logAppEvents(VOICE_SESSION,
             hashMapOf("duration" to duration))
+    }
+
+    fun logPersonaButtonClick(){
+        sessionManager.logAppEvents("voice_personalise", null)
     }
 }

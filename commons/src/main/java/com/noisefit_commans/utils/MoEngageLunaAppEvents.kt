@@ -348,5 +348,7 @@ object MoEngageLunaAppEvents {
 
     const val SCREEN_VISIBLE = "screen_visible"
     const val VOICE_SESSION = "voice_session"
+    const val LIFEOS_VOICE_ENTRY = "lifeos_voice_entry"
 
+    const val VOICE_SELECTION = "voice_selection"
 }

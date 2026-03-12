@@ -149,6 +149,7 @@ class LifeOSVoiceChatFragment :
         }
         binding.ivPersonalization.setOnClickListener {
             viewModel.disposeChatStream()
+            viewModel.logPersonaButtonClick()
             navigate(
                 R.id.choosePersonaVoiceFragment,
                 bundleOf(

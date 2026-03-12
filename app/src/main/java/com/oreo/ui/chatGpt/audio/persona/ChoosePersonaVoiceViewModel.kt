@@ -4,11 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.noisefit.data.remote.base.Resource
+import com.noisefit.session.SessionManager
 import com.noisefit_commans.data.BinaryActionCallback
 import com.noisefit_commans.data.UIComponentType
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.model.chatGPT.voice.persona.ItemPersonaVoiceResponse
 import com.noisefit_commans.ui.BaseViewModel
+import com.noisefit_commans.utils.MoEngageLunaAppEvents.VOICE_SELECTION
 import com.oreo.data.repository.abstraction.OreoDeviceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +21,7 @@ import javax.inject.Inject
 class ChoosePersonaVoiceViewModel @Inject constructor(
     private val oreoDeviceRepository: OreoDeviceRepository,
     private val ringDataStore: RingDataStore,
+    private val sessionManager: SessionManager
 ): BaseViewModel() {
 
     private val _personaData = MutableLiveData<List<ItemPersonaVoiceResponse>>()
@@ -108,5 +111,10 @@ class ChoosePersonaVoiceViewModel @Inject constructor(
 
     fun saveUserPersona(persona: String){
         viewModelScope.launch(Dispatchers.IO) { ringDataStore.setUserSelectedPersona(persona) }
+    }
+
+    fun logVoiceSelection(selectedPersona: String) {
+        sessionManager.logAppEvents(VOICE_SELECTION,
+            hashMapOf("voice" to selectedPersona))
     }
 }

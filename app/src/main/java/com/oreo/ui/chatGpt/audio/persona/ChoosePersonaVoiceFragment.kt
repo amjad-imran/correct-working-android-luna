@@ -108,6 +108,8 @@ class ChoosePersonaVoiceFragment :
         binding.tvSelect.setOnClickListener {
             if(::currentPersona.isInitialized.not()) return@setOnClickListener
             viewModel.saveUserPersona(currentPersona)
+            val persona = viewModel.personaData.value?.firstOrNull{ it.persona_ai == currentPersona }?.personaTitle ?: ""
+            viewModel.logVoiceSelection(persona)
             navigateUpSafe()
             if(arguments?.getBoolean("isFromVoiceChat", false) == false)
                 navigate(R.id.lifeOsVoiceChatFragment,
