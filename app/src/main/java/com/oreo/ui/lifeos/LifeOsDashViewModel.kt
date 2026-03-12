@@ -934,6 +934,10 @@ class LifeOsDashViewModel @Inject constructor(
         }
     }
 
+    fun logInsightCardScroll() {
+        sessionManager.logAppEvents("lifeos_insights_screen_scroll", null)
+    }
+
     sealed class LifeOsDashUiStates{
         object BeginFrag: LifeOsDashUiStates()
         object QuesFrag: LifeOsDashUiStates()

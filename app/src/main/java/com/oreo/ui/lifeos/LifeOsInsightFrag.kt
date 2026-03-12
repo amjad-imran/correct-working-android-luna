@@ -29,12 +29,12 @@ class LifeOsInsightFrag :
     private var spentTime: Long = 0
 
     private val insightAdapter by lazy {
-        LifeOsInsightListAdapter { insightItem ->
+        LifeOsInsightListAdapter ( onClick = { insightItem ->
             navigate(
                 R.id.lifeOsInsightDetailsFragment,
                 Bundle().apply { putParcelable("insightData", insightItem) }
             )
-        }
+        })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

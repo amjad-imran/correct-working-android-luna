@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.noisefit.luna.R
@@ -37,6 +38,7 @@ import java.util.ArrayList
 class LifeOsInsightListAdapter(
     private val isFromLifeOsDash: Boolean = false,
     private val onClick: (InsightCardUiModel) -> Unit,
+    private val onScroll: () -> Unit = {}
 ) : ListAdapter<InsightCardUiModel, LifeOsInsightListAdapter.ViewHolder>(Diff) {
 
     init {
@@ -44,6 +46,23 @@ class LifeOsInsightListAdapter(
     }
 
     override fun getItemId(position: Int): Long = getItem(position).id
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        var lastPosition = RecyclerView.NO_ID.toInt()
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    val layoutManager = recyclerView.layoutManager as? LinearLayoutManager ?: return
+                    val firstVisible = layoutManager.findFirstCompletelyVisibleItemPosition()
+                    if (firstVisible != RecyclerView.NO_POSITION && firstVisible != lastPosition) {
+                        lastPosition = firstVisible
+                        onScroll()
+                    }
+                }
+            }
+        })
+    }
 
     inner class ViewHolder(val binding: FragmentLifeOsInsightCardBinding) :
         RecyclerView.ViewHolder(binding.root) {

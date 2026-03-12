@@ -98,7 +98,7 @@ class LifeOsDashFragment :
     }
 
     private val insightAdapter by lazy {
-        LifeOsInsightListAdapter(true){ insightItem ->
+        LifeOsInsightListAdapter(true, { insightItem ->
             viewModel.sessionManager.logMoEngageAppEvent(
                 MoEngageLunaAppEvents.lifeos_insight_card_clicked
             )
@@ -107,6 +107,8 @@ class LifeOsDashFragment :
                 R.id.lifeOsInsightDetailsFragment,
                 Bundle().apply { putParcelable("insightData", insightItem) }
             )
+        }){
+            viewModel.logInsightCardScroll()
         }
     }
 
