@@ -286,6 +286,9 @@ class SummaryDataViewModelToday @Inject constructor(
         return localDataStore.getStressWalkthroughShownStatus()
     }
 
+    fun logWhatsNewEvent(eventMap: HashMap<String, Any>) {
+        sessionManager.logAppEvents("whats_new_card_clicked",eventMap)
+    }
     fun checkBeforeTime(): Boolean {
         val calendar: Calendar = Calendar.getInstance()
         val hour24hrs: Int = calendar.get(Calendar.HOUR_OF_DAY)

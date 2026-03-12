@@ -33,7 +33,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayoutMediator
@@ -56,7 +55,6 @@ import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.connection.ConnectState
 import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.ui.BaseFragment
-import com.noisefit_commans.ui.dpToPixel
 import com.noisefit_commans.ui.gone
 import com.noisefit_commans.ui.invisible
 import com.noisefit_commans.ui.loadImage
@@ -79,14 +77,12 @@ import com.oreo.data.model.ServerUserHealthData
 import com.oreo.data.model.TapMeasureState
 import com.oreo.data.model.TrendsData
 import com.oreo.data.model.VideoInfoType
-import com.oreo.data.model.health.Nudges
 import com.oreo.data.model.health.ODashboardActivityScoreModel
 import com.oreo.data.model.health.ODashboardReadinessScoreModel
 import com.oreo.data.model.health.ODashboardSleepScoreModel
 import com.oreo.data.model.sleep.HealthTrend
 import com.oreo.data.model.timeline.habits.HabitsByDateResponse
 import com.oreo.ui.chatGpt.AITopics
-import com.oreo.ui.chatGpt.PlanType
 import com.oreo.ui.chatGpt.SummaryStates
 import com.oreo.ui.circadianAlignment.CircadianAlignmentViewModel
 import com.oreo.ui.custom.CirclePagerIndicatorDecoration
@@ -102,8 +98,6 @@ import com.oreo.ui.sleep.nap.BOTTOM_NAP_RESULT
 import com.oreo.ui.sleep.scoredetails.ClickViewType
 import com.oreo.ui.sleep.scoredetails.SharedOSCDViewModel
 import com.oreo.ui.sleep.scoredetails.ViewItemClickType
-import com.oreo.util.uiUtils.GenerateCustomDrawables
-import com.oreo.widget.water.WaterWidgetUpdater
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -201,6 +195,14 @@ class SummaryDataFragmentToday :
                             requireContext(),
                             appLink = ApplicationUtils.parseAppLink(path)
                         )
+                        val eventMap = hashMapOf<String, Any>()
+                            banner.tapEventDetail
+                            .split("|")
+                            .forEach { pair ->
+                                val (key, value) = pair.split(":", limit = 2)
+                                eventMap[key] = value
+                            }
+                        viewModel.logWhatsNewEvent(eventMap)
                         startActivity(intent)
                     },
                     { banner ->
