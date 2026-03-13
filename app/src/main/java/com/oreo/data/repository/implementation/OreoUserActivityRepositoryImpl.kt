@@ -18,6 +18,7 @@ import com.noisefit.data.repository.implementation.DELETE_DB_DAYS
 import com.noisefit.data.safeApiCallFlow
 import com.noisefit.data.safeCacheCall
 import com.noisefit.luna.BuildConfig
+import com.noisefit_commans.analytics.MixPanelAnalytics
 import com.noisefit_commans.common.checkDayDifferenceMoreNMinutes
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
@@ -355,6 +356,18 @@ class OreoUserActivityRepositoryImpl(
 
                             localDataStore.setTimelineActivitiesData(timeTrackerActivities)
                             localDataStore.setMeasurementsData(measurements)
+                            val user = localDataStore.getUser()
+                            MixPanelAnalytics.identifyUser(
+                                userId = user?.id.toString(),
+                                userProperties = mapOf(
+                                    "activation_date" to run {
+                                        val days = response.registerDate
+                                        if (days != null) LocalDate.now().minusDays(days).toString()
+                                        else ""
+                                    },
+                                    "gender" to (user?.userInfo?.gender ?: "")
+                                )
+                            )
                         }
                     }
                 }

@@ -44,7 +44,7 @@ object MixPanelAnalytics {
         userProperties: Map<String, Any>? = null
     ) {
         if (!isInitialized) return
-        mixpanel?.identify(userId)
+        mixpanel?.identify(userId, true)
         userProperties?.forEach { (key, value) ->
             mixpanel?.people?.set(key, value)
         }
