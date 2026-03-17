@@ -62,6 +62,10 @@ import com.zhapp.ble.bean.MusicInfoBean
 import com.zhapp.ble.bean.NotificationSettingsBean
 import com.zhapp.ble.bean.PressureModeBean
 import com.zhapp.ble.bean.RealTimeBean
+import com.zhapp.ble.bean.SWBRMonitorBean
+import com.zhapp.ble.bean.SWHRMonitorBean
+import com.zhapp.ble.bean.SWHRVMonitorBean
+import com.zhapp.ble.bean.SWSPO2MonitorBean
 import com.zhapp.ble.bean.SchedulerBean
 import com.zhapp.ble.bean.SchoolBean
 import com.zhapp.ble.bean.ScreenDisplayBean
@@ -927,6 +931,18 @@ constructor(
 
             override fun onCustomizeLeftClickSettings(p0: Int) {
 
+            }
+
+            override fun onSWSPO2Monitor(p0: SWSPO2MonitorBean?) {
+            }
+
+            override fun onSWHRVMonitor(p0: SWHRVMonitorBean?) {
+            }
+
+            override fun onSWBRMonitor(p0: SWBRMonitorBean?) {
+            }
+
+            override fun onSWHRMonitor(p0: SWHRMonitorBean?) {
             }
 
 
