@@ -1223,7 +1223,7 @@ class SummaryDataViewModelToday @Inject constructor(
                 getLunaManagedPriority(hasSleep)
             }
 
-            val generation = getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
+//            val generation = getGeneration(ringDataStore.getRingDevice()?.ringInfo?.serialNoRaw)
 
 
             var isTapVitalAdded = false
@@ -1236,12 +1236,10 @@ class SummaryDataViewModelToday @Inject constructor(
 
                 val hasOneTapVitalsKey = priorityList.find { it.key.equals("one_tap_vitals", true) }
                 if (hasOneTapVitalsKey == null) {
-                    if (generation == 2) {
-                        getOneTapVitalsCard(healthData, measurements)?.let {
-                            userActivities.add(
-                                it
-                            )
-                        }
+                    getOneTapVitalsCard(healthData, measurements)?.let {
+                        userActivities.add(
+                            it
+                        )
                     }
                     isTapVitalAdded = true
                 }
@@ -1261,12 +1259,10 @@ class SummaryDataViewModelToday @Inject constructor(
 
                 when (item.key) {
                     "one_tap_vitals" -> {
-                        if (generation == 2) {
-                            getOneTapVitalsCard(healthData, measurements)?.let {
-                                userActivities.add(
-                                    it
-                                )
-                            }
+                        getOneTapVitalsCard(healthData, measurements)?.let {
+                            userActivities.add(
+                                it
+                            )
                         }
                         isTapVitalAdded = true
                     }
@@ -1387,12 +1383,10 @@ class SummaryDataViewModelToday @Inject constructor(
                         val hasOneTapVitalsKey =
                             priorityList.find { it.key.equals("one_tap_vitals", true) }
                         if (hasOneTapVitalsKey == null && isTapVitalAdded.not()) {
-                            if (generation == 2) {
-                                getOneTapVitalsCard(healthData, measurements)?.let {
-                                    userActivities.add(
-                                        it
-                                    )
-                                }
+                            getOneTapVitalsCard(healthData, measurements)?.let {
+                                userActivities.add(
+                                    it
+                                )
                             }
                             isTapVitalAdded = true
                         }

@@ -87,6 +87,10 @@ constructor(val zhApplicationHandler: ZhApplicationHandler) : ConnectionDataActi
                     if (noiseFitDevice?.deviceType.equals(
                             DeviceType.NOISEFIT_LUNA.deviceType,
                             true
+                        ) ||
+                        noiseFitDevice?.deviceType.equals(
+                            DeviceType.LUNA_BAND.deviceType,
+                            true
                         )
                     ) {
                         ControlBleTools.getInstance().getAutoSportData(null)

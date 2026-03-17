@@ -365,7 +365,8 @@ constructor(
                 LOGS.d(TAG, "onDailyData : $data ${data.date}")
 
 
-                if (colorFitDevice?.deviceType.equals(DeviceType.NOISEFIT_LUNA.deviceType, true)) {
+                if (colorFitDevice?.deviceType.equals(DeviceType.NOISEFIT_LUNA.deviceType, true)
+                    || colorFitDevice?.deviceType.equals(DeviceType.LUNA_BAND.deviceType, true)) {
                     userActivityDataCallbacks?.onUserActivityDataReceived(
                         UserActivityCallback.StepsDataObtainedOreo(
                             oreoDataConverter.parseStepsData(
@@ -405,7 +406,8 @@ constructor(
             override fun onContinuousHeartRateData(data: ContinuousHeartRateBean) {
                 LOGS.d(TAG, "onContinuousHeartRateData : $data ${data.date}")
 
-                if (colorFitDevice?.deviceType.equals(DeviceType.NOISEFIT_LUNA.deviceType, true)) {
+                if (colorFitDevice?.deviceType.equals(DeviceType.NOISEFIT_LUNA.deviceType, true)
+                    || colorFitDevice?.deviceType.equals(DeviceType.LUNA_BAND.deviceType, true)) {
                     userActivityDataCallbacks?.onUserActivityDataReceived(
                         UserActivityCallback.HeartHistoryObtainedOreo(
                             oreoDataConverter.parseHeartRateData(data)
@@ -431,7 +433,8 @@ constructor(
             override fun onContinuousBloodOxygenData(data: ContinuousBloodOxygenBean) {
                 LOGS.d(TAG, "onContinuousBloodOxygenData : $data ${data.date}")
                 AppLogs.sendAppLogs("$TRACK_TAG onContinuousBloodOxygenData : $data ${data.date}")
-                if (colorFitDevice?.deviceType.equals(DeviceType.NOISEFIT_LUNA.deviceType, true)) {
+                if (colorFitDevice?.deviceType.equals(DeviceType.NOISEFIT_LUNA.deviceType, true)
+                    || colorFitDevice?.deviceType.equals(DeviceType.LUNA_BAND.deviceType, true)) {
                     userActivityDataCallbacks?.onUserActivityDataReceived(
                         UserActivityCallback.OreoBloodOxygenObtained(
                             oreoDataConverter.parseContinuousBloodOxygenData(data)
@@ -456,7 +459,8 @@ constructor(
              */
             override fun onContinuousPressureData(data: ContinuousPressureBean) {
                 LOGS.d(TAG, "onOfflinePressureData : $data ${data.date}")
-                if (colorFitDevice?.deviceType.equals(DeviceType.NOISEFIT_LUNA.deviceType, true)) {
+                if (colorFitDevice?.deviceType.equals(DeviceType.NOISEFIT_LUNA.deviceType, true)
+                    || colorFitDevice?.deviceType.equals(DeviceType.LUNA_BAND.deviceType, true)) {
                     userActivityDataCallbacks?.onUserActivityDataReceived(
                         UserActivityCallback.StressDataObtainedOreo(
                             oreoDataConverter.parseStressData(data)
@@ -486,7 +490,8 @@ constructor(
 
             override fun onContinuousTemperatureData(data: ContinuousTemperatureBean) {
                 LOGS.d(TAG, "onContinuousTemperatureData : $data")
-                if (colorFitDevice?.deviceType.equals(DeviceType.NOISEFIT_LUNA.deviceType, true)) {
+                if (colorFitDevice?.deviceType.equals(DeviceType.NOISEFIT_LUNA.deviceType, true)
+                    || colorFitDevice?.deviceType.equals(DeviceType.LUNA_BAND.deviceType, true)) {
                     userActivityDataCallbacks?.onUserActivityDataReceived(
                         UserActivityCallback.BodyTemperatureObtainedOreo(
                             oreoDataConverter.parseBodyTemperature(data)
@@ -500,7 +505,8 @@ constructor(
             override fun onOfflineTemperatureData(data: OfflineTemperatureDataBean) {
                 LOGS.d(TAG, "onOfflineTemperatureData : $data ${data.date}")
 
-                if (colorFitDevice?.deviceType.equals(DeviceType.NOISEFIT_LUNA.deviceType, true)) {
+                if (colorFitDevice?.deviceType.equals(DeviceType.NOISEFIT_LUNA.deviceType, true)
+                    || colorFitDevice?.deviceType.equals(DeviceType.LUNA_BAND.deviceType, true)) {
                     //oreo data in onContinuousTemperatureData
                 } else {
                     userActivityDataCallbacks?.onUserActivityDataReceived(
