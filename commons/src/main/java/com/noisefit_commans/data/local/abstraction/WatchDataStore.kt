@@ -37,9 +37,9 @@ interface WatchDataStore {
 
     fun updateBatteryFullyChargeTime(percent: Int?)
 
-    fun getBatteryRemainingTime(percent: Int?)
+    fun getBatteryRemainingTime(): Int
 
-    fun getBatteryFullyChargeTime(percent: Int?)
+    fun getBatteryFullyChargeTime(): Int
 
     fun setOrUpdateRingCaseData(caseInfoData: CaseInfoData?)
 

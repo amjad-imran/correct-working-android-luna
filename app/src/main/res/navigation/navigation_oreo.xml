@@ -1790,5 +1790,9 @@
             android:defaultValue="0"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/blankTestFragment"
+        android:name="com.oreo.ui.home.summary.BlankTestFragment"
+        android:label="BlankTestFragment" />
 
 </navigation>

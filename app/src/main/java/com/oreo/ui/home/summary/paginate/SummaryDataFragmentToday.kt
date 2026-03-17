@@ -350,6 +350,10 @@ class SummaryDataFragmentToday :
             adapter = viewedCardsAdapter
         }
 
+        binding.fabTest.setOnClickListener {
+            navigate(R.id.blankTestFragment)
+        }
+
         viewedCardsAdapter.itemClickListener = { type ->
             when (type) {
                 is OSummaryHealthOverviewClickEnum.TextRingCareClicked -> {

@@ -409,12 +409,12 @@ constructor(
         }
     }
 
-    override fun getBatteryRemainingTime(percent: Int?) {
-        mPrefs.getInt("BatteryRemainingTime", 0)
+    override fun getBatteryRemainingTime(): Int {
+        return mPrefs.getInt("BatteryRemainingTime", 0)
     }
 
-    override fun getBatteryFullyChargeTime(percent: Int?) {
-        mPrefs.getInt("BatteryFullyChargeTime", 0)
+    override fun getBatteryFullyChargeTime(): Int {
+        return mPrefs.getInt("BatteryFullyChargeTime", 0)
     }
 
     override fun setOrUpdateRingCaseData(caseInfoData: CaseInfoData?) {
