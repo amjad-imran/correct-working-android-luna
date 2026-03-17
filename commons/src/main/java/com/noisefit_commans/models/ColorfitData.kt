@@ -568,6 +568,8 @@ data class BatteryData(
     @SerializedName("battery_percentage") var percentage: Int? = 0,
     @SerializedName("fully_charge") var isFullyCharged: Boolean? = false,
     @SerializedName("is_charging") var isCharging: Boolean = false,
+    @SerializedName("remaining_charge_time") var remainingChargeTime: Int = 0,
+    @SerializedName("fully_charged_need_time") var fullyChargedNeedTime: Int = 0,
     var caseInfoData: CaseInfoData ?= null,
     var isCaseDataAvailable: Boolean = true,
 ) :

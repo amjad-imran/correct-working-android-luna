@@ -33,6 +33,14 @@ interface WatchDataStore {
     fun getBatteryPercentRing(): Int
     fun updateBatteryPercentRing(percent: Int?)
 
+    fun updateBatteryRemainingTime(percent: Int?)
+
+    fun updateBatteryFullyChargeTime(percent: Int?)
+
+    fun getBatteryRemainingTime(percent: Int?)
+
+    fun getBatteryFullyChargeTime(percent: Int?)
+
     fun setOrUpdateRingCaseData(caseInfoData: CaseInfoData?)
 
     fun getRingCaseData(): CaseInfoData?

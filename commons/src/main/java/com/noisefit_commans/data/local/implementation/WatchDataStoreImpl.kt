@@ -395,6 +395,28 @@ constructor(
         }
     }
 
+    override fun updateBatteryRemainingTime(percent: Int?) {
+        percent?.let {
+            mPrefs.edit()?.putInt("BatteryRemainingTime", it)
+                ?.commit()
+        }
+    }
+
+    override fun updateBatteryFullyChargeTime(percent: Int?) {
+        percent?.let {
+            mPrefs.edit()?.putInt("BatteryFullyChargeTime", it)
+                ?.commit()
+        }
+    }
+
+    override fun getBatteryRemainingTime(percent: Int?) {
+        mPrefs.getInt("BatteryRemainingTime", 0)
+    }
+
+    override fun getBatteryFullyChargeTime(percent: Int?) {
+        mPrefs.getInt("BatteryFullyChargeTime", 0)
+    }
+
     override fun setOrUpdateRingCaseData(caseInfoData: CaseInfoData?) {
         mPrefs.edit()
             ?.putString(RING_CASE_DATA, gson.toJson(caseInfoData))

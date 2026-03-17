@@ -1776,6 +1776,8 @@ constructor() : LifecycleService() {
                     LOGS.d("sjbskbajsv : ring_case_data : ${queryCallback.batteryData.caseInfoData}")
 
                     watchDataStore.updateBatteryPercentRing(percent)
+                    watchDataStore.updateBatteryRemainingTime(queryCallback.batteryData.remainingChargeTime)
+                    watchDataStore.updateBatteryFullyChargeTime(queryCallback.batteryData.fullyChargedNeedTime)
                     if(queryCallback.batteryData.isCaseDataAvailable){
                         watchDataStore.setOrUpdateRingCaseData(queryCallback.batteryData.caseInfoData)
                         sessionManager.isCaseCurrentlyConnected.postValue(
