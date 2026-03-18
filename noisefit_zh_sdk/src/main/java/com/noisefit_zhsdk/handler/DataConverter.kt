@@ -1154,7 +1154,8 @@ constructor(
             type = it.recordPointSportType,
             hrData = Gson().toJson(hrData),
             intensityList = Gson().toJson(intensity),
-            date = date
+            date = date,
+            fitnessAge = it.fitnessAge
         )
     }
 }

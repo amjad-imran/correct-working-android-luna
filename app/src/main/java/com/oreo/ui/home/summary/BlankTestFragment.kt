@@ -34,12 +34,20 @@ class BlankTestFragment : Fragment() {
             while (true) {
                 val remainingTime = watchDataStore.getBatteryRemainingTime()
                 val fullyChargedTime = watchDataStore.getBatteryFullyChargeTime()
+                val fitnessAge = watchDataStore.getFitnessAge()
+                val energyConsumption = watchDataStore.getEnergyConsumption()
                 withContext(Dispatchers.Main){
                     view.findViewById<TextView>(R.id.tvRemainingBatteryTime).text =
                         "Remaining Battery Time: $remainingTime"
 
                     view.findViewById<TextView>(R.id.tvFullyChargedTime).text =
                         "Fully Charged Time: $fullyChargedTime"
+
+                    view.findViewById<TextView>(R.id.tvExtra1).text =
+                        "Fitness Age: $fitnessAge"
+
+                    view.findViewById<TextView>(R.id.tvExtra2).text =
+                        "Enery Expenditure: $energyConsumption"
                 }
                 delay(2000L)
             }

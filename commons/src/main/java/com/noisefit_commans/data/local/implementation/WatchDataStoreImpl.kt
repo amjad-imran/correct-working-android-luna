@@ -107,6 +107,26 @@ constructor(
 
     }
 
+    override fun updateFitnessAge(age: Int){
+        mPrefs.edit()
+            ?.putInt("FITNESS_AGE", age)
+            ?.commit()
+    }
+
+    override fun getFitnessAge(): Int{
+        return mPrefs.getInt("FITNESS_AGE", 0)
+    }
+
+    override fun updateEnergyConsumption(value: Int) {
+        mPrefs.edit()
+            ?.putInt("ENERGY_CONSUMPTION", value)
+            ?.commit()
+    }
+
+    override fun getEnergyConsumption(): Int {
+        return mPrefs.getInt("ENERGY_CONSUMPTION", 0)
+    }
+
     override fun getLastSavedAverageHrv(): Int {
         return mPrefs.getInt(AVERAGE_LAST_DAY_HRV, 0)
     }

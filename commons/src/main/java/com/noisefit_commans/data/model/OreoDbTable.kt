@@ -85,7 +85,8 @@ data class RecordedWorkoutData(
     @ColumnInfo(name = "distance") @SerializedName("distance") var distance: Long? = null,
     @ColumnInfo(name = "recovery_time") @SerializedName("recovery_time") var recoveryTime: Long? = null,
     @ColumnInfo(name = "intensity_list") @SerializedName("intensity_list") var intensityList: String? = null,
-    @SerializedName("date") var date: String? = null
+    @SerializedName("date") var date: String? = null,
+    @ColumnInfo(name = "fitness_age") @SerializedName("fitness_age") var fitnessAge: Int?
 ) : ColorfitData(), Parcelable
 
 

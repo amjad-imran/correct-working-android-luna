@@ -131,6 +131,12 @@ interface WatchDataStore {
 
     fun testSaveStressData(data: String?)
     fun testGetStressData(): String?
+
+    fun updateFitnessAge(age: Int)
+    fun getFitnessAge(): Int
+    fun updateEnergyConsumption(value: Int)
+    fun getEnergyConsumption(): Int
+
 }
 
 enum class ChargingNotificationLevel {

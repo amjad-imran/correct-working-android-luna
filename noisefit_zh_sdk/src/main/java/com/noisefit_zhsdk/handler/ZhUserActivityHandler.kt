@@ -148,6 +148,8 @@ constructor(
                 val result = ArrayList<RecordedWorkoutData>()
                 sportModleInfoList.forEach { sportModleInfo ->
                     sportModleInfo.let {
+                        watchDataStore.updateFitnessAge(it.fitnessAge)
+                        watchDataStore.updateEnergyConsumption(it.reportEnergyConsumption)
                         result.add(dataConverter.parseRecordedData(it))
                         //dataConverter.parseSportsDataGPS(it, colorFitDevice!!)
                     }
