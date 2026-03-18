@@ -40,6 +40,9 @@ class BlankTestFragment : Fragment() {
                     view.findViewById<TextView>(R.id.tvRemainingBatteryTime).text =
                         "Remaining Battery Time: $remainingTime"
 
+                    view.findViewById<TextView>(R.id.tvSleepDuration).text =
+                        "Remaining Days: ${remainingTime/2}"
+
                     view.findViewById<TextView>(R.id.tvFullyChargedTime).text =
                         "Fully Charged Time: $fullyChargedTime"
 
@@ -48,6 +51,12 @@ class BlankTestFragment : Fragment() {
 
                     view.findViewById<TextView>(R.id.tvExtra2).text =
                         "Enery Expenditure: $energyConsumption"
+
+                    view.findViewById<TextView>(R.id.tvExtra3).text =
+                        "WorkOut:"
+
+                    view.findViewById<TextView>(R.id.tvExtra3Desc).text =
+                        "${watchDataStore.getWorkout()}"
                 }
                 delay(2000L)
             }

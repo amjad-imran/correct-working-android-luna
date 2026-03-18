@@ -150,6 +150,7 @@ constructor(
                     sportModleInfo.let {
                         watchDataStore.updateFitnessAge(it.fitnessAge)
                         watchDataStore.updateEnergyConsumption(it.reportEnergyConsumption)
+                        watchDataStore.updateWorkout(dataConverter.parseRecordedData(it))
                         result.add(dataConverter.parseRecordedData(it))
                         //dataConverter.parseSportsDataGPS(it, colorFitDevice!!)
                     }

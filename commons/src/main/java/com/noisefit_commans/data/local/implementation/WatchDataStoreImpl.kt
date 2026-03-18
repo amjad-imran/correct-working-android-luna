@@ -5,6 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.noisefit_commans.data.local.abstraction.ChargingNotificationLevel
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
+import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.models.CaseInfoData
 import com.noisefit_commans.models.Contact
 import com.noisefit_commans.models.CustomReplyData
@@ -125,6 +126,22 @@ constructor(
 
     override fun getEnergyConsumption(): Int {
         return mPrefs.getInt("ENERGY_CONSUMPTION", 0)
+    }
+
+    override fun updateWorkout(value: RecordedWorkoutData) {
+        val json = gson.toJson(value)
+        mPrefs.edit()
+            ?.putString("workout", json)
+            ?.commit()
+    }
+
+    override fun getWorkout(): RecordedWorkoutData? {
+        val json = mPrefs.getString("workout", null)
+        return if (json != null) {
+            gson.fromJson(json, RecordedWorkoutData::class.java)
+        } else {
+            null
+        }
     }
 
     override fun getLastSavedAverageHrv(): Int {

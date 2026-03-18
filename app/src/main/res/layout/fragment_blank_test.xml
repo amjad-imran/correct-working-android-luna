@@ -1,42 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="24dp">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tvRemainingBatteryTime"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="24dp"
-        android:text="Remaining Battery Time: --" />
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvFullyChargedTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="24dp"
-        android:text="Fully Charged Time: --" />
+        <!-- Dashboard Title -->
+        <TextView
+            android:id="@+id/tvDashboardTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HEALTH AND FITNESS DASHBOARD"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_marginBottom="16dp" />
 
-    <TextView
-        android:id="@+id/tvExtra1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:layout_marginBottom="24dp"
-        android:text="--" />
+        <!-- Sleep Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginTop="@dimen/dimen_20dp"
+            android:background="@drawable/bg_lifeos_gradient_border"
+            android:layout_marginBottom="16dp">
 
-    <TextView
-        android:id="@+id/tvExtra2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:text="--" />
+            <TextView
+                android:id="@+id/tvRemainingBatteryTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SLEEP SCORE: 85"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_marginBottom="8dp" />
 
-</LinearLayout>
+            <TextView
+                android:id="@+id/tvSleepDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="ASLEEP: 7h 14m | IN BED: 7h 56m"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Heart Metrics Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="@drawable/bg_lifeos_gradient_border"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/tvFullyChargedTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HEART RATE: 72 BPM"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tvContinuousHeartRate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                tools:text="Continuous HR: Avg 42 BPM | Min 25 BPM"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Activity Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="@drawable/bg_lifeos_gradient_border"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:id="@+id/tvExtra1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ACTIVITY: 14 Kcal"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tvStress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="STRESS: 25"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <!-- Sleep Schedule Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_lifeos_gradient_border"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tvExtra2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SLEEP SCHEDULE"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tvBedWakeTimes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Bedtime: 11:00 PM | Wake Up: 7:00 AM"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:layout_marginBottom="4dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_lifeos_gradient_border"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tvExtra3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SLEEP SCHEDULE"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tvExtra3Desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Bedtime: 11:00 PM | Wake Up: 7:00 AM"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:layout_marginBottom="4dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

@@ -1,5 +1,6 @@
 package com.noisefit_commans.data.local.abstraction
 
+import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.models.CaseInfoData
 import com.noisefit_commans.models.Contact
 import com.noisefit_commans.models.CustomReplyData
@@ -137,6 +138,8 @@ interface WatchDataStore {
     fun updateEnergyConsumption(value: Int)
     fun getEnergyConsumption(): Int
 
+    fun updateWorkout(value: RecordedWorkoutData)
+    fun getWorkout(): RecordedWorkoutData?
 }
 
 enum class ChargingNotificationLevel {
