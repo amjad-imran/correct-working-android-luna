@@ -45,7 +45,7 @@ import com.oreo.data.db.database.OreoUserHealthDataDao
         OreoBodyTemperatureBreakup::class, OreoRespiratoryData::class, DayTimeMovementBreakup::class,
         OreoAutoSportData::class, RecordedWorkoutData::class, KeyValue::class, UserHealthData::class, OreoNapData::class,
         GoogleFitWorkoutData::class, OreoBodyStressData::class, GoogleFitDataDb::class],
-    version = 12, exportSchema = false
+    version = 13, exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class OreoDataBase : RoomDatabase() {

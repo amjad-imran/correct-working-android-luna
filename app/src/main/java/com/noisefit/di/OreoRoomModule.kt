@@ -68,6 +68,7 @@ class OreoRoomModule {
             .addMigrations(MIGRATION_9_10)
             .addMigrations(MIGRATION_10_11)
             .addMigrations(MIGRATION_11_12)
+            .addMigrations(MIGRATION_12_13)
             .build()
     }
 
@@ -211,6 +212,20 @@ class OreoRoomModule {
         }
     }
 
+    private val MIGRATION_12_13: Migration = object : Migration(12, 13) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            try {
+                database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `fitness_age` INTEGER")
+            } catch (e: Exception) {
+                // column already exists, skip
+            }
+            try {
+                database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `energy_consumption` INTEGER")
+            } catch (e: Exception) {
+                // column already exists, skip
+            }
+        }
+    }
     /*private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL(
