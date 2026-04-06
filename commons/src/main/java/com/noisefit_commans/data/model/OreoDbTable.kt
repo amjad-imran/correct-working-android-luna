@@ -87,7 +87,36 @@ data class RecordedWorkoutData(
     @ColumnInfo(name = "intensity_list") @SerializedName("intensity_list") var intensityList: String? = null,
     @SerializedName("date") var date: String? = null,
     @ColumnInfo(name = "fitness_age") @SerializedName("fitnessAge") var fitnessAge: Int?,
-    @ColumnInfo(name = "energy_consumption") @SerializedName("energyConsumption") var energyConsumption: Int?
+    @ColumnInfo(name = "energy_consumption") @SerializedName("energyConsumption") var energyConsumption: Int?,
+    // Training metrics
+    @ColumnInfo(name = "vo2_max") @SerializedName("vo2Max") var vo2Max: Float? = null,
+    @ColumnInfo(name = "training_effect") @SerializedName("trainingEffect") var trainingEffect: Float? = null,
+    @ColumnInfo(name = "training_load") @SerializedName("trainingLoad") var trainingLoad: Int? = null,
+    // Heart rate stats
+    @ColumnInfo(name = "avg_heart") @SerializedName("avgHeart") var avgHeart: Int? = null,
+    @ColumnInfo(name = "max_heart") @SerializedName("maxHeart") var maxHeart: Int? = null,
+    @ColumnInfo(name = "min_heart") @SerializedName("minHeart") var minHeart: Int? = null,
+    // Pace / Speed
+    @ColumnInfo(name = "avg_pace") @SerializedName("avgPace") var avgPace: Long? = null,
+    @ColumnInfo(name = "fast_pace") @SerializedName("fastPace") var fastPace: Long? = null,
+    @ColumnInfo(name = "avg_speed") @SerializedName("avgSpeed") var avgSpeed: Long? = null,
+    @ColumnInfo(name = "fast_speed") @SerializedName("fastSpeed") var fastSpeed: Float? = null,
+    // HR Zone times
+    @ColumnInfo(name = "hr_limit_time") @SerializedName("hrLimitTime") var hrLimitTime: Long? = null,
+    @ColumnInfo(name = "hr_anaerobic") @SerializedName("hrAnaerobic") var hrAnaerobic: Long? = null,
+    @ColumnInfo(name = "hr_aerobic") @SerializedName("hrAerobic") var hrAerobic: Long? = null,
+    @ColumnInfo(name = "hr_fat_burning") @SerializedName("hrFatBurning") var hrFatBurning: Long? = null,
+    @ColumnInfo(name = "hr_warm_up") @SerializedName("hrWarmUp") var hrWarmUp: Long? = null,
+    // Stride data
+    @ColumnInfo(name = "avg_stride") @SerializedName("avgStride") var avgStride: Int? = null,
+    @ColumnInfo(name = "max_stride") @SerializedName("maxStride") var maxStride: Int? = null,
+    @ColumnInfo(name = "min_stride") @SerializedName("minStride") var minStride: Int? = null,
+    // Elevation data
+    @ColumnInfo(name = "cumulative_rise") @SerializedName("cumulativeRise") var cumulativeRise: Float? = null,
+    @ColumnInfo(name = "cumulative_decline") @SerializedName("cumulativeDecline") var cumulativeDecline: Float? = null,
+    @ColumnInfo(name = "avg_height") @SerializedName("avgHeight") var avgHeight: Float? = null,
+    @ColumnInfo(name = "max_height") @SerializedName("maxHeight") var maxHeight: Float? = null,
+    @ColumnInfo(name = "min_height") @SerializedName("minHeight") var minHeight: Float? = null
 ) : ColorfitData(), Parcelable
 
 

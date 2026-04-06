@@ -46,6 +46,7 @@ abstract class QueryDeviceDataActions() :
 
     open fun getHandwashData() {}
     open fun getHeartRateAlert() {}
+    open fun getHeartRateAlertSettings() {}
     open fun getMedicineReminders() {}
     open fun getReminders() {}
     open fun getActivityRecogniseSettings() {}
@@ -53,6 +54,7 @@ abstract class QueryDeviceDataActions() :
     open fun getMealReminderSettings() {}
     open fun getMedicineReminderSettings() {}
     open fun getStressSettings() {}
+    open fun getPressureModeSettings() {}
     open fun getBodyTempUnit() {}
     open fun getWalkReminderData() {}
     open fun getSportModeInfo() {}
@@ -75,8 +77,11 @@ abstract class QueryDeviceDataActions() :
     open fun getBleCallingSwitch() {}
 
     open fun getSleepReminder() {}
+    open fun getRingWearingStatus() {}
     open fun getContactList() {}
     open fun getSpo2Settings() {}
+    open fun getSpo2AlertSettings() {}
+    open fun getHighStressAlertSettings() {}
 
     open fun getSOSContactList() {}
     abstract fun setDevice(colorFitDevice: ColorFitDevice)

@@ -69,6 +69,7 @@ class OreoRoomModule {
             .addMigrations(MIGRATION_10_11)
             .addMigrations(MIGRATION_11_12)
             .addMigrations(MIGRATION_12_13)
+            .addMigrations(MIGRATION_13_14)
             .build()
     }
 
@@ -226,6 +227,35 @@ class OreoRoomModule {
             }
         }
     }
+
+    private val MIGRATION_13_14: Migration = object : Migration(13, 14) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            try { database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `vo2_max` REAL") } catch (_: Exception) {}
+            try { database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `training_effect` REAL") } catch (_: Exception) {}
+            try { database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `training_load` INTEGER") } catch (_: Exception) {}
+            try { database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `avg_heart` INTEGER") } catch (_: Exception) {}
+            try { database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `max_heart` INTEGER") } catch (_: Exception) {}
+            try { database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `min_heart` INTEGER") } catch (_: Exception) {}
+            try { database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `avg_pace` INTEGER") } catch (_: Exception) {}
+            try { database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `fast_pace` INTEGER") } catch (_: Exception) {}
+            try { database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `avg_speed` INTEGER") } catch (_: Exception) {}
+            try { database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `fast_speed` REAL") } catch (_: Exception) {}
+            try { database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `hr_limit_time` INTEGER") } catch (_: Exception) {}
+            try { database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `hr_anaerobic` INTEGER") } catch (_: Exception) {}
+            try { database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `hr_aerobic` INTEGER") } catch (_: Exception) {}
+            try { database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `hr_fat_burning` INTEGER") } catch (_: Exception) {}
+            try { database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `hr_warm_up` INTEGER") } catch (_: Exception) {}
+            try { database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `avg_stride` INTEGER") } catch (_: Exception) {}
+            try { database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `max_stride` INTEGER") } catch (_: Exception) {}
+            try { database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `min_stride` INTEGER") } catch (_: Exception) {}
+            try { database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `cumulative_rise` REAL") } catch (_: Exception) {}
+            try { database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `cumulative_decline` REAL") } catch (_: Exception) {}
+            try { database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `avg_height` REAL") } catch (_: Exception) {}
+            try { database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `max_height` REAL") } catch (_: Exception) {}
+            try { database.execSQL("ALTER TABLE `recorded_workout` ADD COLUMN `min_height` REAL") } catch (_: Exception) {}
+        }
+    }
+
     /*private val MIGRATION_2_3: Migration = object : Migration(2, 3) {
         override fun migrate(database: SupportSQLiteDatabase) {
             database.execSQL(

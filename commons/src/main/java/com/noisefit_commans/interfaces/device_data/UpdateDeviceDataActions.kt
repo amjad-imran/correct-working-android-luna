@@ -65,6 +65,7 @@ abstract class UpdateDeviceDataActions() :
     open fun updateAPGSData(data1: Uri, data2: Uri) {}
     open fun onWeatherUpdateRequest() {}
     open fun setHeartRateAlert(heartRateAlert: HeartRateAlert) {}
+    open fun setHeartRateAlertSettings(heartRateAlertSettings: HeartRateAlertSettings) {}
     open fun addReminder(reminder: ReminderList.Reminder) {}
     open fun onAddReminder(success: Boolean) {}
     open fun deleteAlarm(alarm: AlarmsList) {}
@@ -77,7 +78,9 @@ abstract class UpdateDeviceDataActions() :
     open fun setMedicineReminder(sedentaryData: SedentaryData) {}
     open fun setFactoryReset() {}
     open fun setStressData(sedentaryData: SedentaryData) {}
+    open fun setPressureModeSettings(pressureModeSettings: PressureModeSettings) {}
     open fun setRealTimeDataState(status: Boolean) {}
+    open fun setHighStressAlertSettings(highStressAlertSettings: HighStressAlertSettings) {}
 
     open fun getWatchFacePro3(type: String) {}
     open fun setSportSyncParamPro3() {}
@@ -111,6 +114,7 @@ abstract class UpdateDeviceDataActions() :
     open fun updateWidgetList(data: List<Widget>) {}
     open fun setUPIQRCode(uPIQRCode: List<UPIQRCode>) {}
     open fun setSpo2Settings(data: Spo2Data) {}
+    open fun setSpo2AlertSettings(spo2AlertSettings: Spo2AlertSettings) {}
     open fun setUPIQRCode(uPIQRCode: UPIQRCode) {}
     open fun setClearUPIQRCode(id: Int) {}
     open fun setVibrationIntensity(vibrationIntensity: VibrationIntensity) {}

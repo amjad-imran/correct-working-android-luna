@@ -875,7 +875,9 @@ data class ManualMeasurement(
     @SerializedName("isError") var isError: Boolean = false,
     @SerializedName("value") var value: Int = 0,
     @SerializedName("manualMeasureType") var manualMeasureType: ManualMeasureType,
-    @SerializedName("timeStamp") var timeStamp: Long = 0
+    @SerializedName("timeStamp") var timeStamp: Long = 0,
+    @SerializedName("error_reason") var errorReason: Int = 0,
+    @SerializedName("is_wrist") var isWrist: Boolean? = null
 ) : ColorfitData() {
 
 }
@@ -1103,4 +1105,274 @@ data class SleepReminder(
     @SerializedName("millisecond") var millisecond: Int = 0
 
 ) : Parcelable
+
+enum class DeviceAlertFeature {
+    HEART_RATE,
+    SPO2,
+    RELAXATION_PROMPT,
+    SLEEP_REMINDER,
+    SEDENTARY_REMINDER,
+    HIGH_STRESS_INDEX,
+    WEAR_DETECTION
+}
+
+data class HeartRateAlertSnapshot(
+    @SerializedName("mode") var mode: Int? = null,
+    @SerializedName("frequency") var frequency: Int? = null,
+    @SerializedName("continuous_heart_rate_mode") var continuousHeartRateMode: Int? = null
+) : ColorfitData() {
+    fun isComplete(): Boolean {
+        return mode != null && frequency != null && continuousHeartRateMode != null
+    }
+}
+
+data class ScreenlessHeartRateRealtimeSnapshot(
+    @SerializedName("status") var status: Boolean? = null,
+    @SerializedName("frequency") var frequency: Int? = null,
+    @SerializedName("overtime") var overtime: Int? = null
+) : ColorfitData() {
+    fun isComplete(): Boolean {
+        return status != null && frequency != null && overtime != null
+    }
+}
+
+data class SedentaryReminderSnapshot(
+    @SerializedName("no_disturb_in_launch") var noDisturbInLaunch: Boolean? = null,
+    @SerializedName("start_noon_hour") var startNoonHour: Int? = null,
+    @SerializedName("start_noon_minute") var startNoonMinute: Int? = null,
+    @SerializedName("end_noon_hour") var endNoonHour: Int? = null,
+    @SerializedName("end_noon_minute") var endNoonMinute: Int? = null
+) : ColorfitData() {
+    fun isComplete(): Boolean {
+        return noDisturbInLaunch != null
+    }
+}
+
+data class PressureModeSnapshot(
+    @SerializedName("relaxation_warning_value") var relaxationWarningValue: Int? = null
+) : ColorfitData() {
+    fun isComplete(): Boolean {
+        return relaxationWarningValue != null
+    }
+}
+
+data class ScreenlessSpo2MonitoringSnapshot(
+    @SerializedName("mode") var mode: Int? = null,
+    @SerializedName("frequency") var frequency: Int? = null,
+    @SerializedName("start_hour") var startHour: Int? = null,
+    @SerializedName("start_minute") var startMinute: Int? = null,
+    @SerializedName("end_hour") var endHour: Int? = null,
+    @SerializedName("end_minute") var endMinute: Int? = null
+) : ColorfitData() {
+    fun isComplete(): Boolean {
+        return mode != null &&
+            frequency != null &&
+            startHour != null &&
+            startMinute != null &&
+            endHour != null &&
+            endMinute != null
+    }
+}
+
+data class HeartRateAlertSettings(
+    @SerializedName("resting_enabled") var restingEnabled: Boolean = false,
+    @SerializedName("resting_threshold") var restingThreshold: Int = 150,
+    @SerializedName("workout_enabled") var workoutEnabled: Boolean = false,
+    @SerializedName("workout_threshold") var workoutThreshold: Int = 175,
+    @SerializedName("low_enabled") var lowEnabled: Boolean = false,
+    @SerializedName("low_threshold") var lowThreshold: Int = 50
+) : ColorfitData() {
+    fun hasAnyEnabledAlert(): Boolean {
+        return restingEnabled || workoutEnabled || lowEnabled
+    }
+}
+
+data class Spo2AlertSettings(
+    @SerializedName("enabled") var enabled: Boolean = false,
+    @SerializedName("threshold") var threshold: Int = 75
+) : ColorfitData()
+
+data class PressureModeSettings(
+    @SerializedName("stress_monitoring_enabled") var stressMonitoringEnabled: Boolean = false,
+    @SerializedName("relaxation_prompt_enabled") var relaxationPromptEnabled: Boolean = false
+) : ColorfitData()
+
+data class HighStressAlertSettings(
+    @SerializedName("enabled") var enabled: Boolean = false,
+    @SerializedName("threshold") var threshold: Int = 85
+) : ColorfitData()
+
+enum class AlertEventSource {
+    MIRROR_PUSH,
+    SCHEDULE,
+    VERIFY_ONLY
+}
+
+data class AlertEvent(
+    @SerializedName("id") var id: String = "",
+    @SerializedName("timestamp") var timestamp: Long = 0L,
+    @SerializedName("feature") var feature: DeviceAlertFeature = DeviceAlertFeature.HEART_RATE,
+    @SerializedName("title") var title: String = "",
+    @SerializedName("message") var message: String = "",
+    @SerializedName("observed_value") var observedValue: Int? = null,
+    @SerializedName("threshold") var threshold: Int? = null,
+    @SerializedName("source") var source: AlertEventSource = AlertEventSource.MIRROR_PUSH,
+    @SerializedName("band_send_state") var bandSendState: String = "queued"
+) : ColorfitData()
+
+data class LocalDeviceAlertPendingSync(
+    @SerializedName("heart_rate") var heartRate: Boolean = false,
+    @SerializedName("spo2") var spo2: Boolean = false,
+    @SerializedName("relaxation_prompt") var relaxationPrompt: Boolean = false,
+    @SerializedName("sleep_reminder") var sleepReminder: Boolean = false,
+    @SerializedName("sedentary_reminder") var sedentaryReminder: Boolean = false,
+    @SerializedName("high_stress_index") var highStressIndex: Boolean = false
+) : ColorfitData() {
+    fun isPending(feature: DeviceAlertFeature): Boolean {
+        return when (feature) {
+            DeviceAlertFeature.HEART_RATE -> heartRate
+            DeviceAlertFeature.SPO2 -> spo2
+            DeviceAlertFeature.RELAXATION_PROMPT -> relaxationPrompt
+            DeviceAlertFeature.SLEEP_REMINDER -> sleepReminder
+            DeviceAlertFeature.SEDENTARY_REMINDER -> sedentaryReminder
+            DeviceAlertFeature.HIGH_STRESS_INDEX -> highStressIndex
+            DeviceAlertFeature.WEAR_DETECTION -> false
+        }
+    }
+
+    fun setPending(feature: DeviceAlertFeature, value: Boolean) {
+        when (feature) {
+            DeviceAlertFeature.HEART_RATE -> heartRate = value
+            DeviceAlertFeature.SPO2 -> spo2 = value
+            DeviceAlertFeature.RELAXATION_PROMPT -> relaxationPrompt = value
+            DeviceAlertFeature.SLEEP_REMINDER -> sleepReminder = value
+            DeviceAlertFeature.SEDENTARY_REMINDER -> sedentaryReminder = value
+            DeviceAlertFeature.HIGH_STRESS_INDEX -> highStressIndex = value
+            DeviceAlertFeature.WEAR_DETECTION -> Unit
+        }
+    }
+
+    fun hasPendingSync(): Boolean {
+        return heartRate || spo2 || relaxationPrompt || sleepReminder || sedentaryReminder || highStressIndex
+    }
+}
+
+data class LocalDeviceAlertSupport(
+    @SerializedName("heart_rate") var heartRate: Boolean = true,
+    @SerializedName("heart_rate_workout") var heartRateWorkout: Boolean = true,
+    @SerializedName("spo2") var spo2: Boolean = true,
+    @SerializedName("relaxation_prompt") var relaxationPrompt: Boolean = true,
+    @SerializedName("sleep_reminder") var sleepReminder: Boolean = true,
+    @SerializedName("sedentary_reminder") var sedentaryReminder: Boolean = true,
+    @SerializedName("high_stress_index") var highStressIndex: Boolean = false,
+    @SerializedName("wear_detection") var wearDetection: Boolean = false
+) : ColorfitData() {
+    fun isSupported(feature: DeviceAlertFeature): Boolean {
+        return when (feature) {
+            DeviceAlertFeature.HEART_RATE -> heartRate
+            DeviceAlertFeature.SPO2 -> spo2
+            DeviceAlertFeature.RELAXATION_PROMPT -> relaxationPrompt
+            DeviceAlertFeature.SLEEP_REMINDER -> sleepReminder
+            DeviceAlertFeature.SEDENTARY_REMINDER -> sedentaryReminder
+            DeviceAlertFeature.HIGH_STRESS_INDEX -> highStressIndex
+            DeviceAlertFeature.WEAR_DETECTION -> wearDetection
+        }
+    }
+
+    fun setSupported(feature: DeviceAlertFeature, value: Boolean) {
+        when (feature) {
+            DeviceAlertFeature.HEART_RATE -> heartRate = value
+            DeviceAlertFeature.SPO2 -> spo2 = value
+            DeviceAlertFeature.RELAXATION_PROMPT -> relaxationPrompt = value
+            DeviceAlertFeature.SLEEP_REMINDER -> sleepReminder = value
+            DeviceAlertFeature.SEDENTARY_REMINDER -> sedentaryReminder = value
+            DeviceAlertFeature.HIGH_STRESS_INDEX -> highStressIndex = value
+            DeviceAlertFeature.WEAR_DETECTION -> wearDetection = value
+        }
+    }
+}
+
+data class WearDetectionStatus(
+    @SerializedName("is_worn") var isWorn: Boolean? = null,
+    @SerializedName("last_updated_at") var lastUpdatedAt: Long = 0L,
+    @SerializedName("source") var source: String? = null,
+    @SerializedName("observed_value") var observedValue: Int? = null
+) : ColorfitData()
+
+data class LocalDeviceAlertSnapshots(
+    @SerializedName("heart_rate") var heartRate: HeartRateAlertSnapshot = HeartRateAlertSnapshot(),
+    @SerializedName("screenless_heart_rate_realtime") var screenlessHeartRateRealtime: ScreenlessHeartRateRealtimeSnapshot =
+        ScreenlessHeartRateRealtimeSnapshot(),
+    @SerializedName("pressure_mode") var pressureMode: PressureModeSnapshot = PressureModeSnapshot(),
+    @SerializedName("screenless_spo2_monitoring") var screenlessSpo2Monitoring: ScreenlessSpo2MonitoringSnapshot =
+        ScreenlessSpo2MonitoringSnapshot(),
+    @SerializedName("sedentary_reminder") var sedentaryReminder: SedentaryReminderSnapshot = SedentaryReminderSnapshot()
+) : ColorfitData()
+
+data class LocalDeviceAlertSettings(
+    @SerializedName("device_address") var deviceAddress: String? = null,
+    @SerializedName("heart_rate") var heartRate: HeartRateAlertSettings = HeartRateAlertSettings(),
+    @SerializedName("spo2") var spo2: Spo2AlertSettings = Spo2AlertSettings(),
+    @SerializedName("pressure_mode") var pressureMode: PressureModeSettings = PressureModeSettings(),
+    @SerializedName("high_stress") var highStress: HighStressAlertSettings = HighStressAlertSettings(),
+    @SerializedName("sleep_reminder") var sleepReminder: SleepReminder = SleepReminder(),
+    @SerializedName("sedentary_reminder") var sedentaryReminder: SedentaryData = SedentaryData(
+        interval = 60,
+        startHour = 9,
+        endHour = 18
+    ),
+    @SerializedName("wear_detection_status") var wearDetectionStatus: WearDetectionStatus = WearDetectionStatus(),
+    @SerializedName("recent_alerts") var recentAlerts: ArrayList<AlertEvent> = arrayListOf(),
+    @SerializedName("pending_sync") var pendingSync: LocalDeviceAlertPendingSync = LocalDeviceAlertPendingSync(),
+    @SerializedName("support") var support: LocalDeviceAlertSupport = LocalDeviceAlertSupport(),
+    @SerializedName("snapshots") var snapshots: LocalDeviceAlertSnapshots = LocalDeviceAlertSnapshots()
+) : ColorfitData() {
+    fun requiresSnapshot(feature: DeviceAlertFeature): Boolean {
+        return when (feature) {
+            DeviceAlertFeature.HEART_RATE -> !snapshots.heartRate.isComplete()
+            DeviceAlertFeature.RELAXATION_PROMPT -> !snapshots.pressureMode.isComplete()
+            DeviceAlertFeature.SLEEP_REMINDER -> false
+            DeviceAlertFeature.SEDENTARY_REMINDER -> !snapshots.sedentaryReminder.isComplete()
+            DeviceAlertFeature.SPO2 -> false
+            DeviceAlertFeature.HIGH_STRESS_INDEX -> false
+            DeviceAlertFeature.WEAR_DETECTION -> false
+        }
+    }
+
+    fun isPending(feature: DeviceAlertFeature): Boolean {
+        return pendingSync.isPending(feature)
+    }
+
+    fun setPending(feature: DeviceAlertFeature, value: Boolean) {
+        pendingSync.setPending(feature, value)
+    }
+
+    fun setSupport(feature: DeviceAlertFeature, value: Boolean) {
+        support.setSupported(feature, value)
+    }
+
+    fun isSupported(feature: DeviceAlertFeature): Boolean {
+        return support.isSupported(feature)
+    }
+
+    fun recordAlertEvent(event: AlertEvent, limit: Int = 50) {
+        val updatedEvents = ArrayList<AlertEvent>()
+        updatedEvents.add(event)
+        recentAlerts.forEach { existing ->
+            if (existing.id != event.id && updatedEvents.size < limit) {
+                updatedEvents.add(existing)
+            }
+        }
+        recentAlerts = updatedEvents
+    }
+
+    fun latestAlertEvent(
+        feature: DeviceAlertFeature,
+        source: AlertEventSource? = null
+    ): AlertEvent? {
+        return recentAlerts.firstOrNull { event ->
+            event.feature == feature && (source == null || event.source == source)
+        }
+    }
+}
 

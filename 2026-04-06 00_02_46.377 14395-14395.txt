@@ -1,0 +1,975 @@
+2026-04-06 00:02:46.377 14395-14395 ViewRootImplExtImpl     com.noisefit.luna.dev                D  the up motion event handled by client, just return
+2026-04-06 00:02:49.471 14395-14395 ViewRootImplExtImpl     com.noisefit.luna.dev                D  the up motion event handled by client, just return
+2026-04-06 00:02:49.486 14395-14395 WindowOnBackDispatcher  com.noisefit.luna.dev                W  OnBackInvokedCallback is not enabled for the application.
+                                                                                                    Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+2026-04-06 00:02:49.503 14395-14395 oplus.andr...actoryImpl com.noisefit.luna.dev                I  get feature:IOplusDynamicVsyncFeature
+2026-04-06 00:02:49.504 14395-14395 oplus.andr...actoryImpl com.noisefit.luna.dev                I  get feature:IOplusDynamicVsyncFeature
+2026-04-06 00:02:49.504 14395-14395 oplus.andr...actoryImpl com.noisefit.luna.dev                I  get feature:IOplusDynamicVsyncFeature
+2026-04-06 00:02:49.691 14395-14395 CompatChangeReporter    com.noisefit.luna.dev                D  Compat change id reported: 303326708; UID 10443; state: ENABLED
+2026-04-06 00:02:49.778 14395-14395 Quality                 com.noisefit.luna.dev                I  InflateViewInfo:275201719,ScrollView
+2026-04-06 00:02:49.783 14395-14395 ControlBleTools         com.noisefit.luna.dev                D  getDailyHistoryData()
+2026-04-06 00:02:49.785 14395-14395 BluetoothService        com.noisefit.luna.dev                I  writeCmd[8, 112]
+2026-04-06 00:02:49.785 14395-14395 ControlBleTools         com.noisefit.luna.dev                D  getAutoSportData()
+2026-04-06 00:02:49.786 14395-14472 BluetoothService        com.noisefit.luna.dev                D  CMDThread send size = 1
+2026-04-06 00:02:49.787 14395-14395 BluetoothService        com.noisefit.luna.dev                I  writeCmd[8, 110]
+2026-04-06 00:02:49.788 14395-14395 ControlBleTools         com.noisefit.luna.dev                D  getFitnessSportIdsData()
+2026-04-06 00:02:49.790 14395-14395 BluetoothService        com.noisefit.luna.dev                I  writeCmd[8, 117]
+2026-04-06 00:02:49.790 14395-14395 ControlBleTools         com.noisefit.luna.dev                D  getFitnessSportIdsData()
+2026-04-06 00:02:49.792 14395-14395 BluetoothService        com.noisefit.luna.dev                I  writeCmd[8, 117]
+2026-04-06 00:02:49.803 14395-14472 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 00 00 00 00 01 00 
+2026-04-06 00:02:49.981 14395-14395 ControlBleTools         com.noisefit.luna.dev                D  getSWHRMonitor()
+2026-04-06 00:02:49.983 14395-14395 BluetoothService        com.noisefit.luna.dev                I  writeCmd[8, -6, 5]
+2026-04-06 00:02:49.985 14395-14395 ControlBleTools         com.noisefit.luna.dev                D  getSWSPO2Monitor()
+2026-04-06 00:02:49.987 14395-14395 BluetoothService        com.noisefit.luna.dev                I  writeCmd[8, -16, 5]
+2026-04-06 00:02:49.988 14395-14395 ControlBleTools         com.noisefit.luna.dev                D  getSWHRVMonitor()
+2026-04-06 00:02:49.990 14395-14395 BluetoothService        com.noisefit.luna.dev                I  writeCmd[8, -13, 5]
+2026-04-06 00:02:49.992 14395-14395 ControlBleTools         com.noisefit.luna.dev                D  getSWBRMonitor()
+2026-04-06 00:02:49.993 14395-14395 BluetoothService        com.noisefit.luna.dev                I  writeCmd[8, -10, 5]
+2026-04-06 00:02:49.994 14395-14395 ControlBleTools         com.noisefit.luna.dev                D  getSleepReminder()
+2026-04-06 00:02:49.996 14395-14395 BluetoothService        com.noisefit.luna.dev                I  writeCmd[8, -2, 3]
+2026-04-06 00:02:49.997 14395-14395 ControlBleTools         com.noisefit.luna.dev                D  getSedentaryReminder()
+2026-04-06 00:02:49.999 14395-14395 BluetoothService        com.noisefit.luna.dev                I  writeCmd[8, -39, 1]
+2026-04-06 00:02:50.329  3764-4202  CommonApp-131-10443     com.oplus.nas                        D  scene=COMMON pn=com.noisefit.luna.dev
+2026-04-06 00:02:50.392 14395-14401 isefit.luna.dev         com.noisefit.luna.dev                I  Background concurrent copying GC freed 12MB AllocSpace bytes, 2(60KB) LOS objects, 37% free, 39MB/63MB, paused 75us,55us total 131.757ms
+2026-04-06 00:02:50.573 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 01 00 00 
+2026-04-06 00:02:50.587 14395-14603 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 01 00 08 70 
+2026-04-06 00:02:50.931 14395-14401 isefit.luna.dev         com.noisefit.luna.dev                I  NativeAlloc concurrent copying GC freed 9213KB AllocSpace bytes, 7(616KB) LOS objects, 33% free, 47MB/71MB, paused 67us,61us total 140.390ms
+2026-04-06 00:02:51.052 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 00 00 00 
+2026-04-06 00:02:51.054 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 00 00 00 00 02 00 
+2026-04-06 00:02:51.066 14395-14608 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 01 00 00 
+2026-04-06 00:02:51.177 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 01 00 08 70 4A B3 02 12 B0 02 0A 11 0A 0D 08 EA 0F 10 04 18 06 20 00 28 00 30 00 10 02 0A 11 0A 0D 08 EA 0F 10 04 18 06 20 00 28 00 30 00 10 04 0A 11 0A 0D 08 EA 0F 10 04 18 06 20 00 28 00 30 00 10 06 0A 11 0A 0D 08 EA 0F 10 04 18 06 20 00 28 00 30 00 10 08 0A 11 0A 0D 08 EA 0F 10 04 18 06 20 00 28 00 30 00 10 0E 0A 11 0A 0D 08 EA 0F 10 04 18 06 20 00 28 00 30 00 10 12 0A 11 0A 0D 08 EA 0F 10 04 18 06 20 00 28 00 30 00 10 13 0A 11 0A 0D 08 EA 0F 10 04 18 06 20 00 28 00 30 00 10 11 0A 11 0A 0D 08 EA 0F 10 04 18 06 20 00 28 00 30 00 10 00 0A 11 0A 0D 08 EA 0F 10 04 18 06 20 00 28 00 30 00 10 15 0A 11 0A 0D 08 EA 0F 10 04 18 06 20 00 28 00 30 00 10 16 0A 11 0A 0D 08 EA 0F 10 04 18 06 20 00 28 00 30 00 10 17 0A 11 0A 0D 08 EA 
+2026-04-06 00:02:51.181 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 02 00 0F 10 04 18 06 20 00 28 00 30 00 10 18 0A 11 0A 0D 08 EA 0F 10 04 18 06 20 00 28 00 30 00 10 1A 0A 11 0A 0D 08 EA 0F 10 04 18 06 20 00 28 00 30 00 10 1B 0A 11 0A 0D 08 EA 0F 10 04 18 06 20 00 28 00 30 00 10 19 
+2026-04-06 00:02:51.195 14395-14473 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 00 00 00 
+2026-04-06 00:02:51.202 14395-14395 BleParsing              com.noisefit.luna.dev                I  parsing id = 00 70  = 112 --> GET_FITNESS_TYPE_ID_LIST errorCode = 0
+2026-04-06 00:02:51.203 14395-14395 BleParsing              com.noisefit.luna.dev                W  112 GET_FITNESS_TYPE_ID_LIST_VALUE list size = 16
+2026-04-06 00:02:51.217 14395-14472 BluetoothService        com.noisefit.luna.dev                D  CMDThread send size = 9
+2026-04-06 00:02:51.233 14395-14472 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 00 00 00 00 01 00 
+2026-04-06 00:02:51.293 14395-14395 BleParsing              com.noisefit.luna.dev                D  112 GET_FITNESS_TYPE_ID_LIST_VALUE list i:0 = time {
+                                                                                                      year: 2026
+                                                                                                      month: 4
+                                                                                                      day: 6
+                                                                                                      hour: 0
+                                                                                                      minute: 0
+                                                                                                      second: 0
+                                                                                                    }
+                                                                                                    fitness_function_type: 2
+2026-04-06 00:02:51.294 14395-14395 BleParsing              com.noisefit.luna.dev                D  112 GET_FITNESS_TYPE_ID_LIST_VALUE list i:1 = time {
+                                                                                                      year: 2026
+                                                                                                      month: 4
+                                                                                                      day: 6
+                                                                                                      hour: 0
+                                                                                                      minute: 0
+                                                                                                      second: 0
+                                                                                                    }
+                                                                                                    fitness_function_type: 4
+2026-04-06 00:02:51.295 14395-14395 BleParsing              com.noisefit.luna.dev                D  112 GET_FITNESS_TYPE_ID_LIST_VALUE list i:2 = time {
+                                                                                                      year: 2026
+                                                                                                      month: 4
+                                                                                                      day: 6
+                                                                                                      hour: 0
+                                                                                                      minute: 0
+                                                                                                      second: 0
+                                                                                                    }
+                                                                                                    fitness_function_type: 6
+2026-04-06 00:02:51.296 14395-14395 BleParsing              com.noisefit.luna.dev                D  112 GET_FITNESS_TYPE_ID_LIST_VALUE list i:3 = time {
+                                                                                                      year: 2026
+                                                                                                      month: 4
+                                                                                                      day: 6
+                                                                                                      hour: 0
+                                                                                                      minute: 0
+                                                                                                      second: 0
+                                                                                                    }
+                                                                                                    fitness_function_type: 8
+2026-04-06 00:02:51.297 14395-14395 BleParsing              com.noisefit.luna.dev                D  112 GET_FITNESS_TYPE_ID_LIST_VALUE list i:4 = time {
+                                                                                                      year: 2026
+                                                                                                      month: 4
+                                                                                                      day: 6
+                                                                                                      hour: 0
+                                                                                                      minute: 0
+                                                                                                      second: 0
+                                                                                                    }
+                                                                                                    fitness_function_type: 14
+2026-04-06 00:02:51.298 14395-14395 BleParsing              com.noisefit.luna.dev                D  112 GET_FITNESS_TYPE_ID_LIST_VALUE list i:5 = time {
+                                                                                                      year: 2026
+                                                                                                      month: 4
+                                                                                                      day: 6
+                                                                                                      hour: 0
+                                                                                                      minute: 0
+                                                                                                      second: 0
+                                                                                                    }
+                                                                                                    fitness_function_type: 18
+2026-04-06 00:02:51.299 14395-14395 BleParsing              com.noisefit.luna.dev                D  112 GET_FITNESS_TYPE_ID_LIST_VALUE list i:6 = time {
+                                                                                                      year: 2026
+                                                                                                      month: 4
+                                                                                                      day: 6
+                                                                                                      hour: 0
+                                                                                                      minute: 0
+                                                                                                      second: 0
+                                                                                                    }
+                                                                                                    fitness_function_type: 19
+2026-04-06 00:02:51.300 14395-14395 BleParsing              com.noisefit.luna.dev                D  112 GET_FITNESS_TYPE_ID_LIST_VALUE list i:7 = time {
+                                                                                                      year: 2026
+                                                                                                      month: 4
+                                                                                                      day: 6
+                                                                                                      hour: 0
+                                                                                                      minute: 0
+                                                                                                      second: 0
+                                                                                                    }
+                                                                                                    fitness_function_type: 17
+2026-04-06 00:02:51.301 14395-14395 BleParsing              com.noisefit.luna.dev                D  112 GET_FITNESS_TYPE_ID_LIST_VALUE list i:8 = time {
+                                                                                                      year: 2026
+                                                                                                      month: 4
+                                                                                                      day: 6
+                                                                                                      hour: 0
+                                                                                                      minute: 0
+                                                                                                      second: 0
+                                                                                                    }
+                                                                                                    fitness_function_type: 0
+2026-04-06 00:02:51.302 14395-14395 BleParsing              com.noisefit.luna.dev                D  112 GET_FITNESS_TYPE_ID_LIST_VALUE list i:9 = time {
+                                                                                                      year: 2026
+                                                                                                      month: 4
+                                                                                                      day: 6
+                                                                                                      hour: 0
+                                                                                                      minute: 0
+                                                                                                      second: 0
+                                                                                                    }
+                                                                                                    fitness_function_type: 21
+2026-04-06 00:02:51.304 14395-14395 BleParsing              com.noisefit.luna.dev                D  112 GET_FITNESS_TYPE_ID_LIST_VALUE list i:10 = time {
+                                                                                                      year: 2026
+                                                                                                      month: 4
+                                                                                                      day: 6
+                                                                                                      hour: 0
+                                                                                                      minute: 0
+                                                                                                      second: 0
+                                                                                                    }
+                                                                                                    fitness_function_type: 22
+2026-04-06 00:02:51.305 14395-14395 BleParsing              com.noisefit.luna.dev                D  112 GET_FITNESS_TYPE_ID_LIST_VALUE list i:11 = time {
+                                                                                                      year: 2026
+                                                                                                      month: 4
+                                                                                                      day: 6
+                                                                                                      hour: 0
+                                                                                                      minute: 0
+                                                                                                      second: 0
+                                                                                                    }
+                                                                                                    fitness_function_type: 23
+2026-04-06 00:02:51.306 14395-14395 BleParsing              com.noisefit.luna.dev                D  112 GET_FITNESS_TYPE_ID_LIST_VALUE list i:12 = time {
+                                                                                                      year: 2026
+                                                                                                      month: 4
+                                                                                                      day: 6
+                                                                                                      hour: 0
+                                                                                                      minute: 0
+                                                                                                      second: 0
+                                                                                                    }
+                                                                                                    fitness_function_type: 24
+2026-04-06 00:02:51.307 14395-14395 BleParsing              com.noisefit.luna.dev                D  112 GET_FITNESS_TYPE_ID_LIST_VALUE list i:13 = time {
+                                                                                                      year: 2026
+                                                                                                      month: 4
+                                                                                                      day: 6
+                                                                                                      hour: 0
+                                                                                                      minute: 0
+                                                                                                      second: 0
+                                                                                                    }
+                                                                                                    fitness_function_type: 26
+2026-04-06 00:02:51.308 14395-14395 BleParsing              com.noisefit.luna.dev                D  112 GET_FITNESS_TYPE_ID_LIST_VALUE list i:14 = time {
+                                                                                                      year: 2026
+                                                                                                      month: 4
+                                                                                                      day: 6
+                                                                                                      hour: 0
+                                                                                                      minute: 0
+                                                                                                      second: 0
+                                                                                                    }
+                                                                                                    fitness_function_type: 27
+2026-04-06 00:02:51.309 14395-14395 BleParsing              com.noisefit.luna.dev                D  112 GET_FITNESS_TYPE_ID_LIST_VALUE list i:15 = time {
+                                                                                                      year: 2026
+                                                                                                      month: 4
+                                                                                                      day: 6
+                                                                                                      hour: 0
+                                                                                                      minute: 0
+                                                                                                      second: 0
+                                                                                                    }
+                                                                                                    fitness_function_type: 25
+2026-04-06 00:02:51.310 14395-14395 ZhUserActivityHandler   com.noisefit.luna.dev                D  onProgress : 进度 0  总数 16
+2026-04-06 00:02:51.310 14395-14395 RingConnectionService   com.noisefit.luna.dev                D  Received data com.noisefit_commans.interfaces.data.UserActivityCallback$UserDataSyncUpdated@6d47676
+2026-04-06 00:02:51.312 14395-14395 FitnessParsing          com.noisefit.luna.dev                W  GET_FITNESS_TYPE_IDS_VALUE = time {
+                                                                                                      year: 2026
+                                                                                                      month: 4
+                                                                                                      day: 6
+                                                                                                      hour: 0
+                                                                                                      minute: 0
+                                                                                                      second: 0
+                                                                                                    }
+                                                                                                    fitness_function_type: 2
+2026-04-06 00:02:51.313 14395-14395 ControlBleTools         com.noisefit.luna.dev                D  getDailyDataById() time {
+                                                                                                      year: 2026
+                                                                                                      month: 4
+                                                                                                      day: 6
+                                                                                                      hour: 0
+                                                                                                      minute: 0
+                                                                                                      second: 0
+                                                                                                    }
+                                                                                                    fitness_function_type: 2
+2026-04-06 00:02:51.315 14395-14395 BluetoothService        com.noisefit.luna.dev                I  writeCmd[8, 113, 74, 19, 10, 17, 10, 13, 8, -22, 15, 16, 4, 24, 6, 32, 0, 40, 0, 48, 0, 16, 2]
+2026-04-06 00:02:51.425 14395-14395 setAxisMinimum          com.noisefit.luna.dev                D   0.0 0.0 0.0
+2026-04-06 00:02:51.425 14395-14395 calculate               com.noisefit.luna.dev                D  calculate 88.5 95.5
+2026-04-06 00:02:51.427 14395-14395 calculate               com.noisefit.luna.dev                D  calculate 88.5 95.5
+2026-04-06 00:02:51.482 14395-14401 isefit.luna.dev         com.noisefit.luna.dev                I  NativeAlloc concurrent copying GC freed 25MB AllocSpace bytes, 41(4124KB) LOS objects, 33% free, 46MB/70MB, paused 258us,67us total 217.779ms
+2026-04-06 00:02:51.709  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:625]  interop_oplus_match_name_impl:[OplusLeConnIntMinLimitAccept] check Luna Band_005E return 0
+2026-04-06 00:02:51.710  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:639]  interop_oplus_match_both_name_and_addr_impl:[OplusLeConnIntMinLimitAccept] check Luna Band_005E-d8:**:**:**:00:5e return 0
+2026-04-06 00:02:51.710  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:665]  interop_oplus_match_both_name_addr_and_ver_impl:[OplusLeConnIntMinLimitAccept] check Luna Band_005E-d8:**:**:**:00:5e-09:09ac:0329 return 0
+2026-04-06 00:02:51.713  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:625]  interop_oplus_match_name_impl:[OplusLeAvoidDoFastConnectionTwice] check Luna Band_005E return 0
+2026-04-06 00:02:51.713  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:639]  interop_oplus_match_both_name_and_addr_impl:[OplusLeAvoidDoFastConnectionTwice] check Luna Band_005E-d8:**:**:**:00:5e return 0
+2026-04-06 00:02:51.714  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:665]  interop_oplus_match_both_name_addr_and_ver_impl:[OplusLeAvoidDoFastConnectionTwice] check Luna Band_005E-d8:**:**:**:00:5e-09:09ac:0329 return 0
+2026-04-06 00:02:51.715  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:625]  interop_oplus_match_name_impl:[OplusLeConnLatencyAdjust] check Luna Band_005E return 0
+2026-04-06 00:02:51.715  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:639]  interop_oplus_match_both_name_and_addr_impl:[OplusLeConnLatencyAdjust] check Luna Band_005E-d8:**:**:**:00:5e return 0
+2026-04-06 00:02:51.715  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:665]  interop_oplus_match_both_name_addr_and_ver_impl:[OplusLeConnLatencyAdjust] check Luna Band_005E-d8:**:**:**:00:5e-09:09ac:0329 return 0
+2026-04-06 00:02:51.716  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:625]  interop_oplus_match_name_impl:[OplusLeConnIntMinLimitAdjust] check Luna Band_005E return 0
+2026-04-06 00:02:51.716  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:639]  interop_oplus_match_both_name_and_addr_impl:[OplusLeConnIntMinLimitAdjust] check Luna Band_005E-d8:**:**:**:00:5e return 0
+2026-04-06 00:02:51.717  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:665]  interop_oplus_match_both_name_addr_and_ver_impl:[OplusLeConnIntMinLimitAdjust] check Luna Band_005E-d8:**:**:**:00:5e-09:09ac:0329 return 0
+2026-04-06 00:02:51.719  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:625]  interop_oplus_match_name_impl:[OplusLeAvoidDoFastConnectionTwice] check Luna Band_005E return 0
+2026-04-06 00:02:51.720  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:639]  interop_oplus_match_both_name_and_addr_impl:[OplusLeAvoidDoFastConnectionTwice] check Luna Band_005E-d8:**:**:**:00:5e return 0
+2026-04-06 00:02:51.720  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:665]  interop_oplus_match_both_name_addr_and_ver_impl:[OplusLeAvoidDoFastConnectionTwice] check Luna Band_005E-d8:**:**:**:00:5e-09:09ac:0329 return 0
+2026-04-06 00:02:51.771 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 01 00 00 
+2026-04-06 00:02:51.784 14395-14594 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 01 00 08 6E 
+2026-04-06 00:02:51.893 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 00 00 00 
+2026-04-06 00:02:51.895 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 00 00 00 00 01 00 
+2026-04-06 00:02:51.908 14395-14595 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 01 00 00 
+2026-04-06 00:02:52.012 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 01 00 08 6E 42 02 4A 00 
+2026-04-06 00:02:52.027 14395-14599 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 00 00 00 
+2026-04-06 00:02:52.032 14395-14472 BluetoothService        com.noisefit.luna.dev                D  CMDThread send size = 9
+2026-04-06 00:02:52.048 14395-14472 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 00 00 00 00 01 00 
+2026-04-06 00:02:52.492 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 01 00 00 
+2026-04-06 00:02:52.505 14395-14603 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 01 00 08 75 
+2026-04-06 00:02:52.971 14395-14401 isefit.luna.dev         com.noisefit.luna.dev                I  Background concurrent copying GC freed 13MB AllocSpace bytes, 2(596KB) LOS objects, 30% free, 55MB/79MB, paused 101us,44us total 135.390ms
+2026-04-06 00:02:52.974 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 00 00 00 
+2026-04-06 00:02:52.979 14395-16027 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 00 00 00 00 01 00 
+2026-04-06 00:02:52.996 14395-14608 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 01 00 00 
+2026-04-06 00:02:53.029 14395-16027 BluetoothGatt           com.noisefit.luna.dev                D  onConnectionUpdated() - Device=D8:5C:08:30:00:5E interval=24 latency=0 timeout=600 status=0
+2026-04-06 00:02:53.062 14395-16027 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 01 00 08 75 4A 02 1A 00 
+2026-04-06 00:02:53.081 14395-14610 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 00 00 00 
+2026-04-06 00:02:53.095 14395-14472 BluetoothService        com.noisefit.luna.dev                D  CMDThread send size = 8
+2026-04-06 00:02:53.110 14395-14472 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 00 00 00 00 01 00 
+2026-04-06 00:02:53.150 14395-16027 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 01 00 00 
+2026-04-06 00:02:53.163 14395-14473 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 01 00 08 75 
+2026-04-06 00:02:53.212 14395-16027 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 00 00 00 
+2026-04-06 00:02:53.213 14395-16027 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 00 00 00 00 01 00 
+2026-04-06 00:02:53.227 14395-14594 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 01 00 00 
+2026-04-06 00:02:53.269 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 01 00 08 75 4A 02 1A 00 
+2026-04-06 00:02:53.282 14395-14595 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 00 00 00 
+2026-04-06 00:02:53.292 14395-14472 BluetoothService        com.noisefit.luna.dev                D  CMDThread send size = 7
+2026-04-06 00:02:53.305 14395-14472 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 00 00 00 00 01 00 
+2026-04-06 00:02:53.359 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 01 00 00 
+2026-04-06 00:02:53.372 14395-14599 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 01 00 08 FA 05 
+2026-04-06 00:02:53.419 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 00 00 00 
+2026-04-06 00:02:53.421 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 00 00 00 00 01 00 
+2026-04-06 00:02:53.435 14395-14609 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 01 00 00 
+2026-04-06 00:02:53.480 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 01 00 08 FA 05 7A 0C AA 03 09 08 00 10 DC 01 18 00 20 2D 
+2026-04-06 00:02:53.492 14395-14608 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 00 00 00 
+2026-04-06 00:02:53.499 14395-14472 BluetoothService        com.noisefit.luna.dev                D  CMDThread send size = 6
+2026-04-06 00:02:53.513 14395-14472 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 00 00 00 00 01 00 
+2026-04-06 00:02:53.571 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 01 00 00 
+2026-04-06 00:02:53.585 14395-14610 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 01 00 08 F0 05 
+2026-04-06 00:02:53.633 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 00 00 00 
+2026-04-06 00:02:53.641 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 00 00 00 00 01 00 
+2026-04-06 00:02:53.657 14395-14598 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 01 00 00 
+2026-04-06 00:02:53.723 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 01 00 08 F0 05 7A 07 92 03 04 08 01 10 5A 
+2026-04-06 00:02:53.741 14395-14594 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 00 00 00 
+2026-04-06 00:02:53.760 14395-14472 BluetoothService        com.noisefit.luna.dev                D  CMDThread send size = 5
+2026-04-06 00:02:53.776 14395-14472 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 00 00 00 00 01 00 
+2026-04-06 00:02:53.841 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 01 00 00 
+2026-04-06 00:02:53.851 14395-14401 isefit.luna.dev         com.noisefit.luna.dev                I  Background concurrent copying GC freed 2465KB AllocSpace bytes, 7(140KB) LOS objects, 24% free, 74MB/98MB, paused 126us,46us total 166.433ms
+2026-04-06 00:02:53.859 14395-14595 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 01 00 08 F3 05 
+2026-04-06 00:02:53.899 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 00 00 00 
+2026-04-06 00:02:53.901 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 00 00 00 00 01 00 
+2026-04-06 00:02:53.915 14395-14603 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 01 00 00 
+2026-04-06 00:02:53.959 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 01 00 08 F3 05 7A 08 9A 03 05 08 00 10 DC 01 
+2026-04-06 00:02:53.974 14395-14609 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 00 00 00 
+2026-04-06 00:02:53.983 14395-14472 BluetoothService        com.noisefit.luna.dev                D  CMDThread send size = 4
+2026-04-06 00:02:53.997 14395-14472 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 00 00 00 00 01 00 
+2026-04-06 00:02:54.049 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 01 00 00 
+2026-04-06 00:02:54.061 14395-14608 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 01 00 08 F6 05 
+2026-04-06 00:02:54.109 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 00 00 00 
+2026-04-06 00:02:54.111 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 00 00 00 00 01 00 
+2026-04-06 00:02:54.123 14395-14473 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 01 00 00 
+2026-04-06 00:02:54.169 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 01 00 08 F6 05 7A 07 A2 03 04 08 00 10 64 
+2026-04-06 00:02:54.183 14395-14598 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 00 00 00 
+2026-04-06 00:02:54.192 14395-14472 BluetoothService        com.noisefit.luna.dev                D  CMDThread send size = 3
+2026-04-06 00:02:54.206 14395-14472 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 00 00 00 00 01 00 
+2026-04-06 00:02:54.261 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 01 00 00 
+2026-04-06 00:02:54.274 14395-14594 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 01 00 08 FE 03 
+2026-04-06 00:02:54.321 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 00 00 00 
+2026-04-06 00:02:54.352 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 00 00 00 00 01 00 
+2026-04-06 00:02:54.365 14395-14599 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 01 00 00 
+2026-04-06 00:02:54.411 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 01 00 08 FE 03 A0 06 01 
+2026-04-06 00:02:54.427 14395-14603 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 00 00 00 
+2026-04-06 00:02:54.433 14395-14472 BluetoothService        com.noisefit.luna.dev                D  CMDThread send size = 2
+2026-04-06 00:02:54.449 14395-14472 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 00 00 00 00 01 00 
+2026-04-06 00:02:54.503 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 01 00 00 
+2026-04-06 00:02:54.519 14395-14609 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 01 00 08 D9 01 
+2026-04-06 00:02:54.566 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 00 00 00 
+2026-04-06 00:02:54.572 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 00 00 00 00 01 00 
+2026-04-06 00:02:54.588 14395-14610 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 01 00 00 
+2026-04-06 00:02:54.652 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 01 00 08 D9 01 A0 06 00 
+2026-04-06 00:02:54.670 14395-14473 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 00 00 00 
+2026-04-06 00:02:54.679 14395-14472 BluetoothService        com.noisefit.luna.dev                D  CMDThread send size = 1
+2026-04-06 00:02:54.698 14395-14472 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 00 00 00 00 01 00 
+2026-04-06 00:02:54.742 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 01 00 00 
+2026-04-06 00:02:54.768 14395-14598 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 01 00 08 71 4A 13 0A 11 0A 0D 08 EA 0F 10 04 18 06 20 00 28 00 30 00 10 02 
+2026-04-06 00:02:54.769 14395-14401 isefit.luna.dev         com.noisefit.luna.dev                I  Background concurrent copying GC freed 3533KB AllocSpace bytes, 8(160KB) LOS objects, 20% free, 94MB/118MB, paused 72us,118us total 199.612ms
+2026-04-06 00:02:54.831 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 00 00 00 
+2026-04-06 00:02:54.834 14395-16027 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 00 00 00 00 0D 00 
+2026-04-06 00:02:54.846 14395-14595 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 01 00 00 
+2026-04-06 00:02:54.895 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 01 00 08 71 4A E1 16 32 DE 16 0A 11 0A 0D 08 EA 0F 10 04 18 06 20 00 28 00 30 00 10 02 10 1E 1A C0 16 37 00 35 00 39 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+2026-04-06 00:02:54.900 14395-16027 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+2026-04-06 00:02:54.903 14395-16027 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+2026-04-06 00:02:54.909 14395-16027 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 04 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+2026-04-06 00:02:54.925 14395-16027 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 05 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+2026-04-06 00:02:54.930 14395-16027 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 06 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+2026-04-06 00:02:54.935 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 07 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+2026-04-06 00:02:54.940 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 08 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+2026-04-06 00:02:54.953 14395-14411 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 09 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+2026-04-06 00:02:54.958 14395-16027 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 0A 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+2026-04-06 00:02:54.963 14395-16027 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 0B 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+2026-04-06 00:02:54.967 14395-16027 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 0C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 63 00 1E 00 00 00 00 00 1E 00 3A 00 00 00 00 00 1E 00 1E 00 30 00 34 00 1E 00 1E 00 1E 00 1E 00 43 00 36 00 1E 00 1E 00 1E 00 1E 00 42 00 37 00 55 00 38 00 3B 00 3E 00 35 00 3C 00 3A 00 3C 00 38 00 38 00 3D 00 45 00 3D 00 3A 00 4B 00 3E 00 44 00 40 00 3C 00 38 00 38 00 37 00 37 00 3D 00 3C 00 3C 00 46 00 1E 00 1E 00 42 00 43 00 38 00 37 00 3E 00 4A 00 43 00 40 00 38 00 42 00 38 00 3B 00 40 00 57 00 46 00 6E 00 3B 00 1E 00 3D 00 45 00 3C 00 3A 00 35 00 3E 00 34 00 3B 00 38 00 4F 00 35 00 42 00 39 00 39 00 3A 00 3C 00 
+2026-04-06 00:02:54.980 14395-16027 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 0D 00 45 00 36 00 36 00 39 00 20 6E 28 1E 48 01 
+2026-04-06 00:02:54.994 14395-14608 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 00 00 00 
+2026-04-06 00:02:56.373 14395-14401 isefit.luna.dev         com.noisefit.luna.dev                I  Background concurrent copying GC freed 10153KB AllocSpace bytes, 2(1592KB) LOS objects, 18% free, 104MB/128MB, paused 103us,76us total 205.019ms
+2026-04-06 00:02:57.230  2187-3144  InputDispatcher         system_server                        I  AnrLogEnhancement:onAnrLocked eb03687 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity (server) is not responding seq=437284
+2026-04-06 00:02:57.233  2187-3144  InputDispatcher         system_server                        W  Window eb03687 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity (server) is unresponsive: eb03687 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity (server) is not responding. Waited 5001ms for MotionEvent(deviceId=3, eventTime=75788425872000, source=TOUCHSCREEN, displayId=0, action=DOWN, actionButton=0x00000000, flags=0x00000000, metaState=0x00000000, buttonState=0x00000000, classification=NONE, edgeFlags=0x00000000, xPrecision=4.0, yPrecision=4.0, xCursorPosition=nan, yCursorPosition=nan, pointers=[0: (630.8, 1669.0)]), policyFlags=0x62000000
+2026-04-06 00:02:57.233  2187-3144  InputDispatcher         system_server                        W  Canceling events for eb03687 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity (server) because it is unresponsive
+2026-04-06 00:02:57.236  2187-3144  WindowManager           system_server                        I  ANR in Window{eb03687 u0 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity}. Reason:Input dispatching timed out (eb03687 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity (server) is not responding. Waited 5001ms for MotionEvent(deviceId=3, eventTime=75788425872000, source=TOUCHSCREEN, displayId=0, action=DOWN, actionButton=0x00000000, flags=0x00000000, metaState=0x00000000, buttonState=0x00000000, classification=NONE, edgeFlags=0x00000000, xPrecision=4.0, yPrecision=4.0, xCursorPosition=nan, yCursorPosition=nan, pointers=[0: (630.8, 1669.0)]), policyFlags=0x62000000).
+2026-04-06 00:02:57.236  2187-3144  WindowManager           system_server                        D   mCurrentFocus =Window{eb03687 u0 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity},drawState=HAS_DRAWN,w.getFrame() =Rect(0, 0 - 1080, 2400),mSyncState=0,flags =-2122252032,canReceiveKeys = true,reasonfromTouch= false isVisibleRequestedOrAdding=true mViewVisibility=0 mRemoveOnExit=false flags=-2122252032 appWindowsAreFocusable=true canReceiveTouchInput=true displayIsOnTop=true displayIsTrusted=true transitShouldKeepFocus=false,isFocusable=true,mHasSurface=truemViewVisibility=0x0
+2026-04-06 00:02:57.236  2187-3144  WindowManager           system_server                        D   log WindowState end, mFocusedApp =ActivityRecord{adf1a8e u0 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity t2353}
+2026-04-06 00:02:57.243  2187-2187  OIM_Policy              system_server                        I  receive gesture unResponsive msg, reason = eb03687 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity (server) is not responding. Waited 5001ms for MotionEvent(deviceId=3, eventTime=75788425872000, source=TOUCHSCREEN, displayId=0, action=DOWN, actionButton=0x00000000, flags=0x00000000, metaState=0x00000000, buttonState=0x00000000, classification=NONE, edgeFlags=0x00000000, xPrecision=4.0, yPrecision=4.0, xCursorPosition=nan, yCursorPosition=nan, pointers=[0: (630.8, 1669.0)]), policyFlags=0x62000000 OPLUS_EX_CHANNEL_NAME = OplusExInputReceiver1
+2026-04-06 00:02:57.251 14395-14396 isefit.luna.dev         com.noisefit.luna.dev                I  Thread[2,tid=14396,WaitingInMainSignalCatcherLoop,Thread*=0xb40000758d226000,peer=0x38c01a0,"Signal Catcher"]: reacting to signal 3
+2026-04-06 00:02:57.251 14395-14396 isefit.luna.dev         com.noisefit.luna.dev                I  Mutator lock exclusive owner tid: -1
+                                                                                                    ThreadList lock owner tid: 0
+                                                                                                    ClassLinker classes lock owner tid: 0
+                                                                                                    ClassLinker dex lock owner tid: 0
+2026-04-06 00:02:57.252  2187-16337 OplusWindo...rolService system_server                        W  respondANR: all info about WindowContainer: Stack: Counter{ com.oppo.quicksearchbox(1) com.android.launche(1) com.noisefit.luna.dev(1) com.ss.android.lark(1) com.android.intentresolver(4) }; Task: Counter{ com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity(1) } Counter{ com.android.launcher/.Launcher(1) } Counter{ com.oppo.quicksearchbox/com.oplus.globalsearch.ui.SearchDrawActivity(1) } 
+2026-04-06 00:02:57.252  2187-16337 OplusWindo...rolService system_server                        W  respondANR: all info about WindowContainer: Stack: Counter{ com.oppo.quicksearchbox(1) com.android.launche(1) com.noisefit.luna.dev(1) com.ss.android.lark(1) com.android.intentresolver(4) }; Task: Counter{ com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity(1) } Counter{ com.android.launcher/.Launcher(1) } Counter{ com.oppo.quicksearchbox/com.oplus.globalsearch.ui.SearchDrawActivity(1) } 
+2026-04-06 00:02:57.253  2187-16337 OplusWindo...rolService system_server                        W  respondANR: all info about WindowContainer: Stack: Counter{ com.oppo.quicksearchbox(1) com.android.launche(1) com.noisefit.luna.dev(1) com.ss.android.lark(1) com.android.intentresolver(4) }; Task: Counter{ com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity(1) } Counter{ com.android.launcher/.Launcher(1) } Counter{ com.oppo.quicksearchbox/com.oplus.globalsearch.ui.SearchDrawActivity(1) } 
+2026-04-06 00:02:57.270  8414-16339 LogKit.OLC...InfoEntity com.oplus.olc                        I  exceptionInfoCollector get componentName:com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity
+2026-04-06 00:02:57.270  8414-16339 LogKit.OLC...ckageUtils com.oplus.olc                        D  PackageName: com.noisefit.luna.dev
+2026-04-06 00:02:57.276  2187-16337 ITheiaManagerExt        system_server                        D  recordAnrOrCrashEventStamp: pnIndex: 0 pkIndex: 34 packageName: com.noisefit.luna.dev
+2026-04-06 00:02:57.277  2187-16337 ITheiaManagerExt        system_server                        D  parseExtraInfo: pnIndex: 0 pkIndex: 34 packageName: com.noisefit.luna.dev packageVersion: 1.6.3.staging.luna eventType: 
+2026-04-06 00:02:57.277  2187-16337 ActivityManager         system_server                        D  TheiaManager sendEvent:com.noisefit.luna.dev ANR happen
+2026-04-06 00:02:57.278  1008-1028  statsd                  statsd                               I  An anomaly (1003101440) (101440)0x10000->20120[I] (101440)0x20000->CriticalLog[S] (101440)0x30000->Theia[S] (101440)0x40000->1775404977275[L] (101440)0x50000->anr[S] (101440)0x60000->14395[I] (101440)0x70000->10443[I] (101440)0x80000->com.noisefit.luna.dev[S] (101440)0x90000->1.6.3.staging.luna[S] (101440)0xa0000->NA[S] (101440)0xb0000->15[S]  has occurred! Informing subscribers.
+2026-04-06 00:02:57.281  8414-16339 LogKit.OLC...ckageUtils com.oplus.olc                        D  PackageName: com.noisefit.luna.dev
+2026-04-06 00:02:57.306  1951-2181  gaia:event_server       oplus_gaia                           D  [handleEvent:34]parse event from rawMsg: {"data":"{\"app_list\":[\"com.noisefit.luna.dev\"],\"error_time\":1775404977238,\"error_type\":\"anr_start\",\"file_id\":\"96a16db6-1402-48e8-a800-df46b620b699\",\"log_option\":33023,\"log_list\":[\"extras@2026-04-06_00-02-57.txt\"]}","eventId":269500417,"packetId":"1135","type":2}
+2026-04-06 00:02:57.308  1951-2164  gaia:logcollect         oplus_gaia                           D  [startCatchLog:132]LogCollect startCatchLog with exception Info: {"app_list":["com.noisefit.luna.dev"],"error_time":1775404977238,"error_type":"anr_start","file_id":"96a16db6-1402-48e8-a800-df46b620b699","log_option":33023,"log_list":["extras@2026-04-06_00-02-57.txt"]}
+2026-04-06 00:02:57.335  8414-16339 LogKit.OLC...ckageUtils com.oplus.olc                        D  PackageName: com.noisefit.luna.dev
+2026-04-06 00:02:57.338  9074-13168 OCenterLog              com.oplus.midas                      I  e: dcs onCommon onCalled: EventInfo{id=0, TimestampMs=1775404977292, eventId=101440, eventName=oplus_theia_common_anr, reportData={"fault_timestamp_ms"="1775404977275","uid"="10443","log_type"="anr","package_version"="1.6.3.staging.luna","dcs_app_id"="20120","ota_version"="NA","dcs_event_id"="Theia","package_name"="com.noisefit.luna.dev","dcs_log_tag"="CriticalLog","pid"="14395","android_version"="15"}}
+2026-04-06 00:02:57.339  8414-16339 LogKit.OLC...ckageUtils com.oplus.olc                        D  PackageName: com.noisefit.luna.dev
+2026-04-06 00:02:57.340  3764-4202  CommonApp-131-10443     com.oplus.nas                        D  scene=COMMON pn=com.noisefit.luna.dev
+2026-04-06 00:02:57.356  1951-21760 gaia:OCent...Subscriber oplus_gaia                           D  [onEvent:11]OCenterEventSubscriber Received event OCenterEvent{eventId: 101440, eventName: oplus_theia_common_anr, timestampMs: 1775404977292, reportData: [OCenterKV{key: dcs_app_id, value: 20120}, OCenterKV{key: dcs_log_tag, value: CriticalLog}, OCenterKV{key: dcs_event_id, value: Theia}, OCenterKV{key: fault_timestamp_ms, value: 1775404977275}, OCenterKV{key: log_type, value: anr}, OCenterKV{key: pid, value: 14395}, OCenterKV{key: uid, value: 10443}, OCenterKV{key: package_name, value: com.noisefit.luna.dev}, OCenterKV{key: package_version, value: 1.6.3.staging.luna}, OCenterKV{key: ota_version, value: NA}, OCenterKV{key: android_version, value: 15}]}
+2026-04-06 00:02:57.457 14395-14401 isefit.luna.dev         com.noisefit.luna.dev                I  Background young concurrent copying GC freed 8637KB AllocSpace bytes, 0(0B) LOS objects, 3% free, 123MB/128MB, paused 88us,94us total 284.836ms
+2026-04-06 00:02:57.585 14395-14396 isefit.luna.dev         com.noisefit.luna.dev                I  Wrote stack traces to tombstoned
+2026-04-06 00:02:58.054  2187-3144  InputDispatcher         system_server                        W  Not sending touch to eb03687 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity because it is not responsive
+2026-04-06 00:02:58.210 14395-14401 isefit.luna.dev         com.noisefit.luna.dev                I  Background concurrent copying GC freed 61MB AllocSpace bytes, 0(0B) LOS objects, 21% free, 85MB/109MB, paused 449us,75us total 750.051ms
+2026-04-06 00:02:58.468  2187-16337 ActivityManager         system_server                        E  ANR in com.noisefit.luna.dev (com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity)
+                                                                                                    PID: 14395
+                                                                                                    Reason: Input dispatching timed out (eb03687 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity (server) is not responding. Waited 5001ms for MotionEvent(deviceId=3, eventTime=75788425872000, source=TOUCHSCREEN, displayId=0, action=DOWN, actionButton=0x00000000, flags=0x00000000, metaState=0x00000000, buttonState=0x00000000, classification=NONE, edgeFlags=0x00000000, xPrecision=4.0, yPrecision=4.0, xCursorPosition=nan, yCursorPosition=nan, pointers=[0: (630.8, 1669.0)]), policyFlags=0x62000000).
+                                                                                                    Parent: com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity
+                                                                                                    ErrorId: 9e36ee19-4680-4e79-acba-e82895f47706
+                                                                                                    Frozen: false
+                                                                                                    Load: 0.05 / 0.22 / 0.23
+                                                                                                    ----- Output from /proc/pressure/memory -----
+                                                                                                    some avg10=0.16 avg60=0.10 avg300=0.15 total=220810788
+                                                                                                    full avg10=0.12 avg60=0.03 avg300=0.00 total=63589805
+                                                                                                    ----- End output from /proc/pressure/memory -----
+                                                                                                    ----- Output from /proc/pressure/cpu -----
+                                                                                                    some avg10=3.43 avg60=2.86 avg300=4.38 total=3590745918
+                                                                                                    ----- End output from /proc/pressure/cpu -----
+                                                                                                    ----- Output from /proc/pressure/io -----
+                                                                                                    some avg10=0.20 avg60=0.21 avg300=0.35 total=667654411
+                                                                                                    full avg10=0.19 avg60=0.13 avg300=0.13 total=338756663
+                                                                                                    ----- End output from /proc/pressure/io -----
+                                                                                                    
+                                                                                                    CPU usage from 7566ms to -2ms ago (2026-04-06 00:02:49.689 to 2026-04-06 00:02:57.256):
+                                                                                                      150% 14395/com.noisefit.luna.dev: 136% user + 13% kernel / faults: 169215 minor
+                                                                                                      24% 2187/system_server: 12% user + 12% kernel / faults: 685 minor 3 major
+                                                                                                      7.8% 4759/midasd: 7.5% user + 0.2% kernel / faults: 97 minor
+                                                                                                      7% 3851/com.android.bluetooth: 4.5% user + 2.5% kernel / faults: 58 minor
+                                                                                                      6.9% 9749/adbd: 1% user + 5.8% kernel / faults: 28 minor
+                                                                                                      4.2% 647/logd: 0.3% user + 3.8% kernel / faults: 109 minor
+                                                                                                      3.4% 4870/kworker/u24:10-events_unbound: 0% user + 3.4% kernel / faults: 1 minor
+                                                                                                      3.1% 1249/surfaceflinger: 2.2% user + 0.9% kernel
+                                                                                                      3% 3394/com.android.systemui: 1.7% user + 1.3% kernel / faults: 676 minor
+                                                                                                      2.9% 12831/kworker/u24:12-memlat_wq: 0% user + 2.9% kernel / faults: 1 minor
+                                                                                                    31% TOTAL: 21% user + 8.3% kernel + 0% iowait + 1% irq + 0.2% softirq
+                                                                                                    CPU usage from 74ms to 831ms later (2026-04-06 00:02:57.329 to 2026-04-06 00:02:58.085):
+                                                                                                      138% 2187/system_server: 59% user + 78% kernel / faults: 3241 minor
+                                                                                                        55% 2344/Signal Catcher: 30% user + 24% kernel
+                                                                                                        51% 16338/AnrAuxiliaryTas: 14% user + 37% kernel
+                                                                                                        2% 2576/android.ui: 2% user + 0% kernel
+                                                                                                        2% 3144/InputDispatcher: 0% user + 2% kernel
+                                                                                                        2% 3145/InputReader: 2% user + 0% kernel
+                                                                                                        2% 8040/OwmDhcpMonitor: 0% user + 2% kernel
+                                                                                                      197% 14395/com.noisefit.luna.dev: 187% user + 10% kernel / faults: 4928 minor
+                                                                                                        96% 14395/isefit.luna.dev: 90% user + 6.6% kernel
+                                                                                                        93% 14401/HeapTaskDaemon: 93% user + 0% kernel
+                                                                                                      95% 4759/midasd: 95% user + 0% kernel
+                                                                                                        98% 13996/SQL: 95% user + 2.5% kernel
+                                                                                                      28% 184/kswapd0:0: 0% user + 28% kernel
+                                                                                                      14% 647/logd: 2.9% user + 11% kernel / faults: 1156 minor
+                                                                                                        2.9% 657/logd.writer: 1.4% user + 1.4% kernel
+                                                                                                      4% 186/kshrink_slabd: 0% user + 4% kernel
+                                                                                                      2.6% 1/init: 2.6% user + 0% kernel / faults: 103 minor
+                                                                                                        2.6% 1/init: 2.6% user + 0% kernel
+                                                                                                      3.9% 1951/oplus_gaia: 0% user + 3.9% kernel / faults: 1 minor
+                                                                                                      6.3% 12831/kworker/u24:12-memlat_wq: 0% user + 6.3% kernel
+                                                                                                      1.3% 12/rcu_preempt: 0% user + 1.3% kernel
+                                                                                                      1.3% 13/rcuog/0: 0% user + 1.3% kernel
+                                                                                                      1.3% 23/rcuop/1: 0% user + 1.3% kernel
+                                                                                                      1.3% 44/rcuog/4: 0% user + 1.3% kernel
+                                                                                                      1.3% 52/rcuop/5: 0% user + 1.3% kernel
+                                                                                                      1.3% 324/spi0: 0% user + 1.3% kernel
+                                                                                                      1.6% 1117/com.zjw.zhotatools: 0% user + 1.6% kernel
+                                                                                                        1.6% 1735/Thread-9: 0% user + 1.6% kernel
+                                                                                                      1.7% 1165/android.hardware.bluetooth@1.0-service-qti: 1.7% user + 0% kernel
+                                                                                                      1.8% 1223/vendor.oplus.hardware.urcc-service: 0% user + 1.8% kernel / faults: 11 minor
+                                                                                                        1.8% 1240/UrccWorker: 0% user + 1.8% kernel
+                                                                                                       +0% 16370/POSIX timer 499: 0% user + 0% kernel
+                                                                                                       +0% 16372/POSIX timer 499: 0% user + 0% kernel
+                                                                                                       +0% 16373/POSIX timer 499: 0% user + 0% kernel
+2026-04-06 00:02:58.470 14395-16027 Looper                  com.noisefit.luna.dev                D  dumpMergedQueue
+2026-04-06 00:02:58.470  2187-16337 OplusWindo...rolService system_server                        W  respondANR: all info about WindowContainer: Stack: Counter{ com.oppo.quicksearchbox(1) com.android.launche(1) com.noisefit.luna.dev(1) com.ss.android.lark(1) com.android.intentresolver(4) }; Task: Counter{ com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity(1) } Counter{ com.android.launcher/.Launcher(1) } Counter{ com.oppo.quicksearchbox/com.oplus.globalsearch.ui.SearchDrawActivity(1) } 
+2026-04-06 00:02:58.470 14395-16027 OplusLoope...Dispatcher com.noisefit.luna.dev                D  dumpMsgWhenAnr
+2026-04-06 00:02:58.472  2187-16337 ActivityManager         system_server                        D  Completed ANR of com.noisefit.luna.dev in 1232ms, latency 1ms
+2026-04-06 00:02:58.472  2187-2576  OplusWindo...rolService system_server                        W  respondANR: all info about WindowContainer: Stack: Counter{ com.oppo.quicksearchbox(1) com.android.launche(1) com.noisefit.luna.dev(1) com.ss.android.lark(1) com.android.intentresolver(4) }; Task: Counter{ com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity(1) } Counter{ com.android.launcher/.Launcher(1) } Counter{ com.oppo.quicksearchbox/com.oplus.globalsearch.ui.SearchDrawActivity(1) } 
+2026-04-06 00:02:58.473  2187-2576  ActivityTaskManager     system_server                        W    Force finishing activity com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity
+2026-04-06 00:02:58.476  2187-3281  [UAH_CLIENT]            system_server                        I  UahEventAcquire, cmdid:0, pkg:com.noisefit.luna.dev, identity:com.android.server.wm
+2026-04-06 00:02:58.480  2187-2576  ActivityTaskManager     system_server                        D  setAppVisibility(Token{93366bc ActivityRecord{adf1a8e u0 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity t2353 f}}}, visible=false): mNextAppTransitionRequests=[], mNextAppTransitionFlags=,mAppTransitionState=APP_STATE_IDLE visible=true mVisibleRequested=true
+2026-04-06 00:02:58.481  2187-2576  ActivityTaskManager     system_server                        D  setVisibility(Token{93366bc ActivityRecord{adf1a8e u0 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity t2353 f}}}, visible=false) defer commitVisibility for transition collecting
+2026-04-06 00:02:58.487  2187-2576  OplusHansManager        system_server                        I  front pkg: com.android.launcher, uid: 10189, prev pkg: com.noisefit.luna.dev, prev uid: 10443
+2026-04-06 00:02:58.488  2187-3419  Osense-Bas...isionMaker system_server                        I  notifySceneToAthenaPolicy: SCENE_LAUNCHER, bundle: Bundle[{prevPkgName=com.noisefit.luna.dev, curUid=10189, curPkgName=com.android.launcher, prevUid=10443}]
+2026-04-06 00:02:58.490  2187-3834  OPM-Process             system_server                        I  resume pkg: com.android.launcher, uid:10189, prev pkg: com.noisefit.luna.dev, prev uid: 10443
+2026-04-06 00:02:58.496  2187-3767  OplusHansManager        system_server                        I  uid=10443, pkg=com.noisefit.luna.dev enter SM
+2026-04-06 00:02:58.496  2187-3767  OplusHansManager        system_server                        I  uid=10443, pkg=com.noisefit.luna.dev R enter(), D stay=85
+2026-04-06 00:02:58.499  2187-2576  ActivityTaskManager     system_server                        D  NFW_setLastResumedActivityUncheckLocked:true r:ActivityRecord{f2ed79c u0 com.android.launcher/.Launcher t5} currentFocus:Window{eb03687 u0 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity}
+2026-04-06 00:02:58.499  2187-2576  WindowManager           system_server                        D  NFW_findFocusedWindowIfNeeded:null mCurrentFocus:Window{eb03687 u0 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity}
+2026-04-06 00:02:58.501  2187-2576  WindowManager           system_server                        V  Changing focus from Window{eb03687 u0 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity} to null,diplayid=0
+2026-04-06 00:02:58.502  2187-2576  FlexibleTaskController  system_server                        D  onTaskFocusChanged prevTask:Task{9316d2e #2353 type=standard A=10443:com.noisefit.luna.dev} ,currentTask:Task{c92b5ff #5 type=home I=com.android.launcher/.Launcher}, reason: resumeTopActivity - onActivityStateChanged
+2026-04-06 00:02:58.515  2187-2576  OplusFlexi...agerHelper system_server                        D  onTaskInfoChanged taskInfo:TaskInfo{userId=0 taskId=2353 displayId=0 isRunning=false baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.noisefit.luna.dev/com.noisefit.ui.SplashActivity mCallingUid=10189 } baseActivity=null topActivity=null origActivity=null realActivity=ComponentInfo{com.noisefit.luna.dev/com.noisefit.ui.SplashActivity} numActivities=0 lastActiveTime=491109634 supportsSplitScreenMultiWindow=true supportsMultiWindow=true supportsPocketStudioMultiWindow=true isInFlexibleEmbedded = false uid = -1 pid = -1 resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{544181d Task{9316d2e #2353 type=standard A=10443:com.noisefit.luna.dev}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 107 - 0, 0) topActivityInfo=null launchCookies=[android.os.BinderProxy@5786bbf] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=true isVisibleRequested=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false topActivityInOplusCompatMode=false topActivityEligibleForLetterboxEducation= falseisLetterboxEducationEnabled= false isLetterboxDoubleTapEnabled= false topActivityEligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false cameraCompatTaskInfo=CameraCompatTaskInfo { cameraCompatControlState=hidden freeformCameraCompatMode=inactive}} topActivityLetterboxInsets=Rect(0, 0 - 0, 0) mOplusExtraBundle = Bundle[{androidx.flexible.taskFrame=Rect(0, 0 - 0, 0), key_flexible_task_state=0, androidx.activity.LaunchScenario=0, androidx.activity.LaunchScale=1.0}]} task:Task{9316d2e #2353 type=standard A=10443:com.noisefit.luna.dev}
+2026-04-06 00:02:58.518  2187-2576  ActivityManager         system_server                        I  Killing 14395:com.noisefit.luna.dev/u0a443 (adj 0): user request after error:Input dispatching timed out (eb03687 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity (server) is not responding. Waited 5001ms for MotionEvent(deviceId=3, eventTime=75788425872000, source=TOUCHSCREEN, displayId=0, action=DOWN, actionButton=0x00000000, flags=0x00000000, metaState=0x00000000, buttonState=0x00000000, classification=NONE, edgeFlags=0x00000000, xPrecision=4.0, yPrecision=4.0, xCursorPosition=nan, yCursorPosition=nan, pointers=[0: (630.8, 1669.0)]), policyFlags=0x62000000).
+2026-04-06 00:02:58.526  2187-3425  OsenseKillAction        system_server                        I  KillAction: oops, can not find client pi: ProcessRecord{974bbe4 14395:com.noisefit.luna.dev/u0a443}
+2026-04-06 00:02:58.541  8414-16339 LogKit.OLC...ckageUtils com.oplus.olc                        D  PackageName: com.noisefit.luna.dev
+2026-04-06 00:02:58.541  8414-16339 LogKit.OLC...ckageUtils com.oplus.olc                        D  PackageName: com.noisefit.luna.dev
+2026-04-06 00:02:58.543  2187-3425  OsenseKillAction        system_server                        I  KillAction: 63mb more anonRss to reclaim, 0mb more swapMb to reclaim, <skip> mem guard, cur avail=2051mb, bundle: Bundle[{appcareThreshold=0, prevPkgName=com.noisefit.luna.dev, triggerMemory=2200, curUid=10189, curPkgName=com.android.launcher, qbmode=false, prevUid=10443, type=cached, level=1, scene=SCENE_LAUNCHER, requestId=307, purposeMemory=2400}]
+2026-04-06 00:02:58.545  8414-16339 LogKit.OLC...ckageUtils com.oplus.olc                        D  PackageName: com.noisefit.luna.dev
+2026-04-06 00:02:58.545  8414-16339 LogKit.OLC...ckageUtils com.oplus.olc                        D  PackageName: com.noisefit.luna.dev
+2026-04-06 00:02:58.548  2187-3144  InputDispatcher         system_server                        W  Not sending touch gesture to 2e9c2af ActivityRecordInputSink com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity ic = 0x5, because it has config NO_INPUT_CHANNEL, currInputWindows displayId=0 {5baff83 ScreenDecorOverlayBottom,0,id=76,ownerPid=3394,iC=0x50c,a=1.00,tR=<empty>} {c45e7d0 ScreenDecorOverlay,0,id=73,ownerPid=3394,iC=0x50c,a=1.00,tR=<empty>} {1289d43 NavigationBar_displayId_0,0,id=89,ownerPid=3394,iC=0x104,a=1.00,tR=<empty>} {2d95d97 StatusBar,0,id=93,ownerPid=3394,iC=0x104,a=1.00,tR=[0,0][1080,107]} {b24f518 OplusOSEdgeFloatBar,0,id=128,ownerPid=8671,iC=0x11c,a=1.00,tR=[1024,227][1080,515]} {eb03687 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity,0,id=7737,ownerPid=14395,iC=0x1d,a=1.00,tR=<empty>} {recents_animation_input_consumer,0,id=116,ownerPid=2187,iC=0x102,a=1.00,tR=[0,0][1080,2400]} {4c32aaf com.android.launcher/com.android.launcher.Launcher,0,id=7745,ownerPid=11863,iC=0x30e,a=1.00,tR=<empty>} {a396e7f com.android.wallpaper.livepicker.service.daynight.GradientDayNightWallpaper
+2026-04-06 00:02:58.562  2187-2574  InputStatistic          system_server                        I  start on common mType = WindowNoInputChannel reason = 2e9c2af ActivityRecordInputSink com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity
+2026-04-06 00:02:58.576  1008-1028  statsd                  statsd                               I  An anomaly (1003101248) (101248)0x10000->20039[I] (101248)0x20000->2003905[S] (101248)0x30000->WindowNoInputChannel[S] (101248)0x40000->1775404978562[L] (101248)0x50000->2e9c2af ActivityRecordInputSink com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity[S]  has occurred! Informing subscribers.
+2026-04-06 00:02:58.577  2187-2583  Transition              system_server                        D  collectOrderChanges onTopTasksEnd: [Task{40adbe0 #1 type=home}, Task{c92b5ff #5 type=home I=com.android.launcher/.Launcher}], reportedOnTop:null, mOnTopTasksStart: [Task{9316d2e #2353 type=standard A=10443:com.noisefit.luna.dev}], TDA child: [Task{2e8894e #2 type=undefined}, Task{e8451c5 #2346 type=standard A=10234:com.oppo.quicksearchbox}, Task{95ece64 #2350 type=standard A=10359:com.ss.android.lark}, Task{9316d2e #2353 type=standard A=10443:com.noisefit.luna.dev}, Task{40adbe0 #1 type=home}]
+2026-04-06 00:02:58.577  2187-2583  OplusFlexi...ionManager system_server                        D  fixTransitType type result:2, targets: [Task{40adbe0 #1 type=home}, Task{9316d2e #2353 type=standard A=10443:com.noisefit.luna.dev}, WallpaperWindowToken{95d5c token=android.os.Binder@133610d showWhenLocked=true}]
+2026-04-06 00:02:58.580  2187-2583  OplusTrans...Controller system_server                        D  onTransactionReady, transition: 640, 
+                                                                                                     info: {id=640 t=CLOSE f=0x10 trk=0 r=[0@Point(0, 0)] c=[{WCT{RemoteToken{bce07f9 Task{40adbe0 #1 type=home}}} m=TO_FRONT f=SHOW_WALLPAPER|MOVE_TO_TOP leash=Surface(name=Task=1)/@0x683102e sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0 taskParent=-1},{WCT{RemoteToken{544181d Task{9316d2e #2353 type=standard A=10443:com.noisefit.luna.dev}}} m=CLOSE f=NONE leash=Surface(name=Task=2353)/@0xc54a92 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0 taskParent=-1},{null m=TO_FRONT f=IS_WALLPAPER leash=Surface(name=WallpaperWindowToken{95d5c token=android.os.Binder@133610d showWhenLocked=false})/@0x73cd5d3 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}] extendInfo=[OplusTransitionExtendedInfo{mTmpFinishT=null, mInOplusCompatMode=false, mIsProcessRunning=false, mHasMismatchBoundsTarget=false, mRecentsController=null, mIsTranslucentActivityToHome=false, mAvoidInterceptKeyEventToHome=false, mIsFromHome=false, mParentLeash=null, mIsOplusAnimRes=false, mIsFromOverlay=false, mIsBalAllow=false, mTaskNotInRecent=false, mIsLaunchFromSpruce=false, mIsLaunchFromDrive=false, mAssistScreenShowing=false, mUserIdTransition=0, mInRemoteScene=false, mInPreReady=false, mPreStart=false, mToken=null, mShellApplyToken=null, mRequestTransitionTaskId=-1, mAbortTransitionOnShell=0, mTransitionId=640, mSkipRemoteTransitionfalse, mAnimStartingPosition=[0, 0, 0, 0], mIsOpeningStkDialogActivity=false}]}, 
+                                                                                                     targets : [Task{40adbe0 #1 type=home}, Task{9316d2e #2353 type=standard A=10443:com.noisefit.luna.dev}, WallpaperWindowToken{95d5c token=android.os.Binder@133610d showWhenLocked=true}], 
+                                                                                                     participants: {WallpaperWindowToken{95d5c token=android.os.Binder@133610d showWhenLocked=true}, Task{40adbe0 #1 type=home}, Task{9316d2e #2353 type=standard A=10443:com.noisefit.luna.dev}, ActivityRecord{adf1a8e u0 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity t2353 f}}, Task{c92b5ff #5 type=home I=com.android.launcher/.Launcher}, ActivityRecord{f2ed79c u0 com.android.launcher/.Launcher t5}}, 
+                                                                                                     playings:[TransitionRecord{6b9be5b id=640 track=0 type=CLOSE flags=0x10 state=2}]
+2026-04-06 00:02:58.582  2187-2583  WindowManager           system_server                        W  captureTaskSnapshot mSnapshotMode= 0 source=Task{9316d2e #2353 type=standard A=10443:com.noisefit.luna.dev}
+2026-04-06 00:02:58.594  2187-2583  TaskSnapshotCache       system_server                        D  putSnapshot mRunningCache top= ActivityRecord{adf1a8e u0 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity t2353 f}}, mTaskId=2353, snapshot=TaskSnapshot{ mId=1775404978582 mCaptureTime=491109747103351 mTopActivityComponent=com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity mSnapshot=android.hardware.HardwareBuffer@2919236 (756x1680) mColorSpace=sRGB IEC61966-2.1 (id=0, model=RGB) mOrientation=1 mRotation=0 mTaskSize=Point(1080, 2400) mOplusCompatMode=false mTopActivityBounds=[0,0][1080,2400] mContentInsets=[0,107][0,48] mLetterboxInsets=[0,0][0,0] mIsLowResolution=false mIsRealSnapshot=true mWindowingMode=1 mAppearance=0 mIsTranslucent=false mHasImeSurface=false mInternalReferences=2 mUiMode=11, mAppIdMap size= 3
+2026-04-06 00:02:58.597  2187-2574  WindowManager           system_server                        V      info={id=640 t=CLOSE f=0x10 trk=0 r=[0@Point(0, 0)] c=[
+                                                                                                            {WCT{RemoteToken{bce07f9 Task{40adbe0 #1 type=home}}} m=TO_FRONT f=SHOW_WALLPAPER|MOVE_TO_TOP leash=Surface(name=Task=1)/@0x683102e sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0 taskParent=-1},
+                                                                                                            {WCT{RemoteToken{544181d Task{9316d2e #2353 type=standard A=10443:com.noisefit.luna.dev}}} m=CLOSE f=NONE leash=Surface(name=Task=2353)/@0xc54a92 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0 taskParent=-1},
+                                                                                                            {null m=TO_FRONT f=IS_WALLPAPER leash=Surface(name=WallpaperWindowToken{95d5c token=android.os.Binder@133610d showWhenLocked=false})/@0x73cd5d3 sb=Rect(0, 0 - 1080, 2400) eb=Rect(0, 0 - 1080, 2400) d=0}
+                                                                                                        ] extendInfo=[OplusTransitionExtendedInfo{mTmpFinishT=null, mInOplusCompatMode=false, mIsProcessRunning=false, mHasMismatchBoundsTarget=false, mRecentsController=null, mIsTranslucentActivityToHome=false, mAvoidInterceptKeyEventToHome=false, mIsFromHome=false, mParentLeash=null, mIsOplusAnimRes=false, mIsFromOverlay=false, mIsBalAllow=false, mTaskNotInRecent=false, mIsLaunchFromSpruce=false, mIsLaunchFromDrive=false, mAssistScreenShowing=false, mUserIdTransition=0, mInRemoteScene=false, mInPreReady=false, mPreStart=false, mToken=null, mShellApplyToken=null, mRequestTransitionTaskId=-1, mAbortTransitionOnShell=0, mTransitionId=640, mSkipRemoteTransitionfalse, mAnimStartingPosition=[0, 0, 0, 0], mIsOpeningStkDialogActivity=false}]}
+2026-04-06 00:02:58.661  1951-21760 gaia:OCent...Subscriber oplus_gaia                           D  [onEvent:11]OCenterEventSubscriber Received event OCenterEvent{eventId: 101248, eventName: window_no_inputChannel, timestampMs: 1775404978616, reportData: [OCenterKV{key: dcs_app_id, value: 20039}, OCenterKV{key: dcs_log_tag, value: 2003905}, OCenterKV{key: dcs_event_id, value: WindowNoInputChannel}, OCenterKV{key: fault_timestamp_ms, value: 1775404978562}, OCenterKV{key: window_name, value: 2e9c2af ActivityRecordInputSink com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity}]}
+2026-04-06 00:02:58.695  9074-13168 OCenterLog              com.oplus.midas                      I  e: dcs onCommon onCalled: EventInfo{id=0, TimestampMs=1775404978616, eventId=101248, eventName=window_no_inputChannel, reportData={"fault_timestamp_ms"="1775404978562","window_name"="2e9c2af ActivityRecordInputSink com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity","dcs_app_id"="20039","dcs_event_id"="WindowNoInputChannel","dcs_log_tag"="2003905"}}
+2026-04-06 00:02:58.752 13753-13805 Notificati...ntProvider com.oplus.notificationmanager        D  queryBadge:querySignal:pkg=com.noisefit.luna.dev&uid=10443,cost 10,use:selection ,type:0
+2026-04-06 00:02:58.975  2187-3183  ConnectivityService     system_server                        D  releasing NetworkRequest [ REQUEST id=9297, [ Capabilities: INTERNET&NOT_RESTRICTED&TRUSTED&NOT_VCN_MANAGED&NOT_BANDWIDTH_CONSTRAINED Uid: 10443 RequestorUid: 10443 RequestorPkg: com.noisefit.luna.dev UnderlyingNetworks: Null] ] (release request)
+2026-04-06 00:02:58.976  2187-8504  WindowManager           system_server                        I  WIN DEATH: Window{eb03687 u0 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity}
+2026-04-06 00:02:58.976  2187-8504  InputDispatcher         system_server                        I  channel 'eb03687 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity (server)'~ abortBrokenDispatchCycleLocked - notify=false
+2026-04-06 00:02:58.977  2187-8504  InputManager-JNI        system_server                        W  Input channel object 'eb03687 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity (client)' was disposed without first being removed with the input manager!
+2026-04-06 00:02:58.984  2187-6379  ActivityManager         system_server                        I  Death received, pid = 14395, processName = com.noisefit.luna.dev for thread android.os.BinderProxy@2b602d6
+2026-04-06 00:02:58.984  1249-1540  SurfaceFlinger          surfaceflinger                       I  [SF client] REMOVE (0xb400007538b31200) for (14395:com.noisefit.luna.dev)
+2026-04-06 00:02:58.987  2187-2582  ActivityTaskManager     system_server                        W  Activity top resumed state loss timeout for ActivityRecord{adf1a8e u0 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity t2353 f}}
+2026-04-06 00:02:58.993  2187-2582  ActivityTaskManager     system_server                        W  Activity pause timeout for ActivityRecord{adf1a8e u0 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity t2353 f}}
+2026-04-06 00:02:59.001  2187-4020  OplusAppSwitchListener  system_server                        D  Detect com.noisefit.luna.dev switch to background
+2026-04-06 00:02:59.001  2187-4020  OplusFeatu...Brightness system_server                        D  onAppExit , info = com.noisefit.luna.dev
+2026-04-06 00:02:59.001  2187-4020  OplusEapManager         system_server                        D  mTargetExitName :com.noisefit.luna.dev
+2026-04-06 00:02:59.002  2187-2582  ClientLifecycleManager  system_server                        W  Failed to deliver transaction for android.app.IApplicationThread$Stub$Proxy@7fd863b
+                                                                                                    transaction=ClientTransaction{
+                                                                                                      transactionItems=[
+                                                                                                        DestroyActivityItem{mActivityToken=Token{93366bc ActivityRecord{adf1a8e u0 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity t2353 f}}},finished=true}
+                                                                                                      ]
+                                                                                                    }
+2026-04-06 00:02:59.002  3345-3354  DCSEX-AppSwitchManager  com.oplus.exsystemservice            V  OnAppSwitchObserver: onAppExit, resuming = com.android.launcher, target = com.noisefit.luna.dev, is ResumingFirstStart =  false, is ResumingMultiApp =  false, extensionInfo =  Bundle[mParcelledData.dataSize=128]
+2026-04-06 00:02:59.003  3764-4201  ActivityAdapter         com.oplus.nas                        D  onCommonAppExit: OplusAppExitInfo = {  targetName = com.noisefit.luna.dev hasResumingActivity = true resumingPackageName = com.android.launcher resumingActivityName = com.android.launcher.Launcher resumingWindowMode = 1 isResumingMultiApp = false isResumingFirstStart = false extension = Bundle[mParcelledData.dataSize=128]}
+2026-04-06 00:02:59.003  3345-3462  DCSEX-AppL...ntRecorder com.oplus.exsystemservice            D  onAppSwitch from = com.noisefit.luna.dev to = com.android.launcher
+2026-04-06 00:02:59.003  3345-3462  DCSEX-AppL...ntRecorder com.oplus.exsystemservice            D  recordExitApp = com.noisefit.luna.dev
+2026-04-06 00:02:59.015  6105-6115  Battery                 com.oplus.battery                    W  AppSwitchDetectorV2: OnAppSwitchObserver: onAppExit , info = OplusAppExitInfo = {  targetName = com.noisefit.luna.dev hasResumingActivity = true resumingPackageName = com.android.launcher resumingActivityName = com.android.launcher.Launcher resumingWindowMode = 1 isResumingMultiApp = false isResumingFirstStart = false extension = Bundle[mParcelledData.dataSize=128]}
+2026-04-06 00:02:59.020  3846-5948  Athena                  com.oplus.athena                     I  AthenaDynamicReceiver: pre_app:com.noisefit.luna.dev, next_app:com.android.launcher(10189|3629)
+2026-04-06 00:02:59.027  3764-4194  DispatcherPolicy        com.oplus.nas                        I  onBaseEvent EventId=10022	ID_FOREGROUND_SERVICE_CHANGED	TimeStamp =1775404979027	Intent =null	Content =null	Pid =14395	PkgName =com.noisefit.luna.dev	ExtraDta =Bundle[{foreground_service_type=0}]
+2026-04-06 00:02:59.029  8960-9377  SceneSDK.1...tchAbility com.oplus.metis                      D  onAppSwitchEvent: AppSwitchEvent(timeStamp=1775404979019, eventType=2, targetName=com.noisefit.luna.dev, firstStart=false, multiApp=false, windowMode=0, resumingPackageName=com.android.launcher, resumingActivityName=com.android.launcher.Launcher, isResumingMultiApp=false, isResumingFirstStart=false)
+2026-04-06 00:02:59.029  8960-9377  metis_v2_A...aCollector com.oplus.metis                      I  AppExitEvent =  com.noisefit.luna.dev, NextAppName = com.android.launcher [Metis|com.oplus.metis|1.4.54-aa2067f]
+2026-04-06 00:02:59.051  2187-3539  ActivityTaskManager     system_server                        D  removeAppToken: ActivityRecord{adf1a8e u0 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity t2353 f}} delayed=true parent=Task{9316d2e #2353 type=standard A=10443:com.noisefit.luna.dev} animating=true Callers=com.android.server.wm.DisplayContent.removeAppToken:1734 com.android.server.wm.ActivityRecord.removeFromHistory:5062 com.android.server.wm.ActivityRecord.handleAppDied:5405 com.android.server.wm.WindowProcessController.handleAppDied:1622 
+2026-04-06 00:02:59.059  2187-4136  OplusHansManager        system_server                        I  onUidGone(), 10443 com.noisefit.luna.dev exit SM
+2026-04-06 00:02:59.059  2187-4136  OplusHansManager        system_server                        I  onUidGone(),  keep: 10443 com.noisefit.luna.dev alarm
+2026-04-06 00:02:59.060  2187-3767  OplusHansManager        system_server                        I  uid=10443, pkg=com.noisefit.luna.dev R exit SM
+2026-04-06 00:02:59.060  2187-3767  OplusHansManager        system_server                        I  uid=10443, pkg=com.noisefit.luna.dev R exit(), R stay=0
+2026-04-06 00:02:59.090  3764-4194  DispatcherPolicy        com.oplus.nas                        I  onBaseEvent EventId=22	INPUT_PROCESS_DIED	TimeStamp =1775404979089	Intent =null	Content =null	Pid =14395	PkgName =com.noisefit.luna.dev
+2026-04-06 00:02:59.092  3394-31248 PluginSeedling--Base    com.android.systemui                 I  SeedlingPluginService-->onStateChange: Bundle[{pkgName=com.noisefit.luna.dev, pid=14395, uid=10443, state=onProcessDied}]
+2026-04-06 00:02:59.097  1237-4482  AudioFlingerExtImpl     audioserver                          D  AudioFlingerExtImpl oplusSetParameters: keyvalue onForegroundActivitiesChanged=com.noisefit.luna.dev:foreground:0
+2026-04-06 00:02:59.314  2187-3650  Transition              system_server                        D  finishTransition ar ActivityRecord{adf1a8e u0 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity t2353 f} isExiting}, isVisibleRequested=false, state=DESTROYED, visibleAtTransitionEndTokens={WallpaperWindowToken{95d5c token=android.os.Binder@133610d showWhenLocked=true}, ActivityRecord{f2ed79c u0 com.android.launcher/.Launcher t5}}, this=TransitionRecord{6b9be5b id=640 track=0 type=CLOSE flags=0x10 state=2}
+2026-04-06 00:02:59.315  2187-3650  ActivityTaskManager     system_server                        D  commitVisibility: ActivityRecord{adf1a8e u0 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity t2353 f} isExiting}: visible=false visibleRequested=false, isInTransition=false, runningAnimation=false 
+2026-04-06 00:02:59.315  2187-3650  WindowManager           system_server                        D  NFW_setClientVisible:ActivityRecord{adf1a8e u0 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity t2353 f} isExiting} clientVisible:false
+2026-04-06 00:02:59.316  2187-3650  WindowManager           system_server                        W  Exception thrown during dispatchAppVisibility Window{eb03687 u0 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity EXITING}
+                                                                                                    android.os.DeadObjectException
+                                                                                                    	at android.os.BinderProxy.transactNative(Native Method)
+                                                                                                    	at android.os.BinderProxy.transact(BinderProxy.java:679)
+                                                                                                    	at android.view.IWindow$Stub$Proxy.dispatchAppVisibility(IWindow.java:607)
+                                                                                                    	at com.android.server.wm.WindowState.sendAppVisibilityToClients(WindowState.java:3756)
+                                                                                                    	at com.android.server.wm.WindowContainer.sendAppVisibilityToClients(WindowContainer.java:1430)
+                                                                                                    	at com.android.server.wm.WindowToken.setClientVisible(WindowToken.java:451)
+                                                                                                    	at com.android.server.wm.ActivityRecord.setClientVisible(ActivityRecord.java:8879)
+                                                                                                    	at com.android.server.wm.ActivityRecord.postApplyAnimation(ActivityRecord.java:7207)
+                                                                                                    	at com.android.server.wm.ActivityRecord.commitVisibility(ActivityRecord.java:7149)
+                                                                                                    	at com.android.server.wm.Transition.finishTransition(Transition.java:1545)
+                                                                                                    	at com.android.server.wm.TransitionController.finishTransition(TransitionController.java:1050)
+                                                                                                    	at com.android.server.wm.WindowOrganizerController.finishTransition(WindowOrganizerController.java:599)
+                                                                                                    	at android.window.IWindowOrganizerController$Stub.onTransact(IWindowOrganizerController.java:386)
+                                                                                                    	at com.android.server.wm.WindowOrganizerController.onTransact(WindowOrganizerController.java:223)
+                                                                                                    	at android.os.Binder.execTransactInternal(Binder.java:1518)
+                                                                                                    	at android.os.Binder.execTransact(Binder.java:1457)
+2026-04-06 00:02:59.321  2187-3650  OplusFlexi...agerHelper system_server                        D  onTaskInfoChanged taskInfo:TaskInfo{userId=0 taskId=2353 displayId=0 isRunning=false baseIntent=Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.noisefit.luna.dev/com.noisefit.ui.SplashActivity mCallingUid=10189 } baseActivity=null topActivity=null origActivity=null realActivity=ComponentInfo{com.noisefit.luna.dev/com.noisefit.ui.SplashActivity} numActivities=0 lastActiveTime=491109634 supportsSplitScreenMultiWindow=true supportsMultiWindow=true supportsPocketStudioMultiWindow=true isInFlexibleEmbedded = false uid = -1 pid = -1 resizeMode=1 isResizeable=true minWidth=-1 minHeight=-1 defaultMinSize=220 token=WCT{RemoteToken{544181d Task{9316d2e #2353 type=standard A=10443:com.noisefit.luna.dev}}} topActivityType=1 pictureInPictureParams=null shouldDockBigOverlays=false launchIntoPipHostTaskId=-1 lastParentTaskIdBeforePip=-1 displayCutoutSafeInsets=Rect(0, 107 - 0, 0) topActivityInfo=null launchCookies=[android.os.BinderProxy@5786bbf] positionInParent=Point(0, 0) parentTaskId=-1 isFocused=false isVisible=false isVisibleRequested=false isSleeping=false locusId=null displayAreaFeatureId=1 isTopActivityTransparent=false appCompatTaskInfo=AppCompatTaskInfo { topActivityInSizeCompat=false topActivityInOplusCompatMode=false topActivityEligibleForLetterboxEducation= falseisLetterboxEducationEnabled= false isLetterboxDoubleTapEnabled= false topActivityEligibleForUserAspectRatioButton= false topActivityBoundsLetterboxed= false isFromLetterboxDoubleTap= false topActivityLetterboxVerticalPosition= -1 topActivityLetterboxHorizontalPosition= -1 topActivityLetterboxWidth=-1 topActivityLetterboxHeight=-1 isUserFullscreenOverrideEnabled=false isSystemFullscreenOverrideEnabled=false cameraCompatTaskInfo=CameraCompatTaskInfo { cameraCompatControlState=hidden freeformCameraCompatMode=inactive}} topActivityLetterboxInsets=Rect(0, 0 - 0, 0) mOplusExtraBundle = Bundle[{androidx.flexible.taskFrame=Rect(0, 0 - 0, 0), key_flexible_task_state=0, androidx.activity.LaunchScenario=0, androidx.activity.LaunchScale=1.0}]} task:Task{9316d2e #2353 type=standard A=10443:com.noisefit.luna.dev}
+2026-04-06 00:02:59.321  2187-3650  ActivityTaskManager     system_server                        D  removeAppToken: ActivityRecord{adf1a8e u0 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity t2353 f}} delayed=false parent=Task{9316d2e #2353 type=standard A=10443:com.noisefit.luna.dev} animating=false Callers=com.android.server.wm.ActivityRecord.removeImmediately:5420 com.android.server.wm.ActivityRecord.removeIfPossible:5435 com.android.server.wm.ActivityRecord.handleCompleteDeferredRemoval:5441 com.android.server.wm.WindowContainer.handleCompleteDeferredRemoval:1623 
+2026-04-06 00:02:59.323  2187-3650  WindowManager           system_server                        I  Window{eb03687 u0 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity EXITING} state from HAS_DRAWN to NO_SURFACE; reason: destroySurface
+2026-04-06 00:02:59.326  2187-3650  OplusScreenSecurityMask system_server                        I  onStackRemoved task = Task{9316d2e #2353 type=standard A=10443:com.noisefit.luna.dev} record = null displayId = 0
+2026-04-06 00:02:59.327  2187-3650  OplusAlwaysAliveManager system_server                        D  removing: 2353, ComponentInfo{com.noisefit.luna.dev/com.noisefit.ui.SplashActivity}
+2026-04-06 00:02:59.333  2187-2583  OplusFlexi...agerHelper system_server                        D  onTaskVanished taskInfo:2353 task:Task{9316d2e #2353 type=standard A=10443:com.noisefit.luna.dev}
+2026-04-06 00:02:59.333  2187-2583  FlexibleTaskController  system_server                        D  no need releaseFlexibleCaptionView or destroyFlexibleDragLeash when non-caption-view-task vanished, task=Task{9316d2e #2353 type=standard A=10443:com.noisefit.luna.dev}
+2026-04-06 00:02:59.333  2187-2583  OplusFlexi...agerHelper system_server                        D  onTaskVanished taskInfo:2353 task:Task{9316d2e #2353 type=standard A=10443:com.noisefit.luna.dev}
+2026-04-06 00:02:59.333  2187-2583  FlexibleTaskController  system_server                        D  no need releaseFlexibleCaptionView or destroyFlexibleDragLeash when non-caption-view-task vanished, task=Task{9316d2e #2353 type=standard A=10443:com.noisefit.luna.dev}
+2026-04-06 00:02:59.341  2187-3650  ActivityTaskManager     system_server                        D  pre-Filtered:com.noisefit.luna.dev # com.ss.android.lark # com.oppo.quicksearchbox # 
+                                                                                                    after skip size 3
+2026-04-06 00:02:59.376  1951-2172  gaia:logcompress        oplus_gaia                           D  [compressExceptionLog:141]LogCompress start compress with exception Info: {"app_list":["com.noisefit.luna.dev"],"collect_path":"/data/persist_log/olc/com.oplus.crashbox/temp_15","error_time":1775404977238,"error_type":"anr_start","file_id":"96a16db6-1402-48e8-a800-df46b620b699","log_list":["extras@2026-04-06_00-02-57.txt"],"log_option":33023,"log_path":""}
+2026-04-06 00:02:59.452  1951-13171 gaia:event              oplus_gaia                           D  [packJson:129]pack json string(content:{"data":"{\"app_list\":[\"com.noisefit.luna.dev\"],\"collect_path\":\"\",\"error_time\":1775404977238,\"error_type\":\"anr_start\",\"file_id\":\"96a16db6-1402-48e8-a800-df46b620b699\",\"log_list\":[\"extras@2026-04-06_00-02-57.txt\"],\"log_option\":33023,\"log_path\":\"/data/persist_log/olc/com.oplus.crashbox/anr_crash/anr_start@96a16db6-1402-48e8-a800-df46b620b699@CPH2467_11.F.85_2850_202601052202@2026-04-06_00-02-59\"}","eventId":269500417,"isAck":1,"packetId":"1135","resultCode":1,"type":2}) (len:498)
+2026-04-06 00:02:59.456  8414-10892 gaia-GaiaPacketReader   com.oplus.olc                        D  onReceivePacket , packet data = {"eventId":269500417,"eventTag":"crashbox_collect_log","isAck":1,"packetId":"1135","packetType":2,"rcvMsgInfo":{"data":"{\"app_list\":[\"com.noisefit.luna.dev\"],\"collect_path\":\"\",\"error_time\":1775404977238,\"error_type\":\"anr_start\",\"file_id\":\"96a16db6-1402-48e8-a800-df46b620b699\",\"log_list\":[\"extras@2026-04-06_00-02-57.txt\"],\"log_option\":33023,\"log_path\":\"/data/persist_log/olc/com.oplus.crashbox/anr_crash/anr_start@96a16db6-1402-48e8-a800-df46b620b699@CPH2467_11.F.85_2850_202601052202@2026-04-06_00-02-59\"}","eventId":269500417,"isAck":1,"packetId":"1135","resultCode":1,"type":"2"},"sourceData":[71,65,73,65,123,34,100,97,116,97,34,58,34,123,92,34,97,112,112,95,108,105,115,116,92,34,58,91,92,34,99,111,109,46,110,111,105,115,101,102,105,116,46,108,117,110,97,46,100,101,118,92,34,93,44,92,34,99,111,108,108,101,99,116,95,112,97,116,104,92,34,58,92,34,92,34,44,92,34,101,114,114,111,114,95,116,105,109,101,92,34,58,49,55,55,53,52,48,52,57,55,55,50,51,56,44,92,34,101,114,114,111,114,95,116,121,112,101,92,34,58,92,34,97,110,114,95,115,116,97,114,116,92,34,44,92,34,102,105,108,101,95,105,100,92,34,58,92,34,57,54,97,49,54,100,98,54,45,49,52,48,50,45,52,56,101,56,45,97,56,48,48,45,100,102,52,54,98,54,50,48,98,54,57,57,92,34,44,92,34,108,111,103,95,108,105,115,116,92,34,58,91,92,34,101,120,116,114,97,115,64,50,48,50,54,45,48,52,45,48,54,95,48,48,45,48,50,45,53,55,46,116,120,116,92,34,93,44,92,34,108,111,103,95,111,112,116,105,111,110,92,34,58,51,51,48,50,51,44,92,34,108,111,103,95,112,97,116,104,92,34,58,92,34,47,100,97,116,97,47,112,101,114,115,105,115,116,95,108,111,103,47,111,108,99,47,99,111,109,46,111,112,108,117,115,46,99,114,97,115,104,98,111,120,47,97,110,114,95,99,114,97,115,104,47,97,110,114,95,115,116,97,114,116,64,57,54,97,49,54,100,98,54,45,49,52,48,50,45,52,56,101,56,45,97,56,48,48,45,100,102,52,54,98,54,50,48,98,54,57,57,64,67,80,72,50,52,54,55,95,49,49,46,70,46,56,53,95,50,56,53,48,95,50,48,50,54,48,49,48,53,50,50,48,50,64,50,48,50,54,45,48,52,45,48,54,95,48,48,45,48,50,45,53,57,92,34,125,34,44,34,101,118,101,110,116,73,100,34,58,50,54,57,53,48,48,52,49,55,44,34,105,115,65,99,107,34,58,49,44,34,112,97,99,107,101,116,73,100,34,58,34,49,49,51,53,34,44,34,114,101,115,117,108,116,67,111,100,101,34,58,49,44,34,116,121,112,101,34,58,50,125]}
+2026-04-06 00:02:59.462  1951-2181  gaia:event_server       oplus_gaia                           D  [handleEvent:34]parse event from rawMsg: {"data":"{\"app_list\":[\"com.noisefit.luna.dev\"],\"collect_path\":\"/data/persist_log/olc/com.oplus.crashbox/anr_crash/anr_start@96a16db6-1402-48e8-a800-df46b620b699@CPH2467_11.F.85_2850_202601052202@2026-04-06_00-02-59\",\"error_time\":1775404977238,\"error_type\":\"anr\",\"file_id\":\"96a16db6-1402-48e8-a800-df46b620b699\",\"log_option\":33024,\"log_list\":[\"anr@2026-04-06_00-02-57.txt\"]}","eventId":269500417,"packetId":"1136","type":2}
+2026-04-06 00:02:59.464  1951-2165  gaia:logcollect         oplus_gaia                           D  [startCatchLog:132]LogCollect startCatchLog with exception Info: {"app_list":["com.noisefit.luna.dev"],"collect_path":"/data/persist_log/olc/com.oplus.crashbox/anr_crash/anr_start@96a16db6-1402-48e8-a800-df46b620b699@CPH2467_11.F.85_2850_202601052202@2026-04-06_00-02-59","error_time":1775404977238,"error_type":"anr","file_id":"96a16db6-1402-48e8-a800-df46b620b699","log_option":33024,"log_list":["anr@2026-04-06_00-02-57.txt"]}
+2026-04-06 00:02:59.466  8414-16340 LogKit.Anr...mpRunnable com.oplus.olc                        D  The log switch is turned on, but the conditions are not met. exceptionInfo = ExceptionInfo{appInfoList=[AppInfo{packageName='com.noisefit.luna.dev', processName='com.noisefit.luna.dev', appName='Luna Ring', versionName='1.6.3.staging.luna', versionCode=154, componentName='com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity', isForeground=true}], crashInfo=null, anrInfo=AnrInfo{reason='Input Dispatching Timeout', message='Input dispatching timed out (eb03687 com.noisefit.luna.dev/com.noisefit.oreo.OreoMainActivity (server) is not responding. Waited 5001ms for MotionEvent(deviceId=3, eventTime=75788425872000, source=TOUCHSCREEN, displayId=0, action=DOWN, actionButton=0x00000000, flags=0x00000000, metaState=0x00000000, buttonState=0x00000000, classification=NONE, edgeFlags=0x00000000, xPrecision=4.0, yPrecision=4.0, xCursorPosition=nan, yCursorPosition=nan, pointers=[0: (630.8, 1669.0)]), policyFlags=0x62000000).', stackTrace='  at java.lang.String.charAt(Native method)  at java.lang.String.hashCode(String.java:2304)
+                                                                                                      at android.util.ArrayMap.indexOfKey(ArrayMap.java:441)
+                                                                                                      at android.util.ArrayMap.get(ArrayMap.java:491)
+                                                                                                      at android.os.BaseBundle.getInt(BaseBundle.java:1290)
+                                                                                                      at android.app.ActivityThread.getIntCoreSetting(ActivityThread.java:9267)
+                                                                                                      at android.app.AppGlobals.getIntCoreSetting(AppGlobals.java:74)
+                                                                                                      at android.text.TextFlags.isFeatureEnabled(TextFlags.java:91)
+                                                                                                      at android.text.ClientFlags.icuBidiMigration(ClientFlags.java:62)
+                                                                                                      at android.text.MeasuredParagraph.resetAndAnalyzeBidi(MeasuredParagraph.java:682)
+                                                                                                      at android.text.MeasuredParagraph.buildForStaticLayoutInternal(MeasuredParagraph.java:597)
+                                                                                                      at android.text.MeasuredParagraph.buildForStaticLayout(MeasuredParagraph.java:543)
+                                                                                                      at android.text.PrecomputedText.createMeasuredParagraphs(PrecomputedText.java:526)
+                                                                                                      at android.text.StaticLayout.generate(StaticLayout.java:886)
+                                                                                                      at android.text.StaticLayout.<init>(StaticLayout.java:749)
+                                                                                                      at android.text.StaticLayout.<init>(unavailable:0)
+                                                                                                      at android.text.StaticLayout$Builder.build(StaticLayout.java:558)
+                                                                                                      at android.widget.TextView.makeSingleLayout(TextView.java:11260)
+                                                                                                      at android.widget.TextView.makeNewLayout(TextView.java:11007)
+                                                                                                      at android.widget.TextView.checkForRelayout(TextView.java:11775)
+                                                                                                      at android.widget.TextView.setText(TextView.java:7526)
+                                                                                                      at android.widget.TextView.setText(TextView.java:7341)
+                                                                                                      at android.widget.TextView.setText(TextView.java:7279)
+                                                                                                      at com.oreo.ui.home.summary.BlankTestFragment$bindDashboardCards$1$1.invokeSuspend(BlankTestFragment.kt:481)
+                                                                                                      at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+                                                                                                      at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:100)
+                                                                                                      at android.os.Handler.handleCallback(Handler.java:973)
+                                                                                                      at android.os.Handler.dispatchMessage(Handler.java:100)
+                                                                                                      at android.os.Looper.loopOnce(Looper.java:282)
+                                                                                                      at android.os.Looper.loop(Looper.java:387)
+                                                                                                      at android.app.ActivityThread.main(ActivityThread.java:9500)
+                                                                                                      at java.lang.reflect.Method.invoke(Native method)
+                                                                                                      at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:600)
+                                                                                                      at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1005)
+                                                                                                    '}, eventType='anr', time=1775404977238, timeZone='GMT+08:00', count=1, fileId='96a16db6-1402-48e8-a800-df46b620b699', filePath='null', fileDir='/data/persist_log/olc/com.oplus.crashbox/anr_crash/anr_start@96a16db6-1402-48e8-a800-df46b620b699@CPH2467_11.F.85_2850_202601052202@2026-04-06_00-02-59'}
+2026-04-06 00:03:00.046  2187-2628  ActivityManager         system_server                        I  Start proc 16699:com.noisefit.luna.dev/u0a443 for service {com.noisefit.luna.dev/com.oreo.receiver.service.RingConnectionService}
+2026-04-06 00:03:00.063  3394-3598  CachedBluetoothDevice   com.android.systemui                 D  Device name: Luna Band_005E
+2026-04-06 00:03:00.064 16699-16699 isefit.luna.dev         pid-16699                            I  Late-enabling -Xcheck:jni
+2026-04-06 00:03:00.092 16699-16699 isefit.luna.dev         pid-16699                            E  Unknown bits set in runtime_flags: 0x40000000
+2026-04-06 00:03:00.092 16699-16699 isefit.luna.dev         pid-16699                            I  Using CollectorTypeCC GC.
+2026-04-06 00:03:00.136  2187-6379  ResourcesManagerCache   system_server                        D  For package com.noisefit.luna.dev we got cacheList [null] appInfoExt is null ? false hasFeature ? false
+2026-04-06 00:03:00.145  2187-4136  OplusHansManager        system_server                        I  onUidActive(), uid=10443, pkgName=com.noisefit.luna.dev, can enter SM
+2026-04-06 00:03:00.146  2187-4136  OplusHansManager        system_server                        I  onUidActive() update stay time, uid=10443, pkgName=com.noisefit.luna.dev, U stay=1
+2026-04-06 00:03:00.146  2187-3767  OplusHansManager        system_server                        I  uid=10443, pkg=com.noisefit.luna.dev enter SM
+2026-04-06 00:03:00.146  2187-3767  OplusHansManager        system_server                        I  uid=10443, pkg=com.noisefit.luna.dev R enter(), D stay=0
+2026-04-06 00:03:00.225 16699-16699 libc                    com.noisefit.luna.dev                W  Access denied finding property "ro.odm.prev.product.name"
+2026-04-06 00:03:00.235 16699-16699 ApplicationLoaders      com.noisefit.luna.dev                D  Returning zygote-cached class loader: /system/framework/org.apache.http.legacy.jar
+2026-04-06 00:03:00.236 16699-16699 ApplicationLoaders      com.noisefit.luna.dev                D  Returning zygote-cached class loader: /system_ext/framework/androidx.window.extensions.jar
+2026-04-06 00:03:00.236 16699-16699 ApplicationLoaders      com.noisefit.luna.dev                D  Returning zygote-cached class loader: /system_ext/framework/androidx.window.sidecar.jar
+2026-04-06 00:03:00.965 16699-16699 nativeloader            com.noisefit.luna.dev                D  Configuring clns-7 for other apk /data/app/~~WiJY8hU42O81fEYddqVDCQ==/com.noisefit.luna.dev-h0CiJuNE-YeLGW0Nxd6-Qg==/base.apk. target_sdk_version=35, uses_libraries=, library_path=/data/app/~~WiJY8hU42O81fEYddqVDCQ==/com.noisefit.luna.dev-h0CiJuNE-YeLGW0Nxd6-Qg==/lib/arm64:/data/app/~~WiJY8hU42O81fEYddqVDCQ==/com.noisefit.luna.dev-h0CiJuNE-YeLGW0Nxd6-Qg==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.noisefit.luna.dev
+2026-04-06 00:03:00.968 16699-16699 Quality                 com.noisefit.luna.dev                I  ActivityThread: createClassLoader delay 733 /data/app/~~WiJY8hU42O81fEYddqVDCQ==/com.noisefit.luna.dev-h0CiJuNE-YeLGW0Nxd6-Qg==/base.apk 16699
+2026-04-06 00:03:00.970 16699-16699 CompatChangeReporter    com.noisefit.luna.dev                D  Compat change id reported: 202956589; UID 10443; state: ENABLED
+2026-04-06 00:03:00.971 16699-16699 Quality                 com.noisefit.luna.dev                I  ActivityThread: createOrUpdateClassLoaderLocked delay 743 com.noisefit.luna.dev 16699
+2026-04-06 00:03:00.982 16699-16699 GraphicsEnvironment     com.noisefit.luna.dev                V  Currently set values for:
+2026-04-06 00:03:00.982 16699-16699 GraphicsEnvironment     com.noisefit.luna.dev                V    angle_gl_driver_selection_pkgs=[]
+2026-04-06 00:03:00.982 16699-16699 GraphicsEnvironment     com.noisefit.luna.dev                V    angle_gl_driver_selection_values=[]
+2026-04-06 00:03:00.982 16699-16699 GraphicsEnvironment     com.noisefit.luna.dev                V  Global.Settings values are invalid: number of packages: 0, number of values: 0
+2026-04-06 00:03:00.982 16699-16699 GraphicsEnvironment     com.noisefit.luna.dev                V  Neither updatable production driver nor prerelease driver is supported.
+2026-04-06 00:03:00.985 16699-16699 ResourcesManagerExtImpl com.noisefit.luna.dev                D  applyConfigurationToAppResourcesLocked app.getDisplayId() return callback.displayId:-1
+2026-04-06 00:03:01.004 16699-16699 MultiDex                com.noisefit.luna.dev                I  VM with version 2.1.0 has multidex support
+2026-04-06 00:03:01.004 16699-16699 MultiDex                com.noisefit.luna.dev                I  Installing application
+2026-04-06 00:03:01.004 16699-16699 MultiDex                com.noisefit.luna.dev                I  VM has multidex support, MultiDex support library is disabled.
+2026-04-06 00:03:01.076 16699-16699 SessionsDependencies    com.noisefit.luna.dev                D  Dependency to CRASHLYTICS added.
+2026-04-06 00:03:01.084 16699-16699 FirebaseApp             com.noisefit.luna.dev                I  Device unlocked: initializing all Firebase APIs for app [DEFAULT]
+2026-04-06 00:03:01.099 16699-16699 FirebaseCrashlytics     com.noisefit.luna.dev                I  Initializing Firebase Crashlytics 19.4.4 for com.noisefit.luna.dev
+2026-04-06 00:03:01.126 16699-16699 SessionsDependencies    com.noisefit.luna.dev                D  Subscriber CRASHLYTICS registered.
+2026-04-06 00:03:01.154 16699-16764 isefit.luna.dev         com.noisefit.luna.dev                W  ClassLoaderContext classpath size mismatch. expected=1, found=0 (DLC[];PCL[base.apk*3532740154]{PCL[/system/framework/org.apache.http.legacy.jar*579360325]#PCL[/system/framework/com.android.location.provider.jar*3414091812]#PCL[/system/framework/com.android.media.remotedisplay.jar*2042759013]#PCL[/system_ext/framework/androidx.window.extensions.jar*4184533965]#PCL[/system_ext/framework/androidx.window.sidecar.jar*2740161290]} | DLC[];PCL[])
+2026-04-06 00:03:01.156 16699-16764 DynamiteModule          com.noisefit.luna.dev                I  Considering local module com.google.android.gms.measurement.dynamite:152 and remote module com.google.android.gms.measurement.dynamite:182
+2026-04-06 00:03:01.156 16699-16764 DynamiteModule          com.noisefit.luna.dev                I  Selected remote version of com.google.android.gms.measurement.dynamite, version >= 182
+2026-04-06 00:03:01.156 16699-16764 DynamiteModule          com.noisefit.luna.dev                V  Dynamite loader version >= 2, using loadModule2NoCrashUtils
+2026-04-06 00:03:01.171 16699-16764 System                  com.noisefit.luna.dev                W  ClassLoader referenced unknown path: 
+2026-04-06 00:03:01.172 16699-16764 nativeloader            com.noisefit.luna.dev                D  Configuring clns-8 for other apk . target_sdk_version=37, uses_libraries=, library_path=/data/app/~~1CTgFiFg0H7GlO61pRvHHQ==/com.google.android.gms-zDfEXYVC6o809Zirz2FHKQ==/lib/arm64:/data/app/~~1CTgFiFg0H7GlO61pRvHHQ==/com.google.android.gms-zDfEXYVC6o809Zirz2FHKQ==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.google.android.gms
+2026-04-06 00:03:01.190 16699-16764 isefit.luna.dev         com.noisefit.luna.dev                W  ClassLoaderContext classpath element checksum mismatch. expected=3532740154, found=3873971592 (DLC[];PCL[base.apk*3532740154]{PCL[/system/framework/org.apache.http.legacy.jar*579360325]#PCL[/system/framework/com.android.location.provider.jar*3414091812]#PCL[/system/framework/com.android.media.remotedisplay.jar*2042759013]#PCL[/system_ext/framework/androidx.window.extensions.jar*4184533965]#PCL[/system_ext/framework/androidx.window.sidecar.jar*2740161290]} | DLC[];PCL[/data/app/~~WiJY8hU42O81fEYddqVDCQ==/com.noisefit.luna.dev-h0CiJuNE-YeLGW0Nxd6-Qg==/base.apk*3873971592]{PCL[/system/framework/org.apache.http.legacy.jar*579360325]#PCL[/system_ext/framework/androidx.window.extensions.jar*4184533965]#PCL[/system_ext/framework/androidx.window.sidecar.jar*2740161290]})
+2026-04-06 00:03:01.224 16699-16699 FirebaseSessions        com.noisefit.luna.dev                D  Initializing Firebase Sessions SDK.
+2026-04-06 00:03:01.242 19929-12591 PhenotypeResourceReader com.google.android.gms.persistent    I  unable to find any Phenotype resource metadata for com.noisefit.luna.dev
+2026-04-06 00:03:01.244 16699-16774 FirebaseSessions        com.noisefit.luna.dev                D  No Sessions subscribers. Not listening to lifecycle events.
+2026-04-06 00:03:01.246 16699-16699 FirebaseInitProvider    com.noisefit.luna.dev                I  FirebaseApp initialization successful
+2026-04-06 00:03:01.274 16699-16782 isefit.luna.dev         com.noisefit.luna.dev                I  hiddenapi: Accessing hidden method Ldalvik/system/VMStack;->getStackClass2()Ljava/lang/Class; (runtime_flags=0, domain=core-platform, api=unsupported) from Lm7/aoz; (domain=app, TargetSdkVersion=35) using reflection: allowed
+2026-04-06 00:03:01.279 16699-16699 CompatChangeReporter    com.noisefit.luna.dev                D  Compat change id reported: 279646685; UID 10443; state: ENABLED
+2026-04-06 00:03:01.312 16699-16771 isefit.luna.dev         com.noisefit.luna.dev                E  No package ID 6a found for resource ID 0x6a0b0013.
+2026-04-06 00:03:01.314 16699-16771 FA                      com.noisefit.luna.dev                I  App measurement initialized, version: 158007
+2026-04-06 00:03:01.314 16699-16771 FA                      com.noisefit.luna.dev                I  To enable debug logging run: adb shell setprop log.tag.FA VERBOSE
+2026-04-06 00:03:01.315 16699-16771 FA                      com.noisefit.luna.dev                I  To enable faster debug mode event logging run:
+                                                                                                      adb shell setprop debug.firebase.analytics.app com.noisefit.luna.dev
+2026-04-06 00:03:01.391 16699-16699 nativeloader            com.noisefit.luna.dev                D  Load libSchedAssistJni.so using system ns (caller=/system/framework/oplus-framework.jar): ok
+2026-04-06 00:03:01.391 16699-16699 ExtensionsLoader        com.noisefit.luna.dev                D  createInstance(64bit) : createExtendedFactory
+2026-04-06 00:03:01.391 16699-16699 ExtensionsLoader        com.noisefit.luna.dev                D  Opened libSchedAssistExtImpl.so
+2026-04-06 00:03:01.391 16699-16699 SchedAssist             com.noisefit.luna.dev                E  ofbOpen failed with error=No such file or directory
+2026-04-06 00:03:01.391 16699-16699 SchedAssist             com.noisefit.luna.dev                E  sysOpen failed with error=No such file or directory
+2026-04-06 00:03:01.391 16699-16699 SchedAssist             com.noisefit.luna.dev                E  open sharedFd failed with error=Permission denied
+2026-04-06 00:03:01.391 16699-16699 SchedAssist             com.noisefit.luna.dev                E  open sharedFd failed with error=Permission denied
+2026-04-06 00:03:01.391 16699-16699 SchedAssist             com.noisefit.luna.dev                E  open sharedFd failed with error=Permission denied
+2026-04-06 00:03:01.391 16699-16699 SchedAssist             com.noisefit.luna.dev                E  open sharedFd failed with error=No such file or directory
+2026-04-06 00:03:01.396 16699-16699 OplusGraphicsEvent      com.noisefit.luna.dev                D  OplusGraphicsEventListener create now!
+2026-04-06 00:03:01.398 16699-16699 OplusGraphicsEvent      com.noisefit.luna.dev                D  addEventListener success!
+2026-04-06 00:03:01.398 16699-16772 FirebaseCrashlytics     com.noisefit.luna.dev                I  No version control information found
+2026-04-06 00:03:01.401  2187-8461  ScrollOpti...rfService] system_server                        E  isScrollOptimEnable: pkgName = com.noisefit.luna.dev, output = Bundle[{pre_anim_enable=true, frame_insert_list=null, frame_insert_default_num=1, scroll_changed_enable_list=null}]
+2026-04-06 00:03:01.401 16699-16699 ScrollOpti...igManager] com.noisefit.luna.dev                D  initOptConfig: pkg= com.noisefit.luna.dev, mOptEnable= true, mAnimAheadEnable= true, mInsertDefaultNum= 1, mFrameInsertEnableList= {}, mSCEnableList= []
+2026-04-06 00:03:01.402 16699-16699 AppStateListener        com.noisefit.luna.dev                I   OnCreate FreshchatInitProvider
+2026-04-06 00:03:01.414 16699-16699 FacebookInitProvider    com.noisefit.luna.dev                I  Failed to auto initialize the Facebook SDK
+                                                                                                    A valid Facebook app client token must be set in the AndroidManifest.xml or set by calling FacebookSdk.setClientToken before initializing the sdk.
+                                                                                                    	at com.facebook.FacebookSdk.sdkInitialize(FacebookSdk.kt:460)
+                                                                                                    	at com.facebook.FacebookSdk.sdkInitialize(FacebookSdk.kt:412)
+                                                                                                    	at com.facebook.internal.FacebookInitProvider.onCreate(FacebookInitProvider.kt:28)
+                                                                                                    	at android.content.ContentProvider.attachInfo(ContentProvider.java:2702)
+                                                                                                    	at android.content.ContentProvider.attachInfo(ContentProvider.java:2671)
+                                                                                                    	at android.app.ActivityThread.installProvider(ActivityThread.java:9021)
+                                                                                                    	at android.app.ActivityThread.installContentProviders(ActivityThread.java:8536)
+                                                                                                    	at android.app.ActivityThread.handleBindApplication(ActivityThread.java:8191)
+                                                                                                    	at android.app.ActivityThread.-$$Nest$mhandleBindApplication(Unknown Source:0)
+                                                                                                    	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:2642)
+                                                                                                    	at android.os.Handler.dispatchMessage(Handler.java:107)
+                                                                                                    	at android.os.Looper.loopOnce(Looper.java:282)
+                                                                                                    	at android.os.Looper.loop(Looper.java:387)
+                                                                                                    	at android.app.ActivityThread.main(ActivityThread.java:9500)
+                                                                                                    	at java.lang.reflect.Method.invoke(Native Method)
+                                                                                                    	at com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run(RuntimeInit.java:600)
+                                                                                                    	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:1005)
+2026-04-06 00:03:01.495  1951-2172  gaia:logcompress        oplus_gaia                           D  [compressExceptionLog:141]LogCompress start compress with exception Info: {"app_list":["com.noisefit.luna.dev"],"collect_path":"/data/persist_log/olc/com.oplus.crashbox/anr_crash/anr_start@96a16db6-1402-48e8-a800-df46b620b699@CPH2467_11.F.85_2850_202601052202@2026-04-06_00-02-59","error_time":1775404977238,"error_type":"anr","file_id":"96a16db6-1402-48e8-a800-df46b620b699","log_list":["anr@2026-04-06_00-02-57.txt"],"log_option":33024,"log_path":""}
+2026-04-06 00:03:01.514 16699-16699 LOGS                    com.noisefit.luna.dev                D  sdfljkshdkfjhskdjf locale set
+2026-04-06 00:03:01.527 16699-16699 XLog                    com.noisefit.luna.dev                W  XLog is already initialized, do not initialize again
+2026-04-06 00:03:01.548 16699-16699 MoEngage                com.noisefit.luna.dev                V  Core_SdkInstanceManager addInstanceIfPossible() Current Instance Count: 0
+2026-04-06 00:03:01.548 16699-16699 MoEngage                com.noisefit.luna.dev                V  Core_SdkInstanceManager addInstanceIfPossible() Is default instance initialised? false
+2026-04-06 00:03:01.548 16699-16699 MoEngage                com.noisefit.luna.dev                V  Core_SdkInstanceManager addInstanceIfPossible() Is incoming instance default? true
+2026-04-06 00:03:01.550 16699-16790 MoEngage                com.noisefit.luna.dev                I  VWZYK0ZFPRQZM6G2WG9YBV47 Core_InitialisationHandler initialiseSdk() : initialisation started
+2026-04-06 00:03:01.551 16699-16699 MoEngage                com.noisefit.luna.dev                V  Core_LifecycleManager registerForObservers() : 
+2026-04-06 00:03:01.551 16699-16699 MoEngage                com.noisefit.luna.dev                V  Core_LifecycleManager registerForApplicationLifecycle() : 
+2026-04-06 00:03:01.551 16699-16699 MoEngage                com.noisefit.luna.dev                V  Core_LifecycleManager addObserver() : 
+2026-04-06 00:03:01.552 16699-16699 MoEngage                com.noisefit.luna.dev                V  Core_GlobalApplicationLifecycleHandler onCreate() : 
+2026-04-06 00:03:01.552 16699-16699 MoEngage                com.noisefit.luna.dev                V  Core_LifecycleManager registerActivityLifecycleObserver() : 
+2026-04-06 00:03:01.553 16699-16699 MoEngage                com.noisefit.luna.dev                I  VWZYK0ZFPRQZM6G2WG9YBV47 Core_InitialisationHandler initialiseSdk() : SDK version : 130300
+2026-04-06 00:03:01.567 16699-16699 MoEngage                com.noisefit.luna.dev                I  VWZYK0ZFPRQZM6G2WG9YBV47 Core_InitialisationHandler initialiseSdk() : InitConfig: {"appId":"VWZYK0ZFPRQZM6G2WG9YBV47_DEBUG","dataCenter":"DATA_CENTER_3","cardConfig":{"cardPlaceHolderImage":-1,"inboxEmptyImage":-1,"cardsDateFormat":"MMM dd, hh:mm a","isSwipeRefreshEnabled":true},"push":{"tokenRetryInterval":20,"meta":{"smallIcon":2131232303,"largeIcon":2131232303,"notificationColor":-1,"isMultipleNotificationInDrawerEnabled":false,"isBuildingBackStackEnabled":true,"isLargeIconDisplayEnabled":true},"fcm":{"isRegistrationEnabled":true},"pushKit":{"isRegistrationEnabled":false}},"log":{"level":3,"isEnabledForReleaseBuild":false},"trackingOptOut":{"isCarrierTrackingEnabled":true,"isDeviceAttributeTrackingEnabled":true,"optOutActivities":[],"screenNameTrackingConfig":{"isPackageFilteringEnabled":false,"whitelistedPackages":[]}},"rtt":{"isBackgroundSyncEnabled":true},"inApp":{"optOutActivities":[],"isShowInAppInNewActivityEnabled":false},"dataSync":{"isPeriodicSyncEnabled":true,"periodicSyncInterval":-1,"isBackgroundSyncEnabled":true},"integrationPartner":null,"storageSecurityConfig":{"storageEncryptionConfig":{"isEncryptionEnabled":false}},"networkRequestConfig":{"networkDataSecurityConfig":{"isEncryptionEnabled":false,"encryptionEncodedDebugKey":"","encryptionEncodedReleaseKey":""},"networkAuthorizationConfig":{"isJwtEnabled":false},"shouldCacheConnection":true},"userRegistrationConfig":{"isRegistrationEnabled":false},"environmentConfig":{"environment":"DEFAULT"}}
+2026-04-06 00:03:01.567 16699-16699 MoEngage                com.noisefit.luna.dev                I  VWZYK0ZFPRQZM6G2WG9YBV47 Core_InitialisationHandler initialiseSdk(): Is SDK initialised on main thread: true
+2026-04-06 00:03:01.573 16699-16699 MoEngage                com.noisefit.luna.dev                V  PushBase_8.1.0_PermissionHandler onPermissionGranted() : 
+2026-04-06 00:03:01.573 16699-16699 MoEngage                com.noisefit.luna.dev                V  PushBase_8.1.0_PermissionHandler onPermissionGranted() : 
+2026-04-06 00:03:01.575 16699-16699 MoEngage                com.noisefit.luna.dev                V  PushBase_8.1.0_PushHelper createMoEngageChannels() : 
+2026-04-06 00:03:01.578 16699-16699 MoEngage                com.noisefit.luna.dev                V  PushBase_8.1.0_PushHelper createMoEngageChannels() : 
+2026-04-06 00:03:01.643 16699-16699 FRESHCHAT               com.noisefit.luna.dev                I  Shared Preference encryption version 5
+2026-04-06 00:03:01.694 16699-16790 MoEngage                com.noisefit.luna.dev                I  Core_EncryptedStorageManager loadHandler() : Encrypted Storage module not found.
+2026-04-06 00:03:01.697 16699-16790 MoEngage                com.noisefit.luna.dev                I  null loadHandler() : Security module not found
+2026-04-06 00:03:01.723 16699-16699 Vibrator                com.noisefit.luna.dev                D  SystemVibrator Created
+2026-04-06 00:03:01.723 16699-16699 RingConnectionService   com.noisefit.luna.dev                I  The service has been created
+2026-04-06 00:03:01.724 16699-16699 LOGS                    com.noisefit.luna.dev                D  setting setCrashlyticsUserProperty
+2026-04-06 00:03:01.740  3394-30976 SystemUi--QuickSettings com.android.systemui                 I  OplusFgsManagerController-->onForegroundStateChanged: com.noisefit.luna.dev 0 true 4
+2026-04-06 00:03:01.750 16699-16699 RingConnectionService   com.noisefit.luna.dev                I  onStartCommand executed with startId: 27
+2026-04-06 00:03:01.750 16699-16699 RingConnectionService   com.noisefit.luna.dev                I  onStartCommand executed posting last notification
+2026-04-06 00:03:01.751  3394-30976 SystemUi--QuickSettings com.android.systemui                 I  OplusFgsManagerController-->onForegroundStateChanged: com.noisefit.luna.dev 0 true 4
+2026-04-06 00:03:01.752 16699-16699 RingConnectionService   com.noisefit.luna.dev                I  with a null intent. It has been probably restarted by the system.
+2026-04-06 00:03:01.752 16699-16699 RingConnectionService   com.noisefit.luna.dev                I  Before setConnetionMode
+2026-04-06 00:03:01.752 16699-16699 RingConnectionService   com.noisefit.luna.dev                I  Starting the foreground service task
+2026-04-06 00:03:01.756 16699-16699 RingConnectionService   com.noisefit.luna.dev                D  checkValidateConnection called
+2026-04-06 00:03:01.756 16699-16699 RingConnectionService   com.noisefit.luna.dev                D  Periodic sync difference 0
+2026-04-06 00:03:01.756 16699-16699 RingConnectionService   com.noisefit.luna.dev                D  connectionDataAction null
+2026-04-06 00:03:01.781 16699-16803 AppLogs                 com.noisefit.luna.dev                D  Saving Event :  02 FF
+2026-04-06 00:03:01.796 16699-16699 ControlBleTools         com.noisefit.luna.dev                D  setDeviceLogCallBack()
+2026-04-06 00:03:01.798 16699-16699 sdkVersionCode          com.noisefit.luna.dev                D  ZH_SDK_20260402_V2.3.1
+2026-04-06 00:03:01.800 16699-16699 ZhUserActivityHandler   com.noisefit.luna.dev                D  Activity Callback attached
+2026-04-06 00:03:01.800 16699-16699 BluetoothS...ceAccessor com.noisefit.luna.dev                E  Service operation failed in: com.noisefit_zhsdk.handler.ZhConnectHandler#isConnected, return default:false
+2026-04-06 00:03:01.802 16699-16699 BluetoothS...ceAccessor com.noisefit.luna.dev                E  Service operation failed in: com.noisefit_zhsdk.handler.ZhConnectHandler#isConnected, return default:false
+2026-04-06 00:03:01.803 16699-16699 LOGS                    com.noisefit.luna.dev                D  ZhConnectHandler false false
+2026-04-06 00:03:01.803 16699-16699 BluetoothS...ceAccessor com.noisefit.luna.dev                E  Service operation failed in: com.noisefit_zhsdk.handler.ZhConnectHandler#isConnected, return default:false
+2026-04-06 00:03:01.804 16699-16699 LOGS                    com.noisefit.luna.dev                D  validateAndSetConnectStateRing SendState : false com.noisefit_commans.interfaces.connection.ConnectState$ConnectFailed@bbc143c ColorFitDevice(bluetoothName=Luna Band, address=D8:5C:08:30:00:5E, rssi=-58, deviceType=luna_band, deviceId=2, id=0, mIs=0, len=0, isInDuffMode=false, namePattern=, matchingType=, isSupportHeadset=false, isBind=true, headsetMac=00:00:00:00:00:00, url=, mcuPlatform=PLATFORM_NONE, userId=778470, watchToken=748cc154-e5d4-472d-824d-178aab7d08a5103, ringInfo=null)
+2026-04-06 00:03:01.805 16699-16699 LOGS                    com.noisefit.luna.dev                D  sdfkjsk failed ring connection service - >failed
+2026-04-06 00:03:01.806 16699-16699 RingConnectionService   com.noisefit.luna.dev                D  On Device Reconnected
+2026-04-06 00:03:01.807 16699-16699 ZhConnectHandler        com.noisefit.luna.dev                I  OnReConnect
+2026-04-06 00:03:01.807 16699-16699 BluetoothS...ceAccessor com.noisefit.luna.dev                E  Service operation failed in: com.noisefit_zhsdk.handler.ZhConnectHandler#isConnected, return default:false
+2026-04-06 00:03:01.808 16699-16699 BluetoothS...ceAccessor com.noisefit.luna.dev                E  Service operation failed in: com.noisefit_zhsdk.handler.ZhConnectHandler#isConnected, return default:false
+2026-04-06 00:03:01.809 16699-16699 LOGS                    com.noisefit.luna.dev                D  ZhConnectHandler false false
+2026-04-06 00:03:01.810 16699-16699 BluetoothS...ceAccessor com.noisefit.luna.dev                E  Service operation failed in: com.noisefit_zhsdk.handler.ZhConnectHandler#isConnected, return default:false
+2026-04-06 00:03:01.811 16699-16699 LOGS                    com.noisefit.luna.dev                D  validateAndSetConnectStateRing SendState : false com.noisefit_commans.interfaces.connection.ConnectState$ConnectFailed@ce84941 ColorFitDevice(bluetoothName=Luna Band, address=D8:5C:08:30:00:5E, rssi=-58, deviceType=luna_band, deviceId=2, id=0, mIs=0, len=0, isInDuffMode=false, namePattern=, matchingType=, isSupportHeadset=false, isBind=true, headsetMac=00:00:00:00:00:00, url=, mcuPlatform=PLATFORM_NONE, userId=778470, watchToken=748cc154-e5d4-472d-824d-178aab7d08a5103, ringInfo=null)
+2026-04-06 00:03:01.812 16699-16699 LOGS                    com.noisefit.luna.dev                D  sdfkjsk failed ring connection service - >failed
+2026-04-06 00:03:01.812 16699-16699 LOGS                    com.noisefit.luna.dev                D  validateAndSetConnectStateRing SendState : true com.noisefit_commans.interfaces.connection.ConnectState$Connecting@e7f2ee6 ColorFitDevice(bluetoothName=Luna Band, address=D8:5C:08:30:00:5E, rssi=-58, deviceType=luna_band, deviceId=2, id=0, mIs=0, len=0, isInDuffMode=false, namePattern=, matchingType=, isSupportHeadset=false, isBind=true, headsetMac=00:00:00:00:00:00, url=, mcuPlatform=PLATFORM_NONE, userId=778470, watchToken=748cc154-e5d4-472d-824d-178aab7d08a5103, ringInfo=null)
+2026-04-06 00:03:01.815 16699-16699 ControlBleTools         com.noisefit.luna.dev                D  isSdkServiceRunning() isInit:false,running:false,hasService:false,Service:null
+2026-04-06 00:03:01.817 16699-16699 ControlBleTools         com.noisefit.luna.dev                D  setInitStatusCallBack()
+2026-04-06 00:03:01.820 16699-16699 BluetoothS...ceAccessor com.noisefit.luna.dev                E  Service operation failed , service == null, in: com.noisefit_zhsdk.handler.ZhConnectHandler#connectDevice
+2026-04-06 00:03:01.821 16699-16699 ZhApplicationHandler    com.noisefit.luna.dev                I  initSdk:false
+2026-04-06 00:03:01.821 16699-16699 ControlBleTools         com.noisefit.luna.dev                D  setInitStatusCallBack()
+2026-04-06 00:03:01.823 16699-16699 BluetoothS...ceAccessor com.noisefit.luna.dev                E  Service operation failed , service == null, in: com.noisefit_zhsdk.base.ZhApplicationHandler#initSdk
+2026-04-06 00:03:01.831 16699-16699 ControlBleTools         com.noisefit.luna.dev                D  init() Context,String,String,int,int,BleStateCallBack,ZHInitStatusCallBack --> com.noisefit.NoiseFitApplicationMain@62b891f,null,null,0,10,null,null
+2026-04-06 00:03:01.843 16699-16699 RingConnectionService   com.noisefit.luna.dev                D  Inside setConnection
+2026-04-06 00:03:01.847 16699-16803 AppLogs                 com.noisefit.luna.dev                D  Saving Event :  01 FF
+2026-04-06 00:03:01.851 16699-16699 Choreographer           com.noisefit.luna.dev                I  Skipped 53 frames!  The application may be doing too much work on its main thread.
+2026-04-06 00:03:01.855  2187-8461  VRR [OPlus...teManager] system_server                        D  isPkgTfcEnable: pkgName = com.noisefit.luna.dev, enable = false
+2026-04-06 00:03:01.855  2187-8461  VRR [OPlus...teManager] system_server                        D  getTfcMinFramerate: pkgName = com.noisefit.luna.dev, min framerate = 0
+2026-04-06 00:03:01.856 16699-16699 DynamicFra...igManager] com.noisefit.luna.dev                I  initFrameRateConfig: 
+                                                                                                    	levels: [120, 60]
+                                                                                                    	thresholds: [200]
+2026-04-06 00:03:01.856 16699-16699 DynamicFra...igManager] com.noisefit.luna.dev                I  FRTCConfigManager: FRTC_CAPABILITY = 120, package name = com.noisefit.luna.dev, WINDOW_ANIMATION_SPEED_RATE = 10, SCROLL_ANIMATION_SPEED_RATE = 20, PACKAGE_ENABLE = false
+2026-04-06 00:03:01.856 16699-16699 DynamicFra...ontroller] com.noisefit.luna.dev                I  init info: mPackageName = com.noisefit.luna.dev, mIsEnabled = false
+2026-04-06 00:03:01.859 16699-16699 MoEngage                com.noisefit.luna.dev                V  Core_InitialisationHandler onSdkInitialised() : Notifying initialisation listeners
+2026-04-06 00:03:01.861 16699-16699 CompatChangeReporter    com.noisefit.luna.dev                D  Compat change id reported: 270674727; UID 10443; state: ENABLED
+2026-04-06 00:03:01.867  3394-30976 SystemUi--QuickSettings com.android.systemui                 I  OplusFgsManagerController-->onForegroundStateChanged: com.noisefit.luna.dev 0 true 4
+2026-04-06 00:03:01.867 16699-16813 FRESHCHAT_SERVICE       com.noisefit.luna.dev                I  Now Processing u
+2026-04-06 00:03:01.868 16699-16813 AppStateListener        com.noisefit.luna.dev                I   FreshchatInitApiDeferred called - is init Deferred : true
+2026-04-06 00:03:01.875  3394-30976 SystemUi--QuickSettings com.android.systemui                 I  OplusFgsManagerController-->onForegroundStateChanged: com.noisefit.luna.dev 0 true 4
+2026-04-06 00:03:01.883  3394-30976 SystemUi--QuickSettings com.android.systemui                 I  OplusFgsManagerController-->onForegroundStateChanged: com.noisefit.luna.dev 0 true 4
+2026-04-06 00:03:01.891  3394-3405  SystemUi--QuickSettings com.android.systemui                 I  OplusFgsManagerController-->onForegroundStateChanged: com.noisefit.luna.dev 0 true 4
+2026-04-06 00:03:01.904  3394-30976 SystemUi--QuickSettings com.android.systemui                 I  OplusFgsManagerController-->onForegroundStateChanged: com.noisefit.luna.dev 0 true 4
+2026-04-06 00:03:01.914 16699-16699 ControlBleTools         com.noisefit.luna.dev                D  setBleStateCallBack()
+2026-04-06 00:03:01.917 16699-16699 LOGS                    com.noisefit.luna.dev                D  validateAndSetConnectStateRing SendState : true com.noisefit_commans.interfaces.connection.ConnectState$Connecting@9801b83 ColorFitDevice(bluetoothName=Luna Band, address=D8:5C:08:30:00:5E, rssi=-58, deviceType=luna_band, deviceId=2, id=0, mIs=0, len=0, isInDuffMode=false, namePattern=, matchingType=, isSupportHeadset=false, isBind=true, headsetMac=00:00:00:00:00:00, url=, mcuPlatform=PLATFORM_NONE, userId=778470, watchToken=748cc154-e5d4-472d-824d-178aab7d08a5103, ringInfo=null)
+2026-04-06 00:03:01.918 16699-16699 ControlBleTools         com.noisefit.luna.dev                D  isSdkServiceRunning() isInit:true,running:true,hasService:true,Service:com.zhapp.ble.BluetoothService@e3fd100
+2026-04-06 00:03:01.919 16699-16699 ZhConnectHandler        com.noisefit.luna.dev                I  ConnectDevice the device ColorFitDevice(bluetoothName=Luna Band, address=D8:5C:08:30:00:5E, rssi=-58, deviceType=luna_band, deviceId=2, id=0, mIs=0, len=0, isInDuffMode=false, namePattern=, matchingType=, isSupportHeadset=false, isBind=true, headsetMac=00:00:00:00:00:00, url=, mcuPlatform=PLATFORM_NONE, userId=778470, watchToken=748cc154-e5d4-472d-824d-178aab7d08a5103, ringInfo=null)
+2026-04-06 00:03:01.919 16699-16699 ControlBleTools         com.noisefit.luna.dev                D  connect() name:Luna Band,address:D8:5C:08:30:00:5E
+2026-04-06 00:03:01.921 16699-16699 BluetoothService        com.noisefit.luna.dev                E  connect name = Luna Band address = D8:5C:08:30:00:5E isConnecting false
+2026-04-06 00:03:01.922 16699-16699 BluetoothService        com.noisefit.luna.dev                D  disconnect
+2026-04-06 00:03:01.925 16699-16803 AppLogs                 com.noisefit.luna.dev                D  Saving Event :  02 FF
+2026-04-06 00:03:01.941 16699-16699 BluetoothService        com.noisefit.luna.dev                D  disconnect device mBluetoothGatt == null
+2026-04-06 00:03:01.943 16699-16699 ZhConnectHandler        com.noisefit.luna.dev                D  onConnectState 1
+2026-04-06 00:03:01.943 16699-16699 LOGS                    com.noisefit.luna.dev                D  validateAndSetConnectStateRing SendState : true com.noisefit_commans.interfaces.connection.ConnectState$Connecting@e13c5c4 ColorFitDevice(bluetoothName=Luna Band, address=D8:5C:08:30:00:5E, rssi=-58, deviceType=luna_band, deviceId=2, id=0, mIs=0, len=0, isInDuffMode=false, namePattern=, matchingType=, isSupportHeadset=false, isBind=true, headsetMac=00:00:00:00:00:00, url=, mcuPlatform=PLATFORM_NONE, userId=778470, watchToken=748cc154-e5d4-472d-824d-178aab7d08a5103, ringInfo=null)
+2026-04-06 00:03:01.945 16699-16699 NordicsemiBleScanner    com.noisefit.luna.dev                D  onStopBleScan()
+2026-04-06 00:03:01.946 16699-16699 NordicsemiBleScanner    com.noisefit.luna.dev                D  onStartBleScan() isScanning:false
+2026-04-06 00:03:01.951 16699-16699 BluetoothAdapter        com.noisefit.luna.dev                D  isLeEnabled(): ON
+2026-04-06 00:03:01.955 16699-16724 BluetoothLeScanner      com.noisefit.luna.dev                D  onScannerRegistered() - status=0 scannerId=1 mScannerId=0
+2026-04-06 00:03:01.969 16699-16699 NordicsemiBleScanner    com.noisefit.luna.dev                D  StartBleScan
+2026-04-06 00:03:01.970 16699-16699 ZhApplicationHandler    com.noisefit.luna.dev                I  initSdk: onInitComplete()
+2026-04-06 00:03:01.979 16699-16803 AppLogs                 com.noisefit.luna.dev                D  Saving Event :  01 FF
+2026-04-06 00:03:01.983 16699-16803 AppLogs                 com.noisefit.luna.dev                D  Saving Event :  01 FF
+2026-04-06 00:03:02.590  1951-2157  gaia:event              oplus_gaia                           D  [packJson:129]pack json string(content:{"data":"{\"app_list\":[\"com.noisefit.luna.dev\"],\"collect_path\":\"\",\"error_time\":1775404977238,\"error_type\":\"anr\",\"file_id\":\"96a16db6-1402-48e8-a800-df46b620b699\",\"log_list\":[\"anr@2026-04-06_00-02-57.txt\"],\"log_option\":33024,\"log_path\":\"/data/persist_log/olc/com.oplus.crashbox/anr_crash/anr@96a16db6-1402-48e8-a800-df46b620b699@CPH2467_11.F.85_2850_202601052202@2026-04-06_00-03-01.zip\"}","eventId":269500417,"isAck":1,"packetId":"1136","resultCode":1,"type":2}) (len:487)
+2026-04-06 00:03:02.594  8414-10892 gaia-GaiaPacketReader   com.oplus.olc                        D  onReceivePacket , packet data = {"eventId":269500417,"eventTag":"crashbox_collect_log","isAck":1,"packetId":"1136","packetType":2,"rcvMsgInfo":{"data":"{\"app_list\":[\"com.noisefit.luna.dev\"],\"collect_path\":\"\",\"error_time\":1775404977238,\"error_type\":\"anr\",\"file_id\":\"96a16db6-1402-48e8-a800-df46b620b699\",\"log_list\":[\"anr@2026-04-06_00-02-57.txt\"],\"log_option\":33024,\"log_path\":\"/data/persist_log/olc/com.oplus.crashbox/anr_crash/anr@96a16db6-1402-48e8-a800-df46b620b699@CPH2467_11.F.85_2850_202601052202@2026-04-06_00-03-01.zip\"}","eventId":269500417,"isAck":1,"packetId":"1136","resultCode":1,"type":"2"},"sourceData":[71,65,73,65,123,34,100,97,116,97,34,58,34,123,92,34,97,112,112,95,108,105,115,116,92,34,58,91,92,34,99,111,109,46,110,111,105,115,101,102,105,116,46,108,117,110,97,46,100,101,118,92,34,93,44,92,34,99,111,108,108,101,99,116,95,112,97,116,104,92,34,58,92,34,92,34,44,92,34,101,114,114,111,114,95,116,105,109,101,92,34,58,49,55,55,53,52,48,52,57,55,55,50,51,56,44,92,34,101,114,114,111,114,95,116,121,112,101,92,34,58,92,34,97,110,114,92,34,44,92,34,102,105,108,101,95,105,100,92,34,58,92,34,57,54,97,49,54,100,98,54,45,49,52,48,50,45,52,56,101,56,45,97,56,48,48,45,100,102,52,54,98,54,50,48,98,54,57,57,92,34,44,92,34,108,111,103,95,108,105,115,116,92,34,58,91,92,34,97,110,114,64,50,48,50,54,45,48,52,45,48,54,95,48,48,45,48,50,45,53,55,46,116,120,116,92,34,93,44,92,34,108,111,103,95,111,112,116,105,111,110,92,34,58,51,51,48,50,52,44,92,34,108,111,103,95,112,97,116,104,92,34,58,92,34,47,100,97,116,97,47,112,101,114,115,105,115,116,95,108,111,103,47,111,108,99,47,99,111,109,46,111,112,108,117,115,46,99,114,97,115,104,98,111,120,47,97,110,114,95,99,114,97,115,104,47,97,110,114,64,57,54,97,49,54,100,98,54,45,49,52,48,50,45,52,56,101,56,45,97,56,48,48,45,100,102,52,54,98,54,50,48,98,54,57,57,64,67,80,72,50,52,54,55,95,49,49,46,70,46,56,53,95,50,56,53,48,95,50,48,50,54,48,49,48,53,50,50,48,50,64,50,48,50,54,45,48,52,45,48,54,95,48,48,45,48,51,45,48,49,46,122,105,112,92,34,125,34,44,34,101,118,101,110,116,73,100,34,58,50,54,57,53,48,48,52,49,55,44,34,105,115,65,99,107,34,58,49,44,34,112,97,99,107,101,116,73,100,34,58,34,49,49,51,54,34,44,34,114,101,115,117,108,116,67,111,100,101,34,58,49,44,34,116,121,112,101,34,58,50,125]}
+2026-04-06 00:03:02.952 16699-16699 BluetoothService        com.noisefit.luna.dev                D  scanDevice onBleScan size = 0
+2026-04-06 00:03:03.956 16699-16699 BluetoothService        com.noisefit.luna.dev                D  scanDevice onBleScan size = 0
+2026-04-06 00:03:04.019  6105-6138  AppSwitchObserverHelper com.oplus.battery                    D  packageName: com.noisefit.luna.dev,com.noisefit.luna.dev
+2026-04-06 00:03:04.965 16699-16699 BluetoothService        com.noisefit.luna.dev                D  scanDevice onBleScan size = 0
+2026-04-06 00:03:04.974 16699-16699 BluetoothGatt           com.noisefit.luna.dev                D  connect() - device: XX:XX:XX:XX:00:5E, auto: false
+2026-04-06 00:03:04.974 16699-16699 BluetoothGatt           com.noisefit.luna.dev                D  registerApp()
+2026-04-06 00:03:04.974 16699-16699 BluetoothGatt           com.noisefit.luna.dev                D  registerApp() - UUID=8b4ed126-9360-4e27-8782-72637f6af5bf
+2026-04-06 00:03:04.979 16699-16724 BluetoothGatt           com.noisefit.luna.dev                D  onClientRegistered() - status=0 clientIf=7
+2026-04-06 00:03:04.985 16699-16699 BluetoothService        com.noisefit.luna.dev                D  main, connect device  = Luna Band_005E, Address:D8:5C:08:30:00:5E, BondState:10, Type:0,android.bluetooth.BluetoothGatt@98a53a7
+2026-04-06 00:03:04.990 16699-16699 BluetoothService        com.noisefit.luna.dev                D  removeConnectTimeOutHandler
+2026-04-06 00:03:05.971 16699-16699 BluetoothService        com.noisefit.luna.dev                D  scanDevice onBleScan size = 0
+2026-04-06 00:03:06.151  2187-3767  OplusHansManager        system_server                        I  uid=10443, pkg=com.noisefit.luna.dev cannot transition from R to M, importance=fg-service
+2026-04-06 00:03:06.368  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:625]  interop_oplus_match_name_impl:[OplusGapSetHpm] check Luna Band_005E return 0
+2026-04-06 00:03:06.369  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:639]  interop_oplus_match_both_name_and_addr_impl:[OplusGapSetHpm] check Luna Band_005E-d8:**:**:**:00:5e return 0
+2026-04-06 00:03:06.369  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:665]  interop_oplus_match_both_name_addr_and_ver_impl:[OplusGapSetHpm] check Luna Band_005E-d8:**:**:**:00:5e-09:09ac:0329 return 0
+2026-04-06 00:03:06.607  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:625]  interop_oplus_match_name_impl:[OplusGapRoleSwitch] check Luna Band_005E return 0
+2026-04-06 00:03:06.607  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:639]  interop_oplus_match_both_name_and_addr_impl:[OplusGapRoleSwitch] check Luna Band_005E-d8:**:**:**:00:5e return 0
+2026-04-06 00:03:06.608  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:665]  interop_oplus_match_both_name_addr_and_ver_impl:[OplusGapRoleSwitch] check Luna Band_005E-d8:**:**:**:00:5e-09:09ac:0329 return 0
+2026-04-06 00:03:06.619  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:625]  interop_oplus_match_name_impl:[OplusGapNotDoSniffSubrating] check Luna Band_005E return 0
+2026-04-06 00:03:06.619  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:639]  interop_oplus_match_both_name_and_addr_impl:[OplusGapNotDoSniffSubrating] check Luna Band_005E-d8:**:**:**:00:5e return 0
+2026-04-06 00:03:06.619  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:665]  interop_oplus_match_both_name_addr_and_ver_impl:[OplusGapNotDoSniffSubrating] check Luna Band_005E-d8:**:**:**:00:5e-09:09ac:0329 return 0
+2026-04-06 00:03:06.636  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:625]  interop_oplus_match_name_impl:[OplusLeDisableCache] check Luna Band_005E return 0
+2026-04-06 00:03:06.636  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:639]  interop_oplus_match_both_name_and_addr_impl:[OplusLeDisableCache] check Luna Band_005E-d8:**:**:**:00:5e return 0
+2026-04-06 00:03:06.637  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:665]  interop_oplus_match_both_name_addr_and_ver_impl:[OplusLeDisableCache] check Luna Band_005E-d8:**:**:**:00:5e-09:09ac:0329 return 0
+2026-04-06 00:03:06.637  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:625]  interop_oplus_match_name_impl:[OplusLeDisableCache] check Luna Band_005E return 0
+2026-04-06 00:03:06.637  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:639]  interop_oplus_match_both_name_and_addr_impl:[OplusLeDisableCache] check Luna Band_005E-d8:**:**:**:00:5e return 0
+2026-04-06 00:03:06.638  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:665]  interop_oplus_match_both_name_addr_and_ver_impl:[OplusLeDisableCache] check Luna Band_005E-d8:**:**:**:00:5e-09:09ac:0329 return 0
+2026-04-06 00:03:06.638  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:625]  interop_oplus_match_name_impl:[OplusDisableRobustCaching] check Luna Band_005E return 0
+2026-04-06 00:03:06.638  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:639]  interop_oplus_match_both_name_and_addr_impl:[OplusDisableRobustCaching] check Luna Band_005E-d8:**:**:**:00:5e return 0
+2026-04-06 00:03:06.638  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:665]  interop_oplus_match_both_name_addr_and_ver_impl:[OplusDisableRobustCaching] check Luna Band_005E-d8:**:**:**:00:5e-09:09ac:0329 return 0
+2026-04-06 00:03:06.639  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:625]  interop_oplus_match_name_impl:[OplusDisableRobustCaching] check Luna Band_005E return 0
+2026-04-06 00:03:06.639  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:639]  interop_oplus_match_both_name_and_addr_impl:[OplusDisableRobustCaching] check Luna Band_005E-d8:**:**:**:00:5e return 0
+2026-04-06 00:03:06.640  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:665]  interop_oplus_match_both_name_addr_and_ver_impl:[OplusDisableRobustCaching] check Luna Band_005E-d8:**:**:**:00:5e-09:09ac:0329 return 0
+2026-04-06 00:03:06.640  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:625]  interop_oplus_match_name_impl:[OplusLeDisableFastConnection] check Luna Band_005E return 0
+2026-04-06 00:03:06.640  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:639]  interop_oplus_match_both_name_and_addr_impl:[OplusLeDisableFastConnection] check Luna Band_005E-d8:**:**:**:00:5e return 0
+2026-04-06 00:03:06.641  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:665]  interop_oplus_match_both_name_addr_and_ver_impl:[OplusLeDisableFastConnection] check Luna Band_005E-d8:**:**:**:00:5e-09:09ac:0329 return 0
+2026-04-06 00:03:06.681 16699-16724 BluetoothGatt           com.noisefit.luna.dev                D  onClientConnectionState() - status=0 clientIf=7 connected=true device=D8:5C:08:30:00:5E
+2026-04-06 00:03:06.682 16699-16724 BluetoothService        com.noisefit.luna.dev                E  onConnectionStateChange status = 0   newState =2
+2026-04-06 00:03:06.690 16699-16724 BluetoothService        com.noisefit.luna.dev                D  onConnectionStateChange mBluetoothGatt == gatt
+2026-04-06 00:03:06.694 16699-16724 BluetoothService        com.noisefit.luna.dev                D  removeConnectTimeOutHandler
+2026-04-06 00:03:06.697 16699-16724 BluetoothService        com.noisefit.luna.dev                D  onConnectionStateChange device is connected
+2026-04-06 00:03:06.712 16699-16724 BluetoothGatt           com.noisefit.luna.dev                D  discoverServices() - device: XX:XX:XX:XX:00:5E
+2026-04-06 00:03:06.714 16699-16724 BluetoothService        com.noisefit.luna.dev                W  onConnectionStateChange discoverServices = true
+2026-04-06 00:03:06.979 16699-16699 BluetoothService        com.noisefit.luna.dev                D  scanDevice onBleScan size = 0
+2026-04-06 00:03:07.063 16699-16854 BluetoothGatt           com.noisefit.luna.dev                D  onConnectionUpdated() - Device=D8:5C:08:30:00:5E interval=6 latency=0 timeout=500 status=0
+2026-04-06 00:03:07.376  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:625]  interop_oplus_match_name_impl:[OplusLeDisableMtuFixed] check Luna Band_005E return 0
+2026-04-06 00:03:07.376  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:639]  interop_oplus_match_both_name_and_addr_impl:[OplusLeDisableMtuFixed] check Luna Band_005E-d8:**:**:**:00:5e return 0
+2026-04-06 00:03:07.376  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:665]  interop_oplus_match_both_name_addr_and_ver_impl:[OplusLeDisableMtuFixed] check Luna Band_005E-d8:**:**:**:00:5e-09:09ac:0329 return 0
+2026-04-06 00:03:07.703  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:625]  interop_oplus_match_name_impl:[OplusLeDisableFastConnection] check Luna Band_005E return 0
+2026-04-06 00:03:07.703  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:639]  interop_oplus_match_both_name_and_addr_impl:[OplusLeDisableFastConnection] check Luna Band_005E-d8:**:**:**:00:5e return 0
+2026-04-06 00:03:07.704  3851-4358  bt_device_interop       com.android.bluetooth                D  [interop_oplus.cc:665]  interop_oplus_match_both_name_addr_and_ver_impl:[OplusLeDisableFastConnection] check Luna Band_005E-d8:**:**:**:00:5e-09:09ac:0329 return 0
+2026-04-06 00:03:07.716 16699-16854 BluetoothGatt           com.noisefit.luna.dev                D  onSearchComplete() = Device=D8:5C:08:30:00:5E Status=0
+2026-04-06 00:03:07.717 16699-16854 BluetoothService        com.noisefit.luna.dev                I  onServicesDiscovered discoverServicesTime new 6 <= 2000: 1005
+2026-04-06 00:03:07.721 16699-16854 BluetoothService        com.noisefit.luna.dev                I  onServicesDiscovered success state is 0 and now status = 0
+2026-04-06 00:03:07.724 16699-16866 BluetoothService        com.noisefit.luna.dev                I  discovered service  = 00001800-0000-1000-8000-00805f9b34fb
+2026-04-06 00:03:07.727 16699-16866 BluetoothService        com.noisefit.luna.dev                I  discovered service  = 00001801-0000-1000-8000-00805f9b34fb
+2026-04-06 00:03:07.730 16699-16866 BluetoothService        com.noisefit.luna.dev                I  discovered service  = 0000180a-0000-1000-8000-00805f9b34fb
+2026-04-06 00:03:07.731 16699-16867 ProfileInstaller        com.noisefit.luna.dev                D  Installing profile for com.noisefit.luna.dev
+2026-04-06 00:03:07.731 16699-16866 BluetoothService        com.noisefit.luna.dev                I  discovered service  = 16186f00-0000-1000-8000-00807f9b34fb
+2026-04-06 00:03:07.732 16699-16866 BluetoothService        com.noisefit.luna.dev                I  discovered service  = 0000aa01-0000-1000-8000-00805f9b34fb
+2026-04-06 00:03:07.733 16699-16866 BluetoothService        com.noisefit.luna.dev                I  discovered service  = 0000190e-0000-1000-8000-00805f9b34fb
+2026-04-06 00:03:07.734 16699-16866 BluetoothService        com.noisefit.luna.dev                D  onServicesDiscovered enableNotification channel total size = 5
+2026-04-06 00:03:07.735 16699-16866 BluetoothService        com.noisefit.luna.dev                W  enable characteristic size = 5
+2026-04-06 00:03:07.736 16699-16866 BluetoothService        com.noisefit.luna.dev                I  enableNotification  = 16186f01-0000-1000-8000-00807f9b34fb
+2026-04-06 00:03:07.737 16699-16866 BluetoothGatt           com.noisefit.luna.dev                D  setCharacteristicNotification() - uuid: 16186f01-0000-1000-8000-00807f9b34fb enable: true
+2026-04-06 00:03:07.759 16699-16854 BluetoothService        com.noisefit.luna.dev                W  enableNotification  = SUCCESS time = 23ms
+2026-04-06 00:03:07.763 16699-16866 BluetoothService        com.noisefit.luna.dev                W  enable characteristic size = 4
+2026-04-06 00:03:07.765 16699-16866 BluetoothService        com.noisefit.luna.dev                I  enableNotification  = 16186f02-0000-1000-8000-00807f9b34fb
+2026-04-06 00:03:07.766 16699-16866 BluetoothGatt           com.noisefit.luna.dev                D  setCharacteristicNotification() - uuid: 16186f02-0000-1000-8000-00807f9b34fb enable: true
+2026-04-06 00:03:07.826 16699-16854 BluetoothGatt           com.noisefit.luna.dev                D  onConnectionUpdated() - Device=D8:5C:08:30:00:5E interval=36 latency=0 timeout=500 status=0
+2026-04-06 00:03:07.868 16699-16854 BluetoothService        com.noisefit.luna.dev                W  enableNotification  = SUCCESS time = 102ms
+2026-04-06 00:03:07.877 16699-16866 BluetoothService        com.noisefit.luna.dev                W  enable characteristic size = 3
+2026-04-06 00:03:07.882 16699-16866 BluetoothService        com.noisefit.luna.dev                I  enableNotification  = 16186f03-0000-1000-8000-00807f9b34fb
+2026-04-06 00:03:07.887 16699-16866 BluetoothGatt           com.noisefit.luna.dev                D  setCharacteristicNotification() - uuid: 16186f03-0000-1000-8000-00807f9b34fb enable: true
+2026-04-06 00:03:07.958 16699-16854 BluetoothService        com.noisefit.luna.dev                W  enableNotification  = SUCCESS time = 76ms
+2026-04-06 00:03:07.968 16699-16866 BluetoothService        com.noisefit.luna.dev                W  enable characteristic size = 2
+2026-04-06 00:03:07.974 16699-16866 BluetoothService        com.noisefit.luna.dev                I  enableNotification  = 16186f04-0000-1000-8000-00807f9b34fb
+2026-04-06 00:03:07.978 16699-16866 BluetoothGatt           com.noisefit.luna.dev                D  setCharacteristicNotification() - uuid: 16186f04-0000-1000-8000-00807f9b34fb enable: true
+2026-04-06 00:03:07.986 16699-16699 BluetoothService        com.noisefit.luna.dev                D  scanDevice onBleScan size = 0
+2026-04-06 00:03:08.048 16699-16854 BluetoothService        com.noisefit.luna.dev                W  enableNotification  = SUCCESS time = 75ms
+2026-04-06 00:03:08.057 16699-16866 BluetoothService        com.noisefit.luna.dev                W  enable characteristic size = 1
+2026-04-06 00:03:08.061 16699-16866 BluetoothService        com.noisefit.luna.dev                I  enableNotification  = 16186f05-0000-1000-8000-00807f9b34fb
+2026-04-06 00:03:08.065 16699-16866 BluetoothGatt           com.noisefit.luna.dev                D  setCharacteristicNotification() - uuid: 16186f05-0000-1000-8000-00807f9b34fb enable: true
+2026-04-06 00:03:08.138 16699-16854 BluetoothService        com.noisefit.luna.dev                W  enableNotification  = SUCCESS time = 77ms
+2026-04-06 00:03:08.144 16699-16866 BluetoothService        com.noisefit.luna.dev                D  init initDeviceCmd and init device channel over
+2026-04-06 00:03:08.150 16699-16866 ControlBleTools         com.noisefit.luna.dev                D  nativeMethodGetMtu()
+2026-04-06 00:03:08.180 16699-16866 a                       com.noisefit.luna.dev                D  getBleMtu mtu default
+2026-04-06 00:03:08.191 16699-16866 BluetoothService        com.noisefit.luna.dev                I  writeCmd[8, 0, -102, 6, 2, 32, 0]
+2026-04-06 00:03:08.192 16699-16814 BluetoothService        com.noisefit.luna.dev                D  CMDThread send size = 1
+2026-04-06 00:03:08.192 16699-16699 ZhConnectHandler        com.noisefit.luna.dev                D  onConnectState 2
+2026-04-06 00:03:08.193 16699-16699 ControlBleTools         com.noisefit.luna.dev                D  requestDeviceBindState()
+2026-04-06 00:03:08.200 16699-16699 BluetoothService        com.noisefit.luna.dev                I  writeCmd[8, 16]
+2026-04-06 00:03:08.205 16699-16699 ControlBleTools         com.noisefit.luna.dev                D  getAutoSportData()
+2026-04-06 00:03:08.210 16699-16699 BluetoothService        com.noisefit.luna.dev                I  writeCmd[8, 110]
+2026-04-06 00:03:08.212 16699-16814 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 00 00 00 00 01 00 
+2026-04-06 00:03:08.276 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 01 00 00 
+2026-04-06 00:03:08.308 16699-16869 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 01 00 08 00 9A 06 02 20 00 
+2026-04-06 00:03:08.365 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 00 00 00 
+2026-04-06 00:03:08.371 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 00 00 00 00 01 00 
+2026-04-06 00:03:08.391 16699-16874 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 01 00 00 
+2026-04-06 00:03:08.456 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 01 00 08 00 10 F7 01 
+2026-04-06 00:03:08.482 16699-16875 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 00 00 00 
+2026-04-06 00:03:08.503 16699-16699 BleParsing              com.noisefit.luna.dev                I  parsing id = 00 00  = 0 --> MTU_REQUEST_CHANGE errorCode = 0
+2026-04-06 00:03:08.504 16699-16699 BleParsing              com.noisefit.luna.dev                W  MTU_REQUEST_CHANGE_VALUE = 247
+2026-04-06 00:03:08.505 16699-16814 BluetoothService        com.noisefit.luna.dev                D  CMDThread send size = 2
+2026-04-06 00:03:08.505 16699-16699 BleParsing              com.noisefit.luna.dev                E  mtu = 244
+2026-04-06 00:03:08.506 16699-16699 BluetoothService        com.noisefit.luna.dev                D  mtu --- 244
+2026-04-06 00:03:08.523 16699-16814 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 00 00 00 00 01 00 
+2026-04-06 00:03:08.591 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 01 00 00 
+2026-04-06 00:03:08.614 16699-16876 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 01 00 08 10 
+2026-04-06 00:03:08.682 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 00 00 00 
+2026-04-06 00:03:08.687 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 00 00 00 00 01 00 
+2026-04-06 00:03:08.705 16699-16882 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 01 00 00 
+2026-04-06 00:03:08.775 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 01 00 08 10 1A 02 08 01 
+2026-04-06 00:03:08.799 16699-16815 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 00 00 00 
+2026-04-06 00:03:08.809 16699-16699 BleParsing              com.noisefit.luna.dev                I  parsing id = 00 10  = 16 --> INQUIRY_BINDING_STATUS errorCode = 0
+2026-04-06 00:03:08.816 16699-16814 BluetoothService        com.noisefit.luna.dev                D  CMDThread send size = 1
+2026-04-06 00:03:08.833 16699-16814 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 00 00 00 00 01 00 
+2026-04-06 00:03:08.903 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 01 00 00 
+2026-04-06 00:03:08.905 16699-16699 BleParsing              com.noisefit.luna.dev                W  INQUIRY_BINDING_STATUS_VALUE = request_binding_status: true
+2026-04-06 00:03:08.906 16699-16699 LOGS                    com.noisefit.luna.dev                D  ZhConnectHandler Bind State true , isReconnect true
+2026-04-06 00:03:08.907 16699-16699 LOGS                    com.noisefit.luna.dev                D  ZhConnectHandler verifyUserId token=748cc154-e5d4-472d-824d-178aab7d08a5103
+2026-04-06 00:03:08.907 16699-16699 ControlBleTools         com.noisefit.luna.dev                D  verifyUserId() 748cc154-e5d4-472d-824d-178aab7d08a5103
+2026-04-06 00:03:08.908 16699-16699 BluetoothService        com.noisefit.luna.dev                I  writeCmd[8, 19, 26, 41, 50, 39, 55, 52, 56, 99, 99, 49, 53, 52, 45, 101, 53, 100, 52, 45, 52, 55, 50, 100, 45, 56, 50, 52, 100, 45, 49, 55, 56, 97, 97, 98, 55, 100, 48, 56, 97, 53, 49, 48, 51]
+2026-04-06 00:03:08.916 16699-16803 AppLogs                 com.noisefit.luna.dev                D  Saving Event :  02 FF
+2026-04-06 00:03:08.922 16699-16868 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 01 00 08 6E 
+2026-04-06 00:03:08.991 16699-16699 BluetoothService        com.noisefit.luna.dev                D  scanDevice onBleScan size = 0
+2026-04-06 00:03:08.997 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 00 00 00 
+2026-04-06 00:03:09.003 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 00 00 00 00 01 00 
+2026-04-06 00:03:09.022 16699-16873 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 01 00 00 
+2026-04-06 00:03:09.089 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 01 00 08 6E 42 02 4A 00 
+2026-04-06 00:03:09.113 16699-16874 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 00 00 00 
+2026-04-06 00:03:09.128 16699-16699 BleParsing              com.noisefit.luna.dev                I  parsing id = 00 6E  = 110 --> GET_AUTO_SPORT_DATA_LIST errorCode = 0
+2026-04-06 00:03:09.136 16699-16814 BluetoothService        com.noisefit.luna.dev                D  CMDThread send size = 1
+2026-04-06 00:03:09.155 16699-16814 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 00 00 00 00 01 00 
+2026-04-06 00:03:09.190 16699-16699 BleParsing              com.noisefit.luna.dev                W  GET_AUTO_SPORT_DATA_LIST_VALUE = 
+2026-04-06 00:03:09.193 16699-16699 RingConnectionService   com.noisefit.luna.dev                D  Received data com.noisefit_commans.interfaces.data.UserActivityCallback$AutoSportDataObtained@d58b3f8
+2026-04-06 00:03:09.193 16699-16699 RingConnectionService   com.noisefit.luna.dev                D  SyncDataWork: onAutoSportData inside
+2026-04-06 00:03:09.220 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 01 00 00 
+2026-04-06 00:03:09.229 16699-16788 RingConnectionService   com.noisefit.luna.dev                D  SyncDataWork: onAutoSportData true
+2026-04-06 00:03:09.241 16699-16875 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 01 00 08 13 1A 29 32 27 37 34 38 63 63 31 35 34 2D 65 35 64 34 2D 34 37 32 64 2D 38 32 34 64 2D 31 37 38 61 61 62 37 64 30 38 61 35 31 30 33 
+2026-04-06 00:03:09.311 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 00 00 00 
+2026-04-06 00:03:09.319 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 00 00 00 00 01 00 
+2026-04-06 00:03:09.338 16699-16879 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 01 00 00 
+2026-04-06 00:03:09.400 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 01 00 08 13 1A 06 3A 04 08 01 10 01 
+2026-04-06 00:03:09.422 16699-16882 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 00 00 00 
+2026-04-06 00:03:09.429 16699-16699 BleParsing              com.noisefit.luna.dev                I  parsing id = 00 13  = 19 --> VERIFY_USER_NUMBER errorCode = 0
+2026-04-06 00:03:09.433 16699-16699 BleParsing              com.noisefit.luna.dev                W  VERIFY_USER_NUMBER_VALUE = verify_result {
+                                                                                                      verify_result_type: true
+                                                                                                      binding_status: true
+                                                                                                    }
+2026-04-06 00:03:09.435 16699-16699 LOGS                    com.noisefit.luna.dev                D  ZhConnectHandler verifyUserIdCallBack state=0
+2026-04-06 00:03:09.436 16699-16699 LOGS                    com.noisefit.luna.dev                D  validateAndSetConnectStateRing SendState : true com.noisefit_commans.interfaces.connection.ConnectState$ConnectSuccess@3cdb73c ColorFitDevice(bluetoothName=Luna Band, address=D8:5C:08:30:00:5E, rssi=-58, deviceType=luna_band, deviceId=2, id=0, mIs=0, len=0, isInDuffMode=false, namePattern=, matchingType=, isSupportHeadset=false, isBind=true, headsetMac=00:00:00:00:00:00, url=, mcuPlatform=PLATFORM_NONE, userId=778470, watchToken=748cc154-e5d4-472d-824d-178aab7d08a5103, ringInfo=null)
+2026-04-06 00:03:09.437 16699-16699 RingConnectionService   com.noisefit.luna.dev                D  Info Fetch Difference 169343
+2026-04-06 00:03:09.437 16699-16699 RingConnectionService   com.noisefit.luna.dev                D  Info Fetch Difference ask for battery
+2026-04-06 00:03:09.453 16699-16699 LOGS                    com.noisefit.luna.dev                D  SetDeviceTime
+2026-04-06 00:03:09.453 16699-16699 ControlBleTools         com.noisefit.luna.dev                D  setTime() currentTimeMillis:1775404989453
+2026-04-06 00:03:09.456 16699-16788 WM-PackageManagerHelper com.noisefit.luna.dev                D  Skipping component enablement for androidx.work.impl.background.systemjob.SystemJobService
+2026-04-06 00:03:09.456 16699-16788 WM-Schedulers           com.noisefit.luna.dev                D  Created SystemJobScheduler and enabled SystemJobService
+2026-04-06 00:03:09.456 16699-16699 BluetoothService        com.noisefit.luna.dev                I  writePrioritizedCmd
+2026-04-06 00:03:09.457 16699-16699 LOGS                    com.noisefit.luna.dev                D  inside disconnection
+2026-04-06 00:03:09.457 16699-16814 BluetoothService        com.noisefit.luna.dev                D  CMDThread send size = 1
+2026-04-06 00:03:09.458 16699-16699 ControlBleTools         com.noisefit.luna.dev                D  getDisconnectReason()
+2026-04-06 00:03:09.459 16699-16699 BluetoothService        com.noisefit.luna.dev                I  writeCmd[8, 34]
+2026-04-06 00:03:09.460 16699-16887 WM-ForceStopRunnable    com.noisefit.luna.dev                D  The default process name was not specified.
+2026-04-06 00:03:09.460 16699-16699 ZhConnectHandler        com.noisefit.luna.dev                I  isSupportHeadset:false, bt mac:00:00:00:00:00:00, isbind:true
+2026-04-06 00:03:09.462 16699-16887 WM-ForceStopRunnable    com.noisefit.luna.dev                D  Performing cleanup operations.
+2026-04-06 00:03:09.467  3394-30970 SystemUi--QuickSettings com.android.systemui                 I  OplusFgsManagerController-->onForegroundStateChanged: com.noisefit.luna.dev 0 true 4
+2026-04-06 00:03:09.471 16699-16699 ControlBleTools         com.noisefit.luna.dev                D  realTimeDataSwitch() isOpen:true
+2026-04-06 00:03:09.474 16699-16814 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 00 00 00 00 01 00 
+2026-04-06 00:03:09.474 16699-16699 BluetoothService        com.noisefit.luna.dev                I  writeCmd[8, -92, 1, 98, 2, 24, 0]
+2026-04-06 00:03:09.476 16699-16699 LOGS                    com.noisefit.luna.dev                D  Update Device Action not defined in ServiceUtil com.noisefit_commans.interfaces.device_data.UpdateDeviceAction$Default@d315294
+2026-04-06 00:03:09.488 16699-16887 WM-SystemJobScheduler   com.noisefit.luna.dev                D  Reconciling jobs
+2026-04-06 00:03:09.495 16699-16887 WM-ForceStopRunnable    com.noisefit.luna.dev                D  Found unfinished work, scheduling it.
+2026-04-06 00:03:09.522 16699-16788 LOGS                    com.noisefit.luna.dev                W  queryWatchInfo 300 isOreoSyncDataWorkerRunning false
+2026-04-06 00:03:09.523 16699-16788 ControlBleTools         com.noisefit.luna.dev                D  getDeviceInfo()
+2026-04-06 00:03:09.524 16699-16788 BluetoothService        com.noisefit.luna.dev                I  writeCmd[8, 32]
+2026-04-06 00:03:09.531 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 01 00 00 
+2026-04-06 00:03:09.537 16699-16892 WM-PackageManagerHelper com.noisefit.luna.dev                D  Skipping component enablement for androidx.work.impl.background.systemalarm.RescheduleReceiver
+2026-04-06 00:03:09.550 16699-16815 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 01 00 08 30 2A 0A 0A 08 08 BD 8F CA CE 06 10 40 
+2026-04-06 00:03:09.622 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 00 00 00 
+2026-04-06 00:03:09.627 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 00 00 00 00 01 00 
+2026-04-06 00:03:09.644 16699-16869 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 01 00 00 
+2026-04-06 00:03:09.713 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 01 00 08 30 A0 06 00 
+2026-04-06 00:03:09.735 16699-16873 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 00 00 00 
+2026-04-06 00:03:09.740 16699-16699 BleParsing              com.noisefit.luna.dev                I  parsing id = 00 30  = 48 --> SET_SYSTEM_TIME errorCode = 0
+2026-04-06 00:03:09.742 16699-16814 BluetoothService        com.noisefit.luna.dev                D  CMDThread send size = 3
+2026-04-06 00:03:09.759 16699-16814 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 00 00 00 00 01 00 
+2026-04-06 00:03:09.851 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 01 00 00 
+2026-04-06 00:03:09.873 16699-16874 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 01 00 08 22 
+2026-04-06 00:03:09.942 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 00 00 00 
+2026-04-06 00:03:09.949 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 00 00 00 00 01 00 
+2026-04-06 00:03:09.970 16699-16876 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 01 00 00 
+2026-04-06 00:03:09.970 16699-16699 BluetoothService        com.noisefit.luna.dev                D  stopScanDeviceRunnable 
+2026-04-06 00:03:09.972 16699-16699 BluetoothService        com.noisefit.luna.dev                D  stopBleScan
+2026-04-06 00:03:09.974 16699-16699 BluetoothService        com.noisefit.luna.dev                D  Bluetooth Scan time B 6: 8029
+2026-04-06 00:03:09.976 16699-16699 NordicsemiBleScanner    com.noisefit.luna.dev                D  onStopBleScan()
+2026-04-06 00:03:10.030 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 01 00 08 22 A0 06 01 
+2026-04-06 00:03:10.052 16699-16879 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_01 write   = 00 00 01 00 00 00 
+2026-04-06 00:03:10.060 16699-16699 BleParsing              com.noisefit.luna.dev                I  parsing id = 00 22  = 34 --> GET_DEVICE_DISCONNECT_REASON errorCode = 1
+2026-04-06 00:03:10.064 16699-16814 BluetoothService        com.noisefit.luna.dev                D  CMDThread send size = 2
+2026-04-06 00:03:10.081 16699-16814 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 00 00 00 00 01 00 
+2026-04-06 00:03:10.212 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 01 00 00 
+2026-04-06 00:03:10.236 16699-16882 BluetoothService        com.noisefit.luna.dev                I  PROTOBUF_02 write   = 01 00 08 A4 01 62 02 18 00 
+2026-04-06 00:03:10.296 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_02 receive = 00 00 01 00 00 00 
+2026-04-06 00:03:10.300 16699-16854 BluetoothService        com.noisefit.luna.dev                D  PROTOBUF_01 receive = 00 00 00 00 02 00 

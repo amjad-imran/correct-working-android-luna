@@ -2,6 +2,7 @@ package com.noisefit_commans.interfaces.device_data
 
 import com.noisefit_commans.interfaces.QueryCallback
 import com.noisefit_commans.models.ColorfitError
+import com.noisefit_commans.models.DeviceAlertFeature
 import com.noisefit_commans.models.ManualMeasurement
 import com.noisefit_commans.models.SwitchSetting
 import com.noisefit_commans.models.UpdateStatus
@@ -82,6 +83,7 @@ sealed class UpdateDeviceDataCallback {
     class HandWashingUpdated(val success: Boolean) : UpdateDeviceDataCallback()
     class WeatherUpdateRequest() : UpdateDeviceDataCallback()
     class HeartRateAlertUpdated(val success: Boolean) : UpdateDeviceDataCallback()
+    class HeartRateAlertSettingsUpdated(val success: Boolean) : UpdateDeviceDataCallback()
     class AddReminder(val success: Boolean) : UpdateDeviceDataCallback()
     class DeleteReminder(val success: Boolean) : UpdateDeviceDataCallback()
     class Error(val colorfitError: ColorfitError) : UpdateDeviceDataCallback()
@@ -91,6 +93,8 @@ sealed class UpdateDeviceDataCallback {
     class MedicineDataUpdated(val success: Boolean) : UpdateDeviceDataCallback()
     class FactoryReset(val success: Boolean) : UpdateDeviceDataCallback()
     class StressDataUpdated(val success: Boolean) : UpdateDeviceDataCallback()
+    class PressureModeSettingsUpdated(val success: Boolean) : UpdateDeviceDataCallback()
+    class HighStressAlertSettingsUpdated(val success: Boolean) : UpdateDeviceDataCallback()
     class BodyTempDataUpdated(val success: Boolean) : UpdateDeviceDataCallback()
 
     class Pro3WatchFaceUpdate(val watchFace: WatchFace) : UpdateDeviceDataCallback()
@@ -112,6 +116,11 @@ sealed class UpdateDeviceDataCallback {
         UpdateDeviceDataCallback()
 
     class SleepReminderUpdated(val success: Boolean) : UpdateDeviceDataCallback()
+    class Spo2AlertSettingsUpdated(val success: Boolean) : UpdateDeviceDataCallback()
+    class AlertFeatureSupportResolved(
+        val feature: DeviceAlertFeature,
+        val supported: Boolean
+    ) : UpdateDeviceDataCallback()
 }
 
 enum class WorkoutFailReason {

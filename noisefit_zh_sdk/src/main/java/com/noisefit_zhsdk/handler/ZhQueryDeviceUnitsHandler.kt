@@ -24,18 +24,24 @@ import com.noisefit_commans.models.BatteryData
 import com.noisefit_commans.models.CaseInfoData
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.CustomReplyData
+import com.noisefit_commans.models.DeviceAlertFeature
 import com.noisefit_commans.models.DeviceFirmware
 import com.noisefit_commans.models.DeviceType
 import com.noisefit_commans.models.HandWashing
 import com.noisefit_commans.models.HeartRateAlert
+import com.noisefit_commans.models.HeartRateInterval
+import com.noisefit_commans.models.LocalDeviceAlertSettings
+import com.noisefit_commans.models.ScreenlessDeviceSupport
 import com.noisefit_commans.models.ReminderList
 import com.noisefit_commans.models.SedentaryData
+import com.noisefit_commans.models.Spo2Data
 import com.noisefit_commans.models.StockSymbol
 import com.noisefit_commans.models.StockSymbolList
 import com.noisefit_commans.models.SwitchSetting
 import com.noisefit_commans.models.WorkoutRealTimeData
 import com.noisefit_commans.models.WorldClockList
 import com.noisefit_commans.utils.AppLogs
+import com.noisefit_commans.utils.AlertDebugLogger
 import com.noisefit_commans.utils.FileLogsUtils
 import com.noisefit_commans.utils.LOGS
 import com.noisefit_commans.utils.LocationClientClass
@@ -62,6 +68,7 @@ import com.zhapp.ble.bean.MusicInfoBean
 import com.zhapp.ble.bean.NotificationSettingsBean
 import com.zhapp.ble.bean.PressureModeBean
 import com.zhapp.ble.bean.RealTimeBean
+import com.zhapp.ble.bean.RealTimeHeartRateConfigBean
 import com.zhapp.ble.bean.SWBRMonitorBean
 import com.zhapp.ble.bean.SWHRMonitorBean
 import com.zhapp.ble.bean.SWHRVMonitorBean
@@ -91,6 +98,7 @@ import com.zhapp.ble.callback.MicroCallBack
 import com.zhapp.ble.callback.MusicCallBack
 import com.zhapp.ble.callback.QuickReplyCallBack
 import com.zhapp.ble.callback.RealTimeDataCallBack
+import com.zhapp.ble.callback.RealTimeHeartRateCallback
 import com.zhapp.ble.callback.RequestClassicBleConnectStatusCallBack
 import com.zhapp.ble.callback.SettingMenuCallBack
 import com.zhapp.ble.callback.StockCallBack
@@ -245,9 +253,16 @@ constructor(
     }
 
     override fun getSleepReminder() {
+        AlertDebugLogger.log("ZhQuery", "getSleepReminder dispatched")
         ControlBleTools.getInstance().getSleepReminder(object : SendCmdStateListener() {
             override fun onState(p0: SendCmdState?) {
-
+                AlertDebugLogger.log("ZhQuery", "getSleepReminder state=$p0")
+                if (p0 == SendCmdState.NOT_SUPPORT) {
+                    AlertDebugLogger.log(
+                        "ZhQuery",
+                        "getSleepReminder state=NOT_SUPPORT keeping bedtime reminder support unresolved until a set attempt fails"
+                    )
+                }
             }
 
         })
@@ -319,7 +334,120 @@ constructor(
     }
 
     override fun getStressSettings() {
-        ControlBleTools.getInstance().getPressureMode(null)
+        getPressureModeSettings()
+    }
+
+    override fun getPressureModeSettings() {
+        if (isScreenlessDevice()) {
+            AlertDebugLogger.log(
+                "ZhQuery",
+                "getPressureModeSettings dispatched api=SWBRMonitor deviceType=${noiseFitDevice?.deviceType}"
+            )
+            ControlBleTools.getInstance().getSWBRMonitor(object : SendCmdStateListener() {
+                override fun onState(state: SendCmdState?) {
+                    AlertDebugLogger.log("ZhQuery", "getPressureModeSettings api=SWBRMonitor state=$state")
+                    if (state == SendCmdState.NOT_SUPPORT) {
+                        notifyAlertFeatureSupport(DeviceAlertFeature.RELAXATION_PROMPT, false)
+                    }
+                }
+            })
+        } else {
+            AlertDebugLogger.log(
+                "ZhQuery",
+                "getPressureModeSettings dispatched api=PressureMode deviceType=${noiseFitDevice?.deviceType}"
+            )
+            ControlBleTools.getInstance().getPressureMode(object : SendCmdStateListener() {
+                override fun onState(state: SendCmdState?) {
+                    AlertDebugLogger.log("ZhQuery", "getPressureModeSettings api=PressureMode state=$state")
+                    if (state == SendCmdState.NOT_SUPPORT) {
+                        notifyAlertFeatureSupport(DeviceAlertFeature.RELAXATION_PROMPT, false)
+                    }
+                }
+            })
+        }
+    }
+
+    override fun getHeartRateAlertSettings() {
+        if (isScreenlessDevice()) {
+            AlertDebugLogger.log(
+                "ZhQuery",
+                "getHeartRateAlertSettings dispatched api=SWHRMonitor deviceType=${noiseFitDevice?.deviceType}"
+            )
+            ControlBleTools.getInstance().getSWHRMonitor(object : SendCmdStateListener() {
+                override fun onState(state: SendCmdState?) {
+                    AlertDebugLogger.log("ZhQuery", "getHeartRateAlertSettings api=SWHRMonitor state=$state")
+                    if (state == SendCmdState.NOT_SUPPORT) {
+                        notifyAlertFeatureSupport(DeviceAlertFeature.HEART_RATE, false)
+                    }
+                }
+            })
+        } else {
+            AlertDebugLogger.log("ZhQuery", "getHeartRateAlertSettings dispatched api=HeartRateMonitor")
+            ControlBleTools.getInstance().getHeartRateMonitor(object : SendCmdStateListener() {
+                override fun onState(state: SendCmdState?) {
+                    AlertDebugLogger.log("ZhQuery", "getHeartRateAlertSettings api=HeartRateMonitor state=$state")
+                    if (state == SendCmdState.NOT_SUPPORT) {
+                        notifyAlertFeatureSupport(DeviceAlertFeature.HEART_RATE, false)
+                    }
+                }
+            })
+        }
+    }
+
+    override fun getSpo2AlertSettings() {
+        AlertDebugLogger.log("ZhQuery", "getSpo2AlertSettings dispatched")
+        ControlBleTools.getInstance().getSWSPO2Monitor(object : SendCmdStateListener() {
+            override fun onState(state: SendCmdState?) {
+                AlertDebugLogger.log("ZhQuery", "getSpo2AlertSettings state=$state")
+                if (state == SendCmdState.NOT_SUPPORT) {
+                    notifyAlertFeatureSupport(DeviceAlertFeature.SPO2, false)
+                }
+            }
+        })
+    }
+
+    override fun getHighStressAlertSettings() {
+        if (!isScreenlessDevice()) {
+            notifyAlertFeatureSupport(DeviceAlertFeature.HIGH_STRESS_INDEX, false)
+            return
+        }
+        AlertDebugLogger.log(
+            "ZhQuery",
+            "getHighStressAlertSettings dispatched api=SWHRVMonitor deviceType=${noiseFitDevice?.deviceType}"
+        )
+        ControlBleTools.getInstance().getSWHRVMonitor(object : SendCmdStateListener() {
+            override fun onState(state: SendCmdState?) {
+                AlertDebugLogger.log("ZhQuery", "getHighStressAlertSettings api=SWHRVMonitor state=$state")
+                if (state == SendCmdState.NOT_SUPPORT) {
+                    notifyAlertFeatureSupport(DeviceAlertFeature.HIGH_STRESS_INDEX, false)
+                }
+            }
+        })
+    }
+
+    private fun notifyAlertFeatureSupport(feature: DeviceAlertFeature, supported: Boolean) {
+        testQueryDeviceDataCallback?.onQueryDataReceived(
+            QueryCallback.AlertFeatureSupportObtained(
+                feature = feature,
+                supported = supported
+            )
+        )
+    }
+
+    private fun getLocalAlertSettings(): LocalDeviceAlertSettings {
+        return watchDataStore.getLocalDeviceAlertSettings()
+            ?: LocalDeviceAlertSettings(deviceAddress = noiseFitDevice?.address)
+    }
+
+    private fun saveLocalAlertSettings(settings: LocalDeviceAlertSettings) {
+        if (settings.deviceAddress.isNullOrEmpty()) {
+            settings.deviceAddress = noiseFitDevice?.address
+        }
+        watchDataStore.updateLocalDeviceAlertSettings(settings)
+    }
+
+    private fun isScreenlessDevice(): Boolean {
+        return ScreenlessDeviceSupport.isScreenlessDeviceType(noiseFitDevice?.deviceType)
     }
 
     private fun compareMusicData(music1: MusicInfoBean, music2: MusicInfoBean): Boolean {
@@ -669,19 +797,16 @@ constructor(
             }
 
             override fun onHeartRateMonitorResult(bean: HeartRateMonitorBean) {
-                var status = true
-                if (bean.mode == 1) {
-                    status = false
-                }
+                AlertDebugLogger.logValue("ZhQuery", "onHeartRateMonitorResult", bean)
+                val alertSettings = AlertSettingsMapper.fromHeartRateMonitor(bean)
                 testQueryDeviceDataCallback?.onQueryDataReceived(
-                    QueryCallback.HeartRateAlertDataObtained(
-                        HeartRateAlert(
-                            status,
-                            0,
-                            bean.warningValue
-                        )
+                    QueryCallback.HeartRateAlertSettingsObtained(
+                        heartRateAlertSettings = alertSettings.first,
+                        snapshot = alertSettings.second,
+                        workoutSupported = true
                     )
                 )
+                notifyAlertFeatureSupport(DeviceAlertFeature.HEART_RATE, true)
                 AppLogs.sendAppLogs("sent request for heart rate monitor result")
 
             }
@@ -701,23 +826,24 @@ constructor(
             }
 
             override fun onSedentaryReminderResult(bean: CommonReminderBean) {
+                AlertDebugLogger.logValue("ZhQuery", "onSedentaryReminderResult", bean)
 
                 LOGS.d("ZhQueryDeviceUnitHandler", "$bean")
 
-                val idleAlert = SedentaryData(
-                    status = bean.isOn,
-                    interval = bean.frequency / 60,
-                    startHour = bean.startTime.hour,
-                    startMinute = bean.startTime.minuter,
-                    endHour = bean.endTime.hour,
-                    endMinute = bean.endTime.minuter
-                )
+                val idleAlert = AlertSettingsMapper.fromSedentaryReminder(bean)
 
                 testQueryDeviceDataCallback?.onQueryDataReceived(
                     QueryCallback.SedentaryDataObtained(
-                        idleAlert
+                        idleAlert.first
                     )
                 )
+                testQueryDeviceDataCallback?.onQueryDataReceived(
+                    QueryCallback.SedentaryReminderSettingsObtained(
+                        sedentaryData = idleAlert.first,
+                        snapshot = idleAlert.second
+                    )
+                )
+                notifyAlertFeatureSupport(DeviceAlertFeature.SEDENTARY_REMINDER, true)
                 AppLogs.sendAppLogs("sent request for sedentary data result")
 
             }
@@ -806,12 +932,14 @@ constructor(
 
             override fun onSleepReminder(p0: SleepReminder?) {
                 p0?.let {
+                    AlertDebugLogger.logValue("ZhQuery", "onSleepReminder", p0)
 
                     testQueryDeviceDataCallback?.onQueryDataReceived(
                         QueryCallback.SleepReminderObtained(
                             dataConverter.formatSleepReminder(p0)
                         )
                     )
+                    notifyAlertFeatureSupport(DeviceAlertFeature.SLEEP_REMINDER, true)
                     AppLogs.sendAppLogs("sent request for event reminder result")
                 }
 
@@ -887,18 +1015,54 @@ constructor(
             }
 
             override fun onPressureModeResult(p0: PressureModeBean?) {
+                AlertDebugLogger.logValue("ZhQuery", "onPressureModeResult", p0)
+                val pressureModeSettings = AlertSettingsMapper.fromPressureMode(p0)
                 testQueryDeviceDataCallback?.onQueryDataReceived(
                     QueryCallback.StressParamObtained(
                         dataConverter.parseStress(p0)
                     )
                 )
+                testQueryDeviceDataCallback?.onQueryDataReceived(
+                    QueryCallback.PressureModeSettingsObtained(
+                        pressureModeSettings = pressureModeSettings,
+                        snapshot = com.noisefit_commans.models.PressureModeSnapshot(
+                            relaxationWarningValue = 0
+                        )
+                    )
+                )
+                notifyAlertFeatureSupport(DeviceAlertFeature.RELAXATION_PROMPT, true)
             }
 
             override fun onNotificationSetting(p0: NotificationSettingsBean?) {
             }
 
             override fun onContinuousBloodOxygenSetting(p0: ContinuousBloodOxygenSettingsBean?) {
-
+                AlertDebugLogger.logValue("ZhQuery", "onContinuousBloodOxygenSetting", p0)
+                if (p0 == null) {
+                    return
+                }
+                watchDataStore.updateBloodOxygenStatus(
+                    Pair(
+                        p0.mode == SettingMenuCallBack.ContinuousBloodOxygenMode.AUTO.mode,
+                        p0.frequency
+                    )
+                )
+                val settings = getLocalAlertSettings()
+                settings.snapshots.screenlessSpo2Monitoring =
+                    AlertSettingsMapper.fromScreenlessSpo2Monitoring(p0)
+                saveLocalAlertSettings(settings)
+                testQueryDeviceDataCallback?.onQueryDataReceived(
+                    QueryCallback.Spo2SettingsObtained(
+                        Spo2Data(
+                            status = p0.mode == SettingMenuCallBack.ContinuousBloodOxygenMode.AUTO.mode,
+                            interval = p0.frequency,
+                            startHour = p0.startTime?.hour ?: AlertSettingsMapper.DEFAULT_SCREENLESS_START_HOUR,
+                            startMinute = p0.startTime?.minuter ?: AlertSettingsMapper.DEFAULT_SCREENLESS_START_MINUTE,
+                            endHour = p0.endTime?.hour ?: AlertSettingsMapper.DEFAULT_SCREENLESS_END_HOUR,
+                            endMinute = p0.endTime?.minuter ?: AlertSettingsMapper.DEFAULT_SCREENLESS_END_MINUTE
+                        )
+                    )
+                )
             }
 
             override fun onFindWearSettings(p0: FindWearSettingsBean?) {
@@ -921,15 +1085,51 @@ constructor(
             }
 
             override fun onSWSPO2Monitor(p0: SWSPO2MonitorBean?) {
+                AlertDebugLogger.logValue("ZhQuery", "onSWSPO2Monitor", p0)
+                testQueryDeviceDataCallback?.onQueryDataReceived(
+                    QueryCallback.Spo2AlertSettingsObtained(
+                        spo2AlertSettings = AlertSettingsMapper.fromSpo2Monitor(p0)
+                    )
+                )
+                notifyAlertFeatureSupport(DeviceAlertFeature.SPO2, true)
             }
 
             override fun onSWHRVMonitor(p0: SWHRVMonitorBean?) {
+                AlertDebugLogger.logValue("ZhQuery", "onSWHRVMonitor", p0)
+                testQueryDeviceDataCallback?.onQueryDataReceived(
+                    QueryCallback.HighStressAlertSettingsObtained(
+                        highStressAlertSettings = AlertSettingsMapper.fromHighStressMonitor(p0)
+                    )
+                )
+                notifyAlertFeatureSupport(DeviceAlertFeature.HIGH_STRESS_INDEX, true)
             }
 
             override fun onSWBRMonitor(p0: SWBRMonitorBean?) {
+                AlertDebugLogger.logValue("ZhQuery", "onSWBRMonitor", p0)
+                val pressureMode = AlertSettingsMapper.fromScreenlessBreathingRelaxation(p0)
+                testQueryDeviceDataCallback?.onQueryDataReceived(
+                    QueryCallback.PressureModeSettingsObtained(
+                        pressureModeSettings = pressureMode.first,
+                        snapshot = pressureMode.second
+                    )
+                )
+                notifyAlertFeatureSupport(DeviceAlertFeature.RELAXATION_PROMPT, true)
             }
 
             override fun onSWHRMonitor(p0: SWHRMonitorBean?) {
+                AlertDebugLogger.logValue("ZhQuery", "onSWHRMonitor", p0)
+                testQueryDeviceDataCallback?.onQueryDataReceived(
+                    QueryCallback.HeartRateAlertSettingsObtained(
+                        heartRateAlertSettings = AlertSettingsMapper.fromScreenlessHeartRateMonitor(p0),
+                        snapshot = com.noisefit_commans.models.HeartRateAlertSnapshot(
+                            mode = 0,
+                            frequency = 0,
+                            continuousHeartRateMode = 0
+                        ),
+                        workoutSupported = false
+                    )
+                )
+                notifyAlertFeatureSupport(DeviceAlertFeature.HEART_RATE, true)
             }
 
 
@@ -1045,13 +1245,65 @@ constructor(
             }
 
             override fun onRingWearingStatus(p0: Int) {
-
+                AlertDebugLogger.log("ZhQuery", "onRingWearingStatus status=$p0")
+                testQueryDeviceDataCallback?.onQueryDataReceived(
+                    QueryCallback.RingWearingStatusObtained(
+                        com.noisefit_commans.models.WearDetectionStatus(
+                            isWorn = p0 == 1,
+                            lastUpdatedAt = System.currentTimeMillis()
+                        )
+                    )
+                )
+                notifyAlertFeatureSupport(DeviceAlertFeature.WEAR_DETECTION, true)
             }
         })
 
         /**
          * 设备快捷回复相关
          */
+
+        CallBackUtils.realTimeHeartRateCallback = object : RealTimeHeartRateCallback {
+            override fun onConfigResult(configBean: RealTimeHeartRateConfigBean) {
+                AlertDebugLogger.logValue("ZhQuery", "onRealTimeHeartRateConfig", configBean)
+                watchDataStore.updateHeartRateInterval(
+                    HeartRateInterval(
+                        status = configBean.status,
+                        interval = configBean.frequency,
+                        startTime = "00:00",
+                        endTime = "23:59"
+                    )
+                )
+                val settings = getLocalAlertSettings()
+                settings.snapshots.screenlessHeartRateRealtime =
+                    AlertSettingsMapper.fromScreenlessHeartRateRealtime(configBean)
+                saveLocalAlertSettings(settings)
+                testQueryDeviceDataCallback?.onQueryDataReceived(
+                    QueryCallback.HeartRateIntervalObtained(
+                        HeartRateInterval(
+                            status = configBean.status,
+                            interval = configBean.frequency,
+                            startTime = "00:00",
+                            endTime = "23:59"
+                        )
+                    )
+                )
+            }
+
+            override fun onDataResult(timeMillis: Long, hrValue: Int) {
+                AlertDebugLogger.log(
+                    "ZhQuery",
+                    "onRealTimeHeartRateSample timeMillis=$timeMillis hrValue=$hrValue"
+                )
+                if (hrValue > 0) {
+                    testQueryDeviceDataCallback?.onQueryDataReceived(
+                        QueryCallback.RealTimeHeartRateSampleObtained(
+                            value = hrValue,
+                            timeStamp = timeMillis
+                        )
+                    )
+                }
+            }
+        }
 
         CallBackUtils.quickReplyCallBack = object : QuickReplyCallBack {
             override fun onQuickReplyResult(data: java.util.ArrayList<String>) {
@@ -1427,15 +1679,82 @@ constructor(
     }
 
     override fun getHeartRateInterval() {
-
+        if (!isScreenlessDevice()) {
+            return
+        }
+        AlertDebugLogger.log(
+            "ZhQuery",
+            "getHeartRateInterval dispatched api=RealTimeHeartRateConfig deviceType=${noiseFitDevice?.deviceType}"
+        )
+        ControlBleTools.getInstance().getRealTimeHeartRateConfig(object : SendCmdStateListener() {
+            override fun onState(state: SendCmdState?) {
+                AlertDebugLogger.log("ZhQuery", "getHeartRateInterval api=RealTimeHeartRateConfig state=$state")
+                if (state == SendCmdState.NOT_SUPPORT) {
+                    AlertDebugLogger.log(
+                        "ZhQuery",
+                        "getHeartRateInterval api=RealTimeHeartRateConfig state=NOT_SUPPORT keeping heart-rate threshold alerts supported"
+                    )
+                }
+            }
+        })
     }
 
     override fun getHeartRateAlert() {
-        ControlBleTools.getInstance().getHeartRateMonitor(null)
+        getHeartRateAlertSettings()
     }
 
     override fun getSedentaryData() {
-        ControlBleTools.getInstance().getSedentaryReminder(null)
+        ControlBleTools.getInstance().getSedentaryReminder(object : SendCmdStateListener() {
+            override fun onState(state: SendCmdState?) {
+                if (state == SendCmdState.NOT_SUPPORT) {
+                    notifyAlertFeatureSupport(DeviceAlertFeature.SEDENTARY_REMINDER, false)
+                }
+            }
+        })
+    }
+
+    override fun getRingWearingStatus() {
+        AlertDebugLogger.log(
+            "ZhQuery",
+            "getRingWearingStatus dispatched deviceType=${noiseFitDevice?.deviceType}"
+        )
+        ControlBleTools.getInstance().getRingWearingStatus(object : SendCmdStateListener() {
+            override fun onState(state: SendCmdState?) {
+                AlertDebugLogger.log("ZhQuery", "getRingWearingStatus state=$state")
+                if (state == SendCmdState.NOT_SUPPORT) {
+                    if (ScreenlessDeviceSupport.isScreenlessDeviceType(noiseFitDevice?.deviceType)) {
+                        AlertDebugLogger.log(
+                            "ZhQuery",
+                            "getRingWearingStatus state=NOT_SUPPORT keeping screenless wear detection optimistic"
+                        )
+                    } else {
+                        notifyAlertFeatureSupport(DeviceAlertFeature.WEAR_DETECTION, false)
+                    }
+                }
+            }
+        })
+    }
+
+    override fun getSpo2Settings() {
+        if (!isScreenlessDevice()) {
+            getSpo2AlertSettings()
+            return
+        }
+        AlertDebugLogger.log(
+            "ZhQuery",
+            "getSpo2Settings dispatched api=ContinuousBloodOxygenSettings deviceType=${noiseFitDevice?.deviceType}"
+        )
+        ControlBleTools.getInstance().getContinuousBloodOxygenSettings(object : SendCmdStateListener() {
+            override fun onState(state: SendCmdState?) {
+                AlertDebugLogger.log("ZhQuery", "getSpo2Settings api=ContinuousBloodOxygenSettings state=$state")
+                if (state == SendCmdState.NOT_SUPPORT) {
+                    AlertDebugLogger.log(
+                        "ZhQuery",
+                        "getSpo2Settings api=ContinuousBloodOxygenSettings state=NOT_SUPPORT keeping SpO2 threshold alerts supported"
+                    )
+                }
+            }
+        })
     }
 
     override fun getDeviceUnits() {

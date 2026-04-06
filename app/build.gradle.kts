@@ -268,6 +268,8 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.truth)
+    testImplementation(project(Modules.noisefit_zh_sdk))
+    testImplementation(project(Modules.noisefit_libraries_zh))
 
 
 

@@ -41,7 +41,9 @@ import com.zhapp.ble.bean.AutoActiveSportBean
 import com.zhapp.ble.bean.AutoSportDataBean
 import com.zhapp.ble.bean.ContinuousBloodOxygenBean
 import com.zhapp.ble.bean.ContinuousHeartRateBean
+import com.zhapp.ble.bean.ContinuousHeartRateSportFiveMinAfterBean
 import com.zhapp.ble.bean.ContinuousPressureBean
+import com.zhapp.ble.bean.ContinuousRRIDBean
 import com.zhapp.ble.bean.ContinuousTemperatureBean
 import com.zhapp.ble.bean.DailyBean
 import com.zhapp.ble.bean.DevSportInfoBean
@@ -62,6 +64,8 @@ import com.zhapp.ble.bean.RingSleepNapBean
 import com.zhapp.ble.bean.RingSleepResultBean
 import com.zhapp.ble.bean.RingStressDetectionBean
 import com.zhapp.ble.bean.SleepBean
+import com.zhapp.ble.bean.SleepHRVBean
+import com.zhapp.ble.bean.SleepRRIBean
 import com.zhapp.ble.bean.SportRequestBean
 import com.zhapp.ble.bean.SportResponseBean
 import com.zhapp.ble.bean.SportStatusBean
@@ -126,6 +130,7 @@ constructor(
                 LOGS.d(TAG, "onDevSportInfo $data")
                 //userActivityDataCallbacks?.onUserActivityDataReceived(UserActivityCallback.RingUserWorkoutData(Gson().toJson(data)))
                 AppLogs.sendAppLogs("RECORD_WORKOUT received workout $data")
+                watchDataStore.testSaveRawDevSportJson(Gson().toJson(data))
                 sportModleInfoList.add(data)
             }
 
@@ -158,6 +163,7 @@ constructor(
 
 
                 AppLogs.sendAppLogs("RECORD_WORKOUT  Activity Sync:: success Size: ${sportModleInfoList.size}")
+                watchDataStore.testSaveRawFitnessSportIdsJson(Gson().toJson(sportModleInfoList))
 
                 LOGS.i(TAG, "Activity Sync:: success Size: ${sportModleInfoList.size}")
 
@@ -305,6 +311,7 @@ constructor(
         //val dummyData =Gson().fromJson<MutableList<AutoSportDataBean>>("[{\"autoSportDuration\":549,\"autoSportIntensity\":1,\"autoSportKcal\":76,\"autoSportStartTime\":1697782504,\"autoSportSteps\":1090,\"autoSportType\":1,\"hrData\":[]}]")
 
         AppLogs.sendAppLogs("AutoSportDataCallBack ${Gson().toJson(p0)}")
+        watchDataStore.testSaveRawAutoSportJson(Gson().toJson(p0))
         colorFitDevice?.let {
             userActivityDataCallbacks?.onUserActivityDataReceived(
                 UserActivityCallback.AutoSportDataObtained(
@@ -314,6 +321,24 @@ constructor(
                     )
                 )
             )
+        }
+    }
+
+    private fun saveRawSdkPayload(
+        label: String,
+        raw: String?,
+        saver: (String?) -> Unit
+    ) {
+        LOGS.d(TAG, "$label : $raw")
+        AppLogs.sendAppLogs("$TRACK_TAG $label : $raw")
+        saver(raw)
+    }
+
+    private fun requestDailyHistoryData(mode: Int?) {
+        if (mode == null) {
+            ControlBleTools.getInstance().getDailyHistoryData(null)
+        } else {
+            ControlBleTools.getInstance().getDailyHistoryData(mode, null)
         }
     }
 
@@ -407,7 +432,11 @@ constructor(
             }
 
             override fun onContinuousHeartRateData(data: ContinuousHeartRateBean) {
-                LOGS.d(TAG, "onContinuousHeartRateData : $data ${data.date}")
+                saveRawSdkPayload(
+                    label = "onContinuousHeartRateData",
+                    raw = Gson().toJson(data),
+                    saver = watchDataStore::testSaveRawContinuousHeartRateJson
+                )
 
                 if (colorFitDevice?.deviceType.equals(DeviceType.NOISEFIT_LUNA.deviceType, true)
                     || colorFitDevice?.deviceType.equals(DeviceType.LUNA_BAND.deviceType, true)) {
@@ -461,7 +490,11 @@ constructor(
              * HRV
              */
             override fun onContinuousPressureData(data: ContinuousPressureBean) {
-                LOGS.d(TAG, "onOfflinePressureData : $data ${data.date}")
+                saveRawSdkPayload(
+                    label = "onContinuousPressureData",
+                    raw = Gson().toJson(data),
+                    saver = watchDataStore::testSaveRawContinuousPressureJson
+                )
                 if (colorFitDevice?.deviceType.equals(DeviceType.NOISEFIT_LUNA.deviceType, true)
                     || colorFitDevice?.deviceType.equals(DeviceType.LUNA_BAND.deviceType, true)) {
                     userActivityDataCallbacks?.onUserActivityDataReceived(
@@ -478,6 +511,38 @@ constructor(
                 }
                 AppLogs.sendAppLogs("$TRACK_TAG onOfflinePressureData : $data ${data.date}")
                 AppLogs.sendAppLogs("Sent Offline Pressure Data")
+            }
+
+            override fun onSleepRRIData(data: SleepRRIBean) {
+                saveRawSdkPayload(
+                    label = "onSleepRRIData",
+                    raw = Gson().toJson(data),
+                    saver = watchDataStore::testSaveRawSleepRriJson
+                )
+            }
+
+            override fun onSleepHRVData(data: SleepHRVBean) {
+                saveRawSdkPayload(
+                    label = "onSleepHRVData",
+                    raw = Gson().toJson(data),
+                    saver = watchDataStore::testSaveRawSleepHrvJson
+                )
+            }
+
+            override fun onContinuousHeartRateSportFiveMinAfter(data: ContinuousHeartRateSportFiveMinAfterBean) {
+                saveRawSdkPayload(
+                    label = "onContinuousHeartRateSportFiveMinAfter",
+                    raw = Gson().toJson(data),
+                    saver = watchDataStore::testSaveRawSportHeartRateAfterJson
+                )
+            }
+
+            override fun onContinuousRRIData(data: ContinuousRRIDBean) {
+                saveRawSdkPayload(
+                    label = "onContinuousRRIData",
+                    raw = Gson().toJson(data),
+                    saver = watchDataStore::testSaveRawContinuousRriJson
+                )
             }
 
             override fun onOfflinePressureData(data: OfflinePressureDataBean) {
@@ -566,6 +631,7 @@ constructor(
             override fun onRingTodayRespiratoryRateData(p0: TodayRespiratoryRateData?) {
                 LOGS.d(TAG, "onRingTodayRespiratoryRateData : $p0")
                 AppLogs.sendAppLogs("$TRACK_TAG onRingTodayRespiratoryRateData : $p0")
+                watchDataStore.testSaveRawRespiratoryJson(Gson().toJson(p0))
                 if (p0 == null) return
 
                 userActivityDataCallbacks?.onUserActivityDataReceived(
@@ -661,6 +727,7 @@ constructor(
                 )*/
 
                 AppLogs.sendAppLogs("onRingAutoActiveSportData ${Gson().toJson(p0)}")
+                watchDataStore.testSaveRawAutoActiveSportJson(Gson().toJson(p0))
                 if (p0 == null) return
 
                 colorFitDevice?.let {
@@ -699,9 +766,12 @@ constructor(
 
 
     override fun syncUserActivity(date: String, isRefresh: Boolean) {
-        try {
+        syncUserActivityByMode(date, null)
+    }
 
-            ControlBleTools.getInstance().getDailyHistoryData(null)
+    override fun syncUserActivityByMode(date: String, mode: Int?) {
+        try {
+            requestDailyHistoryData(mode)
             ControlBleTools.getInstance().getAutoSportData(null)
             ControlBleTools.getInstance().getFitnessSportIdsData(null)
 

@@ -6,6 +6,7 @@ import com.noisefit_commans.models.Contact
 import com.noisefit_commans.models.CustomReplyData
 import com.noisefit_commans.models.HandWashing
 import com.noisefit_commans.models.HeartRateInterval
+import com.noisefit_commans.models.LocalDeviceAlertSettings
 import com.noisefit_commans.models.LocationDataModel
 import com.noisefit_commans.models.SedentaryData
 import com.noisefit_commans.models.WatchFirmwareDetails
@@ -133,6 +134,31 @@ interface WatchDataStore {
     fun testSaveStressData(data: String?)
     fun testGetStressData(): String?
 
+    fun testSaveRawDevSportJson(data: String?)
+    fun testGetRawDevSportJson(): String?
+    fun testSaveRawAutoSportJson(data: String?)
+    fun testGetRawAutoSportJson(): String?
+    fun testSaveRawAutoActiveSportJson(data: String?)
+    fun testGetRawAutoActiveSportJson(): String?
+    fun testSaveRawFitnessSportIdsJson(data: String?)
+    fun testGetRawFitnessSportIdsJson(): String?
+
+    fun testSaveRawRespiratoryJson(data: String?)
+    fun testGetRawRespiratoryJson(): String?
+
+    fun testSaveRawContinuousHeartRateJson(data: String?)
+    fun testGetRawContinuousHeartRateJson(): String?
+    fun testSaveRawContinuousPressureJson(data: String?)
+    fun testGetRawContinuousPressureJson(): String?
+    fun testSaveRawSleepRriJson(data: String?)
+    fun testGetRawSleepRriJson(): String?
+    fun testSaveRawSleepHrvJson(data: String?)
+    fun testGetRawSleepHrvJson(): String?
+    fun testSaveRawContinuousRriJson(data: String?)
+    fun testGetRawContinuousRriJson(): String?
+    fun testSaveRawSportHeartRateAfterJson(data: String?)
+    fun testGetRawSportHeartRateAfterJson(): String?
+
     fun updateFitnessAge(age: Int)
     fun getFitnessAge(): Int
     fun updateEnergyConsumption(value: Int)
@@ -140,6 +166,9 @@ interface WatchDataStore {
 
     fun updateWorkout(value: RecordedWorkoutData)
     fun getWorkout(): RecordedWorkoutData?
+
+    fun updateLocalDeviceAlertSettings(data: LocalDeviceAlertSettings?)
+    fun getLocalDeviceAlertSettings(): LocalDeviceAlertSettings?
 }
 
 enum class ChargingNotificationLevel {

@@ -38,6 +38,7 @@ import com.noisefit_commans.interfaces.data.UserActivityCallback
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceAction
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.location.LocationUtils
+import com.noisefit_commans.models.AlertEvent
 import com.noisefit_commans.models.CaseInfoData
 import com.noisefit_commans.models.ColorFitDevice
 import com.noisefit_commans.models.Gender
@@ -97,6 +98,7 @@ class SessionManager
      * Get app Foreground status
      */
     var appInForeground = true
+    var alertRealtimeMonitoringActive = false
 
     /**
      * For handling update firmware check via latest version
@@ -199,6 +201,7 @@ class SessionManager
 
     private val _userActivityAction = MutableLiveData<UserActivityAction>()
     private val _userActivityCallback = MutableLiveData<Event<UserActivityCallback>>()
+    private val _alertMirrorEvent = MutableLiveData<Event<AlertEvent>>()
     private val _reloadNotification = MutableLiveData<Event<Boolean>>()
 //    private val _dateChanged = MutableLiveData<Event<Boolean>>()
 
@@ -263,6 +266,9 @@ class SessionManager
     val userActivityCallback: LiveData<Event<UserActivityCallback>>
         get() = _userActivityCallback
 
+    val alertMirrorEvent: LiveData<Event<AlertEvent>>
+        get() = _alertMirrorEvent
+
     val sportsModeRequest: LiveData<SportsModeRequest?>
         get() = _sportsModeRequest
 
@@ -288,6 +294,7 @@ class SessionManager
 
     fun clearSessionManager() {
         forceOtaResponseRing = null
+        alertRealtimeMonitoringActive = false
         _connectedDeviceRing.postValue(null)
         _connectState.postValue(ConnectState.UnPaired())
         _connectStateRing.postValue(ConnectState.UnPaired())
@@ -412,6 +419,12 @@ class SessionManager
     fun setUserActivityCallback(callback: UserActivityCallback) {
         GlobalScope.launch(Main) {
             _userActivityCallback.value = Event(callback)
+        }
+    }
+
+    fun postAlertMirrorEvent(event: AlertEvent) {
+        GlobalScope.launch(Main) {
+            _alertMirrorEvent.value = Event(event)
         }
     }
 
@@ -763,7 +776,23 @@ class SessionManager
                 return@launch
             }
             sendUpdateQueryAction(
-                UpdateDeviceAction.SetRealTimeDataState(false)
+                UpdateDeviceAction.SetRealTimeDataState(alertRealtimeMonitoringActive)
+            )
+        }
+    }
+
+    fun updateAlertRealtimeMonitoringState(active: Boolean) {
+        if (alertRealtimeMonitoringActive == active) {
+            return
+        }
+        alertRealtimeMonitoringActive = active
+        GlobalScope.launch(Main) {
+            val isDeviceConnected = connectStateRing.value is ConnectState.ConnectSuccess
+            if (!isDeviceConnected) {
+                return@launch
+            }
+            sendUpdateQueryAction(
+                UpdateDeviceAction.SetRealTimeDataState(appInForeground || alertRealtimeMonitoringActive)
             )
         }
     }

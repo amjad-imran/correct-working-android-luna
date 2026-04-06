@@ -1,4 +1,4 @@
 
 
 configurations.maybeCreate("default")
-artifacts.add("default", file("./zh_app/ZH_SDK_20260204_V2.3.0.aar"))
+artifacts.add("default", file("./zh_app/ZH_SDK_20260402_V2.3.1.aar"))

@@ -12,16 +12,20 @@ import com.noisefit_commans.models.DeviceUnits
 import com.noisefit_commans.models.DiyCustomWatchFace
 import com.noisefit_commans.models.DoNotDisturb
 import com.noisefit_commans.models.HandWashing
+import com.noisefit_commans.models.HighStressAlertSettings
 import com.noisefit_commans.models.HeartRateAlert
+import com.noisefit_commans.models.HeartRateAlertSettings
 import com.noisefit_commans.models.HeartRateInterval
 import com.noisefit_commans.models.IncomingCall
 import com.noisefit_commans.models.Language
 import com.noisefit_commans.models.ManualMeasureType
 import com.noisefit_commans.models.MenstrualData
+import com.noisefit_commans.models.PressureModeSettings
 import com.noisefit_commans.models.ReminderList
 import com.noisefit_commans.models.SOSContact
 import com.noisefit_commans.models.SedentaryData
 import com.noisefit_commans.models.SleepReminder
+import com.noisefit_commans.models.Spo2AlertSettings
 import com.noisefit_commans.models.Spo2Data
 import com.noisefit_commans.models.SportsModeList
 import com.noisefit_commans.models.StartDayOfWeek
@@ -111,6 +115,8 @@ sealed class UpdateDeviceAction {
     class UpdateAPGSData(val data1: Uri, val data2: Uri) : UpdateDeviceAction()
     class OnWeatherUpdateRequest() : UpdateDeviceAction()
     class SetHeartRateAlert(val heartRateAlert: HeartRateAlert) : UpdateDeviceAction()
+    class SetHeartRateAlertSettings(val heartRateAlertSettings: HeartRateAlertSettings) :
+        UpdateDeviceAction()
     class AddReminder(val reminder: ReminderList.Reminder) : UpdateDeviceAction()
     class OnAddReminder(success: Boolean) : UpdateDeviceAction()
     class DeleteAlarm(alarm: AlarmsList) : UpdateDeviceAction()
@@ -123,7 +129,12 @@ sealed class UpdateDeviceAction {
     class SetMedicineReminder(val sedentaryData: SedentaryData) : UpdateDeviceAction()
     object SetFactoryReset : UpdateDeviceAction()
     class SetStressData(val sedentaryData: SedentaryData) : UpdateDeviceAction()
+    class SetPressureModeSettings(val pressureModeSettings: PressureModeSettings) :
+        UpdateDeviceAction()
     class SetSpo2Settings(val spo2Data: Spo2Data) : UpdateDeviceAction()
+    class SetSpo2AlertSettings(val spo2AlertSettings: Spo2AlertSettings) : UpdateDeviceAction()
+    class SetHighStressAlertSettings(val highStressAlertSettings: HighStressAlertSettings) :
+        UpdateDeviceAction()
 
     class GetWatchFacePro3(type: String) : UpdateDeviceAction()
     class SetSportSyncParamPro3() : UpdateDeviceAction()

@@ -58,9 +58,14 @@ import com.noisefit_commans.data.enums.ServiceState
 import com.noisefit_commans.data.local.abstraction.DataStoredInterface
 import com.noisefit_commans.data.local.abstraction.RingDataStore
 import com.noisefit_commans.data.local.abstraction.WatchDataStore
+import com.noisefit_commans.data.model.OreoBloodOxygenBreakup
+import com.noisefit_commans.data.model.OreoHeartRate
+import com.noisefit_commans.data.model.OreoStressDataBreakup
+import com.noisefit_commans.enums.ApplicationType
 import com.noisefit_commans.data.model.RecordedWorkoutData
 import com.noisefit_commans.data.model.User
 import com.noisefit_commans.interfaces.IQueryDataCallback
+import com.noisefit_commans.interfaces.QueryAction
 import com.noisefit_commans.interfaces.QueryCallback
 import com.noisefit_commans.interfaces.connection.BindState
 import com.noisefit_commans.interfaces.connection.ConnectState
@@ -76,10 +81,20 @@ import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataActions
 import com.noisefit_commans.interfaces.device_data.UpdateDeviceDataCallback
 import com.noisefit_commans.location.LocationService2
 import com.noisefit_commans.location.LocationUtils2
+import com.noisefit_commans.models.AlertSettingsStateUtils
+import com.noisefit_commans.models.AlertSettingsDeviceDefaults
+import com.noisefit_commans.models.AlertEvent
+import com.noisefit_commans.models.AlertEventSource
+import com.noisefit_commans.models.AppNotification
 import com.noisefit_commans.models.ColorFitDevice
+import com.noisefit_commans.models.DeviceAlertFeature
 import com.noisefit_commans.models.DeviceFirmware
 import com.noisefit_commans.models.DeviceUnits
+import com.noisefit_commans.models.LocalDeviceAlertSettings
 import com.noisefit_commans.models.ManualMeasureType
+import com.noisefit_commans.models.ScreenlessDeviceSupport
+import com.noisefit_commans.models.SedentaryData
+import com.noisefit_commans.models.SleepReminder
 import com.noisefit_commans.models.StepsData
 import com.noisefit_commans.models.TimeFormat
 import com.noisefit_commans.models.TimeFormats
@@ -87,6 +102,7 @@ import com.noisefit_commans.models.UpdateStatus
 import com.noisefit_commans.models.WatchFirmwareDetails
 import com.noisefit_commans.ui.tryCatch
 import com.noisefit_commans.utils.AppLogs
+import com.noisefit_commans.utils.AlertDebugLogger
 import com.noisefit_commans.utils.CallHandler
 import com.noisefit_commans.utils.DateFormats
 import com.noisefit_commans.utils.Event
@@ -99,6 +115,10 @@ import com.oreo.data.db.OreoDataBase
 import com.oreo.data.db.abstaction.OreoUserHealthDataDataSource
 import com.oreo.data.repository.abstraction.OreoSyncRepository
 import com.oreo.data.repository.abstraction.OreoUserActivityRepository
+import com.oreo.alerts.AlertMirrorEvaluator
+import com.oreo.alerts.MirrorCondition
+import com.oreo.alerts.MirrorConditionState
+import com.oreo.alerts.WearStatusResolver
 import com.oreo.receiver.workManager.HealthOverviewDataType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -117,10 +137,30 @@ import java.util.TimerTask
 import java.util.concurrent.ScheduledFuture
 import javax.inject.Inject
 
+private const val ALERT_MONITOR_TICK_MS = 30_000L
+private const val ALERT_REPEAT_HEART_RATE_MS = 3 * 60_000L
+private const val ALERT_REPEAT_SPO2_MS = 10 * 60_000L
+private const val ALERT_REPEAT_HIGH_STRESS_MS = 10 * 60_000L
+private const val ALERT_MANUAL_MEASUREMENT_INTERVAL_MS = 5 * 60_000L
+private const val ALERT_MANUAL_MEASUREMENT_TIMEOUT_MS = 90_000L
+private const val ALERT_WEAR_PROBE_INTERVAL_MS = 60_000L
+
 @AndroidEntryPoint
 class RingConnectionService
 @Inject
 constructor() : LifecycleService() {
+
+    private enum class AlertSyncPhase {
+        SNAPSHOT_QUERY,
+        UPDATE_SENT,
+        VERIFY_QUERY
+    }
+
+    private data class AlertSyncState(
+        val feature: DeviceAlertFeature,
+        val phase: AlertSyncPhase,
+        val operationId: Long
+    )
 
     private var timer: Timer? = null
     private val executor: Executor = Executor()
@@ -177,6 +217,20 @@ constructor() : LifecycleService() {
 
     @Inject
     lateinit var sessionManager: SessionManager
+
+    private var alertSyncState: AlertSyncState? = null
+    private val blockedAlertSyncFeatures = linkedSetOf<DeviceAlertFeature>()
+    private val alertOperationIds = mutableMapOf<DeviceAlertFeature, Long>()
+    private val alertMonitorHandler = Handler(Looper.getMainLooper())
+    private val alertMirrorStates = mutableMapOf<MirrorCondition, MirrorConditionState>()
+    private val alertMeasurementRequests = mutableMapOf<ManualMeasureType, Long>()
+    private var recentWearEvidenceAt: Long? = null
+    private var recentWearEvidenceValue: Int? = null
+    private var lastHeartRateSampleAt = 0L
+    private var lastSpo2SampleAt = 0L
+    private var lastStressSampleAt = 0L
+    private var lastWearProbeAt = 0L
+    private val alertMonitorRunnable = Runnable { runAlertMonitorTick() }
 
     @Inject
     lateinit var connectionHandler: ConnectionHandler
@@ -896,6 +950,7 @@ constructor() : LifecycleService() {
     }
 
     private fun onRingDisconnected() {
+        stopAlertMonitor()
         GlobalScope.launch(Dispatchers.IO) {
             //todo handle is disconnected location already sent
             LOGS.d("sdfkjsk onRingDisconnected")
@@ -906,8 +961,774 @@ constructor() : LifecycleService() {
 
     private fun setRealTimeDataState() {
         sessionManager.sendUpdateQueryAction(
-            UpdateDeviceAction.SetRealTimeDataState(sessionManager.appInForeground)
+            UpdateDeviceAction.SetRealTimeDataState(
+                sessionManager.appInForeground || sessionManager.alertRealtimeMonitoringActive
+            )
         )
+    }
+
+    private fun resetAlertSyncState() {
+        AlertDebugLogger.log("AlertService", "resetAlertSyncState")
+        alertSyncState = null
+        blockedAlertSyncFeatures.clear()
+    }
+
+    private fun currentAlertOperationId(feature: DeviceAlertFeature): Long {
+        return alertOperationIds[feature] ?: 0L
+    }
+
+    private fun ensureAlertOperationId(feature: DeviceAlertFeature): Long {
+        val current = currentAlertOperationId(feature)
+        if (current > 0L) {
+            return current
+        }
+        alertOperationIds[feature] = 1L
+        return 1L
+    }
+
+    private fun nextAlertOperationId(feature: DeviceAlertFeature): Long {
+        val next = currentAlertOperationId(feature) + 1L
+        alertOperationIds[feature] = next
+        return next
+    }
+
+    private fun isStaleAlertResponse(feature: DeviceAlertFeature, syncState: AlertSyncState?): Boolean {
+        if (syncState == null || syncState.feature != feature) {
+            return false
+        }
+        val currentOperationId = currentAlertOperationId(feature)
+        return currentOperationId > 0L && syncState.operationId != currentOperationId
+    }
+
+    private fun onAlertStaleResponse(feature: DeviceAlertFeature, syncState: AlertSyncState) {
+        AlertDebugLogger.logAlertFlow(
+            "AlertService",
+            feature,
+            syncState.operationId,
+            "stale_response",
+            "phase=${syncState.phase} current_op_id=${currentAlertOperationId(feature)}"
+        )
+        if (alertSyncState?.feature == feature && alertSyncState?.operationId == syncState.operationId) {
+            alertSyncState = null
+        }
+        syncPendingAlertSettings()
+    }
+
+    private fun getCurrentAlertSettings(): LocalDeviceAlertSettings? {
+        val localSettings = watchDataStore.getLocalDeviceAlertSettings() ?: return null
+        val currentAddress = ringDataStore.getRingDevice()?.address ?: return localSettings
+        if (localSettings.deviceAddress.isNullOrEmpty()) {
+            localSettings.deviceAddress = currentAddress
+            watchDataStore.updateLocalDeviceAlertSettings(localSettings)
+            return AlertSettingsDeviceDefaults.apply(localSettings, ringDataStore.getRingDevice()?.deviceType)
+        }
+        if (localSettings.deviceAddress == currentAddress) {
+            return AlertSettingsDeviceDefaults.apply(localSettings, ringDataStore.getRingDevice()?.deviceType)
+        }
+        return null
+    }
+
+    private fun saveAlertSettings(settings: LocalDeviceAlertSettings) {
+        if (settings.deviceAddress.isNullOrEmpty()) {
+            settings.deviceAddress = ringDataStore.getRingDevice()?.address
+        }
+        AlertSettingsDeviceDefaults.apply(settings, ringDataStore.getRingDevice()?.deviceType)
+        AlertDebugLogger.logValue("AlertService", "saveAlertSettings", settings)
+        watchDataStore.updateLocalDeviceAlertSettings(settings)
+        updateAlertMonitorState(settings)
+    }
+
+    private fun updateAlertMonitorState(settings: LocalDeviceAlertSettings? = getCurrentAlertSettings()) {
+        val shouldRun = shouldRunAlertMonitor(settings)
+        AlertDebugLogger.log(
+            "AlertService",
+            "updateAlertMonitorState shouldRun=$shouldRun connected=${sessionManager.connectStateRing.value is ConnectState.ConnectSuccess}"
+        )
+        settings?.let(::pruneDisabledMirrorStates)
+        sessionManager.updateAlertRealtimeMonitoringState(shouldRun)
+        if (shouldRun) {
+            alertMonitorHandler.removeCallbacks(alertMonitorRunnable)
+            alertMonitorHandler.post(alertMonitorRunnable)
+        } else {
+            stopAlertMonitor()
+        }
+    }
+
+    private fun shouldRunAlertMonitor(settings: LocalDeviceAlertSettings?): Boolean {
+        if (settings == null || sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
+            return false
+        }
+        return (settings.isSupported(DeviceAlertFeature.HEART_RATE) &&
+            (settings.heartRate.restingEnabled || settings.heartRate.lowEnabled)) ||
+            (settings.isSupported(DeviceAlertFeature.SPO2) && settings.spo2.enabled) ||
+            (settings.isSupported(DeviceAlertFeature.HIGH_STRESS_INDEX) && settings.highStress.enabled) ||
+            (settings.isSupported(DeviceAlertFeature.SLEEP_REMINDER) && settings.sleepReminder.status) ||
+            (settings.isSupported(DeviceAlertFeature.SEDENTARY_REMINDER) && settings.sedentaryReminder.status)
+    }
+
+    private fun pruneDisabledMirrorStates(settings: LocalDeviceAlertSettings) {
+        if (!settings.heartRate.restingEnabled) {
+            alertMirrorStates.remove(MirrorCondition.HEART_RATE_HIGH)
+        }
+        if (!settings.heartRate.lowEnabled) {
+            alertMirrorStates.remove(MirrorCondition.HEART_RATE_LOW)
+        }
+        if (!settings.spo2.enabled) {
+            alertMirrorStates.remove(MirrorCondition.SPO2_LOW)
+        }
+        if (!settings.highStress.enabled) {
+            alertMirrorStates.remove(MirrorCondition.HIGH_STRESS)
+        }
+    }
+
+    private fun stopAlertMonitor() {
+        alertMonitorHandler.removeCallbacks(alertMonitorRunnable)
+        sessionManager.updateAlertRealtimeMonitoringState(false)
+        alertMeasurementRequests.clear()
+        alertMirrorStates.clear()
+        recentWearEvidenceAt = null
+        recentWearEvidenceValue = null
+        lastHeartRateSampleAt = 0L
+        lastSpo2SampleAt = 0L
+        lastStressSampleAt = 0L
+        lastWearProbeAt = 0L
+    }
+
+    private fun runAlertMonitorTick() {
+        val settings = getCurrentAlertSettings()
+        if (!shouldRunAlertMonitor(settings)) {
+            stopAlertMonitor()
+            return
+        }
+        val safeSettings = settings ?: return
+        val now = System.currentTimeMillis()
+        maybeSendScheduledAlerts(safeSettings, now)
+        maybeRequestManualFallbackMeasurements(safeSettings, now)
+        maybePublishPassiveWearStatus(now)
+        maybeRequestWearProbe(now)
+        alertMonitorHandler.removeCallbacks(alertMonitorRunnable)
+        alertMonitorHandler.postDelayed(alertMonitorRunnable, ALERT_MONITOR_TICK_MS)
+    }
+
+    private fun maybeSendScheduledAlerts(settings: LocalDeviceAlertSettings, now: Long) {
+        if (settings.isSupported(DeviceAlertFeature.SLEEP_REMINDER) &&
+            settings.sleepReminder.status &&
+            AlertMirrorEvaluator.isBedtimeDue(
+                now = now,
+                hour = settings.sleepReminder.hour,
+                minute = settings.sleepReminder.minute,
+                recentAlerts = settings.recentAlerts
+            )
+        ) {
+            dispatchMirroredAlert(
+                feature = DeviceAlertFeature.SLEEP_REMINDER,
+                title = "Bedtime reminder",
+                message = "Bedtime reminder sent to the smart band.",
+                observedValue = null,
+                threshold = null,
+                source = AlertEventSource.SCHEDULE
+            )
+        }
+
+        if (settings.isSupported(DeviceAlertFeature.SEDENTARY_REMINDER) &&
+            settings.sedentaryReminder.status &&
+            AlertMirrorEvaluator.isSedentaryDue(
+                now = now,
+                startHour = settings.sedentaryReminder.startHour,
+                startMinute = settings.sedentaryReminder.startMinute,
+                endHour = settings.sedentaryReminder.endHour,
+                endMinute = settings.sedentaryReminder.endMinute,
+                intervalMinutes = settings.sedentaryReminder.interval,
+                recentAlerts = settings.recentAlerts
+            )
+        ) {
+            dispatchMirroredAlert(
+                feature = DeviceAlertFeature.SEDENTARY_REMINDER,
+                title = "Sedentary reminder",
+                message = "Sedentary reminder sent to the smart band.",
+                observedValue = null,
+                threshold = settings.sedentaryReminder.interval,
+                source = AlertEventSource.SCHEDULE
+            )
+        }
+    }
+
+    private fun maybeRequestManualFallbackMeasurements(settings: LocalDeviceAlertSettings, now: Long) {
+        if (settings.isSupported(DeviceAlertFeature.SPO2) &&
+            settings.spo2.enabled &&
+            now - lastSpo2SampleAt >= ALERT_MANUAL_MEASUREMENT_INTERVAL_MS
+        ) {
+            requestAlertMeasurement(
+                manualMeasureType = ManualMeasureType.BLOOD_OXYGEN,
+                feature = DeviceAlertFeature.SPO2,
+                now = now
+            )
+        }
+        if (settings.isSupported(DeviceAlertFeature.HIGH_STRESS_INDEX) &&
+            settings.highStress.enabled &&
+            now - lastStressSampleAt >= ALERT_MANUAL_MEASUREMENT_INTERVAL_MS
+        ) {
+            requestAlertMeasurement(
+                manualMeasureType = ManualMeasureType.HRV,
+                feature = DeviceAlertFeature.HIGH_STRESS_INDEX,
+                now = now
+            )
+        }
+    }
+
+    private fun requestAlertMeasurement(
+        manualMeasureType: ManualMeasureType,
+        feature: DeviceAlertFeature,
+        now: Long
+    ) {
+        val lastRequestedAt = alertMeasurementRequests[manualMeasureType] ?: 0L
+        if (now - lastRequestedAt < ALERT_MANUAL_MEASUREMENT_INTERVAL_MS) {
+            return
+        }
+        alertMeasurementRequests[manualMeasureType] = now
+        AlertDebugLogger.logAlertFlow(
+            "AlertService",
+            feature,
+            currentAlertOperationId(feature),
+            "background_probe",
+            "requestAlertMeasurement type=$manualMeasureType"
+        )
+        sessionManager.sendUpdateQueryAction(
+            UpdateDeviceAction.SetManualMeasurement(manualMeasureType, true)
+        )
+    }
+
+    private fun maybeRequestWearProbe(now: Long) {
+        if (!ScreenlessDeviceSupport.isScreenlessDeviceType(ringDataStore.getRingDevice()?.deviceType)) {
+            return
+        }
+        if (now - lastWearProbeAt < ALERT_WEAR_PROBE_INTERVAL_MS) {
+            return
+        }
+        lastWearProbeAt = now
+        AlertDebugLogger.logAlertFlow(
+            "AlertService",
+            DeviceAlertFeature.WEAR_DETECTION,
+            currentAlertOperationId(DeviceAlertFeature.WEAR_DETECTION),
+            "wear_probe",
+            "dispatch getRingWearingStatus"
+        )
+        sessionManager.sendQueryAction(QueryAction.GetRingWearingStatus)
+    }
+
+    private fun maybePublishPassiveWearStatus(now: Long) {
+        val settings = getCurrentAlertSettings() ?: return
+        if (!ScreenlessDeviceSupport.isScreenlessDeviceType(ringDataStore.getRingDevice()?.deviceType)) {
+            return
+        }
+        val resolved = WearStatusResolver.inferPassive(
+            current = settings.wearDetectionStatus,
+            now = now,
+            recentEvidenceAt = recentWearEvidenceAt,
+            recentEvidenceValue = recentWearEvidenceValue
+        )
+        if (resolved != settings.wearDetectionStatus) {
+            publishWearStatus(resolved, stage = "wear_inference", publishToUi = true)
+        }
+    }
+
+    private fun onSensorWearEvidence(observedValue: Int, observedAt: Long = System.currentTimeMillis()) {
+        recentWearEvidenceAt = observedAt
+        recentWearEvidenceValue = observedValue
+        val settings = getCurrentAlertSettings() ?: return
+        val current = settings.wearDetectionStatus
+        val shouldPublish = current.isWorn != true ||
+            current.source != WearStatusResolver.SOURCE_SENSOR_SAMPLE ||
+            current.observedValue != observedValue ||
+            observedAt - current.lastUpdatedAt >= ALERT_WEAR_PROBE_INTERVAL_MS
+        if (shouldPublish) {
+            publishWearStatus(
+                WearStatusResolver.fromSensorEvidence(
+                    now = observedAt,
+                    observedValue = observedValue
+                ),
+                stage = "wear_inference",
+                publishToUi = true
+            )
+        }
+    }
+
+    private fun publishWearStatus(
+        wearStatus: com.noisefit_commans.models.WearDetectionStatus,
+        stage: String,
+        publishToUi: Boolean
+    ) {
+        val settings = getCurrentAlertSettings()
+            ?: LocalDeviceAlertSettings(deviceAddress = ringDataStore.getRingDevice()?.address)
+        settings.wearDetectionStatus = wearStatus
+        settings.setSupport(DeviceAlertFeature.WEAR_DETECTION, true)
+        AlertDebugLogger.logAlertFlowValue(
+            "AlertService",
+            DeviceAlertFeature.WEAR_DETECTION,
+            currentAlertOperationId(DeviceAlertFeature.WEAR_DETECTION),
+            stage,
+            "wearStatus",
+            wearStatus
+        )
+        saveAlertSettings(settings)
+        if (publishToUi) {
+            sessionManager.setQueryCallback(QueryCallback.RingWearingStatusObtained(wearStatus))
+        }
+    }
+
+    private fun mirrorState(condition: MirrorCondition): MirrorConditionState {
+        return alertMirrorStates.getOrPut(condition) { MirrorConditionState() }
+    }
+
+    private fun processHeartRateSample(value: Int, sampleTime: Long) {
+        val settings = getCurrentAlertSettings() ?: return
+        val now = if (sampleTime > 0L) sampleTime else System.currentTimeMillis()
+        lastHeartRateSampleAt = now
+        onSensorWearEvidence(value, now)
+        if (!settings.isSupported(DeviceAlertFeature.HEART_RATE)) {
+            return
+        }
+        if (settings.heartRate.restingEnabled) {
+            val decision = AlertMirrorEvaluator.evaluateHighThreshold(
+                state = mirrorState(MirrorCondition.HEART_RATE_HIGH),
+                value = value,
+                threshold = settings.heartRate.restingThreshold,
+                hysteresis = 5,
+                repeatIntervalMs = ALERT_REPEAT_HEART_RATE_MS,
+                now = now
+            )
+            handleMirrorDecision(
+                condition = MirrorCondition.HEART_RATE_HIGH,
+                decision = decision,
+                title = "High heart rate",
+                message = "$value BPM crossed the ${settings.heartRate.restingThreshold} BPM limit."
+            )
+        }
+        if (settings.heartRate.lowEnabled) {
+            val decision = AlertMirrorEvaluator.evaluateLowThreshold(
+                state = mirrorState(MirrorCondition.HEART_RATE_LOW),
+                value = value,
+                threshold = settings.heartRate.lowThreshold,
+                hysteresis = 5,
+                repeatIntervalMs = ALERT_REPEAT_HEART_RATE_MS,
+                now = now
+            )
+            handleMirrorDecision(
+                condition = MirrorCondition.HEART_RATE_LOW,
+                decision = decision,
+                title = "Low heart rate",
+                message = "$value BPM crossed the ${settings.heartRate.lowThreshold} BPM limit."
+            )
+        }
+    }
+
+    private fun processSpo2Sample(value: Int, sampleTime: Long = System.currentTimeMillis()) {
+        val settings = getCurrentAlertSettings() ?: return
+        lastSpo2SampleAt = sampleTime
+        onSensorWearEvidence(value, sampleTime)
+        if (!settings.isSupported(DeviceAlertFeature.SPO2) || !settings.spo2.enabled) {
+            return
+        }
+        val decision = AlertMirrorEvaluator.evaluateLowThreshold(
+            state = mirrorState(MirrorCondition.SPO2_LOW),
+            value = value,
+            threshold = settings.spo2.threshold,
+            hysteresis = 2,
+            repeatIntervalMs = ALERT_REPEAT_SPO2_MS,
+            now = sampleTime
+        )
+        handleMirrorDecision(
+            condition = MirrorCondition.SPO2_LOW,
+            decision = decision,
+            title = "Low SpO2",
+            message = "$value% crossed the ${settings.spo2.threshold}% limit."
+        )
+    }
+
+    private fun processHighStressSample(value: Int, sampleTime: Long = System.currentTimeMillis()) {
+        val settings = getCurrentAlertSettings() ?: return
+        lastStressSampleAt = sampleTime
+        onSensorWearEvidence(value, sampleTime)
+        if (!settings.isSupported(DeviceAlertFeature.HIGH_STRESS_INDEX) || !settings.highStress.enabled) {
+            return
+        }
+        val decision = AlertMirrorEvaluator.evaluateHighThreshold(
+            state = mirrorState(MirrorCondition.HIGH_STRESS),
+            value = value,
+            threshold = settings.highStress.threshold,
+            hysteresis = 5,
+            repeatIntervalMs = ALERT_REPEAT_HIGH_STRESS_MS,
+            now = sampleTime
+        )
+        handleMirrorDecision(
+            condition = MirrorCondition.HIGH_STRESS,
+            decision = decision,
+            title = "High stress index",
+            message = "$value crossed the ${settings.highStress.threshold} limit."
+        )
+    }
+
+    private fun handleMirrorDecision(
+        condition: MirrorCondition,
+        decision: com.oreo.alerts.MirrorDecision,
+        title: String,
+        message: String
+    ) {
+        if (decision.stage != "safe") {
+            AlertDebugLogger.logAlertFlow(
+                "AlertService",
+                condition.feature,
+                currentAlertOperationId(condition.feature),
+                decision.stage,
+                "observed=${decision.observedValue} threshold=${decision.threshold}"
+            )
+        }
+        if (decision.rearmed) {
+            return
+        }
+        if (decision.triggered) {
+            dispatchMirroredAlert(
+                feature = condition.feature,
+                title = title,
+                message = message,
+                observedValue = decision.observedValue,
+                threshold = decision.threshold,
+                source = AlertEventSource.MIRROR_PUSH
+            )
+        }
+    }
+
+    private fun dispatchMirroredAlert(
+        feature: DeviceAlertFeature,
+        title: String,
+        message: String,
+        observedValue: Int?,
+        threshold: Int?,
+        source: AlertEventSource
+    ) {
+        val now = System.currentTimeMillis()
+        val event = AlertEvent(
+            id = "${feature.name}_${source.name}_$now",
+            timestamp = now,
+            feature = feature,
+            title = title,
+            message = message,
+            observedValue = observedValue,
+            threshold = threshold,
+            source = source,
+            bandSendState = "dispatched"
+        )
+        val settings = getCurrentAlertSettings()
+            ?: LocalDeviceAlertSettings(deviceAddress = ringDataStore.getRingDevice()?.address)
+        settings.recordAlertEvent(event)
+        saveAlertSettings(settings)
+        AlertDebugLogger.logAlertFlowValue(
+            "AlertService",
+            feature,
+            currentAlertOperationId(feature),
+            "mirror_push",
+            "event",
+            event
+        )
+        val notification = AppNotification(
+            appType = ApplicationType.NOISEFIT.type,
+            name = title,
+            message = message
+        )
+        AlertDebugLogger.logAlertFlowValue(
+            "AlertService",
+            feature,
+            currentAlertOperationId(feature),
+            "mirror_push",
+            "notification",
+            notification
+        )
+        sessionManager.sendUpdateQueryAction(UpdateDeviceAction.SendAppNotification(notification))
+        sessionManager.postAlertMirrorEvent(event)
+    }
+
+    private fun consumeAlertMeasurementRequest(manualMeasurement: com.noisefit_commans.models.ManualMeasurement): Boolean {
+        val requestedAt = alertMeasurementRequests[manualMeasurement.manualMeasureType] ?: return false
+        val now = System.currentTimeMillis()
+        if (now - requestedAt > ALERT_MANUAL_MEASUREMENT_TIMEOUT_MS) {
+            alertMeasurementRequests.remove(manualMeasurement.manualMeasureType)
+            return false
+        }
+        alertMeasurementRequests.remove(manualMeasurement.manualMeasureType)
+        AlertDebugLogger.logAlertFlowValue(
+            "AlertService",
+            when (manualMeasurement.manualMeasureType) {
+                ManualMeasureType.BLOOD_OXYGEN -> DeviceAlertFeature.SPO2
+                ManualMeasureType.HRV -> DeviceAlertFeature.HIGH_STRESS_INDEX
+                else -> DeviceAlertFeature.WEAR_DETECTION
+            },
+            null,
+            "mirror_sample",
+            "manualMeasurement",
+            manualMeasurement
+        )
+        WearStatusResolver.fromManualMeasurement(manualMeasurement, now)?.let {
+            publishWearStatus(it, stage = "wear_inference", publishToUi = true)
+        }
+        when (manualMeasurement.manualMeasureType) {
+            ManualMeasureType.BLOOD_OXYGEN -> {
+                if (!manualMeasurement.isError && manualMeasurement.value > 0) {
+                    processSpo2Sample(manualMeasurement.value, now)
+                }
+                return true
+            }
+            ManualMeasureType.HRV -> {
+                if (!manualMeasurement.isError && manualMeasurement.value > 0) {
+                    processHighStressSample(manualMeasurement.value, now)
+                }
+                return true
+            }
+            else -> return false
+        }
+    }
+
+    private fun nextPendingAlertFeature(settings: LocalDeviceAlertSettings): DeviceAlertFeature? {
+        val orderedFeatures = listOf(
+            DeviceAlertFeature.HEART_RATE,
+            DeviceAlertFeature.SPO2,
+            DeviceAlertFeature.HIGH_STRESS_INDEX,
+            DeviceAlertFeature.RELAXATION_PROMPT,
+            DeviceAlertFeature.SLEEP_REMINDER,
+            DeviceAlertFeature.SEDENTARY_REMINDER
+        )
+        return orderedFeatures.firstOrNull { feature ->
+            settings.isPending(feature) &&
+                settings.isSupported(feature) &&
+                !blockedAlertSyncFeatures.contains(feature)
+        }
+    }
+
+    private fun sendAlertQuery(feature: DeviceAlertFeature) {
+        val syncState = alertSyncState?.takeIf { it.feature == feature }
+        val action = when (feature) {
+            DeviceAlertFeature.HEART_RATE -> QueryAction.GetHeartRateAlertSettings
+            DeviceAlertFeature.SPO2 -> QueryAction.GetSpo2AlertSettings
+            DeviceAlertFeature.HIGH_STRESS_INDEX -> QueryAction.GetHighStressAlertSettings
+            DeviceAlertFeature.RELAXATION_PROMPT -> QueryAction.GetPressureModeSettings
+            DeviceAlertFeature.SLEEP_REMINDER -> QueryAction.GetSleepReminder
+            DeviceAlertFeature.SEDENTARY_REMINDER -> QueryAction.GetSedentaryData
+            DeviceAlertFeature.WEAR_DETECTION -> null
+        }
+        AlertDebugLogger.logAlertFlow(
+            "AlertService",
+            feature,
+            syncState?.operationId,
+            if (syncState?.phase == AlertSyncPhase.VERIFY_QUERY) "verify_query" else "threshold_api",
+            "sendAlertQuery action=$action"
+        )
+        action?.let(sessionManager::sendQueryAction)
+    }
+
+    private fun sendAlertUpdate(feature: DeviceAlertFeature, settings: LocalDeviceAlertSettings) {
+        AlertDebugLogger.logAlertFlow(
+            "AlertService",
+            feature,
+            alertSyncState?.takeIf { it.feature == feature }?.operationId ?: currentAlertOperationId(feature),
+            "threshold_api",
+            "sendAlertUpdate"
+        )
+        AlertDebugLogger.logValue("AlertService", "sendAlertUpdate settings", settings)
+        when (feature) {
+            DeviceAlertFeature.HEART_RATE -> {
+                sessionManager.sendUpdateQueryAction(
+                    UpdateDeviceAction.SetHeartRateAlertSettings(settings.heartRate)
+                )
+            }
+            DeviceAlertFeature.SPO2 -> {
+                sessionManager.sendUpdateQueryAction(
+                    UpdateDeviceAction.SetSpo2AlertSettings(settings.spo2)
+                )
+            }
+            DeviceAlertFeature.HIGH_STRESS_INDEX -> {
+                sessionManager.sendUpdateQueryAction(
+                    UpdateDeviceAction.SetHighStressAlertSettings(settings.highStress)
+                )
+            }
+            DeviceAlertFeature.RELAXATION_PROMPT -> {
+                sessionManager.sendUpdateQueryAction(
+                    UpdateDeviceAction.SetPressureModeSettings(settings.pressureMode)
+                )
+            }
+            DeviceAlertFeature.SLEEP_REMINDER -> {
+                sessionManager.sendUpdateQueryAction(
+                    UpdateDeviceAction.UpdateSleepReminder(settings.sleepReminder)
+                )
+            }
+            DeviceAlertFeature.SEDENTARY_REMINDER -> {
+                sessionManager.sendUpdateQueryAction(
+                    UpdateDeviceAction.SetSedentaryData(settings.sedentaryReminder)
+                )
+            }
+            DeviceAlertFeature.WEAR_DETECTION -> Unit
+        }
+    }
+
+    private fun syncPendingAlertSettings() {
+        if (sessionManager.connectStateRing.value !is ConnectState.ConnectSuccess) {
+            AlertDebugLogger.log("AlertService", "syncPendingAlertSettings skipped disconnected")
+            return
+        }
+        if (alertSyncState != null) {
+            AlertDebugLogger.log("AlertService", "syncPendingAlertSettings skipped activePhase=${alertSyncState?.phase} feature=${alertSyncState?.feature}")
+            return
+        }
+        val settings = getCurrentAlertSettings() ?: return
+        val feature = nextPendingAlertFeature(settings) ?: return
+        val operationId = nextAlertOperationId(feature)
+        val requiresSnapshot = AlertSettingsStateUtils.requiresSnapshot(
+            settings = settings,
+            feature = feature,
+            deviceType = ringDataStore.getRingDevice()?.deviceType
+        )
+        AlertDebugLogger.logAlertFlow(
+            "AlertService",
+            feature,
+            operationId,
+            "threshold_api",
+            "syncPendingAlertSettings requiresSnapshot=$requiresSnapshot"
+        )
+        if (requiresSnapshot) {
+            alertSyncState = AlertSyncState(feature, AlertSyncPhase.SNAPSHOT_QUERY, operationId)
+            sendAlertQuery(feature)
+            return
+        }
+        alertSyncState = AlertSyncState(feature, AlertSyncPhase.UPDATE_SENT, operationId)
+        sendAlertUpdate(feature, settings)
+    }
+
+    private fun onAlertFeatureUnsupported(feature: DeviceAlertFeature) {
+        AlertDebugLogger.log("AlertService", "onAlertFeatureUnsupported feature=$feature")
+        val settings = getCurrentAlertSettings() ?: return
+        settings.setSupport(feature, false)
+        settings.setPending(feature, false)
+        saveAlertSettings(settings)
+        if (alertSyncState?.feature == feature) {
+            alertSyncState = null
+        }
+        blockedAlertSyncFeatures.remove(feature)
+        syncPendingAlertSettings()
+    }
+
+    private fun onAlertVerificationFailed(feature: DeviceAlertFeature) {
+        AlertDebugLogger.log("AlertService", "onAlertVerificationFailed feature=$feature")
+        blockedAlertSyncFeatures.add(feature)
+        if (alertSyncState?.feature == feature) {
+            alertSyncState = null
+        }
+        syncPendingAlertSettings()
+    }
+
+    private fun onAlertQueryCompleted(
+        feature: DeviceAlertFeature,
+        matchesStored: Boolean? = null
+    ) {
+        val syncState = alertSyncState ?: return
+        if (syncState.feature != feature) {
+            return
+        }
+        if (isStaleAlertResponse(feature, syncState)) {
+            onAlertStaleResponse(feature, syncState)
+            return
+        }
+        AlertDebugLogger.logAlertFlow(
+            "AlertService",
+            feature,
+            syncState.operationId,
+            if (syncState.phase == AlertSyncPhase.VERIFY_QUERY) "verify_query" else "threshold_api",
+            "onAlertQueryCompleted matchesStored=$matchesStored phase=${syncState.phase}"
+        )
+        when (syncState.phase) {
+            AlertSyncPhase.SNAPSHOT_QUERY -> {
+                val settings = getCurrentAlertSettings()
+                val requiresSnapshot = if (settings != null) {
+                    AlertSettingsStateUtils.requiresSnapshot(
+                        settings = settings,
+                        feature = feature,
+                        deviceType = ringDataStore.getRingDevice()?.deviceType
+                    )
+                } else {
+                    false
+                }
+                if (settings != null && settings.isPending(feature) && !requiresSnapshot) {
+                    alertSyncState = AlertSyncState(feature, AlertSyncPhase.UPDATE_SENT, syncState.operationId)
+                    sendAlertUpdate(feature, settings)
+                } else {
+                    alertSyncState = null
+                    syncPendingAlertSettings()
+                }
+            }
+            AlertSyncPhase.VERIFY_QUERY -> {
+                val settings = getCurrentAlertSettings()
+                if (settings != null && matchesStored == true) {
+                    settings.setPending(feature, false)
+                    saveAlertSettings(settings)
+                    blockedAlertSyncFeatures.remove(feature)
+                } else {
+                    onAlertVerificationFailed(feature)
+                    return
+                }
+                alertSyncState = null
+                syncPendingAlertSettings()
+            }
+            AlertSyncPhase.UPDATE_SENT -> Unit
+        }
+    }
+
+    private fun onAlertUpdateCompleted(feature: DeviceAlertFeature, success: Boolean) {
+        val syncState = alertSyncState
+        if (syncState?.feature != feature || syncState.phase != AlertSyncPhase.UPDATE_SENT) {
+            return
+        }
+        if (isStaleAlertResponse(feature, syncState)) {
+            onAlertStaleResponse(feature, syncState)
+            return
+        }
+        AlertDebugLogger.logAlertFlow(
+            "AlertService",
+            feature,
+            syncState.operationId,
+            "threshold_api",
+            "onAlertUpdateCompleted success=$success"
+        )
+        if (!success) {
+            onAlertVerificationFailed(feature)
+            return
+        }
+        alertSyncState = AlertSyncState(feature, AlertSyncPhase.VERIFY_QUERY, syncState.operationId)
+        val verifyDelayMs = getAlertVerifyDelayMs(feature)
+        AlertDebugLogger.logAlertFlow(
+            "AlertService",
+            feature,
+            syncState.operationId,
+            "verify_query",
+            "scheduleVerify delayMs=$verifyDelayMs"
+        )
+        if (verifyDelayMs <= 0L) {
+            sendAlertQuery(feature)
+        } else {
+            Handler(Looper.getMainLooper()).postDelayed({
+                if (alertSyncState?.feature == feature && alertSyncState?.phase == AlertSyncPhase.VERIFY_QUERY) {
+                    sendAlertQuery(feature)
+                }
+            }, verifyDelayMs)
+        }
+    }
+
+    private fun getAlertVerifyDelayMs(feature: DeviceAlertFeature): Long {
+        return when (feature) {
+            DeviceAlertFeature.RELAXATION_PROMPT,
+            DeviceAlertFeature.SLEEP_REMINDER,
+            DeviceAlertFeature.SEDENTARY_REMINDER -> 1500L
+            DeviceAlertFeature.HEART_RATE,
+            DeviceAlertFeature.SPO2,
+            DeviceAlertFeature.HIGH_STRESS_INDEX,
+            DeviceAlertFeature.WEAR_DETECTION -> 0L
+        }
     }
 
     private fun setPeriodicInfo() {
@@ -953,6 +1774,8 @@ constructor() : LifecycleService() {
 
 
     fun onDisconnectSuccess() {
+        stopAlertMonitor()
+        resetAlertSyncState()
         statusFailedConnection = false
         val device = ringDataStore.getRingDevice()
         ringDataStore.clearConnectedDevice()
@@ -1025,6 +1848,9 @@ constructor() : LifecycleService() {
         queryWatchInfo(colorFitDevice, 300)
 
         statusFailedConnection = false
+        resetAlertSyncState()
+        syncPendingAlertSettings()
+        updateAlertMonitorState()
     }
 
     fun queryWatchInfo(colorFitDevice: ColorFitDevice, fetchTime: Int) {
@@ -1752,6 +2578,8 @@ constructor() : LifecycleService() {
 
     private val queryCallback = object : IQueryDataCallback {
         override fun onQueryDataReceived(queryCallback: QueryCallback) {
+            AlertDebugLogger.log("AlertService", "queryCallback type=${queryCallback.javaClass.simpleName}")
+            var callbackForUi: QueryCallback = queryCallback
 
             when (queryCallback) {
 
@@ -1866,17 +2694,446 @@ constructor() : LifecycleService() {
                     }*/
                 }
 
+                is QueryCallback.AlertFeatureSupportObtained -> {
+                    if (!queryCallback.supported &&
+                        queryCallback.feature == DeviceAlertFeature.WEAR_DETECTION &&
+                        ScreenlessDeviceSupport.isScreenlessDeviceType(ringDataStore.getRingDevice()?.deviceType)
+                    ) {
+                        val settings = getCurrentAlertSettings()
+                            ?: LocalDeviceAlertSettings(deviceAddress = ringDataStore.getRingDevice()?.address)
+                        settings.setSupport(DeviceAlertFeature.WEAR_DETECTION, true)
+                        saveAlertSettings(settings)
+                    } else if (queryCallback.supported) {
+                        val settings = getCurrentAlertSettings()
+                            ?: LocalDeviceAlertSettings(deviceAddress = ringDataStore.getRingDevice()?.address)
+                        settings.setSupport(queryCallback.feature, true)
+                        saveAlertSettings(settings)
+                    } else {
+                        if (queryCallback.feature == DeviceAlertFeature.WEAR_DETECTION) {
+                            val settings = getCurrentAlertSettings()
+                                ?: LocalDeviceAlertSettings(deviceAddress = ringDataStore.getRingDevice()?.address)
+                            settings.wearDetectionStatus = settings.wearDetectionStatus.copy(
+                                isWorn = null,
+                                lastUpdatedAt = -1L
+                            )
+                            settings.setSupport(DeviceAlertFeature.WEAR_DETECTION, false)
+                            saveAlertSettings(settings)
+                        }
+                        onAlertFeatureUnsupported(queryCallback.feature)
+                    }
+                }
+
+                is QueryCallback.HeartRateAlertSettingsObtained -> {
+                    val settings = getCurrentAlertSettings()
+                        ?: LocalDeviceAlertSettings(deviceAddress = ringDataStore.getRingDevice()?.address)
+                    val syncState = alertSyncState?.takeIf { it.feature == DeviceAlertFeature.HEART_RATE }
+                    val syncPhase = syncState?.phase
+                    val staleResponse = isStaleAlertResponse(DeviceAlertFeature.HEART_RATE, syncState)
+                    val matchesStored = AlertSettingsStateUtils.heartRateMatches(
+                        settings.heartRate,
+                        queryCallback.heartRateAlertSettings,
+                        workoutSupported = queryCallback.workoutSupported
+                    )
+                    settings.support.heartRateWorkout = queryCallback.workoutSupported
+                    if (!queryCallback.workoutSupported) {
+                        settings.heartRate.workoutEnabled = false
+                    }
+                    settings.snapshots.heartRate = queryCallback.snapshot
+                    settings.setSupport(DeviceAlertFeature.HEART_RATE, true)
+                    when {
+                        staleResponse -> {
+                            AlertDebugLogger.logAlertFlow(
+                                "AlertService",
+                                DeviceAlertFeature.HEART_RATE,
+                                syncState?.operationId,
+                                "stale_response",
+                                "ignored heart-rate threshold query"
+                            )
+                        }
+
+                        syncPhase == AlertSyncPhase.SNAPSHOT_QUERY -> {
+                            AlertDebugLogger.log("AlertService", "heartRate query using snapshot only")
+                        }
+
+                        syncPhase == AlertSyncPhase.UPDATE_SENT -> {
+                            AlertDebugLogger.logAlertFlow(
+                                "AlertService",
+                                DeviceAlertFeature.HEART_RATE,
+                                syncState?.operationId,
+                                "threshold_api",
+                                "heart-rate write in flight, preserving local value"
+                            )
+                        }
+
+                        syncPhase == AlertSyncPhase.VERIFY_QUERY && !matchesStored -> {
+                            AlertDebugLogger.log("AlertService", "heartRate verify mismatch preserving local value")
+                        }
+
+                        settings.isPending(DeviceAlertFeature.HEART_RATE) && syncPhase == null -> {
+                            AlertDebugLogger.log("AlertService", "heartRate passive query preserving pending local value")
+                        }
+
+                        else -> {
+                            settings.heartRate = AlertSettingsStateUtils.mergeHeartRate(
+                                settings.heartRate,
+                                queryCallback.heartRateAlertSettings,
+                                workoutSupported = queryCallback.workoutSupported
+                            )
+                        }
+                    }
+                    saveAlertSettings(settings)
+                    if (syncState != null) {
+                        if (staleResponse) {
+                            onAlertStaleResponse(DeviceAlertFeature.HEART_RATE, syncState)
+                        } else {
+                            onAlertQueryCompleted(DeviceAlertFeature.HEART_RATE, matchesStored)
+                        }
+                    }
+                }
+
+                is QueryCallback.HeartRateIntervalObtained -> {
+                    AlertDebugLogger.logAlertFlowValue(
+                        "AlertService",
+                        DeviceAlertFeature.HEART_RATE,
+                        alertSyncState?.takeIf { it.feature == DeviceAlertFeature.HEART_RATE }?.operationId,
+                        "background_probe",
+                        "heartRateInterval",
+                        queryCallback.interval
+                    )
+                }
+
+                is QueryCallback.RealTimeHeartRateSampleObtained -> {
+                    AlertDebugLogger.logAlertFlowValue(
+                        "AlertService",
+                        DeviceAlertFeature.HEART_RATE,
+                        currentAlertOperationId(DeviceAlertFeature.HEART_RATE),
+                        "mirror_sample",
+                        "realTimeHeartRate",
+                        queryCallback
+                    )
+                    processHeartRateSample(
+                        value = queryCallback.value,
+                        sampleTime = queryCallback.timeStamp
+                    )
+                }
+
+                is QueryCallback.Spo2AlertSettingsObtained -> {
+                    val settings = getCurrentAlertSettings()
+                        ?: LocalDeviceAlertSettings(deviceAddress = ringDataStore.getRingDevice()?.address)
+                    val syncState = alertSyncState?.takeIf { it.feature == DeviceAlertFeature.SPO2 }
+                    val syncPhase = syncState?.phase
+                    val staleResponse = isStaleAlertResponse(DeviceAlertFeature.SPO2, syncState)
+                    val matchesStored = AlertSettingsStateUtils.spo2Matches(
+                        settings.spo2,
+                        queryCallback.spo2AlertSettings
+                    )
+                    settings.setSupport(DeviceAlertFeature.SPO2, true)
+                    when {
+                        staleResponse -> {
+                            AlertDebugLogger.logAlertFlow(
+                                "AlertService",
+                                DeviceAlertFeature.SPO2,
+                                syncState?.operationId,
+                                "stale_response",
+                                "ignored spo2 threshold query"
+                            )
+                        }
+
+                        syncPhase == AlertSyncPhase.UPDATE_SENT -> {
+                            AlertDebugLogger.logAlertFlow(
+                                "AlertService",
+                                DeviceAlertFeature.SPO2,
+                                syncState?.operationId,
+                                "threshold_api",
+                                "spo2 write in flight, preserving local value"
+                            )
+                        }
+
+                        syncPhase == AlertSyncPhase.VERIFY_QUERY && !matchesStored -> {
+                            AlertDebugLogger.log("AlertService", "spo2 verify mismatch preserving local value")
+                        }
+
+                        settings.isPending(DeviceAlertFeature.SPO2) && syncPhase == null -> {
+                            AlertDebugLogger.log("AlertService", "spo2 passive query preserving pending local value")
+                        }
+
+                        else -> {
+                            settings.spo2 = AlertSettingsStateUtils.mergeSpo2(
+                                settings.spo2,
+                                queryCallback.spo2AlertSettings
+                            )
+                        }
+                    }
+                    saveAlertSettings(settings)
+                    if (syncState != null) {
+                        if (staleResponse) {
+                            onAlertStaleResponse(DeviceAlertFeature.SPO2, syncState)
+                        } else {
+                            onAlertQueryCompleted(DeviceAlertFeature.SPO2, matchesStored)
+                        }
+                    }
+                }
+
+                is QueryCallback.Spo2SettingsObtained -> {
+                    AlertDebugLogger.logAlertFlowValue(
+                        "AlertService",
+                        DeviceAlertFeature.SPO2,
+                        alertSyncState?.takeIf { it.feature == DeviceAlertFeature.SPO2 }?.operationId,
+                        "background_probe",
+                        "spo2Monitoring",
+                        queryCallback.spo2Data
+                    )
+                }
+
+                is QueryCallback.HighStressAlertSettingsObtained -> {
+                    val settings = getCurrentAlertSettings()
+                        ?: LocalDeviceAlertSettings(deviceAddress = ringDataStore.getRingDevice()?.address)
+                    val syncState = alertSyncState?.takeIf { it.feature == DeviceAlertFeature.HIGH_STRESS_INDEX }
+                    val syncPhase = syncState?.phase
+                    val staleResponse = isStaleAlertResponse(DeviceAlertFeature.HIGH_STRESS_INDEX, syncState)
+                    val matchesStored = AlertSettingsStateUtils.highStressMatches(
+                        settings.highStress,
+                        queryCallback.highStressAlertSettings
+                    )
+                    settings.setSupport(DeviceAlertFeature.HIGH_STRESS_INDEX, true)
+                    when {
+                        staleResponse -> {
+                            AlertDebugLogger.logAlertFlow(
+                                "AlertService",
+                                DeviceAlertFeature.HIGH_STRESS_INDEX,
+                                syncState?.operationId,
+                                "stale_response",
+                                "ignored high-stress threshold query"
+                            )
+                        }
+
+                        syncPhase == AlertSyncPhase.UPDATE_SENT -> {
+                            AlertDebugLogger.logAlertFlow(
+                                "AlertService",
+                                DeviceAlertFeature.HIGH_STRESS_INDEX,
+                                syncState?.operationId,
+                                "threshold_api",
+                                "high-stress write in flight, preserving local value"
+                            )
+                        }
+
+                        syncPhase == AlertSyncPhase.VERIFY_QUERY && !matchesStored -> {
+                            AlertDebugLogger.log("AlertService", "highStress verify mismatch preserving local value")
+                        }
+
+                        settings.isPending(DeviceAlertFeature.HIGH_STRESS_INDEX) && syncPhase == null -> {
+                            AlertDebugLogger.log("AlertService", "highStress passive query preserving pending local value")
+                        }
+
+                        else -> {
+                            settings.highStress = AlertSettingsStateUtils.mergeHighStress(
+                                settings.highStress,
+                                queryCallback.highStressAlertSettings
+                            )
+                        }
+                    }
+                    saveAlertSettings(settings)
+                    if (syncState != null) {
+                        if (staleResponse) {
+                            onAlertStaleResponse(DeviceAlertFeature.HIGH_STRESS_INDEX, syncState)
+                        } else {
+                            onAlertQueryCompleted(DeviceAlertFeature.HIGH_STRESS_INDEX, matchesStored)
+                        }
+                    }
+                }
+
+                is QueryCallback.PressureModeSettingsObtained -> {
+                    val settings = getCurrentAlertSettings()
+                        ?: LocalDeviceAlertSettings(deviceAddress = ringDataStore.getRingDevice()?.address)
+                    val syncState = alertSyncState?.takeIf { it.feature == DeviceAlertFeature.RELAXATION_PROMPT }
+                    val syncPhase = syncState?.phase
+                    val staleResponse = isStaleAlertResponse(DeviceAlertFeature.RELAXATION_PROMPT, syncState)
+                    val matchesStored = settings.pressureMode == queryCallback.pressureModeSettings
+                    settings.snapshots.pressureMode = queryCallback.snapshot
+                    settings.setSupport(DeviceAlertFeature.RELAXATION_PROMPT, true)
+                    when {
+                        staleResponse -> {
+                            AlertDebugLogger.logAlertFlow("AlertService", DeviceAlertFeature.RELAXATION_PROMPT, syncState?.operationId, "stale_response", "ignored pressure threshold query")
+                        }
+
+                        syncPhase == AlertSyncPhase.UPDATE_SENT -> {
+                            AlertDebugLogger.logAlertFlow("AlertService", DeviceAlertFeature.RELAXATION_PROMPT, syncState?.operationId, "threshold_api", "pressure write in flight, preserving local value")
+                        }
+
+                        syncPhase == AlertSyncPhase.VERIFY_QUERY && !matchesStored -> {
+                            AlertDebugLogger.log("AlertService", "pressure verify mismatch preserving local value")
+                        }
+
+                        settings.isPending(DeviceAlertFeature.RELAXATION_PROMPT) && syncPhase == null -> {
+                            AlertDebugLogger.log("AlertService", "pressure passive query preserving pending local value")
+                        }
+
+                        else -> {
+                            settings.pressureMode = queryCallback.pressureModeSettings
+                        }
+                    }
+                    saveAlertSettings(settings)
+                    if (syncState != null) {
+                        if (staleResponse) {
+                            onAlertStaleResponse(DeviceAlertFeature.RELAXATION_PROMPT, syncState)
+                        } else {
+                            onAlertQueryCompleted(DeviceAlertFeature.RELAXATION_PROMPT, matchesStored)
+                        }
+                    }
+                }
+
+                is QueryCallback.SleepReminderObtained -> {
+                    val settings = getCurrentAlertSettings()
+                        ?: LocalDeviceAlertSettings(deviceAddress = ringDataStore.getRingDevice()?.address)
+                    val syncState = alertSyncState?.takeIf { it.feature == DeviceAlertFeature.SLEEP_REMINDER }
+                    val syncPhase = syncState?.phase
+                    val staleResponse = isStaleAlertResponse(DeviceAlertFeature.SLEEP_REMINDER, syncState)
+                    val matchesStored = AlertSettingsStateUtils.sleepReminderMatches(
+                        settings.sleepReminder,
+                        queryCallback.sleepReminder
+                    )
+                    settings.setSupport(DeviceAlertFeature.SLEEP_REMINDER, true)
+                    when {
+                        staleResponse -> {
+                            AlertDebugLogger.logAlertFlow("AlertService", DeviceAlertFeature.SLEEP_REMINDER, syncState?.operationId, "stale_response", "ignored sleep reminder query")
+                        }
+
+                        syncPhase == AlertSyncPhase.UPDATE_SENT -> {
+                            AlertDebugLogger.logAlertFlow("AlertService", DeviceAlertFeature.SLEEP_REMINDER, syncState?.operationId, "threshold_api", "sleep reminder write in flight, preserving local value")
+                        }
+
+                        syncPhase == AlertSyncPhase.VERIFY_QUERY && !matchesStored -> {
+                            AlertDebugLogger.log("AlertService", "sleepReminder verify mismatch preserving local value")
+                        }
+
+                        settings.isPending(DeviceAlertFeature.SLEEP_REMINDER) && syncPhase == null -> {
+                            AlertDebugLogger.log("AlertService", "sleepReminder passive query preserving pending local value")
+                        }
+
+                        else -> {
+                            settings.sleepReminder = AlertSettingsStateUtils.mergeSleepReminder(
+                                settings.sleepReminder,
+                                queryCallback.sleepReminder
+                            )
+                        }
+                    }
+                    saveAlertSettings(settings)
+                    if (syncState != null) {
+                        if (staleResponse) {
+                            onAlertStaleResponse(DeviceAlertFeature.SLEEP_REMINDER, syncState)
+                        } else {
+                            onAlertQueryCompleted(DeviceAlertFeature.SLEEP_REMINDER, matchesStored)
+                        }
+                    }
+                }
+
+                is QueryCallback.SedentaryReminderSettingsObtained -> {
+                    val settings = getCurrentAlertSettings()
+                        ?: LocalDeviceAlertSettings(deviceAddress = ringDataStore.getRingDevice()?.address)
+                    val syncState = alertSyncState?.takeIf { it.feature == DeviceAlertFeature.SEDENTARY_REMINDER }
+                    val syncPhase = syncState?.phase
+                    val staleResponse = isStaleAlertResponse(DeviceAlertFeature.SEDENTARY_REMINDER, syncState)
+                    val readbackAnomaly = AlertSettingsStateUtils.isScreenlessSedentaryReadbackAnomaly(
+                        deviceType = ringDataStore.getRingDevice()?.deviceType,
+                        local = settings.sedentaryReminder,
+                        device = queryCallback.sedentaryData
+                    )
+                    val matchesStored = AlertSettingsStateUtils.sedentaryMatches(
+                        settings.sedentaryReminder,
+                        queryCallback.sedentaryData
+                    ) || readbackAnomaly
+                    settings.snapshots.sedentaryReminder = queryCallback.snapshot
+                    settings.setSupport(DeviceAlertFeature.SEDENTARY_REMINDER, true)
+                    if (readbackAnomaly) {
+                        AlertDebugLogger.log(
+                            "AlertService",
+                            "sedentary readback anomaly detected deviceType=${ringDataStore.getRingDevice()?.deviceType}"
+                        )
+                    }
+                    when {
+                        staleResponse -> {
+                            AlertDebugLogger.logAlertFlow("AlertService", DeviceAlertFeature.SEDENTARY_REMINDER, syncState?.operationId, "stale_response", "ignored sedentary reminder query")
+                        }
+
+                        syncPhase == AlertSyncPhase.SNAPSHOT_QUERY -> {
+                            AlertDebugLogger.log("AlertService", "sedentary query using snapshot only")
+                        }
+
+                        syncPhase == AlertSyncPhase.UPDATE_SENT -> {
+                            AlertDebugLogger.logAlertFlow("AlertService", DeviceAlertFeature.SEDENTARY_REMINDER, syncState?.operationId, "threshold_api", "sedentary write in flight, preserving local value")
+                        }
+
+                        syncPhase == AlertSyncPhase.VERIFY_QUERY && !matchesStored -> {
+                            AlertDebugLogger.log("AlertService", "sedentary verify mismatch preserving local value")
+                        }
+
+                        settings.isPending(DeviceAlertFeature.SEDENTARY_REMINDER) && syncPhase == null -> {
+                            AlertDebugLogger.log("AlertService", "sedentary passive query preserving pending local value")
+                        }
+
+                        readbackAnomaly -> {
+                            AlertDebugLogger.log("AlertService", "sedentary verify using local value after zeroed readback")
+                        }
+
+                        else -> {
+                            settings.sedentaryReminder = AlertSettingsStateUtils.mergeSedentary(
+                                settings.sedentaryReminder,
+                                queryCallback.sedentaryData
+                            )
+                        }
+                    }
+                    saveAlertSettings(settings)
+                    if (syncState != null) {
+                        if (staleResponse) {
+                            onAlertStaleResponse(DeviceAlertFeature.SEDENTARY_REMINDER, syncState)
+                        } else {
+                            onAlertQueryCompleted(DeviceAlertFeature.SEDENTARY_REMINDER, matchesStored)
+                        }
+                    }
+                }
+
+                is QueryCallback.RingWearingStatusObtained -> {
+                    val directStatus = if (queryCallback.wearDetectionStatus.isWorn == true) 1 else 0
+                    val fusedWearStatus = WearStatusResolver.fromDirectQuery(
+                        directStatus = directStatus,
+                        now = System.currentTimeMillis(),
+                        recentEvidenceAt = recentWearEvidenceAt,
+                        recentEvidenceValue = recentWearEvidenceValue
+                    )
+                    publishWearStatus(
+                        wearStatus = fusedWearStatus,
+                        stage = "wear_probe",
+                        publishToUi = false
+                    )
+                    callbackForUi = QueryCallback.RingWearingStatusObtained(fusedWearStatus)
+                }
+
                 else -> {}
             }
-            sessionManager.setQueryCallback(queryCallback)
+            sessionManager.setQueryCallback(callbackForUi)
 
         }
     }
 
     private val updateDeviceCallback = object : IUpdateDeviceDataCallback {
         override fun onUpdateDataReceived(dataCallback: UpdateDeviceDataCallback) {
+            AlertDebugLogger.log("AlertService", "updateCallback type=${dataCallback.javaClass.simpleName}")
             when (dataCallback) {
                 is UpdateDeviceDataCallback.ManualMeasurementObtained -> {
+                    if (consumeAlertMeasurementRequest(dataCallback.manualMeasurement)) {
+                        sessionManager.setUpdateDeviceCallback(dataCallback)
+                        return
+                    }
+                    WearStatusResolver.fromManualMeasurement(
+                        dataCallback.manualMeasurement,
+                        System.currentTimeMillis()
+                    )?.let { wearStatus ->
+                        publishWearStatus(
+                            wearStatus = wearStatus,
+                            stage = "wear_inference",
+                            publishToUi = true
+                        )
+                    }
                     if (dataCallback.manualMeasurement.manualMeasureType == ManualMeasureType.STRESS) {
                         ringDataStore.setManualMeasurementValueStress(dataCallback.manualMeasurement)
                         sessionManager.setManualMeasurementValue(
@@ -1931,6 +3188,59 @@ constructor() : LifecycleService() {
                     }
                 }
 
+                is UpdateDeviceDataCallback.HeartRateAlertSettingsUpdated -> {
+                    onAlertUpdateCompleted(DeviceAlertFeature.HEART_RATE, dataCallback.success)
+                }
+
+                is UpdateDeviceDataCallback.Spo2AlertSettingsUpdated -> {
+                    onAlertUpdateCompleted(DeviceAlertFeature.SPO2, dataCallback.success)
+                }
+
+                is UpdateDeviceDataCallback.HighStressAlertSettingsUpdated -> {
+                    onAlertUpdateCompleted(DeviceAlertFeature.HIGH_STRESS_INDEX, dataCallback.success)
+                }
+
+                is UpdateDeviceDataCallback.PressureModeSettingsUpdated -> {
+                    onAlertUpdateCompleted(DeviceAlertFeature.RELAXATION_PROMPT, dataCallback.success)
+                }
+
+                is UpdateDeviceDataCallback.SleepReminderUpdated -> {
+                    onAlertUpdateCompleted(DeviceAlertFeature.SLEEP_REMINDER, dataCallback.success)
+                }
+
+                is UpdateDeviceDataCallback.SedentaryDataUpdated -> {
+                    onAlertUpdateCompleted(DeviceAlertFeature.SEDENTARY_REMINDER, dataCallback.success)
+                }
+
+                is UpdateDeviceDataCallback.AlertFeatureSupportResolved -> {
+                    if (!dataCallback.supported &&
+                        dataCallback.feature == DeviceAlertFeature.WEAR_DETECTION &&
+                        ScreenlessDeviceSupport.isScreenlessDeviceType(ringDataStore.getRingDevice()?.deviceType)
+                    ) {
+                        val settings = getCurrentAlertSettings()
+                            ?: LocalDeviceAlertSettings(deviceAddress = ringDataStore.getRingDevice()?.address)
+                        settings.setSupport(DeviceAlertFeature.WEAR_DETECTION, true)
+                        saveAlertSettings(settings)
+                    } else if (dataCallback.supported) {
+                        val settings = getCurrentAlertSettings()
+                            ?: LocalDeviceAlertSettings(deviceAddress = ringDataStore.getRingDevice()?.address)
+                        settings.setSupport(dataCallback.feature, true)
+                        saveAlertSettings(settings)
+                    } else {
+                        if (dataCallback.feature == DeviceAlertFeature.WEAR_DETECTION) {
+                            val settings = getCurrentAlertSettings()
+                                ?: LocalDeviceAlertSettings(deviceAddress = ringDataStore.getRingDevice()?.address)
+                            settings.wearDetectionStatus = settings.wearDetectionStatus.copy(
+                                isWorn = null,
+                                lastUpdatedAt = -1L
+                            )
+                            settings.setSupport(DeviceAlertFeature.WEAR_DETECTION, false)
+                            saveAlertSettings(settings)
+                        }
+                        onAlertFeatureUnsupported(dataCallback.feature)
+                    }
+                }
+
                 else -> {}
             }
             sessionManager.setUpdateDeviceCallback(dataCallback)
@@ -1946,6 +3256,19 @@ constructor() : LifecycleService() {
                     LOGS.d(TAG, "steps Data testing : ${userActivityCallback.stepsData.totalSteps}")
                 }
 
+                is UserActivityCallback.HeartHistoryObtainedOreo -> {
+                    AlertMirrorEvaluator.extractLatestPositiveValue(userActivityCallback.heartRateData.breakUp)
+                        ?.takeIf { it > 0 }
+                        ?.let { processHeartRateSample(it, System.currentTimeMillis()) }
+                }
+
+                is UserActivityCallback.OreoBloodOxygenObtained -> {
+                    handleOreoSpo2Sample(userActivityCallback.bloodOxygen)
+                }
+
+                is UserActivityCallback.StressDataObtainedOreo -> {
+                    handleOreoStressSample(userActivityCallback.stressData)
+                }
 
                 is UserActivityCallback.SportsModeDataObtained -> {
                     //LOGS.d("SportsModeDataObtained6 " + userActivityCallback.sportsModeRequestList)
@@ -1958,6 +3281,38 @@ constructor() : LifecycleService() {
 
 
         }
+    }
+
+    private fun handleOreoSpo2Sample(bloodOxygen: OreoBloodOxygenBreakup) {
+        AlertMirrorEvaluator.extractLatestPositiveValue(bloodOxygen.breakUp)
+            ?.takeIf { it > 0 }
+            ?.let { observedValue ->
+                AlertDebugLogger.logAlertFlowValue(
+                    "AlertService",
+                    DeviceAlertFeature.SPO2,
+                    currentAlertOperationId(DeviceAlertFeature.SPO2),
+                    "mirror_sample",
+                    "continuousSpo2",
+                    bloodOxygen
+                )
+                processSpo2Sample(observedValue, System.currentTimeMillis())
+            }
+    }
+
+    private fun handleOreoStressSample(stressData: OreoStressDataBreakup) {
+        AlertMirrorEvaluator.extractLatestPositiveValue(stressData.breakUp)
+            ?.takeIf { it > 0 }
+            ?.let { observedValue ->
+                AlertDebugLogger.logAlertFlowValue(
+                    "AlertService",
+                    DeviceAlertFeature.HIGH_STRESS_INDEX,
+                    currentAlertOperationId(DeviceAlertFeature.HIGH_STRESS_INDEX),
+                    "mirror_sample",
+                    "continuousStress",
+                    stressData
+                )
+                processHighStressSample(observedValue, System.currentTimeMillis())
+            }
     }
 
     private fun registerTimeChangeReceiver() {

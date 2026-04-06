@@ -11,6 +11,7 @@ import com.noisefit_commans.models.Contact
 import com.noisefit_commans.models.CustomReplyData
 import com.noisefit_commans.models.HandWashing
 import com.noisefit_commans.models.HeartRateInterval
+import com.noisefit_commans.models.LocalDeviceAlertSettings
 import com.noisefit_commans.models.LocationDataModel
 import com.noisefit_commans.models.SedentaryData
 import com.noisefit_commans.models.WatchFirmwareDetails
@@ -56,8 +57,20 @@ private const val RYEEX_WATCH_TOKEN_ARG = "RYEEX_WATCH_TOKEN_ARG"
 private const val WEATHER_SPORT_DATA_KEY = "WEATHER_SPORT_DATA_KEY_2"
 private const val TEST_BODY_BATTERY = "TEST_BODY_BATTERY"
 private const val TEST_STRESS_DATA = "TEST_STRESS_DATA"
+private const val TEST_RAW_DEV_SPORT = "TEST_RAW_DEV_SPORT"
+private const val TEST_RAW_AUTO_SPORT = "TEST_RAW_AUTO_SPORT"
+private const val TEST_RAW_AUTO_ACTIVE_SPORT = "TEST_RAW_AUTO_ACTIVE_SPORT"
+private const val TEST_RAW_FITNESS_SPORT_IDS = "TEST_RAW_FITNESS_SPORT_IDS"
+private const val TEST_RAW_RESPIRATORY = "TEST_RAW_RESPIRATORY"
+private const val TEST_RAW_CONTINUOUS_HEART_RATE = "TEST_RAW_CONTINUOUS_HEART_RATE"
+private const val TEST_RAW_CONTINUOUS_PRESSURE = "TEST_RAW_CONTINUOUS_PRESSURE"
+private const val TEST_RAW_SLEEP_RRI = "TEST_RAW_SLEEP_RRI"
+private const val TEST_RAW_SLEEP_HRV = "TEST_RAW_SLEEP_HRV"
+private const val TEST_RAW_CONTINUOUS_RRI = "TEST_RAW_CONTINUOUS_RRI"
+private const val TEST_RAW_SPORT_HEART_RATE_AFTER = "TEST_RAW_SPORT_HEART_RATE_AFTER"
 
 private const val RING_CASE_DATA = "RING_CASE_DATA"
+private const val LOCAL_DEVICE_ALERT_SETTINGS = "LOCAL_DEVICE_ALERT_SETTINGS"
 
 
 private inline fun <reified T> Gson.fromJson(json: String) =
@@ -106,6 +119,116 @@ constructor(
     override fun testGetStressData(): String? {
         return mPrefs.getString(TEST_STRESS_DATA, null)
 
+    }
+
+    override fun testSaveRawDevSportJson(data: String?) {
+        mPrefs.edit()
+            ?.putString(TEST_RAW_DEV_SPORT, data)
+            ?.commit()
+    }
+
+    override fun testGetRawDevSportJson(): String? {
+        return mPrefs.getString(TEST_RAW_DEV_SPORT, null)
+    }
+
+    override fun testSaveRawAutoSportJson(data: String?) {
+        mPrefs.edit()
+            ?.putString(TEST_RAW_AUTO_SPORT, data)
+            ?.commit()
+    }
+
+    override fun testGetRawAutoSportJson(): String? {
+        return mPrefs.getString(TEST_RAW_AUTO_SPORT, null)
+    }
+
+    override fun testSaveRawAutoActiveSportJson(data: String?) {
+        mPrefs.edit()
+            ?.putString(TEST_RAW_AUTO_ACTIVE_SPORT, data)
+            ?.commit()
+    }
+
+    override fun testGetRawAutoActiveSportJson(): String? {
+        return mPrefs.getString(TEST_RAW_AUTO_ACTIVE_SPORT, null)
+    }
+
+    override fun testSaveRawFitnessSportIdsJson(data: String?) {
+        mPrefs.edit()
+            ?.putString(TEST_RAW_FITNESS_SPORT_IDS, data)
+            ?.commit()
+    }
+
+    override fun testGetRawFitnessSportIdsJson(): String? {
+        return mPrefs.getString(TEST_RAW_FITNESS_SPORT_IDS, null)
+    }
+
+    override fun testSaveRawRespiratoryJson(data: String?) {
+        mPrefs.edit()
+            ?.putString(TEST_RAW_RESPIRATORY, data)
+            ?.commit()
+    }
+
+    override fun testGetRawRespiratoryJson(): String? {
+        return mPrefs.getString(TEST_RAW_RESPIRATORY, null)
+    }
+
+    override fun testSaveRawContinuousHeartRateJson(data: String?) {
+        mPrefs.edit()
+            ?.putString(TEST_RAW_CONTINUOUS_HEART_RATE, data)
+            ?.commit()
+    }
+
+    override fun testGetRawContinuousHeartRateJson(): String? {
+        return mPrefs.getString(TEST_RAW_CONTINUOUS_HEART_RATE, null)
+    }
+
+    override fun testSaveRawContinuousPressureJson(data: String?) {
+        mPrefs.edit()
+            ?.putString(TEST_RAW_CONTINUOUS_PRESSURE, data)
+            ?.commit()
+    }
+
+    override fun testGetRawContinuousPressureJson(): String? {
+        return mPrefs.getString(TEST_RAW_CONTINUOUS_PRESSURE, null)
+    }
+
+    override fun testSaveRawSleepRriJson(data: String?) {
+        mPrefs.edit()
+            ?.putString(TEST_RAW_SLEEP_RRI, data)
+            ?.commit()
+    }
+
+    override fun testGetRawSleepRriJson(): String? {
+        return mPrefs.getString(TEST_RAW_SLEEP_RRI, null)
+    }
+
+    override fun testSaveRawSleepHrvJson(data: String?) {
+        mPrefs.edit()
+            ?.putString(TEST_RAW_SLEEP_HRV, data)
+            ?.commit()
+    }
+
+    override fun testGetRawSleepHrvJson(): String? {
+        return mPrefs.getString(TEST_RAW_SLEEP_HRV, null)
+    }
+
+    override fun testSaveRawContinuousRriJson(data: String?) {
+        mPrefs.edit()
+            ?.putString(TEST_RAW_CONTINUOUS_RRI, data)
+            ?.commit()
+    }
+
+    override fun testGetRawContinuousRriJson(): String? {
+        return mPrefs.getString(TEST_RAW_CONTINUOUS_RRI, null)
+    }
+
+    override fun testSaveRawSportHeartRateAfterJson(data: String?) {
+        mPrefs.edit()
+            ?.putString(TEST_RAW_SPORT_HEART_RATE_AFTER, data)
+            ?.commit()
+    }
+
+    override fun testGetRawSportHeartRateAfterJson(): String? {
+        return mPrefs.getString(TEST_RAW_SPORT_HEART_RATE_AFTER, null)
     }
 
     override fun updateFitnessAge(age: Int){
@@ -587,7 +710,11 @@ constructor(
     }
 
     override fun clearWatchData() {
+        val localAlertSettings = mPrefs.getString(LOCAL_DEVICE_ALERT_SETTINGS, null)
         mPrefs.edit().clear().commit()
+        localAlertSettings?.let {
+            mPrefs.edit().putString(LOCAL_DEVICE_ALERT_SETTINGS, it).commit()
+        }
     }
 
     override fun setAskForPermission(status: Boolean) {
@@ -598,5 +725,18 @@ constructor(
 
     override fun getAskForPermission(): Boolean {
         return mPrefs.getBoolean(ASK_PERMISSION, false)
+    }
+
+    override fun updateLocalDeviceAlertSettings(data: LocalDeviceAlertSettings?) {
+        mPrefs.edit()
+            ?.putString(LOCAL_DEVICE_ALERT_SETTINGS, gson.toJson(data))
+            ?.commit()
+    }
+
+    override fun getLocalDeviceAlertSettings(): LocalDeviceAlertSettings? {
+        return gson.fromJson(
+            mPrefs.getString(LOCAL_DEVICE_ALERT_SETTINGS, null),
+            LocalDeviceAlertSettings::class.java
+        )
     }
 }

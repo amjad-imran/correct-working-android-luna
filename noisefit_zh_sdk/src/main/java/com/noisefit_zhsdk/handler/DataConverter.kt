@@ -1156,7 +1156,30 @@ constructor(
             intensityList = Gson().toJson(intensity),
             date = date,
             fitnessAge = it.fitnessAge,
-            energyConsumption = it.reportEnergyConsumption
+            energyConsumption = it.reportEnergyConsumption,
+            vo2Max = it.reportVO2max,
+            trainingEffect = it.reportTrainingEffect,
+            trainingLoad = it.reportTrainingLoad,
+            avgHeart = it.reportAvgHeart,
+            maxHeart = it.reportMaxHeart,
+            minHeart = it.reportMinHeart,
+            avgPace = it.reportAvgPace,
+            fastPace = it.reportFastPace,
+            avgSpeed = it.reportAvgSpeed,
+            fastSpeed = it.reportFastSpeed,
+            hrLimitTime = it.reportHeartLimitTime,
+            hrAnaerobic = it.reportHeartAnaerobic,
+            hrAerobic = it.reportHeartAerobic,
+            hrFatBurning = it.reportHeartFatBurning,
+            hrWarmUp = it.reportHeartWarmUp,
+            avgStride = it.reportAvgStride,
+            maxStride = it.reportMaxStride,
+            minStride = it.reportMinStride,
+            cumulativeRise = it.reportCumulativeRise,
+            cumulativeDecline = it.reportCumulativeDecline,
+            avgHeight = it.reportAvgHeight,
+            maxHeight = it.reportMaxHeight,
+            minHeight = it.reportMinHeight
         )
     }
 }

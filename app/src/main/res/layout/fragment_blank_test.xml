@@ -36,9 +36,9 @@
                 android:id="@+id/tvChargingStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="CHARGING"
+                android:text="--"
                 android:textSize="10sp"
-                android:textColor="#4ADE80"
+                android:textColor="#888888"
                 android:letterSpacing="0.1" />
         </LinearLayout>
 
@@ -602,6 +602,699 @@
             </LinearLayout>
 
         </LinearLayout>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- BODY BATTERY CHART                    -->
+        <!-- ══════════════════════════════════════ -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_lifeos_gradient_border"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BODY BATTERY"
+                android:textSize="10sp"
+                android:letterSpacing="0.15"
+                android:textColor="#888888"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="CURRENT STAMINA"
+                    android:textSize="9sp"
+                    android:textColor="#555555"
+                    android:letterSpacing="0.1" />
+
+                <TextView
+                    android:id="@+id/tvCurrentStamina"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="--"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textColor="#4ADE80" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" / 100"
+                    android:textSize="12sp"
+                    android:textColor="#555555"
+                    android:paddingBottom="4dp" />
+            </LinearLayout>
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chartBodyBattery"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:background="#111111" />
+
+            <TextView
+                android:id="@+id/tvBodyBatteryStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Waiting for data..."
+                android:textSize="10sp"
+                android:textColor="#555555"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+        <!-- ══════════════════════════════════════ -->
+        <!-- NEW WORKOUT METRICS (VO2/TE/TL/HR)   -->
+        <!-- ══════════════════════════════════════ -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_lifeos_gradient_border"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ADVANCED WORKOUT METRICS"
+                android:textSize="10sp"
+                android:letterSpacing="0.15"
+                android:textColor="#888888"
+                android:layout_marginBottom="12dp" />
+
+            <!-- ROW: VO2 Max | Training Effect | Training Load -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:layout_marginBottom="8dp">
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:background="#1A1A1A" android:padding="10dp" android:layout_marginEnd="6dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="VO2 MAX" android:textSize="8sp" android:letterSpacing="0.1" android:textColor="#555555" />
+                    <TextView android:id="@+id/tvWorkoutVo2Max" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" tools:text="--"
+                        android:textSize="14sp" android:textStyle="bold" android:textColor="#4ADE80"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:background="#1A1A1A" android:padding="10dp" android:layout_marginEnd="6dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="TRAINING EFF" android:textSize="8sp" android:letterSpacing="0.1" android:textColor="#555555" />
+                    <TextView android:id="@+id/tvWorkoutTrainingEffect" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" tools:text="--"
+                        android:textSize="14sp" android:textStyle="bold" android:textColor="#4ADE80"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:background="#1A1A1A" android:padding="10dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="TRAINING LOAD" android:textSize="8sp" android:letterSpacing="0.1" android:textColor="#555555" />
+                    <TextView android:id="@+id/tvWorkoutTrainingLoad" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" tools:text="--"
+                        android:textSize="14sp" android:textStyle="bold" android:textColor="#4ADE80"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- ROW: Avg HR | Max HR | Min HR -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:layout_marginBottom="8dp">
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:background="#1A1A1A" android:padding="10dp" android:layout_marginEnd="6dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="AVG HR" android:textSize="8sp" android:letterSpacing="0.1" android:textColor="#555555" />
+                    <TextView android:id="@+id/tvWorkoutAvgHeart" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" tools:text="--"
+                        android:textSize="14sp" android:textStyle="bold" android:textColor="#FFFFFF"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:background="#1A1A1A" android:padding="10dp" android:layout_marginEnd="6dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="MAX HR" android:textSize="8sp" android:letterSpacing="0.1" android:textColor="#555555" />
+                    <TextView android:id="@+id/tvWorkoutMaxHeart" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" tools:text="--"
+                        android:textSize="14sp" android:textStyle="bold" android:textColor="#FFFFFF"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:background="#1A1A1A" android:padding="10dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="MIN HR" android:textSize="8sp" android:letterSpacing="0.1" android:textColor="#555555" />
+                    <TextView android:id="@+id/tvWorkoutMinHeart" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" tools:text="--"
+                        android:textSize="14sp" android:textStyle="bold" android:textColor="#FFFFFF"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- ROW: Avg Pace | Fast Pace | Avg Speed -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:layout_marginBottom="8dp">
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:background="#1A1A1A" android:padding="10dp" android:layout_marginEnd="6dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="AVG PACE" android:textSize="8sp" android:letterSpacing="0.1" android:textColor="#555555" />
+                    <TextView android:id="@+id/tvWorkoutAvgPace" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" tools:text="--"
+                        android:textSize="14sp" android:textStyle="bold" android:textColor="#FFFFFF"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:background="#1A1A1A" android:padding="10dp" android:layout_marginEnd="6dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="FAST PACE" android:textSize="8sp" android:letterSpacing="0.1" android:textColor="#555555" />
+                    <TextView android:id="@+id/tvWorkoutFastPace" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" tools:text="--"
+                        android:textSize="14sp" android:textStyle="bold" android:textColor="#FFFFFF"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:background="#1A1A1A" android:padding="10dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="AVG SPEED" android:textSize="8sp" android:letterSpacing="0.1" android:textColor="#555555" />
+                    <TextView android:id="@+id/tvWorkoutAvgSpeed" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" tools:text="--"
+                        android:textSize="14sp" android:textStyle="bold" android:textColor="#FFFFFF"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- ROW: HR Zones - Limit | Anaerobic | Aerobic -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:layout_marginBottom="8dp">
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:background="#1A1A1A" android:padding="10dp" android:layout_marginEnd="6dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="HR LIMIT" android:textSize="8sp" android:letterSpacing="0.1" android:textColor="#555555" />
+                    <TextView android:id="@+id/tvWorkoutHrLimit" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" tools:text="--"
+                        android:textSize="14sp" android:textStyle="bold" android:textColor="#FFFFFF"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:background="#1A1A1A" android:padding="10dp" android:layout_marginEnd="6dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="ANAEROBIC" android:textSize="8sp" android:letterSpacing="0.1" android:textColor="#555555" />
+                    <TextView android:id="@+id/tvWorkoutHrAnaerobic" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" tools:text="--"
+                        android:textSize="14sp" android:textStyle="bold" android:textColor="#FFFFFF"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:background="#1A1A1A" android:padding="10dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="AEROBIC" android:textSize="8sp" android:letterSpacing="0.1" android:textColor="#555555" />
+                    <TextView android:id="@+id/tvWorkoutHrAerobic" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" tools:text="--"
+                        android:textSize="14sp" android:textStyle="bold" android:textColor="#FFFFFF"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- ROW: HR Zones - Fat Burning | Warm Up | Fast Speed -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:layout_marginBottom="8dp">
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:background="#1A1A1A" android:padding="10dp" android:layout_marginEnd="6dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="FAT BURN" android:textSize="8sp" android:letterSpacing="0.1" android:textColor="#555555" />
+                    <TextView android:id="@+id/tvWorkoutHrFatBurn" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" tools:text="--"
+                        android:textSize="14sp" android:textStyle="bold" android:textColor="#FFFFFF"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:background="#1A1A1A" android:padding="10dp" android:layout_marginEnd="6dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="WARM UP" android:textSize="8sp" android:letterSpacing="0.1" android:textColor="#555555" />
+                    <TextView android:id="@+id/tvWorkoutHrWarmUp" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" tools:text="--"
+                        android:textSize="14sp" android:textStyle="bold" android:textColor="#FFFFFF"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:background="#1A1A1A" android:padding="10dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="FAST SPEED" android:textSize="8sp" android:letterSpacing="0.1" android:textColor="#555555" />
+                    <TextView android:id="@+id/tvWorkoutFastSpeed" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" tools:text="--"
+                        android:textSize="14sp" android:textStyle="bold" android:textColor="#FFFFFF"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- ROW: Stride - Avg | Max | Min -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal" android:layout_marginBottom="8dp">
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:background="#1A1A1A" android:padding="10dp" android:layout_marginEnd="6dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="AVG STRIDE" android:textSize="8sp" android:letterSpacing="0.1" android:textColor="#555555" />
+                    <TextView android:id="@+id/tvWorkoutAvgStride" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" tools:text="--"
+                        android:textSize="14sp" android:textStyle="bold" android:textColor="#FFFFFF"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:background="#1A1A1A" android:padding="10dp" android:layout_marginEnd="6dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="MAX STRIDE" android:textSize="8sp" android:letterSpacing="0.1" android:textColor="#555555" />
+                    <TextView android:id="@+id/tvWorkoutMaxStride" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" tools:text="--"
+                        android:textSize="14sp" android:textStyle="bold" android:textColor="#FFFFFF"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:background="#1A1A1A" android:padding="10dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="MIN STRIDE" android:textSize="8sp" android:letterSpacing="0.1" android:textColor="#555555" />
+                    <TextView android:id="@+id/tvWorkoutMinStride" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" tools:text="--"
+                        android:textSize="14sp" android:textStyle="bold" android:textColor="#FFFFFF"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- ROW: Elevation - Rise | Decline | Avg Height -->
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:background="#1A1A1A" android:padding="10dp" android:layout_marginEnd="6dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="CUM. RISE" android:textSize="8sp" android:letterSpacing="0.1" android:textColor="#555555" />
+                    <TextView android:id="@+id/tvWorkoutCumRise" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" tools:text="--"
+                        android:textSize="14sp" android:textStyle="bold" android:textColor="#FFFFFF"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:background="#1A1A1A" android:padding="10dp" android:layout_marginEnd="6dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="CUM. DECLINE" android:textSize="8sp" android:letterSpacing="0.1" android:textColor="#555555" />
+                    <TextView android:id="@+id/tvWorkoutCumDecline" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" tools:text="--"
+                        android:textSize="14sp" android:textStyle="bold" android:textColor="#FFFFFF"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                    android:layout_weight="1" android:orientation="vertical"
+                    android:background="#1A1A1A" android:padding="10dp">
+                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:text="AVG HEIGHT" android:textSize="8sp" android:letterSpacing="0.1" android:textColor="#555555" />
+                    <TextView android:id="@+id/tvWorkoutAvgHeight" android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" tools:text="--"
+                        android:textSize="14sp" android:textStyle="bold" android:textColor="#FFFFFF"
+                        android:layout_marginTop="2dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ══════════════════════════════════════ -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_lifeos_gradient_border"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SDK V2.3.1 DAILY SYNC MODES"
+                android:textSize="10sp"
+                android:letterSpacing="0.15"
+                android:textColor="#888888"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tvSdkSyncStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="--"
+                android:textSize="11sp"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:id="@+id/tvSdkSyncDefault"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/back_modal_new_black"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:text="DEFAULT"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvSdkSyncToday"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/back_modal_new_black"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:text="TODAY"
+                    android:textColor="#4ADE80"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:id="@+id/tvSdkSyncHistory"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:background="@drawable/back_modal_new_black"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:text="HISTORY"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvSdkSyncAll"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/back_modal_new_black"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:text="ALL"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Default keeps the old app behavior. Today, History, and All use the new v2.3.1 daily-data transmission mode."
+                android:textSize="10sp"
+                android:textColor="#888888" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_lifeos_gradient_border"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SDK V2.3.1 SCREENLESS DATA"
+                android:textSize="10sp"
+                android:letterSpacing="0.15"
+                android:textColor="#888888"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tvSdkHeartRateMeta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Continuous heart-rate metadata unavailable."
+                android:textSize="11sp"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="6dp" />
+
+            <TextView
+                android:id="@+id/tvSdkPressureMeta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Continuous pressure metadata unavailable."
+                android:textSize="11sp"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="6dp" />
+
+            <TextView
+                android:id="@+id/tvSdkContinuousRriMeta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Continuous RRI metadata unavailable."
+                android:textSize="11sp"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="6dp" />
+
+            <TextView
+                android:id="@+id/tvSdkSleepRriMeta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sleep RRI metadata unavailable."
+                android:textSize="11sp"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="6dp" />
+
+            <TextView
+                android:id="@+id/tvSdkSleepHrvMeta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sleep HRV metadata unavailable."
+                android:textSize="11sp"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="6dp" />
+
+            <TextView
+                android:id="@+id/tvSdkSportHeartAfterMeta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Post-workout heart-rate metadata unavailable."
+                android:textSize="11sp"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CONTINUOUS HEART RATE RAW"
+                android:textSize="10sp"
+                android:textColor="#888888"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/tvRawHeartRateV231"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#111111"
+                android:fontFamily="monospace"
+                android:padding="8dp"
+                android:text="--"
+                android:textColor="#AAAAAA"
+                android:textSize="9sp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CONTINUOUS PRESSURE RAW"
+                android:textSize="10sp"
+                android:textColor="#888888"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/tvRawPressureV231"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#111111"
+                android:fontFamily="monospace"
+                android:padding="8dp"
+                android:text="--"
+                android:textColor="#AAAAAA"
+                android:textSize="9sp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SLEEP RRI RAW"
+                android:textSize="10sp"
+                android:textColor="#888888"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/tvRawSleepRri"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#111111"
+                android:fontFamily="monospace"
+                android:padding="8dp"
+                android:text="--"
+                android:textColor="#AAAAAA"
+                android:textSize="9sp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SLEEP HRV RAW"
+                android:textSize="10sp"
+                android:textColor="#888888"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/tvRawSleepHrv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#111111"
+                android:fontFamily="monospace"
+                android:padding="8dp"
+                android:text="--"
+                android:textColor="#AAAAAA"
+                android:textSize="9sp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CONTINUOUS RRI RAW"
+                android:textSize="10sp"
+                android:textColor="#888888"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/tvRawContinuousRri"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#111111"
+                android:fontFamily="monospace"
+                android:padding="8dp"
+                android:text="--"
+                android:textColor="#AAAAAA"
+                android:textSize="9sp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="POST-WORKOUT HEART RATE RAW"
+                android:textSize="10sp"
+                android:textColor="#888888"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:id="@+id/tvRawSportHeartRateAfter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#111111"
+                android:fontFamily="monospace"
+                android:padding="8dp"
+                android:text="--"
+                android:textColor="#AAAAAA"
+                android:textSize="9sp"
+                android:layout_marginBottom="12dp" />
+        </LinearLayout>
+
+        <!-- RAW DATA DUMP                         -->
+        <!-- ══════════════════════════════════════ -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_lifeos_gradient_border"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DEV SPORT INFO  (RAW SDK FIELDS)"
+                android:textSize="10sp"
+                android:letterSpacing="0.15"
+                android:textColor="#888888"
+                android:layout_marginBottom="8dp" />
+            <TextView
+                android:id="@+id/tvRawDevSport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="--"
+                android:textSize="9sp"
+                android:textColor="#AAAAAA"
+                android:fontFamily="monospace"
+                android:background="#111111"
+                android:padding="8dp"
+                android:layout_marginBottom="8dp" />
+        </LinearLayout>
+
+        <include layout="@layout/layout_alert_settings_panel" />
 
     </LinearLayout>
 </ScrollView>

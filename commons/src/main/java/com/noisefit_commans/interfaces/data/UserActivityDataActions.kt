@@ -18,6 +18,9 @@ abstract class UserActivityDataActions() :
     abstract fun getStressCount()
     abstract fun getBodyTemperatureData()
     open fun syncUserActivity(date: String, isRefresh: Boolean) {}
+    open fun syncUserActivityByMode(date: String, mode: Int?) {
+        syncUserActivity(date, true)
+    }
     open fun updateSportsMode(sportsModeRequest: SportsModeRequest) {}
     open fun refresh(sportsModeRequest: SportsModeRequest) {}
     open fun getHeartHistory(calendar: Calendar) {}

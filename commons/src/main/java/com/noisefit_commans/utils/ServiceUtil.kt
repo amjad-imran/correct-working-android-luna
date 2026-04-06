@@ -27,8 +27,17 @@ object ServiceUtil {
             QueryAction.GetSpo2Settings -> {
                 queryAction.getSpo2Settings()
             }
+            QueryAction.GetSpo2AlertSettings -> {
+                queryAction.getSpo2AlertSettings()
+            }
+            QueryAction.GetHighStressAlertSettings -> {
+                queryAction.getHighStressAlertSettings()
+            }
             QueryAction.GetQuickBleCallingSwitch -> {
                 queryAction.getBleCallingSwitch()
+            }
+            QueryAction.GetRingWearingStatus -> {
+                queryAction.getRingWearingStatus()
             }
             QueryAction.GetSleepReminder -> {
                 queryAction.getSleepReminder()
@@ -85,6 +94,9 @@ object ServiceUtil {
             QueryAction.GetHeartRateAlert -> {
                 queryAction.getHeartRateAlert()
             }
+            QueryAction.GetHeartRateAlertSettings -> {
+                queryAction.getHeartRateAlertSettings()
+            }
             QueryAction.GetHeartRateInterval -> {
                 queryAction.getHeartRateInterval()
             }
@@ -139,6 +151,9 @@ object ServiceUtil {
             }
             QueryAction.GetStressSettings -> {
                 queryAction.getStressSettings()
+            }
+            QueryAction.GetPressureModeSettings -> {
+                queryAction.getPressureModeSettings()
             }
             QueryAction.GetUserGoals -> TODO()
             QueryAction.GetUserInfo -> TODO()
@@ -199,6 +214,9 @@ object ServiceUtil {
             }
             is UpdateDeviceAction.SetSpo2Settings -> {
                 updateAction.setSpo2Settings(it.spo2Data)
+            }
+            is UpdateDeviceAction.SetSpo2AlertSettings -> {
+                updateAction.setSpo2AlertSettings(it.spo2AlertSettings)
             }
             is UpdateDeviceAction.FindDevice -> {
                 updateAction.findDevice(it.findDevice)
@@ -291,6 +309,12 @@ object ServiceUtil {
             is UpdateDeviceAction.SetHeartRateAlert -> {
                 updateAction.setHeartRateAlert(it.heartRateAlert)
             }
+            is UpdateDeviceAction.SetHeartRateAlertSettings -> {
+                updateAction.setHeartRateAlertSettings(it.heartRateAlertSettings)
+            }
+            is UpdateDeviceAction.SetHighStressAlertSettings -> {
+                updateAction.setHighStressAlertSettings(it.highStressAlertSettings)
+            }
             is UpdateDeviceAction.SetQuickEyeMovementSwitch -> {
                 updateAction.setQuickEyeMovementSwitch(it.status)
             }
@@ -329,6 +353,9 @@ object ServiceUtil {
             }
             is UpdateDeviceAction.SetStressData -> {
                 updateAction.setStressData(it.sedentaryData)
+            }
+            is UpdateDeviceAction.SetPressureModeSettings -> {
+                updateAction.setPressureModeSettings(it.pressureModeSettings)
             }
             is UpdateDeviceAction.SetFactoryReset -> {
                 updateAction.setFactoryReset()

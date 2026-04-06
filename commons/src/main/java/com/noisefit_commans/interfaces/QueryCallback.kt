@@ -36,13 +36,21 @@ sealed class QueryCallback {
     class VibrationIntensityObtained(val vibrationIntensity: VibrationIntensity) : QueryCallback()
     class ScreenAwakeIntervalObtained(val interval: Int) : QueryCallback()
     class HeartRateIntervalObtained(val interval: HeartRateInterval) : QueryCallback()
+    class RealTimeHeartRateSampleObtained(val value: Int, val timeStamp: Long) : QueryCallback()
     class Spo2SettingsObtained(val spo2Data: Spo2Data) : QueryCallback()
+    class Spo2AlertSettingsObtained(val spo2AlertSettings: Spo2AlertSettings) : QueryCallback()
+    class HighStressAlertSettingsObtained(val highStressAlertSettings: HighStressAlertSettings) : QueryCallback()
     class AutoSleepObtained(val autoSleep: AutoSleep) : QueryCallback()
     class WatchFaceLayoutObtained(watchFaceLayout: WatchFaceLayout) : QueryCallback()
     class SwitchSettingObtained(switchSetting: SwitchSetting) : QueryCallback()
     class CustomReplyObtained(val customReplyData: CustomReplyData) : QueryCallback()
     class GetHandWashing(val handWashing: HandWashing) : QueryCallback()
     class HeartRateAlertDataObtained(val heartRateAlert: HeartRateAlert) : QueryCallback()
+    class HeartRateAlertSettingsObtained(
+        val heartRateAlertSettings: HeartRateAlertSettings,
+        val snapshot: HeartRateAlertSnapshot,
+        val workoutSupported: Boolean = true
+    ) : QueryCallback()
     class RemindersObtained(val reminderList: ReminderList) : QueryCallback()
     class Error(colorFitError: ColorfitError) : QueryCallback()
     class ActivityRecognise(val switchSetting: SwitchSetting) : QueryCallback()
@@ -50,6 +58,19 @@ sealed class QueryCallback {
     class MealDataObtained(val sedentaryData: SedentaryData) : QueryCallback()
     class MedicineDataObtained(val sedentaryData: SedentaryData) : QueryCallback()
     class StressParamObtained(val sedentaryData: SedentaryData) : QueryCallback()
+    class PressureModeSettingsObtained(
+        val pressureModeSettings: PressureModeSettings,
+        val snapshot: PressureModeSnapshot = PressureModeSnapshot()
+    ) :
+        QueryCallback()
+    class SedentaryReminderSettingsObtained(
+        val sedentaryData: SedentaryData,
+        val snapshot: SedentaryReminderSnapshot
+    ) : QueryCallback()
+    class AlertFeatureSupportObtained(
+        val feature: DeviceAlertFeature,
+        val supported: Boolean
+    ) : QueryCallback()
     class WalkReminderDataObtained(val walkReminderData: WalkReminderData) : QueryCallback()
     class SportModeInfoObtained(val sportsModeList: SportsModeList?) : QueryCallback()
     class FirmwareLogObtained(val fileName: String) : QueryCallback()
@@ -77,5 +98,6 @@ sealed class QueryCallback {
     class SOSContactObtained(var sosContact: SOSContact) : QueryCallback()
 
     class SleepReminderObtained(var sleepReminder: SleepReminder) : QueryCallback()
+    class RingWearingStatusObtained(val wearDetectionStatus: WearDetectionStatus) : QueryCallback()
     class UpdateFirmwareLogStatus(var fwLogStatus: Int) : QueryCallback()
 }
