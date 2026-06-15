@@ -21,4 +21,7 @@ local.properties
 /app/staging
 /app/live
 /.gradle/
+.gradle/
 /.idea/
+app/outputfile.txt
+myPackage.zip
