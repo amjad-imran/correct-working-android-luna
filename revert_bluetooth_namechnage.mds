@@ -1,0 +1,247 @@
+# Revert Guide: Luna Band `Noise_REP_XXXX` Bluetooth Name Change
+
+## Purpose
+- This document explains exactly how to revert the Bluetooth-name support change that:
+  - allowed `Noise_REP_XXXX` scan results to enter the existing Luna-band pipeline
+  - displayed renamed devices as `Noise Band` in UI
+  - kept legacy devices displayed as `Luna Band`
+- Use this only if you want to fully remove this rename-support change set and return to the older behavior where only the legacy Luna-band BLE naming is recognized by the app.
+
+## Scope of the change set
+- No backend API contract was changed.
+- No Gradle/build/dependency file was changed.
+- No SDK/AAR integration file was changed.
+- No database/storage schema was changed.
+- No existing pairing/connection flow branching by `deviceType` was changed.
+- The production code change is intentionally limited to the existing scan-classification ViewModel and its UI-facing display label.
+
+## Files affected by this change set
+
+| File | Mode in this change set | What changed |
+| --- | --- | --- |
+| `app/src/main/java/com/noisefit/ui/onboarding/pairing/find/SearchNearbyDeviceViewModel.kt` | Modified | Added `Noise_REP_` fallback matching and separate UI display-name resolution |
+| `app/src/test/java/com/noisefit/ui/onboarding/pairing/find/SearchNearbyDeviceViewModelTest.kt` | Created | Added focused regression tests for old/new name handling |
+| `changes.md` | Modified | Added top summary section for this Bluetooth-name support |
+| `changes_detailed.md` | Modified | Added top detailed section for this Bluetooth-name support |
+| `update_changes.md` | Created | Added file audit for this Bluetooth-name support |
+| `revert_bluetooth_namechnage.mds` | Created | Added this revert guide |
+
+## Production code changes to revert
+
+### 1. `SearchNearbyDeviceViewModel.kt`
+- File:
+  - `app/src/main/java/com/noisefit/ui/onboarding/pairing/find/SearchNearbyDeviceViewModel.kt`
+- Current affected lines:
+  - `31-74`
+  - `283-287`
+  - `404-417`
+
+### 1.1 Remove added constants
+- Current lines:
+  - `31-33`
+- Added code:
+  - `LUNA_BAND_NOISE_REP_PREFIX`
+  - `LUNA_BAND_DISPLAY_NAME`
+  - `NOISE_BAND_DISPLAY_NAME`
+- Revert action:
+  - delete lines `31-33`
+
+### 1.2 Remove extracted helper for catalog name matching
+- Current lines:
+  - `35-48`
+- Added code:
+  - `internal fun ColorFitNetworkDevice.matchesScannedDeviceName(scannedName: String): Boolean`
+- Purpose of added code:
+  - moved the pre-existing inline matcher logic out of `getDeviceType(...)`
+- Revert action:
+  - delete lines `35-48`
+  - restore the original inline matching logic inside `getDeviceType(...)`
+
+### 1.3 Remove `Noise_REP_` alias resolver
+- Current lines:
+  - `50-63`
+- Added code:
+  - `internal fun resolveLunaBandNoiseRepAlias(...)`
+- Purpose of added code:
+  - maps scanned names beginning with `Noise_REP_` to the existing `DeviceType.LUNA_BAND` catalog entry only as a fallback
+- Revert action:
+  - delete lines `50-63`
+
+### 1.4 Remove UI display-name resolver
+- Current lines:
+  - `65-74`
+- Added code:
+  - `internal fun resolveScannedDeviceDisplayName(...)`
+- Purpose of added code:
+  - returns `Noise Band` for `Noise_REP_XXXX`
+  - returns the matched catalog name for legacy Luna-band devices
+- Revert action:
+  - delete lines `65-74`
+
+### 1.5 Revert the `ColorFitDevice.bluetoothName` assignment in `onDeviceFound(...)`
+- Current lines:
+  - `283-287`
+- Current code behavior:
+  - `ColorFitDevice.bluetoothName` is set from `resolveScannedDeviceDisplayName(...)`
+- Revert action:
+  - replace current assignment at lines `284-287` with the old direct catalog-name assignment:
+
+```kotlin
+bluetoothName = result.second.bluetoothName,
+```
+
+- Why this matters:
+  - the nearby-device list and pairing screen both already read `ColorFitDevice.bluetoothName`
+  - reverting this line removes the separate `Noise Band` / `Luna Band` UI label behavior
+
+### 1.6 Revert `getDeviceType(...)` to the pre-change matcher-only behavior
+- Current lines:
+  - `404-417`
+- Current code behavior:
+  - reads `scannedName`
+  - runs `device.matchesScannedDeviceName(scannedName)`
+  - if no catalog match is found, falls back to `resolveLunaBandNoiseRepAlias(devices, scannedName)`
+- Revert action:
+  - replace the full current body of `getDeviceType(...)` with the original matcher-only version below:
+
+```kotlin
+fun getDeviceType(scannedDevice: DeviceEntity): Pair<DeviceType?, ColorFitNetworkDevice>? {
+    _deviceList.value?.forEach { device ->
+        if (device.namePattern.isNullOrEmpty() || device.matchingType.isNullOrEmpty()) return@forEach
+        device.namePattern?.split(";")?.forEach {
+            when (device.matchingType) {
+                "exact" -> {
+                    if (scannedDevice.name?.equals(it, true) == true) {
+                        return Pair(
+                            DeviceType.findDeviceType(device.deviceType!!),
+                            device
+                        )
+                    }
+                }
+
+                "exact_pattern" -> {
+                    if (scannedDevice.name?.dropLast(5)?.equals(it, true) == true) {
+                        return Pair(
+                            DeviceType.findDeviceType(device.deviceType!!),
+                            device
+                        )
+                    }
+                }
+
+                "pattern" -> {
+                    if (scannedDevice.name?.contains(it, true) == true) {
+                        return Pair(
+                            DeviceType.findDeviceType(device.deviceType!!),
+                            device
+                        )
+                    }
+                }
+            }
+        }
+    }
+    return null
+}
+```
+
+- Result after revert:
+  - `Noise_REP_XXXX` devices will no longer be recognized
+  - only the legacy catalog-driven Luna-band naming will pass scan classification
+
+## Why the UI changed without touching other pairing screens
+- No pairing/pipeline screen code was edited for the label split.
+- The changed scan-model name flows through existing UI bindings:
+  - `app/src/main/java/com/noisefit/ui/onboarding/pairing/pair/NearbyDevicesAdapter.kt`
+    - current line `36` appends `colorFitDevice.bluetoothName`
+  - `app/src/main/java/com/noisefit/ui/onboarding/pairing/pair/PairingFragment.kt`
+    - current line `716` assigns `binding.tvWatchName.text = colorFitDevice.bluetoothName`
+  - `app/src/main/java/com/noisefit/ui/onboarding/pairing/find/FindDeviceListFragment.kt`
+    - current lines `572-577` pass the scanned `ColorFitDevice` list into the adapter
+- Revert implication:
+  - do not change these UI files when reverting this Bluetooth-name change set
+  - reverting `SearchNearbyDeviceViewModel.kt` is sufficient to remove the separate `Noise Band` label behavior
+
+## Test file to remove
+
+### 2. `SearchNearbyDeviceViewModelTest.kt`
+- File:
+  - `app/src/test/java/com/noisefit/ui/onboarding/pairing/find/SearchNearbyDeviceViewModelTest.kt`
+- Current affected lines:
+  - `1-53`
+- Mode in this change set:
+  - created
+- Revert action:
+  - delete this full file
+- Reason:
+  - all tests in this file were added only for the Bluetooth-name rename support and UI label split
+
+## Documentation changes to revert
+
+### 3. `changes.md`
+- File:
+  - `changes.md`
+- Current affected lines:
+  - `1-57`
+- Mode in this change set:
+  - modified
+- Revert action:
+  - delete the full top section titled:
+    - `## April 10, 2026 - Luna Band Noise_REP_XXXX support`
+- Remove the section starting at line `1` and ending at line `57`
+
+### 4. `changes_detailed.md`
+- File:
+  - `changes_detailed.md`
+- Current affected lines:
+  - `1-91`
+- Mode in this change set:
+  - modified
+- Revert action:
+  - delete the full top section titled:
+    - `## April 10, 2026 - Detailed notes for Luna Band Noise_REP_XXXX rename support`
+- Remove the section starting at line `1` and ending at line `91`
+
+### 5. `update_changes.md`
+- File:
+  - `update_changes.md`
+- Current affected lines:
+  - `1-41`
+- Mode in this change set:
+  - created
+- Revert action:
+  - delete this full file
+
+### 6. `revert_bluetooth_namechnage.mds`
+- File:
+  - `revert_bluetooth_namechnage.mds`
+- Mode in this change set:
+  - created
+- Revert action:
+  - after using this guide and verifying the revert, delete this file last
+
+## Summary of exact add/remove intent
+- Added in production code:
+  - `Noise_REP_` prefix support
+  - fallback mapping from renamed devices to `DeviceType.LUNA_BAND`
+  - UI display label `Noise Band` for renamed devices
+  - explicit display label constant `Luna Band` for legacy devices
+- Not added:
+  - no new backend behavior
+  - no new BLE connect path
+  - no new SDK call handling
+  - no new dependency
+  - no new folder/module/package
+- Deleted by this change set:
+  - nothing
+
+## Safe revert order
+1. Revert `SearchNearbyDeviceViewModel.kt` production code changes.
+2. Delete `SearchNearbyDeviceViewModelTest.kt`.
+3. Remove the top Bluetooth-name sections from `changes.md` and `changes_detailed.md`.
+4. Delete `update_changes.md`.
+5. Verify that `Noise_REP_XXXX` devices no longer appear as supported Luna-band scan results.
+6. Delete `revert_bluetooth_namechnage.mds` last.
+
+## Expected behavior after full revert
+- `Noise_REP_XXXX` devices will not be matched into `DeviceType.LUNA_BAND`.
+- Only the older Luna-band naming pattern will be recognized.
+- Nearby scan list and pairing UI will stop showing `Noise Band` because `ColorFitDevice.bluetoothName` will again come directly from the matched catalog entry.

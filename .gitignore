@@ -25,3 +25,30 @@ local.properties
 /.idea/
 app/outputfile.txt
 myPackage.zip
+
+# Gradle caches and user home
+.gradle-user-home/
+.gradle-user/
+
+# Kotlin build caches
+.kotlin/
+buildSrc/.kotlin/
+
+# Temp/inspect directories
+.tmp/
+.tmp_sdk230_inspect/
+.tmp_sdk231_inspect/
+
+# Log files
+*.log
+hs_err_pid*.log
+replay_pid*.log
+
+# Backup/reference copy of old branch
+luna-band-1.6.4 without any changes/
+
+# IDE files in submodules
+app/.idea/
+
+# Accidental shell-expansion directory
+$(pwd)/
